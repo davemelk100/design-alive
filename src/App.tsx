@@ -446,7 +446,7 @@ function App() {
                               {color.value}
                             </span>
                           </motion.div>
-                          <span className="text-caption text-muted-foreground">
+                          <span className="text-xs text-muted-foreground">
                             {color.name}
                           </span>
                         </div>
@@ -617,7 +617,7 @@ function App() {
                                 <img
                                   src={project.image}
                                   alt={project.alt || project.title}
-                                  className="h-full w-full object-contain"
+                                  className="h-full w-full object-contain rounded-lg"
                                 />
                               </div>
                               <div>
