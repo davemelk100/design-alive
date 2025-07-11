@@ -561,6 +561,9 @@ function App() {
                           rel="noopener noreferrer"
                           className="group relative overflow-hidden rounded-lg bg-gray-100/80 p-4 block flex flex-col"
                         >
+                          <div className="absolute top-3 right-3 text-gray-400 group-hover:text-gray-600 transition-colors">
+                            <ArrowUp className="h-4 w-4 rotate-45" />
+                          </div>
                           <div className="flex items-start gap-4">
                             <div className="flex-shrink-0">
                               <img
@@ -581,11 +584,6 @@ function App() {
                                   {project.description}
                                 </p>
                               </div>
-                            </div>
-                          </div>
-                          <div className="mt-auto pt-3">
-                            <div className="inline-flex items-center text-black hover:text-gray-600 dark:text-black dark:hover:text-gray-700 underline text-nav">
-                              View App
                             </div>
                           </div>
                         </a>
