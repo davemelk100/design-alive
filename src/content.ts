@@ -78,6 +78,7 @@ export const content = {
         categories: "Insurance",
         image: "/img/delta-search.png",
         alt: "Delta Dental Individual Insurance Registration",
+        url: "https://www.mysmilecoverage.com/delta/",
       },
       {
         title: "3D Conversion UX Plan",
