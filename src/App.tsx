@@ -502,9 +502,9 @@ function App() {
                               </div>
                               <div className="aspect-[3/2] overflow-hidden rounded-lg">
                                 <img
-                                  src={
+                                  src={`${
                                     (article as any).cardImage || article.image
-                                  }
+                                  }?v=${Date.now()}`}
                                   alt={article.title}
                                   className="h-full w-full object-contain"
                                 />
@@ -567,7 +567,7 @@ function App() {
                           <div className="flex items-start gap-4">
                             <div className="flex-shrink-0">
                               <img
-                                src="/img/lab.svg"
+                                src={`/img/lab.svg?v=${Date.now()}`}
                                 alt="Lab"
                                 className="h-[90px] w-[90px] object-contain"
                               />
@@ -615,9 +615,10 @@ function App() {
                             <div className="flex flex-col gap-3">
                               <div className="aspect-[3/2] overflow-hidden rounded-lg">
                                 <img
-                                  src={project.image}
+                                  src={`${project.image}?v=${Date.now()}`}
                                   alt={project.alt || project.title}
                                   className="h-full w-full object-contain rounded-lg"
+                                  loading="lazy"
                                 />
                               </div>
                               <div>

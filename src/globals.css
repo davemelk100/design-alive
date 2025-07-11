@@ -97,6 +97,12 @@
     font-weight: 400;
     font-style: normal;
   }
+
+  /* Force image refresh */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
 }
 
 @layer components {

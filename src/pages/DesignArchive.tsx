@@ -86,9 +86,10 @@ export default function DesignArchive() {
                 {/* Image */}
                 <div className="mb-4 md:mb-0 aspect-video overflow-hidden rounded-lg">
                   <img
-                    src={project.image}
+                    src={`${project.image}?v=${Date.now()}`}
                     alt={project.alt || project.title}
                     className="h-full w-full object-cover"
+                    loading="lazy"
                   />
                 </div>
 
