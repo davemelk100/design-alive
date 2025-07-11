@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { content } from "../content";
-import { ArrowLeft, LogOut, Clock } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowLeft, LogOut, Clock, Play } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
 import {
   checkAdminAuth,
   logoutAdmin,
@@ -225,6 +225,24 @@ export default function Admin() {
               <Clock className="h-4 w-4 text-white" />
               <span className="text-white">{sessionInfo.timeRemaining}</span>
             </div>
+          </div>
+        </div>
+
+        {/* Music Player Link */}
+        <div className="bg-purple-100 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-medium text-purple-900 dark:text-purple-100 mb-1">
+                Music Player
+              </h3>
+            </div>
+            <Link
+              to="/music-player"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+            >
+              <Play className="h-4 w-4" />
+              Open Music Player
+            </Link>
           </div>
         </div>
 
@@ -498,24 +516,6 @@ export default function Admin() {
               );
             })}
           </div>
-        </div>
-
-
-
-        {/* Status Information */}
-        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mt-8">
-          <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
-            How it works
-          </h3>
-          <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-            <li>
-              • Changes are saved automatically to your browser's localStorage
-            </li>
-            <li>• Main Page: Controls visibility on the homepage</li>
-            <li>• Archive: Controls visibility in the articles archive</li>
-            <li>• You can still access hidden articles directly via URL</li>
-            <li>• Settings persist across browser sessions</li>
-          </ul>
         </div>
       </div>
     </div>

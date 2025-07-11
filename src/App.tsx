@@ -348,6 +348,7 @@ function App() {
                   <Keyboard className="h-5 w-5" />
                 </button>
               </motion.li>
+
               <motion.li whileHover={{ scale: 1.05 }}>
                 <button
                   onClick={handleAdminAction}
