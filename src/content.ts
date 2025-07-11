@@ -57,7 +57,7 @@ export const content = {
       {
         title: "Delta Dental Member Portal",
         description:
-          "Led user interface design implementation of a SaaS provider portal using HTML/CSS/Angular. Created accessible components following WCAG guidelines and implemented responsive design patterns for optimal user experience across all devices.",
+          "Led UI design implementation for a SaaS provider portal using HTML/CSS/Angular with accessible components and responsive design patterns.",
         categories: "",
         image: "/img/delta-portal-sq.png",
         alt: "Delta Dental Member Portal",
@@ -598,8 +598,7 @@ export const content = {
       {
         id: "information-architecture-not-sacred",
         title: "Information Architecture Is Not Sacred",
-        description:
-          "Your IA should evolve with your users, not remain rigid.",
+        description: "Your IA should evolve with your users, not remain rigid.",
         content: `<h1>Information Architecture Is Not Sacred</h1>
 
 <h2>Your IA Shouldn't Be Set in Stone</h2>
