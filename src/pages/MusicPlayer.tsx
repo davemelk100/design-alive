@@ -33,21 +33,21 @@ const MusicPlayer: React.FC = () => {
   const tracks: Track[] = [
     {
       id: 1,
-      title: "Mash - Motorhead v Notorious B.I.G. v Pink Floyd",
+      title: "Motorhead v Notorious B.I.G. v Pink Floyd",
       artist: "BALM",
       url: "/audio/motorbeatv2.mp3",
       duration: "1:26",
     },
     {
       id: 2,
-      title: "Mash - Alice In Chains x Fiend",
+      title: "Alice In Chains x Fiend",
       artist: "BALM",
       url: "/audio/aic-fiend.mp3",
       duration: "0:38",
     },
     {
       id: 3,
-      title: "Mash - Slayer x Congas",
+      title: "Slayer x Congas",
       artist: "BALM",
       url: "/audio/slayer-congas.mp3",
       duration: "2:15",
