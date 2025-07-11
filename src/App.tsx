@@ -466,7 +466,7 @@ function App() {
                       className="mb-12"
                       showArchiveLink={false}
                     />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {getVisibleArticles(content.articles.items)
                         .filter(
                           (article) =>
@@ -604,7 +604,7 @@ function App() {
                       showArchiveLink={false}
                     />
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       {getVisibleDesignWork(content.work.projects)
                         .filter(
                           (project: any) =>

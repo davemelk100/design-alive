@@ -104,12 +104,12 @@ export const content = {
         alt: "Hex Code Pop Art",
       },
       {
-        title: "Mobile App Design",
+        title: "Design Panes",
         description:
-          "User interface design for a productivity mobile application.",
+          "Design, Designs, Designers.",
         categories: "Mobile",
         image: "/img/design-panes.png",
-        alt: "Mobile App Design",
+        alt: "Design Panes",
       },
       {
         title: "NFL-Themed Logos for Sports Podcast",
@@ -847,7 +847,7 @@ export const content = {
 
 <h2>What is Text Tunneling?</h2>
 
-<p><strong>Text Tunneling</strong> is a content strategy technique that guides users directly to the most valuable information or action by using clear, specific, and benefit-focused language. Instead of burying the most important content behind vague descriptions or generic calls-to-action, Text Tunneling "tunnels" straight to the point, reducing cognitive load and increasing engagement.</p>
+<p><strong>Text Tunneling</strong> guides users directly to the most valuable information or action by using clear, specific, and benefit-focused language. Instead of burying the most important content behind vague descriptions or generic calls-to-action, Text Tunneling "tunnels" straight to the point, reducing cognitive load and increasing engagement.</p>
 
 <p>Think of it as the opposite of "burying the lede" - you're not hiding the most important information, you're making it impossible to miss. When users have thousands of competing options and declining attention spans, Text Tunneling respects their time by getting to the heart of what matters most.</p>
 
