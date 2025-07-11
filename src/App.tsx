@@ -577,7 +577,7 @@ function App() {
                                 </p>
                               </div>
                             </div>
-                            <div className="aspect-[3/2] overflow-hidden">
+                            <div className="aspect-[3/2] overflow-hidden -mx-3">
                               <img
                                 src={`${
                                   (article as any).cardImage || article.image
@@ -638,7 +638,7 @@ function App() {
                           );
 
                           const ProjectImage = (
-                            <div className="aspect-[3/2] overflow-hidden">
+                            <div className="aspect-[3/2] overflow-hidden -mx-3 -mb-3">
                               <img
                                 src={`${project.image}?v=${Date.now()}`}
                                 alt={project.alt || project.title}
