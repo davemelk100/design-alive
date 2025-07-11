@@ -352,13 +352,7 @@ export const content = {
         demo: "https://chatbot-samples.netlify.app/",
         image: "/img/ai-user-research.png",
       },
-      {
-        title: "Old Portfolio",
-        description: "Previous portfolio design",
-        technologies: ["HTML", "CSS", "JavaScript"],
-        demo: "https://rococo-paprenjak-da1be1.netlify.app/",
-        image: "/img/old-portfolio.png",
-      },
+
       {
         title: "Design Panes",
         description: "Design, designs, and designers",

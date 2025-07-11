@@ -1,0 +1,103 @@
+<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .color-wheel {
+        transform-origin: 45px 45px;
+        animation: rotate 80s linear infinite;
+      }
+      
+      .secondary-color {
+        animation: pulse 16s ease-in-out infinite;
+      }
+      
+      .tertiary-color {
+        animation: pulse 16s ease-in-out infinite 10.7s;
+      }
+      
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.6;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.9;
+          transform: scale(1.02);
+        }
+      }
+      
+      .complementary-line {
+        stroke: #8b8b8b;
+        stroke-width: 0.8;
+        stroke-dasharray: 3,3;
+        animation: dash 16s linear infinite;
+      }
+      
+      @keyframes dash {
+        to {
+          stroke-dashoffset: -6;
+        }
+      }
+      
+      .color-mix {
+        animation: colorShift 24s ease-in-out infinite;
+      }
+      
+      @keyframes colorShift {
+        0%, 100% {
+          fill: #4A5568;
+        }
+        33% {
+          fill: #718096;
+        }
+        66% {
+          fill: #A0AEC0;
+        }
+      }
+      
+
+    </style>
+  </defs>
+  
+  <!-- Color Wheel -->
+  <g class="color-wheel">
+
+    
+    <!-- Secondary Colors -->
+    <circle cx="50" cy="20" r="6" fill="#4A5568" opacity="0.7" class="secondary-color"/>
+    <circle cx="65" cy="35" r="6" fill="#718096" opacity="0.6" class="secondary-color"/>
+    <circle cx="50" cy="70" r="6" fill="#A0AEC0" opacity="0.8" class="secondary-color"/>
+    <circle cx="25" cy="35" r="6" fill="#CBD5E0" opacity="0.5" class="secondary-color"/>
+    <circle cx="25" cy="55" r="6" fill="#E2E8F0" opacity="0.7" class="secondary-color"/>
+    <circle cx="40" cy="70" r="6" fill="#F7FAFC" opacity="0.6" class="secondary-color"/>
+    
+    <!-- Tertiary Colors -->
+    <circle cx="65" cy="10" r="4" fill="#2D3748" opacity="0.4" class="tertiary-color"/>
+    <circle cx="80" cy="25" r="4" fill="#4A5568" opacity="0.5" class="tertiary-color"/>
+    <circle cx="80" cy="65" r="4" fill="#718096" opacity="0.3" class="tertiary-color"/>
+    <circle cx="65" cy="80" r="4" fill="#A0AEC0" opacity="0.6" class="tertiary-color"/>
+    <circle cx="25" cy="80" r="4" fill="#CBD5E0" opacity="0.4" class="tertiary-color"/>
+    <circle cx="10" cy="65" r="4" fill="#E2E8F0" opacity="0.5" class="tertiary-color"/>
+    <circle cx="10" cy="25" r="4" fill="#F7FAFC" opacity="0.3" class="tertiary-color"/>
+    <circle cx="25" cy="10" r="4" fill="#2D3748" opacity="0.6" class="tertiary-color"/>
+  </g>
+  
+  <!-- Center Color Mixing -->
+  <circle cx="45" cy="45" r="12" class="color-mix" opacity="0.8"/>
+  
+  <!-- Complementary Color Lines -->
+  <line x1="25" y1="45" x2="65" y2="45" class="complementary-line"/>
+  <line x1="45" y1="25" x2="45" y2="65" class="complementary-line"/>
+  
+
+  
+
+</svg> 

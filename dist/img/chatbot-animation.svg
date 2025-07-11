@@ -1,0 +1,170 @@
+<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .chat-container {
+        transform-origin: 45px 45px;
+      }
+      
+      .chat-bubble {
+        fill: #6366F1;
+        stroke: #4F46E5;
+        stroke-width: 0.5;
+        animation: bubbleFloat 3s ease-in-out infinite alternate;
+      }
+      
+      .chat-bubble-2 {
+        fill: #10B981;
+        stroke: #059669;
+        stroke-width: 0.5;
+        animation: bubbleFloat 3s ease-in-out infinite alternate 1s;
+      }
+      
+      .chat-bubble-3 {
+        fill: #F59E0B;
+        stroke: #D97706;
+        stroke-width: 0.5;
+        animation: bubbleFloat 3s ease-in-out infinite alternate 2s;
+      }
+      
+      @keyframes bubbleFloat {
+        0% {
+          transform: translateY(0px);
+        }
+        100% {
+          transform: translateY(-2px);
+        }
+      }
+      
+      .typing-dot {
+        fill: #FFFFFF;
+        animation: typing 1.4s infinite ease-in-out;
+      }
+      
+      .typing-dot:nth-child(1) {
+        animation-delay: 0s;
+      }
+      
+      .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      
+      @keyframes typing {
+        0%, 60%, 100% {
+          transform: translateY(0);
+          opacity: 0.4;
+        }
+        30% {
+          transform: translateY(-4px);
+          opacity: 1;
+        }
+      }
+      
+      .bot-avatar {
+        fill: #3B82F6;
+        stroke: #1E40AF;
+        stroke-width: 1;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.8;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      
+      .bot-eye {
+        fill: #FFFFFF;
+        animation: blink 3s infinite;
+      }
+      
+      .bot-pupil {
+        fill: #1E40AF;
+        animation: look 4s infinite;
+      }
+      
+      @keyframes blink {
+        0%, 90%, 100% {
+          transform: scaleY(1);
+        }
+        95% {
+          transform: scaleY(0.1);
+        }
+      }
+      
+      @keyframes look {
+        0%, 100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(1px);
+        }
+        75% {
+          transform: translateX(-1px);
+        }
+      }
+      
+      .message-line {
+        stroke: #FFFFFF;
+        stroke-width: 1;
+        opacity: 0.8;
+        animation: messageAppear 2s ease-in-out infinite alternate;
+      }
+      
+      @keyframes messageAppear {
+        0% {
+          opacity: 0.3;
+        }
+        100% {
+          opacity: 0.8;
+        }
+      }
+    </style>
+  </defs>
+  
+  <!-- Chat Interface Background -->
+  <rect x="10" y="10" width="70" height="70" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
+  
+  <!-- Bot Avatar -->
+  <circle cx="25" cy="25" r="8" class="bot-avatar"/>
+  <circle cx="22" cy="22" r="2" class="bot-eye"/>
+  <circle cx="28" cy="22" r="2" class="bot-eye"/>
+  <circle cx="22" cy="22" r="1" class="bot-pupil"/>
+  <circle cx="28" cy="22" r="1" class="bot-pupil"/>
+  
+  <!-- Chat Bubbles -->
+  <g class="chat-container">
+    <!-- First Chat Bubble -->
+    <path d="M35 20 Q35 15 40 15 L50 15 Q55 15 55 20 L55 30 L45 20 L40 20 Q35 20 35 20 Z" class="chat-bubble"/>
+    <line x1="40" y1="22" x2="45" y2="22" class="message-line"/>
+    <line x1="40" y1="25" x2="50" y2="25" class="message-line"/>
+    
+    <!-- Second Chat Bubble -->
+    <path d="M20 35 Q20 30 25 30 L35 30 Q40 30 40 35 L40 45 L30 35 L25 35 Q20 35 20 35 Z" class="chat-bubble-2"/>
+    <line x1="25" y1="37" x2="30" y2="37" class="message-line"/>
+    <line x1="25" y1="40" x2="35" y2="40" class="message-line"/>
+    
+    <!-- Third Chat Bubble -->
+    <path d="M35 50 Q35 45 40 45 L50 45 Q55 45 55 50 L55 60 L45 50 L40 50 Q35 50 35 50 Z" class="chat-bubble-3"/>
+    <line x1="40" y1="52" x2="45" y2="52" class="message-line"/>
+    <line x1="40" y1="55" x2="50" y2="55" class="message-line"/>
+  </g>
+  
+  <!-- Typing Indicator -->
+  <g transform="translate(60, 70)">
+    <circle cx="0" cy="0" r="2" class="typing-dot"/>
+    <circle cx="6" cy="0" r="2" class="typing-dot"/>
+    <circle cx="12" cy="0" r="2" class="typing-dot"/>
+  </g>
+  
+  <!-- Connection Lines -->
+  <line x1="25" y1="25" x2="35" y2="20" stroke="#3B82F6" stroke-width="1" opacity="0.6"/>
+  <line x1="25" y1="25" x2="20" y2="35" stroke="#10B981" stroke-width="1" opacity="0.6"/>
+  <line x1="25" y1="25" x2="35" y2="50" stroke="#F59E0B" stroke-width="1" opacity="0.6"/>
+</svg> 

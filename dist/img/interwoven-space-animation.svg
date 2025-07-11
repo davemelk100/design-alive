@@ -1,0 +1,169 @@
+<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .layer-group {
+        transform-origin: 45px 45px;
+      }
+      
+      .overlapping-shapes {
+        animation: overlapShift 20s ease-in-out infinite;
+      }
+      
+      .intersecting-lines {
+        animation: intersectMove 24s ease-in-out infinite;
+      }
+      
+      .layered-elements {
+        animation: layerFloat 28s ease-in-out infinite;
+      }
+      
+      .woven-pattern {
+        animation: weavePattern 32s ease-in-out infinite;
+      }
+      
+      .spatial-connections {
+        animation: spatialConnect 36s ease-in-out infinite;
+      }
+      
+      @keyframes overlapShift {
+        0%, 100% {
+          transform: translateX(0px) translateY(0px) rotate(0deg);
+          opacity: 0.6;
+        }
+        25% {
+          transform: translateX(3px) translateY(-2px) rotate(5deg);
+          opacity: 0.8;
+        }
+        50% {
+          transform: translateX(-2px) translateY(3px) rotate(-3deg);
+          opacity: 0.7;
+        }
+        75% {
+          transform: translateX(1px) translateY(-1px) rotate(2deg);
+          opacity: 0.9;
+        }
+      }
+      
+      @keyframes intersectMove {
+        0%, 100% {
+          transform: translateX(0px) translateY(0px) scale(1);
+          opacity: 0.5;
+        }
+        33% {
+          transform: translateX(-4px) translateY(2px) scale(1.1);
+          opacity: 0.7;
+        }
+        66% {
+          transform: translateX(3px) translateY(-3px) scale(0.9);
+          opacity: 0.6;
+        }
+      }
+      
+      @keyframes layerFloat {
+        0%, 100% {
+          transform: translateY(0px) scale(1);
+          opacity: 0.4;
+        }
+        25% {
+          transform: translateY(-6px) scale(1.15);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(-2px) scale(0.95);
+          opacity: 0.5;
+        }
+        75% {
+          transform: translateY(-8px) scale(1.2);
+          opacity: 0.7;
+        }
+      }
+      
+      @keyframes weavePattern {
+        0%, 100% {
+          transform: rotate(0deg) scale(1);
+          opacity: 0.3;
+        }
+        50% {
+          transform: rotate(180deg) scale(1.1);
+          opacity: 0.6;
+        }
+      }
+      
+      @keyframes spatialConnect {
+        0%, 100% {
+          transform: scale(0.8);
+          opacity: 0.2;
+        }
+        25% {
+          transform: scale(1.2);
+          opacity: 0.4;
+        }
+        50% {
+          transform: scale(0.9);
+          opacity: 0.3;
+        }
+        75% {
+          transform: scale(1.3);
+          opacity: 0.5;
+        }
+      }
+    </style>
+  </defs>
+  
+  <!-- Background Grid (Reference for spatial relationships) -->
+  <line x1="15" y1="15" x2="75" y2="15" stroke="#e0e0e0" stroke-width="0.2" opacity="0.1"/>
+  <line x1="15" y1="30" x2="75" y2="30" stroke="#e0e0e0" stroke-width="0.2" opacity="0.1"/>
+  <line x1="15" y1="45" x2="75" y2="45" stroke="#e0e0e0" stroke-width="0.2" opacity="0.1"/>
+  <line x1="15" y1="60" x2="75" y2="60" stroke="#e0e0e0" stroke-width="0.2" opacity="0.1"/>
+  <line x1="15" y1="75" x2="75" y2="75" stroke="#e0e0e0" stroke-width="0.2" opacity="0.1"/>
+  
+  <line x1="15" y1="15" x2="15" y2="75" stroke="#e0e0e0" stroke-width="0.2" opacity="0.1"/>
+  <line x1="30" y1="15" x2="30" y2="75" stroke="#e0e0e0" stroke-width="0.2" opacity="0.1"/>
+  <line x1="45" y1="15" x2="45" y2="75" stroke="#e0e0e0" stroke-width="0.2" opacity="0.1"/>
+  <line x1="60" y1="15" x2="60" y2="75" stroke="#e0e0e0" stroke-width="0.2" opacity="0.1"/>
+  <line x1="75" y1="15" x2="75" y2="75" stroke="#e0e0e0" stroke-width="0.2" opacity="0.1"/>
+  
+  <!-- Overlapping Shapes (Primary interwoven elements) -->
+  <g class="layer-group">
+    <rect x="25" y="25" width="20" height="20" rx="3" fill="#4A5568" class="overlapping-shapes"/>
+    <rect x="35" y="35" width="20" height="20" rx="3" fill="#718096" class="overlapping-shapes"/>
+    <rect x="45" y="25" width="20" height="20" rx="3" fill="#A0AEC0" class="overlapping-shapes"/>
+  </g>
+  
+  <!-- Intersecting Lines (Show connections between spaces) -->
+  <g class="layer-group">
+    <line x1="20" y1="20" x2="70" y2="70" stroke="#4A5568" stroke-width="1.5" class="intersecting-lines"/>
+    <line x1="70" y1="20" x2="20" y2="70" stroke="#718096" stroke-width="1.5" class="intersecting-lines"/>
+    <line x1="45" y1="15" x2="45" y2="75" stroke="#A0AEC0" stroke-width="1" class="intersecting-lines"/>
+    <line x1="15" y1="45" x2="75" y2="45" stroke="#CBD5E0" stroke-width="1" class="intersecting-lines"/>
+  </g>
+  
+  <!-- Layered Elements (Multiple depth levels) -->
+  <g class="layer-group">
+    <circle cx="30" cy="30" r="6" fill="#4A5568" class="layered-elements"/>
+    <circle cx="60" cy="30" r="6" fill="#718096" class="layered-elements"/>
+    <circle cx="30" cy="60" r="6" fill="#A0AEC0" class="layered-elements"/>
+    <circle cx="60" cy="60" r="6" fill="#CBD5E0" class="layered-elements"/>
+  </g>
+  
+  <!-- Woven Pattern (Complex interweaving) -->
+  <g class="layer-group">
+    <polygon points="40,20 50,20 45,30" fill="#4A5568" class="woven-pattern"/>
+    <polygon points="20,40 30,40 25,50" fill="#718096" class="woven-pattern"/>
+    <polygon points="60,40 70,40 65,50" fill="#A0AEC0" class="woven-pattern"/>
+    <polygon points="40,60 50,60 45,70" fill="#CBD5E0" class="woven-pattern"/>
+  </g>
+  
+  <!-- Spatial Connections (Show relationships) -->
+  <g class="layer-group">
+    <rect x="35" y="35" width="20" height="20" rx="10" fill="none" stroke="#4A5568" stroke-width="1" class="spatial-connections"/>
+    <rect x="25" y="25" width="40" height="40" rx="20" fill="none" stroke="#718096" stroke-width="0.5" class="spatial-connections"/>
+  </g>
+  
+  <!-- Overlapping Circles (Additional interwoven elements) -->
+  <g class="layer-group">
+    <circle cx="45" cy="45" r="8" fill="#4A5568" opacity="0.6" class="overlapping-shapes"/>
+    <circle cx="50" cy="40" r="6" fill="#718096" opacity="0.7" class="overlapping-shapes"/>
+    <circle cx="40" cy="50" r="6" fill="#A0AEC0" opacity="0.8" class="overlapping-shapes"/>
+  </g>
+</svg> 

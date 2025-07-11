@@ -13,7 +13,7 @@ import {
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { useState, useEffect } from "react";
 import { content } from "./content";
-import SparklingBackground from "../components/SparklingBackground";
+
 import { BrowserRouter as Router } from "react-router-dom";
 import ImageModal from "../components/ImageModal";
 import ArticleModal from "./components/ArticleModal";
@@ -161,8 +161,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100">
-      <SparklingBackground />
-
       {/* Header Navigation */}
       <div className="relative z-20">
         <div className="bg-gradient-to-r from-gray-500 to-black px-6 py-2 flex items-center justify-between">
@@ -457,9 +455,77 @@ function App() {
                 </div>
               </section>
 
+              {/* Current Projects Section */}
+              {isSectionVisible("lab") && (
+                <section id="current-projects" className="py-16 sm:py-24">
+                  <div className="container mx-auto px-4 sm:px-8">
+                    <SectionHeader
+                      title={content.currentProjects.title}
+                      subtitle={content.currentProjects.subtitle}
+                      className="mb-12"
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {getVisibleLabProjects(
+                        content.currentProjects.projects
+                      ).map((project, index) => (
+                        <a
+                          key={index}
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group relative overflow-hidden rounded-lg bg-gray-100/80 p-4 block flex flex-col"
+                        >
+                          <div className="absolute top-3 right-3 text-gray-400 group-hover:text-gray-600 transition-colors">
+                            <ArrowUp className="h-4 w-4 rotate-45" />
+                          </div>
+                          <div className="flex items-start gap-4">
+                            <div className="flex-shrink-0">
+                              <img
+                                src={
+                                  project.title === "Chatbots"
+                                    ? `/img/color-theory-animation.svg?v=${Date.now()}`
+                                    : project.title === "Design Panes"
+                                    ? `/img/ambiguous-scale-animation.svg?v=${Date.now()}`
+                                    : project.title === "AI NUI"
+                                    ? `/img/progressive-disclosure-animation.svg?v=${Date.now()}`
+                                    : `/img/lab.svg?v=${Date.now()}`
+                                }
+                                alt={
+                                  project.title === "Chatbots"
+                                    ? "Robot Chatbot"
+                                    : project.title === "Design Panes"
+                                    ? "Design Panes"
+                                    : project.title === "AI NUI"
+                                    ? "Progressive Disclosure"
+                                    : "Lab"
+                                }
+                                className="h-[90px] w-[90px] object-contain"
+                              />
+                            </div>
+                            <div className="flex flex-col gap-3 flex-1">
+                              <div className="flex-1 flex flex-col">
+                                <h3
+                                  className="text-[20px] font-semibold mb-2 dark:text-black title-font"
+                                  style={{ letterSpacing: "-0.75px" }}
+                                >
+                                  {project.title}
+                                </h3>
+                                <p className="mb-3 text-black dark:text-black text-card-body flex-1">
+                                  {project.description}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              )}
+
               {/* Articles Section */}
               {isSectionVisible("articles") && (
-                <section id="articles" className="py-2 sm:py-4">
+                <section id="articles" className="py-16 sm:py-24">
                   <div className="container mx-auto px-4 sm:px-8">
                     <SectionHeader
                       title="Articles"
@@ -488,46 +554,42 @@ function App() {
                             new Date(a.date).getTime()
                         )
                         .map((article, index) => (
-                          <div
+                          <Link
                             key={index}
-                            className="group relative overflow-hidden rounded-lg bg-gray-100/80 p-4 flex flex-col"
+                            to={`/article/${slugify(article.title)}`}
+                            className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col"
                           >
-                            <div className="flex flex-col gap-3 flex-1">
+                            <div className="absolute top-3 right-3 text-gray-400 group-hover:text-gray-600 transition-colors">
+                              <ArrowUp className="h-4 w-4 rotate-45" />
+                            </div>
+                            <div className="p-3 flex flex-col gap-2 flex-1">
                               <div>
                                 <h3
-                                  className="text-[20px] font-semibold mb-2 dark:text-black title-font"
+                                  className="text-[20px] font-semibold mb-1 dark:text-black title-font"
                                   style={{ letterSpacing: "-0.75px" }}
                                 >
                                   {article.title}
                                 </h3>
                               </div>
-                              <div className="aspect-[3/2] overflow-hidden rounded-lg">
-                                <img
-                                  src={`${
-                                    (article as any).cardImage || article.image
-                                  }?v=${Date.now()}`}
-                                  alt={article.title}
-                                  className="h-full w-full object-contain"
-                                />
-                              </div>
                               <div className="flex-1 flex flex-col">
-                                <div className="flex items-center gap-4 mb-2 text-nav text-gray-600">
+                                <div className="flex items-center gap-4 mb-1 text-nav text-gray-600">
                                   <span>{article.date}</span>
                                 </div>
-                                <p className="text-gray-600 dark:text-gray-400 mb-3 text-card-body flex-1">
+                                <p className="text-gray-600 dark:text-gray-400 mb-2 text-card-body flex-1">
                                   {article.description}
                                 </p>
                               </div>
                             </div>
-                            <div className="mt-auto pt-3">
-                              <Link
-                                to={`/article/${slugify(article.title)}`}
-                                className="inline-flex items-center text-black hover:text-gray-600 dark:text-black dark:hover:text-gray-700 underline text-nav"
-                              >
-                                Read Article
-                              </Link>
+                            <div className="aspect-[3/2] overflow-hidden">
+                              <img
+                                src={`${
+                                  (article as any).cardImage || article.image
+                                }?v=${Date.now()}`}
+                                alt={article.title}
+                                className="h-full w-full object-cover"
+                              />
                             </div>
-                          </div>
+                          </Link>
                         ))}
                     </div>
                     <div className="mt-8">
@@ -542,61 +604,9 @@ function App() {
                 </section>
               )}
 
-              {/* Current Projects Section */}
-              {isSectionVisible("lab") && (
-                <section id="current-projects" className="py-8 sm:py-12">
-                  <div className="container mx-auto px-4 sm:px-8">
-                    <SectionHeader
-                      title={content.currentProjects.title}
-                      subtitle={content.currentProjects.subtitle}
-                      className="mb-12"
-                    />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                      {getVisibleLabProjects(
-                        content.currentProjects.projects
-                      ).map((project, index) => (
-                        <a
-                          key={index}
-                          href={project.demo}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="group relative overflow-hidden rounded-lg bg-gray-100/80 p-4 block flex flex-col"
-                        >
-                          <div className="absolute top-3 right-3 text-gray-400 group-hover:text-gray-600 transition-colors">
-                            <ArrowUp className="h-4 w-4 rotate-45" />
-                          </div>
-                          <div className="flex items-start gap-4">
-                            <div className="flex-shrink-0">
-                              <img
-                                src={`/img/lab.svg?v=${Date.now()}`}
-                                alt="Lab"
-                                className="h-[90px] w-[90px] object-contain"
-                              />
-                            </div>
-                            <div className="flex flex-col gap-3 flex-1">
-                              <div className="flex-1 flex flex-col">
-                                <h3
-                                  className="text-[20px] font-semibold mb-2 dark:text-black title-font"
-                                  style={{ letterSpacing: "-0.75px" }}
-                                >
-                                  {project.title}
-                                </h3>
-                                <p className="mb-3 text-black dark:text-black text-card-body flex-1">
-                                  {project.description}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </section>
-              )}
-
               {/* Work Section */}
               {isSectionVisible("designWork") && (
-                <section id="work" className="py-8 sm:py-12">
+                <section id="work" className="py-16 sm:py-24">
                   <div className="container mx-auto px-4 sm:px-8">
                     <SectionHeader
                       title="Design"
@@ -672,7 +682,7 @@ function App() {
 
               {/* Testimonials Section */}
               {isSectionVisible("testimonials") && (
-                <section id="testimonials" className="py-8 sm:py-12">
+                <section id="testimonials" className="py-16 sm:py-24">
                   <div className="container mx-auto px-4 sm:px-8">
                     <SectionHeader
                       title={content.testimonials.title}
@@ -711,7 +721,7 @@ function App() {
               )}
 
               {/* Career Timeline Section */}
-              <section id="career" className="py-8 sm:py-12">
+              <section id="career" className="py-16 sm:py-24">
                 <div className="container mx-auto px-4 sm:px-8">
                   <SectionHeader
                     title={content.career.title}
@@ -796,7 +806,7 @@ function App() {
               </section>
 
               {/* Figma Hotkeys Section */}
-              <section id="figma-hotkeys" className="py-8 sm:py-12">
+              <section id="figma-hotkeys" className="py-16 sm:py-24">
                 <div className="container mx-auto px-4 sm:px-8">
                   <SectionHeader
                     title={content.figmaHotkeys.title}

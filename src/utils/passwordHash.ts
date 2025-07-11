@@ -17,4 +17,4 @@ export const verifyPassword = async (password: string): Promise<boolean> => {
     import.meta.env.VITE_ADMIN_PASSWORD_HASH ||
     "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
   return hashedPassword === expectedHash;
-};
+}; 
