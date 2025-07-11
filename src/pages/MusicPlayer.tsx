@@ -7,6 +7,7 @@ import {
   SkipForward,
   Volume2,
   VolumeX,
+  Loader2,
 } from "lucide-react";
 
 interface Track {
@@ -23,6 +24,7 @@ const MusicPlayer: React.FC = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -53,6 +55,9 @@ const MusicPlayer: React.FC = () => {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
+        if (audioRef.current.readyState < 3) {
+          setLoading(true);
+        }
         audioRef.current.play();
       }
       setIsPlaying(!isPlaying);
@@ -62,6 +67,7 @@ const MusicPlayer: React.FC = () => {
   const playTrack = (index: number) => {
     setCurrentTrack(index);
     setIsPlaying(false);
+    setLoading(true);
     if (audioRef.current) {
       audioRef.current.src = tracks[index].url;
       audioRef.current.load();
@@ -83,6 +89,10 @@ const MusicPlayer: React.FC = () => {
       setCurrentTime(audioRef.current.currentTime);
       setDuration(audioRef.current.duration);
     }
+  };
+
+  const handleCanPlay = () => {
+    setLoading(false);
   };
 
   const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,6 +159,7 @@ const MusicPlayer: React.FC = () => {
             onTimeUpdate={handleTimeUpdate}
             onEnded={nextTrack}
             onLoadedMetadata={handleTimeUpdate}
+            onCanPlay={handleCanPlay}
           />
 
           {/* Progress Bar */}
@@ -168,10 +179,16 @@ const MusicPlayer: React.FC = () => {
           </div>
 
           {/* Controls */}
-          <div className="flex justify-center items-center gap-6 mb-8">
+          <div className="flex justify-center items-center gap-6 mb-8 relative">
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 z-10 rounded-full">
+                <Loader2 className="animate-spin h-8 w-8 text-purple-600" />
+              </div>
+            )}
             <button
               onClick={prevTrack}
               className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+              disabled={loading}
             >
               <SkipBack className="h-6 w-6 text-gray-700 dark:text-gray-300" />
             </button>
@@ -179,6 +196,7 @@ const MusicPlayer: React.FC = () => {
             <button
               onClick={togglePlay}
               className="p-4 rounded-full bg-purple-600 hover:bg-purple-700 text-white transition-colors"
+              disabled={loading}
             >
               {isPlaying ? (
                 <Pause className="h-8 w-8" />
@@ -190,6 +208,7 @@ const MusicPlayer: React.FC = () => {
             <button
               onClick={nextTrack}
               className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+              disabled={loading}
             >
               <SkipForward className="h-6 w-6 text-gray-700 dark:text-gray-300" />
             </button>
