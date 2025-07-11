@@ -868,7 +868,7 @@ export const content = {
 
 <h2>The Art of the Reveal</h2>
 
-<p>The real magic happens when you smoothly transition from "Hey, check this out" to "Whoa - I actually got my solution already" It's like telling a story - you don't slam a reader into the ending, you logically build up to it, with a smooth completion. The key is making that journey feel natural, rapid, not like you're routinely rerouting or detouring.</p>
+<p>The real magic happens when you smoothly transition from "Hey, check this out" to "Whoa - I actually got my solution already". When writing a novel, you don't slam a reader into the ending, you logically build up to it, with a smooth completion. The key is making that journey feel natural, rapid, and not like you're routinely rerouting or detouring.</p>
 
 <h2>IRL</h2>
 
@@ -876,13 +876,13 @@ export const content = {
 "README.md file has installation instructions"</p>
 
 <p>Try something like:<br>
-"Use the {some-sort-of-AI-driven-repo-installation-instructions-scanner} tool to validate the installation instructions. Update the README.md file with the new instructions."</p>
+"Use the AI tool to validate the installation instructions. Update the README.md file with the new instructions."</p>
 
 <p>What about a Wordpress or Shopify site?<br>
 "Product filtering plugins are on the Plugins page."</p>
 
 <p>Sure, I guess that's sorta helpful. Maybe let's try:<br>
-"Your store's payment tier is best suited for the {filtering-plugin-name} plugin. It's free."</p>
+"Your store's payment tier is best suited for the Acme plugin. It's free."</p>
 
 <h2>Wrapping It Up</h2>
 
