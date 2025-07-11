@@ -709,7 +709,7 @@ export const content = {
 
 <h2>Do Genres Matter?</h2>
 
-<p>These design genres aren't just fancy labels - they're a powerful shared language that helps teams make better decisions. When someone says "this interface needs to be more familiar and reliable" or "let's make this experience more playful and experimental," they're not just talking about colors and fonts. They're communicating a complete vision of how the product should feel and function.</p>
+<p>Not really, but they serve as a shared language. When someone says "this interface needs to be more familiar and reliable" or "let's make this experience more playful and experimental," they're not just talking about colors and fonts. They're communicating a complete vision of how the product should feel and function.</p>
 
 <p>Think of it like a movie soundtrack. The right music doesn't just play in the background - it shapes how you experience the entire film. In the same way, choosing the right design genre shapes how users experience your product. It's about creating harmony between what users expect, what your business needs, and how people feel when they use your product.</p>
 
