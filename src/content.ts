@@ -345,24 +345,21 @@ export const content = {
     projects: [
       {
         title: "Chatbots",
-        description:
-          "Interactive chatbot experiments",
+        description: "Interactive chatbot experiments",
         technologies: ["React", "OpenAI API", "Tailwind", "Node.js"],
         demo: "https://chatbot-samples.netlify.app/",
         image: "/img/ai-user-research.png",
       },
       {
         title: "Old Portfolio",
-        description:
-          "Previous portfolio design",
+        description: "Previous portfolio design",
         technologies: ["HTML", "CSS", "JavaScript"],
         demo: "https://rococo-paprenjak-da1be1.netlify.app/",
         image: "/img/old-portfolio.png",
       },
       {
         title: "Design Panes",
-        description:
-          "Design, designs, and designers",
+        description: "Design, designs, and designers",
         technologies: ["React", "TypeScript", "Tailwind", "Figma API"],
         demo: "https://designpanes.com/",
         image: "/img/design-panes.png",
@@ -569,9 +566,9 @@ export const content = {
 
       {
         id: "bolt-new-rapid-prototyping",
-        title: "Bolt.new: The Leader in the Rapid Prototyping Clubhouse",
+        title: "Bolt.new: The Leader in the Clubhouse",
         description:
-          "Bolt.new and its ecosystem is the leader in the AI-assisted development and design space.",
+          "Bolt.new and its ecosystem is killing it in the AI-assisted development and design space.",
         url: "bolt-new-rapid-prototyping",
         content: `<h1>Bolt.new: Leader in the Rapid Prototyping Clubhouse</h1>
 
@@ -639,7 +636,7 @@ export const content = {
 
       {
         id: "five-design-genres",
-        title: "These are the 5 Design Genres",
+        title: "There are 5 Design Genres",
         description:
           "After years of research, five design genres have been defined (by me ).",
         url: "five-design-genres",
@@ -664,7 +661,7 @@ export const content = {
 
 <p>Users expect power, control, and maximum information density through heavy, complex interfaces with dense information, dark themes, high contrast, and industrial aesthetics.</p>
 
-<p><strong>THINK:</strong> Bloomberg Terminal, Trading Platforms</p>
+<p><strong>THINK:</strong> Bloomberg Terminal, Trading Platforms, Figma's Properties Panel</p>
 
 <p><strong>SAY:</strong> "The admin panel is getting too Dense - maybe we should split these controls into separate views?"</p>
 
