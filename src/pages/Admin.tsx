@@ -1,15 +1,6 @@
 import { useState, useEffect } from "react";
 import { content } from "../content";
-import {
-  ArrowLeft,
-  LogOut,
-  Clock,
-  BookOpen,
-  Beaker,
-  Palette,
-  Quote,
-  Music,
-} from "lucide-react";
+import { ArrowLeft, LogOut, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   checkAdminAuth,
