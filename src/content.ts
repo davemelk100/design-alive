@@ -642,7 +642,7 @@ export const content = {
         url: "five-design-genres",
         content: `
 
-<p>Why do we need utilitarian names for types of design? Because we don't have any yet. At least none that are any fun. So let's make some up.</p>
+<p>Why do we need utilitarian names for types of design? Because we don't have any yet. At least none that are any fun. So I made some up.</p>
 
 <div class="flex justify-center mb-8">
   <div class="w-3/4 max-w-2xl aspect-video overflow-hidden rounded-lg relative group">
