@@ -632,15 +632,22 @@ export const content = {
       },
 
       {
-        title: "I Just Created 5 Design Genres and I'm Hear To Tell You About It",
+        title:
+          "I Just Created 5 Design Genres and I'm Hear To Tell You About It",
         description: "Naming things is fun, as previously discussed.",
         url: "five-design-genres",
         content: `<p>This was fun the first time around, so let's go ahead and run it back, this time with more details. And more guitars.</p>
 
 <p>Why do we need utilitarian names for types of design? Because we don't have any yet. At least none that are any fun. So let's make some up.</p>
 
-<div class="w-full mb-8 aspect-video overflow-hidden rounded-lg">
-  <img src="/img/vinyl-bob.jpg" alt="Robert Pollard standing in front of his vast record collection" class="w-full h-full object-cover" title="Robert Pollard - The prolific frontman of Guided By Voices, shown here looking through records at a small record store. With over 300 records to his name spanning nearly every genre imaginable, Pollard embodies the spirit of artistic exploration and genre-defying creativity." />
+<div class="w-full mb-8 aspect-video overflow-hidden rounded-lg relative group">
+  <img src="/img/vinyl-bob.jpg" alt="Robert Pollard standing in front of his vast record collection" class="w-full h-full object-cover cursor-help" />
+  <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
+    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg max-w-xs mx-4 text-center transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+      <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Robert Pollard</h4>
+      <p class="text-sm text-gray-700 dark:text-gray-300">The prolific frontman of Guided By Voices, shown here looking through records at a small record store. With over 300 records to his name spanning nearly every genre imaginable, Pollard embodies the spirit of artistic exploration and genre-defying creativity.</p>
+    </div>
+  </div>
   <p class="text-sm text-gray-600 dark:text-gray-400 mt-2 text-center italic">Design genres, like musical genres, help us understand and communicate different approaches to creating user experiences.</p>
 </div>
 

@@ -1,6 +1,5 @@
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import ShareWidget from "./ShareWidget";
 import { useEffect } from "react";
 
 interface ArticleModalProps {

@@ -27,11 +27,13 @@ const tracks: Track[] = [
 - **Size**: Keep files reasonably sized for web streaming
 - **Quality**: 128-320 kbps is recommended for web use
 
-## Current Track
+## Current Tracks
 
 The player is currently configured with:
 
-- `motorbeatv2.mp3` - Motor Beat v2 by Dave Melkonian
+- `motorbeatv2.mp3` - Mash - Motorhead v Notorious B.I.G. v Pink Floyd
+- `aic-fiend.mp3` - Mash - Alice In Chains x Fiend
+- `slayer-congas.mp3` - Mash - Slayer x Congas
 
 Add more tracks by updating the tracks array in `src/pages/MusicPlayer.tsx`.
 
