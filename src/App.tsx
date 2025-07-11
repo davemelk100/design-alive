@@ -500,7 +500,7 @@ function App() {
                                   {article.title}
                                 </h3>
                               </div>
-                              <div className="aspect-[2/1] overflow-hidden rounded-lg">
+                              <div className="aspect-[3/2] overflow-hidden rounded-lg">
                                 <img
                                   src={
                                     (article as any).cardImage || article.image
@@ -613,7 +613,7 @@ function App() {
                         .map((project: any, index) => {
                           const ProjectCard = (
                             <div className="flex flex-col gap-3">
-                              <div className="aspect-[2/1] overflow-hidden rounded-lg">
+                              <div className="aspect-[3/2] overflow-hidden rounded-lg">
                                 <img
                                   src={project.image}
                                   alt={project.alt || project.title}
