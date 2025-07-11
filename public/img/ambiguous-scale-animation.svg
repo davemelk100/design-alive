@@ -6,15 +6,15 @@
       }
       
       .micro-scale {
-        animation: microPulse 16s ease-in-out infinite;
+        animation: microPulse 32s ease-in-out infinite;
       }
       
       .macro-scale {
-        animation: macroPulse 20s ease-in-out infinite;
+        animation: macroPulse 40s ease-in-out infinite;
       }
       
       .nested-scale {
-        animation: nestedScale 24s ease-in-out infinite;
+        animation: nestedScale 48s ease-in-out infinite;
       }
       
       @keyframes microPulse {
@@ -55,15 +55,15 @@
       }
       
       .floating-scale {
-        animation: floatScale 30s ease-in-out infinite;
+        animation: floatScale 60s ease-in-out infinite;
       }
       
       .floating-scale:nth-child(2) {
-        animation-delay: 8s;
+        animation-delay: 16s;
       }
       
       .floating-scale:nth-child(3) {
-        animation-delay: 16s;
+        animation-delay: 32s;
       }
       
       @keyframes floatScale {
@@ -86,7 +86,7 @@
       }
       
       .perspective-shift {
-        animation: perspectiveShift 36s ease-in-out infinite;
+        animation: perspectiveShift 72s ease-in-out infinite;
       }
       
       @keyframes perspectiveShift {

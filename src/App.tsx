@@ -495,7 +495,7 @@ function App() {
                                   : project.title === "Design Panes"
                                   ? `/img/ambiguous-scale-animation.svg?v=${Date.now()}`
                                   : project.title === "AI NUI"
-                                  ? `/img/progressive-disclosure-animation.svg?v=${Date.now()}`
+                                  ? `/img/interwoven-space-animation.svg?v=${Date.now()}`
                                   : `/img/lab.svg?v=${Date.now()}`
                               }
                               alt={
@@ -504,7 +504,7 @@ function App() {
                                   : project.title === "Design Panes"
                                   ? "Design Panes"
                                   : project.title === "AI NUI"
-                                  ? "Progressive Disclosure"
+                                  ? "Interwoven Space"
                                   : "Lab"
                               }
                               className="h-full w-full object-contain"
