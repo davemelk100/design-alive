@@ -632,8 +632,7 @@ export const content = {
       },
 
       {
-        title:
-          "I Just Created 5 Design Genres and I'm Hear To Tell You About It",
+        title: "I Created 5 Design Genres and I'm Hear To Tell You About 'Em",
         description: "Naming things is fun, as previously discussed.",
         url: "five-design-genres",
         content: `<p>This was fun the first time around, so let's go ahead and run it back, this time with more details. And more guitars.</p>
@@ -641,7 +640,7 @@ export const content = {
 <p>Why do we need utilitarian names for types of design? Because we don't have any yet. At least none that are any fun. So let's make some up.</p>
 
 <div class="w-full mb-8 aspect-video overflow-hidden rounded-lg relative group">
-  <img src="/img/vinyl-bob.jpg" alt="Robert Pollard standing in front of his vast record collection" class="w-full h-full object-cover cursor-help" />
+  <img src="/img/vinyl-bob.jpg" alt="Robert Pollard" class="w-full h-full object-cover cursor-help" />
   <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
     <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg max-w-xs mx-4 text-center transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
       <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Robert Pollard</h4>
@@ -834,6 +833,12 @@ export const content = {
           "Candor and brevity can turn casual users into engaged users.",
         url: "text-Tunneling",
         content: `<h1>Text Tunneling: Make It Make Sense</h1>
+
+<h2>What is Text Tunneling?</h2>
+
+<p><strong>Text Tunneling</strong> is a content strategy technique that guides users directly to the most valuable information or action by using clear, specific, and benefit-focused language. Instead of burying the most important content behind vague descriptions or generic calls-to-action, Text Tunneling "tunnels" straight to the point, reducing cognitive load and increasing engagement.</p>
+
+<p>Think of it as the opposite of "burying the lede" - you're not hiding the most important information, you're making it impossible to miss. When users have thousands of competing options and declining attention spans, Text Tunneling respects their time by getting to the heart of what matters most.</p>
 
 <h2>Be Blatant and See ROI</h2>
 
