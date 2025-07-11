@@ -657,7 +657,6 @@ export const content = {
     </div>
   </div>
 </div>
-<p class="text-sm text-gray-600 dark:text-gray-400 mb-8 text-center italic">Design genres, like musical genres, get us directly into the ballpark without guessing as to whether the product is a SaaS, IAaaS, or whatever we're calling it now. So, without further ado, here are the five design genres:</p>
 
 <h2>1. Dense</h2>
 
