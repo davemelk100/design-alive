@@ -484,7 +484,7 @@ function App() {
                               </p>
                             </div>
                           </div>
-                          <div className="aspect-[3/2] overflow-hidden -mx-3">
+                          <div className="aspect-[4/3] overflow-hidden -mx-3">
                             <img
                               src={
                                 project.title === "Chatbots"

@@ -110,6 +110,7 @@ export const content = {
         categories: "Mobile",
         image: "/img/design-panes.png",
         alt: "Design Panes",
+        url: "https://designpanes.com/",
       },
       {
         title: "NFL-Themed Logos for Sports Podcast",
