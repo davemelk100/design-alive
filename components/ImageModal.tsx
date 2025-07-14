@@ -32,10 +32,10 @@ const ImageModal: React.FC<ImageModalProps> = ({ imageUrl, onClose }) => {
           e.stopPropagation();
           onClose();
         }}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 hover:bg-white text-black shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 fixed top-8 right-8 z-[9999]"
+        className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/90 hover:bg-white text-black shadow-lg hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 fixed top-8 right-8 z-[9999]"
         aria-label="Close modal"
       >
-        <X className="h-6 w-6" />
+        <X className="h-5 w-5 sm:h-6 sm:w-6" />
       </button>
 
       <div className="fixed inset-0 z-[9000]">

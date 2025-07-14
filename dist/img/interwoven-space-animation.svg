@@ -1,5 +1,35 @@
 <svg width="90" height="90" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
   <defs>
+    <!-- 3D Gradients for Depth Effect -->
+    <radialGradient id="gradient1" cx="0.4" cy="0.4" r="0.8">
+      <stop offset="0%" stop-color="#A67C52" stop-opacity="1"/>
+      <stop offset="70%" stop-color="#8B7355" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#6B5B47" stop-opacity="0.6"/>
+    </radialGradient>
+    
+    <radialGradient id="gradient2" cx="0.6" cy="0.3" r="0.8">
+      <stop offset="0%" stop-color="#20B2AA" stop-opacity="1"/>
+      <stop offset="70%" stop-color="#1E9BA3" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#1A8A91" stop-opacity="0.6"/>
+    </radialGradient>
+    
+    <radialGradient id="gradient3" cx="0.3" cy="0.6" r="0.8">
+      <stop offset="0%" stop-color="#D2691E" stop-opacity="1"/>
+      <stop offset="70%" stop-color="#B85A1A" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#A04A16" stop-opacity="0.6"/>
+    </radialGradient>
+    
+    <radialGradient id="gradient4" cx="0.5" cy="0.5" r="0.8">
+      <stop offset="0%" stop-color="#8B7355" stop-opacity="1"/>
+      <stop offset="70%" stop-color="#7A6B4A" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#6A5B3F" stop-opacity="0.6"/>
+    </radialGradient>
+    
+    <radialGradient id="highlight" cx="0.3" cy="0.3" r="0.6">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    
     <style>
       .layer {
         animation: breathe 120s ease-in-out infinite;
@@ -24,12 +54,20 @@
       
       @keyframes breathe {
         0%, 100% { 
-          transform: scale(1) rotate(0deg);
+          transform: scale(1) rotate(0deg) translateZ(0px);
           opacity: 0.8;
         }
+        25% { 
+          transform: scale(1.05) rotate(90deg) translateZ(5px);
+          opacity: 0.7;
+        }
         50% { 
-          transform: scale(1.1) rotate(180deg);
-          opacity: 0.4;
+          transform: scale(1.1) rotate(180deg) translateZ(10px);
+          opacity: 0.6;
+        }
+        75% { 
+          transform: scale(1.05) rotate(270deg) translateZ(5px);
+          opacity: 0.7;
         }
       }
       
@@ -48,43 +86,28 @@
     </style>
   </defs>
   
-  <!-- Mid-Century Modern Concentric Layers - Warm Grays -->
-  <circle class="layer" cx="45" cy="45" r="15" fill="#A67C52" opacity="0.8"/>
-  <circle class="layer" cx="45" cy="45" r="5" fill="#8B7355" opacity="0.9"/>
-  
-  <!-- Center Lightbulb SVG -->
-  <g class="lightbulb">
-    <!-- Lightbulb Glass - More bulbous shape -->
-    <path d="M 37 30 Q 37 25 45 25 Q 53 25 53 30 Q 53 45 45 45 Q 37 45 37 30 Z" fill="#F8F8F0" opacity="0.95" stroke="#8B7355" stroke-width="0.3"/>
-    <!-- Lightbulb Neck -->
-    <rect x="43" y="45" width="4" height="3" rx="1" fill="#E8E8E8" opacity="0.9"/>
-    <!-- Lightbulb Base/Socket -->
-    <rect x="41" y="48" width="8" height="5" rx="1.5" fill="#A67C52"/>
-    <!-- Lightbulb Base Threads -->
-    <rect x="42" y="49" width="6" height="3" rx="0.5" fill="#8B7355" opacity="0.7"/>
-    <!-- Lightbulb Support Wires -->
-    <line x1="41" y1="35" x2="41" y2="38" stroke="#C0C0C0" stroke-width="0.3"/>
-    <line x1="49" y1="35" x2="49" y2="38" stroke="#C0C0C0" stroke-width="0.3"/>
-    <!-- Lightbulb Filaments - More realistic -->
-    <g class="lightbulb-filament">
-      <path d="M 41 35 Q 45 32 49 35" stroke="#D2691E" stroke-width="0.8" fill="none"/>
-      <path d="M 41 37 Q 45 34 49 37" stroke="#20B2AA" stroke-width="0.8" fill="none"/>
-      <path d="M 41 39 Q 45 36 49 39" stroke="#CD853F" stroke-width="0.8" fill="none"/>
-    </g>
-    <!-- Lightbulb Center Support -->
-    <line x1="45" y1="32" x2="45" y2="42" stroke="#C0C0C0" stroke-width="0.2"/>
-    <!-- Lightbulb Glow Effect -->
-    <circle cx="45" cy="35" r="10" fill="url(#glow)" opacity="0.4"/>
+  <!-- 3D Interwoven Space Layers with Depth -->
+  <g class="layer">
+    <!-- Background Shadow Layer -->
+    <circle cx="47" cy="47" r="22" fill="#8B7355" opacity="0.3"/>
+    
+    <!-- Primary Space Layer - Bottom -->
+    <circle cx="45" cy="45" r="20" fill="url(#gradient1)" opacity="0.8"/>
+    
+    <!-- Secondary Space Layer - Middle -->
+    <circle cx="50" cy="40" r="18" fill="url(#gradient2)" opacity="0.7"/>
+    
+    <!-- Third Space Layer - Top -->
+    <circle cx="40" cy="50" r="16" fill="url(#gradient3)" opacity="0.6"/>
+    
+    <!-- Nested Inner Space - Foreground -->
+    <circle cx="45" cy="45" r="8" fill="url(#gradient4)" opacity="0.9"/>
+    
+    <!-- 3D Highlight Effects -->
+    <circle cx="42" cy="42" r="6" fill="url(#highlight)" opacity="0.4"/>
   </g>
   
-  <!-- Lightbulb Glow Gradient -->
-  <defs>
-    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0%" stop-color="#F9C22E" stop-opacity="0.8"/>
-      <stop offset="50%" stop-color="#D2691E" stop-opacity="0.4"/>
-      <stop offset="100%" stop-color="#8B7355" stop-opacity="0"/>
-    </radialGradient>
-  </defs>
+
   
   <!-- Mid-Century Modern Corner Elements - Muted Orange and Teal -->
   <rect class="dot" x="18" y="18" width="6" height="6" rx="1" fill="#D2691E"/>
@@ -96,7 +119,15 @@
   <circle class="dot" cx="45" cy="15" r="3" fill="#8B7355"/>
   <circle class="dot" cx="45" cy="75" r="3" fill="#A67C52"/>
   
-  <!-- AI Interface Elements -->
+  <!-- 3D Interwoven Connection Points -->
+  <circle cx="48" cy="42" r="2.5" fill="url(#gradient1)" opacity="0.9" class="dot"/>
+  <circle cx="42" cy="48" r="2.5" fill="url(#gradient2)" opacity="0.9" class="dot"/>
+  <circle cx="52" cy="38" r="2.5" fill="url(#gradient3)" opacity="0.9" class="dot"/>
+  <circle cx="38" cy="52" r="2.5" fill="url(#gradient4)" opacity="0.9" class="dot"/>
+  
+
+  
+  <!-- AI Interface Elements at Intersection Points -->
   <rect x="35" y="25" width="4" height="4" rx="0.5" fill="#C4A484" opacity="0.6" class="dot"/>
   <rect x="51" y="25" width="4" height="4" rx="0.5" fill="#D2B48C" opacity="0.6" class="dot"/>
   <rect x="35" y="61" width="4" height="4" rx="0.5" fill="#A67C52" opacity="0.6" class="dot"/>

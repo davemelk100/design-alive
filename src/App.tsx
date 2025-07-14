@@ -145,8 +145,8 @@ function App() {
                   className="absolute inset-0 bg-gradient-to-b from-transparent to-background/5"
                 />
 
-                <div className="container mx-auto px-4 sm:px-8 pt-8">
-                  {/* Top Navigation and Title Row */}
+                <div className="container mx-auto px-4 sm:px-8 pt-16 sm:pt-20">
+                  {/* Title, Icons, and Navigation Row */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
                     <motion.div
                       initial="hidden"
@@ -175,7 +175,6 @@ function App() {
                         }}
                         className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none"
                         style={{
-                          textShadow: "1px 1px 2px rgba(0,0,0,0.15)",
                           letterSpacing: "-0.06em",
                         }}
                       >
@@ -183,13 +182,14 @@ function App() {
                       </motion.h1>
                     </motion.div>
 
-                    {/* Top Navigation */}
-                    <motion.nav
+                    {/* Icons and Navigation */}
+                    <motion.div
                       initial={{ opacity: 0, y: -20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.8, delay: 0.1 }}
-                      className="w-full sm:w-auto"
+                      className="flex flex-col sm:flex-row sm:items-center gap-4"
                     >
+                      {/* Navigation Links */}
                       <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center justify-start gap-3">
                         <button
                           onClick={() => handleNavClick("current-projects")}
@@ -226,6 +226,10 @@ function App() {
                         >
                           Career
                         </button>
+                      </div>
+
+                      {/* Icons */}
+                      <div className="flex items-center gap-3">
                         <a
                           href={content.navigation.social.linkedin.url}
                           target="_blank"
@@ -248,7 +252,7 @@ function App() {
                           <ThemeToggle />
                         </div>
                       </div>
-                    </motion.nav>
+                    </motion.div>
                   </div>
 
                   {/* Color Palette */}
@@ -256,7 +260,7 @@ function App() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 1.2 }}
-                    className="mt-6 flex flex-wrap gap-3"
+                    className="mt-6 hidden sm:flex flex-wrap justify-center sm:justify-start gap-3"
                   >
                     {designTokens.colors.map((color) => {
                       return (
@@ -268,12 +272,11 @@ function App() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            className="relative w-6 h-6 rounded-full"
+                            className="relative w-4 h-4 sm:w-6 sm:h-6 rounded-full"
                             style={{
                               backgroundColor: color.value,
-                              boxShadow:
-                                "2px 2px 4px rgba(0,0,0,0.2), -2px -2px 4px rgba(255,255,255,0.3)",
                               background: `radial-gradient(circle at 70% 70%, ${color.value} 0%, ${color.value} 60%, ${color.value}dd 100%)`,
+                              opacity: 0.7,
                             }}
                           />
                         </div>

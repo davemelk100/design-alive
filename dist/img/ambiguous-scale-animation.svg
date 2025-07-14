@@ -108,28 +108,7 @@
         }
       }
       
-      .paintbrush {
-        animation: paintbrushFloat 12s ease-in-out infinite;
-      }
-      
-      @keyframes paintbrushFloat {
-        0%, 100% {
-          transform: rotate(-15deg) scale(1);
-          opacity: 0.8;
-        }
-        25% {
-          transform: rotate(-10deg) scale(1.05);
-          opacity: 0.9;
-        }
-        50% {
-          transform: rotate(-20deg) scale(0.95);
-          opacity: 0.7;
-        }
-        75% {
-          transform: rotate(-5deg) scale(1.1);
-          opacity: 1;
-        }
-      }
+
     </style>
   </defs>
   
@@ -158,20 +137,7 @@
     <rect x="45" y="45" width="6" height="6" rx="0.5" fill="#A67C52" opacity="0.8"/>
   </g>
   
-  <!-- Center Paintbrush SVG -->
-  <g class="paintbrush">
-    <!-- Paintbrush Handle -->
-    <rect x="44" y="37" width="2" height="12" rx="1" fill="#8B7355"/>
-    <!-- Paintbrush Ferrule -->
-    <rect x="43.5" y="36" width="3" height="2" rx="1" fill="#A67C52"/>
-    <!-- Paintbrush Bristles -->
-    <path d="M 43 36 Q 42 35 43 34 Q 44 35 43 36 Z" fill="#D2691E"/>
-    <path d="M 44 36 Q 43 35 44 34 Q 45 35 44 36 Z" fill="#20B2AA"/>
-    <path d="M 45 36 Q 44 35 45 34 Q 46 35 45 36 Z" fill="#CD853F"/>
-    <path d="M 46 36 Q 45 35 46 34 Q 47 35 46 36 Z" fill="#48D1CC"/>
-    <!-- Paint Drip -->
-    <circle cx="45" cy="33" r="1" fill="#C4A484" opacity="0.7"/>
-  </g>
+
   
   <!-- Floating Scale Elements - All Squares -->
   <g class="scale-group">
