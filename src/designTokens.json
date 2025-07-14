@@ -29,6 +29,36 @@
       "name": "Warm Gray Dark",
       "value": "#8B7355",
       "description": "Dark warm gray"
+    },
+    {
+      "name": "Burnt Sienna",
+      "value": "#CD853F",
+      "description": "Burnt sienna secondary color"
+    },
+    {
+      "name": "Sage Green",
+      "value": "#9CAF88",
+      "description": "Sage green secondary color"
+    },
+    {
+      "name": "Taupe",
+      "value": "#B8860B",
+      "description": "Taupe secondary color"
+    },
+    {
+      "name": "Dusty Blue",
+      "value": "#6B8E23",
+      "description": "Dusty blue secondary color"
+    },
+    {
+      "name": "Terracotta",
+      "value": "#E2725B",
+      "description": "Terracotta secondary color"
+    },
+    {
+      "name": "Slate Gray",
+      "value": "#708090",
+      "description": "Slate gray secondary color"
     }
   ],
 
