@@ -281,7 +281,7 @@ function App() {
                             style={{
                               backgroundColor: color.value,
                               background: `radial-gradient(circle at 70% 70%, ${color.value} 0%, ${color.value} 60%, ${color.value}dd 100%)`,
-                              opacity: 0.7,
+                              opacity: 0.4,
                             }}
                           />
                         </div>
@@ -310,7 +310,7 @@ function App() {
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.6, delay: index * 0.1 }}
-                          className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[6/5]"
+                          className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]"
                         >
                           <div className="absolute top-3 right-3 z-20">
                             <a
