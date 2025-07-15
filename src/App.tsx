@@ -383,9 +383,9 @@ function App() {
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.6, delay: index * 0.1 }}
-                          className="group relative overflow-visible rounded-lg bg-gray-100/80 flex flex-col shadow-md"
+                          className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[3/2]"
                         >
-                          <div className="absolute top-3 right-3">
+                          <div className="absolute top-3 right-3 z-10">
                             <a
                               href={project.demo}
                               target="_blank"
@@ -395,7 +395,7 @@ function App() {
                               <Eye className="h-4 w-4 text-gray-600" />
                             </a>
                           </div>
-                          <div className="p-3 flex flex-col gap-2 flex-1">
+                          <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                             <div className="pr-12">
                               <h3 className="text-[20px] font-semibold mb-1 dark:text-black title-font">
                                 {project.title}
@@ -407,7 +407,7 @@ function App() {
                               </p>
                             </div>
                           </div>
-                          <div className="relative aspect-[3/2] overflow-visible -mx-3 -mb-3">
+                          <div className="absolute inset-0 overflow-visible">
                             <img
                               src={
                                 project.title === "Chatbots"
