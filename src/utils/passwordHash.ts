@@ -12,9 +12,12 @@ export const hashPassword = async (password: string): Promise<string> => {
 
 export const verifyPassword = async (password: string): Promise<boolean> => {
   const hashedPassword = await hashPassword(password);
-  // Use environment variable if available, otherwise use hardcoded hash for production
-  const expectedHash =
-    import.meta.env.VITE_ADMIN_PASSWORD_HASH ||
-    "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
+  const expectedHash = import.meta.env.VITE_ADMIN_PASSWORD_HASH;
+
+  if (!expectedHash) {
+    console.error("VITE_ADMIN_PASSWORD_HASH environment variable is not set");
+    return false;
+  }
+
   return hashedPassword === expectedHash;
-}; 
+};
