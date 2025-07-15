@@ -314,13 +314,13 @@ function App() {
                                   subtitle: story.subtitle,
                                 })
                               }
-                              className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+                              className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-md hover:scale-110 transition-all duration-200 w-12 h-12 flex items-center justify-center"
                             >
-                              <Eye className="h-4 w-4 text-gray-600" />
+                              <Eye className="h-6 w-6 text-gray-600" />
                             </button>
                           ) : (
-                            <div className="bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-md w-8 h-8 flex items-center justify-center">
-                              <Eye className="h-4 w-4 text-gray-600" />
+                            <div className="bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-md w-12 h-12 flex items-center justify-center">
+                              <Eye className="h-6 w-6 text-gray-600" />
                             </div>
                           )}
                         </div>
@@ -390,9 +390,9 @@ function App() {
                               href={project.demo}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center relative z-20"
+                              className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-md hover:scale-110 transition-all duration-200 w-12 h-12 flex items-center justify-center relative z-20"
                             >
-                              <Eye className="h-4 w-4 text-gray-600" />
+                              <Eye className="h-6 w-6 text-gray-600" />
                             </a>
                           </div>
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
@@ -479,9 +479,9 @@ function App() {
                             <div className="absolute top-3 right-3">
                               <Link
                                 to={`/article/${slugify(article.title)}`}
-                                className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+                                className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-md hover:scale-110 transition-all duration-200 w-12 h-12 flex items-center justify-center"
                               >
-                                <Eye className="h-4 w-4 text-gray-600" />
+                                <Eye className="h-6 w-6 text-gray-600" />
                               </Link>
                             </div>
                             <div className="p-3 flex flex-col gap-2 flex-1">
@@ -582,9 +582,9 @@ function App() {
                                   href={project.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+                                  className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-md hover:scale-110 transition-all duration-200 w-12 h-12 flex items-center justify-center"
                                 >
-                                  <Eye className="h-4 w-4 text-gray-600" />
+                                  <Eye className="h-6 w-6 text-gray-600" />
                                 </a>
                               </div>
                               <div className="p-3 flex flex-col gap-2 flex-1">
@@ -598,8 +598,8 @@ function App() {
                               className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md"
                             >
                               <div className="absolute top-3 right-3">
-                                <div className="bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-md w-8 h-8 flex items-center justify-center">
-                                  <Eye className="h-4 w-4 text-gray-600" />
+                                <div className="bg-white/80 backdrop-blur-sm rounded-full p-3 shadow-md w-12 h-12 flex items-center justify-center">
+                                  <Eye className="h-6 w-6 text-gray-600" />
                                 </div>
                               </div>
                               <div className="p-3 flex flex-col gap-2 flex-1">

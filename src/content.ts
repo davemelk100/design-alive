@@ -254,7 +254,7 @@ export const content = {
         hasModal: true,
       },
       {
-        title: "Propio",
+        title: "AI-Driven Interpretation",
         subtitle:
           "How I negotiated, researched, and designed an AI-driven design feature request across organizations",
         description: "",
