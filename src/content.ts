@@ -256,7 +256,7 @@ export const content = {
       {
         title: "AI-Driven Interpretation",
         subtitle:
-          "How I negotiated, researched, and designed an AI-driven design feature request across organizations",
+          "How I researched, and designed an AI-driven design feature request across organizations",
         description: "",
         category: "AI Design",
         image: "/img/propio-story.png",
@@ -268,7 +268,7 @@ export const content = {
       {
         title: "Design Management",
         subtitle:
-          "How I proposed and implemented new efficiencies and opportunities to a development and design organization",
+          "How I proposed and implemented new efficiencies and opportunities for a development and design organization",
         description: "",
         category: "Process Improvement",
         image: "/img/meridian-story.png",

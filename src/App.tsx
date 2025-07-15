@@ -46,7 +46,12 @@ const SectionHeader = ({
   return (
     <div className={`${className}`}>
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-[clamp(1.25rem,3vw,2.5rem)] font-bold title-font leading-tight">
+        <h2
+          className="text-[clamp(1.25rem,3vw,2.5rem)] font-bold title-font leading-tight"
+          style={{
+            letterSpacing: "-0.01em",
+          }}
+        >
           {title}
         </h2>
         {showArchiveLink && (
@@ -319,7 +324,12 @@ function App() {
                           </div>
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                             <div className="pr-12">
-                              <h3 className="text-[20px] font-semibold mb-1 dark:text-black title-font">
+                              <h3
+                                className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                style={{
+                                  letterSpacing: "-0.01em",
+                                }}
+                              >
                                 {project.title}
                               </h3>
                             </div>
@@ -399,7 +409,12 @@ function App() {
                         </div>
                         <div className="p-3 flex flex-col gap-2 flex-1">
                           <div className="pr-12">
-                            <h3 className="text-[20px] font-semibold mb-1 dark:text-black title-font">
+                            <h3
+                              className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                              style={{
+                                letterSpacing: "-0.01em",
+                              }}
+                            >
                               {story.title}
                             </h3>
                             {story.subtitle && (
@@ -486,7 +501,12 @@ function App() {
                             </div>
                             <div className="p-3 flex flex-col gap-2 flex-1">
                               <div className="pr-12">
-                                <h3 className="text-[20px] font-semibold mb-1 dark:text-black title-font">
+                                <h3
+                                  className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                  style={{
+                                    letterSpacing: "-0.01em",
+                                  }}
+                                >
                                   {article.title}
                                 </h3>
                               </div>
@@ -543,7 +563,12 @@ function App() {
                           const ProjectCard = (
                             <div className="flex flex-col gap-2 flex-1">
                               <div className="pr-12">
-                                <h3 className="text-[20px] font-semibold mb-1 dark:text-black title-font">
+                                <h3
+                                  className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                  style={{
+                                    letterSpacing: "-0.01em",
+                                  }}
+                                >
                                   {project.title}
                                 </h3>
                                 {project.description && (
@@ -660,7 +685,12 @@ function App() {
                                   <div className="absolute right-[-9px] md:right-auto md:left-[calc(50%-9px)] top-0">
                                     <div className="w-[18px] h-[18px] rounded-full bg-primary" />
                                   </div>
-                                  <h3 className="text-[20px] font-semibold mb-2">
+                                  <h3
+                                    className="text-[20px] font-semibold mb-2"
+                                    style={{
+                                      letterSpacing: "-0.01em",
+                                    }}
+                                  >
                                     {position.title}
                                   </h3>
                                   <p className="text-nav text-muted-foreground mb-1">
@@ -686,7 +716,12 @@ function App() {
                                   <div className="absolute right-[-9px] md:right-auto md:left-[calc(50%-9px)] top-0">
                                     <div className="w-[18px] h-[18px] rounded-full bg-primary" />
                                   </div>
-                                  <h3 className="text-[20px] font-semibold mb-2">
+                                  <h3
+                                    className="text-[20px] font-semibold mb-2"
+                                    style={{
+                                      letterSpacing: "-0.01em",
+                                    }}
+                                  >
                                     {position.title}
                                   </h3>
                                   <p className="text-nav text-muted-foreground mb-1">
