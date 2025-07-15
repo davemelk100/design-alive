@@ -190,7 +190,7 @@ function App() {
                       className="flex flex-col sm:flex-row sm:items-center gap-4"
                     >
                       {/* Navigation Links */}
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center justify-start gap-3">
+                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center justify-start gap-6">
                         <button
                           onClick={() => handleNavClick("current-projects")}
                           className="text-black hover:text-gray-600 transition-colors text-sm font-medium"
@@ -325,7 +325,7 @@ function App() {
                           )}
                         </div>
                         <div className="p-3 flex flex-col gap-2 flex-1">
-                          <div>
+                          <div className="pr-12">
                             <h3 className="text-[20px] font-semibold mb-1 dark:text-black title-font">
                               {story.title}
                             </h3>
@@ -336,22 +336,26 @@ function App() {
                             )}
                           </div>
                           <div className="flex-1 flex flex-col">
-                            {story.description && (
-                              <p className="text-black mb-2 dark:text-black text-card-body flex-1">
-                                {story.description}
-                              </p>
-                            )}
+                            <p className="text-black mb-2 dark:text-black text-card-body flex-1">
+                              {story.description || "No description available."}
+                            </p>
                           </div>
                         </div>
-                        {story.image && (
-                          <div className="aspect-[3/2] overflow-hidden -mx-3 -mb-3">
+                        <div className="aspect-[3/2] overflow-hidden -mx-3 -mb-3">
+                          {story.image ? (
                             <img
                               src={`${story.image}?v=${Date.now()}`}
                               alt={story.title}
                               className="h-full w-full object-cover"
                             />
-                          </div>
-                        )}
+                          ) : (
+                            <div className="h-full w-full bg-gray-200/50 flex items-center justify-center">
+                              <div className="text-gray-400 text-sm">
+                                No image
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </motion.div>
                     ))}
                   </div>
@@ -407,7 +411,7 @@ function App() {
                                 project.title === "Chatbots"
                                   ? `/img/chatbot-animation.svg?v=${Date.now()}`
                                   : project.title === "Design Panes"
-                                  ? `/img/ambiguous-scale-animation.svg?v=${Date.now()}`
+                                  ? `/img/design-panes-slow.svg?v=${Date.now()}`
                                   : project.title === "AI NUI"
                                   ? `/img/interwoven-space-animation.svg?v=${Date.now()}`
                                   : `/img/lab.svg?v=${Date.now()}`
@@ -421,7 +425,7 @@ function App() {
                                   ? "Interwoven Space"
                                   : "Lab"
                               }
-                              className="h-full w-full object-contain"
+                              className="h-full w-full object-cover"
                             />
                           </div>
                         </motion.div>

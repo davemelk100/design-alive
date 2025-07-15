@@ -1,117 +1,234 @@
 <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
-      .design-element {
+      .fractal-square {
         transform-origin: 45px 45px;
       }
       
-      .floating-pane {
+      .primary-rotate {
+        animation: primaryRotate 20s linear infinite;
+      }
+      
+      .secondary-rotate {
+        animation: secondaryRotate 15s linear infinite reverse;
+      }
+      
+      .tertiary-rotate {
+        animation: tertiaryRotate 25s linear infinite;
+      }
+      
+      .quaternary-rotate {
+        animation: quaternaryRotate 30s linear infinite reverse;
+      }
+      
+      .quinary-rotate {
+        animation: quinaryRotate 35s linear infinite;
+      }
+      
+      .senary-rotate {
+        animation: senaryRotate 40s linear infinite reverse;
+      }
+      
+      .floating {
         animation: float 8s ease-in-out infinite;
       }
       
-      .floating-pane:nth-child(2) {
+      .floating:nth-child(2) {
         animation-delay: 2s;
       }
       
-      .floating-pane:nth-child(3) {
+      .floating:nth-child(3) {
         animation-delay: 4s;
+      }
+      
+      .pulse {
+        animation: pulse 6s ease-in-out infinite;
+      }
+      
+      .pulse:nth-child(2) {
+        animation-delay: 1.5s;
+      }
+      
+      .pulse:nth-child(3) {
+        animation-delay: 3s;
+      }
+      
+      .breathing {
+        animation: breathing 10s ease-in-out infinite;
+      }
+      
+      @keyframes primaryRotate {
+        0% {
+          transform: rotate(0deg) scale(1);
+        }
+        50% {
+          transform: rotate(180deg) scale(1.1);
+        }
+        100% {
+          transform: rotate(360deg) scale(1);
+        }
+      }
+      
+      @keyframes secondaryRotate {
+        0% {
+          transform: rotate(0deg) scale(1.1);
+        }
+        50% {
+          transform: rotate(-180deg) scale(0.9);
+        }
+        100% {
+          transform: rotate(-360deg) scale(1.1);
+        }
+      }
+      
+      @keyframes tertiaryRotate {
+        0% {
+          transform: rotate(0deg) scale(0.9);
+        }
+        50% {
+          transform: rotate(180deg) scale(1.2);
+        }
+        100% {
+          transform: rotate(360deg) scale(0.9);
+        }
+      }
+      
+      @keyframes quaternaryRotate {
+        0% {
+          transform: rotate(0deg) scale(1.2);
+        }
+        50% {
+          transform: rotate(-180deg) scale(0.8);
+        }
+        100% {
+          transform: rotate(-360deg) scale(1.2);
+        }
+      }
+      
+      @keyframes quinaryRotate {
+        0% {
+          transform: rotate(0deg) scale(0.8);
+        }
+        50% {
+          transform: rotate(180deg) scale(1.3);
+        }
+        100% {
+          transform: rotate(360deg) scale(0.8);
+        }
+      }
+      
+      @keyframes senaryRotate {
+        0% {
+          transform: rotate(0deg) scale(1.3);
+        }
+        50% {
+          transform: rotate(-180deg) scale(0.7);
+        }
+        100% {
+          transform: rotate(-360deg) scale(1.3);
+        }
       }
       
       @keyframes float {
         0%, 100% {
-          transform: translateY(0px) rotate(0deg);
-          opacity: 0.6;
+          transform: translateY(0px);
+          opacity: 0.4;
         }
         50% {
-          transform: translateY(-8px) rotate(2deg);
-          opacity: 1;
+          transform: translateY(-6px);
+          opacity: 0.8;
         }
       }
       
-      .rotating-element {
-        animation: slowRotate 25s linear infinite;
-      }
-      
-      @keyframes slowRotate {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-      
-      .breathing-element {
-        animation: breathe 6s ease-in-out infinite;
-      }
-      
-      @keyframes breathe {
+      @keyframes pulse {
         0%, 100% {
           transform: scale(1);
-          opacity: 0.7;
-        }
-        50% {
-          transform: scale(1.1);
-          opacity: 1;
-        }
-      }
-      
-      .fade-element {
-        animation: fade 10s ease-in-out infinite;
-      }
-      
-      @keyframes fade {
-        0%, 100% {
           opacity: 0.3;
         }
         50% {
-          opacity: 0.8;
+          transform: scale(1.1);
+          opacity: 0.7;
+        }
+      }
+      
+      @keyframes breathing {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 0.2;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.6;
         }
       }
     </style>
   </defs>
   
-  <!-- Background Grid (Subtle) -->
-  <line x1="15" y1="75" x2="75" y2="75" stroke="#e0e0e0" stroke-width="0.3" opacity="0.2"/>
-  <line x1="15" y1="60" x2="75" y2="60" stroke="#e0e0e0" stroke-width="0.3" opacity="0.2"/>
-  <line x1="15" y1="45" x2="75" y2="45" stroke="#e0e0e0" stroke-width="0.3" opacity="0.2"/>
-  <line x1="15" y1="30" x2="75" y2="30" stroke="#e0e0e0" stroke-width="0.3" opacity="0.2"/>
+  <!-- Central Core Square -->
+  <rect x="40" y="40" width="10" height="10" fill="#F97316" opacity="0.6" class="fractal-square primary-rotate"/>
   
-  <line x1="15" y1="30" x2="15" y2="75" stroke="#e0e0e0" stroke-width="0.3" opacity="0.2"/>
-  <line x1="30" y1="30" x2="30" y2="75" stroke="#e0e0e0" stroke-width="0.3" opacity="0.2"/>
-  <line x1="45" y1="30" x2="45" y2="75" stroke="#e0e0e0" stroke-width="0.3" opacity="0.2"/>
-  <line x1="60" y1="30" x2="60" y2="75" stroke="#e0e0e0" stroke-width="0.3" opacity="0.2"/>
-  <line x1="75" y1="30" x2="75" y2="75" stroke="#e0e0e0" stroke-width="0.3" opacity="0.2"/>
-  
-  <!-- Floating Design Panes -->
-  <g class="design-element">
-    <!-- First Pane -->
-    <rect x="20" y="35" width="25" height="20" rx="3" fill="#6366F1" opacity="0.8" class="floating-pane"/>
-    <rect x="22" y="37" width="21" height="16" rx="2" fill="#818CF8" opacity="0.6"/>
-    
-    <!-- Second Pane -->
-    <rect x="45" y="45" width="25" height="20" rx="3" fill="#10B981" opacity="0.8" class="floating-pane"/>
-    <rect x="47" y="47" width="21" height="16" rx="2" fill="#34D399" opacity="0.6"/>
-    
-    <!-- Third Pane -->
-    <rect x="35" y="55" width="25" height="20" rx="3" fill="#F59E0B" opacity="0.8" class="floating-pane"/>
-    <rect x="37" y="57" width="21" height="16" rx="2" fill="#FBBF24" opacity="0.6"/>
+  <!-- First Layer of Rotating Squares -->
+  <g class="fractal-square secondary-rotate">
+    <rect x="25" y="25" width="8" height="8" fill="#06B6D4" opacity="0.5" class="floating"/>
+    <rect x="57" y="25" width="8" height="8" fill="#F97316" opacity="0.5" class="floating"/>
+    <rect x="57" y="57" width="8" height="8" fill="#06B6D4" opacity="0.5" class="floating"/>
+    <rect x="25" y="57" width="8" height="8" fill="#F97316" opacity="0.5" class="floating"/>
   </g>
   
-  <!-- Central Breathing Element -->
-  <circle cx="45" cy="45" r="8" fill="#8B5CF6" opacity="0.7" class="breathing-element"/>
-  
-  <!-- Rotating Design Elements -->
-  <g class="rotating-element">
-    <circle cx="25" cy="25" r="3" fill="#EF4444" opacity="0.6"/>
-    <circle cx="65" cy="25" r="3" fill="#06B6D4" opacity="0.6"/>
-    <circle cx="65" cy="65" r="3" fill="#84CC16" opacity="0.6"/>
-    <circle cx="25" cy="65" r="3" fill="#F97316" opacity="0.6"/>
+  <!-- Second Layer of Rotating Squares -->
+  <g class="fractal-square tertiary-rotate">
+    <rect x="15" y="15" width="6" height="6" fill="#F97316" opacity="0.4" class="pulse"/>
+    <rect x="69" y="15" width="6" height="6" fill="#06B6D4" opacity="0.4" class="pulse"/>
+    <rect x="69" y="69" width="6" height="6" fill="#F97316" opacity="0.4" class="pulse"/>
+    <rect x="15" y="69" width="6" height="6" fill="#06B6D4" opacity="0.4" class="pulse"/>
   </g>
   
-  <!-- Subtle Connection Lines -->
-  <line x1="45" y1="45" x2="25" y2="25" stroke="#8B5CF6" stroke-width="0.5" opacity="0.3" class="fade-element"/>
-  <line x1="45" y1="45" x2="65" y2="25" stroke="#8B5CF6" stroke-width="0.5" opacity="0.3" class="fade-element"/>
-  <line x1="45" y1="45" x2="65" y2="65" stroke="#8B5CF6" stroke-width="0.5" opacity="0.3" class="fade-element"/>
-  <line x1="45" y1="45" x2="25" y2="65" stroke="#8B5CF6" stroke-width="0.5" opacity="0.3" class="fade-element"/>
+  <!-- Third Layer of Rotating Squares -->
+  <g class="fractal-square quaternary-rotate">
+    <rect x="8" y="8" width="4" height="4" fill="#06B6D4" opacity="0.3" class="floating"/>
+    <rect x="78" y="8" width="4" height="4" fill="#F97316" opacity="0.3" class="floating"/>
+    <rect x="78" y="78" width="4" height="4" fill="#06B6D4" opacity="0.3" class="floating"/>
+    <rect x="8" y="78" width="4" height="4" fill="#F97316" opacity="0.3" class="floating"/>
+  </g>
+  
+  <!-- Fourth Layer of Rotating Squares -->
+  <g class="fractal-square quinary-rotate">
+    <rect x="3" y="3" width="3" height="3" fill="#F97316" opacity="0.25" class="pulse"/>
+    <rect x="84" y="3" width="3" height="3" fill="#06B6D4" opacity="0.25" class="pulse"/>
+    <rect x="84" y="84" width="3" height="3" fill="#F97316" opacity="0.25" class="pulse"/>
+    <rect x="3" y="84" width="3" height="3" fill="#06B6D4" opacity="0.25" class="pulse"/>
+  </g>
+  
+  <!-- Fifth Layer of Rotating Squares -->
+  <g class="fractal-square senary-rotate">
+    <rect x="1" y="1" width="2" height="2" fill="#06B6D4" opacity="0.2" class="breathing"/>
+    <rect x="87" y="1" width="2" height="2" fill="#F97316" opacity="0.2" class="breathing"/>
+    <rect x="87" y="87" width="2" height="2" fill="#06B6D4" opacity="0.2" class="breathing"/>
+    <rect x="1" y="87" width="2" height="2" fill="#F97316" opacity="0.2" class="breathing"/>
+  </g>
+  
+  <!-- Sixth Layer of Rotating Squares -->
+  <g class="fractal-square primary-rotate">
+    <rect x="0" y="0" width="1" height="1" fill="#F97316" opacity="0.15" class="floating"/>
+    <rect x="89" y="0" width="1" height="1" fill="#06B6D4" opacity="0.15" class="floating"/>
+    <rect x="89" y="89" width="1" height="1" fill="#F97316" opacity="0.15" class="floating"/>
+    <rect x="0" y="89" width="1" height="1" fill="#06B6D4" opacity="0.15" class="floating"/>
+  </g>
+  
+  <!-- Connection Lines Between Layers -->
+  <line x1="45" y1="45" x2="29" y2="29" stroke="#F97316" stroke-width="0.5" opacity="0.2"/>
+  <line x1="45" y1="45" x2="61" y2="29" stroke="#06B6D4" stroke-width="0.5" opacity="0.2"/>
+  <line x1="45" y1="45" x2="61" y2="61" stroke="#F97316" stroke-width="0.5" opacity="0.2"/>
+  <line x1="45" y1="45" x2="29" y2="61" stroke="#06B6D4" stroke-width="0.5" opacity="0.2"/>
+  
+  <!-- Additional Connection Lines for 4D Effect -->
+  <line x1="45" y1="45" x2="17" y2="17" stroke="#F97316" stroke-width="0.3" opacity="0.15"/>
+  <line x1="45" y1="45" x2="73" y2="17" stroke="#06B6D4" stroke-width="0.3" opacity="0.15"/>
+  <line x1="45" y1="45" x2="73" y2="73" stroke="#F97316" stroke-width="0.3" opacity="0.15"/>
+  <line x1="45" y1="45" x2="17" y2="73" stroke="#06B6D4" stroke-width="0.3" opacity="0.15"/>
+  
+  <!-- Glowing Center Point -->
+  <circle cx="45" cy="45" r="2" fill="#F97316" opacity="0.7" class="pulse"/>
+  <circle cx="45" cy="45" r="4" fill="#F97316" opacity="0.2" class="pulse"/>
+  <circle cx="45" cy="45" r="6" fill="#F97316" opacity="0.1" class="breathing"/>
 </svg> 
