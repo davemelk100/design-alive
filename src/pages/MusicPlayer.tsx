@@ -52,6 +52,13 @@ const MusicPlayer: React.FC = () => {
       url: "/audio/slayer-congas.mp3",
       duration: "2:15",
     },
+    {
+      id: 4,
+      title: "Warrior Women",
+      artist: "BALM",
+      url: "/audio/warrior.mp3",
+      duration: "3:30",
+    },
   ];
 
   // Preload all MP3 files when component mounts
