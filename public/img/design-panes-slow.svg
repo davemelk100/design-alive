@@ -6,55 +6,63 @@
       }
       
       .primary-rotate {
-        animation: primaryRotate 20s linear infinite;
+        animation: primaryRotate 35s linear infinite;
       }
       
       .secondary-rotate {
-        animation: secondaryRotate 15s linear infinite reverse;
+        animation: secondaryRotate 28s linear infinite reverse;
       }
       
       .tertiary-rotate {
-        animation: tertiaryRotate 25s linear infinite;
+        animation: tertiaryRotate 42s linear infinite;
       }
       
       .quaternary-rotate {
-        animation: quaternaryRotate 30s linear infinite reverse;
+        animation: quaternaryRotate 50s linear infinite reverse;
       }
       
       .quinary-rotate {
-        animation: quinaryRotate 35s linear infinite;
+        animation: quinaryRotate 60s linear infinite;
       }
       
       .senary-rotate {
-        animation: senaryRotate 40s linear infinite reverse;
+        animation: senaryRotate 70s linear infinite reverse;
+      }
+      
+      .septenary-rotate {
+        animation: septenaryRotate 80s linear infinite;
+      }
+      
+      .octonary-rotate {
+        animation: octonaryRotate 90s linear infinite reverse;
       }
       
       .floating {
-        animation: float 8s ease-in-out infinite;
+        animation: float 12s ease-in-out infinite;
       }
       
       .floating:nth-child(2) {
-        animation-delay: 2s;
-      }
-      
-      .floating:nth-child(3) {
-        animation-delay: 4s;
-      }
-      
-      .pulse {
-        animation: pulse 6s ease-in-out infinite;
-      }
-      
-      .pulse:nth-child(2) {
-        animation-delay: 1.5s;
-      }
-      
-      .pulse:nth-child(3) {
         animation-delay: 3s;
       }
       
+      .floating:nth-child(3) {
+        animation-delay: 6s;
+      }
+      
+      .pulse {
+        animation: pulse 10s ease-in-out infinite;
+      }
+      
+      .pulse:nth-child(2) {
+        animation-delay: 2.5s;
+      }
+      
+      .pulse:nth-child(3) {
+        animation-delay: 5s;
+      }
+      
       .breathing {
-        animation: breathing 10s ease-in-out infinite;
+        animation: breathing 15s ease-in-out infinite;
       }
       
       @keyframes primaryRotate {
@@ -129,6 +137,30 @@
         }
       }
       
+      @keyframes septenaryRotate {
+        0% {
+          transform: rotate(0deg) scale(0.6);
+        }
+        50% {
+          transform: rotate(180deg) scale(1.4);
+        }
+        100% {
+          transform: rotate(360deg) scale(0.6);
+        }
+      }
+      
+      @keyframes octonaryRotate {
+        0% {
+          transform: rotate(0deg) scale(1.4);
+        }
+        50% {
+          transform: rotate(-180deg) scale(0.5);
+        }
+        100% {
+          transform: rotate(-360deg) scale(1.4);
+        }
+      }
+      
       @keyframes float {
         0%, 100% {
           transform: translateY(0px);
@@ -165,54 +197,86 @@
   </defs>
   
   <!-- Central Core Square -->
-  <rect x="40" y="40" width="10" height="10" fill="#F97316" opacity="0.6" class="fractal-square primary-rotate"/>
+  <rect x="42" y="42" width="6" height="6" fill="#F97316" opacity="0.6" class="fractal-square primary-rotate"/>
   
   <!-- First Layer of Rotating Squares -->
   <g class="fractal-square secondary-rotate">
-    <rect x="25" y="25" width="8" height="8" fill="#06B6D4" opacity="0.5" class="floating"/>
-    <rect x="57" y="25" width="8" height="8" fill="#F97316" opacity="0.5" class="floating"/>
-    <rect x="57" y="57" width="8" height="8" fill="#06B6D4" opacity="0.5" class="floating"/>
-    <rect x="25" y="57" width="8" height="8" fill="#F97316" opacity="0.5" class="floating"/>
+    <rect x="28" y="28" width="5" height="5" fill="#06B6D4" opacity="0.5" class="floating"/>
+    <rect x="57" y="28" width="5" height="5" fill="#F97316" opacity="0.5" class="floating"/>
+    <rect x="57" y="57" width="5" height="5" fill="#06B6D4" opacity="0.5" class="floating"/>
+    <rect x="28" y="57" width="5" height="5" fill="#F97316" opacity="0.5" class="floating"/>
   </g>
   
   <!-- Second Layer of Rotating Squares -->
   <g class="fractal-square tertiary-rotate">
-    <rect x="15" y="15" width="6" height="6" fill="#F97316" opacity="0.4" class="pulse"/>
-    <rect x="69" y="15" width="6" height="6" fill="#06B6D4" opacity="0.4" class="pulse"/>
-    <rect x="69" y="69" width="6" height="6" fill="#F97316" opacity="0.4" class="pulse"/>
-    <rect x="15" y="69" width="6" height="6" fill="#06B6D4" opacity="0.4" class="pulse"/>
+    <rect x="18" y="18" width="4" height="4" fill="#F97316" opacity="0.4" class="pulse"/>
+    <rect x="68" y="18" width="4" height="4" fill="#06B6D4" opacity="0.4" class="pulse"/>
+    <rect x="68" y="68" width="4" height="4" fill="#F97316" opacity="0.4" class="pulse"/>
+    <rect x="18" y="68" width="4" height="4" fill="#06B6D4" opacity="0.4" class="pulse"/>
   </g>
   
   <!-- Third Layer of Rotating Squares -->
   <g class="fractal-square quaternary-rotate">
-    <rect x="8" y="8" width="4" height="4" fill="#06B6D4" opacity="0.3" class="floating"/>
-    <rect x="78" y="8" width="4" height="4" fill="#F97316" opacity="0.3" class="floating"/>
-    <rect x="78" y="78" width="4" height="4" fill="#06B6D4" opacity="0.3" class="floating"/>
-    <rect x="8" y="78" width="4" height="4" fill="#F97316" opacity="0.3" class="floating"/>
+    <rect x="12" y="12" width="3" height="3" fill="#06B6D4" opacity="0.3" class="floating"/>
+    <rect x="75" y="12" width="3" height="3" fill="#F97316" opacity="0.3" class="floating"/>
+    <rect x="75" y="75" width="3" height="3" fill="#06B6D4" opacity="0.3" class="floating"/>
+    <rect x="12" y="75" width="3" height="3" fill="#F97316" opacity="0.3" class="floating"/>
   </g>
   
   <!-- Fourth Layer of Rotating Squares -->
   <g class="fractal-square quinary-rotate">
-    <rect x="3" y="3" width="3" height="3" fill="#F97316" opacity="0.25" class="pulse"/>
-    <rect x="84" y="3" width="3" height="3" fill="#06B6D4" opacity="0.25" class="pulse"/>
-    <rect x="84" y="84" width="3" height="3" fill="#F97316" opacity="0.25" class="pulse"/>
-    <rect x="3" y="84" width="3" height="3" fill="#06B6D4" opacity="0.25" class="pulse"/>
+    <rect x="7" y="7" width="2" height="2" fill="#F97316" opacity="0.25" class="pulse"/>
+    <rect x="81" y="7" width="2" height="2" fill="#06B6D4" opacity="0.25" class="pulse"/>
+    <rect x="81" y="81" width="2" height="2" fill="#F97316" opacity="0.25" class="pulse"/>
+    <rect x="7" y="81" width="2" height="2" fill="#06B6D4" opacity="0.25" class="pulse"/>
   </g>
   
   <!-- Fifth Layer of Rotating Squares -->
   <g class="fractal-square senary-rotate">
-    <rect x="1" y="1" width="2" height="2" fill="#06B6D4" opacity="0.2" class="breathing"/>
-    <rect x="87" y="1" width="2" height="2" fill="#F97316" opacity="0.2" class="breathing"/>
-    <rect x="87" y="87" width="2" height="2" fill="#06B6D4" opacity="0.2" class="breathing"/>
-    <rect x="1" y="87" width="2" height="2" fill="#F97316" opacity="0.2" class="breathing"/>
+    <rect x="3" y="3" width="1" height="1" fill="#06B6D4" opacity="0.2" class="breathing"/>
+    <rect x="86" y="3" width="1" height="1" fill="#F97316" opacity="0.2" class="breathing"/>
+    <rect x="86" y="86" width="1" height="1" fill="#06B6D4" opacity="0.2" class="breathing"/>
+    <rect x="3" y="86" width="1" height="1" fill="#F97316" opacity="0.2" class="breathing"/>
   </g>
   
   <!-- Sixth Layer of Rotating Squares -->
   <g class="fractal-square primary-rotate">
-    <rect x="0" y="0" width="1" height="1" fill="#F97316" opacity="0.15" class="floating"/>
-    <rect x="89" y="0" width="1" height="1" fill="#06B6D4" opacity="0.15" class="floating"/>
-    <rect x="89" y="89" width="1" height="1" fill="#F97316" opacity="0.15" class="floating"/>
-    <rect x="0" y="89" width="1" height="1" fill="#06B6D4" opacity="0.15" class="floating"/>
+    <rect x="1" y="1" width="1" height="1" fill="#F97316" opacity="0.15" class="floating"/>
+    <rect x="88" y="1" width="1" height="1" fill="#06B6D4" opacity="0.15" class="floating"/>
+    <rect x="88" y="88" width="1" height="1" fill="#F97316" opacity="0.15" class="floating"/>
+    <rect x="1" y="88" width="1" height="1" fill="#06B6D4" opacity="0.15" class="floating"/>
+  </g>
+  
+  <!-- Seventh Layer of Rotating Squares -->
+  <g class="fractal-square septenary-rotate">
+    <rect x="0.5" y="0.5" width="0.5" height="0.5" fill="#06B6D4" opacity="0.12" class="pulse"/>
+    <rect x="89" y="0.5" width="0.5" height="0.5" fill="#F97316" opacity="0.12" class="pulse"/>
+    <rect x="89" y="89" width="0.5" height="0.5" fill="#06B6D4" opacity="0.12" class="pulse"/>
+    <rect x="0.5" y="89" width="0.5" height="0.5" fill="#F97316" opacity="0.12" class="pulse"/>
+  </g>
+  
+  <!-- Eighth Layer of Rotating Squares -->
+  <g class="fractal-square octonary-rotate">
+    <rect x="0.25" y="0.25" width="0.25" height="0.25" fill="#F97316" opacity="0.1" class="breathing"/>
+    <rect x="89.5" y="0.25" width="0.25" height="0.25" fill="#06B6D4" opacity="0.1" class="breathing"/>
+    <rect x="89.5" y="89.5" width="0.25" height="0.25" fill="#F97316" opacity="0.1" class="breathing"/>
+    <rect x="0.25" y="89.5" width="0.25" height="0.25" fill="#06B6D4" opacity="0.1" class="breathing"/>
+  </g>
+  
+  <!-- Ninth Layer of Rotating Squares -->
+  <g class="fractal-square primary-rotate">
+    <rect x="0.125" y="0.125" width="0.125" height="0.125" fill="#06B6D4" opacity="0.08" class="floating"/>
+    <rect x="89.75" y="0.125" width="0.125" height="0.125" fill="#F97316" opacity="0.08" class="floating"/>
+    <rect x="89.75" y="89.75" width="0.125" height="0.125" fill="#06B6D4" opacity="0.08" class="floating"/>
+    <rect x="0.125" y="89.75" width="0.125" height="0.125" fill="#F97316" opacity="0.08" class="floating"/>
+  </g>
+  
+  <!-- Tenth Layer of Rotating Squares -->
+  <g class="fractal-square secondary-rotate">
+    <rect x="0.0625" y="0.0625" width="0.0625" height="0.0625" fill="#F97316" opacity="0.06" class="pulse"/>
+    <rect x="89.875" y="0.0625" width="0.0625" height="0.0625" fill="#06B6D4" opacity="0.06" class="pulse"/>
+    <rect x="89.875" y="89.875" width="0.0625" height="0.0625" fill="#F97316" opacity="0.06" class="pulse"/>
+    <rect x="0.0625" y="89.875" width="0.0625" height="0.0625" fill="#06B6D4" opacity="0.06" class="pulse"/>
   </g>
   
   <!-- Connection Lines Between Layers -->

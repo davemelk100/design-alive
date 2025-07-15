@@ -385,12 +385,12 @@ function App() {
                           transition={{ duration: 0.6, delay: index * 0.1 }}
                           className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[3/2]"
                         >
-                          <div className="absolute top-3 right-3 z-10">
+                          <div className="absolute top-3 right-3 z-20">
                             <a
                               href={project.demo}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+                              className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center relative z-20"
                             >
                               <Eye className="h-4 w-4 text-gray-600" />
                             </a>
@@ -407,7 +407,7 @@ function App() {
                               </p>
                             </div>
                           </div>
-                          <div className="absolute inset-0 overflow-visible">
+                          <div className="absolute inset-0 overflow-visible z-0">
                             <img
                               src={
                                 project.title === "Chatbots"

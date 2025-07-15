@@ -390,9 +390,9 @@ export const content = {
       },
       {
         id: "seven-interviews-excessive",
-        title: "Seven Interviews? Some folks say that's excessive.",
+        title: "Seven Interviews?",
         description:
-          "That's because it is. What's the incentive for recruiters? Volume? Baffling.",
+          "Some folks say that's excessive.",
         url: "seven-interviews",
         content: `<h1>Seven Interviews?</h1>
 
@@ -570,7 +570,7 @@ export const content = {
 
       {
         id: "five-design-genres",
-        title: "There are Five Design Genres",
+        title: "The Five Design Genres",
         description:
           "After years of research, five design genres have been defined (by me ).",
         url: "five-design-genres",
@@ -770,9 +770,9 @@ export const content = {
       },
       {
         id: "text-tunneling",
-        title: "Text Tunneling: The Art of Getting to the Point",
+        title: "Text Tunneling",
         description:
-          "Candor and brevity can turn casual users into engaged users.",
+          "The art of getting to the point.",
         url: "text-Tunneling",
         content: `<h1>Text Tunneling: Make It Make Sense</h1>
 
