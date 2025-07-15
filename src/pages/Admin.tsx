@@ -246,6 +246,27 @@ export default function Admin() {
           </div>
         </div>
 
+        {/* Writing Gallery Link */}
+        <div className="bg-blue-100 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-1">
+                Writing Gallery
+              </h3>
+              <p className="text-sm text-blue-700 dark:text-blue-300">
+                Admin-only access to writing portfolio
+              </p>
+            </div>
+            <Link
+              to="/writing-gallery"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            >
+              <Play className="h-4 w-4" />
+              Open Writing Gallery
+            </Link>
+          </div>
+        </div>
+
         {/* Dashboard Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column */}

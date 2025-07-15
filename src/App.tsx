@@ -24,6 +24,7 @@ import Admin from "./pages/Admin";
 import AdminLogin from "./pages/AdminLogin";
 import AdminMusic from "./pages/AdminMusic";
 import MusicPlayer from "./pages/MusicPlayer";
+import WritingGallery from "./pages/WritingGallery";
 import { slugify } from "./utils/slugify";
 import { getVisibleArticles } from "./utils/articleVisibility";
 import { getVisibleDesignWork } from "./utils/designWorkVisibility";
@@ -759,6 +760,7 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin-music" element={<AdminMusic />} />
         <Route path="/music-player" element={<MusicPlayer />} />
+        <Route path="/writing-gallery" element={<WritingGallery />} />
       </Routes>
 
       {selectedArticle && (

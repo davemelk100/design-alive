@@ -33,31 +33,38 @@ const MusicPlayer: React.FC = () => {
   const tracks: Track[] = [
     {
       id: 1,
+      title: "Warrior Women",
+      artist: "BALM",
+      url: "/audio/warrior.mp3",
+      duration: "3:30",
+    },
+    {
+      id: 2,
       title: "Motorhead v Notorious B.I.G. v Pink Floyd",
       artist: "BALM",
       url: "/audio/motorbeatv2.mp3",
       duration: "1:26",
     },
     {
-      id: 2,
+      id: 3,
       title: "Alice In Chains x Fiend",
       artist: "BALM",
       url: "/audio/aic-fiend.mp3",
       duration: "0:38",
     },
     {
-      id: 3,
+      id: 4,
       title: "Slayer x Congas",
       artist: "BALM",
       url: "/audio/slayer-congas.mp3",
       duration: "2:15",
     },
     {
-      id: 4,
-      title: "Warrior Women",
+      id: 5,
+      title: "Staggered (Reprised)",
       artist: "BALM",
-      url: "/audio/warrior.mp3",
-      duration: "3:30",
+      url: "/audio/ht-stems.mp3",
+      duration: "4:20",
     },
   ];
 
