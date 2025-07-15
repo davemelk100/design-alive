@@ -32,8 +32,8 @@ const config: Config = {
           "Arial",
           "sans-serif",
         ],
-        title: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
-        card: ["Space Grotesk", "Helvetica", "Arial", "sans-serif"],
+        title: ["DM Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
+        card: ["DM Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
       },
       fontSize: {
         // Custom typography scale
