@@ -11,11 +11,7 @@ const ThemeToggle: React.FC = () => {
       className="hover:opacity-70 transition-opacity text-black relative z-10"
       aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
-      {isDarkMode ? (
-        <Sun className="h-5 w-5 sm:h-6 sm:w-6" />
-      ) : (
-        <Moon className="h-5 w-5 sm:h-6 sm:w-6" />
-      )}
+      {isDarkMode ? <Sun className="h-6 w-6" /> : <Moon className="h-6 w-6" />}
     </button>
   );
 };

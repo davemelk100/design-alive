@@ -190,38 +190,38 @@ function App() {
                       className="flex flex-col sm:flex-row sm:items-center gap-4"
                     >
                       {/* Navigation Links */}
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 flex items-center justify-start gap-6">
+                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-6 py-3 flex items-center justify-start gap-8">
                         <button
                           onClick={() => handleNavClick("current-projects")}
-                          className="text-black hover:text-gray-600 transition-colors text-sm font-medium"
+                          className="text-black hover:text-gray-600 transition-colors text-base font-medium"
                           style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
                         >
                           Lab
                         </button>
                         <button
                           onClick={() => handleNavClick("stories")}
-                          className="text-black hover:text-gray-600 transition-colors text-sm font-medium"
+                          className="text-black hover:text-gray-600 transition-colors text-base font-medium"
                           style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
                         >
                           Stories
                         </button>
                         <button
                           onClick={() => handleNavClick("articles")}
-                          className="text-black hover:text-gray-600 transition-colors text-sm font-medium"
+                          className="text-black hover:text-gray-600 transition-colors text-base font-medium"
                           style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
                         >
                           Articles
                         </button>
                         <button
                           onClick={() => handleNavClick("work")}
-                          className="text-black hover:text-gray-600 transition-colors text-sm font-medium"
+                          className="text-black hover:text-gray-600 transition-colors text-base font-medium"
                           style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
                         >
                           Design
                         </button>
                         <button
                           onClick={() => handleNavClick("career")}
-                          className="text-black hover:text-gray-600 transition-colors text-sm font-medium"
+                          className="text-black hover:text-gray-600 transition-colors text-base font-medium"
                           style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
                         >
                           Career
@@ -229,26 +229,26 @@ function App() {
                       </div>
 
                       {/* Icons */}
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-4">
                         <a
                           href={content.navigation.social.linkedin.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+                          className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-md hover:scale-110 transition-all duration-200 w-12 h-12 flex items-center justify-center"
                           aria-label="LinkedIn"
                         >
-                          <LinkedInLogoIcon className="h-4 w-4 text-black" />
+                          <LinkedInLogoIcon className="h-6 w-6 text-black" />
                         </a>
                         <a
                           href={content.navigation.social.dribbble.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+                          className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-md hover:scale-110 transition-all duration-200 w-12 h-12 flex items-center justify-center"
                           aria-label="Dribbble"
                         >
-                          <Dribbble className="h-4 w-4 text-black" />
+                          <Dribbble className="h-6 w-6 text-black" />
                         </a>
-                        <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center">
+                        <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-3 shadow-md hover:scale-110 transition-all duration-200 w-12 h-12 flex items-center justify-center">
                           <ThemeToggle />
                         </div>
                       </div>
