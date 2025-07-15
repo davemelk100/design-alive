@@ -1,170 +1,180 @@
-<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="600" height="450" viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <style>
-      .chat-container {
-        transform-origin: 45px 45px;
-      }
-      
-      .chat-bubble {
-        fill: #6366F1;
-        stroke: #4F46E5;
-        stroke-width: 0.5;
-        animation: bubbleFloat 3s ease-in-out infinite alternate;
-      }
-      
-      .chat-bubble-2 {
-        fill: #10B981;
-        stroke: #059669;
-        stroke-width: 0.5;
-        animation: bubbleFloat 3s ease-in-out infinite alternate 1s;
-      }
-      
-      .chat-bubble-3 {
-        fill: #F59E0B;
-        stroke: #D97706;
-        stroke-width: 0.5;
-        animation: bubbleFloat 3s ease-in-out infinite alternate 2s;
-      }
-      
-      @keyframes bubbleFloat {
-        0% {
-          transform: translateY(0px);
-        }
-        100% {
-          transform: translateY(-2px);
-        }
-      }
-      
-      .typing-dot {
-        fill: #FFFFFF;
-        animation: typing 1.4s infinite ease-in-out;
-      }
-      
-      .typing-dot:nth-child(1) {
-        animation-delay: 0s;
-      }
-      
-      .typing-dot:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      
-      .typing-dot:nth-child(3) {
-        animation-delay: 0.4s;
-      }
-      
-      @keyframes typing {
-        0%, 60%, 100% {
-          transform: translateY(0);
-          opacity: 0.4;
-        }
-        30% {
-          transform: translateY(-4px);
-          opacity: 1;
-        }
-      }
-      
-      .bot-avatar {
-        fill: #3B82F6;
-        stroke: #1E40AF;
-        stroke-width: 1;
-        animation: pulse 2s ease-in-out infinite;
-      }
-      
-      @keyframes pulse {
-        0%, 100% {
-          opacity: 0.8;
-        }
-        50% {
-          opacity: 1;
-        }
-      }
-      
-      .bot-eye {
-        fill: #FFFFFF;
-        animation: blink 3s infinite;
-      }
-      
-      .bot-pupil {
-        fill: #1E40AF;
-        animation: look 4s infinite;
-      }
-      
-      @keyframes blink {
-        0%, 90%, 100% {
-          transform: scaleY(1);
-        }
-        95% {
-          transform: scaleY(0.1);
-        }
-      }
-      
-      @keyframes look {
-        0%, 100% {
-          transform: translateX(0);
-        }
-        25% {
-          transform: translateX(1px);
-        }
-        75% {
-          transform: translateX(-1px);
-        }
-      }
-      
-      .message-line {
-        stroke: #FFFFFF;
-        stroke-width: 1;
-        opacity: 0.8;
-        animation: messageAppear 2s ease-in-out infinite alternate;
-      }
-      
-      @keyframes messageAppear {
-        0% {
-          opacity: 0.3;
-        }
-        100% {
-          opacity: 0.8;
-        }
-      }
-    </style>
+    <linearGradient id="chatGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#0d9488;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="chatGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d9488;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#f97316;stop-opacity:0.6" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
   
-  <!-- Chat Interface Background -->
-  <rect x="10" y="10" width="70" height="70" rx="8" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1"/>
-  
-  <!-- Bot Avatar -->
-  <circle cx="25" cy="25" r="8" class="bot-avatar"/>
-  <circle cx="22" cy="22" r="2" class="bot-eye"/>
-  <circle cx="28" cy="22" r="2" class="bot-eye"/>
-  <circle cx="22" cy="22" r="1" class="bot-pupil"/>
-  <circle cx="28" cy="22" r="1" class="bot-pupil"/>
-  
-  <!-- Chat Bubbles -->
-  <g class="chat-container">
-    <!-- First Chat Bubble -->
-    <path d="M35 20 Q35 15 40 15 L50 15 Q55 15 55 20 L55 30 L45 20 L40 20 Q35 20 35 20 Z" class="chat-bubble"/>
-    <line x1="40" y1="22" x2="45" y2="22" class="message-line"/>
-    <line x1="40" y1="25" x2="50" y2="25" class="message-line"/>
+  <!-- Main Chat Interface -->
+  <g transform="translate(300, 225)">
+    <!-- Central AI Core -->
+    <g class="ai-core">
+      <circle cx="0" cy="0" r="40" fill="url(#chatGradient1)" opacity="0.7">
+        <animate attributeName="r" values="40;45;40" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0.9;0.7" dur="4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="0" r="25" fill="url(#chatGradient2)" opacity="0.8">
+        <animate attributeName="r" values="25;30;25" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="0" r="15" fill="url(#chatGradient1)" opacity="0.9">
+        <animate attributeName="r" values="15;18;15" dur="2s" repeatCount="indefinite"/>
+      </circle>
+    </g>
     
-    <!-- Second Chat Bubble -->
-    <path d="M20 35 Q20 30 25 30 L35 30 Q40 30 40 35 L40 45 L30 35 L25 35 Q20 35 20 35 Z" class="chat-bubble-2"/>
-    <line x1="25" y1="37" x2="30" y2="37" class="message-line"/>
-    <line x1="25" y1="40" x2="35" y2="40" class="message-line"/>
+    <!-- Conversation Bubbles -->
+    <g class="conversation-bubbles">
+      <!-- User Message 1 -->
+      <g transform="translate(-120, -80)">
+        <rect x="-30" y="-15" width="60" height="30" rx="15" fill="url(#chatGradient1)" opacity="0.6">
+          <animate attributeName="opacity" values="0.6;0.8;0.6" dur="3s" repeatCount="indefinite"/>
+        </rect>
+        <line x1="30" y1="0" x2="40" y2="0" stroke="url(#chatGradient1)" stroke-width="2" opacity="0.6"/>
+        <circle cx="0" cy="0" r="3" fill="#f97316" opacity="0.8">
+          <animate attributeName="r" values="3;4;3" dur="2s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      
+      <!-- AI Response 1 -->
+      <g transform="translate(120, -60)">
+        <rect x="-35" y="-12" width="70" height="24" rx="12" fill="url(#chatGradient2)" opacity="0.7">
+          <animate attributeName="opacity" values="0.7;0.9;0.7" dur="3.5s" repeatCount="indefinite"/>
+        </rect>
+        <line x1="-35" y1="0" x2="-45" y2="0" stroke="url(#chatGradient2)" stroke-width="2" opacity="0.7"/>
+        <circle cx="0" cy="0" r="4" fill="#0d9488" opacity="0.8">
+          <animate attributeName="r" values="4;5;4" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      
+      <!-- User Message 2 -->
+      <g transform="translate(-100, 20)">
+        <rect x="-25" y="-10" width="50" height="20" rx="10" fill="url(#chatGradient1)" opacity="0.5">
+          <animate attributeName="opacity" values="0.5;0.7;0.5" dur="4s" repeatCount="indefinite"/>
+        </rect>
+        <line x1="25" y1="0" x2="35" y2="0" stroke="url(#chatGradient1)" stroke-width="1.5" opacity="0.5"/>
+        <circle cx="0" cy="0" r="2" fill="#f97316" opacity="0.7">
+          <animate attributeName="r" values="2;3;2" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      
+      <!-- AI Response 2 -->
+      <g transform="translate(100, 40)">
+        <rect x="-30" y="-8" width="60" height="16" rx="8" fill="url(#chatGradient2)" opacity="0.6">
+          <animate attributeName="opacity" values="0.6;0.8;0.6" dur="3.8s" repeatCount="indefinite"/>
+        </rect>
+        <line x1="-30" y1="0" x2="-40" y2="0" stroke="url(#chatGradient2)" stroke-width="1.5" opacity="0.6"/>
+        <circle cx="0" cy="0" r="3" fill="#0d9488" opacity="0.7">
+          <animate attributeName="r" values="3;4;3" dur="2s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+    </g>
     
-    <!-- Third Chat Bubble -->
-    <path d="M35 50 Q35 45 40 45 L50 45 Q55 45 55 50 L55 60 L45 50 L40 50 Q35 50 35 50 Z" class="chat-bubble-3"/>
-    <line x1="40" y1="52" x2="45" y2="52" class="message-line"/>
-    <line x1="40" y1="55" x2="50" y2="55" class="message-line"/>
+    <!-- Neural Network Connections -->
+    <g class="neural-connections">
+      <!-- Connection Lines -->
+      <line x1="0" y1="0" x2="-120" y2="-80" stroke="url(#chatGradient1)" stroke-width="1" opacity="0.4">
+        <animate attributeName="opacity" values="0.4;0.6;0.4" dur="2s" repeatCount="indefinite"/>
+      </line>
+      <line x1="0" y1="0" x2="120" y2="-60" stroke="url(#chatGradient2)" stroke-width="1" opacity="0.4">
+        <animate attributeName="opacity" values="0.4;0.6;0.4" dur="2.5s" repeatCount="indefinite"/>
+      </line>
+      <line x1="0" y1="0" x2="-100" y2="20" stroke="url(#chatGradient1)" stroke-width="1" opacity="0.3">
+        <animate attributeName="opacity" values="0.3;0.5;0.3" dur="3s" repeatCount="indefinite"/>
+      </line>
+      <line x1="0" y1="0" x2="100" y2="40" stroke="url(#chatGradient2)" stroke-width="1" opacity="0.3">
+        <animate attributeName="opacity" values="0.3;0.5;0.3" dur="3.5s" repeatCount="indefinite"/>
+      </line>
+    </g>
+    
+    <!-- Data Processing Nodes -->
+    <g class="data-nodes">
+      <!-- Top Left Node -->
+      <g transform="translate(-80, -120)">
+        <circle cx="0" cy="0" r="8" fill="url(#chatGradient1)" opacity="0.6">
+          <animate attributeName="r" values="8;10;8" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="0" cy="0" r="4" fill="url(#chatGradient2)" opacity="0.8">
+          <animate attributeName="r" values="4;5;4" dur="2s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      
+      <!-- Top Right Node -->
+      <g transform="translate(80, -120)">
+        <circle cx="0" cy="0" r="8" fill="url(#chatGradient2)" opacity="0.6">
+          <animate attributeName="r" values="8;10;8" dur="3.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="0" cy="0" r="4" fill="url(#chatGradient1)" opacity="0.8">
+          <animate attributeName="r" values="4;5;4" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      
+      <!-- Bottom Left Node -->
+      <g transform="translate(-80, 120)">
+        <circle cx="0" cy="0" r="8" fill="url(#chatGradient2)" opacity="0.6">
+          <animate attributeName="r" values="8;10;8" dur="4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="0" cy="0" r="4" fill="url(#chatGradient1)" opacity="0.8">
+          <animate attributeName="r" values="4;5;4" dur="3s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+      
+      <!-- Bottom Right Node -->
+      <g transform="translate(80, 120)">
+        <circle cx="0" cy="0" r="8" fill="url(#chatGradient1)" opacity="0.6">
+          <animate attributeName="r" values="8;10;8" dur="3.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="0" cy="0" r="4" fill="url(#chatGradient2)" opacity="0.8">
+          <animate attributeName="r" values="4;5;4" dur="2.8s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+    </g>
+    
+    <!-- Floating Data Particles -->
+    <g class="data-particles">
+      <circle cx="0" cy="0" r="2" fill="#f97316" opacity="0.7" filter="url(#glow)">
+        <animate attributeName="cx" values="0;50;0;-50;0" dur="8s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="0;-50;0;50;0" dur="8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;1;0.7" dur="4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="0" r="1.5" fill="#0d9488" opacity="0.6" filter="url(#glow)">
+        <animate attributeName="cx" values="0;-40;0;40;0" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="0;40;0;-40;0" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.6;0.9;0.6" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="0" r="1" fill="#f97316" opacity="0.5" filter="url(#glow)">
+        <animate attributeName="cx" values="0;60;0;-60;0" dur="10s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="0;-60;0;60;0" dur="10s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.5;0.8;0.5" dur="5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+    
+    <!-- Processing Rings -->
+    <g class="processing-rings">
+      <circle cx="0" cy="0" r="60" fill="none" stroke="url(#chatGradient1)" stroke-width="1" opacity="0.4">
+        <animateTransform attributeName="transform" type="rotate" values="0;360" dur="20s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="0" r="80" fill="none" stroke="url(#chatGradient2)" stroke-width="1" opacity="0.3">
+        <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="25s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="0" cy="0" r="100" fill="none" stroke="url(#chatGradient1)" stroke-width="1" opacity="0.2">
+        <animateTransform attributeName="transform" type="rotate" values="0;360" dur="30s" repeatCount="indefinite"/>
+      </circle>
+    </g>
   </g>
   
-  <!-- Typing Indicator -->
-  <g transform="translate(60, 70)">
-    <circle cx="0" cy="0" r="2" class="typing-dot"/>
-    <circle cx="6" cy="0" r="2" class="typing-dot"/>
-    <circle cx="12" cy="0" r="2" class="typing-dot"/>
-  </g>
-  
-  <!-- Connection Lines -->
-  <line x1="25" y1="25" x2="35" y2="20" stroke="#3B82F6" stroke-width="1" opacity="0.6"/>
-  <line x1="25" y1="25" x2="20" y2="35" stroke="#10B981" stroke-width="1" opacity="0.6"/>
-  <line x1="25" y1="25" x2="35" y2="50" stroke="#F59E0B" stroke-width="1" opacity="0.6"/>
+  <!-- Ambient Interface Glow -->
+  <circle cx="300" cy="225" r="150" fill="none" stroke="url(#chatGradient1)" stroke-width="1" opacity="0.1">
+    <animate attributeName="opacity" values="0.1;0.3;0.1" dur="6s" repeatCount="indefinite"/>
+  </circle>
 </svg> 

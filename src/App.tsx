@@ -292,7 +292,7 @@ function App() {
                   <SectionHeader
                     title={content.stories.title}
                     subtitle={content.stories.subtitle}
-                    className="mb-8 sm:mb-4"
+                    className="mb-4"
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {content.stories.items.map((story, index) => (
@@ -344,7 +344,7 @@ function App() {
                           </div>
                         </div>
                         {story.image && (
-                          <div className="aspect-[3/2] overflow-hidden -mx-3">
+                          <div className="aspect-[3/2] overflow-hidden -mx-3 -mb-3">
                             <img
                               src={`${story.image}?v=${Date.now()}`}
                               alt={story.title}
@@ -401,11 +401,11 @@ function App() {
                               </p>
                             </div>
                           </div>
-                          <div className="aspect-[3/2] overflow-visible -mx-3">
+                          <div className="aspect-[3/2] overflow-visible -mx-3 -mb-3">
                             <img
                               src={
                                 project.title === "Chatbots"
-                                  ? `/img/color-theory-animation.svg?v=${Date.now()}`
+                                  ? `/img/chatbot-animation.svg?v=${Date.now()}`
                                   : project.title === "Design Panes"
                                   ? `/img/ambiguous-scale-animation.svg?v=${Date.now()}`
                                   : project.title === "AI NUI"
@@ -492,7 +492,7 @@ function App() {
                                 )}
                               </div>
                             </div>
-                            <div className="aspect-[3/2] overflow-visible -mx-3">
+                            <div className="aspect-[3/2] overflow-visible -mx-3 -mb-3">
                               <img
                                 src={`${
                                   (article as any).cardImage || article.image
@@ -551,7 +551,7 @@ function App() {
 
                           const ProjectImage = (
                             <div
-                              className={`aspect-[3/2] overflow-visible -mx-3 -mb-6`}
+                              className={`aspect-[3/2] overflow-visible -mx-3 -mb-3`}
                             >
                               <img
                                 src={`${project.image}?v=${Date.now()}`}
