@@ -110,7 +110,7 @@ export default function ArticleModal({
         >
           <div className="p-8">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-4xl sm:text-5xl font-bold dark:text-white">
+              <h2 className="text-[20px] font-semibold dark:text-white">
                 {title}
               </h2>
               <button
