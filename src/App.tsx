@@ -64,7 +64,9 @@ const SectionHeader = ({
         )}
       </div>
       {subtitle && (
-        <p className="text-base text-muted-foreground mb-6">{subtitle}</p>
+        <p className="text-base text-muted-foreground mb-8 sm:mb-10">
+          {subtitle}
+        </p>
       )}
     </div>
   );
@@ -293,7 +295,10 @@ function App() {
 
               {/* Current Projects Section */}
               {isSectionVisible("lab") && (
-                <section id="current-projects" className="py-8 sm:py-12">
+                <section
+                  id="current-projects"
+                  className="py-12 sm:py-16 lg:py-20"
+                >
                   <div className="container mx-auto px-4 sm:px-8">
                     <SectionHeader
                       title={content.currentProjects.title}
@@ -370,7 +375,7 @@ function App() {
               )}
 
               {/* Stories Section */}
-              <section id="stories" className="py-8 sm:py-12">
+              <section id="stories" className="py-12 sm:py-16 lg:py-20">
                 <div className="container mx-auto px-4 sm:px-8">
                   <SectionHeader
                     title={content.stories.title}
@@ -454,7 +459,7 @@ function App() {
 
               {/* Articles Section */}
               {isSectionVisible("articles") && (
-                <section id="articles" className="py-8 sm:py-12">
+                <section id="articles" className="py-12 sm:py-16 lg:py-20">
                   <div className="container mx-auto px-4 sm:px-8">
                     <SectionHeader
                       title="Articles"
@@ -544,7 +549,7 @@ function App() {
 
               {/* Work Section */}
               {isSectionVisible("designWork") && (
-                <section id="work" className="py-8 sm:py-12">
+                <section id="work" className="py-12 sm:py-16 lg:py-20">
                   <div className="container mx-auto px-4 sm:px-8">
                     <SectionHeader
                       title="Design"
@@ -648,7 +653,7 @@ function App() {
               )}
 
               {/* Career Timeline Section */}
-              <section id="career" className="py-8 sm:py-12">
+              <section id="career" className="py-12 sm:py-16 lg:py-20">
                 <div className="container mx-auto px-4 sm:px-8">
                   {/* Career Timeline */}
                   <div>
