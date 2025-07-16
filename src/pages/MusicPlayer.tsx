@@ -160,6 +160,17 @@ const MusicPlayer: React.FC = () => {
             <p className="text-lg text-gray-600 dark:text-gray-400 mt-1">
               {tracks[currentTrack]?.artist}
             </p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 font-mono">
+              URL:{" "}
+              <a
+                href={tracks[currentTrack]?.uniqueUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+              >
+                {tracks[currentTrack]?.uniqueUrl}
+              </a>
+            </p>
           </div>
 
           {/* Audio Element */}

@@ -63,24 +63,6 @@ export const audioTracks: AudioTrack[] = [
     duration: "2:45",
     filename: "bevacqua.mp3",
   },
-  {
-    id: 7,
-    title: "Balm Shumbah",
-    artist: "BALM",
-    url: "/audio/balm-shumbah.mp3",
-    uniqueUrl: "/audio/balm-shumbah-original-mix.mp3",
-    duration: "5:15",
-    filename: "balm-shumbah.mp3",
-  },
-  {
-    id: 8,
-    title: "Nibbler",
-    artist: "BALM",
-    url: "/audio/nibbler.mp3",
-    uniqueUrl: "/audio/balm-nibbler-experimental.mp3",
-    duration: "4:45",
-    filename: "nibbler.mp3",
-  },
 ];
 
 // Helper function to get track by unique URL
