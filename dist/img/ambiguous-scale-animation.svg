@@ -5,38 +5,8 @@
         transform-origin: 45px 45px;
       }
       
-      .micro-scale {
-        animation: microPulse 32s ease-in-out infinite;
-      }
-      
-      .macro-scale {
-        animation: macroPulse 40s ease-in-out infinite;
-      }
-      
       .nested-scale {
         animation: nestedScale 48s ease-in-out infinite;
-      }
-      
-      @keyframes microPulse {
-        0%, 100% {
-          transform: scale(0.3);
-          opacity: 0.3;
-        }
-        50% {
-          transform: scale(0.8);
-          opacity: 0.7;
-        }
-      }
-      
-      @keyframes macroPulse {
-        0%, 100% {
-          transform: scale(1);
-          opacity: 0.4;
-        }
-        50% {
-          transform: scale(1.5);
-          opacity: 0.8;
-        }
       }
       
       @keyframes nestedScale {
@@ -44,117 +14,17 @@
           transform: scale(0.5);
           opacity: 0.4;
         }
-        33% {
+        50% {
           transform: scale(1.2);
           opacity: 0.6;
         }
-        66% {
-          transform: scale(0.7);
-          opacity: 0.5;
-        }
       }
-      
-      .floating-scale {
-        animation: floatScale 60s ease-in-out infinite;
-      }
-      
-      .floating-scale:nth-child(2) {
-        animation-delay: 16s;
-      }
-      
-      .floating-scale:nth-child(3) {
-        animation-delay: 32s;
-      }
-      
-      @keyframes floatScale {
-        0%, 100% {
-          transform: translateY(0px) scale(0.6);
-          opacity: 0.3;
-        }
-        25% {
-          transform: translateY(-5px) scale(1.2);
-          opacity: 0.6;
-        }
-        50% {
-          transform: translateY(-10px) scale(0.8);
-          opacity: 0.4;
-        }
-        75% {
-          transform: translateY(-5px) scale(1.4);
-          opacity: 0.7;
-        }
-      }
-      
-      .perspective-shift {
-        animation: perspectiveShift 72s ease-in-out infinite;
-      }
-      
-      @keyframes perspectiveShift {
-        0%, 100% {
-          transform: scale(0.4) translateY(0px);
-          opacity: 0.2;
-        }
-        25% {
-          transform: scale(1.8) translateY(-8px);
-          opacity: 0.5;
-        }
-        50% {
-          transform: scale(0.6) translateY(-15px);
-          opacity: 0.3;
-        }
-        75% {
-          transform: scale(2.2) translateY(-5px);
-          opacity: 0.6;
-        }
-      }
-      
-
     </style>
   </defs>
   
-  <!-- Mid-Century Modern Grid Background -->
-  <line x1="10" y1="80" x2="80" y2="80" stroke="#8B7355" stroke-width="0.2" opacity="0.1"/>
-  <line x1="10" y1="60" x2="80" y2="60" stroke="#8B7355" stroke-width="0.2" opacity="0.1"/>
-  <line x1="10" y1="40" x2="80" y2="40" stroke="#8B7355" stroke-width="0.2" opacity="0.1"/>
-  <line x1="10" y1="20" x2="80" y2="20" stroke="#8B7355" stroke-width="0.2" opacity="0.1"/>
-  
-  <line x1="10" y1="20" x2="10" y2="80" stroke="#8B7355" stroke-width="0.2" opacity="0.1"/>
-  <line x1="30" y1="20" x2="30" y2="80" stroke="#8B7355" stroke-width="0.2" opacity="0.1"/>
-  <line x1="50" y1="20" x2="50" y2="80" stroke="#8B7355" stroke-width="0.2" opacity="0.1"/>
-  <line x1="70" y1="20" x2="70" y2="80" stroke="#8B7355" stroke-width="0.2" opacity="0.1"/>
-  
-  <!-- Micro Scale Elements - All Squares -->
-  <g class="scale-group">
-    <rect x="23" y="23" width="8" height="8" rx="1" fill="#D2691E" class="micro-scale"/>
-    <rect x="63" y="23" width="8" height="8" rx="1" fill="#20B2AA" class="micro-scale"/>
-    <rect x="63" y="63" width="8" height="8" rx="1" fill="#CD853F" class="micro-scale"/>
-    <rect x="23" y="63" width="8" height="8" rx="1" fill="#48D1CC" class="micro-scale"/>
-  </g>
-  
-  <!-- Nested Scale Elements - All Squares -->
+  <!-- Simple Scale Element -->
   <g class="scale-group">
     <rect x="42" y="42" width="12" height="12" rx="1" fill="#8B7355" class="nested-scale"/>
     <rect x="45" y="45" width="6" height="6" rx="0.5" fill="#A67C52" opacity="0.8"/>
   </g>
-  
-
-  
-  <!-- Floating Scale Elements - All Squares -->
-  <g class="scale-group">
-    <rect x="15" y="40" width="8" height="8" rx="1" fill="#C4A484" class="floating-scale"/>
-    <rect x="55" y="15" width="8" height="8" rx="1" fill="#D2B48C" class="floating-scale"/>
-    <rect x="55" y="70" width="8" height="8" rx="1" fill="#8B7355" class="floating-scale"/>
-  </g>
-  
-  <!-- Perspective Shift Element - All Squares -->
-  <g class="scale-group">
-    <rect x="40" y="50" width="10" height="10" rx="1" fill="#D2691E" class="perspective-shift"/>
-    <rect x="42" y="52" width="6" height="6" rx="0.5" fill="#20B2AA" opacity="0.7"/>
-  </g>
-  
-  <!-- Scale Reference Lines - Warm Gray Accents -->
-  <line x1="45" y1="45" x2="25" y2="25" stroke="#A67C52" stroke-width="0.3" opacity="0.2"/>
-  <line x1="45" y1="45" x2="65" y2="25" stroke="#C4A484" stroke-width="0.3" opacity="0.2"/>
-  <line x1="45" y1="45" x2="65" y2="65" stroke="#D2B48C" stroke-width="0.3" opacity="0.2"/>
-  <line x1="45" y1="45" x2="25" y2="65" stroke="#8B7355" stroke-width="0.3" opacity="0.2"/>
 </svg> 

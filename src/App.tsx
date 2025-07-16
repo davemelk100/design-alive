@@ -352,11 +352,7 @@ function App() {
                               </p>
                             </div>
                           </div>
-                          <div
-                            className={`absolute inset-0 overflow-visible z-0 ${
-                              project.title === "Chatbots" ? "scale-150" : ""
-                            }`}
-                          >
+                          <div className="absolute inset-0 overflow-hidden z-0">
                             <img
                               src={
                                 project.title === "Chatbots"
@@ -364,23 +360,19 @@ function App() {
                                   : project.title === "Design Panes"
                                   ? `/img/design-panes-slow.svg?v=${Date.now()}`
                                   : project.title === "AI NUI"
-                                  ? `/img/interwoven-space-animation.svg?v=${Date.now()}`
+                                  ? `/img/ai-nui-animation.svg?v=${Date.now()}`
                                   : `/img/lab.svg?v=${Date.now()}`
                               }
                               alt={
                                 project.title === "Chatbots"
-                                  ? "Robot Chatbot"
+                                  ? "Design Panes Animation"
                                   : project.title === "Design Panes"
                                   ? "Design Panes"
                                   : project.title === "AI NUI"
-                                  ? "Interwoven Space"
+                                  ? "Design Panes Animation"
                                   : "Lab"
                               }
-                              className={`absolute inset-0 h-full w-full ${
-                                project.title === "Chatbots"
-                                  ? "object-contain"
-                                  : "object-cover"
-                              }`}
+                              className="absolute inset-0 h-full w-full object-cover"
                             />
                           </div>
                         </motion.div>

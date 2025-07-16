@@ -8,261 +8,27 @@
       <stop offset="0%" style="stop-color:#0d9488;stop-opacity:0.6" />
       <stop offset="100%" style="stop-color:#f97316;stop-opacity:0.6" />
     </linearGradient>
-    <linearGradient id="fractalGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#f97316;stop-opacity:0.4" />
-      <stop offset="50%" style="stop-color:#0d9488;stop-opacity:0.4" />
-      <stop offset="100%" style="stop-color:#f97316;stop-opacity:0.4" />
-    </linearGradient>
-    <linearGradient id="fractalGradient4" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0d9488;stop-opacity:0.3" />
-      <stop offset="50%" style="stop-color:#f97316;stop-opacity:0.3" />
-      <stop offset="100%" style="stop-color:#0d9488;stop-opacity:0.3" />
-    </linearGradient>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-      <feMerge> 
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-    <filter id="glowStrong">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-      <feMerge> 
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
   
-  <!-- Main Fractal Structure -->
+  <!-- Main Structure -->
   <g transform="translate(300, 225)">
-    <!-- Primary Fractal -->
+    <!-- Simple Rotating Rings -->
     <g class="primary-fractal">
       <!-- Outer Ring -->
       <circle cx="0" cy="0" r="120" fill="none" stroke="url(#fractalGradient1)" stroke-width="3" opacity="0.6">
         <animateTransform attributeName="transform" type="rotate" values="0;360" dur="20s" repeatCount="indefinite"/>
       </circle>
       
-      <!-- Additional Outer Rings for 3D Effect -->
-      <circle cx="0" cy="0" r="140" fill="none" stroke="url(#fractalGradient3)" stroke-width="1" opacity="0.4">
-        <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="25s" repeatCount="indefinite"/>
+      <!-- Inner Ring -->
+      <circle cx="0" cy="0" r="90" fill="none" stroke="url(#fractalGradient2)" stroke-width="2" opacity="0.7">
+        <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="15s" repeatCount="indefinite"/>
       </circle>
-      <circle cx="0" cy="0" r="160" fill="none" stroke="url(#fractalGradient4)" stroke-width="1" opacity="0.3">
-        <animateTransform attributeName="transform" type="rotate" values="0;360" dur="30s" repeatCount="indefinite"/>
-      </circle>
-      
-      <!-- Inner Fractal Pattern -->
-      <g class="inner-fractal" transform="rotate(0)">
-        <circle cx="0" cy="0" r="90" fill="none" stroke="url(#fractalGradient2)" stroke-width="2" opacity="0.7">
-          <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="15s" repeatCount="indefinite"/>
-        </circle>
-        
-        <!-- Fractal Branches -->
-        <g class="fractal-branches">
-          <!-- Branch 1 -->
-          <line x1="0" y1="-90" x2="0" y2="-60" stroke="url(#fractalGradient1)" stroke-width="3" opacity="0.8">
-            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="12s" repeatCount="indefinite"/>
-          </line>
-          <circle cx="0" cy="-60" r="12" fill="url(#fractalGradient1)" opacity="0.9">
-            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="12s" repeatCount="indefinite"/>
-          </circle>
-          
-          <!-- Branch 2 -->
-          <line x1="0" y1="90" x2="0" y2="60" stroke="url(#fractalGradient2)" stroke-width="3" opacity="0.8">
-            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="10s" repeatCount="indefinite"/>
-          </line>
-          <circle cx="0" cy="60" r="9" fill="url(#fractalGradient2)" opacity="0.9">
-            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="10s" repeatCount="indefinite"/>
-          </circle>
-          
-          <!-- Branch 3 -->
-          <line x1="-90" y1="0" x2="-60" y2="0" stroke="url(#fractalGradient1)" stroke-width="3" opacity="0.8">
-            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="14s" repeatCount="indefinite"/>
-          </line>
-          <circle cx="-60" cy="0" r="10" fill="url(#fractalGradient1)" opacity="0.9">
-            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="14s" repeatCount="indefinite"/>
-          </circle>
-          
-          <!-- Branch 4 -->
-          <line x1="90" y1="0" x2="60" y2="0" stroke="url(#fractalGradient2)" stroke-width="3" opacity="0.8">
-            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="16s" repeatCount="indefinite"/>
-          </line>
-          <circle cx="60" cy="0" r="8" fill="url(#fractalGradient2)" opacity="0.9">
-            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="16s" repeatCount="indefinite"/>
-          </circle>
-          
-          <!-- Additional 3D Branches -->
-          <!-- Diagonal Branches -->
-          <line x1="-63" y1="-63" x2="-42" y2="-42" stroke="url(#fractalGradient3)" stroke-width="2" opacity="0.6">
-            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="18s" repeatCount="indefinite"/>
-          </line>
-          <circle cx="-42" cy="-42" r="6" fill="url(#fractalGradient3)" opacity="0.7">
-            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="18s" repeatCount="indefinite"/>
-          </circle>
-          
-          <line x1="63" y1="-63" x2="42" y2="-42" stroke="url(#fractalGradient4)" stroke-width="2" opacity="0.6">
-            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="20s" repeatCount="indefinite"/>
-          </line>
-          <circle cx="42" cy="-42" r="5" fill="url(#fractalGradient4)" opacity="0.7">
-            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="20s" repeatCount="indefinite"/>
-          </circle>
-          
-          <line x1="-63" y1="63" x2="-42" y2="42" stroke="url(#fractalGradient3)" stroke-width="2" opacity="0.6">
-            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="22s" repeatCount="indefinite"/>
-          </line>
-          <circle cx="-42" cy="42" r="7" fill="url(#fractalGradient3)" opacity="0.7">
-            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="22s" repeatCount="indefinite"/>
-          </circle>
-          
-          <line x1="63" y1="63" x2="42" y2="42" stroke="url(#fractalGradient4)" stroke-width="2" opacity="0.6">
-            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="24s" repeatCount="indefinite"/>
-          </line>
-          <circle cx="42" cy="42" r="4" fill="url(#fractalGradient4)" opacity="0.7">
-            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="24s" repeatCount="indefinite"/>
-          </circle>
-        </g>
-        
-        <!-- Secondary Fractal Rings -->
-        <g class="secondary-rings">
-          <circle cx="0" cy="0" r="60" fill="none" stroke="url(#fractalGradient1)" stroke-width="1.5" opacity="0.5">
-            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="18s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="0" cy="0" r="45" fill="none" stroke="url(#fractalGradient2)" stroke-width="1.5" opacity="0.6">
-            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="22s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="0" cy="0" r="75" fill="none" stroke="url(#fractalGradient3)" stroke-width="1" opacity="0.4">
-            <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="26s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="0" cy="0" r="30" fill="none" stroke="url(#fractalGradient4)" stroke-width="1" opacity="0.5">
-            <animateTransform attributeName="transform" type="rotate" values="0;360" dur="28s" repeatCount="indefinite"/>
-          </circle>
-        </g>
-      </g>
-      
-      <!-- Floating Particles -->
-      <g class="particles">
-        <circle cx="0" cy="0" r="3" fill="#f97316" opacity="0.8" filter="url(#glow)">
-          <animate attributeName="cx" values="0;30;0;-30;0" dur="8s" repeatCount="indefinite"/>
-          <animate attributeName="cy" values="0;-30;0;30;0" dur="8s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="0" cy="0" r="2" fill="#0d9488" opacity="0.7" filter="url(#glow)">
-          <animate attributeName="cx" values="0;-25;0;25;0" dur="6s" repeatCount="indefinite"/>
-          <animate attributeName="cy" values="0;25;0;-25;0" dur="6s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="0" cy="0" r="1.5" fill="#f97316" opacity="0.6" filter="url(#glow)">
-          <animate attributeName="cx" values="0;40;0;-40;0" dur="10s" repeatCount="indefinite"/>
-          <animate attributeName="cy" values="0;-40;0;40;0" dur="10s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.6;0.9;0.6" dur="5s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="0" cy="0" r="2.5" fill="#0d9488" opacity="0.5" filter="url(#glowStrong)">
-          <animate attributeName="cx" values="0;50;0;-50;0" dur="12s" repeatCount="indefinite"/>
-          <animate attributeName="cy" values="0;-50;0;50;0" dur="12s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.5;0.8;0.5" dur="6s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="0" cy="0" r="1" fill="#f97316" opacity="0.4" filter="url(#glow)">
-          <animate attributeName="cx" values="0;-35;0;35;0" dur="7s" repeatCount="indefinite"/>
-          <animate attributeName="cy" values="0;35;0;-35;0" dur="7s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.4;0.7;0.4" dur="3.5s" repeatCount="indefinite"/>
-        </circle>
-        <circle cx="0" cy="0" r="0.8" fill="#0d9488" opacity="0.3" filter="url(#glow)">
-          <animate attributeName="cx" values="0;45;0;-45;0" dur="9s" repeatCount="indefinite"/>
-          <animate attributeName="cy" values="0;-45;0;45;0" dur="9s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.3;0.6;0.3" dur="4.5s" repeatCount="indefinite"/>
-        </circle>
-      </g>
     </g>
     
     <!-- Core Center -->
     <circle cx="0" cy="0" r="22" fill="url(#fractalGradient1)" opacity="0.9">
-      <animate attributeName="r" values="22;27;22" dur="3s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.9;1;0.9" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="22;25;22" dur="3s" repeatCount="indefinite"/>
     </circle>
-    <circle cx="0" cy="0" r="12" fill="url(#fractalGradient2)" opacity="1">
-      <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite"/>
-    </circle>
-    
-    <!-- 3D Cube Elements -->
-    <g class="cube-elements">
-      <!-- Cube 1 -->
-      <g transform="translate(-80, -80)">
-        <rect x="-8" y="-8" width="16" height="16" fill="url(#fractalGradient3)" opacity="0.6">
-          <animateTransform attributeName="transform" type="rotate" values="0;360" dur="15s" repeatCount="indefinite"/>
-        </rect>
-        <rect x="-6" y="-6" width="12" height="12" fill="url(#fractalGradient4)" opacity="0.7">
-          <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="12s" repeatCount="indefinite"/>
-        </rect>
-      </g>
-      
-      <!-- Cube 2 -->
-      <g transform="translate(80, -80)">
-        <rect x="-8" y="-8" width="16" height="16" fill="url(#fractalGradient4)" opacity="0.6">
-          <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="18s" repeatCount="indefinite"/>
-        </rect>
-        <rect x="-6" y="-6" width="12" height="12" fill="url(#fractalGradient3)" opacity="0.7">
-          <animateTransform attributeName="transform" type="rotate" values="0;360" dur="14s" repeatCount="indefinite"/>
-        </rect>
-      </g>
-      
-      <!-- Cube 3 -->
-      <g transform="translate(-80, 80)">
-        <rect x="-8" y="-8" width="16" height="16" fill="url(#fractalGradient3)" opacity="0.6">
-          <animateTransform attributeName="transform" type="rotate" values="0;360" dur="20s" repeatCount="indefinite"/>
-        </rect>
-        <rect x="-6" y="-6" width="12" height="12" fill="url(#fractalGradient4)" opacity="0.7">
-          <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="16s" repeatCount="indefinite"/>
-        </rect>
-      </g>
-      
-      <!-- Cube 4 -->
-      <g transform="translate(80, 80)">
-        <rect x="-8" y="-8" width="16" height="16" fill="url(#fractalGradient4)" opacity="0.6">
-          <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="22s" repeatCount="indefinite"/>
-        </rect>
-        <rect x="-6" y="-6" width="12" height="12" fill="url(#fractalGradient3)" opacity="0.7">
-          <animateTransform attributeName="transform" type="rotate" values="0;360" dur="18s" repeatCount="indefinite"/>
-        </rect>
-      </g>
-    </g>
-    
-    <!-- Additional 3D Connection Lines -->
-    <g class="connection-lines">
-      <line x1="-80" y1="-80" x2="80" y2="-80" stroke="url(#fractalGradient3)" stroke-width="1" opacity="0.4">
-        <animate attributeName="opacity" values="0.4;0.6;0.4" dur="4s" repeatCount="indefinite"/>
-      </line>
-      <line x1="-80" y1="80" x2="80" y2="80" stroke="url(#fractalGradient4)" stroke-width="1" opacity="0.4">
-        <animate attributeName="opacity" values="0.4;0.6;0.4" dur="4.5s" repeatCount="indefinite"/>
-      </line>
-      <line x1="-80" y1="-80" x2="-80" y2="80" stroke="url(#fractalGradient3)" stroke-width="1" opacity="0.4">
-        <animate attributeName="opacity" values="0.4;0.6;0.4" dur="5s" repeatCount="indefinite"/>
-      </line>
-      <line x1="80" y1="-80" x2="80" y2="80" stroke="url(#fractalGradient4)" stroke-width="1" opacity="0.4">
-        <animate attributeName="opacity" values="0.4;0.6;0.4" dur="5.5s" repeatCount="indefinite"/>
-      </line>
-    </g>
-  </g>
-  
-  <!-- Ambient Glow -->
-  <circle cx="300" cy="225" r="180" fill="none" stroke="url(#fractalGradient1)" stroke-width="1" opacity="0.1">
-    <animate attributeName="opacity" values="0.1;0.3;0.1" dur="4s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="300" cy="225" r="200" fill="none" stroke="url(#fractalGradient2)" stroke-width="1" opacity="0.08">
-    <animate attributeName="opacity" values="0.08;0.25;0.08" dur="6s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="300" cy="225" r="220" fill="none" stroke="url(#fractalGradient3)" stroke-width="1" opacity="0.06">
-    <animate attributeName="opacity" values="0.06;0.2;0.06" dur="8s" repeatCount="indefinite"/>
-  </circle>
-  
-  <!-- 3D Depth Indicators -->
-  <g class="depth-indicators">
-    <circle cx="300" cy="225" r="5" fill="url(#fractalGradient1)" opacity="0.4" filter="url(#glowStrong)">
-      <animate attributeName="r" values="5;8;5" dur="3s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.4;0.7;0.4" dur="3s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="300" cy="225" r="3" fill="url(#fractalGradient2)" opacity="0.6" filter="url(#glow)">
-      <animate attributeName="r" values="3;5;3" dur="2s" repeatCount="indefinite"/>
-      <animate attributeName="opacity" values="0.6;0.9;0.6" dur="2s" repeatCount="indefinite"/>
-    </circle>
+    <circle cx="0" cy="0" r="12" fill="url(#fractalGradient2)" opacity="1"/>
   </g>
 </svg> 

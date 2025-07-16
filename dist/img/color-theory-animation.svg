@@ -10,53 +10,12 @@
         animation: pulse 16s ease-in-out infinite;
       }
       
-      .secondary-color:nth-child(odd) {
-        animation: pulse 16s ease-in-out infinite, rotateCounter 60s linear infinite;
-      }
-      
-      .tertiary-color {
-        animation: pulse 16s ease-in-out infinite 10.7s;
-      }
-      
-      .tertiary-color:nth-child(even) {
-        animation: pulse 16s ease-in-out infinite 10.7s, rotateCounter 40s linear infinite;
-      }
-      
-      .robot-icon {
-        animation: robotFloat 20s ease-in-out infinite;
-      }
-      
-      .robot-icon:nth-child(2) {
-        animation-delay: -5s;
-      }
-      
-      .robot-icon:nth-child(3) {
-        animation-delay: -10s;
-      }
-      
-      .robot-icon:nth-child(4) {
-        animation-delay: -15s;
-      }
-      
-      .center-robot {
-        animation: centerPulse 8s ease-in-out infinite;
-      }
-      
       @keyframes rotate {
         0% {
           transform: rotate(0deg);
         }
         100% {
           transform: rotate(360deg);
-        }
-      }
-      
-      @keyframes rotateCounter {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(-360deg);
         }
       }
       
@@ -70,71 +29,10 @@
           transform: scale(1.02);
         }
       }
-      
-      @keyframes robotFloat {
-        0%, 100% {
-          transform: translateY(0px) scale(1);
-          opacity: 0.7;
-        }
-        25% {
-          transform: translateY(-3px) scale(1.1);
-          opacity: 0.9;
-        }
-        50% {
-          transform: translateY(-6px) scale(0.9);
-          opacity: 0.6;
-        }
-        75% {
-          transform: translateY(-3px) scale(1.05);
-          opacity: 0.8;
-        }
-      }
-      
-      @keyframes centerPulse {
-        0%, 100% {
-          transform: scale(1);
-          opacity: 0.9;
-        }
-        50% {
-          transform: scale(1.1);
-          opacity: 1;
-        }
-      }
-      
-      .complementary-line {
-        stroke: #8B7355;
-        stroke-width: 0.8;
-        stroke-dasharray: 3,3;
-        animation: dash 16s linear infinite;
-      }
-      
-      @keyframes dash {
-        to {
-          stroke-dashoffset: -6;
-        }
-      }
-      
-      .color-mix {
-        animation: colorShift 24s ease-in-out infinite;
-      }
-      
-      @keyframes colorShift {
-        0%, 100% {
-          fill: #8B7355;
-        }
-        33% {
-          fill: #A67C52;
-        }
-        66% {
-          fill: #C4A484;
-        }
-      }
-      
-
     </style>
   </defs>
   
-  <!-- Mid-Century Modern Color Wheel -->
+  <!-- Simplified Color Wheel -->
   <g class="color-wheel">
     <!-- Primary Colors - Muted Orange and Teal -->
     <circle cx="45" cy="25" r="8" fill="#D2691E" opacity="0.8" class="secondary-color"/>
@@ -147,69 +45,8 @@
     <circle cx="60" cy="55" r="6" fill="#A67C52" opacity="0.8" class="secondary-color"/>
     <circle cx="35" cy="60" r="6" fill="#C4A484" opacity="0.5" class="secondary-color"/>
     <circle cx="30" cy="35" r="6" fill="#D2B48C" opacity="0.7" class="secondary-color"/>
-    
-    <!-- Tertiary Colors - Additional Warm Tones -->
-    <circle cx="70" cy="25" r="4" fill="#8B7355" opacity="0.5" class="tertiary-color"/>
-    <circle cx="70" cy="65" r="4" fill="#A67C52" opacity="0.3" class="tertiary-color"/>
-    <circle cx="25" cy="70" r="4" fill="#C4A484" opacity="0.6" class="tertiary-color"/>
-    <circle cx="20" cy="30" r="4" fill="#D2B48C" opacity="0.4" class="tertiary-color"/>
   </g>
   
-  <!-- Center Robot SVG -->
-  <g class="center-robot">
-    <!-- Robot Head -->
-    <rect x="39" y="39" width="12" height="12" rx="2" fill="#8B7355" opacity="0.9"/>
-    <!-- Robot Eyes -->
-    <rect x="42" y="43" width="2" height="2" fill="#D2691E"/>
-    <rect x="46" y="43" width="2" height="2" fill="#20B2AA"/>
-    <!-- Robot Mouth -->
-    <rect x="43" y="47" width="4" height="1" rx="0.5" fill="#A67C52"/>
-    <!-- Robot Antenna -->
-    <line x1="45" y1="39" x2="45" y2="35" stroke="#C4A484" stroke-width="1"/>
-    <circle cx="45" cy="35" r="1" fill="#D2B48C"/>
-  </g>
-  
-
-  
-  <g class="robot-icon" transform="translate(65, 15)">
-    <!-- Robot Head -->
-    <rect x="0" y="0" width="6" height="6" rx="1" fill="#20B2AA" opacity="0.8"/>
-    <!-- Robot Eyes -->
-    <rect x="1" y="1.5" width="1" height="1" fill="#D2691E"/>
-    <rect x="4" y="1.5" width="1" height="1" fill="#D2691E"/>
-    <!-- Robot Antenna -->
-    <line x1="3" y1="0" x2="3" y2="-1.5" stroke="#8B7355" stroke-width="0.4"/>
-    <circle cx="3" cy="-1.5" r="0.4" fill="#8B7355"/>
-  </g>
-  
-  <g class="robot-icon" transform="translate(12, 65)">
-    <!-- Robot Head -->
-    <rect x="0" y="0" width="7" height="7" rx="1" fill="#CD853F" opacity="0.8"/>
-    <!-- Robot Eyes -->
-    <rect x="1.5" y="2" width="1.2" height="1.2" fill="#48D1CC"/>
-    <rect x="4.3" y="2" width="1.2" height="1.2" fill="#48D1CC"/>
-    <!-- Robot Antenna -->
-    <line x1="3.5" y1="0" x2="3.5" y2="-1.8" stroke="#8B7355" stroke-width="0.4"/>
-    <circle cx="3.5" cy="-1.8" r="0.4" fill="#8B7355"/>
-  </g>
-  
-  <g class="robot-icon" transform="translate(70, 68)">
-    <!-- Robot Head -->
-    <rect x="0" y="0" width="6" height="6" rx="1" fill="#48D1CC" opacity="0.8"/>
-    <!-- Robot Eyes -->
-    <rect x="1" y="1.5" width="1" height="1" fill="#CD853F"/>
-    <rect x="4" y="1.5" width="1" height="1" fill="#CD853F"/>
-    <!-- Robot Antenna -->
-    <line x1="3" y1="0" x2="3" y2="-1.5" stroke="#8B7355" stroke-width="0.4"/>
-    <circle cx="3" cy="-1.5" r="0.4" fill="#8B7355"/>
-  </g>
-  
-  <!-- Mid-Century Modern Grid Lines -->
-  <line x1="15" y1="45" x2="75" y2="45" stroke="#8B7355" stroke-width="0.5" opacity="0.3" class="complementary-line"/>
-  <line x1="45" y1="15" x2="45" y2="75" stroke="#8B7355" stroke-width="0.5" opacity="0.3" class="complementary-line"/>
-  
-  <!-- Diagonal Accent Lines -->
-  <line x1="20" y1="20" x2="70" y2="70" stroke="#A67C52" stroke-width="0.3" opacity="0.2" class="complementary-line"/>
-  <line x1="70" y1="20" x2="20" y2="70" stroke="#C4A484" stroke-width="0.3" opacity="0.2" class="complementary-line"/>
-
+  <!-- Simple Center Element -->
+  <circle cx="45" cy="45" r="12" fill="#8B7355" opacity="0.9"/>
 </svg> 
