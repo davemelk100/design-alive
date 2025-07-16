@@ -31,7 +31,7 @@ const tracks: Track[] = [
 
 The player is currently configured with:
 
-- `motorbeatv2.mp3` - Mash - Motorhead x Notorious B.I.G. x Pink Floyd
+- `motorbeatv2.mp3` - Mash - Motorhead v Notorious B.I.G. v Pink Floyd
 - `aic-fiend.mp3` - Mash - Alice In Chains x Fiend
 - `slayer-congas.mp3` - Mash - Slayer x Congas
 

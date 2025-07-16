@@ -1,495 +1,202 @@
-<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="designGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#f97316;stop-opacity:0.8" />
-      <stop offset="100%" style="stop-color:#0d9488;stop-opacity:0.8" />
-    </linearGradient>
-    <linearGradient id="designGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0d9488;stop-opacity:0.6" />
-      <stop offset="100%" style="stop-color:#f97316;stop-opacity:0.6" />
-    </linearGradient>
-    <style>
-      .fractal-square {
-        transform-origin: 45px 45px;
-      }
-      
-      .primary-rotate {
-        animation: primaryRotate 140s linear infinite;
-      }
-      
-      .secondary-rotate {
-        animation: secondaryRotate 112s linear infinite reverse;
-      }
-      
-      .tertiary-rotate {
-        animation: tertiaryRotate 168s linear infinite;
-      }
-      
-      .quaternary-rotate {
-        animation: quaternaryRotate 200s linear infinite reverse;
-      }
-      
-      .quinary-rotate {
-        animation: quinaryRotate 240s linear infinite;
-      }
-      
-      .senary-rotate {
-        animation: senaryRotate 280s linear infinite reverse;
-      }
-      
-      .septenary-rotate {
-        animation: septenaryRotate 320s linear infinite;
-      }
-      
-      .octonary-rotate {
-        animation: octonaryRotate 360s linear infinite reverse;
-      }
-      
-      .nonary-rotate {
-        animation: nonaryRotate 300s linear infinite;
-      }
-      
-      .denary-rotate {
-        animation: denaryRotate 340s linear infinite reverse;
-      }
-      
-      .group-rotate {
-        animation: groupRotate2D 45s linear infinite;
-      }
-      
-      .center-4d-rotate {
-        animation: center4DRotate 80s linear infinite;
-      }
-      
-      .floating {
-        animation: float 48s ease-in-out infinite;
-      }
-      
-      .floating:nth-child(2) {
-        animation-delay: 12s;
-      }
-      
-      .floating:nth-child(3) {
-        animation-delay: 24s;
-      }
-      
-      .pulse {
-        animation: pulse 40s ease-in-out infinite;
-      }
-      
-      .pulse:nth-child(2) {
-        animation-delay: 10s;
-      }
-      
-      .pulse:nth-child(3) {
-        animation-delay: 20s;
-      }
-      
-      .breathing {
-        animation: breathing 60s ease-in-out infinite;
-      }
-      
-      .glow {
-        animation: glow 32s ease-in-out infinite;
-      }
-      
-      @keyframes primaryRotate {
-        0% {
-          transform: rotate(0deg) scale(1);
-        }
-        50% {
-          transform: rotate(180deg) scale(1.1);
-        }
-        100% {
-          transform: rotate(360deg) scale(1);
-        }
-      }
-      
-      @keyframes secondaryRotate {
-        0% {
-          transform: perspective(200px) rotateY(0deg) rotateX(0deg) scale(1.1);
-        }
-        50% {
-          transform: perspective(200px) rotateY(-360deg) rotateX(-180deg) scale(0.9);
-        }
-        100% {
-          transform: perspective(200px) rotateY(-720deg) rotateX(-360deg) scale(1.1);
-        }
-      }
-      
-      @keyframes tertiaryRotate {
-        0% {
-          transform: rotate(0deg) scale(0.9);
-        }
-        50% {
-          transform: rotate(180deg) scale(1.2);
-        }
-        100% {
-          transform: rotate(360deg) scale(0.9);
-        }
-      }
-      
-      @keyframes quaternaryRotate {
-        0% {
-          transform: perspective(200px) rotateY(0deg) rotateX(0deg) scale(1.2);
-        }
-        50% {
-          transform: perspective(200px) rotateY(-360deg) rotateX(-180deg) scale(0.8);
-        }
-        100% {
-          transform: perspective(200px) rotateY(-720deg) rotateX(-360deg) scale(1.2);
-        }
-      }
-      
-      @keyframes quinaryRotate {
-        0% {
-          transform: rotate(0deg) scale(0.8);
-        }
-        50% {
-          transform: rotate(180deg) scale(1.3);
-        }
-        100% {
-          transform: rotate(360deg) scale(0.8);
-        }
-      }
-      
-      @keyframes senaryRotate {
-        0% {
-          transform: perspective(200px) rotateY(0deg) rotateX(0deg) scale(1.3);
-        }
-        50% {
-          transform: perspective(200px) rotateY(-360deg) rotateX(-180deg) scale(0.7);
-        }
-        100% {
-          transform: perspective(200px) rotateY(-720deg) rotateX(-360deg) scale(1.3);
-        }
-      }
-      
-      @keyframes septenaryRotate {
-        0% {
-          transform: rotate(0deg) scale(0.6);
-        }
-        50% {
-          transform: rotate(180deg) scale(1.4);
-        }
-        100% {
-          transform: rotate(360deg) scale(0.6);
-        }
-      }
-      
-      @keyframes octonaryRotate {
-        0% {
-          transform: perspective(200px) rotateY(0deg) rotateX(0deg) scale(1.4);
-        }
-        50% {
-          transform: perspective(200px) rotateY(-360deg) rotateX(-180deg) scale(0.5);
-        }
-        100% {
-          transform: perspective(200px) rotateY(-720deg) rotateX(-360deg) scale(1.4);
-        }
-      }
-      
-      @keyframes nonaryRotate {
-        0% {
-          transform: rotate(0deg) scale(0.5);
-        }
-        50% {
-          transform: rotate(180deg) scale(1.5);
-        }
-        100% {
-          transform: rotate(360deg) scale(0.5);
-        }
-      }
-      
-      @keyframes denaryRotate {
-        0% {
-          transform: perspective(200px) rotateY(0deg) rotateX(0deg) scale(1.5);
-        }
-        50% {
-          transform: perspective(200px) rotateY(-360deg) rotateX(-180deg) scale(0.4);
-        }
-        100% {
-          transform: perspective(200px) rotateY(-720deg) rotateX(-360deg) scale(1.5);
-        }
-      }
-      
-      @keyframes groupRotate {
-        0% {
-          transform: perspective(300px) rotateY(0deg) rotateX(0deg) scale(1);
-        }
-        12.5% {
-          transform: perspective(300px) rotateY(90deg) rotateX(22.5deg) scale(1.1);
-        }
-        25% {
-          transform: perspective(300px) rotateY(180deg) rotateX(45deg) scale(1);
-        }
-        37.5% {
-          transform: perspective(300px) rotateY(270deg) rotateX(67.5deg) scale(1.1);
-        }
-        50% {
-          transform: perspective(300px) rotateY(360deg) rotateX(90deg) scale(1);
-        }
-        62.5% {
-          transform: perspective(300px) rotateY(450deg) rotateX(67.5deg) scale(1.1);
-        }
-        75% {
-          transform: perspective(300px) rotateY(540deg) rotateX(45deg) scale(1);
-        }
-        87.5% {
-          transform: perspective(300px) rotateY(630deg) rotateX(22.5deg) scale(1.1);
-        }
-        100% {
-          transform: perspective(300px) rotateY(720deg) rotateX(0deg) scale(1);
-        }
-      }
-      
-      @keyframes groupRotate2D {
-        0% {
-          transform: rotate(0deg) scale(1);
-        }
-        25% {
-          transform: rotate(90deg) scale(1.1);
-        }
-        50% {
-          transform: rotate(180deg) scale(1);
-        }
-        75% {
-          transform: rotate(270deg) scale(1.1);
-        }
-        100% {
-          transform: rotate(360deg) scale(1);
-        }
-      }
-      
-      @keyframes center4DRotate {
-        0% {
-          transform: perspective(300px) rotateY(0deg) rotateX(0deg) scale(1);
-        }
-        25% {
-          transform: perspective(300px) rotateY(90deg) rotateX(45deg) scale(1.1);
-        }
-        50% {
-          transform: perspective(300px) rotateY(180deg) rotateX(90deg) scale(1);
-        }
-        75% {
-          transform: perspective(300px) rotateY(270deg) rotateX(45deg) scale(1.1);
-        }
-        100% {
-          transform: perspective(300px) rotateY(360deg) rotateX(0deg) scale(1);
-        }
-      }
-      
-      @keyframes float {
-        0%, 100% {
-          transform: translateY(0px);
-          opacity: 0.4;
-        }
-        50% {
-          transform: translateY(-6px);
-          opacity: 0.8;
-        }
-      }
-      
-      @keyframes pulse {
-        0%, 100% {
-          transform: scale(1);
-          opacity: 0.3;
-        }
-        50% {
-          transform: scale(1.1);
-          opacity: 0.7;
-        }
-      }
-      
-      @keyframes breathing {
-        0%, 100% {
-          transform: scale(1);
-          opacity: 0.2;
-        }
-        50% {
-          transform: scale(1.2);
-          opacity: 0.6;
-        }
-      }
-      
-      @keyframes glow {
-        0%, 100% {
-          opacity: 0.3;
-        }
-        50% {
-          opacity: 0.8;
-        }
-      }
-    </style>
+    <radialGradient id="sphere1" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#ff8c42;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#e67e22;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d35400;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="sphere2" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#17a2b8;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#138496;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#117a8b;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="sphere3" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" style="stop-color:#6c757d;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#5a6268;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#495057;stop-opacity:1" />
+    </radialGradient>
+    <filter id="sphereShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
   </defs>
   
-  <!-- Central Core Circle -->
-  <circle cx="45" cy="45" r="3" fill="url(#designGradient1)" opacity="0.7" class="fractal-square primary-rotate"/>
+  <!-- Raised effect in center -->
+  <ellipse cx="100" cy="100" rx="25" ry="8" fill="#f8f9fa" opacity="0.6" class="breathing"/>
+  <ellipse cx="100" cy="100" rx="20" ry="6" fill="#e9ecef" opacity="0.4" class="breathing"/>
   
-  <!-- First Layer of Rotating Circles -->
-  <g class="fractal-square secondary-rotate">
-    <circle cx="30.5" cy="30.5" r="2.5" fill="#0d9488" opacity="0.4" class="floating"/>
-    <circle cx="59.5" cy="30.5" r="2.5" fill="#f97316" opacity="0.4" class="floating"/>
-    <circle cx="59.5" cy="59.5" r="2.5" fill="#0d9488" opacity="0.4" class="floating"/>
-    <circle cx="30.5" cy="59.5" r="2.5" fill="#f97316" opacity="0.4" class="floating"/>
+  <!-- Transparent blue pulsing sphere in center -->
+  <circle cx="100" cy="100" r="12" fill="#3498db" opacity="0.3" class="pulse-center"/>
+  
+  <!-- Core circle (spherical) -->
+  <circle cx="100" cy="100" r="8" fill="url(#sphere1)" filter="url(#sphereShadow)" opacity="0.9" class="rotate-4d-core"/>
+  
+  <!-- Orbit 1 Group with dashed connections -->
+  <g class="orbit-1">
+    <circle cx="100" cy="50" r="4" fill="url(#sphere2)" filter="url(#sphereShadow)" opacity="0.8" class="path-follow-1"/>
+    <circle cx="150" cy="100" r="3" fill="#17a2b8" opacity="0.7" class="path-follow-2"/>
+    <circle cx="100" cy="150" r="5" fill="url(#sphere3)" filter="url(#sphereShadow)" opacity="0.8" class="path-follow-3"/>
+    <circle cx="50" cy="100" r="3" fill="#6c757d" opacity="0.7" class="path-follow-4"/>
+    <!-- Dashed connections for orbit 1 -->
+    <line x1="100" y1="50" x2="150" y2="100" stroke="#17a2b8" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="150" y1="100" x2="100" y2="150" stroke="#17a2b8" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="100" y1="150" x2="50" y2="100" stroke="#17a2b8" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="50" y1="100" x2="100" y2="50" stroke="#17a2b8" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
   </g>
   
-  <!-- Second Layer of Rotating Circles -->
-  <g class="fractal-square tertiary-rotate">
-    <circle cx="20" cy="20" r="2" fill="#f97316" opacity="0.3" class="pulse"/>
-    <circle cx="70" cy="20" r="2" fill="#0d9488" opacity="0.3" class="pulse"/>
-    <circle cx="70" cy="70" r="2" fill="#f97316" opacity="0.3" class="pulse"/>
-    <circle cx="20" cy="70" r="2" fill="#0d9488" opacity="0.3" class="pulse"/>
+  <!-- Orbit 2 Group with dashed connections -->
+  <g class="orbit-2">
+    <circle cx="120" cy="80" r="3" fill="#ff8c42" opacity="0.7" class="path-follow-5"/>
+    <circle cx="80" cy="120" r="4" fill="url(#sphere1)" filter="url(#sphereShadow)" opacity="0.8" class="path-follow-6"/>
+    <circle cx="120" cy="120" r="3" fill="#17a2b8" opacity="0.7" class="path-follow-7"/>
+    <circle cx="80" cy="80" r="3" fill="#6c757d" opacity="0.7" class="path-follow-8"/>
+    <!-- Dashed connections for orbit 2 -->
+    <line x1="120" y1="80" x2="80" y2="120" stroke="#ff8c42" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="80" y1="120" x2="120" y2="120" stroke="#ff8c42" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="120" y1="120" x2="80" y2="80" stroke="#ff8c42" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="80" y1="80" x2="120" y2="80" stroke="#ff8c42" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
   </g>
   
-  <!-- Third Layer of Rotating Circles -->
-  <g class="fractal-square quaternary-rotate">
-    <circle cx="13.5" cy="13.5" r="1.5" fill="#0d9488" opacity="0.25" class="floating"/>
-    <circle cx="76.5" cy="13.5" r="1.5" fill="#f97316" opacity="0.25" class="floating"/>
-    <circle cx="76.5" cy="76.5" r="1.5" fill="#0d9488" opacity="0.25" class="floating"/>
-    <circle cx="13.5" cy="76.5" r="1.5" fill="#f97316" opacity="0.25" class="floating"/>
+  <!-- Orbit 3 Group with dashed connections -->
+  <g class="orbit-3">
+    <circle cx="130" cy="70" r="3" fill="#6c757d" opacity="0.7" class="path-follow-9"/>
+    <circle cx="70" cy="130" r="4" fill="url(#sphere2)" filter="url(#sphereShadow)" opacity="0.8" class="path-follow-10"/>
+    <circle cx="130" cy="130" r="3" fill="#ff8c42" opacity="0.7" class="path-follow-11"/>
+    <circle cx="70" cy="70" r="3" fill="#17a2b8" opacity="0.7" class="path-follow-12"/>
+    <!-- Dashed connections for orbit 3 -->
+    <line x1="130" y1="70" x2="70" y2="130" stroke="#6c757d" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="70" y1="130" x2="130" y2="130" stroke="#6c757d" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="130" y1="130" x2="70" y2="70" stroke="#6c757d" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="70" y1="70" x2="130" y2="70" stroke="#6c757d" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
   </g>
   
-  <!-- Fourth Layer of Rotating Circles -->
-  <g class="fractal-square quinary-rotate">
-    <circle cx="8" cy="8" r="1" fill="#f97316" opacity="0.2" class="pulse"/>
-    <circle cx="82" cy="8" r="1" fill="#0d9488" opacity="0.2" class="pulse"/>
-    <circle cx="82" cy="82" r="1" fill="#f97316" opacity="0.2" class="pulse"/>
-    <circle cx="8" cy="82" r="1" fill="#0d9488" opacity="0.2" class="pulse"/>
-  </g>
-  
-  <!-- Fifth Layer of Rotating Circles -->
-  <g class="fractal-square senary-rotate">
-    <circle cx="3.5" cy="3.5" r="0.5" fill="#0d9488" opacity="0.15" class="breathing"/>
-    <circle cx="86.5" cy="3.5" r="0.5" fill="#f97316" opacity="0.15" class="breathing"/>
-    <circle cx="86.5" cy="86.5" r="0.5" fill="#0d9488" opacity="0.15" class="breathing"/>
-    <circle cx="3.5" cy="86.5" r="0.5" fill="#f97316" opacity="0.15" class="breathing"/>
-  </g>
-  
-  <!-- Sixth Layer of Rotating Circles -->
-  <g class="fractal-square septenary-rotate">
-    <circle cx="1.5" cy="1.5" r="0.5" fill="#f97316" opacity="0.12" class="floating"/>
-    <circle cx="88.5" cy="1.5" r="0.5" fill="#0d9488" opacity="0.12" class="floating"/>
-    <circle cx="88.5" cy="88.5" r="0.5" fill="#f97316" opacity="0.12" class="floating"/>
-    <circle cx="1.5" cy="88.5" r="0.5" fill="#0d9488" opacity="0.12" class="floating"/>
-  </g>
-  
-  <!-- Seventh Layer of Rotating Circles -->
-  <g class="fractal-square octonary-rotate">
-    <circle cx="0.75" cy="0.75" r="0.25" fill="#0d9488" opacity="0.1" class="pulse"/>
-    <circle cx="89.25" cy="0.75" r="0.25" fill="#f97316" opacity="0.1" class="pulse"/>
-    <circle cx="89.25" cy="89.25" r="0.25" fill="#0d9488" opacity="0.1" class="pulse"/>
-    <circle cx="0.75" cy="89.25" r="0.25" fill="#f97316" opacity="0.1" class="pulse"/>
-  </g>
-  
-  <!-- Eighth Layer of Rotating Circles -->
-  <g class="fractal-square nonary-rotate">
-    <circle cx="0.375" cy="0.375" r="0.125" fill="#f97316" opacity="0.08" class="breathing"/>
-    <circle cx="89.625" cy="0.375" r="0.125" fill="#0d9488" opacity="0.08" class="breathing"/>
-    <circle cx="89.625" cy="89.625" r="0.125" fill="#f97316" opacity="0.08" class="breathing"/>
-    <circle cx="0.375" cy="89.625" r="0.125" fill="#0d9488" opacity="0.08" class="breathing"/>
-  </g>
-  
-  <!-- Ninth Layer of Rotating Circles -->
-  <g class="fractal-square denary-rotate">
-    <circle cx="0.1875" cy="0.1875" r="0.0625" fill="#0d9488" opacity="0.06" class="floating"/>
-    <circle cx="89.8125" cy="0.1875" r="0.0625" fill="#f97316" opacity="0.06" class="floating"/>
-    <circle cx="89.8125" cy="89.8125" r="0.0625" fill="#0d9488" opacity="0.06" class="floating"/>
-    <circle cx="0.1875" cy="89.8125" r="0.0625" fill="#f97316" opacity="0.06" class="floating"/>
-  </g>
-  
-  <!-- Tenth Layer of Rotating Circles -->
-  <g class="fractal-square primary-rotate">
-    <circle cx="0.09375" cy="0.09375" r="0.03125" fill="#f97316" opacity="0.05" class="pulse"/>
-    <circle cx="89.90625" cy="0.09375" r="0.03125" fill="#0d9488" opacity="0.05" class="pulse"/>
-    <circle cx="89.90625" cy="89.90625" r="0.03125" fill="#f97316" opacity="0.05" class="pulse"/>
-    <circle cx="0.09375" cy="89.90625" r="0.03125" fill="#0d9488" opacity="0.05" class="pulse"/>
-  </g>
-  
-  <!-- Additional Circles - Eleventh Layer -->
-  <g class="fractal-square secondary-rotate">
-    <circle cx="0.046875" cy="0.046875" r="0.015625" fill="url(#designGradient1)" opacity="0.04" class="glow"/>
-    <circle cx="89.953125" cy="0.046875" r="0.015625" fill="url(#designGradient2)" opacity="0.04" class="glow"/>
-    <circle cx="89.953125" cy="89.953125" r="0.015625" fill="url(#designGradient1)" opacity="0.04" class="glow"/>
-    <circle cx="0.046875" cy="89.953125" r="0.015625" fill="url(#designGradient2)" opacity="0.04" class="glow"/>
-  </g>
-  
-  <!-- Additional Circles - Twelfth Layer -->
-  <g class="fractal-square tertiary-rotate">
-    <circle cx="0.0234375" cy="0.0234375" r="0.0078125" fill="#f97316" opacity="0.03" class="breathing"/>
-    <circle cx="89.9765625" cy="0.0234375" r="0.0078125" fill="#0d9488" opacity="0.03" class="breathing"/>
-    <circle cx="89.9765625" cy="89.9765625" r="0.0078125" fill="#f97316" opacity="0.03" class="breathing"/>
-    <circle cx="0.0234375" cy="89.9765625" r="0.0078125" fill="#0d9488" opacity="0.03" class="breathing"/>
-  </g>
-  
-  <!-- Additional Connection Circles - Replacing X Lines -->
-  <g class="fractal-square secondary-rotate">
-    <circle cx="29" cy="29" r="1.2" fill="url(#designGradient1)" opacity="0.2" class="pulse"/>
-    <circle cx="61" cy="29" r="1.2" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
-    <circle cx="61" cy="61" r="1.2" fill="url(#designGradient1)" opacity="0.2" class="pulse"/>
-    <circle cx="29" cy="61" r="1.2" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
-  </g>
-  
-  <!-- Additional Connection Circles for 4D Effect -->
-  <g class="fractal-square tertiary-rotate">
-    <circle cx="17" cy="17" r="0.8" fill="#f97316" opacity="0.15" class="floating"/>
-    <circle cx="73" cy="17" r="0.8" fill="#0d9488" opacity="0.15" class="floating"/>
-    <circle cx="73" cy="73" r="0.8" fill="#f97316" opacity="0.15" class="floating"/>
-    <circle cx="17" cy="73" r="0.8" fill="#0d9488" opacity="0.15" class="floating"/>
-  </g>
-  
-  <!-- Additional Connection Circles -->
-  <g class="fractal-square quaternary-rotate">
-    <circle cx="10" cy="10" r="0.6" fill="#0d9488" opacity="0.1" class="breathing"/>
-    <circle cx="80" cy="10" r="0.6" fill="#f97316" opacity="0.1" class="breathing"/>
-    <circle cx="80" cy="80" r="0.6" fill="#0d9488" opacity="0.1" class="breathing"/>
-    <circle cx="10" cy="80" r="0.6" fill="#f97316" opacity="0.1" class="breathing"/>
-  </g>
-  
-  <!-- Grouped Circles with 3D/4D Rotation -->
-  <g class="fractal-square group-rotate">
-    <circle cx="42" cy="42" r="1.8" fill="#f97316" opacity="0.6" class="pulse"/>
-    <circle cx="48" cy="42" r="1.8" fill="#0d9488" opacity="0.6" class="pulse"/>
-    <circle cx="45" cy="48" r="1.8" fill="#f97316" opacity="0.6" class="pulse"/>
-    <circle cx="42" cy="48" r="1.8" fill="#0d9488" opacity="0.6" class="pulse"/>
-    <circle cx="48" cy="48" r="1.8" fill="#f97316" opacity="0.6" class="pulse"/>
-    <circle cx="45" cy="45" r="1.8" fill="url(#designGradient1)" opacity="0.7" class="glow"/>
-  </g>
-  
-  <!-- Additional 4D Rotation Group 1 -->
-  <g class="fractal-square center-4d-rotate">
-    <circle cx="35" cy="35" r="1.5" fill="#0d9488" opacity="0.5" class="floating"/>
-    <circle cx="55" cy="35" r="1.5" fill="#f97316" opacity="0.5" class="floating"/>
-    <circle cx="55" cy="55" r="1.5" fill="#0d9488" opacity="0.5" class="floating"/>
-    <circle cx="35" cy="55" r="1.5" fill="#f97316" opacity="0.5" class="floating"/>
-  </g>
-  
-  <!-- Additional 4D Rotation Group 2 -->
-  <g class="fractal-square center-4d-rotate">
-    <circle cx="25" cy="25" r="1.2" fill="#f97316" opacity="0.4" class="pulse"/>
-    <circle cx="65" cy="25" r="1.2" fill="#0d9488" opacity="0.4" class="pulse"/>
-    <circle cx="65" cy="65" r="1.2" fill="#f97316" opacity="0.4" class="pulse"/>
-    <circle cx="25" cy="65" r="1.2" fill="#0d9488" opacity="0.4" class="pulse"/>
-  </g>
-  
-  <!-- Additional 4D Rotation Group 3 -->
-  <g class="fractal-square center-4d-rotate">
-    <circle cx="15" cy="15" r="0.8" fill="#0d9488" opacity="0.3" class="breathing"/>
-    <circle cx="75" cy="15" r="0.8" fill="#f97316" opacity="0.3" class="breathing"/>
-    <circle cx="75" cy="75" r="0.8" fill="#0d9488" opacity="0.3" class="breathing"/>
-    <circle cx="15" cy="75" r="0.8" fill="#f97316" opacity="0.3" class="breathing"/>
-  </g>
-  
-  <!-- Glowing Center Point -->
-  <circle cx="45" cy="45" r="2" fill="url(#designGradient1)" opacity="0.7" class="pulse"/>
-  <circle cx="45" cy="45" r="4" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
-  <circle cx="45" cy="45" r="6" fill="url(#designGradient1)" opacity="0.1" class="center-4d-rotate"/>
-  
-  <!-- Additional Glow Rings -->
-  <circle cx="45" cy="45" r="8" fill="url(#designGradient2)" opacity="0.08" class="glow"/>
-  <circle cx="45" cy="45" r="10" fill="url(#designGradient1)" opacity="0.05" class="breathing"/>
-  
-  <!-- Subtle Raised Effect Below Center -->
-  <ellipse cx="45" cy="52" rx="4" ry="1.5" fill="#f5f5f5" opacity="0.3" class="breathing"/>
-  <ellipse cx="45" cy="53" rx="3" ry="1" fill="#f5f5f5" opacity="0.2" class="breathing"/>
+  <style>
+    .rotate-4d-core {
+      animation: climbFromCenter 8s ease-in-out infinite;
+      animation-delay: -4s;
+      transform-origin: center bottom;
+    }
+    .breathing {
+      animation: breathing 4s ease-in-out infinite;
+    }
+    .pulse-center {
+      animation: pulseCenter 6s ease-in-out infinite;
+    }
+    
+    /* Path following animations for orbit 1 (diamond shape) */
+    .path-follow-1 {
+      animation: path1 20s linear infinite;
+      animation-delay: -10s;
+    }
+    .path-follow-2 {
+      animation: path1 20s linear infinite;
+      animation-delay: -5s;
+    }
+    .path-follow-3 {
+      animation: path1 20s linear infinite;
+      animation-delay: -15s;
+    }
+    .path-follow-4 {
+      animation: path1 20s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    /* Path following animations for orbit 2 (square shape) */
+    .path-follow-5 {
+      animation: path2 24s linear infinite;
+      animation-delay: -12s;
+    }
+    .path-follow-6 {
+      animation: path2 24s linear infinite;
+      animation-delay: -6s;
+    }
+    .path-follow-7 {
+      animation: path2 24s linear infinite;
+      animation-delay: -18s;
+    }
+    .path-follow-8 {
+      animation: path2 24s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    /* Path following animations for orbit 3 (diamond shape) */
+    .path-follow-9 {
+      animation: path3 28s linear infinite;
+      animation-delay: -14s;
+    }
+    .path-follow-10 {
+      animation: path3 28s linear infinite;
+      animation-delay: -7s;
+    }
+    .path-follow-11 {
+      animation: path3 28s linear infinite;
+      animation-delay: -21s;
+    }
+    .path-follow-12 {
+      animation: path3 28s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    @keyframes climbFromCenter {
+      0% { 
+        transform: scale(0.3) translateY(15px) rotateY(0deg) rotateX(0deg);
+        opacity: 0.6;
+      }
+      25% { 
+        transform: scale(0.7) translateY(8px) rotateY(90deg) rotateX(90deg);
+        opacity: 0.8;
+      }
+      50% { 
+        transform: scale(1) translateY(0px) rotateY(180deg) rotateX(180deg);
+        opacity: 0.9;
+      }
+      75% { 
+        transform: scale(0.7) translateY(8px) rotateY(270deg) rotateX(270deg);
+        opacity: 0.8;
+      }
+      100% { 
+        transform: scale(0.3) translateY(15px) rotateY(360deg) rotateX(360deg);
+        opacity: 0.6;
+      }
+    }
+    
+    /* Path 1: Diamond shape - 100,50 -> 150,100 -> 100,150 -> 50,100 -> 100,50 */
+    @keyframes path1 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(50px, 50px); }
+      50% { transform: translate(0px, 100px); }
+      75% { transform: translate(-50px, 50px); }
+    }
+    
+    /* Path 2: Square shape - 120,80 -> 80,120 -> 120,120 -> 80,80 -> 120,80 */
+    @keyframes path2 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(-40px, 40px); }
+      50% { transform: translate(0px, 40px); }
+      75% { transform: translate(-40px, 0px); }
+    }
+    
+    /* Path 3: Diamond shape - 130,70 -> 70,130 -> 130,130 -> 70,70 -> 130,70 */
+    @keyframes path3 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(-60px, 60px); }
+      50% { transform: translate(0px, 60px); }
+      75% { transform: translate(-60px, 0px); }
+    }
+    
+    @keyframes breathing {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+    
+    @keyframes pulseCenter {
+      0%, 100% { 
+        opacity: 0.2;
+        transform: scale(0.8);
+      }
+      50% { 
+        opacity: 0.4;
+        transform: scale(1.2);
+      }
+    }
+  </style>
 </svg> 
