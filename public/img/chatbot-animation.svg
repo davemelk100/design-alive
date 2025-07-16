@@ -250,121 +250,127 @@
   </defs>
   
   <!-- Central Core Circle -->
-  <circle cx="45" cy="45" r="3" fill="url(#designGradient1)" opacity="0.6" class="fractal-square primary-rotate"/>
+  <circle cx="45" cy="45" r="3" fill="url(#designGradient1)" opacity="0.5" class="fractal-square primary-rotate"/>
   
   <!-- First Layer of Rotating Circles -->
   <g class="fractal-square secondary-rotate">
-    <circle cx="30.5" cy="30.5" r="2.5" fill="#0d9488" opacity="0.5" class="floating"/>
-    <circle cx="59.5" cy="30.5" r="2.5" fill="#f97316" opacity="0.5" class="floating"/>
-    <circle cx="59.5" cy="59.5" r="2.5" fill="#0d9488" opacity="0.5" class="floating"/>
-    <circle cx="30.5" cy="59.5" r="2.5" fill="#f97316" opacity="0.5" class="floating"/>
+    <circle cx="30.5" cy="30.5" r="2.5" fill="#0d9488" opacity="0.4" class="floating"/>
+    <circle cx="59.5" cy="30.5" r="2.5" fill="#f97316" opacity="0.4" class="floating"/>
+    <circle cx="59.5" cy="59.5" r="2.5" fill="#0d9488" opacity="0.4" class="floating"/>
+    <circle cx="30.5" cy="59.5" r="2.5" fill="#f97316" opacity="0.4" class="floating"/>
   </g>
   
   <!-- Second Layer of Rotating Circles -->
   <g class="fractal-square tertiary-rotate">
-    <circle cx="20" cy="20" r="2" fill="#f97316" opacity="0.4" class="pulse"/>
-    <circle cx="70" cy="20" r="2" fill="#0d9488" opacity="0.4" class="pulse"/>
-    <circle cx="70" cy="70" r="2" fill="#f97316" opacity="0.4" class="pulse"/>
-    <circle cx="20" cy="70" r="2" fill="#0d9488" opacity="0.4" class="pulse"/>
+    <circle cx="20" cy="20" r="2" fill="#f97316" opacity="0.3" class="pulse"/>
+    <circle cx="70" cy="20" r="2" fill="#0d9488" opacity="0.3" class="pulse"/>
+    <circle cx="70" cy="70" r="2" fill="#f97316" opacity="0.3" class="pulse"/>
+    <circle cx="20" cy="70" r="2" fill="#0d9488" opacity="0.3" class="pulse"/>
   </g>
   
   <!-- Third Layer of Rotating Circles -->
   <g class="fractal-square quaternary-rotate">
-    <circle cx="13.5" cy="13.5" r="1.5" fill="#0d9488" opacity="0.3" class="floating"/>
-    <circle cx="76.5" cy="13.5" r="1.5" fill="#f97316" opacity="0.3" class="floating"/>
-    <circle cx="76.5" cy="76.5" r="1.5" fill="#0d9488" opacity="0.3" class="floating"/>
-    <circle cx="13.5" cy="76.5" r="1.5" fill="#f97316" opacity="0.3" class="floating"/>
+    <circle cx="13.5" cy="13.5" r="1.5" fill="#0d9488" opacity="0.25" class="floating"/>
+    <circle cx="76.5" cy="13.5" r="1.5" fill="#f97316" opacity="0.25" class="floating"/>
+    <circle cx="76.5" cy="76.5" r="1.5" fill="#0d9488" opacity="0.25" class="floating"/>
+    <circle cx="13.5" cy="76.5" r="1.5" fill="#f97316" opacity="0.25" class="floating"/>
   </g>
   
   <!-- Fourth Layer of Rotating Circles -->
   <g class="fractal-square quinary-rotate">
-    <circle cx="8" cy="8" r="1" fill="#f97316" opacity="0.25" class="pulse"/>
-    <circle cx="82" cy="8" r="1" fill="#0d9488" opacity="0.25" class="pulse"/>
-    <circle cx="82" cy="82" r="1" fill="#f97316" opacity="0.25" class="pulse"/>
-    <circle cx="8" cy="82" r="1" fill="#0d9488" opacity="0.25" class="pulse"/>
+    <circle cx="8" cy="8" r="1" fill="#f97316" opacity="0.2" class="pulse"/>
+    <circle cx="82" cy="8" r="1" fill="#0d9488" opacity="0.2" class="pulse"/>
+    <circle cx="82" cy="82" r="1" fill="#f97316" opacity="0.2" class="pulse"/>
+    <circle cx="8" cy="82" r="1" fill="#0d9488" opacity="0.2" class="pulse"/>
   </g>
   
   <!-- Fifth Layer of Rotating Circles -->
   <g class="fractal-square senary-rotate">
-    <circle cx="3.5" cy="3.5" r="0.5" fill="#0d9488" opacity="0.2" class="breathing"/>
-    <circle cx="86.5" cy="3.5" r="0.5" fill="#f97316" opacity="0.2" class="breathing"/>
-    <circle cx="86.5" cy="86.5" r="0.5" fill="#0d9488" opacity="0.2" class="breathing"/>
-    <circle cx="3.5" cy="86.5" r="0.5" fill="#f97316" opacity="0.2" class="breathing"/>
+    <circle cx="3.5" cy="3.5" r="0.5" fill="#0d9488" opacity="0.15" class="breathing"/>
+    <circle cx="86.5" cy="3.5" r="0.5" fill="#f97316" opacity="0.15" class="breathing"/>
+    <circle cx="86.5" cy="86.5" r="0.5" fill="#0d9488" opacity="0.15" class="breathing"/>
+    <circle cx="3.5" cy="86.5" r="0.5" fill="#f97316" opacity="0.15" class="breathing"/>
   </g>
   
   <!-- Sixth Layer of Rotating Circles -->
   <g class="fractal-square septenary-rotate">
-    <circle cx="1.5" cy="1.5" r="0.5" fill="#f97316" opacity="0.15" class="floating"/>
-    <circle cx="88.5" cy="1.5" r="0.5" fill="#0d9488" opacity="0.15" class="floating"/>
-    <circle cx="88.5" cy="88.5" r="0.5" fill="#f97316" opacity="0.15" class="floating"/>
-    <circle cx="1.5" cy="88.5" r="0.5" fill="#0d9488" opacity="0.15" class="floating"/>
+    <circle cx="1.5" cy="1.5" r="0.5" fill="#f97316" opacity="0.12" class="floating"/>
+    <circle cx="88.5" cy="1.5" r="0.5" fill="#0d9488" opacity="0.12" class="floating"/>
+    <circle cx="88.5" cy="88.5" r="0.5" fill="#f97316" opacity="0.12" class="floating"/>
+    <circle cx="1.5" cy="88.5" r="0.5" fill="#0d9488" opacity="0.12" class="floating"/>
   </g>
   
   <!-- Seventh Layer of Rotating Circles -->
   <g class="fractal-square octonary-rotate">
-    <circle cx="0.75" cy="0.75" r="0.25" fill="#0d9488" opacity="0.12" class="pulse"/>
-    <circle cx="89.25" cy="0.75" r="0.25" fill="#f97316" opacity="0.12" class="pulse"/>
-    <circle cx="89.25" cy="89.25" r="0.25" fill="#0d9488" opacity="0.12" class="pulse"/>
-    <circle cx="0.75" cy="89.25" r="0.25" fill="#f97316" opacity="0.12" class="pulse"/>
+    <circle cx="0.75" cy="0.75" r="0.25" fill="#0d9488" opacity="0.1" class="pulse"/>
+    <circle cx="89.25" cy="0.75" r="0.25" fill="#f97316" opacity="0.1" class="pulse"/>
+    <circle cx="89.25" cy="89.25" r="0.25" fill="#0d9488" opacity="0.1" class="pulse"/>
+    <circle cx="0.75" cy="89.25" r="0.25" fill="#f97316" opacity="0.1" class="pulse"/>
   </g>
   
   <!-- Eighth Layer of Rotating Circles -->
   <g class="fractal-square nonary-rotate">
-    <circle cx="0.375" cy="0.375" r="0.125" fill="#f97316" opacity="0.1" class="breathing"/>
-    <circle cx="89.625" cy="0.375" r="0.125" fill="#0d9488" opacity="0.1" class="breathing"/>
-    <circle cx="89.625" cy="89.625" r="0.125" fill="#f97316" opacity="0.1" class="breathing"/>
-    <circle cx="0.375" cy="89.625" r="0.125" fill="#0d9488" opacity="0.1" class="breathing"/>
+    <circle cx="0.375" cy="0.375" r="0.125" fill="#f97316" opacity="0.08" class="breathing"/>
+    <circle cx="89.625" cy="0.375" r="0.125" fill="#0d9488" opacity="0.08" class="breathing"/>
+    <circle cx="89.625" cy="89.625" r="0.125" fill="#f97316" opacity="0.08" class="breathing"/>
+    <circle cx="0.375" cy="89.625" r="0.125" fill="#0d9488" opacity="0.08" class="breathing"/>
   </g>
   
   <!-- Ninth Layer of Rotating Circles -->
   <g class="fractal-square denary-rotate">
-    <circle cx="0.1875" cy="0.1875" r="0.0625" fill="#0d9488" opacity="0.08" class="floating"/>
-    <circle cx="89.8125" cy="0.1875" r="0.0625" fill="#f97316" opacity="0.08" class="floating"/>
-    <circle cx="89.8125" cy="89.8125" r="0.0625" fill="#0d9488" opacity="0.08" class="floating"/>
-    <circle cx="0.1875" cy="89.8125" r="0.0625" fill="#f97316" opacity="0.08" class="floating"/>
+    <circle cx="0.1875" cy="0.1875" r="0.0625" fill="#0d9488" opacity="0.06" class="floating"/>
+    <circle cx="89.8125" cy="0.1875" r="0.0625" fill="#f97316" opacity="0.06" class="floating"/>
+    <circle cx="89.8125" cy="89.8125" r="0.0625" fill="#0d9488" opacity="0.06" class="floating"/>
+    <circle cx="0.1875" cy="89.8125" r="0.0625" fill="#f97316" opacity="0.06" class="floating"/>
   </g>
   
   <!-- Tenth Layer of Rotating Circles -->
   <g class="fractal-square primary-rotate">
-    <circle cx="0.09375" cy="0.09375" r="0.03125" fill="#f97316" opacity="0.06" class="pulse"/>
-    <circle cx="89.90625" cy="0.09375" r="0.03125" fill="#0d9488" opacity="0.06" class="pulse"/>
-    <circle cx="89.90625" cy="89.90625" r="0.03125" fill="#f97316" opacity="0.06" class="pulse"/>
-    <circle cx="0.09375" cy="89.90625" r="0.03125" fill="#0d9488" opacity="0.06" class="pulse"/>
+    <circle cx="0.09375" cy="0.09375" r="0.03125" fill="#f97316" opacity="0.05" class="pulse"/>
+    <circle cx="89.90625" cy="0.09375" r="0.03125" fill="#0d9488" opacity="0.05" class="pulse"/>
+    <circle cx="89.90625" cy="89.90625" r="0.03125" fill="#f97316" opacity="0.05" class="pulse"/>
+    <circle cx="0.09375" cy="89.90625" r="0.03125" fill="#0d9488" opacity="0.05" class="pulse"/>
   </g>
   
   <!-- Additional Circles - Eleventh Layer -->
   <g class="fractal-square secondary-rotate">
-    <circle cx="0.046875" cy="0.046875" r="0.015625" fill="url(#designGradient1)" opacity="0.05" class="glow"/>
-    <circle cx="89.953125" cy="0.046875" r="0.015625" fill="url(#designGradient2)" opacity="0.05" class="glow"/>
-    <circle cx="89.953125" cy="89.953125" r="0.015625" fill="url(#designGradient1)" opacity="0.05" class="glow"/>
-    <circle cx="0.046875" cy="89.953125" r="0.015625" fill="url(#designGradient2)" opacity="0.05" class="glow"/>
+    <circle cx="0.046875" cy="0.046875" r="0.015625" fill="url(#designGradient1)" opacity="0.04" class="glow"/>
+    <circle cx="89.953125" cy="0.046875" r="0.015625" fill="url(#designGradient2)" opacity="0.04" class="glow"/>
+    <circle cx="89.953125" cy="89.953125" r="0.015625" fill="url(#designGradient1)" opacity="0.04" class="glow"/>
+    <circle cx="0.046875" cy="89.953125" r="0.015625" fill="url(#designGradient2)" opacity="0.04" class="glow"/>
   </g>
   
   <!-- Additional Circles - Twelfth Layer -->
   <g class="fractal-square tertiary-rotate">
-    <circle cx="0.0234375" cy="0.0234375" r="0.0078125" fill="#f97316" opacity="0.04" class="breathing"/>
-    <circle cx="89.9765625" cy="0.0234375" r="0.0078125" fill="#0d9488" opacity="0.04" class="breathing"/>
-    <circle cx="89.9765625" cy="89.9765625" r="0.0078125" fill="#f97316" opacity="0.04" class="breathing"/>
-    <circle cx="0.0234375" cy="89.9765625" r="0.0078125" fill="#0d9488" opacity="0.04" class="breathing"/>
+    <circle cx="0.0234375" cy="0.0234375" r="0.0078125" fill="#f97316" opacity="0.03" class="breathing"/>
+    <circle cx="89.9765625" cy="0.0234375" r="0.0078125" fill="#0d9488" opacity="0.03" class="breathing"/>
+    <circle cx="89.9765625" cy="89.9765625" r="0.0078125" fill="#f97316" opacity="0.03" class="breathing"/>
+    <circle cx="0.0234375" cy="89.9765625" r="0.0078125" fill="#0d9488" opacity="0.03" class="breathing"/>
   </g>
   
-  <!-- Connection Lines Between Layers -->
-  <line x1="45" y1="45" x2="29" y2="29" stroke="url(#designGradient1)" stroke-width="0.5" opacity="0.2"/>
-  <line x1="45" y1="45" x2="61" y2="29" stroke="url(#designGradient2)" stroke-width="0.5" opacity="0.2"/>
-  <line x1="45" y1="45" x2="61" y2="61" stroke="url(#designGradient1)" stroke-width="0.5" opacity="0.2"/>
-  <line x1="45" y1="45" x2="29" y2="61" stroke="url(#designGradient2)" stroke-width="0.5" opacity="0.2"/>
+  <!-- Additional Connection Circles - Replacing X Lines -->
+  <g class="fractal-square secondary-rotate">
+    <circle cx="29" cy="29" r="1.2" fill="url(#designGradient1)" opacity="0.2" class="pulse"/>
+    <circle cx="61" cy="29" r="1.2" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
+    <circle cx="61" cy="61" r="1.2" fill="url(#designGradient1)" opacity="0.2" class="pulse"/>
+    <circle cx="29" cy="61" r="1.2" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
+  </g>
   
-  <!-- Additional Connection Lines for 4D Effect -->
-  <line x1="45" y1="45" x2="17" y2="17" stroke="#f97316" stroke-width="0.3" opacity="0.15"/>
-  <line x1="45" y1="45" x2="73" y2="17" stroke="#0d9488" stroke-width="0.3" opacity="0.15"/>
-  <line x1="45" y1="45" x2="73" y2="73" stroke="#f97316" stroke-width="0.3" opacity="0.15"/>
-  <line x1="45" y1="45" x2="17" y2="73" stroke="#0d9488" stroke-width="0.3" opacity="0.15"/>
+  <!-- Additional Connection Circles for 4D Effect -->
+  <g class="fractal-square tertiary-rotate">
+    <circle cx="17" cy="17" r="0.8" fill="#f97316" opacity="0.15" class="floating"/>
+    <circle cx="73" cy="17" r="0.8" fill="#0d9488" opacity="0.15" class="floating"/>
+    <circle cx="73" cy="73" r="0.8" fill="#f97316" opacity="0.15" class="floating"/>
+    <circle cx="17" cy="73" r="0.8" fill="#0d9488" opacity="0.15" class="floating"/>
+  </g>
   
-  <!-- Additional Connection Lines -->
-  <line x1="45" y1="45" x2="10" y2="10" stroke="#0d9488" stroke-width="0.2" opacity="0.1"/>
-  <line x1="45" y1="45" x2="80" y2="10" stroke="#f97316" stroke-width="0.2" opacity="0.1"/>
-  <line x1="45" y1="45" x2="80" y2="80" stroke="#0d9488" stroke-width="0.2" opacity="0.1"/>
-  <line x1="45" y1="45" x2="10" y2="80" stroke="#f97316" stroke-width="0.2" opacity="0.1"/>
+  <!-- Additional Connection Circles -->
+  <g class="fractal-square quaternary-rotate">
+    <circle cx="10" cy="10" r="0.6" fill="#0d9488" opacity="0.1" class="breathing"/>
+    <circle cx="80" cy="10" r="0.6" fill="#f97316" opacity="0.1" class="breathing"/>
+    <circle cx="80" cy="80" r="0.6" fill="#0d9488" opacity="0.1" class="breathing"/>
+    <circle cx="10" cy="80" r="0.6" fill="#f97316" opacity="0.1" class="breathing"/>
+  </g>
   
   <!-- Glowing Center Point -->
   <circle cx="45" cy="45" r="2" fill="url(#designGradient1)" opacity="0.7" class="pulse"/>
@@ -374,4 +380,8 @@
   <!-- Additional Glow Rings -->
   <circle cx="45" cy="45" r="8" fill="url(#designGradient2)" opacity="0.08" class="glow"/>
   <circle cx="45" cy="45" r="10" fill="url(#designGradient1)" opacity="0.05" class="breathing"/>
+  
+  <!-- Subtle Raised Effect Below Center -->
+  <ellipse cx="45" cy="52" rx="4" ry="1.5" fill="#f5f5f5" opacity="0.3" class="breathing"/>
+  <ellipse cx="45" cy="53" rx="3" ry="1" fill="#f5f5f5" opacity="0.2" class="breathing"/>
 </svg> 

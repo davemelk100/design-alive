@@ -249,129 +249,117 @@
     </style>
   </defs>
   
-  <!-- Central Core Diamond -->
-  <polygon points="45,42 48,45 45,48 42,45" fill="url(#designGradient1)" opacity="0.6" class="fractal-square primary-rotate"/>
+  <!-- Central Core Triangle -->
+  <polygon points="45,42 47,46 43,46" fill="url(#designGradient1)" opacity="0.5" class="fractal-square primary-rotate"/>
   
-  <!-- First Layer of Rotating Diamonds -->
+  <!-- First Layer of Rotating Triangles -->
   <g class="fractal-square secondary-rotate">
-    <polygon points="30.5,28 32.5,30.5 30.5,33 28.5,30.5" fill="#0d9488" opacity="0.5" class="floating"/>
-    <polygon points="59.5,28 61.5,30.5 59.5,33 57.5,30.5" fill="#f97316" opacity="0.5" class="floating"/>
-    <polygon points="59.5,57 61.5,59.5 59.5,62 57.5,59.5" fill="#0d9488" opacity="0.5" class="floating"/>
-    <polygon points="30.5,57 32.5,59.5 30.5,62 28.5,59.5" fill="#f97316" opacity="0.5" class="floating"/>
+    <polygon points="30.5,28 32.5,32 28.5,32" fill="#0d9488" opacity="0.4" class="floating"/>
+    <polygon points="59.5,28 61.5,32 57.5,32" fill="#f97316" opacity="0.4" class="floating"/>
+    <polygon points="59.5,57 61.5,61 57.5,61" fill="#0d9488" opacity="0.4" class="floating"/>
+    <polygon points="30.5,57 32.5,61 28.5,61" fill="#f97316" opacity="0.4" class="floating"/>
   </g>
   
-  <!-- Second Layer of Rotating Diamonds -->
+  <!-- Second Layer of Rotating Triangles -->
   <g class="fractal-square tertiary-rotate">
-    <polygon points="20,18 22,20 20,22 18,20" fill="#f97316" opacity="0.4" class="pulse"/>
-    <polygon points="70,18 72,20 70,22 68,20" fill="#0d9488" opacity="0.4" class="pulse"/>
-    <polygon points="70,68 72,70 70,72 68,70" fill="#f97316" opacity="0.4" class="pulse"/>
-    <polygon points="20,68 22,70 20,72 18,70" fill="#0d9488" opacity="0.4" class="pulse"/>
+    <polygon points="20,18 22,22 18,22" fill="#f97316" opacity="0.3" class="pulse"/>
+    <polygon points="70,18 72,22 68,22" fill="#0d9488" opacity="0.3" class="pulse"/>
+    <polygon points="70,68 72,72 68,72" fill="#f97316" opacity="0.3" class="pulse"/>
+    <polygon points="20,68 22,72 18,72" fill="#0d9488" opacity="0.3" class="pulse"/>
   </g>
   
-  <!-- Third Layer of Rotating Diamonds -->
+  <!-- Third Layer of Rotating Triangles -->
   <g class="fractal-square quaternary-rotate">
-    <polygon points="13.5,12 15,13.5 13.5,15 12,13.5" fill="#0d9488" opacity="0.3" class="floating"/>
-    <polygon points="76.5,12 78,13.5 76.5,15 75,13.5" fill="#f97316" opacity="0.3" class="floating"/>
-    <polygon points="76.5,75 78,76.5 76.5,78 75,76.5" fill="#0d9488" opacity="0.3" class="floating"/>
-    <polygon points="13.5,75 15,76.5 13.5,78 12,76.5" fill="#f97316" opacity="0.3" class="floating"/>
+    <polygon points="13.5,12 15,14 12,14" fill="#0d9488" opacity="0.25" class="floating"/>
+    <polygon points="76.5,12 78,14 75,14" fill="#f97316" opacity="0.25" class="floating"/>
+    <polygon points="76.5,75 78,77 75,77" fill="#0d9488" opacity="0.25" class="floating"/>
+    <polygon points="13.5,75 15,77 12,77" fill="#f97316" opacity="0.25" class="floating"/>
   </g>
   
-  <!-- Fourth Layer of Rotating Diamonds -->
+  <!-- Fourth Layer of Rotating Triangles -->
   <g class="fractal-square quinary-rotate">
-    <polygon points="8,7 9,8 8,9 7,8" fill="#f97316" opacity="0.25" class="pulse"/>
-    <polygon points="82,7 83,8 82,9 81,8" fill="#0d9488" opacity="0.25" class="pulse"/>
-    <polygon points="82,81 83,82 82,83 81,82" fill="#f97316" opacity="0.25" class="pulse"/>
-    <polygon points="8,81 9,82 8,83 7,82" fill="#0d9488" opacity="0.25" class="pulse"/>
+    <polygon points="8,7 9,9 7,9" fill="#f97316" opacity="0.2" class="pulse"/>
+    <polygon points="82,7 83,9 81,9" fill="#0d9488" opacity="0.2" class="pulse"/>
+    <polygon points="82,81 83,83 81,83" fill="#f97316" opacity="0.2" class="pulse"/>
+    <polygon points="8,81 9,83 7,83" fill="#0d9488" opacity="0.2" class="pulse"/>
   </g>
   
-  <!-- Fifth Layer of Rotating Diamonds -->
+  <!-- Fifth Layer of Rotating Triangles -->
   <g class="fractal-square senary-rotate">
-    <polygon points="3.5,3 4,3.5 3.5,4 3,3.5" fill="#0d9488" opacity="0.2" class="breathing"/>
-    <polygon points="86.5,3 87,3.5 86.5,4 86,3.5" fill="#f97316" opacity="0.2" class="breathing"/>
-    <polygon points="86.5,86 87,86.5 86.5,87 86,86.5" fill="#0d9488" opacity="0.2" class="breathing"/>
-    <polygon points="3.5,86 4,86.5 3.5,87 3,86.5" fill="#f97316" opacity="0.2" class="breathing"/>
+    <polygon points="3.5,3 4,4 3,4" fill="#0d9488" opacity="0.15" class="breathing"/>
+    <polygon points="86.5,3 87,4 86,4" fill="#f97316" opacity="0.15" class="breathing"/>
+    <polygon points="86.5,86 87,87 86,87" fill="#0d9488" opacity="0.15" class="breathing"/>
+    <polygon points="3.5,86 4,87 3,87" fill="#f97316" opacity="0.15" class="breathing"/>
   </g>
   
-  <!-- Sixth Layer of Rotating Diamonds -->
+  <!-- Sixth Layer of Rotating Triangles -->
   <g class="fractal-square septenary-rotate">
-    <polygon points="1.5,1 2,1.5 1.5,2 1,1.5" fill="#f97316" opacity="0.15" class="floating"/>
-    <polygon points="88.5,1 89,1.5 88.5,2 88,1.5" fill="#0d9488" opacity="0.15" class="floating"/>
-    <polygon points="88.5,88 89,88.5 88.5,89 88,88.5" fill="#f97316" opacity="0.15" class="floating"/>
-    <polygon points="1.5,88 2,88.5 1.5,89 1,88.5" fill="#0d9488" opacity="0.15" class="floating"/>
+    <polygon points="1.5,1 2,2 1,2" fill="#f97316" opacity="0.12" class="floating"/>
+    <polygon points="88.5,1 89,2 88,2" fill="#0d9488" opacity="0.12" class="floating"/>
+    <polygon points="88.5,88 89,89 88,89" fill="#f97316" opacity="0.12" class="floating"/>
+    <polygon points="1.5,88 2,89 1,89" fill="#0d9488" opacity="0.12" class="floating"/>
   </g>
   
-  <!-- Seventh Layer of Rotating Diamonds -->
+  <!-- Seventh Layer of Rotating Triangles -->
   <g class="fractal-square octonary-rotate">
-    <polygon points="0.75,0.5 1,0.75 0.75,1 0.5,0.75" fill="#0d9488" opacity="0.12" class="pulse"/>
-    <polygon points="89.25,0.5 89.5,0.75 89.25,1 89,0.75" fill="#f97316" opacity="0.12" class="pulse"/>
-    <polygon points="89.25,89 89.5,89.25 89.25,89.5 89,89.25" fill="#0d9488" opacity="0.12" class="pulse"/>
-    <polygon points="0.75,89 1,89.25 0.75,89.5 0.5,89.25" fill="#f97316" opacity="0.12" class="pulse"/>
+    <polygon points="0.75,0.5 1,1 0.5,1" fill="#0d9488" opacity="0.1" class="pulse"/>
+    <polygon points="89.25,0.5 89.5,1 89,1" fill="#f97316" opacity="0.1" class="pulse"/>
+    <polygon points="89.25,89 89.5,89.5 89,89.5" fill="#0d9488" opacity="0.1" class="pulse"/>
+    <polygon points="0.75,89 1,89.5 0.5,89.5" fill="#f97316" opacity="0.1" class="pulse"/>
   </g>
   
-  <!-- Eighth Layer of Rotating Diamonds -->
+  <!-- Eighth Layer of Rotating Triangles -->
   <g class="fractal-square nonary-rotate">
-    <polygon points="0.375,0.25 0.5,0.375 0.375,0.5 0.25,0.375" fill="#f97316" opacity="0.1" class="breathing"/>
-    <polygon points="89.625,0.25 89.75,0.375 89.625,0.5 89.5,0.375" fill="#0d9488" opacity="0.1" class="breathing"/>
-    <polygon points="89.625,89.5 89.75,89.625 89.625,89.75 89.5,89.625" fill="#f97316" opacity="0.1" class="breathing"/>
-    <polygon points="0.375,89.5 0.5,89.625 0.375,89.75 0.25,89.625" fill="#0d9488" opacity="0.1" class="breathing"/>
+    <polygon points="0.375,0.25 0.5,0.5 0.25,0.5" fill="#f97316" opacity="0.08" class="breathing"/>
+    <polygon points="89.625,0.25 89.75,0.5 89.5,0.5" fill="#0d9488" opacity="0.08" class="breathing"/>
+    <polygon points="89.625,89.5 89.75,89.75 89.5,89.75" fill="#f97316" opacity="0.08" class="breathing"/>
+    <polygon points="0.375,89.5 0.5,89.75 0.25,89.75" fill="#0d9488" opacity="0.08" class="breathing"/>
   </g>
   
-  <!-- Ninth Layer of Rotating Diamonds -->
+  <!-- Ninth Layer of Rotating Triangles -->
   <g class="fractal-square denary-rotate">
-    <polygon points="0.1875,0.125 0.25,0.1875 0.1875,0.25 0.125,0.1875" fill="#0d9488" opacity="0.08" class="floating"/>
-    <polygon points="89.8125,0.125 89.875,0.1875 89.8125,0.25 89.75,0.1875" fill="#f97316" opacity="0.08" class="floating"/>
-    <polygon points="89.8125,89.75 89.875,89.8125 89.8125,89.875 89.75,89.8125" fill="#0d9488" opacity="0.08" class="floating"/>
-    <polygon points="0.1875,89.75 0.25,89.8125 0.1875,89.875 0.125,89.8125" fill="#f97316" opacity="0.08" class="floating"/>
+    <polygon points="0.1875,0.125 0.25,0.25 0.125,0.25" fill="#0d9488" opacity="0.06" class="floating"/>
+    <polygon points="89.8125,0.125 89.875,0.25 89.75,0.25" fill="#f97316" opacity="0.06" class="floating"/>
+    <polygon points="89.8125,89.75 89.875,89.875 89.75,89.875" fill="#0d9488" opacity="0.06" class="floating"/>
+    <polygon points="0.1875,89.75 0.25,89.875 0.125,89.875" fill="#f97316" opacity="0.06" class="floating"/>
   </g>
   
-  <!-- Tenth Layer of Rotating Diamonds -->
+  <!-- Tenth Layer of Rotating Triangles -->
   <g class="fractal-square primary-rotate">
-    <polygon points="0.09375,0.0625 0.125,0.09375 0.09375,0.125 0.0625,0.09375" fill="#f97316" opacity="0.06" class="pulse"/>
-    <polygon points="89.90625,0.0625 89.9375,0.09375 89.90625,0.125 89.875,0.09375" fill="#0d9488" opacity="0.06" class="pulse"/>
-    <polygon points="89.90625,89.875 89.9375,89.90625 89.90625,89.9375 89.875,89.90625" fill="#f97316" opacity="0.06" class="pulse"/>
-    <polygon points="0.09375,89.875 0.125,89.90625 0.09375,89.9375 0.0625,89.90625" fill="#0d9488" opacity="0.06" class="pulse"/>
+    <polygon points="0.09375,0.0625 0.125,0.125 0.0625,0.125" fill="#f97316" opacity="0.05" class="pulse"/>
+    <polygon points="89.90625,0.0625 89.9375,0.125 89.875,0.125" fill="#0d9488" opacity="0.05" class="pulse"/>
+    <polygon points="89.90625,89.875 89.9375,89.9375 89.875,89.9375" fill="#f97316" opacity="0.05" class="pulse"/>
+    <polygon points="0.09375,89.875 0.125,89.9375 0.0625,89.9375" fill="#0d9488" opacity="0.05" class="pulse"/>
   </g>
   
-  <!-- Additional Diamonds - Eleventh Layer -->
+  <!-- Additional Triangles - Eleventh Layer -->
   <g class="fractal-square secondary-rotate">
-    <polygon points="0.046875,0.03125 0.0625,0.046875 0.046875,0.0625 0.03125,0.046875" fill="url(#designGradient1)" opacity="0.05" class="glow"/>
-    <polygon points="89.953125,0.03125 89.96875,0.046875 89.953125,0.0625 89.9375,0.046875" fill="url(#designGradient2)" opacity="0.05" class="glow"/>
-    <polygon points="89.953125,89.9375 89.96875,89.953125 89.953125,89.96875 89.9375,89.953125" fill="url(#designGradient1)" opacity="0.05" class="glow"/>
-    <polygon points="0.046875,89.9375 0.0625,89.953125 0.046875,89.96875 0.03125,89.953125" fill="url(#designGradient2)" opacity="0.05" class="glow"/>
+    <polygon points="0.046875,0.03125 0.0625,0.0625 0.03125,0.0625" fill="url(#designGradient1)" opacity="0.04" class="glow"/>
+    <polygon points="89.953125,0.03125 89.96875,0.0625 89.9375,0.0625" fill="url(#designGradient2)" opacity="0.04" class="glow"/>
+    <polygon points="89.953125,89.9375 89.96875,89.96875 89.9375,89.96875" fill="url(#designGradient1)" opacity="0.04" class="glow"/>
+    <polygon points="0.046875,89.9375 0.0625,89.96875 0.03125,89.96875" fill="url(#designGradient2)" opacity="0.04" class="glow"/>
   </g>
   
-  <!-- Additional Diamonds - Twelfth Layer -->
+  <!-- Additional Triangles - Twelfth Layer -->
   <g class="fractal-square tertiary-rotate">
-    <polygon points="0.0234375,0.015625 0.03125,0.0234375 0.0234375,0.03125 0.015625,0.0234375" fill="#f97316" opacity="0.04" class="breathing"/>
-    <polygon points="89.9765625,0.015625 89.984375,0.0234375 89.9765625,0.03125 89.96875,0.0234375" fill="#0d9488" opacity="0.04" class="breathing"/>
-    <polygon points="89.9765625,89.96875 89.984375,89.9765625 89.9765625,89.984375 89.96875,89.9765625" fill="#f97316" opacity="0.04" class="breathing"/>
-    <polygon points="0.0234375,89.96875 0.03125,89.9765625 0.0234375,89.984375 0.015625,89.9765625" fill="#0d9488" opacity="0.04" class="breathing"/>
+    <polygon points="0.0234375,0.015625 0.03125,0.03125 0.015625,0.03125" fill="#f97316" opacity="0.03" class="breathing"/>
+    <polygon points="89.9765625,0.015625 89.984375,0.03125 89.96875,0.03125" fill="#0d9488" opacity="0.03" class="breathing"/>
+    <polygon points="89.9765625,89.96875 89.984375,89.984375 89.96875,89.984375" fill="#f97316" opacity="0.03" class="breathing"/>
+    <polygon points="0.0234375,89.96875 0.03125,89.984375 0.015625,89.984375" fill="#0d9488" opacity="0.03" class="breathing"/>
   </g>
   
-  <!-- Connection Lines Between Layers -->
-  <line x1="45" y1="45" x2="29" y2="29" stroke="url(#designGradient1)" stroke-width="0.5" opacity="0.2"/>
-  <line x1="45" y1="45" x2="61" y2="29" stroke="url(#designGradient2)" stroke-width="0.5" opacity="0.2"/>
-  <line x1="45" y1="45" x2="61" y2="61" stroke="url(#designGradient1)" stroke-width="0.5" opacity="0.2"/>
-  <line x1="45" y1="45" x2="29" y2="61" stroke="url(#designGradient2)" stroke-width="0.5" opacity="0.2"/>
-  
-  <!-- Additional Connection Lines for 4D Effect -->
-  <line x1="45" y1="45" x2="17" y2="17" stroke="#f97316" stroke-width="0.3" opacity="0.15"/>
-  <line x1="45" y1="45" x2="73" y2="17" stroke="#0d9488" stroke-width="0.3" opacity="0.15"/>
-  <line x1="45" y1="45" x2="73" y2="73" stroke="#f97316" stroke-width="0.3" opacity="0.15"/>
-  <line x1="45" y1="45" x2="17" y2="73" stroke="#0d9488" stroke-width="0.3" opacity="0.15"/>
-  
-  <!-- Additional Connection Lines -->
-  <line x1="45" y1="45" x2="10" y2="10" stroke="#0d9488" stroke-width="0.2" opacity="0.1"/>
-  <line x1="45" y1="45" x2="80" y2="10" stroke="#f97316" stroke-width="0.2" opacity="0.1"/>
-  <line x1="45" y1="45" x2="80" y2="80" stroke="#0d9488" stroke-width="0.2" opacity="0.1"/>
-  <line x1="45" y1="45" x2="10" y2="80" stroke="#f97316" stroke-width="0.2" opacity="0.1"/>
+
   
   <!-- Glowing Center Point -->
-  <polygon points="45,43 47,45 45,47 43,45" fill="url(#designGradient1)" opacity="0.7" class="pulse"/>
-  <polygon points="45,41 49,45 45,49 41,45" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
-  <polygon points="45,39 51,45 45,51 39,45" fill="url(#designGradient1)" opacity="0.1" class="breathing"/>
+  <polygon points="45,43 46,43.5 46.5,44.5 46.5,45.5 46,46.5 45,47 44,46.5 43.5,45.5 43.5,44.5 44,43.5" fill="url(#designGradient1)" opacity="0.7" class="pulse"/>
+  <polygon points="45,41 47,42 48,44 48,46 47,48 45,49 43,48 42,46 42,44 43,42" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
+  <polygon points="45,39 48,40.5 49.5,43 49.5,47 48,49.5 45,51 42,49.5 40.5,47 40.5,43 42,40.5" fill="url(#designGradient1)" opacity="0.1" class="breathing"/>
   
   <!-- Additional Glow Rings -->
-  <polygon points="45,37 53,45 45,53 37,45" fill="url(#designGradient2)" opacity="0.08" class="glow"/>
-  <polygon points="45,35 55,45 45,55 35,45" fill="url(#designGradient1)" opacity="0.05" class="breathing"/>
+  <polygon points="45,37 49,38.5 51,41.5 51,48.5 49,51.5 45,53 41,51.5 39,48.5 39,41.5 41,38.5" fill="url(#designGradient2)" opacity="0.08" class="glow"/>
+  <polygon points="45,35 50,36.5 52.5,40 52.5,50 50,53.5 45,55 40,53.5 37.5,50 37.5,40 40,36.5" fill="url(#designGradient1)" opacity="0.05" class="breathing"/>
+  
+  <!-- Subtle Raised Effect Below Center -->
+  <ellipse cx="45" cy="52" rx="4" ry="1.5" fill="#f5f5f5" opacity="0.3" class="breathing"/>
+  <ellipse cx="45" cy="53" rx="3" ry="1" fill="#f5f5f5" opacity="0.2" class="breathing"/>
 </svg> 
