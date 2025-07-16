@@ -53,6 +53,10 @@
         animation: denaryRotate 156s linear infinite reverse;
       }
       
+      .center-4d-rotate {
+        animation: center4DRotate 80s linear infinite;
+      }
+      
       .floating {
         animation: float 48s ease-in-out infinite;
       }
@@ -246,6 +250,24 @@
           opacity: 0.8;
         }
       }
+      
+      @keyframes center4DRotate {
+        0% {
+          transform: perspective(300px) rotateY(0deg) rotateX(0deg) scale(1);
+        }
+        25% {
+          transform: perspective(300px) rotateY(90deg) rotateX(45deg) scale(1.1);
+        }
+        50% {
+          transform: perspective(300px) rotateY(180deg) rotateX(90deg) scale(1);
+        }
+        75% {
+          transform: perspective(300px) rotateY(270deg) rotateX(45deg) scale(1.1);
+        }
+        100% {
+          transform: perspective(300px) rotateY(360deg) rotateX(0deg) scale(1);
+        }
+      }
     </style>
   </defs>
   
@@ -358,6 +380,9 @@
   <!-- Additional Glow Rings -->
   <polygon points="45,36 50,44 40,44" fill="url(#designGradient2)" opacity="0.08" class="glow"/>
   <polygon points="45,34 51,43 39,43" fill="url(#designGradient1)" opacity="0.05" class="breathing"/>
+  
+  <!-- Large Center Triangle -->
+  <polygon points="45,32 55,48 35,48" fill="url(#designGradient1)" opacity="0.15" class="center-4d-rotate"/>
   
   <!-- Subtle Raised Effect Below Center -->
   <ellipse cx="45" cy="52" rx="4" ry="1.5" fill="#f5f5f5" opacity="0.3" class="breathing"/>

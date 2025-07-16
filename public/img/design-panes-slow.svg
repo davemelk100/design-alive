@@ -23,7 +23,7 @@
       }
       
       .tertiary-rotate {
-        animation: tertiaryRotate 168s linear infinite;
+        animation: tertiaryRotate 168s linear infinite reverse;
       }
       
       .quaternary-rotate {
@@ -31,7 +31,7 @@
       }
       
       .quinary-rotate {
-        animation: quinaryRotate 240s linear infinite;
+        animation: quinaryRotate 240s linear infinite reverse;
       }
       
       .senary-rotate {
@@ -39,7 +39,7 @@
       }
       
       .septenary-rotate {
-        animation: septenaryRotate 320s linear infinite;
+        animation: septenaryRotate 320s linear infinite reverse;
       }
       
       .octonary-rotate {
@@ -47,11 +47,15 @@
       }
       
       .nonary-rotate {
-        animation: nonaryRotate 300s linear infinite;
+        animation: nonaryRotate 300s linear infinite reverse;
       }
       
       .denary-rotate {
         animation: denaryRotate 340s linear infinite reverse;
+      }
+      
+      .center-4d-rotate {
+        animation: center4DRotate 80s linear infinite;
       }
       
       .floating {
@@ -295,6 +299,24 @@
           opacity: 0.8;
         }
       }
+      
+      @keyframes center4DRotate {
+        0% {
+          transform: perspective(300px) rotateY(0deg) rotateX(0deg) scale(1);
+        }
+        25% {
+          transform: perspective(300px) rotateY(90deg) rotateX(45deg) scale(1.1);
+        }
+        50% {
+          transform: perspective(300px) rotateY(180deg) rotateX(90deg) scale(1);
+        }
+        75% {
+          transform: perspective(300px) rotateY(270deg) rotateX(45deg) scale(1.1);
+        }
+        100% {
+          transform: perspective(300px) rotateY(360deg) rotateX(0deg) scale(1);
+        }
+      }
     </style>
   </defs>
   
@@ -424,7 +446,7 @@
   <!-- Glowing Center Point -->
   <polygon points="45,43 47,44 47,46 45,47 43,46 43,44" fill="url(#designGradient1)" opacity="0.7" class="pulse"/>
   <polygon points="45,41 49,43 49,47 45,49 41,47 41,43" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
-  <polygon points="45,39 51,42 51,48 45,51 39,48 39,42" fill="url(#designGradient1)" opacity="0.1" class="breathing"/>
+  <polygon points="45,39 51,42 51,48 45,51 39,48 39,42" fill="url(#designGradient1)" opacity="0.1" class="center-4d-rotate"/>
   
   <!-- Additional Glow Rings -->
   <polygon points="45,37 53,41 53,49 45,53 37,49 37,41" fill="url(#designGradient2)" opacity="0.08" class="glow"/>

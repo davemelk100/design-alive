@@ -57,6 +57,10 @@
         animation: groupRotate2D 45s linear infinite;
       }
       
+      .center-4d-rotate {
+        animation: center4DRotate 80s linear infinite;
+      }
+      
       .floating {
         animation: float 48s ease-in-out infinite;
       }
@@ -257,6 +261,24 @@
         }
       }
       
+      @keyframes center4DRotate {
+        0% {
+          transform: perspective(300px) rotateY(0deg) rotateX(0deg) scale(1);
+        }
+        25% {
+          transform: perspective(300px) rotateY(90deg) rotateX(45deg) scale(1.1);
+        }
+        50% {
+          transform: perspective(300px) rotateY(180deg) rotateX(90deg) scale(1);
+        }
+        75% {
+          transform: perspective(300px) rotateY(270deg) rotateX(45deg) scale(1.1);
+        }
+        100% {
+          transform: perspective(300px) rotateY(360deg) rotateX(0deg) scale(1);
+        }
+      }
+      
       @keyframes float {
         0%, 100% {
           transform: translateY(0px);
@@ -437,7 +459,7 @@
   <!-- Glowing Center Point -->
   <circle cx="45" cy="45" r="2" fill="url(#designGradient1)" opacity="0.7" class="pulse"/>
   <circle cx="45" cy="45" r="4" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
-  <circle cx="45" cy="45" r="6" fill="url(#designGradient1)" opacity="0.1" class="breathing"/>
+  <circle cx="45" cy="45" r="6" fill="url(#designGradient1)" opacity="0.1" class="center-4d-rotate"/>
   
   <!-- Additional Glow Rings -->
   <circle cx="45" cy="45" r="8" fill="url(#designGradient2)" opacity="0.08" class="glow"/>
