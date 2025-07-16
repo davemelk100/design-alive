@@ -49,22 +49,33 @@ const SectionHeader = ({
   return (
     <div className={`${className}`}>
       <div className="flex items-center justify-between mb-2">
-        <h2
-          className="text-[clamp(1.25rem,3vw,2.5rem)] font-bold title-font leading-tight"
-          style={{
-            letterSpacing: "-0.01em",
-          }}
-        >
-          {title}
-        </h2>
-        {showArchiveLink && (
-          <Link
-            to="/archive"
-            className="text-nav text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+        <div className="flex items-center gap-3">
+          <h2
+            className="text-[clamp(1.25rem,3vw,2.5rem)] font-bold title-font leading-tight"
+            style={{
+              letterSpacing: "-0.01em",
+            }}
           >
-            View Archive
-          </Link>
-        )}
+            {title}
+          </h2>
+        </div>
+        <div className="flex items-center gap-3">
+          {showArchiveLink && (
+            <Link
+              to="/archive"
+              className="text-nav text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+            >
+              View Archive
+            </Link>
+          )}
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="bg-black text-white p-2 rounded-full shadow-lg hover:opacity-80 transition-opacity"
+            aria-label="Scroll to top"
+          >
+            <ArrowUp className="h-4 w-4" />
+          </button>
+        </div>
       </div>
       {subtitle && (
         <p className="text-base text-muted-foreground mb-8 sm:mb-10">
@@ -793,21 +804,6 @@ function App() {
           onClose={() => setSelectedStory(null)}
         />
       )}
-
-      {/* Scroll to Top Button */}
-      <motion.button
-        initial={{ opacity: 0 }}
-        animate={{
-          opacity: isScrolled ? 1 : 0,
-          y: isScrolled ? 0 : 20,
-        }}
-        transition={{ duration: 0.3 }}
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className="fixed bottom-24 right-4 z-50 bg-black text-white p-3 rounded-full shadow-lg hover:opacity-80 transition-opacity"
-        aria-label="Scroll to top"
-      >
-        <ArrowUp className="h-6 w-6" />
-      </motion.button>
 
       {/* Hidden Admin Access Button */}
       <Link
