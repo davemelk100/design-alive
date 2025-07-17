@@ -172,7 +172,11 @@ function App() {
                     {/* Title, Icons, and Navigation Row */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 relative z-10">
                       {/* Mobile: Title left-aligned */}
-                      <div className="flex sm:hidden items-center justify-start w-full">
+                      <div
+                        className={`flex xl:hidden items-center justify-start w-full transition-opacity duration-300 ${
+                          isMobileMenuOpen ? "opacity-0" : "opacity-100"
+                        }`}
+                      >
                         {/* Mobile Title - Left */}
                         <div>
                           <h1
@@ -428,7 +432,7 @@ function App() {
                       className="max-w-4xl mx-auto"
                     >
                       <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed text-left">
-                        Senior Product Designer with 8+ years of experience
+                        Senior Product Designer with 15+ years of experience
                         specializing in AI-powered UX/UI design and
                         accessibility. Led design systems at Powerley Inc.,
                         creating bill analysis dashboards and onboarding
@@ -1022,7 +1026,7 @@ function App() {
       </Suspense>
 
       {/* Mobile Bottom Icons Tray */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 z-50 md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 z-50 xl:hidden">
         <div className="flex items-center justify-around px-4 py-3">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
