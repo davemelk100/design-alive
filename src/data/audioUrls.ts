@@ -47,15 +47,6 @@ export const audioTracks: AudioTrack[] = [
   },
   {
     id: 5,
-    title: "Staggered (Reprised)",
-    artist: "BALM",
-    url: "/audio/ht-stems.mp3",
-    uniqueUrl: "/audio/balm-staggered-reprised-version.mp3",
-    duration: "4:20",
-    filename: "ht-stems.mp3",
-  },
-  {
-    id: 6,
     title: "Lasorda v Bevacqua",
     artist: "BALM",
     url: "/audio/bevacqua.mp3",
