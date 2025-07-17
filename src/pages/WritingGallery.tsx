@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, Trash2, Edit2, Check, X, Download, Upload, AlertCircle } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Edit2,
+  Check,
+  X,
+  Download,
+  Upload,
+  AlertCircle,
+} from "lucide-react";
 import { writingGalleryStorage, storage } from "../utils/storage";
 
 interface WritingPiece {
@@ -65,6 +74,31 @@ const WritingGallery: React.FC = () => {
         url: "",
         isPublished: true,
       },
+      {
+        id: 4,
+        title: "",
+        subtitle: "",
+        excerpt: "AI has made it less scary for when their parents die.",
+        category: "",
+        readTime: "",
+        date: "",
+        image: "",
+        url: "",
+        isPublished: true,
+      },
+      {
+        id: 5,
+        title: "",
+        subtitle: "",
+        excerpt:
+          "I mean, you came to see Shattered Realm, so now's not the time to whine about your helmet being split in two.",
+        category: "",
+        readTime: "",
+        date: "",
+        image: "",
+        url: "",
+        isPublished: true,
+      },
     ];
   };
 
@@ -85,9 +119,9 @@ const WritingGallery: React.FC = () => {
       setStorageStatus({ available: true });
     } catch (error) {
       console.error("Failed to save writing pieces:", error);
-      setStorageStatus({ 
-        available: false, 
-        message: "Failed to save changes. Please try again." 
+      setStorageStatus({
+        available: false,
+        message: "Failed to save changes. Please try again.",
       });
     }
   };
@@ -144,13 +178,17 @@ const WritingGallery: React.FC = () => {
       const data = {
         writingPieces,
         exportDate: new Date().toISOString(),
-        version: "1.0"
+        version: "1.0",
       };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json",
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `writing-gallery-backup-${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `writing-gallery-backup-${
+        new Date().toISOString().split("T")[0]
+      }.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -202,7 +240,9 @@ const WritingGallery: React.FC = () => {
               {!storageStatus.available && (
                 <div className="flex items-center gap-2 mt-2 text-amber-600 dark:text-amber-400">
                   <AlertCircle className="h-4 w-4" />
-                  <span className="text-sm">{storageStatus.message || "Storage not available"}</span>
+                  <span className="text-sm">
+                    {storageStatus.message || "Storage not available"}
+                  </span>
                 </div>
               )}
             </div>

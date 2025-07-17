@@ -182,7 +182,7 @@ export const content = {
 
   career: {
     title: "Career Journey",
-    subtitle: "Organizations that helped me make a living. Appreciate y'all.",
+    subtitle: "Organizations that helped me make a living",
     positions: [
       {
         title: "Senior Product Designer",

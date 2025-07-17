@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Eye } from "lucide-react";
+import LazyVideo from "../components/LazyVideo";
 
 const DesignSystem: React.FC = () => {
   return (
@@ -231,16 +232,14 @@ const DesignSystem: React.FC = () => {
                 </div>
               </div>
               <div className="absolute inset-0 overflow-hidden z-0">
-                <video
+                <LazyVideo
+                  src="/video/jersey.mp4"
                   className="w-full h-full object-cover opacity-20"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                >
-                  <source src="/video/jersey.mov" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
+                  autoPlay={true}
+                  muted={true}
+                  loop={true}
+                  playsInline={true}
+                />
               </div>
             </div>
             <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
@@ -325,6 +324,41 @@ const DesignSystem: React.FC = () => {
                   src="/img/delta-story.png"
                   alt="Selling Accessibility"
                   className="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+            </div>
+            <div className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md">
+              <div className="absolute top-3 right-3">
+                <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+                  <Eye className="h-5 w-5 text-gray-600" />
+                </div>
+              </div>
+              <div className="p-3 flex flex-col gap-2 flex-1">
+                <div className="pr-12">
+                  <h3
+                    className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                    style={{
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    Golf
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-600 mb-2">
+                    The game I love to hate
+                  </p>
+                </div>
+                <div className="flex-1 flex flex-col">
+                  <p className="text-black mb-2 dark:text-black text-card-body flex-1"></p>
+                </div>
+              </div>
+              <div className="relative aspect-[3/2] overflow-visible -mx-3 -mb-3">
+                <LazyVideo
+                  src="/video/golf.mp4"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  autoPlay={true}
+                  muted={true}
+                  loop={true}
+                  playsInline={true}
                 />
               </div>
             </div>

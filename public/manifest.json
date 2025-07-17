@@ -1,0 +1,16 @@
+{
+  "name": "Dave Melkonian - Digital Experience Designer",
+  "short_name": "Dave Melkonian",
+  "description": "Digital Experience Designer Portfolio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+} 
