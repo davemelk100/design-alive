@@ -11,7 +11,7 @@ export interface AudioTrack {
 export const audioTracks: AudioTrack[] = [
   {
     id: 1,
-    title: "Warrior Women",
+    title: "Warrior Women v Egypt",
     artist: "BALM",
     url: "/audio/warrior.mp3",
     uniqueUrl: "/audio/balm-warrior-women-2024.mp3",
@@ -29,7 +29,7 @@ export const audioTracks: AudioTrack[] = [
   },
   {
     id: 3,
-    title: "Alice In Chains x Fiend",
+    title: "Alice In Chains v Fiend",
     artist: "BALM",
     url: "/audio/aic-fiend.mp3",
     uniqueUrl: "/audio/balm-alice-chains-fiend-remix.mp3",
@@ -38,7 +38,7 @@ export const audioTracks: AudioTrack[] = [
   },
   {
     id: 4,
-    title: "Slayer x Congas",
+    title: "Slayer v Congas",
     artist: "BALM",
     url: "/audio/slayer-congas.mp3",
     uniqueUrl: "/audio/balm-slayer-congas-fusion.mp3",
@@ -53,6 +53,15 @@ export const audioTracks: AudioTrack[] = [
     uniqueUrl: "/audio/balm-lasorda-bevacqua-battle-cropped.mp3",
     duration: "76", // 1:16 in seconds
     filename: "bevacqua.mp3",
+  },
+  {
+    id: 6,
+    title: "Eagles v Big Tuck",
+    artist: "BALM",
+    url: "/audio/eagles.mp3",
+    uniqueUrl: "/audio/eagles.mp3",
+    duration: "3:45",
+    filename: "eagles.mp3",
   },
 ];
 

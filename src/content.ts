@@ -318,126 +318,126 @@ export const content = {
     subtitle:
       "As an English major, I felt this wasn't a big stretch to start cranking these out.",
     items: [
-      {
-        id: "mobile-web-seamless-experience",
-        title: "Building for Mobile on Web: The Small Details That Matter",
-        description:
-          "How to create seamless mobile web experiences that feel native, even without the app wrapper.",
-        url: "mobile-web-seamless-experience",
-        content: `<h1>Building for Mobile on Web: The Small Details That Matter</h1>
-
-<h2>The Mobile Web Paradox</h2>
-
-<p>We've all been there. You're browsing a website on your phone, and something just feels... off. The buttons are too small, the text is hard to read, or the navigation requires too many taps. It's not broken, but it's not quite right either. This is the mobile web paradox: technically functional, but experientially frustrating.</p>
-
-<p>The truth is, most websites are built for desktop first and then "made responsive." But true mobile web design isn't about making desktop layouts smaller - it's about reimagining the entire experience for touch, thumb navigation, and the unique constraints of mobile devices.</p>
-
-<h2>Touch Targets: The 44px Rule</h2>
-
-<p>Apple's Human Interface Guidelines established the 44px minimum touch target size for a reason. Your thumb isn't a mouse cursor. It's a blunt instrument that needs space to land accurately. When buttons are too small, users miss their targets, get frustrated, and abandon tasks.</p>
-
-<p>But here's the thing: 44px isn't just about the button itself. It's about the entire touchable area. I've seen designs where the button text is 44px tall, but the actual clickable area is much smaller due to padding issues. Always test your touch targets on actual devices.</p>
-
-<p>Pro tip: Use CSS to create invisible touch targets that extend beyond the visual button. This gives users a larger hit area without changing the visual design.</p>
-
-<h2>Thumb Navigation: The Natural Way</h2>
-
-<p>Look at how you hold your phone. Your thumb naturally arcs in a specific pattern - it's most comfortable reaching the bottom third of the screen and the sides. The top corners? That's a stretch. Literally.</p>
-
-<p>This is why bottom navigation bars work so well on mobile. They put the most important actions where your thumb naturally rests. It's not just about convenience - it's about reducing cognitive load. When navigation feels natural, users don't have to think about how to get around.</p>
-
-<p>I recently redesigned a mobile web app that had all navigation at the top. Users were constantly dropping their phones trying to reach the menu button. Moving the navigation to the bottom reduced user errors by 60% and increased task completion rates significantly.</p>
-
-<h2>The Loading State Problem</h2>
-
-<p>Mobile networks are unpredictable. Users switch between WiFi and cellular, move through dead zones, and experience varying connection speeds. Your loading states need to account for this reality.</p>
-
-<p>Don't just show a spinner. Tell users what's happening. "Loading your profile..." is better than a generic loading indicator. Even better: show progress when possible. "Step 2 of 4: Processing payment..." gives users a sense of forward momentum.</p>
-
-<p>And please, for the love of all things good, don't show a loading spinner for more than 3 seconds without additional context. Users will think your app is broken and leave.</p>
-
-<h2>Form Design: The Mobile Challenge</h2>
-
-<p>Forms are where mobile web experiences often fall apart. Tiny input fields, cramped layouts, and keyboard issues make users want to throw their phones.</p>
-
-<p>Here's what works: large input fields (at least 44px tall), clear labels, and smart keyboard types. If you're asking for an email, set the input type to "email" so the keyboard shows the @ symbol. For phone numbers, use "tel" to show the numeric keypad.</p>
-
-<p>Auto-focus the first field when the form loads, but be careful about auto-advancing between fields. Some users need time to review what they've entered. Let them control the flow.</p>
-
-<h2>The Scroll Experience</h2>
-
-<p>Mobile users scroll differently than desktop users. They use momentum scrolling, expect smooth animations, and are sensitive to janky performance. A 60fps scroll experience isn't just nice - it's expected.</p>
-
-<p>But here's the real issue: infinite scroll on mobile can be a nightmare. Users lose their place, can't find content they saw earlier, and get frustrated when they accidentally trigger new content loads.</p>
-
-<p>Consider pagination or "load more" buttons instead. Give users control over when new content loads. And always provide a way to get back to the top quickly - a floating "back to top" button or pull-to-refresh functionality.</p>
-
-<h2>Visual Hierarchy: Less is More</h2>
-
-<p>Mobile screens are small. Really small. Every pixel counts. When you try to cram too much information onto a mobile screen, everything becomes noise.</p>
-
-<p>Use progressive disclosure. Show the most important information first, then let users tap to see more details. Card-based layouts work well because they create natural content boundaries.</p>
-
-<p>Typography is crucial. Use larger font sizes than you think you need. 16px is the minimum for body text on mobile. And please, don't use light gray text on white backgrounds. It's unreadable in sunlight.</p>
-
-<h2>The Keyboard Problem</h2>
-
-<p>When the keyboard appears, it covers up to 50% of the screen. Your carefully designed layout suddenly becomes unusable. This is a common mobile web failure point.</p>
-
-<p>Solutions: Use viewport units that account for the keyboard, implement smart scrolling that keeps the active input visible, and consider using fixed positioning for important actions when the keyboard is open.</p>
-
-<p>Test your forms with the keyboard open. You'd be surprised how many designs break when the virtual keyboard appears.</p>
-
-<h2>Performance: The Silent Killer</h2>
-
-<p>Mobile users are impatient. They expect pages to load in under 3 seconds. After 5 seconds, you've lost 90% of your users. Performance isn't just about speed - it's about user retention.</p>
-
-<p>Optimize images, minimize JavaScript, and use lazy loading. But most importantly, measure performance on actual devices, not just desktop browsers. Mobile performance is a different beast entirely.</p>
-
-<p>Consider using service workers for offline functionality. Even a simple "you're offline" message is better than a broken page.</p>
-
-<h2>The Small Details That Matter</h2>
-
-<p>It's the small details that separate good mobile web experiences from great ones:</p>
-
-<ul>
-<li><strong>Pull-to-refresh:</strong> Users expect it. Implement it consistently.</li>
-<li><strong>Haptic feedback:</strong> Subtle vibrations for button presses feel native.</li>
-<li><strong>Status bar styling:</strong> Match your app's theme to the device status bar.</li>
-<li><strong>Safe areas:</strong> Account for notches and home indicators.</li>
-<li><strong>Orientation changes:</strong> Handle landscape mode gracefully.</li>
-</ul>
-
-<p>These aren't just nice-to-haves. They're the difference between a website that works on mobile and a mobile web experience that feels native.</p>
-
-<h2>Testing: The Reality Check</h2>
-
-<p>You can't design for mobile without testing on mobile. Period. Desktop browser testing isn't enough. You need to test on actual devices with real fingers and real network conditions.</p>
-
-<p>Test on different screen sizes, different operating systems, and different network speeds. Test with one hand, test while walking, test in bright sunlight. Test everything that could go wrong.</p>
-
-<p>And don't just test functionality - test the emotional experience. Does it feel good to use? Does it make users want to come back?</p>
-
-<h2>The Bottom Line</h2>
-
-<p>Building great mobile web experiences isn't about making desktop websites smaller. It's about understanding the unique constraints and opportunities of mobile devices and designing specifically for them.</p>
-
-<p>The small details matter. The 44px touch targets, the bottom navigation, the loading states, the keyboard handling - these aren't just technical requirements. They're the difference between a frustrating experience and a seamless one.</p>
-
-<p>Mobile web users deserve better than responsive design. They deserve mobile-first design that understands their needs, their behaviors, and their constraints. When you get it right, the result is an experience that feels so natural, users forget they're using a website instead of an app.</p>
-
-<p>That's the goal: not just functional, but delightful. Not just responsive, but mobile-native.</p>
-
-`,
-        image: "/img/mobile-web-experience.png",
-        date: "January 15, 2025",
-        tags: [
-          "Mobile Design",
-          "UX Design",
-          "Web Development",
-          "User Experience",
-        ],
-      },
+      // {
+      //   id: "mobile-web-seamless-experience",
+      //   title: "Building for Mobile on Web: The Small Details That Matter",
+      //   description:
+      //     "How to create seamless mobile web experiences that feel native, even without the app wrapper.",
+      //   url: "mobile-web-seamless-experience",
+      //   content: `<h1>Building for Mobile on Web: The Small Details That Matter</h1>
+      //
+      // <h2>The Mobile Web Paradox</h2>
+      //
+      // <p>We've all been there. You're browsing a website on your phone, and something just feels... off. The buttons are too small, the text is hard to read, or the navigation requires too many taps. It's not broken, but it's not quite right either. This is the mobile web paradox: technically functional, but experientially frustrating.</p>
+      //
+      // <p>The truth is, most websites are built for desktop first and then "made responsive." But true mobile web design isn't about making desktop layouts smaller - it's about reimagining the entire experience for touch, thumb navigation, and the unique constraints of mobile devices.</p>
+      //
+      // <h2>Touch Targets: The 44px Rule</h2>
+      //
+      // <p>Apple's Human Interface Guidelines established the 44px minimum touch target size for a reason. Your thumb isn't a mouse cursor. It's a blunt instrument that needs space to land accurately. When buttons are too small, users miss their targets, get frustrated, and abandon tasks.</p>
+      //
+      // <p>But here's the thing: 44px isn't just about the button itself. It's about the entire touchable area. I've seen designs where the button text is 44px tall, but the actual clickable area is much smaller due to padding issues. Always test your touch targets on actual devices.</p>
+      //
+      // <p>Pro tip: Use CSS to create invisible touch targets that extend beyond the visual button. This gives users a larger hit area without changing the visual design.</p>
+      //
+      // <h2>Thumb Navigation: The Natural Way</h2>
+      //
+      // <p>Look at how you hold your phone. Your thumb naturally arcs in a specific pattern - it's most comfortable reaching the bottom third of the screen and the sides. The top corners? That's a stretch. Literally.</p>
+      //
+      // <p>This is why bottom navigation bars work so well on mobile. They put the most important actions where your thumb naturally rests. It's not just about convenience - it's about reducing cognitive load. When navigation feels natural, users don't have to think about how to get around.</p>
+      //
+      // <p>I recently redesigned a mobile web app that had all navigation at the top. Users were constantly dropping their phones trying to reach the menu button. Moving the navigation to the bottom reduced user errors by 60% and increased task completion rates significantly.</p>
+      //
+      // <h2>The Loading State Problem</h2>
+      //
+      // <p>Mobile networks are unpredictable. Users switch between WiFi and cellular, move through dead zones, and experience varying connection speeds. Your loading states need to account for this reality.</p>
+      //
+      // <p>Don't just show a spinner. Tell users what's happening. "Loading your profile..." is better than a generic loading indicator. Even better: show progress when possible. "Step 2 of 4: Processing payment..." gives users a sense of forward momentum.</p>
+      //
+      // <p>And please, for the love of all things good, don't show a loading spinner for more than 3 seconds without additional context. Users will think your app is broken and leave.</p>
+      //
+      // <h2>Form Design: The Mobile Challenge</h2>
+      //
+      // <p>Forms are where mobile web experiences often fall apart. Tiny input fields, cramped layouts, and keyboard issues make users want to throw their phones.</p>
+      //
+      // <p>Here's what works: large input fields (at least 44px tall), clear labels, and smart keyboard types. If you're asking for an email, set the input type to "email" so the keyboard shows the @ symbol. For phone numbers, use "tel" to show the numeric keypad.</p>
+      //
+      // <p>Auto-focus the first field when the form loads, but be careful about auto-advancing between fields. Some users need time to review what they've entered. Let them control the flow.</p>
+      //
+      // <h2>The Scroll Experience</h2>
+      //
+      // <p>Mobile users scroll differently than desktop users. They use momentum scrolling, expect smooth animations, and are sensitive to janky performance. A 60fps scroll experience isn't just nice - it's expected.</p>
+      //
+      // <p>But here's the real issue: infinite scroll on mobile can be a nightmare. Users lose their place, can't find content they saw earlier, and get frustrated when they accidentally trigger new content loads.</p>
+      //
+      // <p>Consider pagination or "load more" buttons instead. Give users control over when new content loads. And always provide a way to get back to the top quickly - a floating "back to top" button or pull-to-refresh functionality.</p>
+      //
+      // <h2>Visual Hierarchy: Less is More</h2>
+      //
+      // <p>Mobile screens are small. Really small. Every pixel counts. When you try to cram too much information onto a mobile screen, everything becomes noise.</p>
+      //
+      // <p>Use progressive disclosure. Show the most important information first, then let users tap to see more details. Card-based layouts work well because they create natural content boundaries.</p>
+      //
+      // <p>Typography is crucial. Use larger font sizes than you think you need. 16px is the minimum for body text on mobile. And please, don't use light gray text on white backgrounds. It's unreadable in sunlight.</p>
+      //
+      // <h2>The Keyboard Problem</h2>
+      //
+      // <p>When the keyboard appears, it covers up to 50% of the screen. Your carefully designed layout suddenly becomes unusable. This is a common mobile web failure point.</p>
+      //
+      // <p>Solutions: Use viewport units that account for the keyboard, implement smart scrolling that keeps the active input visible, and consider using fixed positioning for important actions when the keyboard is open.</p>
+      //
+      // <p>Test your forms with the keyboard open. You'd be surprised how many designs break when the virtual keyboard appears.</p>
+      //
+      // <h2>Performance: The Silent Killer</h2>
+      //
+      // <p>Mobile users are impatient. They expect pages to load in under 3 seconds. After 5 seconds, you've lost 90% of your users. Performance isn't just about speed - it's about user retention.</p>
+      //
+      // <p>Optimize images, minimize JavaScript, and use lazy loading. But most importantly, measure performance on actual devices, not just desktop browsers. Mobile performance is a different beast entirely.</p>
+      //
+      // <p>Consider using service workers for offline functionality. Even a simple "you're offline" message is better than a broken page.</p>
+      //
+      // <h2>The Small Details That Matter</h2>
+      //
+      // <p>It's the small details that separate good mobile web experiences from great ones:</p>
+      //
+      // <ul>
+      // <li><strong>Pull-to-refresh:</strong> Users expect it. Implement it consistently.</li>
+      // <li><strong>Haptic feedback:</strong> Subtle vibrations for button presses feel native.</li>
+      // <li><strong>Status bar styling:</strong> Match your app's theme to the device status bar.</li>
+      // <li><strong>Safe areas:</strong> Account for notches and home indicators.</li>
+      // <li><strong>Orientation changes:</strong> Handle landscape mode gracefully.</li>
+      // </ul>
+      //
+      // <p>These aren't just nice-to-haves. They're the difference between a website that works on mobile and a mobile web experience that feels native.</p>
+      //
+      // <h2>Testing: The Reality Check</h2>
+      //
+      // <p>You can't design for mobile without testing on mobile. Period. Desktop browser testing isn't enough. You need to test on actual devices with real fingers and real network conditions.</p>
+      //
+      // <p>Test on different screen sizes, different operating systems, and different network speeds. Test with one hand, test while walking, test in bright sunlight. Test everything that could go wrong.</p>
+      //
+      // <p>And don't just test functionality - test the emotional experience. Does it feel good to use? Does it make users want to come back?</p>
+      //
+      // <h2>The Bottom Line</h2>
+      //
+      // <p>Building great mobile web experiences isn't about making desktop websites smaller. It's about understanding the unique constraints and opportunities of mobile devices and designing specifically for them.</p>
+      //
+      // <p>The small details matter. The 44px touch targets, the bottom navigation, the loading states, the keyboard handling - these aren't just technical requirements. They're the difference between a frustrating experience and a seamless one.</p>
+      //
+      // <p>Mobile web users deserve better than responsive design. They deserve mobile-first design that understands their needs, their behaviors, and their constraints. When you get it right, the result is an experience that feels so natural, users forget they're using a website instead of an app.</p>
+      //
+      // <p>That's the goal: not just functional, but delightful. Not just responsive, but mobile-native.</p>
+      //
+      // `,
+      //   image: "/img/mobile-web-experience.png",
+      //   date: "January 15, 2025",
+      //   tags: [
+      //     "Mobile Design",
+      //     "UX Design",
+      //     "Web Development",
+      //     "User Experience",
+      //   ],
+      // },
       // Temporarily hidden until admin panel is fully operational
       // {
       //   id: "ux-business-financial-implications",

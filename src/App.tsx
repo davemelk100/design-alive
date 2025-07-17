@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Dribbble, ArrowUp, Eye, Menu, ExternalLink } from "lucide-react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { useState, useEffect } from "react";
@@ -170,7 +170,7 @@ function App() {
                 <section className="relative h-[12vh] sm:h-[20vh] flex items-start sm:items-center">
                   <div className="container mx-auto px-4 sm:px-8 pt-8 sm:pt-4">
                     {/* Title, Icons, and Navigation Row */}
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 relative z-10">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 sm:mb-6 gap-4 relative z-10">
                       {/* Mobile: Title left-aligned */}
                       <div
                         className={`flex xl:hidden items-center justify-start w-full transition-opacity duration-300 ${
@@ -191,7 +191,7 @@ function App() {
                       </div>
 
                       {/* Desktop: Title on left, Navigation and Icons on right */}
-                      <div className="hidden sm:block">
+                      <div className="hidden xl:block">
                         <h1
                           className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none relative z-10"
                           style={{
@@ -203,9 +203,9 @@ function App() {
                       </div>
 
                       {/* Desktop Icons and Navigation */}
-                      <div className="hidden sm:flex flex-row items-center gap-4">
+                      <div className="hidden xl:flex flex-row items-center gap-4">
                         {/* Desktop Navigation Links */}
-                        <div className="hidden sm:flex rounded-lg px-3 sm:px-4 py-2 items-center justify-start gap-4 sm:gap-6">
+                        <div className="hidden xl:flex rounded-lg px-3 sm:px-4 py-2 items-center justify-start gap-4 sm:gap-6">
                           <button
                             onClick={() => handleNavClick("current-projects")}
                             className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
@@ -302,124 +302,147 @@ function App() {
 
                 {/* Mobile Menu Dropdown */}
                 {isMobileMenuOpen && (
-                  <div className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-50 sm:hidden">
-                    <div className="absolute top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 p-4">
-                      <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-lg font-semibold">Navigation</h2>
-                        <button
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition-colors"
-                          aria-label="Close menu"
-                        >
-                          <Menu className="h-5 w-5 text-gray-600" />
-                        </button>
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <button
-                          onClick={() => {
-                            handleNavClick("current-projects");
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
-                            <span className="text-white text-sm font-bold">
-                              L
+                  <AnimatePresence>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-50 sm:hidden"
+                    >
+                      <motion.div
+                        initial={{ y: "100%" }}
+                        animate={{ y: 0 }}
+                        exit={{ y: "100%" }}
+                        transition={{
+                          type: "spring",
+                          damping: 25,
+                          stiffness: 300,
+                        }}
+                        className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4 rounded-t-2xl"
+                      >
+                        <div className="flex items-center justify-between mb-4">
+                          <h2 className="text-lg font-semibold">Navigation</h2>
+                          <button
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition-colors"
+                            aria-label="Close menu"
+                          >
+                            <Menu className="h-5 w-5 text-gray-600" />
+                          </button>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <button
+                            onClick={() => {
+                              handleNavClick("current-projects");
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-sm font-bold">
+                                L
+                              </span>
+                            </div>
+                            <span className="text-sm font-semibold">Lab</span>
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleNavClick("stories");
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-sm font-bold">
+                                S
+                              </span>
+                            </div>
+                            <span className="text-sm font-semibold">
+                              Stories
                             </span>
-                          </div>
-                          <span className="text-sm font-semibold">Lab</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleNavClick("stories");
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
-                            <span className="text-white text-sm font-bold">
-                              S
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleNavClick("articles");
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-sm font-bold">
+                                A
+                              </span>
+                            </div>
+                            <span className="text-sm font-semibold">
+                              Articles
                             </span>
-                          </div>
-                          <span className="text-sm font-semibold">Stories</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleNavClick("articles");
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
-                            <span className="text-white text-sm font-bold">
-                              A
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleNavClick("work");
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-sm font-bold">
+                                D
+                              </span>
+                            </div>
+                            <span className="text-sm font-semibold">
+                              Designs
                             </span>
-                          </div>
-                          <span className="text-sm font-semibold">
-                            Articles
-                          </span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleNavClick("work");
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
-                            <span className="text-white text-sm font-bold">
-                              D
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleNavClick("career");
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-sm font-bold">
+                                C
+                              </span>
+                            </div>
+                            <span className="text-sm font-semibold">
+                              Career
                             </span>
-                          </div>
-                          <span className="text-sm font-semibold">Designs</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleNavClick("career");
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                            <span className="text-white text-sm font-bold">
-                              C
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleNavClick("personal");
+                              setIsMobileMenuOpen(false);
+                            }}
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-sm font-bold">
+                                P
+                              </span>
+                            </div>
+                            <span className="text-sm font-semibold">
+                              Personal
                             </span>
-                          </div>
-                          <span className="text-sm font-semibold">Career</span>
-                        </button>
-                        <button
-                          onClick={() => {
-                            handleNavClick("personal");
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
-                            <span className="text-white text-sm font-bold">
-                              P
+                          </button>
+                          <Link
+                            to="/design-system"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                          >
+                            <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-sm font-bold">
+                                DS
+                              </span>
+                            </div>
+                            <span className="text-sm font-semibold">
+                              Design System
                             </span>
-                          </div>
-                          <span className="text-sm font-semibold">
-                            Personal
-                          </span>
-                        </button>
-                        <Link
-                          to="/design-system"
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
-                            <span className="text-white text-sm font-bold">
-                              DS
-                            </span>
-                          </div>
-                          <span className="text-sm font-semibold">
-                            Design System
-                          </span>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+                          </Link>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+                  </AnimatePresence>
                 )}
 
                 {/* Summary Section */}
