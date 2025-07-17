@@ -440,6 +440,39 @@ function App() {
                             </span>
                           </Link>
                         </div>
+
+                        {/* Social Links */}
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                          <h3 className="text-sm font-semibold text-gray-600 mb-3">
+                            Connect
+                          </h3>
+                          <div className="flex gap-3">
+                            <a
+                              href={content.navigation.social.linkedin.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors flex-1"
+                            >
+                              <LinkedInLogoIcon className="h-5 w-5 text-blue-600" />
+                              <span className="text-sm font-medium">
+                                LinkedIn
+                              </span>
+                            </a>
+                            <a
+                              href={content.navigation.social.dribbble.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={() => setIsMobileMenuOpen(false)}
+                              className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors flex-1"
+                            >
+                              <Dribbble className="h-5 w-5 text-pink-600" />
+                              <span className="text-sm font-medium">
+                                Dribbble
+                              </span>
+                            </a>
+                          </div>
+                        </div>
                       </motion.div>
                     </motion.div>
                   </AnimatePresence>
@@ -1058,24 +1091,6 @@ function App() {
           >
             <Menu className="h-5 w-5 text-black" />
           </button>
-          <a
-            href={content.navigation.social.linkedin.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
-            aria-label="LinkedIn"
-          >
-            <LinkedInLogoIcon className="h-5 w-5 text-black" />
-          </a>
-          <a
-            href={content.navigation.social.dribbble.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
-            aria-label="Dribbble"
-          >
-            <Dribbble className="h-5 w-5 text-black" />
-          </a>
           <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
             <ThemeToggle />
           </div>
