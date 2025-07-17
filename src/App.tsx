@@ -25,6 +25,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminMusic from "./pages/AdminMusic";
 import MusicPlayer from "./pages/MusicPlayer";
 import WritingGallery from "./pages/WritingGallery";
+import DesignSystem from "./pages/DesignSystem";
 import { slugify } from "./utils/slugify";
 import { getVisibleArticles } from "./utils/articleVisibility";
 import { getVisibleDesignWork } from "./utils/designWorkVisibility";
@@ -160,7 +161,7 @@ function App() {
                   className="absolute inset-0 bg-gradient-to-b from-transparent to-background/5"
                 />
 
-                <div className="container mx-auto px-4 sm:px-8 pt-32 sm:pt-40">
+                <div className="container mx-auto px-4 sm:px-8 pt-32 sm:pt-20">
                   {/* Title, Icons, and Navigation Row */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
                     <motion.div
@@ -208,39 +209,46 @@ function App() {
                       <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 sm:px-6 py-3 flex items-center justify-start gap-4 sm:gap-8">
                         <button
                           onClick={() => handleNavClick("current-projects")}
-                          className="text-black hover:text-gray-600 transition-colors text-sm sm:text-base font-medium uppercase"
+                          className="text-black hover:text-gray-600 transition-colors text-xs sm:text-sm font-medium uppercase"
                           style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
                         >
                           Lab
                         </button>
                         <button
                           onClick={() => handleNavClick("stories")}
-                          className="text-black hover:text-gray-600 transition-colors text-sm sm:text-base font-medium uppercase"
+                          className="text-black hover:text-gray-600 transition-colors text-xs sm:text-sm font-medium uppercase"
                           style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
                         >
                           Stories
                         </button>
                         <button
                           onClick={() => handleNavClick("articles")}
-                          className="text-black hover:text-gray-600 transition-colors text-sm sm:text-base font-medium uppercase"
+                          className="text-black hover:text-gray-600 transition-colors text-xs sm:text-sm font-medium uppercase"
                           style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
                         >
                           Articles
                         </button>
                         <button
                           onClick={() => handleNavClick("work")}
-                          className="text-black hover:text-gray-600 transition-colors text-sm sm:text-base font-medium uppercase"
+                          className="text-black hover:text-gray-600 transition-colors text-xs sm:text-sm font-medium uppercase"
                           style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
                         >
                           Design
                         </button>
                         <button
                           onClick={() => handleNavClick("career")}
-                          className="text-black hover:text-gray-600 transition-colors text-sm sm:text-base font-medium uppercase"
+                          className="text-black hover:text-gray-600 transition-colors text-xs sm:text-sm font-medium uppercase"
                           style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
                         >
                           Career
                         </button>
+                        <Link
+                          to="/design-system"
+                          className="text-black hover:text-gray-600 transition-colors text-xs sm:text-sm font-medium uppercase"
+                          style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
+                        >
+                          Design System
+                        </Link>
                       </div>
 
                       {/* Icons */}
@@ -778,6 +786,7 @@ function App() {
         <Route path="/admin-music" element={<AdminMusic />} />
         <Route path="/music-player" element={<MusicPlayer />} />
         <Route path="/writing-gallery" element={<WritingGallery />} />
+        <Route path="/design-system" element={<DesignSystem />} />
       </Routes>
 
       {selectedArticle && (

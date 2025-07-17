@@ -1,27 +1,32 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { ArrowLeft, Eye } from "lucide-react";
 
-const DesignSystem: React.FC = () => (
-  <div className="min-h-screen bg-white">
-    {/* Header */}
-    <header className="border-b border-gray-200 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900 mt-0 mb-0">Design System</h1>
-            <p className="text-sm text-gray-600 mt-0 mb-0">Component library and design tokens</p>
+const DesignSystem: React.FC = () => {
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="border-b border-gray-200 bg-white">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-5xl font-bold text-gray-900 mt-0 mb-2">
+                Design System
+              </h1>
+              <p className="text-lg text-gray-600 mt-0 mb-0">
+                Component library and design tokens
+              </p>
+            </div>
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Back to Site
+            </Link>
           </div>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Site
-          </Link>
         </div>
-      </div>
-    </header>
+      </header>
 
       {/* Content */}
       <main className="container mx-auto px-4 py-12">
@@ -76,31 +81,60 @@ const DesignSystem: React.FC = () => (
 
         {/* Typography */}
         <section className="mb-16">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Typography</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            Typography
+          </h2>
           <div className="space-y-4">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">Design System</h1>
-              <p className="text-sm text-gray-600">Component library and design tokens</p>
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                Whereas disregard and contempt for human rights have resulted
+              </h1>
+              <p className="text-sm text-gray-600">
+                Component library and design tokens
+              </p>
             </div>
             <div>
-              <h2 className="text-3xl font-semibold text-gray-900 mb-2">Design System</h2>
-              <p className="text-sm text-gray-600">Component library and design tokens</p>
+              <h2 className="text-3xl font-semibold text-gray-900 mb-2">
+                Whereas disregard and contempt for human rights have resulted
+              </h2>
+              <p className="text-sm text-gray-600">
+                Component library and design tokens
+              </p>
             </div>
             <div>
-              <h3 className="text-2xl font-semibold text-gray-900 mb-2">Design System</h3>
-              <p className="text-sm text-gray-600">Component library and design tokens</p>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                Whereas disregard and contempt for human rights have resulted
+              </h3>
+              <p className="text-sm text-gray-600">
+                Component library and design tokens
+              </p>
             </div>
             <div>
-              <h4 className="text-xl font-semibold text-gray-900 mb-2">Design System</h4>
-              <p className="text-sm text-gray-600">Component library and design tokens</p>
+              <h4 className="text-xl font-semibold text-gray-900 mb-2">
+                Whereas disregard and contempt for human rights have resulted
+              </h4>
+              <p className="text-sm text-gray-600">
+                Component library and design tokens
+              </p>
             </div>
             <div>
-              <p className="text-base text-gray-700 mb-2">Body text - This is a paragraph with regular body text styling.</p>
-              <p className="text-sm text-gray-600">Body text - This is a paragraph with regular body text styling.</p>
+              <p className="text-base text-gray-700 mb-2">
+                Whereas disregard and contempt for human rights have resulted in
+                barbarous acts which have outraged the conscience of mankind.
+              </p>
+              <p className="text-sm text-gray-600">
+                Body text - This is a paragraph with regular body text styling.
+              </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600 mb-2">Small text - This is smaller text for captions and secondary information.</p>
-              <p className="text-sm text-gray-600">Small text - This is smaller text for captions and secondary information.</p>
+              <p className="text-sm text-gray-600 mb-2">
+                Whereas disregard and contempt for human rights have resulted in
+                barbarous acts which have outraged the conscience of mankind.
+              </p>
+              <p className="text-sm text-gray-600">
+                Small text - This is smaller text for captions and secondary
+                information.
+              </p>
             </div>
           </div>
         </section>
@@ -135,36 +169,162 @@ const DesignSystem: React.FC = () => (
         <section className="mb-16">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Cards</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Basic Card</h3>
-              <p className="text-gray-600">Basic Card</p>
+            <div className="group relative overflow-hidden rounded-lg bg-white border border-gray-200 shadow-sm">
+              <div className="absolute top-3 right-3 z-20">
+                <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+                  <Eye className="h-5 w-5 text-gray-600" />
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Basic Card
+                </h3>
+                <p className="text-gray-600">Basic Card</p>
+              </div>
             </div>
-            <div className="bg-gray-100/80 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Background Card</h3>
-              <p className="text-gray-700">Background Card</p>
+            <div className="group relative overflow-hidden rounded-lg bg-gray-100/80">
+              <div className="absolute top-3 right-3 z-20">
+                <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+                  <Eye className="h-5 w-5 text-gray-600" />
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Background Card
+                </h3>
+                <p className="text-gray-700">Background Card</p>
+              </div>
             </div>
-            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Interactive Card</h3>
-              <p className="text-gray-600">Interactive Card</p>
+            <div className="group relative overflow-hidden rounded-lg bg-white border border-gray-200 hover:shadow-lg transition-shadow">
+              <div className="absolute top-3 right-3 z-20">
+                <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+                  <Eye className="h-5 w-5 text-gray-600" />
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  Interactive Card
+                </h3>
+                <p className="text-gray-600">Interactive Card</p>
+              </div>
             </div>
-            <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Video Test Card</h3>
-              <p className="text-gray-600">This card contains a test video that autoplays with sound muted.</p>
-              <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
-                <video 
-                  className="w-full h-full object-cover"
-                  autoPlay 
-                  muted 
+            <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
+              <div className="absolute top-3 right-3 z-20">
+                <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+                  <Eye className="h-5 w-5 text-gray-600" />
+                </div>
+              </div>
+              <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                <div className="pr-12 flex items-center gap-2">
+                  <h3
+                    className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                    style={{
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    Video Test Card
+                  </h3>
+                  {/* Video indicator balls */}
+                  <div className="flex items-center gap-1 ml-2">
+                    {[
+                      "#ef4444", // Red for video
+                      "#f97316", // Orange for autoplay
+                      "#eab308", // Yellow for muted
+                      "#dc2626", // Darker red
+                      "#ea580c", // Darker orange
+                      "#ca8a04", // Darker yellow
+                    ].map((color, i) => (
+                      <span
+                        key={i}
+                        style={{
+                          display: "inline-block",
+                          width: 14,
+                          height: 14,
+                          borderRadius: "50%",
+                          background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                          boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="flex-1 flex flex-col">
+                  <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1">
+                    This card contains a test video that autoplays with sound
+                    muted.
+                  </p>
+                </div>
+              </div>
+              <div className="absolute inset-0 overflow-hidden z-0">
+                <video
+                  className="w-full h-full object-cover opacity-20"
+                  autoPlay
+                  muted
                   loop
                   playsInline
                 >
-                  <source src="https://sample-videos.com/zip/10p4/SampleVideo_1280x720b.mp4" type="video/mp4" />
+                  <source
+                    src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+                    type="video/mp4"
+                  />
                   Your browser does not support the video tag.
                 </video>
               </div>
-              <div className="mt-4">
-                <p className="text-sm text-gray-500">Video: Sample test content</p>
-                <p className="text-xs text-gray-400 mt-1">Autoplay • Muted • Loop</p>
+            </div>
+            <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
+              <div className="absolute top-3 right-3 z-20">
+                <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+                  <Eye className="h-5 w-5 text-gray-600" />
+                </div>
+              </div>
+              <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                <div className="pr-12 flex items-center gap-2">
+                  <h3
+                    className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                    style={{
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    Design Panes
+                  </h3>
+                  {/* Greyscale colored balls */}
+                  <div className="flex items-center gap-1 ml-2">
+                    {[
+                      "#6b7280", // Gray 500
+                      "#9ca3af", // Gray 400
+                      "#d1d5db", // Gray 300
+                      "#4b5563", // Gray 600
+                      "#374151", // Gray 700
+                      "#1f2937", // Gray 800
+                    ].map((color, i) => (
+                      <span
+                        key={i}
+                        style={{
+                          display: "inline-block",
+                          width: 14,
+                          height: 14,
+                          borderRadius: "50%",
+                          background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                          boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="flex-1 flex flex-col">
+                  <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1">
+                    Experimental interface patterns exploring dynamic layout
+                    systems and responsive design principles.
+                  </p>
+                </div>
+              </div>
+              <div className="absolute inset-0 overflow-hidden z-0">
+                <img
+                  src={`/img/design-panes-alt2.svg?v=${Date.now()}`}
+                  alt="Design Panes"
+                  className="w-full h-full object-cover opacity-20"
+                  style={{ filter: "grayscale(100%)" }}
+                />
               </div>
             </div>
           </div>
@@ -183,15 +343,15 @@ const DesignSystem: React.FC = () => (
               <span className="text-sm text-gray-600">32px (w-8 h-8)</span>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-12 bg-primary rounded"></div>
+              <div className="w-12 h-12 bg-primary rounded"></div>
               <span className="text-sm text-gray-600">48px (w-12 h-12)</span>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-16 bg-primary rounded"></div>
+              <div className="w-16 h-16 bg-primary rounded"></div>
               <span className="text-sm text-gray-600">64px (w-16 h-16)</span>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-20 bg-primary rounded"></div>
+              <div className="w-20 h-20 bg-primary rounded"></div>
               <span className="text-sm text-gray-600">80px (w-20 h-20)</span>
             </div>
           </div>
@@ -199,31 +359,33 @@ const DesignSystem: React.FC = () => (
 
         {/* Border Radius */}
         <section className="mb-16">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Border Radius</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            Border Radius
+          </h2>
           <div className="flex flex-wrap gap-6">
             <div className="space-y-2">
-              <div className="w-16 bg-primary rounded-none"></div>
-              <p className="text-sm text-gray-600">rounded-none</p>
+              <div className="w-16 h-16 bg-primary rounded-none border-2 border-gray-300"></div>
+              <p className="text-sm text-gray-600">rounded-none (0px)</p>
             </div>
             <div className="space-y-2">
-              <div className="w-16 bg-primary rounded-sm"></div>
-              <p className="text-sm text-gray-600">rounded-sm</p>
+              <div className="w-16 h-16 bg-primary rounded-sm border-2 border-gray-300"></div>
+              <p className="text-sm text-gray-600">rounded-sm (2px)</p>
             </div>
             <div className="space-y-2">
-              <div className="w-16 bg-primary rounded"></div>
-              <p className="text-sm text-gray-600">rounded</p>
+              <div className="w-16 h-16 bg-primary rounded border-2 border-gray-300"></div>
+              <p className="text-sm text-gray-600">rounded (4px)</p>
             </div>
             <div className="space-y-2">
-              <div className="w-16 bg-primary rounded-md"></div>
-              <p className="text-sm text-gray-600">rounded-md</p>
+              <div className="w-16 h-16 bg-primary rounded-md border-2 border-gray-300"></div>
+              <p className="text-sm text-gray-600">rounded-md (6px)</p>
             </div>
             <div className="space-y-2">
-              <div className="w-16 bg-primary rounded-lg"></div>
-              <p className="text-sm text-gray-600">rounded-lg</p>
+              <div className="w-16 h-16 bg-primary rounded-lg border-2 border-gray-300"></div>
+              <p className="text-sm text-gray-600">rounded-lg (8px)</p>
             </div>
             <div className="space-y-2">
-              <div className="w-16 bg-primary rounded-full"></div>
-              <p className="text-sm text-gray-600">rounded-full</p>
+              <div className="w-16 h-16 bg-primary rounded-full border-2 border-gray-300"></div>
+              <p className="text-sm text-gray-600">rounded-full (50%)</p>
             </div>
           </div>
         </section>
@@ -232,4 +394,4 @@ const DesignSystem: React.FC = () => (
   );
 };
 
-export default DesignSystem; 
+export default DesignSystem;

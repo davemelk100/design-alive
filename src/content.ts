@@ -5,7 +5,7 @@ export const content = {
     description: "Digital Experience Designer",
     scrollText: "Scroll to explore",
   },
-
+  
   navigation: {
     menuAriaLabels: {
       open: "Open menu",
