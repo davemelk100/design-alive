@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Dribbble, ArrowUp, Eye, Menu } from "lucide-react";
+import { Dribbble, ArrowUp, Eye, Menu, ExternalLink } from "lucide-react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { useState, useEffect } from "react";
 import {
@@ -12,7 +12,6 @@ import { content } from "./content";
 import Preloader from "./components/Preloader";
 
 import { BrowserRouter as Router } from "react-router-dom";
-import ImageModal from "../components/ImageModal";
 import ArticleModal from "./components/ArticleModal";
 import { ThemeProvider } from "./context/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
@@ -97,7 +96,6 @@ const SectionHeader = ({
 };
 
 function App() {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<{
     title: string;
     content: string;
@@ -110,6 +108,7 @@ function App() {
     subtitle?: string;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -173,205 +172,41 @@ function App() {
             element={
               <>
                 {/* Hero Section */}
-                <section className="relative h-[20vh] flex items-center">
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1 }}
-                    className="absolute inset-0 bg-gradient-to-b from-transparent to-background/5"
-                  />
-
-                  <div className="container mx-auto px-4 sm:px-8 pt-2 sm:pt-4">
+                <section className="relative h-[12vh] sm:h-[20vh] flex items-start sm:items-center">
+                  <div className="container mx-auto px-4 sm:px-8 pt-8 sm:pt-4">
                     {/* Title, Icons, and Navigation Row */}
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-                      {/* Mobile: Dropdown on left, Title in center, Icons on right */}
-                      <div className="flex sm:hidden items-center justify-between w-full">
-                        {/* Mobile Navigation Dropdown - Left */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4 relative z-10">
+                      {/* Mobile: Title left-aligned */}
+                      <div className="flex sm:hidden items-center justify-start w-full">
+                        {/* Mobile Title - Left */}
                         <div>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <button className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
-                                <Menu className="h-5 w-5 text-black" />
-                              </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="w-40 bg-white/95 backdrop-blur-sm border-gray-200 shadow-lg">
-                              <DropdownMenuItem
-                                onClick={() =>
-                                  handleNavClick("current-projects")
-                                }
-                                className="text-black hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800 cursor-pointer text-sm font-bold uppercase"
-                                style={{
-                                  fontFamily: "Helvetica, Arial, sans-serif",
-                                }}
-                              >
-                                Lab
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleNavClick("stories")}
-                                className="text-black hover:bg-gray-100 cursor-pointer text-sm font-bold uppercase"
-                                style={{
-                                  fontFamily: "Helvetica, Arial, sans-serif",
-                                }}
-                              >
-                                Stories
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleNavClick("articles")}
-                                className="text-black hover:bg-gray-100 cursor-pointer text-sm font-bold uppercase"
-                                style={{
-                                  fontFamily: "Helvetica, Arial, sans-serif",
-                                }}
-                              >
-                                Articles
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleNavClick("work")}
-                                className="text-black hover:bg-gray-100 cursor-pointer text-sm font-bold uppercase"
-                                style={{
-                                  fontFamily: "Helvetica, Arial, sans-serif",
-                                }}
-                              >
-                                Designs
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleNavClick("career")}
-                                className="text-black hover:bg-gray-100 cursor-pointer text-sm font-bold uppercase"
-                                style={{
-                                  fontFamily: "Helvetica, Arial, sans-serif",
-                                }}
-                              >
-                                Career
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleNavClick("personal")}
-                                className="text-black hover:bg-gray-100 cursor-pointer text-sm font-bold uppercase"
-                                style={{
-                                  fontFamily: "Helvetica, Arial, sans-serif",
-                                }}
-                              >
-                                Personal
-                              </DropdownMenuItem>
-                              <DropdownMenuItem asChild>
-                                <Link
-                                  to="/design-system"
-                                  className="text-black hover:bg-gray-100 cursor-pointer text-sm font-bold uppercase"
-                                  style={{
-                                    fontFamily: "Helvetica, Arial, sans-serif",
-                                  }}
-                                >
-                                  Design System
-                                </Link>
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-
-                        {/* Mobile Title - Center */}
-                        <motion.div
-                          initial="hidden"
-                          animate="visible"
-                          variants={{
-                            hidden: { opacity: 0 },
-                            visible: {
-                              opacity: 1,
-                              transition: {
-                                staggerChildren: 0.2,
-                              },
-                            },
-                          }}
-                        >
-                          <motion.h1
-                            variants={{
-                              hidden: { opacity: 0, y: 50 },
-                              visible: {
-                                opacity: 1,
-                                y: 0,
-                                transition: {
-                                  duration: 1.2,
-                                  ease: "easeOut",
-                                },
-                              },
-                            }}
-                            className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none"
+                          <h1
+                            className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none relative z-10"
                             style={{
                               letterSpacing: "-0.06em",
                             }}
                           >
                             {content.siteInfo.subtitle}
-                          </motion.h1>
-                        </motion.div>
-
-                        {/* Mobile Icons - Right */}
-                        <div className="flex items-center gap-2">
-                          <a
-                            href={content.navigation.social.linkedin.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
-                            aria-label="LinkedIn"
-                          >
-                            <LinkedInLogoIcon className="h-5 w-5 text-black" />
-                          </a>
-                          <a
-                            href={content.navigation.social.dribbble.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
-                            aria-label="Dribbble"
-                          >
-                            <Dribbble className="h-5 w-5 text-black" />
-                          </a>
-                          <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
-                            <ThemeToggle />
-                          </div>
+                          </h1>
                         </div>
                       </div>
 
                       {/* Desktop: Title on left, Navigation and Icons on right */}
-                      <motion.div
-                        initial="hidden"
-                        animate="visible"
-                        variants={{
-                          hidden: { opacity: 0 },
-                          visible: {
-                            opacity: 1,
-                            transition: {
-                              staggerChildren: 0.2,
-                            },
-                          },
-                        }}
-                        className="hidden sm:block"
-                      >
-                        <motion.h1
-                          variants={{
-                            hidden: { opacity: 0, y: 50 },
-                            visible: {
-                              opacity: 1,
-                              y: 0,
-                              transition: {
-                                duration: 1.2,
-                                ease: "easeOut",
-                              },
-                            },
-                          }}
-                          className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none"
+                      <div className="hidden sm:block">
+                        <h1
+                          className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none relative z-10"
                           style={{
                             letterSpacing: "-0.06em",
                           }}
                         >
                           {content.siteInfo.subtitle}
-                        </motion.h1>
-                      </motion.div>
+                        </h1>
+                      </div>
 
                       {/* Desktop Icons and Navigation */}
-                      <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1.2, delay: 0.1 }}
-                        className="hidden sm:flex flex-row items-center gap-4"
-                      >
+                      <div className="hidden sm:flex flex-row items-center gap-4">
                         {/* Desktop Navigation Links */}
-                        <div className="hidden sm:flex bg-white/10 backdrop-blur-sm rounded-lg px-3 sm:px-4 py-2 items-center justify-start gap-4 sm:gap-6">
+                        <div className="hidden sm:flex rounded-lg px-3 sm:px-4 py-2 items-center justify-start gap-4 sm:gap-6">
                           <button
                             onClick={() => handleNavClick("current-projects")}
                             className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
@@ -461,8 +296,158 @@ function App() {
                             <ThemeToggle />
                           </div>
                         </div>
-                      </motion.div>
+                      </div>
                     </div>
+                  </div>
+                </section>
+
+                {/* Mobile Menu Dropdown */}
+                {isMobileMenuOpen && (
+                  <div className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-50 sm:hidden">
+                    <div className="absolute top-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-b border-gray-200 p-4">
+                      <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-lg font-semibold">Navigation</h2>
+                        <button
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition-colors"
+                          aria-label="Close menu"
+                        >
+                          <Menu className="h-5 w-5 text-gray-600" />
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <button
+                          onClick={() => {
+                            handleNavClick("current-projects");
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">
+                              L
+                            </span>
+                          </div>
+                          <span className="text-sm font-semibold">Lab</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleNavClick("stories");
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">
+                              S
+                            </span>
+                          </div>
+                          <span className="text-sm font-semibold">Stories</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleNavClick("articles");
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">
+                              A
+                            </span>
+                          </div>
+                          <span className="text-sm font-semibold">
+                            Articles
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleNavClick("work");
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">
+                              D
+                            </span>
+                          </div>
+                          <span className="text-sm font-semibold">Designs</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleNavClick("career");
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">
+                              C
+                            </span>
+                          </div>
+                          <span className="text-sm font-semibold">Career</span>
+                        </button>
+                        <button
+                          onClick={() => {
+                            handleNavClick("personal");
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">
+                              P
+                            </span>
+                          </div>
+                          <span className="text-sm font-semibold">
+                            Personal
+                          </span>
+                        </button>
+                        <Link
+                          to="/design-system"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">
+                              DS
+                            </span>
+                          </div>
+                          <span className="text-sm font-semibold">
+                            Design System
+                          </span>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Summary Section */}
+                <section className="py-4 sm:py-6">
+                  <div className="container mx-auto px-4 sm:px-8">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 1.8, delay: 0.4 }}
+                      className="max-w-4xl mx-auto"
+                    >
+                      <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed text-left">
+                        Senior Product Designer with 8+ years of experience
+                        specializing in AI-powered UX/UI design and
+                        accessibility. Led design systems at Powerley Inc.,
+                        creating bill analysis dashboards and onboarding
+                        experiences. Previously served as Principal UX/UI
+                        Developer at Propio Language Services, improving
+                        accessibility compliance from 78% to 98% and developing
+                        AI interpreter features. Expert in React, Figma, and
+                        generative AI tools, with a track record of migrating
+                        e-commerce platforms and conducting comprehensive
+                        usability audits. Passionate about user-centered design,
+                        accessibility compliance, and leveraging AI to enhance
+                        user experiences.
+                      </p>
+                    </motion.div>
                   </div>
                 </section>
 
@@ -487,7 +472,7 @@ function App() {
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.9, delay: index * 0.1 }}
+                            transition={{ duration: 1.8, delay: index * 0.2 }}
                             className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]"
                           >
                             <div className="absolute top-3 right-3 z-20">
@@ -497,7 +482,7 @@ function App() {
                                 rel="noopener noreferrer"
                                 className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center relative z-20"
                               >
-                                <Eye className="h-5 w-5 text-gray-600" />
+                                <ExternalLink className="h-5 w-5 text-gray-600" />
                               </a>
                             </div>
                             <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
@@ -631,7 +616,7 @@ function App() {
                           initial={{ opacity: 0, y: 20 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
-                          transition={{ duration: 0.9, delay: index * 0.1 }}
+                          transition={{ duration: 2.4, delay: 0.2 }}
                           className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md"
                         >
                           <div className="absolute top-3 right-3">
@@ -735,7 +720,7 @@ function App() {
                               initial={{ opacity: 0, y: 20 }}
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={{ once: true }}
-                              transition={{ duration: 0.9, delay: index * 0.1 }}
+                              transition={{ duration: 1.8, delay: index * 0.2 }}
                               className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md"
                             >
                               <div className="absolute top-3 right-3">
@@ -903,7 +888,7 @@ function App() {
                       className="mb-8 sm:mb-16"
                     />
                     <div className="space-y-8">
-                      {content.career.positions.map((position, index) => (
+                      {content.career.positions.map((position) => (
                         <div
                           key={position.title + position.period}
                           className=""
@@ -942,37 +927,8 @@ function App() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.9, delay: 0.1 }}
-                        className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]"
-                      >
-                        <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                          <div className="pr-12 flex items-center gap-2">
-                            <h3
-                              className="text-[20px] font-semibold mb-1 dark:text-black title-font"
-                              style={{
-                                letterSpacing: "-0.01em",
-                              }}
-                            >
-                              Jersey
-                            </h3>
-                          </div>
-                          <div className="flex-1 flex flex-col">
-                            <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1">
-                              My Olde English Bulldogs struggles with allergies
-                              but is a trooper.
-                            </p>
-                          </div>
-                        </div>
-                        <div className="absolute inset-0 overflow-hidden z-0">
-                          <LazyVideo src="/video/jersey.mp4" />
-                        </div>
-                      </motion.div>
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.9, delay: 0.2 }}
-                        className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]"
+                        transition={{ duration: 1.8, delay: 0.2 }}
+                        className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[3/4]"
                       >
                         <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                           <div className="pr-12 flex items-center gap-2">
@@ -1000,8 +956,8 @@ function App() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.9, delay: 0.3 }}
-                        className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]"
+                        transition={{ duration: 1.8, delay: 0.4 }}
+                        className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[3/4]"
                       >
                         <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                           <div className="pr-12 flex items-center gap-2">
@@ -1028,8 +984,8 @@ function App() {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.9, delay: 0.4 }}
-                        className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]"
+                        transition={{ duration: 1.8, delay: 0.6 }}
+                        className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[3/4]"
                       >
                         <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                           <div className="pr-12 flex items-center gap-2">
@@ -1070,19 +1026,46 @@ function App() {
         </Routes>
       </Suspense>
 
+      {/* Mobile Bottom Icons Tray */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 z-50 md:hidden">
+        <div className="flex items-center justify-around px-4 py-3">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+            aria-label="Mobile menu"
+          >
+            <Menu className="h-5 w-5 text-black" />
+          </button>
+          <a
+            href={content.navigation.social.linkedin.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+            aria-label="LinkedIn"
+          >
+            <LinkedInLogoIcon className="h-5 w-5 text-black" />
+          </a>
+          <a
+            href={content.navigation.social.dribbble.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+            aria-label="Dribbble"
+          >
+            <Dribbble className="h-5 w-5 text-black" />
+          </a>
+          <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+            <ThemeToggle />
+          </div>
+        </div>
+      </div>
+
       {selectedArticle && (
         <ArticleModal
           title={selectedArticle.title}
           content={selectedArticle.content}
           image={selectedArticle.image}
           onClose={() => setSelectedArticle(null)}
-        />
-      )}
-
-      {selectedImage && (
-        <ImageModal
-          imageUrl={selectedImage}
-          onClose={() => setSelectedImage(null)}
         />
       )}
 
