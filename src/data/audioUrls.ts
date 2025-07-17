@@ -50,8 +50,8 @@ export const audioTracks: AudioTrack[] = [
     title: "Lasorda v Bevacqua",
     artist: "BALM",
     url: "/audio/bevacqua.mp3",
-    uniqueUrl: "/audio/balm-lasorda-bevacqua-battle.mp3",
-    duration: "2:45",
+    uniqueUrl: "/audio/balm-lasorda-bevacqua-battle-cropped.mp3",
+    duration: "76", // 1:16 in seconds
     filename: "bevacqua.mp3",
   },
 ];

@@ -189,14 +189,43 @@ const MusicPlayer: React.FC = () => {
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>
-            <input
-              type="range"
-              min="0"
-              max={duration || 0}
-              value={currentTime}
-              onChange={handleSeek}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-            />
+            <div className="relative">
+              <input
+                type="range"
+                min="0"
+                max={duration || 0}
+                value={currentTime}
+                onChange={handleSeek}
+                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+              />
+              {/* Special marker for Lasorda track at 1:16 */}
+              {tracks[currentTrack]?.title === "Lasorda v Bevacqua" && (
+                <div
+                  className="absolute top-0 h-2 w-1 bg-red-500 rounded-full pointer-events-none"
+                  style={{
+                    left: `${(76 / duration) * 100}%`, // 1:16 marker
+                    transform: "translateX(-50%)",
+                  }}
+                  title="End of song (1:16)"
+                />
+              )}
+            </div>
+            {/* Label for Lasorda track marker */}
+            {tracks[currentTrack]?.title === "Lasorda v Bevacqua" && (
+              <div
+                className="flex justify-end mt-1"
+                style={{
+                  position: "absolute",
+                  left: `${(76 / duration) * 100}%`, // 1:16 label
+                  top: "-1.5em",
+                  color: "red",
+                  fontSize: "0.8em",
+                  zIndex: 3,
+                }}
+              >
+                1:16
+              </div>
+            )}
           </div>
 
           {/* Controls */}

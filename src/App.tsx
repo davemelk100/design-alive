@@ -245,7 +245,7 @@ function App() {
                       </div>
 
                       {/* Icons */}
-                      <div className="flex items-center gap-2 sm:gap-4">
+                      <div className="hidden sm:flex items-center gap-2 sm:gap-4">
                         <a
                           href={content.navigation.social.linkedin.url}
                           target="_blank"
@@ -270,35 +270,6 @@ function App() {
                       </div>
                     </motion.div>
                   </div>
-
-                  {/* Color Palette */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 1.2 }}
-                    className="mt-6 mb-16 hidden sm:flex flex-wrap justify-center sm:justify-start gap-3"
-                  >
-                    {designTokens.colors.map((color) => {
-                      return (
-                        <div
-                          key={color.name}
-                          className="flex flex-col items-center gap-2"
-                        >
-                          <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="relative w-2 h-2 sm:w-3 sm:h-3 rounded-full"
-                            style={{
-                              backgroundColor: color.value,
-                              background: `radial-gradient(circle at 70% 70%, ${color.value} 0%, ${color.value} 60%, ${color.value}dd 100%)`,
-                              opacity: 0.4,
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
-                  </motion.div>
                 </div>
               </section>
 
@@ -337,7 +308,7 @@ function App() {
                             </a>
                           </div>
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                            <div className="pr-12">
+                            <div className="pr-12 flex items-center gap-2">
                               <h3
                                 className="text-[20px] font-semibold mb-1 dark:text-black title-font"
                                 style={{
@@ -346,6 +317,72 @@ function App() {
                               >
                                 {project.title}
                               </h3>
+                              {/* Colored balls for each Lab card */}
+                              <div className="flex items-center gap-1 ml-2">
+                                {project.title === "Chatbots" &&
+                                  [
+                                    "#ff8c42", // Orange from Chatbots animation
+                                    "#17a2b8", // Blue from Chatbots animation
+                                    "#6c757d", // Gray from Chatbots animation
+                                    "#e67e22", // Darker Orange from Chatbots animation
+                                    "#138496", // Darker Blue from Chatbots animation
+                                    "#58", // Darker Gray from Chatbots animation
+                                  ].map((color, i) => (
+                                    <span
+                                      key={i}
+                                      style={{
+                                        display: "inline-block",
+                                        width: 14,
+                                        height: 14,
+                                        borderRadius: "50%",
+                                        background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                        boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
+                                      }}
+                                    />
+                                  ))}
+                                {project.title === "Design Panes" &&
+                                  [
+                                    "#ffd700", // Gold from Design Panes animation
+                                    "#355c7d", // Deep Blue from Design Panes animation
+                                    "#88d498", // Soft Green from Design Panes animation
+                                    "#e6b800", // Darker Gold from Design Panes animation
+                                    "#26425a", // Darker Blue from Design Panes animation
+                                    "#5", // Darker Green from Design Panes animation
+                                  ].map((color, i) => (
+                                    <span
+                                      key={i}
+                                      style={{
+                                        display: "inline-block",
+                                        width: 14,
+                                        height: 14,
+                                        borderRadius: "50%",
+                                        background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                        boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
+                                      }}
+                                    />
+                                  ))}
+                                {project.title === "AI NUI" &&
+                                  [
+                                    "#ff6b35", // Orange from AI NUI animation
+                                    "#4ecdc4", // Teal from AI NUI animation
+                                    "#6c757d", // Gray from AI NUI animation
+                                    "#e55a2b", // Darker Orange from AI NUI animation
+                                    "#457a", // Darker Teal from AI NUI animation
+                                    "#58", // Darker Gray from AI NUI animation
+                                  ].map((color, i) => (
+                                    <span
+                                      key={i}
+                                      style={{
+                                        display: "inline-block",
+                                        width: 14,
+                                        height: 14,
+                                        borderRadius: "50%",
+                                        background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                        boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
+                                      }}
+                                    />
+                                  ))}
+                              </div>
                             </div>
                             <div className="flex-1 flex flex-col">
                               <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1">
