@@ -8,6 +8,17 @@
   publish = "dist"         # Folder containing the build output
   environment = { CACHE_BUST = "1" }
 
+# Handle SPA routing
+[[redirects]]
+  from = "/favicon.svg"
+  to = "/favicon.svg"
+  status = 200
+
+[[redirects]]
+  from = "/manifest.json"
+  to = "/manifest.json"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -20,10 +31,48 @@
 
 # Cache static assets aggressively
 [[headers]]
+  for = "/assets/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "/assets/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "text/css"
+
+[[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
     Access-Control-Allow-Origin = "*"
+
+# CSS files
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "text/css"
+
+# JavaScript files
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "application/javascript"
+
+# SVG files
+[[headers]]
+  for = "*.svg"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+    Content-Type = "image/svg+xml"
 
 # Cache images for 1 year
 [[headers]]

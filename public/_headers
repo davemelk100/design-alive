@@ -1,0 +1,29 @@
+# JavaScript files
+*.js
+  Content-Type: application/javascript
+  Cache-Control: public, max-age=31536000, immutable
+
+# CSS files  
+*.css
+  Content-Type: text/css
+  Cache-Control: public, max-age=31536000, immutable
+
+# SVG files
+*.svg
+  Content-Type: image/svg+xml
+  Cache-Control: public, max-age=31536000, immutable
+
+# Assets directory
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML files
+*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Security headers for all files
+/*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
+  Access-Control-Allow-Origin: * 

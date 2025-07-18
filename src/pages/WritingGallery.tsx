@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  Plus,
   Trash2,
   Edit2,
   Check,
@@ -113,26 +112,6 @@ const WritingGallery: React.FC = () => {
         message: "Failed to save changes. Please try again.",
       });
     }
-  };
-
-  const addCard = () => {
-    const newId = Math.max(...writingPieces.map((piece) => piece.id), 0) + 1;
-    const newCard: WritingPiece = {
-      id: newId,
-      title: "",
-      subtitle: "",
-      excerpt:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-      category: "",
-      readTime: "",
-      date: "",
-      image: "",
-      url: "",
-      isPublished: true,
-    };
-    const updatedPieces = [...writingPieces, newCard];
-    setWritingPieces(updatedPieces);
-    saveToStorage(updatedPieces);
   };
 
   const removeCard = (id: number) => {
