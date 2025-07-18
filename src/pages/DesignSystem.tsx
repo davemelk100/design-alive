@@ -129,7 +129,7 @@ const DesignSystem: React.FC = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const data = JSON.parse(e.target?.result as string);
+        const data = JSON.parse(e.target?.result as string) as DesignSystemData;
         console.log("Imported design system data:", data);
 
         // Apply the imported data to the design system

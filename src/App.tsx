@@ -1060,7 +1060,7 @@ function App() {
                           </div>
                         </div>
                         <div className="absolute inset-0 overflow-hidden z-0">
-                          <LazyVideo src="/video/golf.mp4" />
+                          <LazyVideo src="/video/golfnew.mp4" />
                         </div>
                       </motion.div>
                     </div>
