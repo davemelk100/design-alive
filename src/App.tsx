@@ -328,7 +328,10 @@ function App() {
                         onClick={(e) => e.stopPropagation()}
                       >
                         <div className="flex items-center justify-between mb-4">
-                          <h2 className="text-lg font-semibold">Navigation</h2>
+                          <h2 className="text-lg font-semibold">
+                            Navigation (Menu Open:{" "}
+                            {isMobileMenuOpen ? "Yes" : "No"})
+                          </h2>
                           <button
                             onClick={() => setIsMobileMenuOpen(false)}
                             className="bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition-colors"
