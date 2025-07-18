@@ -113,6 +113,11 @@ function App() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
   const handleNavClick = (id: string) => {
     if (location.pathname !== "/") {
       // If we're not on the main page, navigate to main page first
@@ -307,7 +312,8 @@ function App() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-50 sm:hidden"
+                      className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-[9999] xl:hidden"
+                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <motion.div
                         initial={{ y: "100%" }}
@@ -318,7 +324,8 @@ function App() {
                           damping: 25,
                           stiffness: 300,
                         }}
-                        className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4 rounded-t-2xl"
+                        className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4 rounded-t-2xl max-h-[80vh] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <div className="flex items-center justify-between mb-4">
                           <h2 className="text-lg font-semibold">Navigation</h2>
@@ -1085,11 +1092,21 @@ function App() {
       <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 z-50 xl:hidden">
         <div className="flex items-center justify-around px-4 py-3">
           <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+            onClick={() => {
+              console.log(
+                "Mobile menu button clicked, current state:",
+                isMobileMenuOpen
+              );
+              setIsMobileMenuOpen(!isMobileMenuOpen);
+            }}
+            className={`backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center ${
+              isMobileMenuOpen
+                ? "bg-orange-500 text-white"
+                : "bg-white/80 hover:bg-white text-black"
+            }`}
             aria-label="Mobile menu"
           >
-            <Menu className="h-5 w-5 text-black" />
+            <Menu className="h-5 w-5" />
           </button>
           <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
             <ThemeToggle />
