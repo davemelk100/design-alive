@@ -355,30 +355,30 @@ function App() {
                             <X className="h-5 w-5 text-gray-600" />
                           </button>
                         </div>
-                        <div className="grid grid-cols-3 gap-2">
+                        <div className="grid grid-cols-3 gap-3">
                           <button
                             onClick={() => {
                               handleNavClick("current-projects");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
-                            <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
-                              <FlaskConical className="h-3 w-3 text-white" />
+                            <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                              <FlaskConical className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-xs font-semibold">Lab</span>
+                            <span className="text-sm font-semibold">Lab</span>
                           </button>
                           <button
                             onClick={() => {
                               handleNavClick("stories");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
-                            <div className="w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center">
-                              <BookOpen className="h-3 w-3 text-white" />
+                            <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
+                              <BookOpen className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-xs font-semibold">
+                            <span className="text-sm font-semibold">
                               Stories
                             </span>
                           </button>
@@ -387,12 +387,12 @@ function App() {
                               handleNavClick("articles");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
-                            <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                              <FileText className="h-3 w-3 text-white" />
+                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                              <FileText className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-xs font-semibold">
+                            <span className="text-sm font-semibold">
                               Articles
                             </span>
                           </button>
@@ -401,12 +401,12 @@ function App() {
                               handleNavClick("work");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
-                            <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
-                              <Palette className="h-3 w-3 text-white" />
+                            <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                              <Palette className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-xs font-semibold">
+                            <span className="text-sm font-semibold">
                               Designs
                             </span>
                           </button>
@@ -415,12 +415,12 @@ function App() {
                               handleNavClick("career");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
-                            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                              <Briefcase className="h-3 w-3 text-white" />
+                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                              <Briefcase className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-xs font-semibold">
+                            <span className="text-sm font-semibold">
                               Career
                             </span>
                           </button>
@@ -429,24 +429,24 @@ function App() {
                               handleNavClick("personal");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
-                            <div className="w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
-                              <Heart className="h-3 w-3 text-white" />
+                            <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
+                              <Heart className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-xs font-semibold">
+                            <span className="text-sm font-semibold">
                               Personal
                             </span>
                           </button>
                           <Link
                             to="/design-system"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
-                            <div className="w-6 h-6 bg-gray-500 rounded-full flex items-center justify-center">
-                              <Settings className="h-3 w-3 text-white" />
+                            <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
+                              <Settings className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-xs font-semibold">
+                            <span className="text-sm font-semibold">
                               Design System
                             </span>
                           </Link>
@@ -455,12 +455,12 @@ function App() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
-                            <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
-                              <LinkedInLogoIcon className="h-4 w-4 text-white" />
+                            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                              <LinkedInLogoIcon className="h-5 w-5 text-white" />
                             </div>
-                            <span className="text-xs font-semibold">
+                            <span className="text-sm font-semibold">
                               LinkedIn
                             </span>
                           </a>
@@ -469,20 +469,20 @@ function App() {
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
-                            <div className="w-6 h-6 bg-pink-600 rounded-full flex items-center justify-center">
-                              <Dribbble className="h-4 w-4 text-white" />
+                            <div className="w-8 h-8 bg-pink-600 rounded-full flex items-center justify-center">
+                              <Dribbble className="h-5 w-5 text-white" />
                             </div>
-                            <span className="text-xs font-semibold">
+                            <span className="text-sm font-semibold">
                               Dribbble
                             </span>
                           </a>
-                          <div className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center">
+                          <div className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                            <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
                               <ThemeToggle />
                             </div>
-                            <span className="text-xs font-semibold">Theme</span>
+                            <span className="text-sm font-semibold">Theme</span>
                           </div>
                         </div>
                       </motion.div>
@@ -500,7 +500,22 @@ function App() {
                       className="max-w-4xl mx-auto"
                     >
                       <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed text-left">
-                      Senior Product Designer with over 15 years of experience delivering accessible, intuitive, and high-impact digital experiences for a range of users and business contexts. Adept at leading projects from research and conceptualization through to polished interface and thorough usability assessment, I have successfully helped organizations modernize dashboards, onboarding, and e-commerce experiences while significantly improving accessibility and clarity. My background includes collaborating across disciplines to address complex challenges, championing user-centered design strategies, and leveraging advanced methodologies—including artificial intelligence—to elevate product effectiveness and inclusivity. Passionate about simplifying complexity and creating solutions that are both innovative and grounded in real user needs.
+                        Senior Product Designer with over 15 years of experience
+                        delivering accessible, intuitive, and high-impact
+                        digital experiences for a range of users and business
+                        contexts. Adept at leading projects from research and
+                        conceptualization through to polished interface and
+                        thorough usability assessment, I have successfully
+                        helped organizations modernize dashboards, onboarding,
+                        and e-commerce experiences while significantly improving
+                        accessibility and clarity. My background includes
+                        collaborating across disciplines to address complex
+                        challenges, championing user-centered design strategies,
+                        and leveraging advanced methodologies—including
+                        artificial intelligence—to elevate product effectiveness
+                        and inclusivity. Passionate about simplifying complexity
+                        and creating solutions that are both innovative and
+                        grounded in real user needs.
                       </p>
                     </motion.div>
                   </div>
