@@ -882,7 +882,11 @@ function App() {
 
                             const ProjectImage = (
                               <div
-                                className={`relative aspect-[5/3] overflow-visible -mx-3 -mb-3`}
+                                className={`relative ${
+                                  project.title === "Vintage Form Design"
+                                    ? "aspect-[4/3]"
+                                    : "aspect-[5/3]"
+                                } overflow-visible -mx-3 -mb-3`}
                               >
                                 <img
                                   src={`${project.image}?v=${Date.now()}`}
@@ -890,6 +894,8 @@ function App() {
                                   className={`absolute inset-0 h-full w-full ${
                                     project.title === "Hex Code Pop Art"
                                       ? "object-cover scale-102"
+                                      : project.title === "Vintage Form Design"
+                                      ? "object-contain scale-90"
                                       : "object-contain"
                                   }`}
                                   loading="lazy"
