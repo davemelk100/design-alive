@@ -500,19 +500,7 @@ function App() {
                       className="max-w-4xl mx-auto"
                     >
                       <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed text-left">
-                        Senior Product Designer with 15+ years of experience
-                        specializing in AI-powered UX/UI design and
-                        accessibility. Currently working at Powerley Inc.,
-                        creating bill analysis dashboards and onboarding
-                        experiences. Previously served as Principal UX/UI
-                        Developer at Propio Language Services, improving
-                        accessibility compliance from 78% to 98% and developing
-                        AI interpreter features. Proficient in React, Figma, and
-                        generative AI tools, with a track record of migrating
-                        e-commerce platforms and conducting comprehensive
-                        usability audits. Passionate about user-centered design,
-                        accessibility compliance, and leveraging AI to enhance
-                        user experiences.
+                      Senior Product Designer with over 15 years of experience delivering accessible, intuitive, and high-impact digital experiences for a range of users and business contexts. Adept at leading projects from research and conceptualization through to polished interface and thorough usability assessment, I have successfully helped organizations modernize dashboards, onboarding, and e-commerce experiences while significantly improving accessibility and clarity. My background includes collaborating across disciplines to address complex challenges, championing user-centered design strategies, and leveraging advanced methodologies—including artificial intelligence—to elevate product effectiveness and inclusivity. Passionate about simplifying complexity and creating solutions that are both innovative and grounded in real user needs.
                       </p>
                     </motion.div>
                   </div>
