@@ -502,7 +502,7 @@ function App() {
                       <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed text-left">
                         Senior Product Designer with 15+ years of experience
                         specializing in AI-powered UX/UI design and
-                        accessibility. Led design systems at Powerley Inc.,
+                        accessibility. Currently working at Powerley Inc.,
                         creating bill analysis dashboards and onboarding
                         experiences. Previously served as Principal UX/UI
                         Developer at Propio Language Services, improving
