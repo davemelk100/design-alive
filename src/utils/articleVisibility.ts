@@ -13,7 +13,6 @@ export const isArticleVisible = (articleTitle: string, type: 'mainPage' | 'archi
     }
     return true; // Default to visible if no settings exist
   } catch (error) {
-    console.error("Error checking article visibility:", error);
     return true; // Default to visible on error
   }
 };

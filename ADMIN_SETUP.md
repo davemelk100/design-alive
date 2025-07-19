@@ -78,27 +78,19 @@ npm run dev
 
 Here’s how you can set your admin password:
 
-1. **Choose your password** (for example: `admin123`).
-2. I generated the hash for `admin123` for you:
-
-```
-Password: admin123
-Hash: 240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9
-
-Add this to your .env.local file:
-<code_block_to_apply_changes_from>
-```
+1. **Choose your password** (for example: `your_secure_password`).
+2. **Generate the hash** using one of the methods above.
 
 3. **Create a file called `.env.local` in your project root** (if it doesn’t exist).
-4. **Paste this line into `.env.local`:**
+4. **Add your hash to `.env.local`:**
 
 ```
-VITE_ADMIN_PASSWORD_HASH=240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9
+VITE_ADMIN_PASSWORD_HASH=your_generated_hash_here
 ```
 
 5. **Restart your dev server** (`npm run dev`).
 
-Now your admin password is `admin123`.  
+Now your admin password is set to your chosen password.  
 If you want a different password, just tell me what you want and I’ll generate the hash for you!
 
 If you’re seeing an error after setting up your admin password, please provide the exact error message or describe what’s happening (e.g., “login fails,” “server won’t start,” etc.).
@@ -112,7 +104,7 @@ If you’re seeing an error after setting up your admin password, please provide
    The line in `.env.local` should be:
 
    ```
-   VITE_ADMIN_PASSWORD_HASH=240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9
+   VITE_ADMIN_PASSWORD_HASH=your_generated_hash_here
    ```
 
    (No quotes, no extra spaces.)
@@ -120,8 +112,8 @@ If you’re seeing an error after setting up your admin password, please provide
 3. **Restart dev server:**  
    After editing `.env.local`, you must restart your dev server (`npm run dev`).
 
-4. **Login with the correct password:**  
-   The password is `admin123` (unless you changed it).
+4. **Login with your password:**  
+   Use the password you set up.
 
 5. **Vite environment variable prefix:**  
    The variable must start with `VITE_` for Vite to expose it to the frontend.

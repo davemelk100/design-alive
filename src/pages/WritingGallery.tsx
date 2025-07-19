@@ -106,7 +106,6 @@ const WritingGallery: React.FC = () => {
       writingGalleryStorage.setPieces(pieces);
       setStorageStatus({ available: true });
     } catch (error) {
-      console.error("Failed to save writing pieces:", error);
       setStorageStatus({
         available: false,
         message: "Failed to save changes. Please try again.",
@@ -162,7 +161,6 @@ const WritingGallery: React.FC = () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Failed to export data:", error);
       alert("Failed to export data. Please try again.");
     }
   };
@@ -184,7 +182,6 @@ const WritingGallery: React.FC = () => {
           alert("Invalid file format. Please select a valid backup file.");
         }
       } catch (error) {
-        console.error("Failed to import data:", error);
         alert("Failed to import data. Please check the file format.");
       }
     };

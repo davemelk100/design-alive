@@ -8,8 +8,10 @@ interface ImageModalProps {
 
 const ImageModal: React.FC<ImageModalProps> = ({ imageUrl, onClose }) => {
   useEffect(() => {
-    console.log("Modal mounted");
-    return () => console.log("Modal unmounted");
+    // Modal mounted
+    return () => {
+      // Modal unmounted
+    };
   }, []);
 
   // Add escape key functionality

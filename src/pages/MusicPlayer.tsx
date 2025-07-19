@@ -55,14 +55,12 @@ const MusicPlayer: React.FC = () => {
   };
 
   const playTrack = (index: number) => {
-    console.log("playTrack called with index:", index);
     setCurrentTrack(index);
     setLoading(true);
     setPendingPlay(true);
     if (audioRef.current) {
       audioRef.current.src = tracks[index].uniqueUrl;
       audioRef.current.load();
-      console.log("Audio src set to:", tracks[index].uniqueUrl);
     }
   };
 
@@ -95,7 +93,6 @@ const MusicPlayer: React.FC = () => {
           setPendingPlay(false);
         })
         .catch((error) => {
-          console.error("Error playing track:", error);
           setPendingPlay(false);
         });
     }

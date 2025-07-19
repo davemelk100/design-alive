@@ -157,7 +157,6 @@ export default function Admin() {
       contentVisibilityStorage.setSettings(newVisibility);
       setStorageStatus({ available: true });
     } catch (error) {
-      console.error("Failed to save content visibility:", error);
       setStorageStatus({
         available: false,
         message: "Failed to save changes. Please try again.",
@@ -181,7 +180,6 @@ export default function Admin() {
       contentVisibilityStorage.setSettings(newVisibility);
       setStorageStatus({ available: true });
     } catch (error) {
-      console.error("Failed to save content visibility:", error);
       setStorageStatus({
         available: false,
         message: "Failed to save changes. Please try again.",
@@ -204,7 +202,6 @@ export default function Admin() {
       contentVisibilityStorage.setSettings(newVisibility);
       setStorageStatus({ available: true });
     } catch (error) {
-      console.error("Failed to save content visibility:", error);
       setStorageStatus({
         available: false,
         message: "Failed to save changes. Please try again.",
@@ -266,7 +263,6 @@ export default function Admin() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Failed to export data:", error);
       alert("Failed to export data. Please try again.");
     }
   };
@@ -287,7 +283,6 @@ export default function Admin() {
             setStorageStatus({ available: true });
             alert("Settings imported successfully!");
           } catch (error) {
-            console.error("Failed to save imported settings:", error);
             setStorageStatus({
               available: false,
               message: "Failed to save imported settings.",
@@ -297,7 +292,6 @@ export default function Admin() {
           alert("Invalid file format. Please select a valid backup file.");
         }
       } catch (error) {
-        console.error("Failed to import data:", error);
         alert("Failed to import data. Please check the file format.");
       }
     };

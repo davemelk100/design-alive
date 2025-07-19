@@ -15,8 +15,6 @@ export const migrateOldStorage = (): MigrationResult => {
   };
 
   try {
-    console.log("Starting storage migration...");
-
     // Check for old localStorage keys and migrate them
     const oldKeys = [
       "writingGalleryPieces",
@@ -28,7 +26,6 @@ export const migrateOldStorage = (): MigrationResult => {
     oldKeys.forEach((oldKey) => {
       try {
         const oldValue = localStorage.getItem(oldKey);
-        console.log(`Checking old key: ${oldKey}, value:`, oldValue);
 
         if (oldValue) {
           let parsedValue;
@@ -59,7 +56,6 @@ export const migrateOldStorage = (): MigrationResult => {
                 };
                 storage.set(STORAGE_KEYS.ADMIN_SESSION, session);
                 result.migratedKeys.push("adminSession");
-                console.log("Migrated admin session:", session);
               }
             }
             return; // Skip individual admin keys as we handle them together
@@ -68,7 +64,6 @@ export const migrateOldStorage = (): MigrationResult => {
           // Store in new storage system
           storage.set(newKey, parsedValue);
           result.migratedKeys.push(newKey);
-          console.log(`Migrated ${oldKey} to ${newKey}:`, parsedValue);
 
           // Remove old key after successful migration
           localStorage.removeItem(oldKey);
@@ -76,7 +71,6 @@ export const migrateOldStorage = (): MigrationResult => {
       } catch (error) {
         result.errors.push(`Failed to migrate ${oldKey}: ${error}`);
         result.success = false;
-        console.error(`Migration error for ${oldKey}:`, error);
       }
     });
 
@@ -97,20 +91,15 @@ export const migrateOldStorage = (): MigrationResult => {
         result.migratedKeys.push("adminSession");
         localStorage.removeItem("adminAuthenticated");
         localStorage.removeItem("adminAuthTime");
-        console.log("Migrated admin session (special handling):", session);
       } catch (error) {
         result.errors.push(`Failed to migrate admin session: ${error}`);
         result.success = false;
-        console.error("Admin session migration error:", error);
       }
     }
   } catch (error) {
     result.errors.push(`Migration failed: ${error}`);
     result.success = false;
-    console.error("General migration error:", error);
   }
-
-  console.log("Migration completed:", result);
   return result;
 };
 
@@ -123,35 +112,17 @@ export const needsMigration = (): boolean => {
     "adminAuthTime",
   ];
   const hasOldData = oldKeys.some((key) => localStorage.getItem(key) !== null);
-  console.log(
-    "Migration needed:",
-    hasOldData,
-    "Old keys found:",
-    oldKeys.filter((key) => localStorage.getItem(key) !== null)
-  );
   return hasOldData;
 };
 
 // Force migration function for manual use
 export const forceMigration = (): MigrationResult => {
-  console.log("Forcing storage migration...");
   return migrateOldStorage();
 };
 
 // Auto-migrate on import
 if (typeof window !== "undefined") {
-  console.log(
-    "Storage migration module loaded, checking for migration needs..."
-  );
   if (needsMigration()) {
-    console.log("Detected old storage format, migrating...");
-    const migrationResult = migrateOldStorage();
-    if (migrationResult.success) {
-      console.log("Migration successful:", migrationResult.migratedKeys);
-    } else {
-      console.error("Migration failed:", migrationResult.errors);
-    }
-  } else {
-    console.log("No migration needed, storage is up to date");
+    migrateOldStorage();
   }
 }

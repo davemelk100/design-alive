@@ -8,7 +8,6 @@ const getVisibilitySettings = (): ContentVisibility => {
     const saved = localStorage.getItem("contentVisibility");
     return saved ? JSON.parse(saved) : { labProjects: {} };
   } catch (error) {
-    console.error("Error loading visibility settings:", error);
     return { labProjects: {} };
   }
 };

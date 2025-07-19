@@ -43,7 +43,7 @@ const DesignSystem: React.FC = () => {
         });
       }
     } catch (error) {
-      console.error("Failed to load stored design system data:", error);
+      // Failed to load stored design system data
     }
   }, []);
 
@@ -114,7 +114,6 @@ const DesignSystem: React.FC = () => {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Failed to export design system data:", error);
       setStorageStatus({
         available: false,
         message: "Failed to export data. Please try again.",
@@ -130,7 +129,6 @@ const DesignSystem: React.FC = () => {
     reader.onload = (e) => {
       try {
         const data = JSON.parse(e.target?.result as string) as DesignSystemData;
-        console.log("Imported design system data:", data);
 
         // Apply the imported data to the design system
         try {
@@ -159,14 +157,12 @@ const DesignSystem: React.FC = () => {
           // Optionally reload the page to see all changes
           // window.location.reload();
         } catch (applyError) {
-          console.error("Failed to apply imported data:", applyError);
           setStorageStatus({
             available: false,
             message: "Failed to apply imported data. Please try again.",
           });
         }
       } catch (error) {
-        console.error("Failed to parse imported data:", error);
         setStorageStatus({
           available: false,
           message: "Invalid file format. Please select a valid JSON file.",

@@ -20,7 +20,7 @@ export const getContentVisibility = (): ContentVisibility => {
       return JSON.parse(saved);
     }
   } catch (error) {
-    console.error("Error loading content visibility:", error);
+    // Error loading content visibility
   }
 
   // Return default visibility (everything visible)

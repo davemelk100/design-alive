@@ -15,7 +15,6 @@ export const verifyPassword = async (password: string): Promise<boolean> => {
   const expectedHash = import.meta.env.VITE_ADMIN_PASSWORD_HASH;
 
   if (!expectedHash) {
-    console.error("VITE_ADMIN_PASSWORD_HASH environment variable is not set");
     return false;
   }
 
