@@ -244,7 +244,7 @@ export const content = {
       {
         title: "Selling Accessibility",
         subtitle:
-          "How I created an accessibility discipline within a development and design organization",
+          "Building an accessibility discipline within a development and design organization",
         description: "",
         category: "UX Strategy",
         image: "/img/delta-story.png",
@@ -268,7 +268,7 @@ export const content = {
       {
         title: "Design Management",
         subtitle:
-          "How I proposed and implemented new efficiencies and opportunities for a development and design organization",
+          "Proposing and implementing new efficiencies and opportunities for a development and design organization",
         description: "",
         category: "Process Improvement",
         image: "/img/meridian-story.png",
@@ -280,7 +280,7 @@ export const content = {
       {
         title: "CMS Portfolio",
         subtitle:
-          "How I built a simple portfolio to be a multi-purpose career portal",
+          "Building a simple portfolio to be a multi-purpose career portal",
         description: "",
         category: "Portfolio Development",
         image: "/img/port-story.png",
