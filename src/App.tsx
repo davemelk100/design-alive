@@ -342,7 +342,7 @@ function App() {
                           damping: 25,
                           stiffness: 300,
                         }}
-                        className="absolute bottom-16 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-3 rounded-t-2xl max-h-[70vh] overflow-y-auto"
+                        className="absolute bottom-16 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-3 rounded-t-3xl max-h-[70vh] overflow-y-auto"
                         onClick={(e) => e.stopPropagation()}
                       >
                         <div className="flex items-center justify-between mb-3">
@@ -478,15 +478,12 @@ function App() {
                               Dribbble
                             </span>
                           </a>
-                          <button
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                          >
+                          <div className="flex flex-col items-center gap-1 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                             <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center">
                               <ThemeToggle />
                             </div>
                             <span className="text-xs font-semibold">Theme</span>
-                          </button>
+                          </div>
                         </div>
                       </motion.div>
                     </motion.div>
@@ -505,12 +502,10 @@ function App() {
                       <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed text-left">
                         Senior Product Designer with 15+ years of experience
                         specializing in AI-powered UX/UI design and
-                        accessibility. Led design systems at Powerley Inc.,
-                        creating bill analysis dashboards and onboarding
-                        experiences. Previously served as Principal UX/UI
+                        accessibility. Previously served as Principal UX/UI
                         Developer at Propio Language Services, improving
                         accessibility compliance from 78% to 98% and developing
-                        AI interpreter features. Proficient in React, Figma, and
+                        AI interpreter features. Proficient in UX, User research, React, Figma, and
                         generative AI tools, with a track record of migrating
                         e-commerce platforms and conducting comprehensive
                         usability audits. Passionate about user-centered design,
