@@ -63,6 +63,15 @@ export const audioTracks: AudioTrack[] = [
     duration: "3:45",
     filename: "eagles.mp3",
   },
+  {
+    id: 7,
+    title: "Specifically or Explicitly",
+    artist: "BALM",
+    url: "/audio/specifically-or-explicitly.mp3",
+    uniqueUrl: "/audio/specifically-or-explicitly.mp3",
+    duration: "1:55",
+    filename: "specifically-or-explicitly.mp3",
+  },
 ];
 
 // Helper function to get track by unique URL
