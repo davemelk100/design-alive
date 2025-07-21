@@ -340,7 +340,15 @@ function App() {
                       className="max-w-4xl flex flex-col items-start"
                     >
                       <p className="text-base text-muted-foreground leading-relaxed text-left">
-                      Senior Product Designer with 15+ years of experience creating accessible, intuitive digital experiences across diverse industries. I lead projects end-to-end—from research to polished interfaces—modernizing dashboards, onboarding, and e-commerce while improving clarity and accessibility. Skilled in cross-functional collaboration, user-centered strategy, and applying advanced methods like AI to solve complex challenges and drive inclusive innovation.
+                        Senior Product Designer with 15+ years of experience
+                        creating accessible, intuitive digital experiences
+                        across diverse industries. I lead projects
+                        end-to-end—from research to polished
+                        interfaces—modernizing dashboards, onboarding, and
+                        e-commerce while improving clarity and accessibility.
+                        Skilled in cross-functional collaboration, user-centered
+                        strategy, and applying advanced methods like AI to solve
+                        complex challenges and drive inclusive innovation.
                       </p>
                     </motion.div>
                   </div>
@@ -1062,7 +1070,7 @@ function App() {
       </Suspense>
 
       {/* Mobile Bottom Icons Tray */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-50/95 backdrop-blur-sm border-t border-gray-200 shadow-lg z-[9999] sm:hidden">
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-50/95 backdrop-blur-sm border-t border-gray-200 shadow-lg z-[9999] md:hidden">
         <div className="flex items-center justify-center px-4 py-3">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
