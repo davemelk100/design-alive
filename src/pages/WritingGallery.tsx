@@ -87,6 +87,19 @@ const WritingGallery: React.FC = () => {
         url: "",
         isPublished: true,
       },
+      {
+        id: 5,
+        title: "",
+        subtitle: "",
+        excerpt:
+          "(image of the wild wild country guy bagwan shri rajneesh) SOUNDGARDEN",
+        category: "",
+        readTime: "",
+        date: "",
+        image: "",
+        url: "",
+        isPublished: true,
+      },
     ];
   };
 
@@ -308,16 +321,7 @@ const WritingGallery: React.FC = () => {
           </div>
 
           {/* Footer */}
-          <div className="mt-12 text-center">
-            <p className="text-gray-500 dark:text-gray-400 text-sm">
-              This gallery is only accessible via the admin panel.
-            </p>
-            {storageStatus.available && (
-              <p className="text-green-600 dark:text-green-400 text-xs mt-2">
-                ✓ Data is being saved automatically
-              </p>
-            )}
-          </div>
+          <div className="mt-12 text-center"></div>
         </motion.div>
       </div>
     </div>

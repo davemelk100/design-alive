@@ -937,15 +937,15 @@ export const content = {
 
 <h2>Best Practices Baked In</h2>
 
-<p>AI coding co-pilots come with objective best practices built right into their underlying models. Whether it's called an LLM (Large Language Model) or something else, these systems have been trained on vast amounts of high-quality code and documentation. That means when you ask for help, you're not just getting a random suggestion—you're tapping into a collective knowledge base of industry standards, proven patterns, and up-to-date best practices, all ready to guide your next line of code.</p>
+<p>AI coding co-pilots come with objective best practices built right into their underlying models. Whether it's called an LLM (Large Language Model) or something else, these systems have been trained on vast amounts of high-quality code and documentation. That means when you ask for help, you're not just getting a random suggestion - you're tapping into a collective knowledge base of industry standards, proven patterns, and up-to-date best practices, all ready to guide your next line of code.</p>
 
 <h2>Live Prototyping: Closing the Feedback Loop</h2>
 
-<p>One powerful extension of this idea is live prototyping—building and refining features in real time, directly in front of users. Instead of waiting for feedback cycles, you can watch users interact with new features as you create them, making adjustments on the spot. This approach not only accelerates learning but also ensures that the product evolves in direct response to real user needs. With AI and collaborative tools, live prototyping is more accessible than ever, turning every session into an opportunity for immediate, actionable insight.</p>
+<p>One powerful extension of this idea is live prototyping - building and refining features in real time, directly in front of users. Instead of waiting for feedback cycles, you can watch users interact with new features as you create them, making adjustments on the spot. This approach not only accelerates learning but also ensures that the product evolves in direct response to real user needs. With AI and collaborative tools, live prototyping is more accessible than ever, turning every session into an opportunity for immediate, actionable insight.</p>
 
 <h2>Search Results as User Artifacts</h2>
 
-<p>Every search result you see isn't just a random entry—it's an artifact, a piece of data that a real user submitted at some point. Each result represents a question, a need, or a solution that someone else contributed to the system. When you interact with search, you're not just finding information; you're tapping into a living archive of user-generated knowledge, shaped and refined by countless individual contributions.</p>
+<p>Every search result you see isn't just a random entry - it's an artifact, a piece of data that a real user submitted at some point. Each result represents a question, a need, or a solution that someone else contributed to the system. When you interact with search, you're not just finding information; you're tapping into a living archive of user-generated knowledge, shaped and refined by countless individual contributions.</p>
 
 `,
 

@@ -342,13 +342,13 @@ function App() {
                       <p className="text-base text-muted-foreground leading-relaxed text-left">
                         Senior Product Designer with 15+ years of experience
                         creating accessible, intuitive digital experiences
-                        across diverse industries. I lead projects
-                        end-to-end—from research to polished
-                        interfaces—modernizing dashboards, onboarding, and
-                        e-commerce while improving clarity and accessibility.
-                        Skilled in cross-functional collaboration, user-centered
-                        strategy, and applying advanced methods like AI to solve
-                        complex challenges and drive inclusive innovation.
+                        across diverse industries. I lead projects end-to-end -
+                        from research to polished interfaces - modernizing
+                        dashboards, onboarding, and e-commerce while improving
+                        clarity and accessibility. Skilled in cross-functional
+                        collaboration, user-centered strategy, and applying
+                        advanced methods like AI to solve complex challenges and
+                        drive inclusive innovation.
                       </p>
                     </motion.div>
                   </div>
@@ -1105,7 +1105,7 @@ function App() {
 
       {/* Hidden Admin Access Button */}
       <Link
-        to="/admin-login"
+        to="/admin"
         className="fixed top-0 left-0 w-8 h-8 bg-white opacity-0 hover:opacity-20 transition-opacity duration-300 z-[9999] cursor-pointer"
         style={{
           boxShadow: "none",

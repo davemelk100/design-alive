@@ -36,7 +36,7 @@ const Dave = () => (
       </li>
       <li>
         <strong>Respect for Time and Attention:</strong> Users don't want to be
-        impressed—they want to get things done. The less friction, the better.
+        impressed - they want to get things done. The less friction, the better.
         Make it fast, make it obvious, and make it reliable.
       </li>
       <li>
@@ -48,7 +48,7 @@ const Dave = () => (
     </ul>
     <p>
       In short: Build with empathy, test with humility, and always be ready to
-      learn from your users—and your tools.
+      learn from your users - and your tools.
     </p>
   </main>
 );
