@@ -1,6 +1,3 @@
-export const getVisibleArticles = (
-  articles: readonly any[],
-  type: "mainPage" | "archive" = "mainPage"
-) => {
+export const getVisibleArticles = (articles: readonly any[]) => {
   return articles; // All articles are always visible since admin controls were removed
 };

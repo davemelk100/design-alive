@@ -22,7 +22,7 @@ export default function Archive() {
 
   // Filter articles based on search term and visibility
   const filteredArticles = useMemo(() => {
-    return getVisibleArticles(content.articles.items, "archive")
+    return getVisibleArticles(content.articles.items)
       .filter((article) => {
         const matchesSearch =
           article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -51,8 +51,7 @@ export default function Archive() {
             Articles Archive
           </h1>
           <p className="text-base text-gray-600 dark:text-gray-400 mb-8">
-            Browse all{" "}
-            {getVisibleArticles(content.articles.items, "archive").length}{" "}
+            Browse all {getVisibleArticles(content.articles.items).length}{" "}
             articles by date or search for specific content.
           </p>
 
@@ -74,8 +73,7 @@ export default function Archive() {
           {/* Results Count */}
           <div className="text-sm text-gray-600 dark:text-gray-400 mb-6">
             Showing {filteredArticles.length} of{" "}
-            {getVisibleArticles(content.articles.items, "archive").length}{" "}
-            articles
+            {getVisibleArticles(content.articles.items).length} articles
             {searchTerm && ` matching "${searchTerm}"`}
           </div>
         </div>

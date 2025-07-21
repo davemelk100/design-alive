@@ -130,13 +130,7 @@ const DesignSystem: React.FC = () => {
             "Outline Primary",
             "Outline Secondary",
           ],
-          cards: [
-            "Basic Card",
-            "Background Card",
-            "Video Card",
-            "Lab Card",
-            "Sample Story",
-          ],
+          cards: ["Background Card", "Video Card", "Lab Card", "Sample Story"],
           icons: [
             "Navigation & UI Icons",
             "Social & Brand Icons",
@@ -396,26 +390,22 @@ const DesignSystem: React.FC = () => {
         {/* Buttons */}
         <section className="mb-16">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Buttons</h2>
-          <div className="space-y-4">
-            <div className="flex flex-wrap gap-4">
-              <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
-                Primary Button
-              </button>
-              <button className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors">
-                Secondary Button
-              </button>
-              <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                Tertiary Button
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-4">
-              <button className="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors">
-                Outline Primary
-              </button>
-              <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                Outline Secondary
-              </button>
-            </div>
+          <div className="flex flex-wrap gap-4">
+            <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+              Primary Button
+            </button>
+            <button className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors">
+              Secondary Button
+            </button>
+            <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+              Tertiary Button
+            </button>
+            <button className="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors">
+              Outline Primary
+            </button>
+            <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+              Outline Secondary
+            </button>
           </div>
         </section>
 
@@ -423,19 +413,6 @@ const DesignSystem: React.FC = () => {
         <section className="mb-16">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Cards</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="group relative overflow-hidden rounded-lg bg-white border border-gray-200 shadow-sm">
-              <div className="absolute top-3 right-3 z-20">
-                <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
-                  <Eye className="h-5 w-5 text-gray-600" />
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Basic Card
-                </h3>
-                <p className="text-gray-600">Basic Card</p>
-              </div>
-            </div>
             <div className="group relative overflow-hidden rounded-lg bg-gray-100/80">
               <div className="absolute top-3 right-3 z-20">
                 <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">

@@ -494,7 +494,7 @@ function App() {
                 )}
 
                 {/* Current Projects Section */}
-                {isSectionVisible("lab") && (
+                {isSectionVisible() && (
                   <section
                     id="current-projects"
                     className="py-12 sm:py-16 lg:py-20"
@@ -728,7 +728,7 @@ function App() {
                 </section>
 
                 {/* Articles Section */}
-                {isSectionVisible("articles") && (
+                {isSectionVisible() && (
                   <section id="articles" className="py-12 sm:py-16 lg:py-20">
                     <div className="container mx-auto px-4 sm:px-8">
                       <SectionHeader
@@ -818,7 +818,7 @@ function App() {
                 )}
 
                 {/* Work Section */}
-                {isSectionVisible("designWork") && (
+                {isSectionVisible() && (
                   <section id="work" className="py-12 sm:py-16 lg:py-20">
                     <div className="container mx-auto px-4 sm:px-8">
                       <SectionHeader
