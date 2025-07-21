@@ -389,24 +389,26 @@ function App() {
                               handleNavClick("current-projects");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
-                            <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                               <FlaskConical className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-sm font-semibold">Lab</span>
+                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                              Lab
+                            </span>
                           </button>
                           <button
                             onClick={() => {
                               handleNavClick("stories");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
-                            <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                               <BookOpen className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-sm font-semibold">
+                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                               Stories
                             </span>
                           </button>
@@ -415,12 +417,12 @@ function App() {
                               handleNavClick("articles");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
-                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                               <FileText className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-sm font-semibold">
+                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                               Articles
                             </span>
                           </button>
@@ -429,12 +431,12 @@ function App() {
                               handleNavClick("work");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
-                            <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                               <Palette className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-sm font-semibold">
+                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                               Designs
                             </span>
                           </button>
@@ -443,12 +445,12 @@ function App() {
                               handleNavClick("career");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
-                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                               <Briefcase className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-sm font-semibold">
+                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                               Career
                             </span>
                           </button>
@@ -457,32 +459,34 @@ function App() {
                               handleNavClick("personal");
                               setIsMobileMenuOpen(false);
                             }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
-                            <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                               <Users className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-sm font-semibold">
+                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                               Personal
                             </span>
                           </button>
                           <Link
                             to="/design-system"
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
-                            <div className="w-8 h-8 bg-gray-500 rounded-full flex items-center justify-center">
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                               <Settings className="h-4 w-4 text-white" />
                             </div>
-                            <span className="text-sm font-semibold whitespace-nowrap">
+                            <span className="text-sm font-semibold whitespace-nowrap text-gray-900 dark:text-gray-100">
                               Design System
                             </span>
                           </Link>
-                          <div className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                            <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
-                              <ThemeToggle />
+                          <div className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md">
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                              <ThemeToggle className="text-white" />
                             </div>
-                            <span className="text-sm font-semibold">Theme</span>
+                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                              Theme
+                            </span>
                           </div>
                         </div>
                       </motion.div>
