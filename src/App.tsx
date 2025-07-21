@@ -1071,10 +1071,10 @@ function App() {
 
       {/* Mobile Bottom Icons Tray */}
       <div className="fixed bottom-0 left-0 right-0 bg-gray-50/95 backdrop-blur-sm border-t border-gray-200 shadow-lg z-[9999] md:hidden">
-        <div className="flex items-center justify-center px-4 py-3">
+        <div className="px-4 py-3">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center ${
+            className={`w-full backdrop-blur-sm rounded-lg p-3 shadow-md hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 ${
               isMobileMenuOpen
                 ? "bg-orange-500 text-white"
                 : "bg-white/80 hover:bg-white text-black"
@@ -1082,6 +1082,7 @@ function App() {
             aria-label="Mobile menu"
           >
             <Menu className="h-5 w-5" />
+            <span className="text-sm font-medium">Menu</span>
           </button>
         </div>
       </div>
