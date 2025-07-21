@@ -13,6 +13,7 @@ import {
   Briefcase,
   Heart,
   Settings,
+  Users,
 } from "lucide-react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { useState, useEffect } from "react";
@@ -195,11 +196,7 @@ function App() {
                     {/* Title Row */}
                     <div className="flex flex-row items-center gap-4 relative z-10 mt-5">
                       {/* Mobile: Title left-aligned */}
-                      <div
-                        className={`flex xl:hidden items-center justify-start w-full transition-opacity duration-300 ${
-                          isMobileMenuOpen ? "opacity-0" : "opacity-100"
-                        }`}
-                      >
+                      <div className="flex xl:hidden items-center justify-start w-full">
                         <h1
                           className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none relative z-10"
                           style={{ letterSpacing: "-0.06em" }}
@@ -266,10 +263,10 @@ function App() {
                     {/* Nav Links and Icons Row */}
                     <div className="hidden md:flex md:flex-col lg:flex-row md:items-stretch lg:items-center gap-4 w-full">
                       {/* Desktop Navigation Links */}
-                      <div className="hidden md:flex w-full justify-start lg:justify-start rounded-lg pl-0 pr-3 sm:pr-4 py-2 items-center gap-4 sm:gap-6">
+                      <div className="hidden md:flex w-full justify-start lg:justify-start rounded-lg pl-0 pr-3 sm:pr-4 py-2 items-center gap-2 sm:gap-3">
                         <button
                           onClick={() => handleNavClick("current-projects")}
-                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
@@ -278,7 +275,7 @@ function App() {
                         </button>
                         <button
                           onClick={() => handleNavClick("stories")}
-                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
@@ -287,7 +284,7 @@ function App() {
                         </button>
                         <button
                           onClick={() => handleNavClick("articles")}
-                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
@@ -296,7 +293,7 @@ function App() {
                         </button>
                         <button
                           onClick={() => handleNavClick("work")}
-                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
@@ -305,7 +302,7 @@ function App() {
                         </button>
                         <button
                           onClick={() => handleNavClick("career")}
-                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
@@ -314,7 +311,7 @@ function App() {
                         </button>
                         <button
                           onClick={() => handleNavClick("personal")}
-                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
@@ -323,7 +320,7 @@ function App() {
                         </button>
                         <Link
                           to="/design-system"
-                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase whitespace-nowrap"
+                          className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase whitespace-nowrap hover:bg-gray-100 dark:hover:bg-gray-800"
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
@@ -386,7 +383,7 @@ function App() {
                             <X className="h-5 w-5 text-gray-600" />
                           </button>
                         </div>
-                        <div className="grid grid-cols-3 gap-3">
+                        <div className="grid grid-cols-4 gap-3">
                           <button
                             onClick={() => {
                               handleNavClick("current-projects");
@@ -463,7 +460,7 @@ function App() {
                             className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                           >
                             <div className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center">
-                              <Heart className="h-4 w-4 text-white" />
+                              <Users className="h-4 w-4 text-white" />
                             </div>
                             <span className="text-sm font-semibold">
                               Personal
