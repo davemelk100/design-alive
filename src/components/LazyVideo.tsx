@@ -49,7 +49,7 @@ const LazyVideo: React.FC<LazyVideoProps> = ({
       {isInView && (
         <video
           ref={videoRef}
-          className="w-full h-full object-cover opacity-10"
+          className="w-full h-full object-cover opacity-70"
           autoPlay={autoPlay}
           muted={muted}
           loop={loop}
