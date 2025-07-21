@@ -32,6 +32,24 @@ export default function Admin() {
           </div>
         </div>
 
+        {/* Music Player and Writing Gallery Links */}
+        <div className="flex gap-4 mb-8">
+          <Link
+            to="/music-player"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+          >
+            <Play className="h-4 w-4" />
+            Open Music Player
+          </Link>
+          <Link
+            to="/writing-gallery"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+          >
+            <Play className="h-4 w-4" />
+            Open Writing Gallery
+          </Link>
+        </div>
+
         {/* Site Summary */}
         <div className="bg-gradient-to-r from-slate-100 to-blue-100 dark:from-slate-800 dark:to-blue-900/20 border border-slate-200 dark:border-slate-700 rounded-lg p-6 mb-8">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">
@@ -94,45 +112,6 @@ export default function Admin() {
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Music Player Link */}
-        <div className="bg-purple-100 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium text-purple-900 dark:text-purple-100 mb-1">
-                Music Player
-              </h3>
-            </div>
-            <Link
-              to="/music-player"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
-            >
-              <Play className="h-4 w-4" />
-              Open Music Player
-            </Link>
-          </div>
-        </div>
-
-        {/* Writing Gallery Link */}
-        <div className="bg-blue-100 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-medium text-blue-900 dark:text-blue-100 mb-1">
-                Writing Gallery
-              </h3>
-              <p className="text-sm text-blue-700 dark:text-blue-300">
-                Admin-only access to writing portfolio
-              </p>
-            </div>
-            <Link
-              to="/writing-gallery"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-            >
-              <Play className="h-4 w-4" />
-              Open Writing Gallery
-            </Link>
           </div>
         </div>
       </div>

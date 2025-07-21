@@ -1102,20 +1102,6 @@ function App() {
           onClose={() => setSelectedStory(null)}
         />
       )}
-
-      {/* Hidden Admin Access Button */}
-      <Link
-        to="/admin"
-        className="fixed top-0 left-0 w-8 h-8 bg-white opacity-0 hover:opacity-20 transition-opacity duration-300 z-[9999] cursor-pointer"
-        style={{
-          boxShadow: "none",
-          border: "none",
-          outline: "none",
-          cursor: "pointer",
-          pointerEvents: "auto",
-        }}
-        title="Admin Access"
-      />
     </div>
   );
 }

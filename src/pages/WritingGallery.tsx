@@ -100,6 +100,19 @@ const WritingGallery: React.FC = () => {
         url: "",
         isPublished: true,
       },
+      {
+        id: 6,
+        title: "",
+        subtitle: "",
+        excerpt:
+          "are moustaches still ironic? seems like people are taking them serious again.",
+        category: "",
+        readTime: "",
+        date: "",
+        image: "",
+        url: "",
+        isPublished: true,
+      },
     ];
   };
 
@@ -264,45 +277,6 @@ const WritingGallery: React.FC = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="relative bg-white dark:bg-gray-700 rounded-lg shadow-md p-6"
               >
-                {/* Action Buttons */}
-                <div className="absolute top-2 right-2 flex gap-1">
-                  {editingId === piece.id ? (
-                    <>
-                      <button
-                        onClick={() => saveEdit(piece.id)}
-                        className="p-1 text-green-500 hover:text-green-600 transition-colors"
-                        title="Save changes"
-                      >
-                        <Check className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={cancelEdit}
-                        className="p-1 text-gray-500 hover:text-gray-600 transition-colors"
-                        title="Cancel edit"
-                      >
-                        <X className="h-4 w-4" />
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => startEditing(piece.id, piece.excerpt)}
-                        className="p-1 text-blue-500 hover:text-blue-600 transition-colors"
-                        title="Edit card"
-                      >
-                        <Edit2 className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => removeCard(piece.id)}
-                        className="p-1 text-gray-400 hover:text-red-500 transition-colors"
-                        title="Remove card"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </>
-                  )}
-                </div>
-
                 {/* Content */}
                 {editingId === piece.id ? (
                   <textarea
@@ -312,7 +286,7 @@ const WritingGallery: React.FC = () => {
                     placeholder="Enter your text here..."
                   />
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-300 text-sm pr-16">
+                  <p className="text-gray-700 dark:text-gray-300 text-sm">
                     {piece.excerpt}
                   </p>
                 )}
