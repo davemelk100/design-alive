@@ -191,7 +191,7 @@ function App() {
               <>
                 {/* Hero Section */}
                 <section className="relative flex flex-col justify-center min-h-[120px] sm:min-h-[160px]">
-                  <div className="container mx-auto px-4 sm:px-8 pt-8 sm:pt-4 flex flex-col gap-y-2 sm:gap-y-4">
+                  <div className="container mx-auto px-4 sm:px-8 pt-8 sm:pt-12 pb-8 sm:pb-12 flex flex-col gap-y-6 sm:gap-y-8">
                     {/* Title Row */}
                     <div className="flex flex-row items-center gap-4 relative z-10 mt-5">
                       {/* Mobile: Title left-aligned */}
