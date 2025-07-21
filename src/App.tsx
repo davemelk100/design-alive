@@ -340,22 +340,7 @@ function App() {
                       className="max-w-4xl flex flex-col items-start"
                     >
                       <p className="text-base text-muted-foreground leading-relaxed text-left">
-                        Senior Product Designer with over 15 years of experience
-                        delivering accessible, intuitive, and high-impact
-                        digital experiences for a range of users and business
-                        contexts. Adept at leading projects from research and
-                        conceptualization through to polished interface and
-                        thorough usability assessment, I have successfully
-                        helped organizations modernize dashboards, onboarding,
-                        and e-commerce experiences while significantly improving
-                        accessibility and clarity. My background includes
-                        collaborating across disciplines to address complex
-                        challenges, championing user-centered design strategies,
-                        and leveraging advanced methodologies—including
-                        artificial intelligence—to elevate product effectiveness
-                        and inclusivity. Passionate about simplifying complexity
-                        and creating solutions that are both innovative and
-                        grounded in real user needs.
+                      Senior Product Designer with 15+ years of experience creating accessible, intuitive digital experiences across diverse industries. I lead projects end-to-end—from research to polished interfaces—modernizing dashboards, onboarding, and e-commerce while improving clarity and accessibility. Skilled in cross-functional collaboration, user-centered strategy, and applying advanced methods like AI to solve complex challenges and drive inclusive innovation.
                       </p>
                     </motion.div>
                   </div>
@@ -1077,7 +1062,7 @@ function App() {
       </Suspense>
 
       {/* Mobile Bottom Icons Tray */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-50/95 backdrop-blur-sm border-t border-gray-200 shadow-lg z-[9999] xl:hidden">
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-50/95 backdrop-blur-sm border-t border-gray-200 shadow-lg z-[9999] sm:hidden">
         <div className="flex items-center justify-center px-4 py-3">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
