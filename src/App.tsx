@@ -190,8 +190,8 @@ function App() {
             element={
               <>
                 {/* Hero Section */}
-                <section className="relative h-[12vh] sm:h-[20vh] flex items-start sm:items-center">
-                  <div className="container mx-auto px-4 sm:px-8 pt-8 sm:pt-4">
+                <section className="relative flex flex-col justify-center min-h-[120px] sm:min-h-[160px]">
+                  <div className="container mx-auto px-4 sm:px-8 pt-8 sm:pt-4 flex flex-col gap-y-2 sm:gap-y-4">
                     {/* Title, Icons, and Navigation Row */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
                       {/* Mobile: Title left-aligned */}
