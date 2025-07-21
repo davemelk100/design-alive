@@ -6,7 +6,7 @@
 [build]
   command = "npm run build" # Command to build your Vite project
   publish = "dist"         # Folder containing the build output
-  environment = { CACHE_BUST = "1" }
+  environment = { CACHE_BUST = "2" }
 
 # Ensure proper MIME types for all assets
 [[headers]]
