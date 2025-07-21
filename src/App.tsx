@@ -1074,11 +1074,7 @@ function App() {
         <div className="px-4 py-3">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`w-full backdrop-blur-sm rounded-lg p-3 shadow-md hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 ${
-              isMobileMenuOpen
-                ? "bg-orange-500 text-white"
-                : "bg-white/80 hover:bg-white text-black"
-            }`}
+            className={`w-full backdrop-blur-sm rounded-lg p-3 shadow-md hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90`}
             aria-label="Mobile menu"
           >
             <Menu className="h-5 w-5" />
