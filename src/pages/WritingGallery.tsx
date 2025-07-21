@@ -1,16 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import {
-  Trash2,
-  Edit2,
-  Check,
-  X,
-  Download,
-  Upload,
-  AlertCircle,
-  ArrowLeft,
-} from "lucide-react";
+import { Download, Upload, AlertCircle, ArrowLeft } from "lucide-react";
 import { writingGalleryStorage, storage } from "../utils/storage";
 
 interface WritingPiece {
@@ -120,8 +111,6 @@ const WritingGallery: React.FC = () => {
     getInitialWritingPieces
   );
 
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editText, setEditText] = useState("");
   const [storageStatus, setStorageStatus] = useState<{
     available: boolean;
     message?: string;
@@ -137,32 +126,6 @@ const WritingGallery: React.FC = () => {
         message: "Failed to save changes. Please try again.",
       });
     }
-  };
-
-  const removeCard = (id: number) => {
-    const updatedPieces = writingPieces.filter((piece) => piece.id !== id);
-    setWritingPieces(updatedPieces);
-    saveToStorage(updatedPieces);
-  };
-
-  const startEditing = (id: number, currentText: string) => {
-    setEditingId(id);
-    setEditText(currentText);
-  };
-
-  const saveEdit = (id: number) => {
-    const updatedPieces = writingPieces.map((piece) =>
-      piece.id === id ? { ...piece, excerpt: editText } : piece
-    );
-    setWritingPieces(updatedPieces);
-    saveToStorage(updatedPieces);
-    setEditingId(null);
-    setEditText("");
-  };
-
-  const cancelEdit = () => {
-    setEditingId(null);
-    setEditText("");
   };
 
   // Export data functionality
@@ -278,18 +241,9 @@ const WritingGallery: React.FC = () => {
                 className="relative bg-white dark:bg-gray-700 rounded-lg shadow-md p-6"
               >
                 {/* Content */}
-                {editingId === piece.id ? (
-                  <textarea
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    className="w-full h-32 p-2 text-sm text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-600 border border-gray-300 dark:border-gray-500 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter your text here..."
-                  />
-                ) : (
-                  <p className="text-gray-700 dark:text-gray-300 text-sm">
-                    {piece.excerpt}
-                  </p>
-                )}
+                <p className="text-gray-700 dark:text-gray-300 text-sm">
+                  {piece.excerpt}
+                </p>
               </motion.div>
             ))}
           </div>
