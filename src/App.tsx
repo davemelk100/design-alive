@@ -192,110 +192,53 @@ function App() {
                 {/* Hero Section */}
                 <section className="relative flex flex-col justify-center min-h-[120px] sm:min-h-[160px]">
                   <div className="container mx-auto px-4 sm:px-8 pt-8 sm:pt-4 flex flex-col gap-y-2 sm:gap-y-4">
-                    {/* Title, Icons, and Navigation Row */}
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
+                    {/* Title Row */}
+                    <div className="flex flex-row items-center gap-4 relative z-10 mt-5">
                       {/* Mobile: Title left-aligned */}
                       <div
                         className={`flex xl:hidden items-center justify-start w-full transition-opacity duration-300 ${
                           isMobileMenuOpen ? "opacity-0" : "opacity-100"
                         }`}
                       >
-                        {/* Mobile Title - Left */}
-                        <div>
-                          <h1
-                            className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none relative z-10"
-                            style={{
-                              letterSpacing: "-0.06em",
-                            }}
-                          >
-                            {content.siteInfo.subtitle}
-                          </h1>
-                        </div>
-                      </div>
-
-                      {/* Desktop: Title on left, Navigation and Icons on right */}
-                      <div className="hidden xl:block">
                         <h1
                           className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none relative z-10"
-                          style={{
-                            letterSpacing: "-0.06em",
-                          }}
+                          style={{ letterSpacing: "-0.06em" }}
                         >
                           {content.siteInfo.subtitle}
                         </h1>
-                      </div>
-
-                      {/* Desktop Icons and Navigation */}
-                      <div className="hidden md:flex md:flex-col lg:flex-row md:items-stretch lg:items-center gap-4 w-full">
-                        {/* Desktop Navigation Links */}
-                        <div className="hidden md:flex w-full md:justify-center lg:justify-start rounded-lg px-3 sm:px-4 py-2 items-center gap-4 sm:gap-6">
-                          <button
-                            onClick={() => handleNavClick("current-projects")}
-                            className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
+                        <div className="flex items-center gap-2 ml-4">
+                          <a
+                            href={content.navigation.social.linkedin.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                            aria-label="LinkedIn"
                           >
-                            Lab
-                          </button>
-                          <button
-                            onClick={() => handleNavClick("stories")}
-                            className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
+                            <LinkedInLogoIcon className="h-5 w-5 text-black" />
+                          </a>
+                          <a
+                            href={content.navigation.social.dribbble.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                            aria-label="Dribbble"
                           >
-                            Stories
-                          </button>
-                          <button
-                            onClick={() => handleNavClick("articles")}
-                            className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                          >
-                            Articles
-                          </button>
-                          <button
-                            onClick={() => handleNavClick("work")}
-                            className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                          >
-                            Designs
-                          </button>
-                          <button
-                            onClick={() => handleNavClick("career")}
-                            className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                          >
-                            Career
-                          </button>
-                          <button
-                            onClick={() => handleNavClick("personal")}
-                            className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                          >
-                            Personal
-                          </button>
-                          <Link
-                            to="/design-system"
-                            className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase whitespace-nowrap"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                          >
-                            Design System
-                          </Link>
+                            <Dribbble className="h-5 w-5 text-black" />
+                          </a>
+                          <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+                            <ThemeToggle />
+                          </div>
                         </div>
-
-                        {/* Desktop Icons */}
-                        <div className="flex items-center gap-2 sm:gap-4">
+                      </div>
+                      {/* Desktop: Title on left */}
+                      <div className="hidden xl:flex items-center">
+                        <h1
+                          className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none relative z-10"
+                          style={{ letterSpacing: "-0.06em" }}
+                        >
+                          {content.siteInfo.subtitle}
+                        </h1>
+                        <div className="flex items-center gap-2 ml-4">
                           <a
                             href={content.navigation.social.linkedin.url}
                             target="_blank"
@@ -320,6 +263,101 @@ function App() {
                         </div>
                       </div>
                     </div>
+                    {/* Nav Links and Icons Row */}
+                    <div className="hidden md:flex md:flex-col lg:flex-row md:items-stretch lg:items-center gap-4 w-full">
+                      {/* Desktop Navigation Links */}
+                      <div className="hidden md:flex w-full justify-start lg:justify-start rounded-lg pl-0 pr-3 sm:pr-4 py-2 items-center gap-4 sm:gap-6">
+                        <button
+                          onClick={() => handleNavClick("current-projects")}
+                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          style={{
+                            fontFamily: "Helvetica, Arial, sans-serif",
+                          }}
+                        >
+                          Lab
+                        </button>
+                        <button
+                          onClick={() => handleNavClick("stories")}
+                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          style={{
+                            fontFamily: "Helvetica, Arial, sans-serif",
+                          }}
+                        >
+                          Stories
+                        </button>
+                        <button
+                          onClick={() => handleNavClick("articles")}
+                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          style={{
+                            fontFamily: "Helvetica, Arial, sans-serif",
+                          }}
+                        >
+                          Articles
+                        </button>
+                        <button
+                          onClick={() => handleNavClick("work")}
+                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          style={{
+                            fontFamily: "Helvetica, Arial, sans-serif",
+                          }}
+                        >
+                          Designs
+                        </button>
+                        <button
+                          onClick={() => handleNavClick("career")}
+                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          style={{
+                            fontFamily: "Helvetica, Arial, sans-serif",
+                          }}
+                        >
+                          Career
+                        </button>
+                        <button
+                          onClick={() => handleNavClick("personal")}
+                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase"
+                          style={{
+                            fontFamily: "Helvetica, Arial, sans-serif",
+                          }}
+                        >
+                          Personal
+                        </button>
+                        <Link
+                          to="/design-system"
+                          className="text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-colors text-sm font-bold uppercase whitespace-nowrap"
+                          style={{
+                            fontFamily: "Helvetica, Arial, sans-serif",
+                          }}
+                        >
+                          Design System
+                        </Link>
+                      </div>
+                    </div>
+                    {/* Summary Row (unchanged) */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 1.8, delay: 0.4 }}
+                      className="max-w-4xl flex flex-col items-start"
+                    >
+                      <p className="text-base text-muted-foreground leading-relaxed text-left">
+                        Senior Product Designer with over 15 years of experience
+                        delivering accessible, intuitive, and high-impact
+                        digital experiences for a range of users and business
+                        contexts. Adept at leading projects from research and
+                        conceptualization through to polished interface and
+                        thorough usability assessment, I have successfully
+                        helped organizations modernize dashboards, onboarding,
+                        and e-commerce experiences while significantly improving
+                        accessibility and clarity. My background includes
+                        collaborating across disciplines to address complex
+                        challenges, championing user-centered design strategies,
+                        and leveraging advanced methodologies—including
+                        artificial intelligence—to elevate product effectiveness
+                        and inclusivity. Passionate about simplifying complexity
+                        and creating solutions that are both innovative and
+                        grounded in real user needs.
+                      </p>
+                    </motion.div>
                   </div>
                 </section>
 
@@ -450,34 +488,6 @@ function App() {
                               Design System
                             </span>
                           </Link>
-                          <a
-                            href={content.navigation.social.linkedin.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                          >
-                            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                              <LinkedInLogoIcon className="h-5 w-5 text-white" />
-                            </div>
-                            <span className="text-sm font-semibold">
-                              LinkedIn
-                            </span>
-                          </a>
-                          <a
-                            href={content.navigation.social.dribbble.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                          >
-                            <div className="w-8 h-8 bg-pink-600 rounded-full flex items-center justify-center">
-                              <Dribbble className="h-5 w-5 text-white" />
-                            </div>
-                            <span className="text-sm font-semibold">
-                              Dribbble
-                            </span>
-                          </a>
                           <div className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                             <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
                               <ThemeToggle />
@@ -489,37 +499,6 @@ function App() {
                     </motion.div>
                   </AnimatePresence>
                 )}
-
-                {/* Summary Section */}
-                <section>
-                  <div className="container mx-auto px-4 sm:px-8">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 1.8, delay: 0.4 }}
-                      className="max-w-4xl flex flex-col items-start"
-                    >
-                      <p className="text-base text-muted-foreground leading-relaxed text-left">
-                        Senior Product Designer with over 15 years of experience
-                        delivering accessible, intuitive, and high-impact
-                        digital experiences for a range of users and business
-                        contexts. Adept at leading projects from research and
-                        conceptualization through to polished interface and
-                        thorough usability assessment, I have successfully
-                        helped organizations modernize dashboards, onboarding,
-                        and e-commerce experiences while significantly improving
-                        accessibility and clarity. My background includes
-                        collaborating across disciplines to address complex
-                        challenges, championing user-centered design strategies,
-                        and leveraging advanced methodologies—including
-                        artificial intelligence—to elevate product effectiveness
-                        and inclusivity. Passionate about simplifying complexity
-                        and creating solutions that are both innovative and
-                        grounded in real user needs.
-                      </p>
-                    </motion.div>
-                  </div>
-                </section>
 
                 {/* Current Projects Section */}
                 {isSectionVisible("lab") && (

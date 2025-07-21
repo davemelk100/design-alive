@@ -179,7 +179,7 @@ const DesignSystem: React.FC = () => {
       {/* Header */}
       <header className="border-b border-gray-200 bg-white">
         <div className="container mx-auto px-4 py-4 md:py-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-y-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-5xl font-bold text-gray-900 mt-0 mb-2">
                 Design System
@@ -201,17 +201,17 @@ const DesignSystem: React.FC = () => {
                 </div>
               )}
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
               {/* Export/Import buttons */}
               <button
                 onClick={exportData}
-                className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm"
+                className="flex items-center gap-2 w-full justify-center mb-2 sm:w-auto sm:mb-0 px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm"
                 title="Export design system data"
               >
                 <Download className="h-4 w-4" />
                 Export
               </button>
-              <label className="flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-sm cursor-pointer">
+              <label className="flex items-center gap-2 w-full justify-center mb-2 sm:w-auto sm:mb-0 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-sm cursor-pointer">
                 <Upload className="h-4 w-4" />
                 Import
                 <input
@@ -223,7 +223,7 @@ const DesignSystem: React.FC = () => {
               </label>
               <Link
                 to="/"
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 w-full justify-center mb-2 sm:w-auto sm:mb-0 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to Site
@@ -234,11 +234,11 @@ const DesignSystem: React.FC = () => {
       </header>
 
       {/* Content */}
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-2 sm:px-4 py-12">
         {/* Colors */}
         <section className="mb-16">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Colors</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             <div className="space-y-2">
               <div className="w-full h-20 bg-primary rounded-lg"></div>
               <div className="text-sm">
@@ -486,49 +486,6 @@ const DesignSystem: React.FC = () => {
                     ))}
                   </div>
                 </div>
-                <div className="flex-1 flex flex-col">
-                  <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1"></p>
-                </div>
-              </div>
-              <div className="absolute inset-0 overflow-hidden z-0">
-                <img
-                  src={`/img/design-panes-alt2.svg?v=${Date.now()}`}
-                  alt="Design Panes"
-                  className="w-full h-full object-cover opacity-20"
-                  style={{ filter: "grayscale(100%)" }}
-                />
-              </div>
-            </div>
-            <div className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md">
-              <div className="absolute top-3 right-3">
-                <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
-                  <Eye className="h-5 w-5 text-gray-600" />
-                </div>
-              </div>
-              <div className="p-3 flex flex-col gap-2 flex-1">
-                <div className="pr-12">
-                  <h3
-                    className="text-[20px] font-semibold mb-1 dark:text-black title-font"
-                    style={{
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
-                    Sample Story
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-600 mb-2">
-                    Description of how I helped solve problems
-                  </p>
-                </div>
-                <div className="flex-1 flex flex-col">
-                  <p className="text-black mb-2 dark:text-black text-card-body flex-1"></p>
-                </div>
-              </div>
-              <div className="relative aspect-[3/2] overflow-visible -mx-3 -mb-3">
-                <img
-                  src="/img/delta-story.png"
-                  alt="Selling Accessibility"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
               </div>
             </div>
           </div>
@@ -537,7 +494,7 @@ const DesignSystem: React.FC = () => {
         {/* Spacing */}
         <section className="mb-16">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Spacing</h2>
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div className="flex items-center gap-4">
               <div className="w-4 h-4 bg-primary rounded"></div>
               <span className="text-sm text-gray-600">16px (w-4 h-4)</span>
@@ -566,7 +523,7 @@ const DesignSystem: React.FC = () => {
           <h2 className="text-xl font-semibold text-gray-900 mb-6">
             Border Radius
           </h2>
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-wrap gap-4">
             <div className="space-y-2">
               <div className="w-16 h-16 bg-primary rounded-none"></div>
               <p className="text-sm text-gray-600">rounded-none (0px)</p>
