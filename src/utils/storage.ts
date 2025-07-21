@@ -243,7 +243,6 @@ export const storage = {
 // Storage keys for consistent usage across the app
 export const STORAGE_KEYS = {
   WRITING_GALLERY_PIECES: "writingGalleryPieces",
-  CONTENT_VISIBILITY: "contentVisibility",
   ADMIN_SESSION: "adminSession",
   MUSIC_PLAYER_SETTINGS: "musicPlayerSettings",
   THEME_PREFERENCES: "themePreferences",
@@ -256,13 +255,6 @@ export const writingGalleryStorage = {
   setPieces: (pieces: any[]) =>
     storage.set(STORAGE_KEYS.WRITING_GALLERY_PIECES, pieces),
   clearPieces: () => storage.remove(STORAGE_KEYS.WRITING_GALLERY_PIECES),
-};
-
-export const contentVisibilityStorage = {
-  getSettings: () => storage.get(STORAGE_KEYS.CONTENT_VISIBILITY, {}),
-  setSettings: (settings: any) =>
-    storage.set(STORAGE_KEYS.CONTENT_VISIBILITY, settings),
-  clearSettings: () => storage.remove(STORAGE_KEYS.CONTENT_VISIBILITY),
 };
 
 export const adminSessionStorage = {

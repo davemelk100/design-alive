@@ -38,56 +38,42 @@ The application now uses a robust storage system that provides persistent data s
 
 ## Storage Keys
 
-The system uses consistent storage keys defined in `STORAGE_KEYS`:
+The system uses the following storage keys:
 
-```typescript
-export const STORAGE_KEYS = {
-  WRITING_GALLERY_PIECES: "writingGalleryPieces",
-  CONTENT_VISIBILITY: "contentVisibility",
-  ADMIN_SESSION: "adminSession",
-  MUSIC_PLAYER_SETTINGS: "musicPlayerSettings",
-  THEME_PREFERENCES: "themePreferences",
-  USER_PREFERENCES: "userPreferences",
-} as const;
-```
+- `WRITING_GALLERY_PIECES`: "writingGalleryPieces"
+- `ADMIN_SESSION`: "adminSession"
+- `MUSIC_PLAYER_SETTINGS`: "musicPlayerSettings"
 
 ## Usage Examples
 
-### Basic Storage Operations
+### Writing Gallery Storage
 
 ```typescript
-import { storage } from "./utils/storage";
+import { writingGalleryStorage } from "./utils/storage";
 
-// Store data
-storage.set("myKey", { data: "value" });
+// Get all writing pieces
+const pieces = writingGalleryStorage.getPieces();
 
-// Retrieve data with default
-const data = storage.get("myKey", { default: "value" });
+// Save writing pieces
+writingGalleryStorage.setPieces(newPieces);
 
-// Remove data
-storage.remove("myKey");
-
-// Clear all data
-storage.clear();
+// Clear all writing pieces
+writingGalleryStorage.clearPieces();
 ```
 
-### Type-Safe Storage Helpers
+### Admin Session Storage
 
 ```typescript
-import {
-  writingGalleryStorage,
-  contentVisibilityStorage,
-} from "./utils/storage";
+import { adminSessionStorage } from "./utils/storage";
 
-// Writing Gallery
-const pieces = writingGalleryStorage.getPieces();
-writingGalleryStorage.setPieces(updatedPieces);
-writingGalleryStorage.clearPieces();
+// Get admin session
+const session = adminSessionStorage.getSession();
 
-// Content Visibility
-const settings = contentVisibilityStorage.getSettings();
-contentVisibilityStorage.setSettings(newSettings);
-contentVisibilityStorage.clearSettings();
+// Set admin session
+adminSessionStorage.setSession(newSession);
+
+// Clear admin session
+adminSessionStorage.clearSession();
 ```
 
 ### Export/Import Data

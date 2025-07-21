@@ -18,7 +18,6 @@ export const migrateOldStorage = (): MigrationResult => {
     // Check for old localStorage keys and migrate them
     const oldKeys = [
       "writingGalleryPieces",
-      "contentVisibility",
       "adminAuthenticated",
       "adminAuthTime",
     ];
@@ -40,8 +39,6 @@ export const migrateOldStorage = (): MigrationResult => {
           let newKey = oldKey;
           if (oldKey === "writingGalleryPieces") {
             newKey = STORAGE_KEYS.WRITING_GALLERY_PIECES;
-          } else if (oldKey === "contentVisibility") {
-            newKey = STORAGE_KEYS.CONTENT_VISIBILITY;
           } else if (
             oldKey === "adminAuthenticated" ||
             oldKey === "adminAuthTime"
@@ -107,7 +104,6 @@ export const migrateOldStorage = (): MigrationResult => {
 export const needsMigration = (): boolean => {
   const oldKeys = [
     "writingGalleryPieces",
-    "contentVisibility",
     "adminAuthenticated",
     "adminAuthTime",
   ];

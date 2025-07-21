@@ -92,7 +92,6 @@ const DesignSystem: React.FC = () => {
           cards: [
             "Basic Card",
             "Background Card",
-            "Interactive Card",
             "Video Card",
             "Lab Card",
             "Sample Story",
@@ -400,19 +399,6 @@ const DesignSystem: React.FC = () => {
                 <p className="text-gray-700">Background Card</p>
               </div>
             </div>
-            <div className="group relative overflow-hidden rounded-lg bg-white border border-gray-200 hover:shadow-lg transition-shadow">
-              <div className="absolute top-3 right-3 z-20">
-                <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
-                  <Eye className="h-5 w-5 text-gray-600" />
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Interactive Card
-                </h3>
-                <p className="text-gray-600">Interactive Card</p>
-              </div>
-            </div>
 
             <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
               <div className="absolute top-3 right-3 z-20">
@@ -438,7 +424,7 @@ const DesignSystem: React.FC = () => {
               <div className="absolute inset-0 overflow-hidden z-0">
                 <LazyVideo
                   src="/video/jersey.mp4"
-                  className="w-full h-full object-cover opacity-20"
+                  className="w-full h-full object-cover opacity-70"
                   autoPlay={true}
                   muted={true}
                   loop={true}
