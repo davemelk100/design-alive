@@ -3,20 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Users, FileText, Palette } from "lucide-react";
 import { content } from "../content";
 
-interface AdminStats {
-  totalArticles: number;
-  totalDesignWork: number;
-  totalStories: number;
-  totalTestimonials: number;
-}
-
 const Admin: React.FC = () => {
-  const stats: AdminStats = {
-    totalArticles: content.articles.items.length,
-    totalDesignWork: content.work.projects.length,
-    totalStories: content.stories.items.length,
-    totalTestimonials: content.testimonials.items.length,
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -42,57 +29,6 @@ const Admin: React.FC = () => {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center gap-3">
-              <FileText className="h-8 w-8 text-blue-600" />
-              <div>
-                <p className="text-sm text-gray-600">Articles</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {stats.totalArticles}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center gap-3">
-              <Palette className="h-8 w-8 text-green-600" />
-              <div>
-                <p className="text-sm text-gray-600">Design Work</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {stats.totalDesignWork}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center gap-3">
-              <FileText className="h-8 w-8 text-purple-600" />
-              <div>
-                <p className="text-sm text-gray-600">Stories</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {stats.totalStories}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center gap-3">
-              <Users className="h-8 w-8 text-orange-600" />
-              <div>
-                <p className="text-sm text-gray-600">Testimonials</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {stats.totalTestimonials}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Quick Actions */}
         <div className="bg-white rounded-lg shadow p-6 mb-8">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
