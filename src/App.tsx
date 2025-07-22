@@ -72,6 +72,15 @@ const SectionHeader = ({
           >
             {title}
           </h2>
+          {showUpArrow && (
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="bg-black text-white dark:bg-white/10 dark:text-white p-2 rounded-full shadow-lg hover:opacity-80 transition-opacity"
+              aria-label="Scroll to top"
+            >
+              <ArrowUp className="h-4 w-4 text-white dark:text-white" />
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-3">
           {showArchiveLink && (
@@ -81,15 +90,6 @@ const SectionHeader = ({
             >
               View Archive
             </Link>
-          )}
-          {showUpArrow && (
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="bg-black text-white dark:bg-white/10 dark:text-white p-2 rounded-full shadow-lg hover:opacity-80 transition-opacity"
-              aria-label="Scroll to top"
-            >
-              <ArrowUp className="h-4 w-4 text-white dark:text-white" />
-            </button>
           )}
         </div>
       </div>
