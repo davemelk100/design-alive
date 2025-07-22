@@ -37,19 +37,12 @@ import { lazy, Suspense } from "react";
 const Article = lazy(() => import("./pages/Article"));
 const Archive = lazy(() => import("./pages/Archive"));
 const DesignArchive = lazy(() => import("./pages/DesignArchive"));
-const Admin = lazy(() => import("./pages/Admin"));
-const AdminLogin = lazy(() => import("./pages/AdminLogin"));
-const AdminMusic = lazy(() => import("./pages/AdminMusic"));
 const MusicPlayer = lazy(() => import("./pages/MusicPlayer"));
 const WritingGallery = lazy(() => import("./pages/WritingGallery"));
 const DesignSystem = lazy(() => import("./pages/DesignSystem"));
 import { slugify } from "./utils/slugify";
-import { getVisibleArticles } from "./utils/articleVisibility";
-import { getVisibleDesignWork } from "./utils/designWorkVisibility";
 import LazyVideo from "./components/LazyVideo";
 
-import { getVisibleLabProjects } from "./utils/labProjectVisibility";
-import { isSectionVisible } from "./utils/contentVisibility";
 import "./utils/storageMigration"; // Import to trigger migration if needed
 
 // Add SectionHeader component
@@ -191,7 +184,7 @@ function App() {
               <>
                 {/* Hero Section */}
                 <section className="relative flex flex-col justify-center min-h-[120px] sm:min-h-[160px]">
-                  <div className="container mx-auto px-4 sm:px-8 pt-8 sm:pt-12 pb-8 sm:pb-12 flex flex-col gap-y-6 sm:gap-y-8">
+                  <div className="container mx-auto px-4 sm:px-8 pt-8 sm:pt-12 pb-4 sm:pb-4 flex flex-col gap-y-6 sm:gap-y-8">
                     {/* Title Row */}
                     <div className="flex flex-row items-center gap-4 relative z-10 mt-5">
                       {/* Mobile: Title left-aligned */}
@@ -496,22 +489,20 @@ function App() {
                 )}
 
                 {/* Current Projects Section */}
-                {isSectionVisible() && (
-                  <section
-                    id="current-projects"
-                    className="py-12 sm:py-16 lg:py-20"
-                  >
-                    <div className="container mx-auto px-4 sm:px-8">
-                      <SectionHeader
-                        title={content.currentProjects.title}
-                        subtitle={content.currentProjects.subtitle}
-                        className="mb-8"
-                        showUpArrow={false}
-                      />
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {getVisibleLabProjects(
-                          content.currentProjects.projects
-                        ).map((project, index) => (
+                <section
+                  id="current-projects"
+                  className="py-12 sm:py-16 lg:py-20"
+                >
+                  <div className="container mx-auto px-4 sm:px-8">
+                    <SectionHeader
+                      title={content.currentProjects.title}
+                      subtitle={content.currentProjects.subtitle}
+                      className="mb-8"
+                      showUpArrow={false}
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {content.currentProjects.projects.map(
+                        (project, index) => (
                           <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}
@@ -640,11 +631,11 @@ function App() {
                               />
                             </div>
                           </motion.div>
-                        ))}
-                      </div>
+                        )
+                      )}
                     </div>
-                  </section>
-                )}
+                  </div>
+                </section>
 
                 {/* Stories Section */}
                 <section id="stories" className="py-12 sm:py-16 lg:py-20">
@@ -730,205 +721,201 @@ function App() {
                 </section>
 
                 {/* Articles Section */}
-                {isSectionVisible() && (
-                  <section id="articles" className="py-12 sm:py-16 lg:py-20">
-                    <div className="container mx-auto px-4 sm:px-8">
-                      <SectionHeader
-                        title="Articles"
-                        subtitle={content.articles.subtitle}
-                        className="mb-8"
-                        showArchiveLink={false}
-                      />
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {getVisibleArticles(content.articles.items)
-                          .filter(
-                            (article) =>
-                              article.title !==
-                                "API Tokens: The Digital Arcade" &&
-                              article.title !== "Commit Message Fatigue" &&
-                              article.title !== "The 5 Design Anti-Patterns" &&
-                              article.title !==
-                                "Vibe Coding vs Vibe Engineering" &&
-                              article.title !==
-                                "Information Architecture Is Not Sacred" &&
-                              article.title !==
-                                "AI is hydrated with user research data"
-                          )
-                          .sort(
-                            (a, b) =>
-                              new Date(b.date).getTime() -
-                              new Date(a.date).getTime()
-                          )
-                          .map((article, index) => (
-                            <motion.div
+                <section id="articles" className="py-12 sm:py-16 lg:py-20">
+                  <div className="container mx-auto px-4 sm:px-8">
+                    <SectionHeader
+                      title="Articles"
+                      subtitle={content.articles.subtitle}
+                      className="mb-8"
+                      showArchiveLink={false}
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {content.articles.items
+                        .filter(
+                          (article) =>
+                            article.title !==
+                              "API Tokens: The Digital Arcade" &&
+                            article.title !== "Commit Message Fatigue" &&
+                            article.title !== "The 5 Design Anti-Patterns" &&
+                            article.title !==
+                              "Vibe Coding vs Vibe Engineering" &&
+                            article.title !==
+                              "Information Architecture Is Not Sacred" &&
+                            article.title !==
+                              "AI is hydrated with user research data"
+                        )
+                        .sort(
+                          (a, b) =>
+                            new Date(b.date).getTime() -
+                            new Date(a.date).getTime()
+                        )
+                        .map((article, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1.8, delay: index * 0.2 }}
+                            className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md"
+                          >
+                            <div className="absolute top-3 right-3">
+                              <Link
+                                to={`/article/${slugify(article.title)}`}
+                                className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                              >
+                                <Eye className="h-5 w-5 text-gray-600" />
+                              </Link>
+                            </div>
+                            <div className="p-3 flex flex-col gap-2 flex-1">
+                              <div className="pr-12">
+                                <h3
+                                  className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                  style={{
+                                    letterSpacing: "-0.01em",
+                                  }}
+                                >
+                                  {article.title}
+                                </h3>
+                              </div>
+                              <div className="flex-1 flex flex-col">
+                                {article.description && (
+                                  <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1">
+                                    {article.description}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            <div className="relative aspect-[3/2] overflow-visible -mx-3 -mb-3">
+                              <img
+                                src={`${
+                                  (article as any).cardImage || article.image
+                                }?v=${Date.now()}`}
+                                alt={article.title}
+                                className="absolute inset-0 h-full w-full object-cover"
+                              />
+                            </div>
+                          </motion.div>
+                        ))}
+                    </div>
+                    <div className="mt-8">
+                      <Link
+                        to="/archive"
+                        className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                      >
+                        View Archive
+                      </Link>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Work Section */}
+                <section id="work" className="py-12 sm:py-16 lg:py-20">
+                  <div className="container mx-auto px-4 sm:px-8">
+                    <SectionHeader
+                      title="Design"
+                      subtitle={content.work.subtitle}
+                      className="mb-8"
+                      showArchiveLink={false}
+                    />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {content.work.projects
+                        .filter(
+                          (project: any) =>
+                            project.title !== "3D Conversion UX Plan"
+                        )
+                        .map((project: any, index) => {
+                          const ProjectCard = (
+                            <div className="flex flex-col gap-2 flex-1">
+                              <div className="pr-12">
+                                <h3
+                                  className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                  style={{
+                                    letterSpacing: "-0.01em",
+                                  }}
+                                >
+                                  {project.title}
+                                </h3>
+                                {project.description && (
+                                  <p className="text-sm text-gray-600 dark:text-gray-600 mb-2">
+                                    {project.description}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                          );
+
+                          const ProjectImage = (
+                            <div
+                              className={`relative ${
+                                project.title === "Vintage Form Design"
+                                  ? "aspect-[4/3]"
+                                  : "aspect-[5/3]"
+                              } overflow-visible -mx-3 -mb-3`}
+                            >
+                              <img
+                                src={`${project.image}?v=${Date.now()}`}
+                                alt={project.alt || project.title}
+                                className={`absolute inset-0 h-full w-full ${
+                                  project.title === "Hex Code Pop Art"
+                                    ? "object-cover scale-102"
+                                    : project.title === "Vintage Form Design"
+                                    ? "object-contain scale-90"
+                                    : "object-contain"
+                                }`}
+                                loading="lazy"
+                              />
+                            </div>
+                          );
+
+                          return project.url ? (
+                            <div
                               key={index}
-                              initial={{ opacity: 0, y: 20 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 1.8, delay: index * 0.2 }}
                               className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md"
                             >
                               <div className="absolute top-3 right-3">
-                                <Link
-                                  to={`/article/${slugify(article.title)}`}
+                                <a
+                                  href={project.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                   className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
                                 >
                                   <Eye className="h-5 w-5 text-gray-600" />
-                                </Link>
+                                </a>
                               </div>
                               <div className="p-3 flex flex-col gap-2 flex-1">
-                                <div className="pr-12">
-                                  <h3
-                                    className="text-[20px] font-semibold mb-1 dark:text-black title-font"
-                                    style={{
-                                      letterSpacing: "-0.01em",
-                                    }}
-                                  >
-                                    {article.title}
-                                  </h3>
-                                </div>
-                                <div className="flex-1 flex flex-col">
-                                  {article.description && (
-                                    <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1">
-                                      {article.description}
-                                    </p>
-                                  )}
+                                {ProjectCard}
+                              </div>
+                              {ProjectImage}
+                            </div>
+                          ) : (
+                            <div
+                              key={index}
+                              className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md"
+                            >
+                              <div className="absolute top-3 right-3">
+                                <div className="bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-md w-10 h-10 flex items-center justify-center">
+                                  <Eye className="h-5 w-5 text-gray-600" />
                                 </div>
                               </div>
-                              <div className="relative aspect-[3/2] overflow-visible -mx-3 -mb-3">
-                                <img
-                                  src={`${
-                                    (article as any).cardImage || article.image
-                                  }?v=${Date.now()}`}
-                                  alt={article.title}
-                                  className="absolute inset-0 h-full w-full object-cover"
-                                />
+                              <div className="p-3 flex flex-col gap-2 flex-1">
+                                {ProjectCard}
                               </div>
-                            </motion.div>
-                          ))}
-                      </div>
-                      <div className="mt-8">
-                        <Link
-                          to="/archive"
-                          className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
-                        >
-                          View Archive
-                        </Link>
-                      </div>
+                              {ProjectImage}
+                            </div>
+                          );
+                        })}
                     </div>
-                  </section>
-                )}
-
-                {/* Work Section */}
-                {isSectionVisible() && (
-                  <section id="work" className="py-12 sm:py-16 lg:py-20">
-                    <div className="container mx-auto px-4 sm:px-8">
-                      <SectionHeader
-                        title="Design"
-                        subtitle={content.work.subtitle}
-                        className="mb-8"
-                        showArchiveLink={false}
-                      />
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {getVisibleDesignWork(content.work.projects)
-                          .filter(
-                            (project: any) =>
-                              project.title !== "3D Conversion UX Plan"
-                          )
-                          .map((project: any, index) => {
-                            const ProjectCard = (
-                              <div className="flex flex-col gap-2 flex-1">
-                                <div className="pr-12">
-                                  <h3
-                                    className="text-[20px] font-semibold mb-1 dark:text-black title-font"
-                                    style={{
-                                      letterSpacing: "-0.01em",
-                                    }}
-                                  >
-                                    {project.title}
-                                  </h3>
-                                  {project.description && (
-                                    <p className="text-sm text-gray-600 dark:text-gray-600 mb-2">
-                                      {project.description}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            );
-
-                            const ProjectImage = (
-                              <div
-                                className={`relative ${
-                                  project.title === "Vintage Form Design"
-                                    ? "aspect-[4/3]"
-                                    : "aspect-[5/3]"
-                                } overflow-visible -mx-3 -mb-3`}
-                              >
-                                <img
-                                  src={`${project.image}?v=${Date.now()}`}
-                                  alt={project.alt || project.title}
-                                  className={`absolute inset-0 h-full w-full ${
-                                    project.title === "Hex Code Pop Art"
-                                      ? "object-cover scale-102"
-                                      : project.title === "Vintage Form Design"
-                                      ? "object-contain scale-90"
-                                      : "object-contain"
-                                  }`}
-                                  loading="lazy"
-                                />
-                              </div>
-                            );
-
-                            return project.url ? (
-                              <div
-                                key={index}
-                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md"
-                              >
-                                <div className="absolute top-3 right-3">
-                                  <a
-                                    href={project.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
-                                  >
-                                    <Eye className="h-5 w-5 text-gray-600" />
-                                  </a>
-                                </div>
-                                <div className="p-3 flex flex-col gap-2 flex-1">
-                                  {ProjectCard}
-                                </div>
-                                {ProjectImage}
-                              </div>
-                            ) : (
-                              <div
-                                key={index}
-                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md"
-                              >
-                                <div className="absolute top-3 right-3">
-                                  <div className="bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-md w-10 h-10 flex items-center justify-center">
-                                    <Eye className="h-5 w-5 text-gray-600" />
-                                  </div>
-                                </div>
-                                <div className="p-3 flex flex-col gap-2 flex-1">
-                                  {ProjectCard}
-                                </div>
-                                {ProjectImage}
-                              </div>
-                            );
-                          })}
-                      </div>
-                      <div className="mt-8">
-                        <Link
-                          to="/design-archive"
-                          className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
-                        >
-                          View Design Archive
-                        </Link>
-                      </div>
+                    <div className="mt-8">
+                      <Link
+                        to="/design-archive"
+                        className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                      >
+                        View Design Archive
+                      </Link>
                     </div>
-                  </section>
-                )}
+                  </div>
+                </section>
 
                 {/* Career Timeline Section */}
                 <section id="career" className="py-12 sm:py-16 lg:py-20">
@@ -1062,9 +1049,6 @@ function App() {
           <Route path="/article/:slug" element={<Article />} />
           <Route path="/archive" element={<Archive />} />
           <Route path="/design-archive" element={<DesignArchive />} />
-          <Route path="/admin-login" element={<AdminLogin />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin-music" element={<AdminMusic />} />
           <Route path="/music-player" element={<MusicPlayer />} />
           <Route path="/writing-gallery" element={<WritingGallery />} />
           <Route path="/design-system" element={<DesignSystem />} />

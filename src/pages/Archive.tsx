@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { content } from "../content";
 import { slugify } from "../utils/slugify";
-import { getVisibleArticles } from "../utils/articleVisibility";
 import { ArrowLeft, Search, Calendar } from "lucide-react";
 
 export default function Archive() {
@@ -22,7 +21,7 @@ export default function Archive() {
 
   // Filter articles based on search term and visibility
   const filteredArticles = useMemo(() => {
-    return getVisibleArticles(content.articles.items)
+    return content.articles.items
       .filter((article) => {
         const matchesSearch =
           article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -51,8 +50,8 @@ export default function Archive() {
             Articles Archive
           </h1>
           <p className="text-base text-gray-600 dark:text-gray-400 mb-8">
-            Browse all {getVisibleArticles(content.articles.items).length}{" "}
-            articles by date or search for specific content.
+            Browse all {content.articles.items.length} articles by date or
+            search for specific content.
           </p>
 
           {/* Search Controls */}
@@ -72,8 +71,8 @@ export default function Archive() {
 
           {/* Results Count */}
           <div className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-            Showing {filteredArticles.length} of{" "}
-            {getVisibleArticles(content.articles.items).length} articles
+            Showing {filteredArticles.length} of {content.articles.items.length}{" "}
+            articles
             {searchTerm && ` matching "${searchTerm}"`}
           </div>
         </div>
