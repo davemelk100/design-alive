@@ -336,14 +336,16 @@ function App() {
                       className="max-w-4xl flex flex-col items-start"
                     >
                       <p className="text-base text-muted-foreground leading-relaxed text-left">
-                        Senior Product Designer with 15+ years of experience
-                        creating accessible, intuitive digital experiences
-                        across diverse industries. I lead projects end-to-end -
-                        from research to polished interfaces - modernizing
-                        dashboards, onboarding, and e-commerce while improving
-                        clarity and accessibility. Skilled in cross-functional
-                        collaboration, user-centered strategy, and applying
-                        advanced methods like AI to solve complex challenges and
+                        Senior User Experience Designer and Product Designer
+                        with over 15 years of experience creating accessible,
+                        intuitive digital experiences across diverse industries.
+                        I have led projects from initial research through to
+                        polished interfaces, modernizing dashboards, onboarding
+                        processes, and e-commerce platforms while improving
+                        clarity and accessibility. I am skilled in cross
+                        functional collaboration, user centered and product
+                        strategy, and applying advanced methods such as
+                        artificial intelligence to solve complex challenges and
                         drive inclusive innovation.
                       </p>
                     </motion.div>

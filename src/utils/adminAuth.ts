@@ -8,9 +8,9 @@ export const checkAdminAuth = (): boolean => {
 export const logoutAdmin = (): void => {
   try {
     adminSessionStorage.clearSession();
-      } catch (error) {
+  } catch (error) {
       // Error during logout
-    }
+  }
 };
 
 export const getSessionInfo = (): {
