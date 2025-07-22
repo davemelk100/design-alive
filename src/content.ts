@@ -1095,6 +1095,10 @@ export const content = {
         excerpt:
           "are moustaches still ironic? seems like people are taking them serious again.",
       },
+      {
+        excerpt:
+          "Every time I click the 'white' option on a job application, some sort of ss type person or whatever",
+      },
     ],
   },
   designSystem: {

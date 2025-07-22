@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and writing gallery pages
+Disallow: /admin
+Disallow: /writing-gallery
+
+# Allow crawling of main content
+Allow: /article/
+Allow: /archive
+Allow: /design-archive
+Allow: /design-system
+Allow: /music-player
+
+# Sitemap (if you have one)
+# Sitemap: https://yourdomain.com/sitemap.xml 

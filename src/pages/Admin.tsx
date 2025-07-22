@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Users, FileText, Palette } from "lucide-react";
+import { ArrowLeft, FileText, Palette } from "lucide-react";
 import { content } from "../content";
 
 const Admin: React.FC = () => {
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
