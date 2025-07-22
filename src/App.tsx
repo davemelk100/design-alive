@@ -13,6 +13,7 @@ import {
   Briefcase,
   Settings,
   Users,
+  AlertCircle,
 } from "lucide-react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { useState, useEffect } from "react";
@@ -40,7 +41,6 @@ const DesignArchive = lazy(() => import("./pages/DesignArchive"));
 const Admin = lazy(() => import("./pages/Admin"));
 const MusicPlayer = lazy(() => import("./pages/MusicPlayer"));
 const WritingGallery = lazy(() => import("./pages/WritingGallery"));
-const DesignSystem = lazy(() => import("./pages/DesignSystem"));
 import { slugify } from "./utils/slugify";
 import LazyVideo from "./components/LazyVideo";
 
@@ -311,15 +311,15 @@ function App() {
                         >
                           Personal
                         </button>
-                        <Link
-                          to="/design-system"
+                        <button
+                          onClick={() => handleNavClick("design-system")}
                           className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase whitespace-nowrap hover:bg-gray-100 dark:hover:bg-gray-800"
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
                         >
                           Design System
-                        </Link>
+                        </button>
                       </div>
                     </div>
                     {/* Summary Row (unchanged) */}
@@ -467,9 +467,11 @@ function App() {
                               Personal
                             </span>
                           </button>
-                          <Link
-                            to="/design-system"
-                            onClick={() => setIsMobileMenuOpen(false)}
+                          <button
+                            onClick={() => {
+                              handleNavClick("design-system");
+                              setIsMobileMenuOpen(false);
+                            }}
                             className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
                             <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
@@ -478,7 +480,7 @@ function App() {
                             <span className="text-sm font-semibold whitespace-nowrap text-gray-900 dark:text-gray-100">
                               Design System
                             </span>
-                          </Link>
+                          </button>
                           <div className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md">
                             <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                               <ThemeToggle className="text-white" />
@@ -1057,6 +1059,260 @@ function App() {
                     </div>
                   </div>
                 </section>
+
+                {/* Design System Section */}
+                <section id="design-system" className="py-12 sm:py-16 lg:py-20">
+                  <div className="container mx-auto px-4 sm:px-8">
+                    <SectionHeader
+                      title="Design System"
+                      subtitle="Component library and design tokens"
+                      className="mb-8"
+                      showUpArrow={true}
+                    />
+
+                    {/* Colors */}
+                    <section className="mb-16">
+                      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                        Colors
+                      </h2>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        <div className="space-y-2">
+                          <div className="w-full h-20 bg-primary rounded-lg"></div>
+                          <div className="text-sm">
+                            <p className="font-medium">Primary</p>
+                            <p className="text-gray-600">Primary</p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="w-full h-20 bg-secondary rounded-lg"></div>
+                          <div className="text-sm">
+                            <p className="font-medium">Secondary</p>
+                            <p className="text-gray-600">Secondary</p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="w-full h-20 bg-gray-100 rounded-lg"></div>
+                          <div className="text-sm">
+                            <p className="font-medium">Gray 100</p>
+                            <p className="text-gray-600">Gray 100</p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="w-full h-20 bg-gray-200 rounded-lg"></div>
+                          <div className="text-sm">
+                            <p className="font-medium">Gray 200</p>
+                            <p className="text-gray-600">Gray 200</p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="w-full h-20 bg-gray-600 rounded-lg"></div>
+                          <div className="text-sm">
+                            <p className="font-medium text-white">Gray 600</p>
+                            <p className="text-gray-300">Gray 600</p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="w-full h-20 bg-gray-900 rounded-lg"></div>
+                          <div className="text-sm">
+                            <p className="font-medium text-white">Gray 900</p>
+                            <p className="text-gray-300">Gray 900</p>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+
+                    {/* Typography */}
+                    <section className="mb-16">
+                      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                        Typography
+                      </h2>
+                      <div className="space-y-4">
+                        <div>
+                          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                            Whereas disregard and contempt for human rights have
+                            resulted
+                          </h1>
+                          <p className="text-sm text-gray-600">
+                            Component library and design tokens
+                          </p>
+                        </div>
+                        <div>
+                          <h2 className="text-3xl font-semibold text-gray-900 mb-2">
+                            Whereas disregard and contempt for human rights have
+                            resulted
+                          </h2>
+                          <p className="text-sm text-gray-600">
+                            Component library and design tokens
+                          </p>
+                        </div>
+                        <div>
+                          <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                            Whereas disregard and contempt for human rights have
+                            resulted
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            Component library and design tokens
+                          </p>
+                        </div>
+                        <div>
+                          <h4 className="text-xl font-semibold text-gray-900 mb-2">
+                            Whereas disregard and contempt for human rights have
+                            resulted
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Component library and design tokens
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-base text-gray-700 mb-2">
+                            Whereas disregard and contempt for human rights have
+                            resulted in barbarous acts which have outraged the
+                            conscience of mankind.
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Body text - This is a paragraph with regular body
+                            text styling.
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600 mb-2">
+                            Whereas disregard and contempt for human rights have
+                            resulted in barbarous acts which have outraged the
+                            conscience of mankind.
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Small text - This is smaller text for captions and
+                            secondary information.
+                          </p>
+                        </div>
+                      </div>
+                    </section>
+
+                    {/* Buttons */}
+                    <section className="mb-16">
+                      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                        Buttons
+                      </h2>
+                      <div className="flex flex-wrap gap-4">
+                        <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                          Primary Button
+                        </button>
+                        <button className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors">
+                          Secondary Button
+                        </button>
+                        <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                          Tertiary Button
+                        </button>
+                        <button className="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors">
+                          Outline Primary
+                        </button>
+                        <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                          Outline Secondary
+                        </button>
+                      </div>
+                    </section>
+
+                    {/* Cards */}
+                    <section className="mb-16">
+                      <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                        Cards
+                      </h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="group relative overflow-hidden rounded-lg bg-gray-100/80">
+                          <div className="absolute top-3 right-3 z-20">
+                            <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+                              <Eye className="h-5 w-5 text-gray-600" />
+                            </div>
+                          </div>
+                          <div className="p-6">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                              Background Card
+                            </h3>
+                            <p className="text-gray-700">Background Card</p>
+                          </div>
+                        </div>
+
+                        <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
+                          <div className="absolute top-3 right-3 z-20">
+                            <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+                              <Eye className="h-5 w-5 text-gray-600" />
+                            </div>
+                          </div>
+                          <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                            <div className="pr-12 flex items-center gap-2">
+                              <h3
+                                className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                style={{
+                                  letterSpacing: "-0.01em",
+                                }}
+                              >
+                                Video Card
+                              </h3>
+                            </div>
+                            <div className="flex-1 flex flex-col">
+                              <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1"></p>
+                            </div>
+                          </div>
+                          <div className="absolute inset-0 overflow-hidden z-0">
+                            <LazyVideo
+                              src="/video/jersey.mp4"
+                              className="w-full h-full object-cover opacity-70"
+                              autoPlay={true}
+                              muted={true}
+                              loop={true}
+                              playsInline={true}
+                            />
+                          </div>
+                        </div>
+                        <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
+                          <div className="absolute top-3 right-3 z-20">
+                            <div className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center">
+                              <Eye className="h-5 w-5 text-gray-600" />
+                            </div>
+                          </div>
+                          <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                            <div className="pr-12 flex items-center gap-2">
+                              <h3
+                                className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                style={{
+                                  letterSpacing: "-0.01em",
+                                }}
+                              >
+                                Lab Card
+                              </h3>
+                              {/* Greyscale colored balls */}
+                              <div className="flex items-center gap-1 ml-2">
+                                {[
+                                  "#6b7280", // Gray 500
+                                  "#9ca3af", // Gray 400
+                                  "#d1d5db", // Gray 300
+                                  "#4b5563", // Gray 600
+                                  "#374151", // Gray 700
+                                  "#1f2937", // Gray 800
+                                ].map((color, i) => (
+                                  <span
+                                    key={i}
+                                    style={{
+                                      display: "inline-block",
+                                      width: 18,
+                                      height: 18,
+                                      borderRadius: "50%",
+                                      background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                      boxShadow: "0 1px 2px rgba(0,0,0,0.08)",
+                                    }}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            <div className="flex-1 flex flex-col">
+                              <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1"></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </section>
               </>
             }
           />
@@ -1066,7 +1322,6 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/music-player" element={<MusicPlayer />} />
           <Route path="/writing-gallery" element={<WritingGallery />} />
-          <Route path="/design-system" element={<DesignSystem />} />
         </Routes>
       </Suspense>
 
