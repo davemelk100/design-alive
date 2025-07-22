@@ -13,7 +13,6 @@ import {
   Briefcase,
   Settings,
   Users,
-  AlertCircle,
 } from "lucide-react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { useState, useEffect } from "react";
@@ -191,7 +190,7 @@ function App() {
                       {/* Mobile: Title left-aligned */}
                       <div className="flex xl:hidden items-center justify-start w-full">
                         <h1
-                          className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none relative z-10"
+                          className="text-[clamp(1.5rem,4vw,3rem)] font-bold mb-1 title-font leading-none relative z-10"
                           style={{ letterSpacing: "-0.06em" }}
                         >
                           {content.siteInfo.subtitle}
@@ -223,7 +222,7 @@ function App() {
                       {/* Desktop: Title on left */}
                       <div className="hidden xl:flex items-center">
                         <h1
-                          className="text-[clamp(1.75rem,5vw,3.5rem)] font-bold mb-1 title-font leading-none relative z-10"
+                          className="text-[clamp(1.5rem,4vw,3rem)] font-bold mb-1 title-font leading-none relative z-10"
                           style={{ letterSpacing: "-0.06em" }}
                         >
                           {content.siteInfo.subtitle}
@@ -507,9 +506,10 @@ function App() {
                       className="mb-8"
                       showUpArrow={false}
                     />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {content.currentProjects.projects.map(
-                        (project, index) => (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {content.currentProjects.projects
+                        .filter((project) => project.title !== "Chatbots")
+                        .map((project, index) => (
                           <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}
@@ -540,28 +540,6 @@ function App() {
                                 </h3>
                                 {/* Colored balls for each Lab card */}
                                 <div className="flex items-center gap-1 ml-2">
-                                  {project.title === "Chatbots" &&
-                                    [
-                                      "#ff8c42", // Orange from Chatbots animation
-                                      "#17a2b8", // Blue from Chatbots animation
-                                      "#6c757d", // Gray from Chatbots animation
-                                      "#e67e22", // Darker Orange from Chatbots animation
-                                      "#138496", // Darker Blue from Chatbots animation
-                                      "#58", // Darker Gray from Chatbots animation
-                                    ].map((color, i) => (
-                                      <span
-                                        key={i}
-                                        style={{
-                                          display: "inline-block",
-                                          width: 14,
-                                          height: 14,
-                                          borderRadius: "50%",
-                                          background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
-                                          boxShadow:
-                                            "0 1px 2px rgba(0,0,0,0.08)",
-                                        }}
-                                      />
-                                    ))}
                                   {project.title === "Design Panes" &&
                                     [
                                       "#ffd700", // Gold from Design Panes animation
@@ -617,18 +595,14 @@ function App() {
                             <div className="absolute inset-0 overflow-hidden z-0">
                               <img
                                 src={
-                                  project.title === "Chatbots"
-                                    ? `/img/chatbot-animation.svg?v=${Date.now()}`
-                                    : project.title === "Design Panes"
+                                  project.title === "Design Panes"
                                     ? `/img/design-panes-alt2.svg?v=${Date.now()}`
                                     : project.title === "AI NUI"
                                     ? `/img/ai-nui-alt2.svg?v=${Date.now()}`
                                     : `/img/lab.svg?v=${Date.now()}`
                                 }
                                 alt={
-                                  project.title === "Chatbots"
-                                    ? "Design Panes Animation"
-                                    : project.title === "Design Panes"
+                                  project.title === "Design Panes"
                                     ? "Design Panes"
                                     : project.title === "AI NUI"
                                     ? "Design Panes Animation"
@@ -638,8 +612,7 @@ function App() {
                               />
                             </div>
                           </motion.div>
-                        )
-                      )}
+                        ))}
                     </div>
                   </div>
                 </section>

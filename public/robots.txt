@@ -9,7 +9,6 @@ Disallow: /writing-gallery
 Allow: /article/
 Allow: /archive
 Allow: /design-archive
-Allow: /design-system
 Allow: /music-player
 
 # Sitemap (if you have one)
