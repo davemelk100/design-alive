@@ -51,7 +51,7 @@ export const content = {
 
   work: {
     title: "Design Work",
-    subtitle: "There's so much more I'm not able to show, sadly.",
+    subtitle: "There is much more I am unable to show, unfortunately.",
     projects: [
       // Temporarily hidden until admin panel is fully operational
       // {
@@ -134,7 +134,7 @@ export const content = {
   testimonials: {
     title: "Kudos",
     subtitle:
-      "Thank you to all who've said such kind things about me. I feel like Sally Field on Oscar night.",
+      "Thank you to everyone who has shared such kind words. I feel like Sally Field on Oscar night.",
     items: [
       {
         quote:
@@ -189,7 +189,7 @@ export const content = {
 
   career: {
     title: "Career Journey",
-    subtitle: "Organizations that helped me make a living",
+    subtitle: "Organizations that have supported my career",
     positions: [
       {
         title: "Senior Product Designer",
@@ -238,7 +238,8 @@ export const content = {
 
   stories: {
     title: "Stories",
-    subtitle: "Examples of how I approach problem-solving and solutioning",
+    subtitle:
+      "Examples of my approach to problem solving and creating solutions.",
     items: [
       {
         title: "Selling Accessibility",
@@ -293,7 +294,7 @@ export const content = {
 
   currentProjects: {
     title: "Lab",
-    subtitle: "New design and development projects",
+    subtitle: "New design and development projects.",
     projects: [
       {
         title: "Chatbots",
@@ -322,8 +323,7 @@ export const content = {
 
   articles: {
     title: "Articles",
-    subtitle:
-      "As an English major, I felt this wasn't a big stretch to start cranking these out.",
+    subtitle: "As an English major, I found it natural to start writing these.",
     items: [
       // {
       //   id: "mobile-web-seamless-experience",
@@ -1018,11 +1018,11 @@ export const content = {
 <div class="point-section">
   <h3><strong>Point:</strong></h3>
   <ul>
-    <li>Be specific – Say exactly what you want changed or created.</li>
-    <li>Add context – Explain the background, use case, or goals.</li>
-    <li>Set constraints – Define limits, formats, or requirements.</li>
-    <li>Request reasoning – Ask the AI to explain its choices, if helpful.</li>
-    <li>Refine – Don't settle for the first response; adjust and try again.</li>
+    <li>Be specific - Say exactly what you want changed or created.</li>
+    <li>Add context - Explain the background, use case, or goals.</li>
+    <li>Set constraints - Define limits, formats, or requirements.</li>
+    <li>Request reasoning - Ask the AI to explain its choices, if helpful.</li>
+    <li>Refine - Don't settle for the first response; adjust and try again.</li>
   </ul>
 </div>
 
@@ -1294,40 +1294,42 @@ export const content = {
   writingGallery: {
     title: "Writing Gallery",
     backToSite: "Back to Site",
-    storageNotAvailable: "Storage not available",
+    storageNotAvailable: "Storage not available.",
     defaultPieces: [
-      { excerpt: "AI has made it less scary for when their parents die." },
       {
-        excerpt:
-          "I mean, you came to see Shattered Realm, so now's not the time to whine about your helmet being split in two.",
+        excerpt: "AI has made it less frightening for when their parents die.",
       },
       {
         excerpt:
-          "Thick Goth Chick Gets Ozempic and Leaves Harcore Dude Who Held Her Down All Those Years Before She Got Skinny",
+          "You came to see Shattered Realm, so now is not the time to complain about your helmet being split in two.",
       },
       {
         excerpt:
-          "Chick Loses Weight, Boyfriend Knows This Is Just The First Step, Next Thing You Know She'll Ask To Go Outside",
+          "Thick Goth Chick Gets Ozempic and Leaves Hardcore Guy Who Held Her Down All Those Years Before She Got Thin.",
       },
       {
         excerpt:
-          "(image of the wild wild country guy bagwan shri rajneesh) SOUNDGARDEN",
+          "Woman Loses Weight, Boyfriend Realizes This Is Just the First Step. Next, She Will Want to Go Outside.",
       },
       {
         excerpt:
-          "are moustaches still ironic? seems like people are taking them serious again.",
+          "(Image of the Wild Wild Country guru Bhagwan Shri Rajneesh) SOUNDGARDEN.",
       },
       {
         excerpt:
-          "Every time I click the 'white' option on a job application, some sort of ss type person or whatever",
+          "Are moustaches still ironic? It seems people are taking them seriously again.",
+      },
+      {
+        excerpt:
+          "Every time I click the 'white' option on a job application, some sort of SS-type person or whatever.",
       },
     ],
   },
   designSystem: {
     title: "Design System",
-    subtitle: "Component library and design tokens",
+    subtitle: "Component library and design tokens.",
     backToSite: "Back to Site",
-    storageNotAvailable: "Storage not available",
+    storageNotAvailable: "Storage not available.",
     sections: {
       colors: "Colors",
       typography: "Typography",

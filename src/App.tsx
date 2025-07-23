@@ -329,21 +329,7 @@ function App() {
                       className="max-w-4xl flex flex-col items-start"
                     >
                       <p className="text-base text-muted-foreground leading-relaxed text-left">
-                        Senior User Experience Designer and Product Designer
-                        with over 15 years of experience creating accessible,
-                        intuitive digital experiences across diverse industries.
-                        I have led projects from initial research through to
-                        polished interfaces, modernizing dashboards, onboarding
-                        processes, and e-commerce platforms while improving
-                        clarity and accessibility. I am skilled in cross
-                        functional collaboration, user centered and product
-                        strategy, and applying advanced methods such as
-                        artificial intelligence to solve complex challenges and
-                        drive inclusive innovation. My expertise extends to
-                        technical writing and content strategy, where I craft
-                        clear, engaging documentation and thought leadership
-                        pieces that bridge the gap between complex technical
-                        concepts and accessible user experiences.
+                      Senior User Experience Designer and Product Designer with over 15 years of experience creating accessible, intuitive digital experiences across diverse industries. Projects have ranged from initial research to polished interfaces, including modernized dashboards, onboarding processes, and e-commerce platforms—always with a focus on clarity and accessibility. Skilled in cross-functional collaboration, user-centered and product strategy, and applying advanced methods such as artificial intelligence to solve complex challenges and drive inclusive innovation. Expertise also includes technical writing and content strategy, crafting clear, engaging documentation and thought leadership that bridge the gap between complex technical concepts and accessible user experiences.
                       </p>
                     </motion.div>
                   </div>
@@ -1115,7 +1101,6 @@ function App() {
                         <div>
                           <h1 className="text-4xl font-bold text-gray-900 mb-2">
                             Whereas disregard and contempt for human rights have
-                            resulted
                           </h1>
                           <p className="text-sm text-gray-600">
                             Component library and design tokens
@@ -1124,7 +1109,6 @@ function App() {
                         <div>
                           <h2 className="text-3xl font-semibold text-gray-900 mb-2">
                             Whereas disregard and contempt for human rights have
-                            resulted
                           </h2>
                           <p className="text-sm text-gray-600">
                             Component library and design tokens
@@ -1133,7 +1117,6 @@ function App() {
                         <div>
                           <h3 className="text-2xl font-semibold text-gray-900 mb-2">
                             Whereas disregard and contempt for human rights have
-                            resulted
                           </h3>
                           <p className="text-sm text-gray-600">
                             Component library and design tokens
@@ -1142,7 +1125,6 @@ function App() {
                         <div>
                           <h4 className="text-xl font-semibold text-gray-900 mb-2">
                             Whereas disregard and contempt for human rights have
-                            resulted
                           </h4>
                           <p className="text-sm text-gray-600">
                             Component library and design tokens
