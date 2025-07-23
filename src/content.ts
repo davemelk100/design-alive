@@ -1319,7 +1319,7 @@ export const content = {
       },
       {
         excerpt:
-          "Every time I click the 'white' option on a job application, some sort of SS-type person or whatever.",
+          "Every time I click the 'white' option on a job application, I feel like I'm rolling the dice.",
       },
     ],
   },
