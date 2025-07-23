@@ -521,18 +521,18 @@ function App() {
                                 }}
                                 className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md h-[400px]"
                               >
-                                <div className="absolute top-3 right-3 z-20">
+                                <div className="absolute top-2 right-2 z-20">
                                   <a
                                     href={project.demo}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center relative z-20"
+                                    className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-1.5 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center relative z-20"
                                     aria-label={`View demo: ${project.title}`}
                                   >
-                                    <ExternalLink className="h-5 w-5 text-gray-600" />
+                                    <ExternalLink className="h-4 w-4 text-gray-600" />
                                   </a>
                                 </div>
-                                <div className="absolute inset-0 overflow-hidden z-0 p-6">
+                                <div className="absolute inset-0 overflow-hidden z-0 p-4">
                                   <img
                                     src={
                                       project.title === "Design Panes"
@@ -648,7 +648,7 @@ function App() {
                                 transition={{ duration: 2.4, delay: 0.2 }}
                                 className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md h-[400px]"
                               >
-                                <div className="absolute top-3 right-3 z-20">
+                                <div className="absolute top-2 right-2 z-20">
                                   {story.hasModal ? (
                                     <button
                                       onClick={() =>
@@ -658,13 +658,13 @@ function App() {
                                           subtitle: story.subtitle,
                                         })
                                       }
-                                      className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                                      className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-1.5 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
                                     >
-                                      <Eye className="h-5 w-5 text-gray-600" />
+                                      <Eye className="h-4 w-4 text-gray-600" />
                                     </button>
                                   ) : (
-                                    <div className="bg-white/80 backdrop-blur-sm rounded-full p-2 shadow-md w-10 h-10 flex items-center justify-center">
-                                      <Eye className="h-5 w-5 text-gray-600" />
+                                    <div className="bg-white/80 backdrop-blur-sm rounded-full p-1.5 shadow-md w-8 h-8 flex items-center justify-center">
+                                      <Eye className="h-4 w-4 text-gray-600" />
                                     </div>
                                   )}
                                 </div>
@@ -692,7 +692,7 @@ function App() {
                                     )}
                                   </div>
                                 </div>
-                                <div className="absolute inset-0 overflow-hidden z-0 p-6">
+                                <div className="absolute inset-0 overflow-hidden z-0 p-4">
                                   {story.image ? (
                                     <img
                                       src={story.image}
@@ -732,13 +732,13 @@ function App() {
                           {content.articles.items
                             .filter(
                               (article) =>
-                                article.title !==
-                                  "API Tokens: The Digital Arcade" &&
                                 article.title !== "Commit Message Fatigue" &&
                                 article.title !==
                                   "Information Architecture Is Not Sacred" &&
                                 article.title !==
-                                  "AI is hydrated with user research data"
+                                  "AI is hydrated with user research data" &&
+                                article.title !==
+                                  "Prompting for Heuristic Evaluations"
                             )
                             .sort(
                               (a, b) =>
@@ -783,7 +783,7 @@ function App() {
                                     )}
                                   </div>
                                 </div>
-                                <div className="absolute inset-0 overflow-hidden z-0 p-6">
+                                <div className="absolute inset-0 overflow-hidden z-0 p-4">
                                   <img
                                     src={`${
                                       (article as any).cardImage ||
@@ -842,7 +842,7 @@ function App() {
                               );
 
                               const ProjectImage = (
-                                <div className="absolute inset-0 overflow-hidden z-0 p-6">
+                                <div className="absolute inset-0 overflow-hidden z-0 p-4">
                                   <img
                                     src={project.image}
                                     alt={project.alt || project.title}
