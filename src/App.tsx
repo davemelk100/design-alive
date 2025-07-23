@@ -11,7 +11,6 @@ import {
   Palette,
   Briefcase,
   Settings,
-  Users,
 } from "lucide-react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { useState, useEffect } from "react";
