@@ -72,6 +72,15 @@ export const audioTracks: AudioTrack[] = [
     duration: "1:55",
     filename: "nothing-specifically.mp3",
   },
+  {
+    id: 8,
+    title: "You Son of A",
+    artist: "BALM",
+    url: "/audio/You-Son-Of-A.mp3",
+    uniqueUrl: "/audio/You-Son-Of-A.mp3",
+    duration: "2:30",
+    filename: "You-Son-Of-A.mp3",
+  },
 ];
 
 // Helper function to get track by unique URL
