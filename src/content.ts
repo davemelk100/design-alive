@@ -306,14 +306,14 @@ export const content = {
 
       {
         title: "Design Panes",
-        description: "Design, designs, and designers",
+        description: "Design, designs, and designers.",
         technologies: ["React", "TypeScript", "Tailwind", "Figma API"],
         demo: "https://designpanes.com/",
         image: "/img/design-panes.png",
       },
       {
         title: "AI NUI",
-        description: "Let's make the AI UI better",
+        description: "Let's make the AI UI better.",
         technologies: ["React", "AI", "UI/UX", "Design Systems"],
         demo: "https://aiuinui.netlify.app/",
         image: "/img/ai-user-research.png",
