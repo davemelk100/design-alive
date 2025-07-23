@@ -497,7 +497,9 @@ function App() {
                 )}
 
                 {/* Lab and Stories Section */}
-                <section className="py-12 sm:py-16 lg:py-20">
+                <section className="py-12 sm:py-16 lg:py-20 relative">
+                  {/* Vertical center line */}
+                  <div className="hidden lg:block absolute top-24 left-1/2 transform -translate-x-1/2 w-[0.5px] bg-gray-200 h-[calc(100%-6rem)] z-0"></div>
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                       {/* Lab Section */}
@@ -521,7 +523,7 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md h-[380px]"
+                                className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md h-[320px]"
                               >
                                 <div className="absolute top-2 right-2 z-20">
                                   <a
@@ -554,10 +556,10 @@ function App() {
                                   />
                                 </div>
                                 <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                  <div className="pr-12 bg-white/60 backdrop-blur-sm rounded-lg p-2">
+                                  <div className="pr-12 bg-white/40 backdrop-blur-sm rounded-lg p-2">
                                     <div className="flex items-center gap-2">
                                       <h3
-                                        className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                        className="text-[18px] font-semibold mb-1 dark:text-black title-font"
                                         style={{
                                           letterSpacing: "-0.01em",
                                         }}
@@ -584,8 +586,8 @@ function App() {
                                               aria-hidden="true"
                                               style={{
                                                 display: "inline-block",
-                                                width: 14,
-                                                height: 14,
+                                                width: 12,
+                                                height: 12,
                                                 borderRadius: "50%",
                                                 background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
                                                 boxShadow:
@@ -608,8 +610,8 @@ function App() {
                                               aria-hidden="true"
                                               style={{
                                                 display: "inline-block",
-                                                width: 14,
-                                                height: 14,
+                                                width: 12,
+                                                height: 12,
                                                 borderRadius: "50%",
                                                 background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
                                                 boxShadow:
@@ -648,7 +650,7 @@ function App() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 2.4, delay: 0.2 }}
-                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md h-[380px]"
+                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md h-[320px]"
                               >
                                 <div className="absolute top-2 right-2 z-20">
                                   {story.hasModal ? (
@@ -671,9 +673,9 @@ function App() {
                                   )}
                                 </div>
                                 <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                  <div className="pr-12 bg-white/60 backdrop-blur-sm rounded-lg p-2">
+                                  <div className="pr-12 bg-white/40 backdrop-blur-sm rounded-lg p-2">
                                     <h3
-                                      className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                      className="text-[18px] font-semibold mb-1 dark:text-black title-font"
                                       style={{
                                         letterSpacing: "-0.01em",
                                       }}
@@ -719,7 +721,9 @@ function App() {
                 </section>
 
                 {/* Articles and Design Section */}
-                <section className="py-12 sm:py-16 lg:py-20">
+                <section className="py-12 sm:py-16 lg:py-20 relative">
+                  {/* Vertical center line */}
+                  <div className="hidden lg:block absolute top-24 left-1/2 transform -translate-x-1/2 w-[0.5px] bg-gray-200 h-[calc(100%-12rem)] z-0"></div>
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                       {/* Articles Section */}
@@ -757,7 +761,7 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md h-[380px]"
+                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md h-[320px]"
                               >
                                 <div className="absolute top-2 right-2 z-20">
                                   <Link
@@ -769,9 +773,9 @@ function App() {
                                   </Link>
                                 </div>
                                 <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                  <div className="pr-12 bg-white/60 backdrop-blur-sm rounded-lg p-2">
+                                  <div className="pr-12 bg-white/40 backdrop-blur-sm rounded-lg p-2">
                                     <h3
-                                      className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                      className="text-[18px] font-semibold mb-1 dark:text-black title-font"
                                       style={{
                                         letterSpacing: "-0.01em",
                                       }}
@@ -825,9 +829,9 @@ function App() {
                             .map((project: any, index) => {
                               const ProjectCard = (
                                 <div className="flex flex-col gap-2 flex-1">
-                                  <div className="pr-12 bg-white/60 backdrop-blur-sm rounded-lg p-2">
+                                  <div className="pr-12 bg-white/40 backdrop-blur-sm rounded-lg p-2">
                                     <h3
-                                      className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                                      className="text-[18px] font-semibold mb-1 dark:text-black title-font"
                                       style={{
                                         letterSpacing: "-0.01em",
                                       }}
@@ -866,7 +870,7 @@ function App() {
                               return project.url ? (
                                 <div
                                   key={index}
-                                  className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md project-card h-[380px]"
+                                  className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md project-card h-[320px]"
                                 >
                                   <div className="absolute top-2 right-2 z-20">
                                     <a
@@ -887,7 +891,7 @@ function App() {
                               ) : (
                                 <div
                                   key={index}
-                                  className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md project-card h-[380px]"
+                                  className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md project-card h-[320px]"
                                 >
                                   <div className="absolute top-2 right-2 z-20">
                                     <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]">

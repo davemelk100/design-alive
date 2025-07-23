@@ -566,11 +566,11 @@ export const content = {
       },
       {
         id: "vibe-coding-vs-vibe-engineering",
-        title: "Vibe Coding vs Vibe Engineering",
+        title: "Vibe Coding v Vibe Engineering",
         description:
-          "The subtle art of making things work right, not just feel right.",
+          "Making things work right, not just feel right.",
         url: "vibe-coding-vs-vibe-engineering",
-        content: `<h1>Vibe Coding vs Vibe Engineering</h1>
+        content: `<h1>Vibe Coding v Vibe Engineering</h1>
 
 <h2>The Vibe Check</h2>
 
