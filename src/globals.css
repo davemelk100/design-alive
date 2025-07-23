@@ -207,4 +207,56 @@
   .counter-point-section li {
     @apply mb-2 text-gray-700 dark:text-gray-300;
   }
+
+  /* Volume slider styling */
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #8b5cf6;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #8b5cf6;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .slider::-webkit-slider-track {
+    height: 8px;
+    border-radius: 4px;
+    background: transparent;
+  }
+
+  .slider::-moz-range-track {
+    height: 8px;
+    border-radius: 4px;
+    background: transparent;
+  }
+
+  /* Dark mode slider styling */
+  .dark .slider::-webkit-slider-thumb {
+    background: #8b5cf6;
+    border: 2px solid #374151;
+  }
+
+  .dark .slider::-moz-range-thumb {
+    background: #8b5cf6;
+    border: 2px solid #374151;
+  }
 }

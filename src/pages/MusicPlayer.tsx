@@ -35,7 +35,14 @@ const MusicPlayer: React.FC = () => {
       audioRef.current.load();
       audioRef.current.volume = volume;
     }
-  }, [volume]);
+  }, []);
+
+  // Update volume when volume state changes
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : volume;
+    }
+  }, [volume, isMuted]);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -64,7 +71,12 @@ const MusicPlayer: React.FC = () => {
       );
       audioRef.current.src = tracks[index].uniqueUrl;
       audioRef.current.load();
-      audioRef.current.volume = isMuted ? 0 : volume;
+      // Ensure volume is properly set after loading
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.volume = isMuted ? 0 : volume;
+        }
+      }, 100);
     }
   };
 
@@ -117,19 +129,21 @@ const MusicPlayer: React.FC = () => {
     if (audioRef.current) {
       audioRef.current.volume = newVolume;
     }
-    if (newVolume === 0) {
-      setIsMuted(true);
-    } else {
-      setIsMuted(false);
-    }
+    // Update mute state based on volume
+    setIsMuted(newVolume === 0);
+
+    // Add visual feedback
+    console.log(`Volume changed to: ${Math.round(newVolume * 100)}%`);
   };
 
   const toggleMute = () => {
     if (audioRef.current) {
       if (isMuted) {
+        // Unmute: restore previous volume
         audioRef.current.volume = volume;
         setIsMuted(false);
       } else {
+        // Mute: set volume to 0
         audioRef.current.volume = 0;
         setIsMuted(true);
       }
@@ -274,6 +288,7 @@ const MusicPlayer: React.FC = () => {
             <button
               onClick={toggleMute}
               className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors"
+              aria-label={isMuted ? "Unmute" : "Mute"}
             >
               {isMuted ? (
                 <VolumeX className="h-5 w-5 text-gray-700 dark:text-gray-300" />
@@ -281,15 +296,26 @@ const MusicPlayer: React.FC = () => {
                 <Volume2 className="h-5 w-5 text-gray-700 dark:text-gray-300" />
               )}
             </button>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={isMuted ? 0 : volume}
-              onChange={handleVolumeChange}
-              className="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-            />
+            <div className="flex items-center gap-2">
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={isMuted ? 0 : volume}
+                onChange={handleVolumeChange}
+                className="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 slider"
+                style={{
+                  background: `linear-gradient(to right, #8b5cf6 0%, #8b5cf6 ${
+                    (isMuted ? 0 : volume) * 100
+                  }%, #e5e7eb ${(isMuted ? 0 : volume) * 100}%, #e5e7eb 100%)`,
+                }}
+                aria-label="Volume control"
+              />
+              <span className="text-sm text-gray-600 dark:text-gray-400 min-w-[3rem]">
+                {Math.round((isMuted ? 0 : volume) * 100)}%
+              </span>
+            </div>
           </div>
 
           {/* Playlist */}
