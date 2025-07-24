@@ -11,6 +11,7 @@ import {
   Palette,
   Briefcase,
   Settings,
+  Heart,
 } from "lucide-react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { useState, useEffect } from "react";
@@ -22,7 +23,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import ArticleModal from "./components/ArticleModal";
 import { ThemeProvider } from "./context/ThemeContext";
 import ThemeToggle from "./components/ThemeToggle";
-import MobileTrayMenu from "./components/MobileTrayMenu";
+// import MobileTrayMenu from "./components/MobileTrayMenu";
 import {
   Routes,
   Route,
@@ -113,48 +114,76 @@ function App() {
     subtitle?: string;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Scroll to top on route change
+  // Scroll to top on route change (but not for internal navigation)
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // Only scroll to top if we're not navigating to a specific section
+    if (!location.hash) {
+      window.scrollTo(0, 0);
+    }
   }, [location.pathname]);
 
   // Close mobile menu when route changes
   useEffect(() => {
-    setIsMobileMenuOpen(false);
+    // setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
   const handleNavClick = (id: string) => {
+    console.log("handleNavClick called with id:", id);
+
+    const scrollToElement = () => {
+      return new Promise((resolve) => {
+        const element = document.getElementById(id);
+        if (element) {
+          const headerHeight = 80;
+          const elementPosition = element.offsetTop - headerHeight;
+          console.log(
+            "Scrolling to element:",
+            id,
+            "at position:",
+            elementPosition
+          );
+          window.scrollTo({
+            top: elementPosition,
+            behavior: "smooth",
+          });
+          resolve(true);
+        } else {
+          console.log("Element not found:", id);
+          console.log(
+            "Available IDs:",
+            Array.from(document.querySelectorAll("[id]")).map((el) => el.id)
+          );
+          resolve(false);
+        }
+      });
+    };
+
+    const attemptScroll = async () => {
+      // Try multiple times with increasing delays
+      for (let i = 0; i < 5; i++) {
+        const success = await scrollToElement();
+        if (success) break;
+
+        // Wait before next attempt
+        await new Promise((resolve) => setTimeout(resolve, 100 * (i + 1)));
+      }
+    };
+
     if (location.pathname !== "/") {
       // If we're not on the main page, navigate to main page first
       navigate("/");
       // Wait for navigation to complete before scrolling
       setTimeout(() => {
-        const element = document.getElementById(id);
-        if (element) {
-          const headerHeight = 64; // Approximate header height
-          const elementPosition = element.offsetTop - headerHeight;
-          window.scrollTo({
-            top: elementPosition,
-            behavior: "smooth",
-          });
-        }
-      }, 100);
+        attemptScroll();
+      }, 300);
     } else {
-      // If we're already on the main page, just scroll
-      const element = document.getElementById(id);
-      if (element) {
-        const headerHeight = 64; // Approximate header height
-        const elementPosition = element.offsetTop - headerHeight;
-        window.scrollTo({
-          top: elementPosition,
-          behavior: "smooth",
-        });
-      }
+      // If we're already on the main page, try scrolling immediately
+      attemptScroll();
     }
   };
 
@@ -251,9 +280,8 @@ function App() {
                         </div>
                       </div>
                     </div>
-                    {/* Nav Links and Icons Row */}
-                    <div className="hidden md:flex md:flex-col lg:flex-row md:items-stretch lg:items-center gap-4 w-full">
-                      {/* Desktop Navigation Links */}
+                    {/* Nav Links and Icons Row - COMMENTED OUT */}
+                    {/* <div className="hidden md:flex md:flex-col lg:flex-row md:items-stretch lg:items-center gap-4 w-full">
                       <div className="hidden md:flex w-full justify-start lg:justify-start rounded-lg pl-0 pr-0 py-2 items-center gap-2 sm:gap-3">
                         <button
                           onClick={() => handleNavClick("current-projects")}
@@ -300,15 +328,15 @@ function App() {
                         >
                           Career
                         </button>
-                        {/* <button
-                          onClick={() => handleNavClick("personal")}
+                        <button
+                          onClick={() => handleNavClick("testimonials")}
                           className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
                         >
-                          Personal
-                        </button> */}
+                          Testimonials
+                        </button>
                         <button
                           onClick={() => handleNavClick("design-system")}
                           className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase whitespace-nowrap hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -319,7 +347,7 @@ function App() {
                           Design System
                         </button>
                       </div>
-                    </div>
+                    </div> */}
                     {/* Summary Row (unchanged) */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -350,15 +378,15 @@ function App() {
                   </div>
                 </section>
 
-                {/* Mobile Menu Dropdown */}
-                {isMobileMenuOpen && (
+                {/* Mobile Menu - DISABLED */}
+                {false && (
                   <AnimatePresence>
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-[9999] xl:hidden"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                      onClick={() => {}}
                     >
                       <motion.div
                         initial={{ y: "100%" }}
@@ -375,7 +403,7 @@ function App() {
                         <div className="flex items-center justify-between mb-3">
                           <h2 className="text-lg font-semibold">Navigation</h2>
                           <button
-                            onClick={() => setIsMobileMenuOpen(false)}
+                            onClick={() => {}}
                             className="bg-gray-100 hover:bg-gray-200 rounded-full p-2 transition-colors"
                             aria-label="Close menu"
                           >
@@ -386,7 +414,7 @@ function App() {
                           <button
                             onClick={() => {
                               handleNavClick("current-projects");
-                              setIsMobileMenuOpen(false);
+                              // setIsMobileMenuOpen(false);
                             }}
                             className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
@@ -400,7 +428,7 @@ function App() {
                           <button
                             onClick={() => {
                               handleNavClick("stories");
-                              setIsMobileMenuOpen(false);
+                              // setIsMobileMenuOpen(false);
                             }}
                             className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
@@ -414,7 +442,7 @@ function App() {
                           <button
                             onClick={() => {
                               handleNavClick("articles");
-                              setIsMobileMenuOpen(false);
+                              // setIsMobileMenuOpen(false);
                             }}
                             className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
@@ -428,7 +456,7 @@ function App() {
                           <button
                             onClick={() => {
                               handleNavClick("work");
-                              setIsMobileMenuOpen(false);
+                              // setIsMobileMenuOpen(false);
                             }}
                             className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
@@ -442,7 +470,7 @@ function App() {
                           <button
                             onClick={() => {
                               handleNavClick("career");
-                              setIsMobileMenuOpen(false);
+                              // setIsMobileMenuOpen(false);
                             }}
                             className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
@@ -469,8 +497,22 @@ function App() {
                           </button> */}
                           <button
                             onClick={() => {
+                              handleNavClick("testimonials");
+                              // setIsMobileMenuOpen(false);
+                            }}
+                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
+                          >
+                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                              <Heart className="h-4 w-4 text-white" />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                              Testimonials
+                            </span>
+                          </button>
+                          <button
+                            onClick={() => {
                               handleNavClick("design-system");
-                              setIsMobileMenuOpen(false);
+                              // setIsMobileMenuOpen(false);
                             }}
                             className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
                           >
@@ -497,12 +539,13 @@ function App() {
 
                 {/* Lab and Stories Section */}
                 <section className="py-12 sm:py-16 lg:py-20 relative">
-                  {/* Vertical center line */}
-                  <div className="hidden lg:block absolute top-24 left-1/2 transform -translate-x-1/2 w-[0.5px] bg-gray-200 h-[calc(100%-6rem)] z-0"></div>
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                       {/* Lab Section */}
-                      <div>
+                      <div
+                        id="current-projects"
+                        className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg"
+                      >
                         <SectionHeader
                           title={content.currentProjects.title}
                           subtitle={content.currentProjects.subtitle}
@@ -631,7 +674,10 @@ function App() {
                       </div>
 
                       {/* Stories Section */}
-                      <div>
+                      <div
+                        id="stories"
+                        className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg"
+                      >
                         <SectionHeader
                           title={content.stories.title}
                           subtitle={content.stories.subtitle}
@@ -721,12 +767,13 @@ function App() {
 
                 {/* Articles and Design Section */}
                 <section className="py-12 sm:py-16 lg:py-20 relative">
-                  {/* Vertical center line */}
-                  <div className="hidden lg:block absolute top-24 left-1/2 transform -translate-x-1/2 w-[0.5px] bg-gray-200 h-[calc(100%-12rem)] z-0"></div>
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                       {/* Articles Section */}
-                      <div>
+                      <div
+                        id="articles"
+                        className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg"
+                      >
                         <SectionHeader
                           title="Articles"
                           subtitle={content.articles.subtitle}
@@ -812,7 +859,10 @@ function App() {
                       </div>
 
                       {/* Design Section */}
-                      <div>
+                      <div
+                        id="work"
+                        className="border border-gray-300 dark:border-gray-600 p-6 rounded-lg"
+                      >
                         <SectionHeader
                           title="Design"
                           subtitle={content.work.subtitle}
@@ -914,6 +964,45 @@ function App() {
                           </Link>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Testimonials Section */}
+                <section id="testimonials" className="py-12 sm:py-16 lg:py-20">
+                  <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+                    <SectionHeader
+                      title={content.testimonials.title}
+                      subtitle={content.testimonials.subtitle}
+                      className="mb-8 sm:mb-16"
+                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {content.testimonials.items.map((testimonial, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1.8, delay: index * 0.2 }}
+                          className="group relative overflow-hidden rounded-lg bg-gray-100/80 shadow-md p-6"
+                        >
+                          <div className="flex flex-col h-full">
+                            <div className="flex-1">
+                              <p className="text-sm text-gray-700 dark:text-gray-700 leading-relaxed mb-4 italic">
+                                "{testimonial.quote}"
+                              </p>
+                            </div>
+                            <div className="mt-auto">
+                              <p className="text-sm font-semibold text-gray-900 dark:text-gray-900">
+                                {testimonial.author}
+                              </p>
+                              <p className="text-xs text-gray-600 dark:text-gray-600">
+                                {testimonial.role}
+                              </p>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
                   </div>
                 </section>
@@ -1327,7 +1416,7 @@ function App() {
           onClose={() => setSelectedStory(null)}
         />
       )}
-      <MobileTrayMenu />
+      {/* <MobileTrayMenu /> */}
     </div>
   );
 }

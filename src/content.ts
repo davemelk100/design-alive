@@ -131,9 +131,9 @@ export const content = {
   },
 
   testimonials: {
-    title: "Kudos",
+    title: "Testimonials",
     subtitle:
-      "Thank you to everyone who has shared such kind words. I feel like Sally Field on Oscar night.",
+      "Thank you to everyone who has shared such kind words.",
     items: [
       {
         quote:
