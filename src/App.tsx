@@ -1042,7 +1042,7 @@ function App() {
                       ))}
                     </div>
                     {/* Certifications & Education */}
-                    <div className="mt-10 pt-6 max-w-3xl">
+                    <div className="mt-4 pt-2 max-w-3xl">
                       <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200 text-sm">
                         Certifications
                       </div>
