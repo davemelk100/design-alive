@@ -238,7 +238,7 @@ export const content = {
   stories: {
     title: "Stories",
     subtitle:
-      "Examples of my approach to problem solving and creating solutions.",
+      "My approach to problem solving and solution delivery.",
     items: [
       {
         title: "Selling Accessibility",
@@ -253,7 +253,7 @@ export const content = {
         hasModal: true,
       },
       {
-        title: "AI-Driven Interpretation",
+        title: "AI Interpretation",
         subtitle: "Researching, and designing an AI design feature",
         description: "",
         category: "AI Design",
@@ -292,7 +292,7 @@ export const content = {
 
   currentProjects: {
     title: "Lab",
-    subtitle: "New design and development projects.",
+    subtitle: "New design and development projects",
     projects: [
       {
         title: "Chatbots",

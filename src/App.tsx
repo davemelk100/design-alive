@@ -16,7 +16,7 @@ import {
   List,
 } from "lucide-react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { content } from "./content";
 import Preloader from "./components/Preloader";
@@ -609,7 +609,7 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md h-[320px]"
+                                className="group relative overflow-visible rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 shadow-md h-[320px]"
                               >
                                 <div className="absolute top-2 right-2 z-20">
                                   <a
@@ -619,7 +619,7 @@ function App() {
                                     className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center relative z-20 mt-[5px] mr-[5px]"
                                     aria-label={`View demo: ${project.title}`}
                                   >
-                                    <ExternalLink className="h-4 w-4 text-gray-600" />
+                                    <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
                                   </a>
                                 </div>
                                 <div className="absolute inset-0 overflow-hidden z-0 p-2">
@@ -642,19 +642,19 @@ function App() {
                                   />
                                 </div>
                                 <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                  <div className="pr-12 bg-white/40 backdrop-blur-sm rounded-lg p-2">
-                                    <div className="flex items-center gap-2">
+                                  <div className="pr-12 bg-white/40 dark:bg-transparent backdrop-blur-sm rounded-lg p-2">
+                                    <div className="flex flex-col gap-1">
                                       <h3
-                                        className="text-[18px] font-semibold mb-1 dark:text-black title-font"
+                                        className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap"
                                         style={{
                                           letterSpacing: "-0.01em",
                                         }}
                                       >
                                         {project.title}
                                       </h3>
-                                      {/* Colored balls for each Lab card */}
+                                      {/* Colored balls for each Lab card, now on a new row */}
                                       <div
-                                        className="flex items-center gap-1 ml-2"
+                                        className="flex items-center gap-1 mt-1 mb-[10px]"
                                         role="presentation"
                                       >
                                         {project.title === "Design Panes" &&
@@ -707,7 +707,7 @@ function App() {
                                           ))}
                                       </div>
                                     </div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1">
+                                    <p className="text-sm text-gray-600 dark:text-white mb-2 flex-1">
                                       {project.description}
                                     </p>
                                   </div>
@@ -747,7 +747,7 @@ function App() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 2.4, delay: 0.2 }}
-                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md h-[320px]"
+                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md h-[320px]"
                               >
                                 <div className="absolute top-2 right-2 z-20">
                                   {story.hasModal ? (
@@ -761,18 +761,18 @@ function App() {
                                       }
                                       className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
                                     >
-                                      <Eye className="h-4 w-4 text-gray-600" />
+                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
                                     </button>
                                   ) : (
                                     <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]">
-                                      <Eye className="h-4 w-4 text-gray-600" />
+                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
                                     </div>
                                   )}
                                 </div>
                                 <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                  <div className="pr-12 bg-white/40 backdrop-blur-sm rounded-lg p-2">
+                                  <div className="pr-12 bg-white/40 dark:bg-transparent backdrop-blur-sm rounded-lg p-2">
                                     <h3
-                                      className="text-[18px] font-semibold mb-1 dark:text-black title-font"
+                                      className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap"
                                       style={{
                                         letterSpacing: "-0.01em",
                                       }}
@@ -780,14 +780,14 @@ function App() {
                                       {story.title}
                                     </h3>
                                     {story.subtitle && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-600 mb-2">
+                                      <p className="text-sm text-gray-600 dark:text-white mb-2">
                                         {story.subtitle}
                                       </p>
                                     )}
                                   </div>
                                   <div className="flex-1 flex flex-col">
                                     {story.description && (
-                                      <p className="text-black mb-2 dark:text-black text-card-body flex-1">
+                                      <p className="text-black mb-2 dark:text-white text-card-body flex-1">
                                         {story.description}
                                       </p>
                                     )}
@@ -867,7 +867,7 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md h-[320px]"
+                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md h-[320px]"
                               >
                                 <div className="absolute top-2 right-2 z-20">
                                   <Link
@@ -875,13 +875,13 @@ function App() {
                                     className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
                                     aria-label={`View article: ${article.title}`}
                                   >
-                                    <Eye className="h-4 w-4 text-gray-600" />
+                                    <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
                                   </Link>
                                 </div>
                                 <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                  <div className="pr-12 bg-white/40 backdrop-blur-sm rounded-lg p-2">
+                                  <div className="pr-12 bg-white/40 dark:bg-transparent backdrop-blur-sm rounded-lg p-2">
                                     <h3
-                                      className="text-[18px] font-semibold mb-1 dark:text-black title-font"
+                                      className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white"
                                       style={{
                                         letterSpacing: "-0.01em",
                                       }}
@@ -889,7 +889,7 @@ function App() {
                                       {article.title}
                                     </h3>
                                     {article.description && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1">
+                                      <p className="text-sm text-gray-600 dark:text-white mb-2 flex-1">
                                         {article.description}
                                       </p>
                                     )}
@@ -946,9 +946,9 @@ function App() {
                             .map((project: any, index) => {
                               const ProjectCard = (
                                 <div className="flex flex-col gap-2 flex-1">
-                                  <div className="pr-12 bg-white/40 backdrop-blur-sm rounded-lg p-2">
+                                  <div className="pr-12 bg-white/40 dark:bg-transparent backdrop-blur-sm rounded-lg p-2">
                                     <h3
-                                      className="text-[18px] font-semibold mb-1 dark:text-black title-font"
+                                      className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white"
                                       style={{
                                         letterSpacing: "-0.01em",
                                       }}
@@ -956,7 +956,7 @@ function App() {
                                       {project.title}
                                     </h3>
                                     {project.description && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-600 mb-2">
+                                      <p className="text-sm text-gray-600 dark:text-white mb-2">
                                         {project.description}
                                       </p>
                                     )}
@@ -987,7 +987,7 @@ function App() {
                               return project.url ? (
                                 <div
                                   key={index}
-                                  className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md project-card h-[320px]"
+                                  className="group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md project-card h-[320px]"
                                 >
                                   <div className="absolute top-2 right-2 z-20">
                                     <a
@@ -997,26 +997,34 @@ function App() {
                                       className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
                                       aria-label={`View project: ${project.title}`}
                                     >
-                                      <Eye className="h-4 w-4 text-gray-600" />
+                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
                                     </a>
                                   </div>
                                   <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                    {ProjectCard}
+                                    {React.cloneElement(ProjectCard, {
+                                      className:
+                                        (ProjectCard.props.className || "") +
+                                        " text-black dark:text-white",
+                                    })}
                                   </div>
                                   {ProjectImage}
                                 </div>
                               ) : (
                                 <div
                                   key={index}
-                                  className="group relative overflow-hidden rounded-lg bg-gray-100/80 flex flex-col shadow-md project-card h-[320px]"
+                                  className="group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md project-card h-[320px]"
                                 >
                                   <div className="absolute top-2 right-2 z-20">
                                     <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]">
-                                      <Eye className="h-4 w-4 text-gray-600" />
+                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
                                     </div>
                                   </div>
                                   <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                    {ProjectCard}
+                                    {React.cloneElement(ProjectCard, {
+                                      className:
+                                        (ProjectCard.props.className || "") +
+                                        " text-black dark:text-white",
+                                    })}
                                   </div>
                                   {ProjectImage}
                                 </div>
