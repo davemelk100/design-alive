@@ -711,11 +711,11 @@ function App() {
                                           ))}
                                         {project.title === "HealthAware" &&
                                           [
-                                            "#0891b2", // Sky Blue - monitoring/calm
-                                            "#7c3aed", // Violet - innovation/tech
-                                            "#059669", // Emerald - health/growth
-                                            "#dc2626", // Red - alerts/attention
-                                            "#f97316", // Orange - energy/warning
+                                            "#64748b", // Slate - neutral/monitoring
+                                            "#94a3b8", // Slate Light - subtle/calm
+                                            "#475569", // Slate Dark - depth/contrast
+                                            "#cbd5e1", // Slate Lighter - soft/gentle
+                                            "#334155", // Slate Darker - sophisticated
                                           ].map((color, i) => (
                                             <span
                                               key={i}

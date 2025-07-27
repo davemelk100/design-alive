@@ -14,79 +14,79 @@
       }
       
       .primary-rotate {
-        animation: primaryRotate 60s linear infinite;
+        animation: primaryRotate 30s linear infinite;
       }
       
       .secondary-rotate {
-        animation: secondaryRotate 48s linear infinite reverse;
+        animation: secondaryRotate 24s linear infinite reverse;
       }
       
       .tertiary-rotate {
-        animation: tertiaryRotate 72s linear infinite;
+        animation: tertiaryRotate 36s linear infinite;
       }
       
       .quaternary-rotate {
-        animation: quaternaryRotate 84s linear infinite reverse;
+        animation: quaternaryRotate 42s linear infinite reverse;
       }
       
       .quinary-rotate {
-        animation: quinaryRotate 96s linear infinite;
+        animation: quinaryRotate 48s linear infinite;
       }
       
       .senary-rotate {
-        animation: senaryRotate 108s linear infinite reverse;
+        animation: senaryRotate 54s linear infinite reverse;
       }
       
       .septenary-rotate {
-        animation: septenaryRotate 120s linear infinite;
+        animation: septenaryRotate 60s linear infinite;
       }
       
       .octonary-rotate {
-        animation: octonaryRotate 132s linear infinite reverse;
+        animation: octonaryRotate 66s linear infinite reverse;
       }
       
       .nonary-rotate {
-        animation: nonaryRotate 144s linear infinite;
+        animation: nonaryRotate 72s linear infinite;
       }
       
       .denary-rotate {
-        animation: denaryRotate 156s linear infinite reverse;
+        animation: denaryRotate 78s linear infinite reverse;
       }
       
       .center-4d-rotate {
-        animation: center4DRotate 80s linear infinite;
+        animation: center4DRotate 40s linear infinite;
       }
       
       .floating {
-        animation: float 48s ease-in-out infinite;
+        animation: float 24s ease-in-out infinite;
       }
       
       .floating:nth-child(2) {
-        animation-delay: 12s;
+        animation-delay: 6s;
       }
       
       .floating:nth-child(3) {
-        animation-delay: 24s;
+        animation-delay: 12s;
       }
       
       .pulse {
-        animation: pulse 40s ease-in-out infinite;
+        animation: pulse 20s ease-in-out infinite;
       }
       
       .pulse:nth-child(2) {
-        animation-delay: 10s;
+        animation-delay: 5s;
       }
       
       .pulse:nth-child(3) {
-        animation-delay: 20s;
+        animation-delay: 10s;
       }
       
       .breathing {
-        animation: breathing 60s ease-in-out infinite;
+        animation: breathing 30s ease-in-out infinite;
       }
       
       .glow {
-        animation: glow 32s ease-in-out infinite;
+        animation: glow 16s ease-in-out infinite;
       }
       
       @keyframes primaryRotate {
