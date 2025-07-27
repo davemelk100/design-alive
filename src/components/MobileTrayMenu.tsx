@@ -93,6 +93,12 @@ const MobileTrayMenu: React.FC = () => {
                 >
                   Career
                 </button>
+                <button
+                  onClick={() => handleNavClick("skills-and-software")}
+                  className="w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                >
+                  Skills & Software
+                </button>
                 {/* <button
                   onClick={() => handleNavClick("personal")}
                   className="w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"

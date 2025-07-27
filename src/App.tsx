@@ -1201,6 +1201,63 @@ function App() {
                   </div>
                 </section>
 
+                {/* Skills and Software Section */}
+                <section
+                  id="skills-and-software"
+                  className="py-12 sm:py-16 lg:py-20"
+                >
+                  <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+                    <SectionHeader
+                      title={content.skillsAndSoftware.title}
+                      subtitle={content.skillsAndSoftware.subtitle}
+                      className="mb-8 sm:mb-6"
+                    />
+                    <div className="space-y-12">
+                      {content.skillsAndSoftware.categories.map(
+                        (category, categoryIndex) => (
+                          <motion.div
+                            key={category.name}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{
+                              duration: 0.8,
+                              delay: categoryIndex * 0.1,
+                            }}
+                            className="bg-gray-50/50 dark:bg-gray-800/50 rounded-lg p-6"
+                          >
+                            <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+                              {category.name}
+                            </h3>
+                            <div className="space-y-4">
+                              {category.skills.map((skill, skillIndex) => (
+                                <div
+                                  key={skillIndex}
+                                  className="border-l-4 border-orange-500 pl-4"
+                                >
+                                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">
+                                    {skill.skill}
+                                  </p>
+                                  <div className="flex flex-wrap gap-2">
+                                    {skill.software.map((tool, toolIndex) => (
+                                      <span
+                                        key={toolIndex}
+                                        className="inline-block px-3 py-1 text-xs bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-200 rounded-full border border-orange-200 dark:border-orange-800"
+                                      >
+                                        {tool}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </section>
+
                 {/* Personal Section */}
                 {/* <section id="personal" className="py-12 sm:py-16 lg:py-20">
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
