@@ -1,4 +1,4 @@
-const CACHE_NAME = "dm-2025-v3";
+const CACHE_NAME = "dm-2025-v4";
 const urlsToCache = ["/", "/index.html", "/favicon.svg"];
 
 // Install event - cache resources
@@ -12,11 +12,17 @@ self.addEventListener("install", (event) => {
 
 // Fetch event - serve from cache if available
 self.addEventListener("fetch", (event) => {
-  // Don't cache asset files with hashes - let them be fetched fresh
-  if (
-    event.request.url.includes("/assets/") &&
-    event.request.url.includes(".js")
-  ) {
+  const url = new URL(event.request.url);
+  
+  // Never cache JavaScript files - always fetch fresh
+  if (url.pathname.includes("/assets/") && url.pathname.endsWith(".js")) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+  
+  // Never cache CSS files - always fetch fresh
+  if (url.pathname.includes("/assets/") && url.pathname.endsWith(".css")) {
+    event.respondWith(fetch(event.request));
     return;
   }
 
