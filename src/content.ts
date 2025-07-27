@@ -132,8 +132,7 @@ export const content = {
 
   testimonials: {
     title: "Testimonials",
-    subtitle:
-      "Thank you to everyone who has shared such kind words.",
+    subtitle: "Thank you to everyone who has shared such kind words.",
     items: [
       {
         quote:
@@ -237,13 +236,11 @@ export const content = {
 
   stories: {
     title: "Stories",
-    subtitle:
-      "My approach to problem solving and solution delivery.",
+    subtitle: "My approach to problem solving and solution delivery.",
     items: [
       {
         title: "Selling Accessibility",
-        subtitle:
-          "Building an accessibility discipline",
+        subtitle: "Building an accessibility discipline",
         description: "",
         category: "UX Strategy",
         image: "/img/delta-story.png",
@@ -315,6 +312,13 @@ export const content = {
         technologies: ["React", "AI", "UI/UX", "Design Systems"],
         demo: "https://aiuinui.netlify.app/",
         image: "/img/ai-user-research.png",
+      },
+      {
+        title: "HealthAware",
+        description: "A health monitoring system for vehicles.",
+        technologies: ["React", "Health APIs", "IoT", "Real-time Data"],
+        demo: "https://my-health-powerered-vehicle.netlify.app/",
+        image: "/img/health-aware-animation.svg",
       },
     ],
   },
@@ -567,8 +571,7 @@ export const content = {
       {
         id: "vibe-coding-vs-vibe-engineering",
         title: "Vibe Coding v Vibe Engineering",
-        description:
-          "Making things work right, not just feel right.",
+        description: "Making things work right, not just feel right.",
         url: "vibe-coding-vs-vibe-engineering",
         content: `<h1>Vibe Coding v Vibe Engineering</h1>
 

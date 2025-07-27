@@ -629,6 +629,8 @@ function App() {
                                         ? `/img/design-panes-alt2.svg?v=${Date.now()}`
                                         : project.title === "AI NUI"
                                         ? `/img/ai-nui-alt2.svg?v=${Date.now()}`
+                                        : project.title === "HealthAware"
+                                        ? `/img/health-aware-animation.svg?v=${Date.now()}`
                                         : `/img/lab.svg?v=${Date.now()}`
                                     }
                                     alt={
@@ -636,6 +638,8 @@ function App() {
                                         ? "Design Panes"
                                         : project.title === "AI NUI"
                                         ? "Design Panes Animation"
+                                        : project.title === "HealthAware"
+                                        ? "HealthAware Animation"
                                         : "Lab"
                                     }
                                     className="absolute inset-0 h-full w-full object-contain object-bottom"
@@ -689,6 +693,29 @@ function App() {
                                             "#e55a2b", // Darker Orange from AI NUI animation
                                             "#457a", // Darker Teal from AI NUI animation
                                             "#58", // Darker Gray from AI NUI animation
+                                          ].map((color, i) => (
+                                            <span
+                                              key={i}
+                                              role="presentation"
+                                              aria-hidden="true"
+                                              style={{
+                                                display: "inline-block",
+                                                width: 12,
+                                                height: 12,
+                                                borderRadius: "50%",
+                                                background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                                boxShadow:
+                                                  "0 1px 2px rgba(0,0,0,0.08)",
+                                              }}
+                                            />
+                                          ))}
+                                        {project.title === "HealthAware" &&
+                                          [
+                                            "#0891b2", // Sky Blue - monitoring/calm
+                                            "#7c3aed", // Violet - innovation/tech
+                                            "#059669", // Emerald - health/growth
+                                            "#dc2626", // Red - alerts/attention
+                                            "#f97316", // Orange - energy/warning
                                           ].map((color, i) => (
                                             <span
                                               key={i}
