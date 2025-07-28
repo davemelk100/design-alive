@@ -570,7 +570,9 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className="group relative overflow-visible rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 shadow-md h-[320px]"
+                                className={`group relative overflow-visible rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 shadow-md ${
+                                  labView === "list" ? "h-[50px]" : "h-[320px]"
+                                }`}
                               >
                                 <div className="absolute top-2 right-2 z-20">
                                   <a
@@ -765,7 +767,11 @@ function App() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 2.4, delay: 0.2 }}
-                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md h-[320px]"
+                                className={`group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md ${
+                                  storiesView === "list"
+                                    ? "h-[50px]"
+                                    : "h-[320px]"
+                                }`}
                               >
                                 <div className="absolute top-2 right-2 z-20">
                                   {story.hasModal ? (
@@ -852,6 +858,23 @@ function App() {
                           showArchiveLink={false}
                           toggleView={setArticlesView}
                           viewMode={articlesView}
+                          icon={
+                            <a
+                              href="https://davemelk.substack.com/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                              aria-label="Substack"
+                            >
+                              <svg
+                                className="h-5 w-5 text-black"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                              >
+                                <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z" />
+                              </svg>
+                            </a>
+                          }
                         />
                         <div
                           className={
@@ -886,7 +909,11 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className="group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md h-[320px]"
+                                className={`group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md ${
+                                  articlesView === "list"
+                                    ? "h-[50px]"
+                                    : "h-[320px]"
+                                }`}
                               >
                                 <div className="absolute top-2 right-2 z-20">
                                   <Link
@@ -1017,7 +1044,11 @@ function App() {
                               return project.url ? (
                                 <div
                                   key={index}
-                                  className="group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md project-card h-[320px]"
+                                  className={`group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md project-card ${
+                                    designView === "list"
+                                      ? "h-[50px]"
+                                      : "h-[320px]"
+                                  }`}
                                 >
                                   <div className="absolute top-2 right-2 z-20">
                                     <a
@@ -1042,7 +1073,11 @@ function App() {
                               ) : (
                                 <div
                                   key={index}
-                                  className="group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md project-card h-[320px]"
+                                  className={`group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md project-card ${
+                                    designView === "list"
+                                      ? "h-[50px]"
+                                      : "h-[320px]"
+                                  }`}
                                 >
                                   <div className="absolute top-2 right-2 z-20">
                                     <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]">
