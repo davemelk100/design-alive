@@ -325,6 +325,7 @@ function App() {
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
+                          aria-label="Navigate to Lab section"
                         >
                           Lab
                         </button>
@@ -334,6 +335,7 @@ function App() {
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
+                          aria-label="Navigate to Stories section"
                         >
                           Stories
                         </button>
@@ -343,6 +345,7 @@ function App() {
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
+                          aria-label="Navigate to Articles section"
                         >
                           Articles
                         </button>
@@ -352,6 +355,7 @@ function App() {
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
+                          aria-label="Navigate to Designs section"
                         >
                           Designs
                         </button>
@@ -361,6 +365,7 @@ function App() {
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
+                          aria-label="Navigate to Career section"
                         >
                           Career
                         </button>
@@ -370,6 +375,7 @@ function App() {
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
+                          aria-label="Navigate to Skills and Software section"
                         >
                           Skills
                         </button>
@@ -379,6 +385,7 @@ function App() {
                           style={{
                             fontFamily: "Helvetica, Arial, sans-serif",
                           }}
+                          aria-label="Navigate to Design System section"
                         >
                           Design System
                         </button>
@@ -1234,7 +1241,7 @@ function App() {
                                     {skill.software.map((tool, toolIndex) => (
                                       <span
                                         key={toolIndex}
-                                        className="inline-block px-3 py-1 text-xs bg-[#D2691E]/10 dark:bg-[#D2691E]/20 text-[#D2691E] dark:text-[#E8A87C] rounded-full border border-[#D2691E]/30 dark:border-[#D2691E]/40"
+                                        className="inline-block px-3 py-1 text-xs bg-[#D2691E]/10 dark:bg-[#D2691E]/20 text-[rgb(133,58,4)] dark:text-[#E8A87C] rounded-full border border-[#D2691E]/30 dark:border-[#D2691E]/40"
                                       >
                                         {tool}
                                       </span>

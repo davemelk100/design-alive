@@ -281,7 +281,7 @@ export const content = {
           },
           {
             skill: "Facilitating and analyzing user testing sessions",
-            software: ["Useberry"],
+            software: ["Useberry", "UserTesting", "Maze"],
           },
           {
             skill: "Creating onboarding tutorials",

@@ -29,7 +29,7 @@ const MobileTrayMenu: React.FC = () => {
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className={`w-full backdrop-blur-sm rounded-lg p-3 shadow-md hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90`}
-            aria-label="Mobile menu"
+            aria-label="Toggle mobile navigation menu"
           >
             <Menu className="h-5 w-5" />
             <span className="text-sm font-medium">Menu</span>
@@ -48,7 +48,7 @@ const MobileTrayMenu: React.FC = () => {
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                aria-label="Close menu"
+                aria-label="Close mobile navigation menu"
               >
                 <X className="h-5 w-5 text-gray-600 dark:text-gray-400" />
               </button>
@@ -60,24 +60,28 @@ const MobileTrayMenu: React.FC = () => {
                 <button
                   onClick={() => handleNavClick("current-projects")}
                   className="w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                  aria-label="Navigate to Lab section"
                 >
                   Lab
                 </button>
                 <button
                   onClick={() => handleNavClick("stories")}
                   className="w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                  aria-label="Navigate to Stories section"
                 >
                   Stories
                 </button>
                 <button
                   onClick={() => handleNavClick("articles")}
                   className="w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                  aria-label="Navigate to Articles section"
                 >
                   Articles
                 </button>
                 <button
                   onClick={() => handleNavClick("work")}
                   className="w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                  aria-label="Navigate to Designs section"
                 >
                   Designs
                 </button>
@@ -85,18 +89,21 @@ const MobileTrayMenu: React.FC = () => {
                 <button
                   onClick={() => handleNavClick("career")}
                   className="w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                  aria-label="Navigate to Career section"
                 >
                   Career
                 </button>
                 <button
                   onClick={() => handleNavClick("skills-and-software")}
                   className="w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                  aria-label="Navigate to Skills and Software section"
                 >
                   Skills & Software
                 </button>
-                {/* <button
+                {/*                 <button
                   onClick={() => handleNavClick("personal")}
                   className="w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                  aria-label="Navigate to Personal section"
                 >
                   Personal
                 </button> */}
