@@ -574,162 +574,189 @@ function App() {
                                   labView === "list" ? "h-[50px]" : "h-[320px]"
                                 }`}
                               >
-                                <div className="absolute top-2 right-2 z-20">
-                                  <a
-                                    href={project.demo}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center relative z-20 mt-[5px] mr-[5px]"
-                                    aria-label={`View demo: ${project.title}`}
-                                  >
-                                    <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
-                                  </a>
-                                </div>
-                                <div className="absolute inset-0 overflow-hidden z-0 p-2">
-                                  <img
-                                    src={
-                                      project.title === "Design Panes"
-                                        ? `/img/design-panes-alt2.svg?v=${Date.now()}`
-                                        : project.title === "AI NUI"
-                                        ? `/img/ai-nui-alt2.svg?v=${Date.now()}`
-                                        : project.title === "HealthAware"
-                                        ? `/img/health-aware-animation.svg?v=${Date.now()}`
-                                        : project.title ===
-                                          "User Testing Config"
-                                        ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
-                                        : `/img/lab.svg?v=${Date.now()}`
-                                    }
-                                    alt={
-                                      project.title === "Design Panes"
-                                        ? "Design Panes"
-                                        : project.title === "AI NUI"
-                                        ? "Design Panes Animation"
-                                        : project.title === "HealthAware"
-                                        ? "HealthAware Animation"
-                                        : project.title ===
-                                          "User Testing Config"
-                                        ? "User Testing Config Animation"
-                                        : "Lab"
-                                    }
-                                    className="absolute inset-0 h-full w-full object-contain object-bottom"
-                                  />
-                                </div>
+                                {labView === "grid" && (
+                                  <div className="absolute top-2 right-2 z-20">
+                                    <a
+                                      href={project.demo}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center relative z-20 mt-[5px] mr-[5px]"
+                                      aria-label={`View demo: ${project.title}`}
+                                    >
+                                      <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
+                                    </a>
+                                  </div>
+                                )}
+                                {labView === "grid" && (
+                                  <div className="absolute inset-0 overflow-hidden z-0 p-2">
+                                    <img
+                                      src={
+                                        project.title === "Design Panes"
+                                          ? `/img/design-panes-alt2.svg?v=${Date.now()}`
+                                          : project.title === "AI NUI"
+                                          ? `/img/ai-nui-alt2.svg?v=${Date.now()}`
+                                          : project.title === "HealthAware"
+                                          ? `/img/health-aware-animation.svg?v=${Date.now()}`
+                                          : project.title ===
+                                            "User Testing Config"
+                                          ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
+                                          : `/img/lab.svg?v=${Date.now()}`
+                                      }
+                                      alt={
+                                        project.title === "Design Panes"
+                                          ? "Design Panes"
+                                          : project.title === "AI NUI"
+                                          ? "Design Panes Animation"
+                                          : project.title === "HealthAware"
+                                          ? "HealthAware Animation"
+                                          : project.title ===
+                                            "User Testing Config"
+                                          ? "User Testing Config Animation"
+                                          : "Lab"
+                                      }
+                                      className="absolute inset-0 h-full w-full object-contain object-bottom"
+                                    />
+                                  </div>
+                                )}
                                 <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                  <div className="pr-12 bg-white/40 dark:bg-transparent backdrop-blur-sm rounded-lg p-2">
+                                  <div
+                                    className={`rounded-lg p-2 ${
+                                      labView === "grid"
+                                        ? "bg-white/40 dark:bg-transparent backdrop-blur-sm pr-12"
+                                        : "flex items-center justify-between h-full"
+                                    }`}
+                                  >
                                     <div className="flex flex-col gap-1">
-                                      <h3
-                                        className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap"
-                                        style={{
-                                          letterSpacing: "-0.01em",
-                                        }}
-                                      >
-                                        {project.title}
-                                      </h3>
-                                      {/* Colored balls for each Lab card, now on a new row */}
-                                      <div
-                                        className="flex items-center gap-1 mt-1 mb-[10px]"
-                                        role="presentation"
-                                      >
-                                        {project.title === "Design Panes" &&
-                                          [
-                                            "#ffd700", // Gold from Design Panes animation
-                                            "#355c7d", // Deep Blue from Design Panes animation
-                                            "#88d498", // Soft Green from Design Panes animation
-                                            "#e6b800", // Darker Gold from Design Panes animation
-                                            "#26425a", // Darker Blue from Design Panes animation
-                                            "#5", // Darker Green from Design Panes animation
-                                          ].map((color, i) => (
-                                            <span
-                                              key={i}
-                                              role="presentation"
-                                              aria-hidden="true"
-                                              style={{
-                                                display: "inline-block",
-                                                width: 12,
-                                                height: 12,
-                                                borderRadius: "50%",
-                                                background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
-                                                boxShadow:
-                                                  "0 1px 2px rgba(0,0,0,0.08)",
-                                              }}
-                                            />
-                                          ))}
-                                        {project.title === "AI NUI" &&
-                                          [
-                                            "#ff6b35", // Orange from AI NUI animation
-                                            "#4ecdc4", // Teal from AI NUI animation
-                                            "#6c757d", // Gray from AI NUI animation
-                                            "#e55a2b", // Darker Orange from AI NUI animation
-                                            "#457a", // Darker Teal from AI NUI animation
-                                            "#58", // Darker Gray from AI NUI animation
-                                          ].map((color, i) => (
-                                            <span
-                                              key={i}
-                                              role="presentation"
-                                              aria-hidden="true"
-                                              style={{
-                                                display: "inline-block",
-                                                width: 12,
-                                                height: 12,
-                                                borderRadius: "50%",
-                                                background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
-                                                boxShadow:
-                                                  "0 1px 2px rgba(0,0,0,0.08)",
-                                              }}
-                                            />
-                                          ))}
-                                        {project.title === "HealthAware" &&
-                                          [
-                                            "#64748b", // Slate - neutral/monitoring
-                                            "#94a3b8", // Slate Light - subtle/calm
-                                            "#475569", // Slate Dark - depth/contrast
-                                            "#cbd5e1", // Slate Lighter - soft/gentle
-                                            "#334155", // Slate Darker - sophisticated
-                                          ].map((color, i) => (
-                                            <span
-                                              key={i}
-                                              role="presentation"
-                                              aria-hidden="true"
-                                              style={{
-                                                display: "inline-block",
-                                                width: 12,
-                                                height: 12,
-                                                borderRadius: "50%",
-                                                background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
-                                                boxShadow:
-                                                  "0 1px 2px rgba(0,0,0,0.08)",
-                                              }}
-                                            />
-                                          ))}
-                                        {project.title ===
-                                          "User Testing Config" &&
-                                          [
-                                            "#a67c52", // Brighter Warm Brown - neutral/testing
-                                            "#b8a095", // Brighter Brown Gray - subtle/calm
-                                            "#8b6b4f", // Brighter Brown Dark - depth/contrast
-                                            "#e8d5d0", // Brighter Light Beige - soft/gentle
-                                            "#7a5a45", // Brighter Brown Darker - sophisticated
-                                          ].map((color, i) => (
-                                            <span
-                                              key={i}
-                                              role="presentation"
-                                              aria-hidden="true"
-                                              style={{
-                                                display: "inline-block",
-                                                width: 12,
-                                                height: 12,
-                                                borderRadius: "50%",
-                                                background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
-                                                boxShadow:
-                                                  "0 1px 2px rgba(0,0,0,0.08)",
-                                              }}
-                                            />
-                                          ))}
+                                      <div className="flex items-center w-full">
+                                        <h3
+                                          className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap flex-1"
+                                          style={{
+                                            letterSpacing: "-0.01em",
+                                          }}
+                                        >
+                                          {project.title}
+                                        </h3>
+                                        {labView === "list" && (
+                                          <a
+                                            href={project.demo}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center ml-auto"
+                                            aria-label={`View demo: ${project.title}`}
+                                          >
+                                            <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
+                                          </a>
+                                        )}
                                       </div>
+                                      {/* Colored balls for each Lab card, now on a new row */}
+                                      {labView === "grid" && (
+                                        <div
+                                          className="flex items-center gap-1 mt-1 mb-[10px]"
+                                          role="presentation"
+                                        >
+                                          {project.title === "Design Panes" &&
+                                            [
+                                              "#ffd700", // Gold from Design Panes animation
+                                              "#355c7d", // Deep Blue from Design Panes animation
+                                              "#88d498", // Soft Green from Design Panes animation
+                                              "#e6b800", // Darker Gold from Design Panes animation
+                                              "#26425a", // Darker Blue from Design Panes animation
+                                              "#5", // Darker Green from Design Panes animation
+                                            ].map((color, i) => (
+                                              <span
+                                                key={i}
+                                                role="presentation"
+                                                aria-hidden="true"
+                                                style={{
+                                                  display: "inline-block",
+                                                  width: 12,
+                                                  height: 12,
+                                                  borderRadius: "50%",
+                                                  background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                                  boxShadow:
+                                                    "0 1px 2px rgba(0,0,0,0.08)",
+                                                }}
+                                              />
+                                            ))}
+                                          {project.title === "AI NUI" &&
+                                            [
+                                              "#ff6b35", // Orange from AI NUI animation
+                                              "#4ecdc4", // Teal from AI NUI animation
+                                              "#6c757d", // Gray from AI NUI animation
+                                              "#e55a2b", // Darker Orange from AI NUI animation
+                                              "#457a", // Darker Teal from AI NUI animation
+                                              "#58", // Darker Gray from AI NUI animation
+                                            ].map((color, i) => (
+                                              <span
+                                                key={i}
+                                                role="presentation"
+                                                aria-hidden="true"
+                                                style={{
+                                                  display: "inline-block",
+                                                  width: 12,
+                                                  height: 12,
+                                                  borderRadius: "50%",
+                                                  background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                                  boxShadow:
+                                                    "0 1px 2px rgba(0,0,0,0.08)",
+                                                }}
+                                              />
+                                            ))}
+                                          {project.title === "HealthAware" &&
+                                            [
+                                              "#64748b", // Slate - neutral/monitoring
+                                              "#94a3b8", // Slate Light - subtle/calm
+                                              "#475569", // Slate Dark - depth/contrast
+                                              "#cbd5e1", // Slate Lighter - soft/gentle
+                                              "#334155", // Slate Darker - sophisticated
+                                            ].map((color, i) => (
+                                              <span
+                                                key={i}
+                                                role="presentation"
+                                                aria-hidden="true"
+                                                style={{
+                                                  display: "inline-block",
+                                                  width: 12,
+                                                  height: 12,
+                                                  borderRadius: "50%",
+                                                  background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                                  boxShadow:
+                                                    "0 1px 2px rgba(0,0,0,0.08)",
+                                                }}
+                                              />
+                                            ))}
+                                          {project.title ===
+                                            "User Testing Config" &&
+                                            [
+                                              "#a67c52", // Brighter Warm Brown - neutral/testing
+                                              "#b8a095", // Brighter Brown Gray - subtle/calm
+                                              "#8b6b4f", // Brighter Brown Dark - depth/contrast
+                                              "#e8d5d0", // Brighter Light Beige - soft/gentle
+                                              "#7a5a45", // Brighter Brown Darker - sophisticated
+                                            ].map((color, i) => (
+                                              <span
+                                                key={i}
+                                                role="presentation"
+                                                aria-hidden="true"
+                                                style={{
+                                                  display: "inline-block",
+                                                  width: 12,
+                                                  height: 12,
+                                                  borderRadius: "50%",
+                                                  background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                                  boxShadow:
+                                                    "0 1px 2px rgba(0,0,0,0.08)",
+                                                }}
+                                              />
+                                            ))}
+                                        </div>
+                                      )}
                                     </div>
-                                    <p className="text-sm text-gray-600 dark:text-white mb-2 flex-1">
-                                      {project.description}
-                                    </p>
+                                    {labView === "grid" && (
+                                      <p className="text-sm text-gray-600 dark:text-white mb-2 flex-1">
+                                        {project.description}
+                                      </p>
+                                    )}
                                   </div>
                                 </div>
                               </motion.div>
@@ -773,67 +800,102 @@ function App() {
                                     : "h-[320px]"
                                 }`}
                               >
-                                <div className="absolute top-2 right-2 z-20">
-                                  {story.hasModal ? (
-                                    <button
-                                      onClick={() =>
-                                        setSelectedStory({
-                                          title: story.title,
-                                          content: story.content,
-                                          subtitle: story.subtitle,
-                                        })
-                                      }
-                                      className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
-                                      aria-label={`View ${story.title} story`}
-                                    >
-                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                    </button>
-                                  ) : (
-                                    <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]">
-                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                  <div className="pr-12 bg-white/40 dark:bg-transparent backdrop-blur-sm rounded-lg p-2">
-                                    <h3
-                                      className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap"
-                                      style={{
-                                        letterSpacing: "-0.01em",
-                                      }}
-                                    >
-                                      {story.title}
-                                    </h3>
-                                    {story.subtitle && (
-                                      <p className="text-sm text-gray-600 dark:text-white mb-2">
-                                        {story.subtitle}
-                                      </p>
-                                    )}
-                                  </div>
-                                  <div className="flex-1 flex flex-col">
-                                    {story.description && (
-                                      <p className="text-black mb-2 dark:text-white text-card-body flex-1">
-                                        {story.description}
-                                      </p>
-                                    )}
-                                  </div>
-                                </div>
-                                <div className="absolute inset-0 overflow-hidden z-0 p-2">
-                                  {story.image ? (
-                                    <img
-                                      src={story.image}
-                                      alt={story.title}
-                                      className="absolute inset-0 h-full w-full object-contain object-bottom"
-                                      loading="lazy"
-                                    />
-                                  ) : (
-                                    <div className="absolute inset-0 h-full w-full bg-gray-200/50 flex items-center justify-center">
-                                      <div className="text-gray-400 text-sm">
-                                        No image
+                                {storiesView === "grid" && (
+                                  <div className="absolute top-2 right-2 z-20">
+                                    {story.hasModal ? (
+                                      <button
+                                        onClick={() =>
+                                          setSelectedStory({
+                                            title: story.title,
+                                            content: story.content,
+                                            subtitle: story.subtitle,
+                                          })
+                                        }
+                                        className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
+                                        aria-label={`View ${story.title} story`}
+                                      >
+                                        <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                      </button>
+                                    ) : (
+                                      <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]">
+                                        <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
                                       </div>
+                                    )}
+                                  </div>
+                                )}
+                                <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                                  <div
+                                    className={`rounded-lg p-2 ${
+                                      storiesView === "grid"
+                                        ? "bg-white/40 dark:bg-transparent backdrop-blur-sm pr-12"
+                                        : "flex items-center justify-between h-full"
+                                    }`}
+                                  >
+                                    <div className="flex items-center w-full">
+                                      <h3
+                                        className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap flex-1"
+                                        style={{
+                                          letterSpacing: "-0.01em",
+                                        }}
+                                      >
+                                        {story.title}
+                                      </h3>
+                                      {storiesView === "list" &&
+                                        (story.hasModal ? (
+                                          <button
+                                            onClick={() =>
+                                              setSelectedStory({
+                                                title: story.title,
+                                                content: story.content,
+                                                subtitle: story.subtitle,
+                                              })
+                                            }
+                                            className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center ml-auto"
+                                            aria-label={`View ${story.title} story`}
+                                          >
+                                            <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                          </button>
+                                        ) : (
+                                          <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center ml-auto">
+                                            <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                          </div>
+                                        ))}
+                                    </div>
+                                    {storiesView === "grid" &&
+                                      story.subtitle && (
+                                        <p className="text-sm text-gray-600 dark:text-white mb-2">
+                                          {story.subtitle}
+                                        </p>
+                                      )}
+                                  </div>
+                                  {storiesView === "grid" && (
+                                    <div className="flex-1 flex flex-col">
+                                      {story.description && (
+                                        <p className="text-black mb-2 dark:text-white text-card-body flex-1">
+                                          {story.description}
+                                        </p>
+                                      )}
                                     </div>
                                   )}
                                 </div>
+                                {storiesView === "grid" && (
+                                  <div className="absolute inset-0 overflow-hidden z-0 p-2">
+                                    {story.image ? (
+                                      <img
+                                        src={story.image}
+                                        alt={story.title}
+                                        className="absolute inset-0 h-full w-full object-contain object-bottom"
+                                        loading="lazy"
+                                      />
+                                    ) : (
+                                      <div className="absolute inset-0 h-full w-full bg-gray-200/50 flex items-center justify-center">
+                                        <div className="text-gray-400 text-sm">
+                                          No image
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
                               </motion.div>
                             ))}
                         </div>
@@ -915,42 +977,66 @@ function App() {
                                     : "h-[320px]"
                                 }`}
                               >
-                                <div className="absolute top-2 right-2 z-20">
-                                  <Link
-                                    to={`/article/${slugify(article.title)}`}
-                                    className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
-                                    aria-label={`View article: ${article.title}`}
-                                  >
-                                    <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                  </Link>
-                                </div>
-                                <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                  <div className="pr-12 bg-white/40 dark:bg-transparent backdrop-blur-sm rounded-lg p-2">
-                                    <h3
-                                      className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white"
-                                      style={{
-                                        letterSpacing: "-0.01em",
-                                      }}
+                                {articlesView === "grid" && (
+                                  <div className="absolute top-2 right-2 z-20">
+                                    <Link
+                                      to={`/article/${slugify(article.title)}`}
+                                      className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
+                                      aria-label={`View article: ${article.title}`}
                                     >
-                                      {article.title}
-                                    </h3>
-                                    {article.description && (
-                                      <p className="text-sm text-gray-600 dark:text-white mb-2 flex-1">
-                                        {article.description}
-                                      </p>
-                                    )}
+                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                    </Link>
+                                  </div>
+                                )}
+                                <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                                  <div
+                                    className={`rounded-lg p-2 ${
+                                      articlesView === "grid"
+                                        ? "bg-white/40 dark:bg-transparent backdrop-blur-sm pr-12"
+                                        : "flex items-center justify-between h-full"
+                                    }`}
+                                  >
+                                    <div className="flex items-center w-full">
+                                      <h3
+                                        className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white flex-1"
+                                        style={{
+                                          letterSpacing: "-0.01em",
+                                        }}
+                                      >
+                                        {article.title}
+                                      </h3>
+                                      {articlesView === "list" && (
+                                        <Link
+                                          to={`/article/${slugify(
+                                            article.title
+                                          )}`}
+                                          className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center ml-auto"
+                                          aria-label={`View article: ${article.title}`}
+                                        >
+                                          <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                        </Link>
+                                      )}
+                                    </div>
+                                    {articlesView === "grid" &&
+                                      article.description && (
+                                        <p className="text-sm text-gray-600 dark:text-white mb-2 flex-1">
+                                          {article.description}
+                                        </p>
+                                      )}
                                   </div>
                                 </div>
-                                <div className="absolute inset-0 overflow-hidden z-0 p-2">
-                                  <img
-                                    src={`${
-                                      (article as any).cardImage ||
-                                      article.image
-                                    }?v=${Date.now()}`}
-                                    alt={article.title}
-                                    className="absolute inset-0 h-full w-full object-contain object-bottom"
-                                  />
-                                </div>
+                                {articlesView === "grid" && (
+                                  <div className="absolute inset-0 overflow-hidden z-0 p-2">
+                                    <img
+                                      src={`${
+                                        (article as any).cardImage ||
+                                        article.image
+                                      }?v=${Date.now()}`}
+                                      alt={article.title}
+                                      className="absolute inset-0 h-full w-full object-contain object-bottom"
+                                    />
+                                  </div>
+                                )}
                               </motion.div>
                             ))}
                         </div>
@@ -1003,25 +1089,50 @@ function App() {
                             .map((project: any, index) => {
                               const ProjectCard = (
                                 <div className="flex flex-col gap-2 flex-1">
-                                  <div className="pr-12 bg-white/40 dark:bg-transparent backdrop-blur-sm rounded-lg p-2">
-                                    <h3
-                                      className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white"
-                                      style={{
-                                        letterSpacing: "-0.01em",
-                                      }}
-                                    >
-                                      {project.title}
-                                    </h3>
-                                    {project.description && (
-                                      <p className="text-sm text-gray-600 dark:text-white mb-2">
-                                        {project.description}
-                                      </p>
-                                    )}
+                                  <div
+                                    className={`rounded-lg p-2 ${
+                                      designView === "grid"
+                                        ? "bg-white/40 dark:bg-transparent backdrop-blur-sm pr-12"
+                                        : "flex items-center justify-between h-full"
+                                    }`}
+                                  >
+                                    <div className="flex items-center w-full">
+                                      <h3
+                                        className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white flex-1"
+                                        style={{
+                                          letterSpacing: "-0.01em",
+                                        }}
+                                      >
+                                        {project.title}
+                                      </h3>
+                                      {designView === "list" &&
+                                        (project.url ? (
+                                          <a
+                                            href={project.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center ml-auto"
+                                            aria-label={`View project: ${project.title}`}
+                                          >
+                                            <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                          </a>
+                                        ) : (
+                                          <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center ml-auto">
+                                            <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                          </div>
+                                        ))}
+                                    </div>
+                                    {designView === "grid" &&
+                                      project.description && (
+                                        <p className="text-sm text-gray-600 dark:text-white mb-2">
+                                          {project.description}
+                                        </p>
+                                      )}
                                   </div>
                                 </div>
                               );
 
-                              const ProjectImage = (
+                              const ProjectImage = designView === "grid" && (
                                 <div className="absolute inset-0 overflow-hidden z-0 p-2">
                                   <img
                                     src={project.image}
@@ -1050,18 +1161,26 @@ function App() {
                                       : "h-[320px]"
                                   }`}
                                 >
-                                  <div className="absolute top-2 right-2 z-20">
-                                    <a
-                                      href={project.url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
-                                      aria-label={`View project: ${project.title}`}
-                                    >
-                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                    </a>
-                                  </div>
-                                  <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                                  {designView === "grid" && (
+                                    <div className="absolute top-2 right-2 z-20">
+                                      <a
+                                        href={project.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
+                                        aria-label={`View project: ${project.title}`}
+                                      >
+                                        <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                      </a>
+                                    </div>
+                                  )}
+                                  <div
+                                    className={`absolute inset-0 p-3 z-10 ${
+                                      designView === "grid"
+                                        ? "flex flex-col gap-2"
+                                        : "flex items-center"
+                                    }`}
+                                  >
                                     {React.cloneElement(ProjectCard, {
                                       className:
                                         (ProjectCard.props.className || "") +
@@ -1079,12 +1198,20 @@ function App() {
                                       : "h-[320px]"
                                   }`}
                                 >
-                                  <div className="absolute top-2 right-2 z-20">
-                                    <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]">
-                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                  {designView === "grid" && (
+                                    <div className="absolute top-2 right-2 z-20">
+                                      <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]">
+                                        <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                                  )}
+                                  <div
+                                    className={`absolute inset-0 p-3 z-10 ${
+                                      designView === "grid"
+                                        ? "flex flex-col gap-2"
+                                        : "flex items-center"
+                                    }`}
+                                  >
                                     {React.cloneElement(ProjectCard, {
                                       className:
                                         (ProjectCard.props.className || "") +
