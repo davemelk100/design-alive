@@ -360,7 +360,7 @@ function App() {
                       transition={{ duration: 1.8, delay: 0.4 }}
                       className="flex flex-col items-start mt-4 sm:mt-6 px-8 sm:px-16 lg:px-32"
                     >
-                      <p className="text-lg text-muted-foreground leading-relaxed text-left">
+                      <p className="text-lg text-muted-foreground leading-relaxed text-center">
                         Senior UX and Product Designer with 15+ years of
                         experience delivering accessible, user-centered digital
                         solutions across industries. Skilled in end-to-end
