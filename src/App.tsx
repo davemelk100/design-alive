@@ -30,7 +30,7 @@ import { lazy, Suspense } from "react";
 // Lazy load components for better performance
 const Article = lazy(() => import("./pages/Article"));
 const Archive = lazy(() => import("./pages/Archive"));
-const DesignArchive = lazy(() => import("./pages/DesignArchive"));
+
 const Admin = lazy(() => import("./pages/Admin"));
 const MusicPlayer = lazy(() => import("./pages/MusicPlayer"));
 const WritingGallery = lazy(() => import("./pages/WritingGallery"));
@@ -640,7 +640,7 @@ function App() {
                                       className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
                                       aria-label={`View article: ${article.title}`}
                                     >
-                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                      <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
                                     </a>
                                   ) : (
                                     <Link
@@ -648,7 +648,7 @@ function App() {
                                       className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
                                       aria-label={`View article: ${article.title}`}
                                     >
-                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                      <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
                                     </Link>
                                   )}
                                 </div>
@@ -715,7 +715,7 @@ function App() {
                                           className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
                                           aria-label={`View article: ${article.title}`}
                                         >
-                                          <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                          <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
                                         </a>
                                       ) : (
                                         <Link
@@ -725,7 +725,7 @@ function App() {
                                           className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
                                           aria-label={`View article: ${article.title}`}
                                         >
-                                          <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                          <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
                                         </Link>
                                       ))}
                                   </div>
@@ -945,14 +945,6 @@ function App() {
                               </motion.div>
                             );
                           })}
-                      </div>
-                      <div className="mt-8">
-                        <Link
-                          to="/design-archive"
-                          className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
-                        >
-                          View Design Archive
-                        </Link>
                       </div>
                     </div>
                   </div>
@@ -1670,7 +1662,7 @@ function App() {
           />
           <Route path="/article/:slug" element={<Article />} />
           <Route path="/archive" element={<Archive />} />
-          <Route path="/design-archive" element={<DesignArchive />} />
+
           <Route path="/admin" element={<Admin />} />
           <Route path="/music-player" element={<MusicPlayer />} />
           <Route path="/writing-gallery" element={<WritingGallery />} />

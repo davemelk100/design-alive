@@ -164,20 +164,7 @@ const MusicPlayer: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8"
         >
-          {/* Bandcamp Link */}
-          <div className="text-center mb-6">
-            <a
-              href="https://balmsoothes.bandcamp.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors font-medium"
-              aria-label="Visit BALM on Bandcamp"
-            >
-              <span>🎵</span>
-              <span>Listen on Bandcamp</span>
-              <span>→</span>
-            </a>
-          </div>
+
 
           {/* Current Track Info */}
           <div className="text-left mb-8">

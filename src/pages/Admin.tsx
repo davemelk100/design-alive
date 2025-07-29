@@ -47,19 +47,6 @@ const Admin: React.FC = () => {
             </Link>
 
             <Link
-              to="/design-archive"
-              className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-            >
-              <Palette className="h-5 w-5 text-green-600" />
-              <div>
-                <p className="font-medium text-gray-900">View Design Work</p>
-                <p className="text-sm text-gray-600">
-                  Browse all design projects
-                </p>
-              </div>
-            </Link>
-
-            <Link
               to="/writing-gallery"
               className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
