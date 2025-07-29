@@ -742,44 +742,8 @@ export const content = {
         id: "seven-interviews-excessive",
         title: "Seven Interviews?",
         description: "Some folks say that's excessive.",
-        url: "seven-interviews",
-        content: `<h1>Seven Interviews?</h1>
-
-<h2>The Interview Process</h2>
-
-<p>Extended interview processes have become the norm: multiple rounds, repeated discussions, and lengthy timelines. While thorough evaluation is important, the current approach often prioritizes procedure over meaningful assessment. How many times should a candidate have to answer "tell me about yourself" before someone takes notes?</p>
-
-<p>After experiencing seven rounds of interviews for a single position, the question becomes clear: what value does each additional interview add? Thankfully, I didn't have to endure this process myself - I've heard enough horror stories from colleagues and friends to know it's a widespread issue that needs addressing.</p>
-
-<h2>A More Efficient Approach</h2>
-
-<p>What if the hiring process was reimagined with respect for everyone's time? What if organizations:</p>
-
-<ul>
-<li>Conducted thorough research before interviews</li>
-<li>Made decisions promptly</li>
-<li>Provided meaningful feedback</li>
-<li>Clearly defined requirements upfront</li>
-</ul>
-
-<p>Research suggests that most hiring decisions are made within the first 15 minutes of the initial interview. The subsequent rounds often serve more as validation than discovery.</p>
-
-<h2>The Cost of Ineffective Hiring</h2>
-
-<p>Poor hiring decisions are expensive. Beyond the interview process, organizations face significant costs when a candidate is hired but later terminated due to skill mismatches: onboarding expenses, lost productivity, and the cost of starting the recruitment process again.</p>
-
-<p>For hiring managers, consider:</p>
-
-<ul>
-<li>Would you want to experience this process?</li>
-<li>What insights are gained from each interview?</li>
-<li>Could decisions be made faster?</li>
-<li>Are candidates being treated with respect?</li>
-</ul>
-
-<p>The best hiring processes are those that efficiently identify the right candidate while treating everyone involved with dignity and respect.</p>
-
-`,
+        url: "https://davemelk.substack.com/p/seven-interviews-excessive",
+        content: `<p>Read the full article on <a href="https://davemelk.substack.com/p/seven-interviews-excessive" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
         image: "/img/seven-interviews-article.png",
         date: "June 7, 2024",
         tags: ["Career", "Hiring", "Workplace Culture"],
@@ -788,24 +752,8 @@ export const content = {
         id: "vibe-coding-vs-vibe-engineering",
         title: "Vibe Coding v Vibe Engineering",
         description: "Making things work right, not just feel right.",
-        url: "vibe-coding-vs-vibe-engineering",
-        content: `<h1>Vibe Coding v Vibe Engineering</h1>
-
-<h2>The Vibe Check</h2>
-
-<p>The word "vibe" might make you cringe, but there's something important about how things feel when you use them. Vibe engineering isn't another buzzword - it's the difference between making something feel right and making it work right. Every interaction is a chance to build trust with users.</p>
-
-<p><strong>THINK</strong> of vibe coding like telling a robot "make this room cozier" instead of understanding what makes a space feel warm. The robot might add throw pillows and dim the lights, but it won't understand that the real issue might be the harsh lighting or cold furniture.</p>
-
-<h2>The Real Difference</h2>
-
-<p>When working with AI, this distinction is crucial. If you don't specify the right constraints upfront, you'll end up with technically correct but fundamentally flawed solutions. It's the difference between asking AI to "make it look better" and telling it exactly what emotional response you want to evoke in users.</p>
-
-<p>This is where real UI development experience pays off. You can tell AI to "add a 2px border with rounded corners" instead of just saying "make it pop." This precision saves time and leads to better results.</p>
-
-<p>Vibe engineering solves real problems while feeling natural. Vibe coding makes things feel right but might miss the underlying issues. Next time you're building something, ask yourself: am I engineering the vibe, or am I just coding it?</p>
-
-`,
+        url: "https://davemelk.substack.com/p/vibe-coding-vs-vibe-engineering",
+        content: `<p>Read the full article on <a href="https://davemelk.substack.com/p/vibe-coding-vs-vibe-engineering" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
         image: "/img/vibe-engineering.png",
         date: "June 8, 2024",
         tags: ["UX Design", "Development", "Product Design"],
@@ -883,36 +831,8 @@ export const content = {
         id: "information-architecture-not-sacred",
         title: "Information Architecture Is Not Sacred",
         description: "Your IA should evolve with your users, not remain rigid.",
-        content: `<h1>Information Architecture Is Not Sacred</h1>
-
-<h2>Your IA Shouldn't Be Set in Stone</h2>
-
-<p>The UX process is iterative by nature. You design something, test it, learn from it, and then do it all over again. It's not a straight path, and your information architecture shouldn't be either. When real feedback shows that people are missing something, you move it. When analytics show that users are skipping entire sections, you streamline. The structure should serve the user, not hold them back.</p>
-
-<h2>Investing in User Testing</h2>
-
-<p>A user testing platform subscription costs less than your office snacks budget, yet provides invaluable insights into how users navigate your information architecture. It's a small investment that helps prevent the much larger cost of losing potential customers due to poor content organization.</p>
-
-<p>Your users aren't just numbers in a database, they're partners in your product's journey. Their navigation patterns, content discovery struggles, and information-seeking behaviors should directly inform your IA decisions.</p>
-
-<p>The real question isn't what your users are worth to you - it's what you're willing to invest to truly understand how they think about and organize your content.</p>
-
-<p>Cutting corners on IA doesn't just affect numbers on a dashboard. You're losing real people. <strong>THINK</strong> about it: if your product has 10,000 users and each one takes just 10 seconds to decide they can't find what they're looking for, that's 10,000 potential customers walking away. What's that worth to you?</p>
-
-<h2>Beyond the Bottom Line</h2>
-
-<p>Yes, business needs to make money. And the best businesses understand that user value and business value aren't mutually exclusive. In fact, they're deeply connected. When you invest in understanding and serving your users better, you're not just doing the right thing - you're making a smart business decision.</p>
-
-<p>Every interaction with your product is an opportunity to build or break trust. When users feel understood and valued, they become your biggest advocates. They'll stick with you through rough patches and bring others along. That kind of loyalty is priceless.</p>
-
-<h2>Build for Real Behavior</h2>
-
-<p>The best organizations don't let ego or outdated documents dictate the user experience. They know great UX means anticipating what the user needs - sometimes before they even know it themselves - and meeting them there.</p>
-
-<p>So go ahead: break your own architecture if it makes the experience better. That's not sloppy - it's smart. It's a living system that should evolve with your users. Keep it flexible. Keep it human.</p>
-
-`,
-        url: "information-architecture-not-sacred",
+        url: "https://davemelk.substack.com/p/information-architecture-not-sacred",
+        content: `<p>Read the full article on <a href="https://davemelk.substack.com/p/information-architecture-not-sacred" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
         image: "/img/ia-flexible.png",
         tags: ["Information Architecture", "UX Design", "User Experience"],
         date: "March 19, 2024",
@@ -922,78 +842,8 @@ export const content = {
         id: "five-design-genres",
         title: "The Five Design Genres",
         description: "I have defined the five design genres.",
-        url: "five-design-genres",
-        content: `
-
-<p>Why do we need simple names for types of modern digital design? Because we all secretly want (and deserve) them. This <a href="https://open.spotify.com/playlist/5dFyK5eLx9jg5VZl3tZXai?si=8LxH6gHuTXKxI-2tgiZzkQ" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline">beautifully curated Spotify playlist</a> will better illustrate each design's musical doppelganger.</p>
-
-<div class="flex justify-center mb-8">
-  <div class="w-3/4 max-w-2xl aspect-video overflow-hidden rounded-lg relative group">
-    <img src="/img/vinyl-bob.jpg" alt="Robert Pollard" class="w-full h-full object-cover cursor-help" />
-    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300">
-      <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg max-w-[200px] text-right transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-        <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-1">Robert Pollard</h4>
-        <p class="text-xs text-gray-700 dark:text-gray-300">The prolific frontman of Guided By Voices, shown here looking through records at a small record store. With over 300 records to his name spanning nearly every genre imaginable, Pollard embodies the spirit of artistic exploration and genre-defying creativity.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<h2>1. Dense</h2>
-
-<p>Users expect power, control, and maximum information density through heavy, complex interfaces with dense information, dark themes, high contrast, and industrial aesthetics.</p>
-
-<p><strong>THINK:</strong> Bloomberg Terminal, Trading Platforms, Figma's Properties Panel</p>
-
-<p><strong>SAY:</strong> "The admin panel is getting too Dense - maybe we should split these controls into separate views?"</p>
-
-<p><strong>LISTEN:</strong> Prog (Mahavishnu Orchestra, Yes, King Crimson) - complex, intense, and information-rich</p>
-
-<h2>2. Routine</h2>
-
-<p>Users expect speed, clarity, and getting things done through simple, straightforward, and functional designs featuring neutral colors, clear typography, and minimal decoration.</p>
-
-<p><strong>THINK:</strong> Google Search, Wikipedia, Craigslist, Microsoft Office</p>
-
-<p><strong>SAY:</strong> "The settings page needs to be more Routine - users just want to change their preferences and move on."</p>
-
-<p><strong>LISTEN:</strong> Noise (Shellac, Helmet, Neu!) - brutish, authentic, and purposeful</p>
-
-<h2>3. Immersive</h2>
-
-<p>Users expect excitement, community, and visual impact through bold, energetic, and immersive designs featuring dark themes, neon accents, and dynamic elements.</p>
-
-<p><strong>THINK:</strong> Discord, Steam, Twitch</p>
-
-<p><strong>SAY:</strong> "Let's commit to being more Immerse - can we add spatial audio?"</p>
-
-<p><strong>LISTEN:</strong> Big Indie (The Flaming Lips, Turnstile, Broken Social Scene) - energetic, engaging, and delightful</p>
-
-<h2>4. Suite</h2>
-
-<p>Users expect innovation, personality, and modern features through bold, playful, and slightly experimental designs featuring bright colors, custom illustrations, and micro-interactions.</p>
-
-<p><strong>THINK:</strong> Slack, Notion, Figma</p>
-
-<p><strong>SAY:</strong> "The empty states could use some Suite intuition - let's try more predicitive micro-interactions."</p>
-
-<p><strong>LISTEN:</strong> Experimental Indie (Guided By Voices, Deerhunter, Neutral Milk Hotel) - creative, unique, but still approachable</p>
-
-<h2>5. Stripped</h2>
-
-<p>Users expect quality, exclusivity, and attention to detail through minimal, sophisticated, and carefully crafted designs featuring monochromatic color schemes, ample whitespace, and subtle animations.</p>
-
-<p><strong>THINK:</strong> Apple, Bang & Olufsen</p>
-
-<p><strong>SAY:</strong> "The product page feels cluttered - let's go more Stripped for the next iteration."</p>
-
-<p><strong>LISTEN:</strong> Post Rock (Radiohead, Tortoise, Slint) - sophisticated, nuanced, and refined</p>
-
-<h2>Do Genres Matter?</h2>
-
-<p>Not really, but they serve as a shared language. When someone says "this interface needs to be more familiar and reliable" or "let's make this experience more playful and experimental," it's not just talking about colors and fonts. It's about creating harmony between what users expect, what your business needs, and how people feel when they use your product.</p>
-
-`,
+        url: "https://davemelk.substack.com/p/five-design-genres",
+        content: `<p>Read the full article on <a href="https://davemelk.substack.com/p/five-design-genres" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
         image: "/img/genres-article.png",
         cardImage: "/img/genres-article.png",
         date: "June 15, 2024",
@@ -1004,56 +854,8 @@ export const content = {
         title: "API Tokens: The Digital Arcade",
         description:
           "How the concept of tokens in modern API usage echoes the arcade culture of the 1980s.",
-        url: "api-tokens-digital-arcade",
-        content: `<h1>API Tokens: The Digital Arcade</h1>
-
-<h2>The Token Economy</h2>
-
-<p>Remember walking into an arcade with a pocket full of quarters, ready to exchange them for tokens? That familiar clink of metal against metal, the anticipation of gameplay ahead. Fast forward to today, and we're still using tokens - just in a different form. API tokens have become the digital equivalent of those arcade tokens, and the parallels are striking.</p>
-
-<h2>The Arcade Experience</h2>
-
-<p>In the 1980s, arcades were temples of gaming. You'd walk in with cash, exchange it for tokens, and each token represented a chance to play. One token, one game. It was simple, it was fair, and it was universal. Whether you were playing Galaga or Pole Position, the token system was the same.</p>
-
-<h2>The Modern Digital Arcade</h2>
-
-<p>Today's API tokens work in much the same way. Instead of physical tokens, we have digital ones. Instead of games, we're accessing services. But the fundamental concept remains:</p>
-
-<ul>
-<li>One token, one request</li>
-<li>Limited supply (rate limits)</li>
-<li>Universal currency (standardized authentication)</li>
-<li>Clear value exchange</li>
-</ul>
-
-<h2>The Psychology of Tokens</h2>
-
-<p>What's fascinating is how both systems tap into the same psychological principles. Physical tokens made the cost of play visible, just as API tokens make the cost of service usage visible. Arcades used tokens to manage access to games, while APIs use tokens to manage access to services. Whether you were in New York or Los Angeles, arcade tokens worked the same way, and API tokens work the same way across different services.</p>
-
-<h2>The Evolution of Token Systems</h2>
-
-<p>The arcade token system evolved from simple mechanical devices to sophisticated electronic systems. Similarly, API tokens have evolved from basic authentication to complex systems with:</p>
-
-<ul>
-<li>Rate limiting</li>
-<li>Usage tracking</li>
-<li>Permission scoping</li>
-<li>Expiration dates</li>
-</ul>
-
-<h2>Lessons from the Arcade</h2>
-
-<p>The arcade token system taught us valuable lessons about user experience. The system had to be immediately understandable, with everyone playing by the same rules. You always knew how many tokens you had left, and you knew instantly if your token was accepted. The limited supply meant you had to use your tokens wisely, and there was always a clear value exchange - you knew exactly what you were getting for your tokens.</p>
-
-<p>These same principles apply to modern API token systems. The best API implementations maintain this simplicity while adding necessary security and control.</p>
-
-<h2>The Future of Tokens</h2>
-
-<p>Just as arcade tokens evolved into digital gaming currencies, API tokens are evolving into more sophisticated systems. But the core concept remains the same: a simple, universal way to exchange value for service.</p>
-
-<p>The next time you're implementing an API token system, remember the arcade. Sometimes the best solutions are the ones that have stood the test of time, just dressed in digital clothes.</p>
-
-`,
+        url: "https://davemelk.substack.com/p/api-tokens-digital-arcade",
+        content: `<p>Read the full article on <a href="https://davemelk.substack.com/p/api-tokens-digital-arcade" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
         image: "/img/tokens.png",
         date: "June 14, 2024",
         tags: ["Development", "API Design", "User Experience"],
@@ -1063,36 +865,8 @@ export const content = {
         title: "The 5 Design Anti-Patterns",
         description:
           "Accidental and intentional anti-patterns that make users insane.",
-        url: "five-design-anti-patterns",
-        content: `<h1>The 5 Design Anti-Patterns</h1>
-
-<p>Let's just make this clear right away - these aren't just bad designs, they're anti-patterns: common mistakes that actively work against good user experience. This is the definitive list of design anti-patterns, according to me.</p>
-
-<h2>1. Navblinding</h2>
-
-<p>Users shouldn't need Waze to use your app. When your navigation is more of a puzzle than a tool, you're not paying attention to your users. Let's not kid ourselves; icons are great, but words are better. Or use both. Go nuts.</p>
-
-<h2>2. Upshelling</h2>
-
-<p>You're reading an article, watching a video, or trying to use a feature - next thing you know, you just got horse-collared by a paywall. Every interaction is another chance to bully you into a paid tier. But sometimes that's the point. Based? Yes. Annoying? Absolutely.</p>
-
-<h2>3. Xhunting</h2>
-
-<p>The modern equivalent of desktop pop-up infection, but on a phone we've learned to tolerate it. Each modal more important and elusive than the last, suddenly you're tapping microscopic X's in order to hide an ad, simply to see the caption on a Reel.</p>
-
-<h2>4. Pagejacking</h2>
-
-<p>When you click something and... nothing happens. No loading indicator, no feedback, just a blank stare from your screen. Not even a "thanks for coming". Oh and what about onboarding tutorials? We all love those, right? When your pages don't respond to user actions, your user wants to jump out a window.</p>
-
-<h2>5. Formlocking</h2>
-
-<p>When there's no way to track progress or retrieve previous data, well, it's super annoying. When your signup form is more complicated than your actual product, you're ignoring decades of UX research on form usability.</p>
-
-<h2>In Conclusion</h2>
-
-<p>That's it. That's the article.</p>
-
-`,
+        url: "https://davemelk.substack.com/p/five-design-anti-patterns",
+        content: `<p>Read the full article on <a href="https://davemelk.substack.com/p/five-design-anti-patterns" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
         image: "/img/anti-patterns.png",
         date: "June 10, 2024",
         tags: ["UX Design", "User Experience", "Design Patterns"],
@@ -1101,18 +875,8 @@ export const content = {
         id: "commit-message-fatigue",
         title: "Commit Message Fatigue",
         description: "Do this and never write another one again 💎💎",
-        url: "commit-message-fatigue",
-        content: `<h1>Commit Message Fatigue</h1>
-
-<h2>My Goodness There's Got to Be a Better Way</h2>
-
-<p>Friday 4:45 PM. Your last 19 commits of the day have been up-arrow + tab + tab + enter + enter.</p>
-
-<h2>The Solution</h2>
-
-<p>Use AI to write your commit messages. Cursor's AI commit message feature can analyze your changes and generate meaningful commit messages automatically. Go here: <a href="https://docs.cursor.com/more/ai-commit-message">https://docs.cursor.com/more/ai-commit-message</a>, or just click on those diamond icons in the Source Control input field and experience the magic.</p>
-
-`,
+        url: "https://davemelk.substack.com/p/commit-message-fatigue",
+        content: `<p>Read the full article on <a href="https://davemelk.substack.com/p/commit-message-fatigue" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
         image: "/img/commit-fatigue.png",
         date: "June 11, 2024",
         tags: ["Git", "Development", "Best Practices", "Productivity"],
@@ -1122,52 +886,10 @@ export const content = {
         title: "AI is hydrated with user research data",
         description:
           "How every interaction with an LLM is training data that makes it smarter.",
-        url: "ai-hydrated-user-research",
-        content: `<h1>AI is hydrated with user research data</h1>
-
-<p>Every time you interact with an AI, you're participating in the world's largest user testing session. Think about it - every prompt, every response, every correction you make is data that helps the model understand what works and what doesn't.</p>
-
-<h2>The Feedback Loop</h2>
-
-<p>When you ask an AI to write code and then tell it "that's not quite right," you're doing the same thing we do in user testing. You're providing feedback that shapes future behavior. The difference is that with AI, this feedback happens in real-time and affects millions of future interactions.</p>
-
-<h2>The Training Data</h2>
-
-<p>Every conversation with an AI becomes training data. Your corrections, your preferences, your "actually, I meant..." moments are all teaching the model to be better. It's like having a user testing session where every participant's feedback immediately improves the product for everyone else.</p>
-
-<h2>The Parallel</h2>
-
-<p>In user testing, we watch how people interact with our products and use that data to make improvements. With AI, the interaction itself is the data. Every time you refine a prompt or correct an output, you're essentially saying "this is how I want this to work."</p>
-
-<h2>The Scale</h2>
-
-<p>The fascinating part is the scale. Traditional user testing might involve 10-20 people. AI user testing involves millions of people simultaneously, all contributing to the same feedback loop. It's user testing at internet scale.</p>
-
-<h2>The Implications</h2>
-
-<p>This means that every interaction with AI is both a test and a training session. When you get frustrated with an AI's response and try a different approach, you're not just solving your immediate problem - you're helping train the model to be better for everyone.</p>
-
-<h2>The Responsibility</h2>
-
-<p>Understanding this changes how we should think about AI interactions. Every prompt is a teaching moment. Every correction is an opportunity to improve the system. We're not just users - we're participants in the largest user research project ever conducted.</p>
-
-<h2>Best Practices Baked In</h2>
-
-<p>AI coding co-pilots come with objective best practices built right into their underlying models. Whether it's called an LLM (Large Language Model) or something else, these systems have been trained on vast amounts of high-quality code and documentation. That means when you ask for help, you're not just getting a random suggestion - you're tapping into a collective knowledge base of industry standards, proven patterns, and up-to-date best practices, all ready to guide your next line of code.</p>
-
-<h2>Live Prototyping: Closing the Feedback Loop</h2>
-
-<p>One powerful extension of this idea is live prototyping - building and refining features in real time, directly in front of users. Instead of waiting for feedback cycles, you can watch users interact with new features as you create them, making adjustments on the spot. This approach not only accelerates learning but also ensures that the product evolves in direct response to real user needs. With AI and collaborative tools, live prototyping is more accessible than ever, turning every session into an opportunity for immediate, actionable insight.</p>
-
-<h2>Search Results as User Artifacts</h2>
-
-<p>Every search result you see isn't just a random entry - it's an artifact, a piece of data that a real user submitted at some point. Each result represents a question, a need, or a solution that someone else contributed to the system. When you interact with search, you're not just finding information; you're tapping into a living archive of user-generated knowledge, shaped and refined by countless individual contributions.</p>
-
-`,
-
+        url: "https://davemelk.substack.com/p/ai-hydrated-user-research",
+        content: `<p>Read the full article on <a href="https://davemelk.substack.com/p/ai-hydrated-user-research" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
         image: "/img/ai-user-research.png",
         cardImage: "/img/ai-hydrated.png",
-
         date: "June 19, 2024",
         tags: [
           "AI",
@@ -1181,98 +903,8 @@ export const content = {
         title: "Can we make AI dumber?",
         description:
           "A point-counterpoint article, rife with hypotheticals and indecision.",
-        url: "bad-good-prompts-ai-dumber-smarter",
-        content: `<h2>The Problem with Vague Prompts (Maybe)</h2>
-
-<div class="point-section">
-  <h3><strong>Point:</strong></h3>
-  <p>Vague prompts create uncertainty. When you ask AI to "make it better," "fix this," or "add something interesting," you're forcing it to guess your intent. Without clear direction, you get generic responses that rarely solve your specific problem. This could create a feedback loop where mediocre outputs become the norm.</p>
-</div>
-
-<div class="counter-point-section">
-  <h3><strong>Counter-Point:</strong></h3>
-  <p>On the other hand, some argue that AI models are actually quite good at inferring intent from context, even with vague prompts. The "make it better" approach might work well when the AI has enough surrounding context to understand what "better" means in that specific situation.</p>
-</div>
-
-<h2>Why This May (or May Not) Matter Technically</h2>
-
-<div class="point-section">
-  <h3><strong>Point:</strong></h3>
-  <p>Large language models respond based on patterns found in their training data and the ways users interact with them after deployment. When vague prompts are commonly used and their results are accepted without refinement, this feedback might become part of the model's broader usage signal. As a result, future versions could optimize for these lower-effort patterns, reinforcing shallow responses.</p>
-</div>
-
-<div class="counter-point-section">
-  <h3><strong>Counter-Point:</strong></h3>
-  <p>However, there's limited evidence that user feedback actually influences model training in the way described. Most major models are trained on curated datasets, not real-time user interactions. The feedback loop theory might be more speculation than fact.</p>
-</div>
-
-<h2>How to (Potentially) Improve Results</h2>
-
-<div class="point-section">
-  <h3><strong>Point:</strong></h3>
-  <p>Clear, specific prompts might lead to more relevant, higher-quality outputs. Instead of making general requests, you could include:</p>
-  <ul>
-    <li>What needs to change</li>
-    <li>Who the audience is</li>
-    <li>Any constraints or goals</li>
-    <li>What success looks like</li>
-  </ul>
-  <p>Examples:</p>
-  <ul>
-    <li>"Increase contrast between headings and body text."</li>
-    <li>"Add hover effects with a 0.2s ease-in-out transition."</li>
-    <li>"Show an error message when the email format is invalid."</li>
-  </ul>
-</div>
-
-<div class="counter-point-section">
-  <h3><strong>Counter-Point:</strong></h3>
-  <p>Over-specification can backfire. Constraints might limit the AI's creativity or cause it to miss unexpected but valuable solutions. Sometimes a simple "make it better" with good context works just fine.</p>
-</div>
-
-<h2>Best Practices for Prompting (If They Work)</h2>
-
-<div class="point-section">
-  <h3><strong>Point:</strong></h3>
-  <ul>
-    <li>Be specific - Say exactly what you want changed or created.</li>
-    <li>Add context - Explain the background, use case, or goals.</li>
-    <li>Set constraints - Define limits, formats, or requirements.</li>
-    <li>Request reasoning - Ask the AI to explain its choices, if helpful.</li>
-    <li>Refine - Don't settle for the first response; adjust and try again.</li>
-  </ul>
-</div>
-
-<div class="counter-point-section">
-  <h3><strong>Counter-Point:</strong></h3>
-  <p>Still, some users report that following rigid prompting frameworks actually makes their interactions more mechanical and less natural. The best approach might be to develop an intuitive feel for what works in each specific context.</p>
-</div>
-
-<h2>The Uncertain Takeaway</h2>
-
-<div class="point-section">
-  <h3><strong>Point:</strong></h3>
-  <p>Better prompts might lead to better results, but the evidence is mixed. Being specific and intentional could improve your own outcomes and potentially encourage models to return higher-quality responses over time. Then again, maybe the AI is smarter than we give it credit for, and our attempts to "optimize" our prompts are just adding unnecessary complexity.</p>
-</div>
-
-<div class="counter-point-section">
-  <h3><strong>Counter-Point:</strong></h3>
-  <p>The truth is, we're still figuring out how AI really learns from our interactions. What seems like a clear cause-and-effect relationship might be more nuanced than we think. Perhaps the best approach is to experiment and see what works for your specific use case, rather than following rigid rules that may or may not apply.</p>
-</div>
-
-<h2>The Real Question: Are We Getting Dumber?</h2>
-
-<div class="point-section">
-  <h3><strong>Point:</strong></h3>
-  <p>Maybe the real concern isn't whether we're making AI dumber, but whether our reliance on AI is making us dumber. When we outsource our thinking to AI for every decision, we risk losing the ability to think critically, solve problems independently, and develop our own creative solutions. It's like having a calculator for everything - convenient, but potentially atrophying our mental muscles.</p>
-</div>
-
-<div class="counter-point-section">
-  <h3><strong>Counter-Point:</strong></h3>
-  <p>On the other hand, AI might be making us smarter by handling routine tasks and freeing up mental bandwidth for more complex, creative thinking. Just as calculators didn't make us worse at math but better at advanced mathematics, AI could be elevating our cognitive capabilities rather than diminishing them.</p>
-</div>
-
-`,
+        url: "https://davemelk.substack.com/p/can-we-make-ai-dumber?r=1jgk3k",
+        content: `<p>Read the full article on <a href="https://davemelk.substack.com/p/can-we-make-ai-dumber?r=1jgk3k" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
         image: "/img/smart-dumb.png",
         cardImage: "/img/smart-dumb.png",
         date: "July 6, 2024",
@@ -1289,222 +921,11 @@ export const content = {
         title: "Prompting for Heuristic Evaluations",
         description:
           "How to structure AI prompts to conduct effective, comprehensive UI heuristic evaluations.",
-        url: "prompts-prompt-structure-heuristic-evaluations",
-        content: `<h1>Prompts and Prompt Structure for Heuristic Evaluations</h1>
-
-<h2>The Challenge of AI-Powered Heuristic Evaluation</h2>
-
-<p>Heuristic evaluation has long been a cornerstone of UX research, providing systematic assessment of user interfaces against established usability principles. But as AI tools become more sophisticated, we're seeing a new challenge: how to effectively prompt AI to conduct thorough, accurate heuristic evaluations that match the quality of human evaluators.</p>
-
-<p>The problem isn't that AI can't evaluate interfaces - it's that we haven't figured out how to ask it to do so effectively. Most prompts are too vague, too broad, or too focused on surface-level issues. The result is evaluations that miss critical usability problems or focus on trivial design elements.</p>
-
-<h2>Why Traditional Prompting Falls Short</h2>
-
-<p>When you ask AI to "evaluate this interface for usability issues," you're essentially asking it to guess what you want. Without clear structure, AI tends to focus on obvious visual problems while missing deeper interaction issues. It might point out that a button is too small, but fail to identify that the entire user flow is broken.</p>
-
-<p>Traditional prompts also lack the systematic approach that makes heuristic evaluation valuable. Human evaluators follow established frameworks like Nielsen's 10 heuristics or Shneiderman's 8 golden rules. AI needs similar structure to provide consistent, comprehensive evaluations.</p>
-
-<h2>The Structured Prompt Framework</h2>
-
-<p>Effective heuristic evaluation prompts need three key components: context, structure, and specificity. Here's how to build them:</p>
-
-<h3>1. Context Setting</h3>
-
-<p>Start by providing the AI with clear context about what you're evaluating:</p>
-
-<ul>
-<li><strong>User goals:</strong> What are users trying to accomplish?</li>
-<li><strong>User context:</strong> Who are the users and what's their technical expertise?</li>
-<li><strong>Business context:</strong> What's the purpose of this interface?</li>
-<li><strong>Evaluation scope:</strong> What specific aspects should be evaluated?</li>
-</ul>
-
-<p>Example context: "Evaluate this e-commerce checkout flow for users who are making their first purchase on mobile devices. The goal is to minimize cart abandonment and maximize conversion rates."</p>
-
-<h3>2. Heuristic Framework Specification</h3>
-
-<p>Explicitly tell the AI which heuristic framework to use and what each principle means:</p>
-
-<p><strong>For Nielsen's 10 Heuristics:</strong></p>
-<ul>
-<li>Visibility of system status</li>
-<li>Match between system and the real world</li>
-<li>User control and freedom</li>
-<li>Consistency and standards</li>
-<li>Error prevention</li>
-<li>Recognition rather than recall</li>
-<li>Flexibility and efficiency of use</li>
-<li>Aesthetic and minimalist design</li>
-<li>Help users recognize, diagnose, and recover from errors</li>
-<li>Help and documentation</li>
-</ul>
-
-<p>Don't just list the heuristics - explain what each one means in the context of your evaluation.</p>
-
-<h3>3. Evaluation Structure</h3>
-
-<p>Provide a clear structure for how you want the evaluation organized:</p>
-
-<ul>
-<li><strong>Severity ratings:</strong> How critical is each issue?</li>
-<li><strong>Evidence:</strong> What specific elements demonstrate the problem?</li>
-<li><strong>Impact:</strong> How does this affect user experience?</li>
-<li><strong>Recommendations:</strong> How could this be improved?</li>
-</ul>
-
-<h2>Advanced Prompting Techniques</h2>
-
-<h3>The Multi-Pass Approach</h3>
-
-<p>Instead of asking for everything at once, break the evaluation into multiple passes:</p>
-
-<p><strong>Pass 1:</strong> "Identify all instances where users might lose control or feel trapped in the interface."</p>
-<p><strong>Pass 2:</strong> "For each identified issue, rate its severity and explain the potential user impact."</p>
-<p><strong>Pass 3:</strong> "Provide specific, actionable recommendations for each high-severity issue."</p>
-
-<p>This approach prevents AI from getting overwhelmed and ensures more thorough analysis.</p>
-
-<h3>The Comparative Analysis</h3>
-
-<p>Ask AI to compare your interface against known good examples:</p>
-
-<p>"Compare this login form against the login patterns used by Google, Apple, and Microsoft. Identify where our implementation differs and whether those differences create usability advantages or disadvantages."</p>
-
-<h3>The User Journey Focus</h3>
-
-<p>Structure prompts around specific user journeys rather than static interface elements:</p>
-
-<p>"Walk through the complete user journey from landing page to successful purchase. At each step, identify potential usability issues that could cause users to abandon the process."</p>
-
-<h2>Prompt Templates for Common Scenarios</h2>
-
-<h3>E-commerce Evaluation</h3>
-
-<p><strong>Template:</strong></p>
-<p>"Evaluate this e-commerce interface using Nielsen's 10 heuristics. Focus on the complete purchase journey from product discovery to order confirmation. For each issue identified:</p>
-<ul>
-<li>Rate severity (1-5, where 5 is critical)</li>
-<li>Explain the specific user impact</li>
-<li>Provide one concrete improvement suggestion</li>
-</ul>
-<p>Pay special attention to mobile usability, trust signals, and checkout flow optimization."</p>
-
-<h3>Mobile App Evaluation</h3>
-
-<p><strong>Template:</strong></p>
-<p>"Conduct a heuristic evaluation of this mobile app interface. Consider both iOS and Android design patterns. Evaluate:</p>
-<ul>
-<li>Touch target sizes and spacing</li>
-<li>Navigation patterns and information architecture</li>
-<li>Error handling and recovery</li>
-<li>Performance and loading states</li>
-<li>Accessibility considerations</li>
-</ul>
-<p>For each issue, explain how it violates mobile usability principles and suggest platform-appropriate solutions."</p>
-
-<h3>Dashboard Evaluation</h3>
-
-<p><strong>Template:</strong></p>
-<p>"Evaluate this dashboard interface for data visualization and information architecture. Consider:</p>
-<ul>
-<li>Information hierarchy and visual scanning patterns</li>
-<li>Data density and cognitive load</li>
-<li>Interactive elements and feedback</li>
-<li>Customization and personalization options</li>
-<li>Error states and empty states</li>
-</ul>
-<p>Focus on how well the interface supports data-driven decision making."</p>
-
-<h2>Common Prompting Mistakes to Avoid</h2>
-
-<h3>1. Too Broad</h3>
-<p><strong>Bad:</strong> "Check this interface for usability issues"</p>
-<p><strong>Good:</strong> "Evaluate this interface against Nielsen's visibility of system status principle, focusing on loading states and progress indicators"</p>
-
-<h3>2. Too Vague</h3>
-<p><strong>Bad:</strong> "Make it more user-friendly"</p>
-<p><strong>Good:</strong> "Identify specific instances where users might feel lost or confused, and suggest clear navigation improvements"</p>
-
-<h3>3. Ignoring Context</h3>
-<p><strong>Bad:</strong> "Find all the problems"</p>
-<p><strong>Good:</strong> "Evaluate this interface for users who are completing this task for the first time on a mobile device"</p>
-
-<h3>4. No Structure</h3>
-<p><strong>Bad:</strong> "Tell me what's wrong"</p>
-<p><strong>Good:</strong> "Provide a structured analysis with severity ratings, evidence, and actionable recommendations"</p>
-
-<h2>Evaluating the Evaluator</h2>
-
-<p>Just as important as structuring your prompts is evaluating the quality of AI's responses. Look for:</p>
-
-<ul>
-<li><strong>Specificity:</strong> Does the AI identify concrete issues with evidence?</li>
-<li><strong>Severity accuracy:</strong> Are critical issues properly prioritized?</li>
-<li><strong>Actionable recommendations:</strong> Can you actually implement the suggested improvements?</li>
-<li><strong>Context awareness:</strong> Does the evaluation consider the specific user and business context?</li>
-<li><strong>Completeness:</strong> Does it cover all relevant aspects of the interface?</li>
-</ul>
-
-<h2>The Iterative Refinement Process</h2>
-
-<p>Effective AI-powered heuristic evaluation is iterative. Start with a structured prompt, evaluate the results, and refine your approach:</p>
-
-<ol>
-<li><strong>Initial evaluation:</strong> Use a comprehensive prompt to get baseline results</li>
-<li><strong>Gap analysis:</strong> Identify what the AI missed or misinterpreted</li>
-<li><strong>Prompt refinement:</strong> Adjust your prompt to address gaps</li>
-<li><strong>Validation:</strong> Compare AI results against human evaluation</li>
-<li><strong>Iteration:</strong> Continue refining until results match human quality</li>
-</ol>
-
-<h2>The Future of AI-Powered Evaluation</h2>
-
-<p>As AI tools become more sophisticated, we're likely to see more specialized prompting frameworks emerge. We might see:</p>
-
-<ul>
-<li><strong>Domain-specific heuristics:</strong> AI trained on industry-specific usability patterns</li>
-<li><strong>Contextual awareness:</strong> AI that automatically considers user demographics and technical expertise</li>
-<li><strong>Predictive evaluation:</strong> AI that can predict usability issues before they're built</li>
-<li><strong>Automated testing:</strong> AI that can generate and run usability tests based on heuristic findings</li>
-</ul>
-
-<h2>The Human-AI Partnership</h2>
-
-<p>The goal isn't to replace human evaluators with AI, but to enhance human capabilities. AI can handle the systematic, repetitive aspects of heuristic evaluation, freeing humans to focus on:</p>
-
-<ul>
-<li><strong>Context interpretation:</strong> Understanding the nuances of specific user populations</li>
-<li><strong>Business alignment:</strong> Balancing usability with business requirements</li>
-<li><strong>Creative solutions:</strong> Developing innovative approaches to complex problems</li>
-<li><strong>Validation and refinement:</strong> Ensuring AI findings are accurate and actionable</li>
-</ul>
-
-<h2>Getting Started</h2>
-
-<p>To begin using structured prompts for heuristic evaluation:</p>
-
-<ol>
-<li><strong>Choose a framework:</strong> Start with Nielsen's 10 heuristics or another established framework</li>
-<li><strong>Create a template:</strong> Build a reusable prompt template for your specific use case</li>
-<li><strong>Test and refine:</strong> Compare AI results with human evaluation and adjust your prompts</li>
-<li><strong>Document patterns:</strong> Keep track of what works and what doesn't for different types of interfaces</li>
-<li><strong>Share and collaborate:</strong> Work with your team to develop and improve prompting strategies</li>
-</ol>
-
-<p>Remember, the quality of your AI-powered heuristic evaluation is directly proportional to the quality of your prompts. Invest time in crafting clear, structured, context-aware prompts, and you'll get evaluations that rival human expertise.</p>
-
-<p>The future of UX evaluation isn't AI replacing humans - it's humans and AI working together to create better user experiences than either could achieve alone.</p>`,
-        image: "/img/ai-hallucination.png",
-        cardImage: "/img/ai-hallucination.png",
-        date: "January 20, 2025",
-        tags: [
-          "AI",
-          "Heuristic Evaluation",
-          "UX Research",
-          "Prompt Engineering",
-          "Usability",
-          "User Experience",
-        ],
+        url: "https://davemelk.substack.com/p/prompts-prompt-structure-heuristic-evaluations",
+        content: `<p>Read the full article on <a href="https://davemelk.substack.com/p/prompts-prompt-structure-heuristic-evaluations" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
+        image: "/img/user-testing.png",
+        date: "June 20, 2024",
+        tags: ["AI", "UX Design", "User Testing", "Prompt Engineering"],
       },
     ],
   },

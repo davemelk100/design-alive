@@ -4,16 +4,8 @@ import {
   ArrowUp,
   Eye,
   ExternalLink,
-  X,
-  FlaskConical,
-  BookOpen,
-  FileText,
-  Palette,
-  Briefcase,
-  Settings,
   LayoutGrid,
   List,
-  Menu,
 } from "lucide-react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import React, { useState, useEffect } from "react";
@@ -149,7 +141,7 @@ function App() {
     subtitle?: string;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const [labView, setLabView] = useState<"grid" | "list">("grid");
   const [storiesView, setStoriesView] = useState<"grid" | "list">("grid");
   const [articlesView, setArticlesView] = useState<"grid" | "list">("grid");
@@ -167,9 +159,7 @@ function App() {
   }, [location.pathname]);
 
   // Close mobile menu when route changes
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location.pathname]);
+  useEffect(() => {}, [location.pathname]);
 
   const handleNavClick = (id: string) => {
     console.log("handleNavClick called with id:", id);
@@ -274,97 +264,6 @@ function App() {
                       </div>
                     </div>
 
-                    {/* Mobile Navigation Button */}
-                    <div className="flex justify-center mb-4 md:hidden">
-                      <button
-                        onClick={() => setIsMobileMenuOpen(true)}
-                        className="bg-black text-white dark:bg-white/10 dark:text-white p-3 rounded-full shadow-lg hover:opacity-80 transition-opacity"
-                        aria-label="Open navigation menu"
-                      >
-                        <Menu className="h-5 w-5" />
-                      </button>
-                    </div>
-
-                    {/* Nav Links and Icons Row */}
-                    <div className="hidden md:flex md:flex-col lg:flex-row md:items-stretch lg:items-center gap-4 w-full px-8 sm:px-16 lg:px-32">
-                      <div className="hidden md:flex w-full justify-center lg:justify-center rounded-lg pl-0 pr-0 py-2 items-center gap-2 sm:gap-3">
-                        <div className="flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
-                          <button
-                            onClick={() => handleNavClick("current-projects")}
-                            className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                            aria-label="Navigate to Lab section"
-                          >
-                            Lab
-                          </button>
-                          <button
-                            onClick={() => handleNavClick("stories")}
-                            className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                            aria-label="Navigate to Storytelling section"
-                          >
-                            Storytelling
-                          </button>
-                          <button
-                            onClick={() => handleNavClick("articles")}
-                            className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                            aria-label="Navigate to Articles section"
-                          >
-                            Articles
-                          </button>
-                          <button
-                            onClick={() => handleNavClick("work")}
-                            className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                            aria-label="Navigate to Designs section"
-                          >
-                            Designs
-                          </button>
-                          <button
-                            onClick={() => handleNavClick("career")}
-                            className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                            aria-label="Navigate to Career section"
-                          >
-                            Career
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleNavClick("skills-and-software")
-                            }
-                            className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase hover:bg-gray-100 dark:hover:bg-gray-800"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                            aria-label="Navigate to Skills and Software section"
-                          >
-                            Skills
-                          </button>
-                          <button
-                            onClick={() => handleNavClick("design-system")}
-                            className="relative px-3 py-3 rounded-lg text-black hover:text-gray-600 dark:text-white dark:hover:text-gray-200 transition-all duration-200 text-sm font-bold uppercase whitespace-nowrap hover:bg-gray-100 dark:hover:bg-gray-800"
-                            style={{
-                              fontFamily: "Helvetica, Arial, sans-serif",
-                            }}
-                            aria-label="Navigate to Design System section"
-                          >
-                            Design System
-                          </button>
-                        </div>
-                        <div className="flex items-center gap-2"></div>
-                      </div>
-                    </div>
                     {/* Summary Row (unchanged) */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -386,153 +285,6 @@ function App() {
                     </motion.div>
                   </div>
                 </section>
-
-                {/* Mobile Menu - ENABLED */}
-                <AnimatePresence>
-                  {isMobileMenuOpen && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="fixed top-0 left-0 right-0 bottom-0 bg-black/50 z-[9999] md:hidden"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      <motion.div
-                        initial={{ y: "100%" }}
-                        animate={{ y: 0 }}
-                        exit={{ y: "100%" }}
-                        transition={{
-                          type: "spring",
-                          damping: 25,
-                          stiffness: 300,
-                        }}
-                        className="absolute bottom-16 left-0 right-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 p-3 rounded-t-3xl max-h-[70vh] overflow-y-auto"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <div className="flex items-center justify-between mb-3">
-                          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            Navigation
-                          </h2>
-                          <button
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 rounded-full p-2 transition-colors"
-                            aria-label="Close menu"
-                          >
-                            <X className="h-5 w-5 text-gray-600 dark:text-gray-300" />
-                          </button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                          <button
-                            onClick={() => {
-                              handleNavClick("current-projects");
-                              setIsMobileMenuOpen(false);
-                            }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
-                          >
-                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                              <FlaskConical className="h-4 w-4 text-white" />
-                            </div>
-                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                              Lab
-                            </span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              handleNavClick("stories");
-                              setIsMobileMenuOpen(false);
-                            }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
-                          >
-                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                              <BookOpen className="h-4 w-4 text-white" />
-                            </div>
-                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                              Stories
-                            </span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              handleNavClick("articles");
-                              setIsMobileMenuOpen(false);
-                            }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
-                          >
-                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                              <FileText className="h-4 w-4 text-white" />
-                            </div>
-                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                              Articles
-                            </span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              handleNavClick("work");
-                              setIsMobileMenuOpen(false);
-                            }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
-                          >
-                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                              <Palette className="h-4 w-4 text-white" />
-                            </div>
-                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                              Designs
-                            </span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              handleNavClick("career");
-                              setIsMobileMenuOpen(false);
-                            }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
-                          >
-                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                              <Briefcase className="h-4 w-4 text-white" />
-                            </div>
-                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                              Career
-                            </span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              handleNavClick("skills-and-software");
-                              setIsMobileMenuOpen(false);
-                            }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
-                          >
-                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                              <Settings className="h-4 w-4 text-white" />
-                            </div>
-                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                              Skills
-                            </span>
-                          </button>
-                          <button
-                            onClick={() => {
-                              handleNavClick("design-system");
-                              setIsMobileMenuOpen(false);
-                            }}
-                            className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md"
-                          >
-                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                              <Settings className="h-4 w-4 text-white" />
-                            </div>
-                            <span className="text-sm font-semibold whitespace-nowrap text-gray-900 dark:text-gray-100">
-                              Design System
-                            </span>
-                          </button>
-                          <div className="flex flex-col items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors shadow-md">
-                            <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                              <ThemeToggle className="text-white" />
-                            </div>
-                            <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                              Theme
-                            </span>
-                          </div>
-                        </div>
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
 
                 {/* Lab Section */}
                 <section className="py-8 sm:py-12 lg:py-16 xl:py-20 relative">
@@ -880,13 +632,25 @@ function App() {
                             >
                               {articlesView === "grid" && (
                                 <div className="absolute top-2 right-2 z-20">
-                                  <Link
-                                    to={`/article/${slugify(article.title)}`}
-                                    className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
-                                    aria-label={`View article: ${article.title}`}
-                                  >
-                                    <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                  </Link>
+                                  {article.url.startsWith("http") ? (
+                                    <a
+                                      href={article.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
+                                      aria-label={`View article: ${article.title}`}
+                                    >
+                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                    </a>
+                                  ) : (
+                                    <Link
+                                      to={`/article/${slugify(article.title)}`}
+                                      className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
+                                      aria-label={`View article: ${article.title}`}
+                                    >
+                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                    </Link>
+                                  )}
                                 </div>
                               )}
                               {articlesView === "grid" && (
@@ -942,17 +706,28 @@ function App() {
                                           )}
                                       </div>
                                     </div>
-                                    {articlesView === "list" && (
-                                      <Link
-                                        to={`/article/${slugify(
-                                          article.title
-                                        )}`}
-                                        className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
-                                        aria-label={`View article: ${article.title}`}
-                                      >
-                                        <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                      </Link>
-                                    )}
+                                    {articlesView === "list" &&
+                                      (article.url.startsWith("http") ? (
+                                        <a
+                                          href={article.url}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+                                          aria-label={`View article: ${article.title}`}
+                                        >
+                                          <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                        </a>
+                                      ) : (
+                                        <Link
+                                          to={`/article/${slugify(
+                                            article.title
+                                          )}`}
+                                          className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+                                          aria-label={`View article: ${article.title}`}
+                                        >
+                                          <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                        </Link>
+                                      ))}
                                   </div>
                                 </div>
                               </div>
@@ -1227,155 +1002,159 @@ function App() {
                 {/* Storytelling Section */}
                 <section
                   id="stories"
-                  className="py-8 sm:py-12 lg:py-16 xl:py-20"
+                  className="py-8 sm:py-12 lg:py-16 xl:py-20 relative"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <SectionHeader
-                      title={content.stories.title}
-                      subtitle={content.stories.subtitle}
-                      className="mb-8"
-                      toggleView={setStoriesView}
-                      viewMode={storiesView}
-                    />
-                    <div
-                      className={
-                        storiesView === "grid"
-                          ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
-                          : "flex flex-col gap-4"
-                      }
-                    >
-                      {content.stories.items
-                        .filter((story) => story.title !== "Design Management")
-                        .map((story) => (
-                          <motion.div
-                            key={story.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 2.4, delay: 0.2 }}
-                            className={`group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md ${
-                              storiesView === "list"
-                                ? "h-[50px]"
-                                : "h-[280px] sm:h-[300px] lg:h-[320px]"
-                            }`}
-                          >
-                            {storiesView === "grid" && (
-                              <div className="absolute top-2 right-2 z-20">
-                                {story.hasModal ? (
-                                  <button
-                                    onClick={() =>
-                                      setSelectedStory({
-                                        title: story.title,
-                                        content: story.content,
-                                        subtitle: story.subtitle,
-                                      })
-                                    }
-                                    className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
-                                    aria-label={`View ${story.title} story`}
-                                  >
-                                    <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                  </button>
-                                ) : (
-                                  <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]">
-                                    <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                            <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                              <div
-                                className={`rounded-lg p-2 ${
-                                  storiesView === "grid"
-                                    ? "bg-white/40 dark:bg-transparent backdrop-blur-sm pr-12"
-                                    : "flex items-center justify-between h-full"
-                                }`}
-                              >
-                                <div className="flex items-center justify-between w-full">
-                                  <div className="flex items-center gap-3">
-                                    {storiesView === "list" && (
-                                      <div className="w-8 h-8 rounded overflow-hidden flex-shrink-0">
-                                        {story.image ? (
-                                          <img
-                                            src={story.image}
-                                            alt={story.title}
-                                            className="w-full h-full object-cover"
-                                            loading="lazy"
-                                          />
-                                        ) : (
-                                          <div className="w-full h-full bg-gray-200/50 flex items-center justify-center">
-                                            <div className="text-gray-400 text-xs">
-                                              No image
-                                            </div>
-                                          </div>
-                                        )}
-                                      </div>
-                                    )}
-                                    <h3
-                                      className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap"
-                                      style={{
-                                        letterSpacing: "-0.01em",
-                                      }}
-                                    >
-                                      {story.title}
-                                    </h3>
-                                  </div>
-                                  {storiesView === "list" &&
-                                    (story.hasModal ? (
-                                      <button
-                                        onClick={() =>
-                                          setSelectedStory({
-                                            title: story.title,
-                                            content: story.content,
-                                            subtitle: story.subtitle,
-                                          })
-                                        }
-                                        className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
-                                        aria-label={`View ${story.title} story`}
-                                      >
-                                        <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                      </button>
-                                    ) : (
-                                      <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center">
-                                        <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                      </div>
-                                    ))}
-                                </div>
-                                {storiesView === "grid" && story.subtitle && (
-                                  <p className="text-sm text-gray-600 dark:text-white mb-2">
-                                    {story.subtitle}
-                                  </p>
-                                )}
-                              </div>
+                    <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg">
+                      <SectionHeader
+                        title={content.stories.title}
+                        subtitle={content.stories.subtitle}
+                        className="mb-8"
+                        toggleView={setStoriesView}
+                        viewMode={storiesView}
+                      />
+                      <div
+                        className={
+                          storiesView === "grid"
+                            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+                            : "flex flex-col gap-4"
+                        }
+                      >
+                        {content.stories.items
+                          .filter(
+                            (story) => story.title !== "Design Management"
+                          )
+                          .map((story) => (
+                            <motion.div
+                              key={story.title}
+                              initial={{ opacity: 0, y: 20 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 2.4, delay: 0.2 }}
+                              className={`group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md ${
+                                storiesView === "list"
+                                  ? "h-[50px]"
+                                  : "h-[280px] sm:h-[300px] lg:h-[320px]"
+                              }`}
+                            >
                               {storiesView === "grid" && (
-                                <div className="flex-1 flex flex-col">
-                                  {story.description && (
-                                    <p className="text-black mb-2 dark:text-white text-card-body flex-1">
-                                      {story.description}
-                                    </p>
+                                <div className="absolute top-2 right-2 z-20">
+                                  {story.hasModal ? (
+                                    <button
+                                      onClick={() =>
+                                        setSelectedStory({
+                                          title: story.title,
+                                          content: story.content,
+                                          subtitle: story.subtitle,
+                                        })
+                                      }
+                                      className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]"
+                                      aria-label={`View ${story.title} story`}
+                                    >
+                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                    </button>
+                                  ) : (
+                                    <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center mt-[5px] mr-[5px]">
+                                      <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                    </div>
                                   )}
                                 </div>
                               )}
-                            </div>
-                            {storiesView === "grid" && (
-                              <div className="absolute inset-0 overflow-hidden z-0 p-2">
-                                {story.image ? (
-                                  <img
-                                    src={story.image}
-                                    alt={story.title}
-                                    className="absolute inset-0 h-full w-full object-contain object-bottom"
-                                    loading="lazy"
-                                  />
-                                ) : (
-                                  <div className="absolute inset-0 h-full w-full bg-gray-200/50 flex items-center justify-center">
-                                    <div className="text-gray-400 text-sm">
-                                      No image
+                              <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                                <div
+                                  className={`rounded-lg p-2 ${
+                                    storiesView === "grid"
+                                      ? "bg-white/40 dark:bg-transparent backdrop-blur-sm pr-12"
+                                      : "flex items-center justify-between h-full"
+                                  }`}
+                                >
+                                  <div className="flex items-center justify-between w-full">
+                                    <div className="flex items-center gap-3">
+                                      {storiesView === "list" && (
+                                        <div className="w-8 h-8 rounded overflow-hidden flex-shrink-0">
+                                          {story.image ? (
+                                            <img
+                                              src={story.image}
+                                              alt={story.title}
+                                              className="w-full h-full object-cover"
+                                              loading="lazy"
+                                            />
+                                          ) : (
+                                            <div className="w-full h-full bg-gray-200/50 flex items-center justify-center">
+                                              <div className="text-gray-400 text-xs">
+                                                No image
+                                              </div>
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                      <h3
+                                        className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap"
+                                        style={{
+                                          letterSpacing: "-0.01em",
+                                        }}
+                                      >
+                                        {story.title}
+                                      </h3>
                                     </div>
+                                    {storiesView === "list" &&
+                                      (story.hasModal ? (
+                                        <button
+                                          onClick={() =>
+                                            setSelectedStory({
+                                              title: story.title,
+                                              content: story.content,
+                                              subtitle: story.subtitle,
+                                            })
+                                          }
+                                          className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+                                          aria-label={`View ${story.title} story`}
+                                        >
+                                          <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                        </button>
+                                      ) : (
+                                        <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center">
+                                          <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                        </div>
+                                      ))}
+                                  </div>
+                                  {storiesView === "grid" && story.subtitle && (
+                                    <p className="text-sm text-gray-600 dark:text-white mb-2">
+                                      {story.subtitle}
+                                    </p>
+                                  )}
+                                </div>
+                                {storiesView === "grid" && (
+                                  <div className="flex-1 flex flex-col">
+                                    {story.description && (
+                                      <p className="text-black mb-2 dark:text-white text-card-body flex-1">
+                                        {story.description}
+                                      </p>
+                                    )}
                                   </div>
                                 )}
                               </div>
-                            )}
-                          </motion.div>
-                        ))}
+                              {storiesView === "grid" && (
+                                <div className="absolute inset-0 overflow-hidden z-0 p-2">
+                                  {story.image ? (
+                                    <img
+                                      src={story.image}
+                                      alt={story.title}
+                                      className="absolute inset-0 h-full w-full object-contain object-bottom"
+                                      loading="lazy"
+                                    />
+                                  ) : (
+                                    <div className="absolute inset-0 h-full w-full bg-gray-200/50 flex items-center justify-center">
+                                      <div className="text-gray-400 text-sm">
+                                        No image
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </motion.div>
+                          ))}
+                      </div>
                     </div>
                   </div>
                 </section>

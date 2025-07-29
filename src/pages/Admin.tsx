@@ -91,14 +91,25 @@ const Admin: React.FC = () => {
                     </p>
                     <p className="text-xs text-gray-600">{article.date}</p>
                   </div>
-                  <Link
-                    to={`/article/${article.title
-                      .toLowerCase()
-                      .replace(/\s+/g, "-")}`}
-                    className="text-blue-600 hover:text-blue-800 text-sm"
-                  >
-                    View
-                  </Link>
+                  {article.url.startsWith("http") ? (
+                    <a
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 text-sm"
+                    >
+                      View
+                    </a>
+                  ) : (
+                    <Link
+                      to={`/article/${article.title
+                        .toLowerCase()
+                        .replace(/\s+/g, "-")}`}
+                      className="text-blue-600 hover:text-blue-800 text-sm"
+                    >
+                      View
+                    </Link>
+                  )}
                 </div>
               ))}
             </div>
