@@ -225,7 +225,7 @@ function App() {
                 </section>
 
                 {/* Lab Section */}
-                <section className="py-8 sm:py-12 lg:py-16 xl:py-20 relative">
+                <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 gap-6 sm:gap-8">
                       {/* Lab Section */}
@@ -499,7 +499,7 @@ function App() {
                 {/* Articles Section */}
                 <section
                   id="articles"
-                  className="py-8 sm:py-12 lg:py-16 xl:py-20 relative"
+                  className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg">
@@ -687,7 +687,7 @@ function App() {
                 {/* Design Section */}
                 <section
                   id="work"
-                  className="py-8 sm:py-12 lg:py-16 xl:py-20 relative"
+                  className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg">
@@ -932,7 +932,7 @@ function App() {
                 {/* Storytelling Section */}
                 <section
                   id="stories"
-                  className="py-8 sm:py-12 lg:py-16 xl:py-20 relative"
+                  className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg">
@@ -1090,10 +1090,7 @@ function App() {
                 </section>
 
                 {/* Career Timeline Section */}
-                <section
-                  id="career"
-                  className="py-8 sm:py-12 lg:py-16 xl:py-20"
-                >
+                <section id="career" className="py-4 sm:py-6 lg:py-8 xl:py-12">
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
                     <SectionHeader
                       title={content.career.title}
@@ -1165,7 +1162,7 @@ function App() {
                 {/* Skills and Software Section */}
                 <section
                   id="skills-and-software"
-                  className="py-8 sm:py-12 lg:py-16 xl:py-20"
+                  className="py-4 sm:py-6 lg:py-8 xl:py-12"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
                     <SectionHeader
@@ -1314,7 +1311,7 @@ function App() {
                 {/* Design System Section */}
                 <section
                   id="design-system"
-                  className="py-8 sm:py-12 lg:py-16 xl:py-20"
+                  className="py-4 sm:py-6 lg:py-8 xl:py-12"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
                     <SectionHeader
