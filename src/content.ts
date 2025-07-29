@@ -910,6 +910,18 @@ export const content = {
         date: "June 20, 2024",
         tags: ["AI", "UX Design", "User Testing", "Prompt Engineering"],
       },
+      {
+        id: "ai-prompts-rolling-dice",
+        title: "AI Prompts and the Art of Rolling the Dice",
+        description:
+          "Why sometimes the best AI results come from unexpected prompts, not perfect planning.",
+        url: "https://open.substack.com/pub/davemelk/p/ai-prompts-and-the-art-of-rolling?r=1jgk3k&utm_campaign=post&utm_medium=web&showWelcomeOnShare=false",
+        content: `<p>Read the full article on <a href="https://open.substack.com/pub/davemelk/p/ai-prompts-and-the-art-of-rolling?r=1jgk3k&utm_campaign=post&utm_medium=web&showWelcomeOnShare=false" target="_blank" rel="noopener noreferrer">Substack</a>.</p>`,
+        image: "/img/overthink-prompts.png",
+        cardImage: "/img/overthink-prompts.png",
+        date: "January 15, 2025",
+        tags: ["AI", "Prompt Engineering", "Creativity", "Productivity"],
+      },
     ],
   },
   writingGallery: {
