@@ -672,14 +672,6 @@ function App() {
                             </motion.div>
                           ))}
                       </div>
-                      <div className="mt-8">
-                        <Link
-                          to="/archive"
-                          className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
-                        >
-                          View Archive
-                        </Link>
-                      </div>
                     </div>
                   </div>
                 </section>
