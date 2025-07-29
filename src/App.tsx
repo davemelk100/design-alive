@@ -271,7 +271,7 @@ function App() {
                       transition={{ duration: 1.8, delay: 0.4 }}
                       className="flex flex-col items-start mt-4 sm:mt-6 px-4 sm:px-8 lg:px-32"
                     >
-                      <p className="text-base sm:text-lg text-muted-foreground leading-relaxed text-center font-['DM_Sans']">
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-center font-['DM_Sans']">
                         Senior UX and Product Designer with 15+ years of
                         experience delivering accessible, user-centered digital
                         solutions across industries. Skilled in end-to-end
