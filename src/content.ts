@@ -267,10 +267,7 @@ export const content = {
             skill: "Facilitating and analyzing user testing sessions",
             software: ["Useberry", "UserTesting", "Maze"],
           },
-          {
-            skill: "Creating onboarding tutorials",
-            software: ["Figma"],
-          },
+
           {
             skill: "Synthesizing feedback to refine designs",
             software: ["Figma", "Useberry", "Perplexity", "ChatGPT", "Grok"],
@@ -335,40 +332,14 @@ export const content = {
             skill: "Creating pattern libraries and frameworks",
             software: ["HTML", "CSS", "JavaScript", "TypeScript"],
           },
-          {
-            skill: "Implementing responsive and accessible front-end code",
-            software: [
-              "HTML",
-              "CSS",
-              "JavaScript",
-              "TypeScript",
-              "React",
-              "Next.js",
-              "Tailwind CSS",
-            ],
-          },
-          {
-            skill: "Migrating websites to modern platforms",
-            software: [
-              "WordPress",
-              "WooCommerce",
-              "Shopify",
-              "HTML",
-              "CSS",
-              "PHP",
-            ],
-          },
-          {
-            skill: "Maintaining and updating websites",
-            software: ["WordPress", "ColdFusion", "HTML", "CSS", "JavaScript"],
-          },
+
           {
             skill: "Integrating payment systems and inventory sync",
             software: ["Authorize.net", "coreSTORE", "WooCommerce"],
           },
           {
             skill: "Developing custom themes and enhancements",
-            software: ["HTML", "CSS", "PHP", "WordPress"],
+            software: ["HTML", "CSS", "PHP", "WordPress", "Contact Form 7"],
           },
           {
             skill: "Building streaming media and interactive training guides",
@@ -378,6 +349,10 @@ export const content = {
               "JavaScript",
               "WMVs (Windows Media Video)",
             ],
+          },
+          {
+            skill: "Integrating email systems and automation",
+            software: ["Email.js", "Auth0", "Mailchimp", "Contact Form 7"],
           },
         ],
       },
@@ -535,7 +510,7 @@ export const content = {
       },
       {
         title: "HealthAware",
-        description: "A health monitoring system for vehicles.",
+        description: "A health monitoring system.",
         technologies: ["React", "Health APIs", "IoT", "Real-time Data"],
         demo: "https://my-health-powerered-vehicle.netlify.app/",
         image: "/img/health-aware-animation.svg",
