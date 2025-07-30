@@ -24,7 +24,7 @@ const MobileTrayMenu: React.FC = () => {
   return (
     <>
       {/* Mobile Bottom Icons Tray */}
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-50/95 backdrop-blur-sm border-t border-gray-200 shadow-lg z-[9999] md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-50/95 backdrop-blur-sm border-t border-gray-200 shadow-lg z-[9999] lg:hidden">
         <div className="px-4 py-3">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -39,7 +39,7 @@ const MobileTrayMenu: React.FC = () => {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 bg-black/50 z-[10000] md:hidden">
+        <div className="fixed inset-0 bg-black/50 z-[10000] lg:hidden">
           <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 rounded-t-2xl shadow-2xl p-6 max-h-[80vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">

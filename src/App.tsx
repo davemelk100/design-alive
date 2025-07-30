@@ -140,6 +140,7 @@ function App() {
   const [storiesView, setStoriesView] = useState<"grid" | "list">("grid");
   const [articlesView, setArticlesView] = useState<"grid" | "list">("grid");
   const [designView, setDesignView] = useState<"grid" | "list">("grid");
+  const [currentSlide, setCurrentSlide] = useState(2);
 
   const location = useLocation();
 
@@ -180,70 +181,189 @@ function App() {
                 {/* Hero Section */}
                 <section className="relative flex flex-col justify-center min-h-[120px] sm:min-h-[160px] pt-4 sm:pt-6 lg:pt-8">
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-                    {/* Title Row */}
-                    <div className="flex flex-row items-center gap-4 relative z-10 mt-5 mb-6 sm:mb-8">
-                      {/* Mobile: Title centered */}
-                      <div className="flex xl:hidden items-center justify-center w-full">
-                        <h1
-                          className="text-[clamp(1.5rem,4vw,3rem)] font-bold mb-1 title-font leading-none relative z-10"
-                          style={{ letterSpacing: "-0.06em" }}
+                    {/* Two-column layout: Left content + Right video card */}
+                    <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-start">
+                      {/* Left Column: Title, Navigation, Summary */}
+                      <div className="flex flex-col items-start flex-1">
+                        {/* Title */}
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 1.8, delay: 0.2 }}
+                          className="mb-6 sm:mb-8"
                         >
-                          {content.siteInfo.subtitle}
-                        </h1>
-                      </div>
-                      {/* Desktop: Title centered */}
-                      <div className="hidden xl:flex items-center justify-center w-full">
-                        <h1
-                          className="text-[clamp(1.5rem,4vw,3rem)] font-bold mb-1 title-font leading-none relative z-10"
-                          style={{ letterSpacing: "-0.06em" }}
-                        >
-                          {content.siteInfo.subtitle}
-                        </h1>
-                      </div>
-                    </div>
+                          <h1
+                            className="text-[clamp(1.5rem,4vw,3rem)] font-bold mb-1 title-font leading-none relative z-10 text-left"
+                            style={{ letterSpacing: "-0.06em" }}
+                          >
+                            {content.siteInfo.subtitle}
+                          </h1>
+                        </motion.div>
 
-                    {/* Navigation Links */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 1.8, delay: 0.4 }}
-                      className="hidden md:flex flex-wrap justify-center gap-4 sm:gap-6 mb-6 sm:mb-8"
-                    >
-                      {content.navigation.links.map((link) => (
-                        <button
-                          key={link.id}
-                          onClick={() => {
-                            const element = document.getElementById(link.id);
-                            if (element) {
-                              element.scrollIntoView({ behavior: "smooth" });
+                        {/* Navigation Links */}
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 1.8, delay: 0.4 }}
+                          className="hidden lg:flex flex-wrap justify-start gap-2 sm:gap-3 mb-6 sm:mb-8"
+                        >
+                          {content.navigation.links.map((link) => (
+                            <button
+                              key={link.id}
+                              onClick={() => {
+                                const element = document.getElementById(
+                                  link.id
+                                );
+                                if (element) {
+                                  element.scrollIntoView({
+                                    behavior: "smooth",
+                                  });
+                                }
+                              }}
+                              className="text-sm font-bold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 uppercase tracking-wide"
+                            >
+                              {link.text}
+                            </button>
+                          ))}
+                        </motion.div>
+
+                        {/* Summary Text */}
+                        <motion.div
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 1.8, delay: 0.6 }}
+                          className="mt-4 sm:mt-6"
+                        >
+                          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-left font-['DM_Sans']">
+                            Senior UX and Product Designer with 15+ years of
+                            experience delivering accessible, user-centered
+                            digital solutions across industries. Skilled in
+                            end-to-end design - from research to polished UIs -
+                            for dashboards, onboarding flows, and e-commerce.
+                            Expert in cross-functional collaboration, AI-driven
+                            problem solving, and inclusive innovation. Also an
+                            experienced technical writer, translating complex
+                            ideas into clear, engaging content for users and
+                            stakeholders.
+                          </p>
+                        </motion.div>
+                      </div>
+
+                      {/* Video Carousel */}
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1.8, delay: 0.8 }}
+                        className="hidden md:block w-[352px]"
+                      >
+                        <div className="relative overflow-hidden bg-white h-[350px] shadow-lg group rounded-lg">
+                          {/* Carousel Slides */}
+                          <div className="relative w-full h-full">
+                            {/* Typesetting Slide */}
+                            <div
+                              className={`absolute inset-0 transition-opacity duration-500 ${
+                                currentSlide === 0 ? "opacity-100" : "opacity-0"
+                              }`}
+                            >
+                              <div className="absolute inset-0 z-0 flex items-center justify-center">
+                                <LazyVideo
+                                  src="/video/typesetting.mp4"
+                                  className="w-full h-auto object-contain shadow-none border-0"
+                                  autoPlay={true}
+                                  muted={true}
+                                  loop={true}
+                                  playsInline={true}
+                                />
+                              </div>
+                            </div>
+
+                            {/* Interwoven Slide */}
+                            <div
+                              className={`absolute inset-0 transition-opacity duration-500 ${
+                                currentSlide === 1 ? "opacity-100" : "opacity-0"
+                              }`}
+                            >
+                              <div className="absolute inset-0 z-0 flex items-center justify-center">
+                                <LazyVideo
+                                  src="/video/interwoven.mp4"
+                                  className="w-full h-auto object-contain shadow-none border-0"
+                                  autoPlay={true}
+                                  muted={true}
+                                  loop={true}
+                                  playsInline={true}
+                                />
+                              </div>
+                            </div>
+
+                            {/* Ambiguous Scale Slide */}
+                            <div
+                              className={`absolute inset-0 transition-opacity duration-500 ${
+                                currentSlide === 2 ? "opacity-100" : "opacity-0"
+                              }`}
+                            >
+                              <div className="absolute inset-0 z-0 flex items-center justify-center">
+                                <LazyVideo
+                                  src="/video/ambiguous-scale.mp4"
+                                  className="w-full h-auto object-contain shadow-none border-0"
+                                  autoPlay={true}
+                                  muted={true}
+                                  loop={true}
+                                  playsInline={true}
+                                />
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Navigation Arrows */}
+                          <button
+                            onClick={() =>
+                              setCurrentSlide((prev) =>
+                                prev === 0 ? 2 : prev - 1
+                              )
                             }
-                          }}
-                          className="text-sm font-bold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 uppercase tracking-wide"
-                        >
-                          {link.text}
-                        </button>
-                      ))}
-                    </motion.div>
-
-                    {/* Summary Row (unchanged) */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 1.8, delay: 0.6 }}
-                      className="flex flex-col items-start mt-4 sm:mt-6 px-4 sm:px-8 lg:px-32"
-                    >
-                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-center font-['DM_Sans']">
-                        Senior UX and Product Designer with 15+ years of
-                        experience delivering accessible, user-centered digital
-                        solutions across industries. Skilled in end-to-end
-                        design - from research to polished UIs - for dashboards,
-                        onboarding flows, and e-commerce. Expert in
-                        cross-functional collaboration, AI-driven problem
-                        solving, and inclusive innovation. Also an experienced
-                        technical writer, translating complex ideas into clear,
-                        engaging content for users and stakeholders.
-                      </p>
-                    </motion.div>
+                            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 z-20 opacity-0 group-hover:opacity-100"
+                            aria-label="Previous video"
+                          >
+                            <svg
+                              className="w-4 h-4 text-gray-600"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 19l-7-7 7-7"
+                              />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() =>
+                              setCurrentSlide((prev) =>
+                                prev === 2 ? 0 : prev + 1
+                              )
+                            }
+                            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 z-20 opacity-0 group-hover:opacity-100"
+                            aria-label="Next video"
+                          >
+                            <svg
+                              className="w-4 h-4 text-gray-600"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                      </motion.div>
+                    </div>
                   </div>
                 </section>
 
@@ -1185,7 +1305,7 @@ function App() {
                       subtitle={content.skillsAndSoftware.subtitle}
                       className="mb-8 sm:mb-6"
                     />
-                    <div className="space-y-8 sm:space-y-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                       {content.skillsAndSoftware.categories.map(
                         (category, categoryIndex) => (
                           <motion.div
