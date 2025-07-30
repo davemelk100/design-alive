@@ -202,11 +202,34 @@ function App() {
                       </div>
                     </div>
 
-                    {/* Summary Row (unchanged) */}
+                    {/* Navigation Links */}
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 1.8, delay: 0.4 }}
+                      className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6 sm:mb-8"
+                    >
+                      {content.navigation.links.map((link) => (
+                        <button
+                          key={link.id}
+                          onClick={() => {
+                            const element = document.getElementById(link.id);
+                            if (element) {
+                              element.scrollIntoView({ behavior: "smooth" });
+                            }
+                          }}
+                          className="text-sm font-bold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 uppercase tracking-wide"
+                        >
+                          {link.text}
+                        </button>
+                      ))}
+                    </motion.div>
+
+                    {/* Summary Row (unchanged) */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 1.8, delay: 0.6 }}
                       className="flex flex-col items-start mt-4 sm:mt-6 px-4 sm:px-8 lg:px-32"
                     >
                       <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-center font-['DM_Sans']">
@@ -220,29 +243,6 @@ function App() {
                         technical writer, translating complex ideas into clear,
                         engaging content for users and stakeholders.
                       </p>
-                    </motion.div>
-
-                    {/* Navigation Links */}
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 1.8, delay: 0.6 }}
-                      className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-6 sm:mt-8"
-                    >
-                      {content.navigation.links.map((link) => (
-                        <button
-                          key={link.id}
-                          onClick={() => {
-                            const element = document.getElementById(link.id);
-                            if (element) {
-                              element.scrollIntoView({ behavior: "smooth" });
-                            }
-                          }}
-                          className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-                        >
-                          {link.text}
-                        </button>
-                      ))}
                     </motion.div>
                   </div>
                 </section>
