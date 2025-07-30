@@ -74,7 +74,7 @@ export const audioTracks: AudioTrack[] = [
   },
   {
     id: 8,
-    title: "You Son of A",
+    title: "Well I'll Be A",
     artist: "BALM",
     url: "/audio/You-Son-Of-A.mp3",
     uniqueUrl: "/audio/You-Son-Of-A.mp3",
@@ -83,7 +83,7 @@ export const audioTracks: AudioTrack[] = [
   },
   {
     id: 9,
-    title: "Claspaliti",
+    title: "This Time, It's Jeremy",
     artist: "BALM",
     url: "/audio/claspaliti.mp3",
     uniqueUrl: "/audio/claspaliti.mp3",
@@ -92,12 +92,21 @@ export const audioTracks: AudioTrack[] = [
   },
   {
     id: 10,
-    title: "Sickly",
+    title: "Vokey SM10 Raw",
     artist: "BALM",
     url: "/audio/sickly.mp3",
     uniqueUrl: "/audio/sickly.mp3",
     duration: "4:32",
     filename: "sickly.mp3",
+  },
+  {
+    id: 11,
+    title: "Vokey SM10 Raw",
+    artist: "BALM",
+    url: "/audio/Vokey-SM10-Raw.mp3",
+    uniqueUrl: "/audio/Vokey-SM10-Raw.mp3",
+    duration: "4:36",
+    filename: "Vokey-SM10-Raw.mp3",
   },
 ];
 
