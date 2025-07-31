@@ -387,7 +387,7 @@ function App() {
                         <div
                           className={
                             labView === "grid"
-                              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+                              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6"
                               : "flex flex-col gap-4"
                           }
                         >
@@ -674,7 +674,7 @@ function App() {
                       <div
                         className={
                           articlesView === "grid"
-                            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+                            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6"
                             : "flex flex-col gap-4"
                         }
                       >
@@ -848,7 +848,7 @@ function App() {
                       <div
                         className={
                           designView === "grid"
-                            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6"
+                            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6"
                             : "flex flex-col gap-4"
                         }
                       >
@@ -1615,7 +1615,7 @@ function App() {
                       <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
                         Cards
                       </h2>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
                         <div className="group relative overflow-hidden rounded-lg bg-gray-100/80">
                           <div className="absolute top-3 right-3 z-20">
                             <button
