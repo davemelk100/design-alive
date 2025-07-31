@@ -99,6 +99,15 @@ export const audioTracks: AudioTrack[] = [
     duration: "4:36",
     filename: "Vokey-SM10-Raw.mp3",
   },
+  {
+    id: 11,
+    title: "On Sunday",
+    artist: "BALM",
+    url: "/audio/on-sunday.mp3",
+    uniqueUrl: "/audio/on-sunday.mp3",
+    duration: "2:49",
+    filename: "on-sunday.mp3",
+  },
 ];
 
 // Helper function to get track by unique URL
