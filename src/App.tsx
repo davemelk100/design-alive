@@ -140,7 +140,7 @@ function App() {
   const [storiesView, setStoriesView] = useState<"grid" | "list">("grid");
   const [articlesView, setArticlesView] = useState<"grid" | "list">("grid");
   const [designView, setDesignView] = useState<"grid" | "list">("grid");
-  const [currentSlide, setCurrentSlide] = useState(1);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const location = useLocation();
 
@@ -256,31 +256,13 @@ function App() {
                         transition={{ duration: 1.8, delay: 0.8 }}
                         className="hidden md:block w-[352px]"
                       >
-                        <div className="relative overflow-hidden bg-white h-[350px] shadow-lg group rounded-lg">
+                        <div className="relative overflow-hidden h-[350px] group rounded-lg">
                           {/* Carousel Slides */}
                           <div className="relative w-full h-full">
-                            {/* Typesetting Slide */}
-                            <div
-                              className={`absolute inset-0 transition-opacity duration-500 ${
-                                currentSlide === 0 ? "opacity-100" : "opacity-0"
-                              }`}
-                            >
-                              <div className="absolute inset-0 z-0 flex items-center justify-center">
-                                <LazyVideo
-                                  src="/video/typesetting.mp4"
-                                  className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={true}
-                                  muted={true}
-                                  loop={true}
-                                  playsInline={true}
-                                />
-                              </div>
-                            </div>
-
                             {/* Interwoven Slide */}
                             <div
                               className={`absolute inset-0 transition-opacity duration-500 ${
-                                currentSlide === 1 ? "opacity-100" : "opacity-0"
+                                currentSlide === 0 ? "opacity-100" : "opacity-0"
                               }`}
                             >
                               <div className="absolute inset-0 z-0 flex items-center justify-center">
@@ -298,7 +280,7 @@ function App() {
                             {/* Ambiguous Scale Slide */}
                             <div
                               className={`absolute inset-0 transition-opacity duration-500 ${
-                                currentSlide === 2 ? "opacity-100" : "opacity-0"
+                                currentSlide === 1 ? "opacity-100" : "opacity-0"
                               }`}
                             >
                               <div className="absolute inset-0 z-0 flex items-center justify-center">
@@ -318,7 +300,7 @@ function App() {
                           <button
                             onClick={() =>
                               setCurrentSlide((prev) =>
-                                prev === 0 ? 2 : prev - 1
+                                prev === 0 ? 1 : prev - 1
                               )
                             }
                             className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 z-20 opacity-0 group-hover:opacity-100"
@@ -341,7 +323,7 @@ function App() {
                           <button
                             onClick={() =>
                               setCurrentSlide((prev) =>
-                                prev === 2 ? 0 : prev + 1
+                                prev === 1 ? 0 : prev + 1
                               )
                             }
                             className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 z-20 opacity-0 group-hover:opacity-100"
