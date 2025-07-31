@@ -140,7 +140,7 @@ function App() {
   const [storiesView, setStoriesView] = useState<"grid" | "list">("grid");
   const [articlesView, setArticlesView] = useState<"grid" | "list">("grid");
   const [designView, setDesignView] = useState<"grid" | "list">("grid");
-  const [currentSlide, setCurrentSlide] = useState(2);
+  const [currentSlide, setCurrentSlide] = useState(1);
 
   const location = useLocation();
 
@@ -259,7 +259,7 @@ function App() {
                         <div className="relative overflow-hidden h-[350px] group rounded-lg shadow-lg">
                           {/* Carousel Slides */}
                           <div className="relative w-full h-full">
-                            {/* Interwoven Slide */}
+                            {/* Helvetica Slide */}
                             <div
                               className={`absolute inset-0 transition-opacity duration-500 ${
                                 currentSlide === 0 ? "opacity-100" : "opacity-0"
@@ -267,42 +267,9 @@ function App() {
                             >
                               <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
                                 <LazyVideo
-                                  src="/video/interwoven.mp4"
-                                  className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={currentSlide === 0}
-                                  muted={true}
-                                  loop={true}
-                                  playsInline={true}
-                                />
-                              </div>
-                              {/* Title and subtitle above animation */}
-                              <div className="absolute inset-0 z-10 flex flex-col justify-start p-4">
-                                <div className="text-gray-900 dark:text-gray-100">
-                                  <h3 className="text-base font-semibold mb-1">
-                                    Interwoven Space
-                                  </h3>
-                                  <p className="text-xs opacity-90 leading-relaxed">
-                                    Interwoven Space explores how elements can
-                                    overlap and interact in 3D space, creating
-                                    depth through layering and transparency.
-                                    This technique adds complexity and visual
-                                    interest while maintaining clarity.
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Helvetica Slide */}
-                            <div
-                              className={`absolute inset-0 transition-opacity duration-500 ${
-                                currentSlide === 1 ? "opacity-100" : "opacity-0"
-                              }`}
-                            >
-                              <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
-                                <LazyVideo
                                   src="/video/helvetica.mp4"
                                   className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={currentSlide === 1}
+                                  autoPlay={currentSlide === 0}
                                   muted={true}
                                   loop={true}
                                   playsInline={true}
@@ -328,14 +295,14 @@ function App() {
                             {/* Axonometric Projection Slide */}
                             <div
                               className={`absolute inset-0 transition-opacity duration-500 ${
-                                currentSlide === 2 ? "opacity-100" : "opacity-0"
+                                currentSlide === 1 ? "opacity-100" : "opacity-0"
                               }`}
                             >
                               <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
                                 <LazyVideo
                                   src="/video/axonometric.mp4"
                                   className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={currentSlide === 2}
+                                  autoPlay={currentSlide === 1}
                                   muted={true}
                                   loop={true}
                                   playsInline={true}
@@ -361,14 +328,14 @@ function App() {
                             {/* Observed Rhythm Slide */}
                             <div
                               className={`absolute inset-0 transition-opacity duration-500 ${
-                                currentSlide === 3 ? "opacity-100" : "opacity-0"
+                                currentSlide === 2 ? "opacity-100" : "opacity-0"
                               }`}
                             >
                               <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
                                 <LazyVideo
                                   src="/video/observed-rhythm.mp4"
                                   className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={currentSlide === 3}
+                                  autoPlay={currentSlide === 2}
                                   muted={true}
                                   loop={true}
                                   playsInline={true}
@@ -396,7 +363,7 @@ function App() {
                           <button
                             onClick={() =>
                               setCurrentSlide((prev) =>
-                                prev === 0 ? 3 : prev - 1
+                                prev === 0 ? 2 : prev - 1
                               )
                             }
                             className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 z-20 opacity-0 group-hover:opacity-100"
@@ -419,7 +386,7 @@ function App() {
                           <button
                             onClick={() =>
                               setCurrentSlide((prev) =>
-                                prev === 3 ? 0 : prev + 1
+                                prev === 2 ? 0 : prev + 1
                               )
                             }
                             className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 z-20 opacity-0 group-hover:opacity-100"
