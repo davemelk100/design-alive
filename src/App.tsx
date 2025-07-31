@@ -269,7 +269,7 @@ function App() {
                                 <LazyVideo
                                   src="/video/interwoven.mp4"
                                   className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={true}
+                                  autoPlay={currentSlide === 0}
                                   muted={true}
                                   loop={true}
                                   playsInline={true}
@@ -302,7 +302,7 @@ function App() {
                                 <LazyVideo
                                   src="/video/helvetica.mp4"
                                   className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={true}
+                                  autoPlay={currentSlide === 1}
                                   muted={true}
                                   loop={true}
                                   playsInline={true}
@@ -335,7 +335,7 @@ function App() {
                                 <LazyVideo
                                   src="/video/axonometric.mp4"
                                   className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={true}
+                                  autoPlay={currentSlide === 2}
                                   muted={true}
                                   loop={true}
                                   playsInline={true}
@@ -368,7 +368,7 @@ function App() {
                                 <LazyVideo
                                   src="/video/observed-rhythm.mp4"
                                   className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={true}
+                                  autoPlay={currentSlide === 3}
                                   muted={true}
                                   loop={true}
                                   playsInline={true}

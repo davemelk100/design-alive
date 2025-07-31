@@ -44,6 +44,19 @@ const LazyVideo: React.FC<LazyVideoProps> = ({
     return () => observer.disconnect();
   }, []);
 
+  // Handle autoPlay changes
+  useEffect(() => {
+    if (videoRef.current && isInView) {
+      if (autoPlay) {
+        videoRef.current.play().catch(() => {
+          // Ignore autoplay errors
+        });
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [autoPlay, isInView]);
+
   return (
     <div ref={containerRef} className={className} style={style}>
       {isInView && (
