@@ -257,15 +257,7 @@ export const content = {
           },
           {
             skill: "Building scalable design systems and reusable components",
-            software: [
-              "React",
-              "Next.js",
-              "Figma",
-              "HTML",
-              "CSS",
-              "JavaScript",
-              "TypeScript",
-            ],
+            software: ["Figma", "Sketch", "HTML", "CSS"],
           },
           {
             skill: "Facilitating and analyzing user testing sessions",
