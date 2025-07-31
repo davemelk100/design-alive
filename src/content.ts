@@ -252,21 +252,20 @@ export const content = {
             software: ["Figma", "Useberry", "bolt.new", "X-Code"],
           },
           {
-            skill: "Conducting usability evaluations and heuristic analysis",
-            software: ["Useberry", "Lighthouse", "aXe"],
-          },
-          {
             skill: "Creating interactive prototypes",
             software: ["Figma", "bolt.new"],
           },
           {
-            skill: "Developing user personas and user narratives",
-            software: ["Figma", "Perplexity", "ChatGPT", "Grok"],
-          },
-
-          {
-            skill: "Conducting market research and best practice analysis",
-            software: ["Perplexity", "ChatGPT", "Grok"],
+            skill: "Building scalable design systems and reusable components",
+            software: [
+              "React",
+              "Next.js",
+              "Figma",
+              "HTML",
+              "CSS",
+              "JavaScript",
+              "TypeScript",
+            ],
           },
           {
             skill: "Facilitating and analyzing user testing sessions",
@@ -282,6 +281,10 @@ export const content = {
       {
         name: "Digital Accessibility",
         skills: [
+          {
+            skill: "Conducting usability evaluations and heuristic analysis",
+            software: ["Useberry", "Lighthouse", "aXe"],
+          },
           {
             skill: "Conducting accessibility audits and remediation",
             software: ["Lighthouse", "aXe", "NVDA", "JAWS", "WAZE"],
@@ -310,18 +313,6 @@ export const content = {
         name: "Front-End Development",
         skills: [
           {
-            skill: "Building scalable design systems and reusable components",
-            software: [
-              "React",
-              "Next.js",
-              "Figma",
-              "HTML",
-              "CSS",
-              "JavaScript",
-              "TypeScript",
-            ],
-          },
-          {
             skill: "Developing dynamic websites and applications",
             software: [
               "React",
@@ -341,10 +332,6 @@ export const content = {
           {
             skill: "Integrating payment systems and inventory sync",
             software: ["Authorize.net", "coreSTORE", "WooCommerce"],
-          },
-          {
-            skill: "Developing custom themes and enhancements",
-            software: ["HTML", "CSS", "PHP", "WordPress", "Contact Form 7"],
           },
 
           {
