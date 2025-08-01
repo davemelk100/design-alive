@@ -160,6 +160,16 @@ export const audioTracks: AudioTrack[] = [
     filename: "sickly-instrumental.mp3",
     isInstrumental: true,
   },
+  {
+    id: 16,
+    title: "Soulja Boy As A Service",
+    artist: "BALM",
+    url: "/audio/soulja-boy-as-a-service.mp3",
+    uniqueUrl: "/audio/soulja-boy-as-a-service.mp3",
+    duration: "2:15",
+    filename: "soulja-boy-as-a-service.mp3",
+    isInstrumental: true,
+  },
 ];
 
 // Helper function to get track by unique URL
