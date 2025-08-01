@@ -160,7 +160,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-100">
+    <div className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white">
       {/* Remove Header Navigation from here */}
 
       <Suspense
@@ -277,7 +277,7 @@ function App() {
                               </div>
                               {/* Title and subtitle above animation */}
                               <div className="absolute inset-0 z-10 flex flex-col justify-start p-4">
-                                <div className="text-gray-900 dark:text-gray-100">
+                                <div className="text-gray-900 dark:text-white">
                                   <h3 className="text-base font-semibold mb-1">
                                     Helvetica
                                   </h3>
@@ -310,7 +310,7 @@ function App() {
                               </div>
                               {/* Title and subtitle above animation */}
                               <div className="absolute inset-0 z-10 flex flex-col justify-start p-4">
-                                <div className="text-gray-900 dark:text-gray-100">
+                                <div className="text-gray-900 dark:text-white">
                                   <h3 className="text-base font-semibold mb-1">
                                     Axonometric Projection
                                   </h3>
@@ -343,7 +343,7 @@ function App() {
                               </div>
                               {/* Title and subtitle above animation */}
                               <div className="absolute inset-0 z-10 flex flex-col justify-start p-4">
-                                <div className="text-gray-900 dark:text-gray-100">
+                                <div className="text-gray-900 dark:text-white">
                                   <h3 className="text-base font-semibold mb-1">
                                     Observed Rhythm
                                   </h3>
@@ -357,13 +357,47 @@ function App() {
                                 </div>
                               </div>
                             </div>
+
+                            {/* Typesetting Slide */}
+                            <div
+                              className={`absolute inset-0 transition-opacity duration-500 ${
+                                currentSlide === 3 ? "opacity-100" : "opacity-0"
+                              }`}
+                            >
+                              <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
+                                <LazyVideo
+                                  src="/video/typesetting.mp4"
+                                  className="w-full h-auto object-contain shadow-none border-0"
+                                  autoPlay={currentSlide === 3}
+                                  muted={true}
+                                  loop={true}
+                                  playsInline={true}
+                                />
+                              </div>
+                              {/* Title and subtitle above animation */}
+                              <div className="absolute inset-0 z-10 flex flex-col justify-start p-4">
+                                <div className="text-gray-900 dark:text-white">
+                                  <h3 className="text-base font-semibold mb-1">
+                                    Typesetting
+                                  </h3>
+                                  <p className="text-xs opacity-90 leading-relaxed">
+                                    Typesetting is the art of arranging text to
+                                    create readable and visually appealing
+                                    layouts. This process involves careful
+                                    attention to spacing, alignment, and
+                                    typography to enhance readability and
+                                    aesthetic appeal.
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
                           </div>
 
                           {/* Navigation Arrows */}
                           <button
                             onClick={() =>
                               setCurrentSlide((prev) =>
-                                prev === 0 ? 2 : prev - 1
+                                prev === 0 ? 3 : prev - 1
                               )
                             }
                             className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 z-20 opacity-0 group-hover:opacity-100"
@@ -386,7 +420,7 @@ function App() {
                           <button
                             onClick={() =>
                               setCurrentSlide((prev) =>
-                                prev === 2 ? 0 : prev + 1
+                                prev === 3 ? 0 : prev + 1
                               )
                             }
                             className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 z-20 opacity-0 group-hover:opacity-100"
@@ -1094,10 +1128,10 @@ function App() {
                               </p>
                             </div>
                             <div className="mt-auto">
-                              <p className="text-sm font-semibold text-gray-900 dark:text-gray-900">
+                              <p className="text-sm font-semibold text-gray-900 dark:text-white">
                                 {testimonial.author}
                               </p>
-                              <p className="text-xs text-gray-600 dark:text-gray-600">
+                              <p className="text-xs text-gray-600 dark:text-gray-300">
                                 {testimonial.role}
                               </p>
                             </div>
@@ -1295,18 +1329,18 @@ function App() {
                           className=""
                         >
                           <h3
-                            className="text-lg font-semibold mb-1 dark:text-black title-font"
+                            className="text-lg font-semibold mb-1 dark:text-white title-font"
                             style={{ letterSpacing: "-0.01em" }}
                           >
                             {position.title}
                           </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-600 mb-1 font-medium">
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 font-medium">
                             {position.company}
                           </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-500 mb-2">
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
                             {position.period}
                           </p>
-                          <p className="text-sm text-gray-700 dark:text-gray-700 leading-relaxed">
+                          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
                             {position.description}
                           </p>
                         </div>
@@ -1503,7 +1537,7 @@ function App() {
 
                     {/* Colors */}
                     <section className="mb-12 sm:mb-16">
-                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
+                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
                         Colors
                       </h2>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
@@ -1570,36 +1604,36 @@ function App() {
 
                     {/* Typography */}
                     <section className="mb-12 sm:mb-16">
-                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
+                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
                         Typography
                       </h2>
                       <div className="space-y-4">
                         <div>
-                          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+                          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-2">
                             Whereas disregard and contempt for human rights have
                           </h1>
-                          <p className="text-xs sm:text-sm text-gray-600">
+                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                             Component library and design tokens
                           </p>
                         </div>
                         <div>
-                          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 mb-2">
+                          <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-white mb-2">
                             Whereas disregard and contempt for human rights have
                           </h2>
-                          <p className="text-xs sm:text-sm text-gray-600">
+                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                             Component library and design tokens
                           </p>
                         </div>
                         <div>
-                          <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 mb-2">
+                          <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900 dark:text-white mb-2">
                             Whereas disregard and contempt for human rights have
                           </h3>
-                          <p className="text-xs sm:text-sm text-gray-600">
+                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                             Component library and design tokens
                           </p>
                         </div>
                         <div>
-                          <h4 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 mb-2">
+                          <h4 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 dark:text-white mb-2">
                             Whereas disregard and contempt for human rights have
                           </h4>
                           <p className="text-xs sm:text-sm text-gray-600">
@@ -1633,7 +1667,7 @@ function App() {
 
                     {/* Buttons */}
                     <section className="mb-12 sm:mb-16">
-                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
+                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
                         Buttons
                       </h2>
                       <div className="flex flex-wrap gap-2 sm:gap-4">
@@ -1657,7 +1691,7 @@ function App() {
 
                     {/* Cards */}
                     <section className="mb-12 sm:mb-16">
-                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
+                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
                         Cards
                       </h2>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
@@ -1671,10 +1705,10 @@ function App() {
                             </button>
                           </div>
                           <div className="p-4 sm:p-6">
-                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">
+                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
                               Background Card
                             </h3>
-                            <p className="text-sm sm:text-base text-gray-700">
+                            <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
                               Background Card
                             </p>
                           </div>
@@ -1692,7 +1726,7 @@ function App() {
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                             <div className="pr-12 flex items-center gap-2">
                               <h3
-                                className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-black title-font"
+                                className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font"
                                 style={{
                                   letterSpacing: "-0.01em",
                                 }}
@@ -1701,7 +1735,7 @@ function App() {
                               </h3>
                             </div>
                             <div className="flex-1 flex flex-col">
-                              <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1"></p>
+                              <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 flex-1"></p>
                             </div>
                           </div>
                           <div className="absolute inset-0 overflow-hidden z-0">
@@ -1727,7 +1761,7 @@ function App() {
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                             <div className="pr-12 flex items-center gap-2">
                               <h3
-                                className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-black title-font"
+                                className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font"
                                 style={{
                                   letterSpacing: "-0.01em",
                                 }}
@@ -1764,7 +1798,7 @@ function App() {
                               </div>
                             </div>
                             <div className="flex-1 flex flex-col">
-                              <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1"></p>
+                              <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 flex-1"></p>
                             </div>
                           </div>
                         </div>
@@ -1773,12 +1807,12 @@ function App() {
 
                     {/* Chips/Tags */}
                     <section className="mb-12 sm:mb-16">
-                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4 sm:mb-6">
+                      <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
                         Chips & Tags
                       </h2>
                       <div className="space-y-4">
                         <div>
-                          <h3 className="text-base font-semibold text-gray-900 mb-3">
+                          <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
                             Default Chips
                           </h3>
                           <div className="flex flex-wrap gap-2">
@@ -1801,7 +1835,7 @@ function App() {
                         </div>
 
                         <div>
-                          <h3 className="text-base font-semibold text-gray-900 mb-3">
+                          <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
                             Outline Chips
                           </h3>
                           <div className="flex flex-wrap gap-2">
@@ -1824,7 +1858,7 @@ function App() {
                         </div>
 
                         <div>
-                          <h3 className="text-base font-semibold text-gray-900 mb-3">
+                          <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
                             Small Chips
                           </h3>
                           <div className="flex flex-wrap gap-2">
@@ -1847,7 +1881,7 @@ function App() {
                         </div>
 
                         <div>
-                          <h3 className="text-base font-semibold text-gray-900 mb-3">
+                          <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
                             Interactive Chips
                           </h3>
                           <div className="flex flex-wrap gap-2">

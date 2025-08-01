@@ -1,0 +1,72 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" rx="12" fill="#F6F6F6"/>
+  
+  <!-- Mobile phone frame -->
+  <rect x="60" y="30" width="80" height="140" rx="12" fill="#333333"/>
+  <rect x="65" y="35" width="70" height="130" rx="8" fill="white"/>
+  
+  <!-- Phone screen content -->
+  <rect x="70" y="45" width="60" height="110" rx="4" fill="#F8F8F8"/>
+  
+  <!-- Status bar -->
+  <rect x="70" y="45" width="60" height="16" rx="4" fill="#18A0FB"/>
+  <circle cx="75" cy="53" r="2" fill="white"/>
+  <rect x="78" y="51" width="8" height="4" rx="2" fill="white"/>
+  <rect x="88" y="51" width="8" height="4" rx="2" fill="white"/>
+  <rect x="98" y="51" width="8" height="4" rx="2" fill="white"/>
+  <text x="130" y="56" text-anchor="end" font-family="Arial, sans-serif" font-size="8" fill="white">9:41</text>
+  
+  <!-- App content area -->
+  <rect x="75" y="70" width="50" height="75" rx="4" fill="white"/>
+  
+  <!-- Navigation bar -->
+  <rect x="75" y="70" width="50" height="12" rx="4" fill="#18A0FB"/>
+  <text x="100" y="79" text-anchor="middle" font-family="Arial, sans-serif" font-size="8" fill="white">App</text>
+  
+  <!-- Content elements -->
+  <!-- Card 1 -->
+  <rect x="78" y="85" width="44" height="16" rx="3" fill="#E5E5E5"/>
+  <rect x="80" y="87" width="8" height="8" rx="2" fill="#18A0FB"/>
+  <rect x="90" y="87" width="30" height="3" rx="1" fill="#666666"/>
+  <rect x="90" y="92" width="20" height="2" rx="1" fill="#999999"/>
+  
+  <!-- Card 2 -->
+  <rect x="78" y="105" width="44" height="16" rx="3" fill="#E5E5E5"/>
+  <rect x="80" y="107" width="8" height="8" rx="2" fill="#18A0FB"/>
+  <rect x="90" y="107" width="30" height="3" rx="1" fill="#666666"/>
+  <rect x="90" y="112" width="20" height="2" rx="1" fill="#999999"/>
+  
+  <!-- Card 3 -->
+  <rect x="78" y="125" width="44" height="16" rx="3" fill="#E5E5E5"/>
+  <rect x="80" y="127" width="8" height="8" rx="2" fill="#18A0FB"/>
+  <rect x="90" y="127" width="30" height="3" rx="1" fill="#666666"/>
+  <rect x="90" y="132" width="20" height="2" rx="1" fill="#999999"/>
+  
+  <!-- Bottom navigation -->
+  <rect x="75" y="145" width="50" height="8" rx="4" fill="#F0F0F0"/>
+  <circle cx="85" cy="149" r="2" fill="#18A0FB"/>
+  <circle cx="95" cy="149" r="2" fill="#CCCCCC"/>
+  <circle cx="105" cy="149" r="2" fill="#CCCCCC"/>
+  <circle cx="115" cy="149" r="2" fill="#CCCCCC"/>
+  
+  <!-- Figma logo elements -->
+  <!-- F shape in corner -->
+  <path d="M 25 25 L 25 35 L 35 35 L 35 32 L 28 32 L 28 30 L 35 30 L 35 27 L 28 27 L 28 25 Z" fill="#18A0FB"/>
+  
+  <!-- Mobile icon -->
+  <rect x="25" y="45" width="20" height="30" rx="3" fill="#18A0FB" opacity="0.8"/>
+  <rect x="27" y="47" width="16" height="26" rx="2" fill="white"/>
+  <circle cx="35" cy="55" r="1" fill="#18A0FB"/>
+  <rect x="30" y="60" width="10" height="2" rx="1" fill="#18A0FB"/>
+  <rect x="30" y="64" width="10" height="2" rx="1" fill="#18A0FB"/>
+  <rect x="30" y="68" width="10" height="2" rx="1" fill="#18A0FB"/>
+  
+  <!-- Prototype connection lines -->
+  <path d="M 140 80 Q 160 80 160 100" stroke="#18A0FB" stroke-width="2" fill="none" stroke-dasharray="4,4"/>
+  <polygon points="155,95 160,100 155,105" fill="#18A0FB"/>
+  
+  <!-- Play button for mobile prototype -->
+  <circle cx="160" cy="130" r="12" fill="#18A0FB"/>
+  <polygon points="155,125 155,135 165,130" fill="white"/>
+</svg> 
