@@ -1,0 +1,36 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="textGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1f2937;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="300" fill="#f8fafc"/>
+  
+  <!-- Simple Text Elements -->
+  <text x="200" y="100" text-anchor="middle" font-family="serif" font-size="24" font-weight="bold" fill="url(#textGradient1)">
+    Typesetting
+  </text>
+  
+  <text x="200" y="130" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#6b7280">
+    The Art of Text Arrangement
+  </text>
+  
+  <text x="60" y="170" font-family="serif" font-size="12" fill="url(#textGradient1)">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  </text>
+  
+  <text x="60" y="190" font-family="serif" font-size="12" fill="url(#textGradient1)">
+    Sed do eiusmod tempor incididunt ut labore et dolore.
+  </text>
+  
+  <text x="200" y="220" text-anchor="middle" font-family="serif" font-size="14" font-weight="bold" fill="#f59e0b">
+    Emphasis & Hierarchy
+  </text>
+  
+  <text x="200" y="250" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#6b7280">
+    Spacing • Alignment • Typography
+  </text>
+</svg> 

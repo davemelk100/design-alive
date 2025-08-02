@@ -162,7 +162,7 @@ export const audioTracks: AudioTrack[] = [
   },
   {
     id: 16,
-    title: "Soulja Boy As A Service",
+    title: "Soulja Boy As A Service (Instrumental)",
     artist: "BALM",
     url: "/audio/soulja-boy-as-a-service.mp3",
     uniqueUrl: "/audio/soulja-boy-as-a-service.mp3",

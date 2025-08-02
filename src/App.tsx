@@ -362,13 +362,10 @@ function App() {
                               }`}
                             >
                               <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
-                                <LazyVideo
-                                  src="/video/typesetting.mp4"
+                                <img
+                                  src="/img/typesetting-animation.svg"
                                   className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={currentSlide === 3}
-                                  muted={true}
-                                  loop={true}
-                                  playsInline={true}
+                                  alt="Typesetting Animation"
                                 />
                               </div>
                               {/* Title and subtitle above animation */}
