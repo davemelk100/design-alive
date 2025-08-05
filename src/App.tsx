@@ -259,53 +259,17 @@ function App() {
                         <div className="relative overflow-hidden h-[350px] group rounded-lg shadow-lg">
                           {/* Carousel Slides */}
                           <div className="relative w-full h-full">
-                            {/* Helvetica Slide */}
+                            {/* Axonometric Projection Slide */}
                             <div
                               className={`absolute inset-0 transition-opacity duration-500 ${
                                 currentSlide === 0 ? "opacity-100" : "opacity-0"
                               }`}
                             >
                               <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
-                                <LazyVideo
-                                  src="/video/helvetica.mp4"
+                                <img
+                                  src="/img/axonometric-animation.svg"
                                   className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={currentSlide === 0}
-                                  muted={true}
-                                  loop={true}
-                                  playsInline={true}
-                                />
-                              </div>
-                              {/* Title and subtitle above animation */}
-                              <div className="absolute inset-0 z-10 flex flex-col justify-start p-4">
-                                <div className="text-gray-900 dark:text-white">
-                                  <h3 className="text-base font-semibold mb-1">
-                                    Helvetica
-                                  </h3>
-                                  <p className="text-xs opacity-90 leading-relaxed">
-                                    Max Miedinger's 1957 typeface revolutionized
-                                    typography with its clean, neutral design.
-                                    Its versatility and readability made it
-                                    essential for corporate communication and
-                                    public signage.
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Axonometric Projection Slide */}
-                            <div
-                              className={`absolute inset-0 transition-opacity duration-500 ${
-                                currentSlide === 1 ? "opacity-100" : "opacity-0"
-                              }`}
-                            >
-                              <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
-                                <LazyVideo
-                                  src="/video/axonometric.mp4"
-                                  className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={currentSlide === 1}
-                                  muted={true}
-                                  loop={true}
-                                  playsInline={true}
+                                  alt="Axonometric Projection Animation"
                                 />
                               </div>
                               {/* Title and subtitle above animation */}
@@ -328,7 +292,7 @@ function App() {
                             {/* Observed Rhythm Slide */}
                             <div
                               className={`absolute inset-0 transition-opacity duration-500 ${
-                                currentSlide === 2 ? "opacity-100" : "opacity-0"
+                                currentSlide === 1 ? "opacity-100" : "opacity-0"
                               }`}
                             >
                               <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
@@ -354,47 +318,13 @@ function App() {
                                 </div>
                               </div>
                             </div>
-
-                            {/* Typesetting Slide */}
-                            <div
-                              className={`absolute inset-0 transition-opacity duration-500 ${
-                                currentSlide === 3 ? "opacity-100" : "opacity-0"
-                              }`}
-                            >
-                              <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
-                                <LazyVideo
-                                  src="/video/typesetting.mp4"
-                                  className="w-full h-auto object-contain shadow-none border-0"
-                                  autoPlay={currentSlide === 3}
-                                  muted={true}
-                                  loop={true}
-                                  playsInline={true}
-                                />
-                              </div>
-                              {/* Title and subtitle above animation */}
-                              <div className="absolute inset-0 z-10 flex flex-col justify-start p-4">
-                                <div className="text-gray-900 dark:text-white">
-                                  <h3 className="text-base font-semibold mb-1">
-                                    Typesetting
-                                  </h3>
-                                  <p className="text-xs opacity-90 leading-relaxed">
-                                    Typesetting is the art of arranging text to
-                                    create readable and visually appealing
-                                    layouts. This process involves careful
-                                    attention to spacing, alignment, and
-                                    typography to enhance readability and
-                                    aesthetic appeal.
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
                           </div>
 
                           {/* Navigation Arrows */}
                           <button
                             onClick={() =>
                               setCurrentSlide((prev) =>
-                                prev === 0 ? 3 : prev - 1
+                                prev === 0 ? 1 : prev - 1
                               )
                             }
                             className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 z-20 opacity-0 group-hover:opacity-100"
@@ -417,7 +347,7 @@ function App() {
                           <button
                             onClick={() =>
                               setCurrentSlide((prev) =>
-                                prev === 3 ? 0 : prev + 1
+                                prev === 1 ? 0 : prev + 1
                               )
                             }
                             className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 z-20 opacity-0 group-hover:opacity-100"

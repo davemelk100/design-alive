@@ -3,13 +3,12 @@
     <style>
       .main-group {
         transform-origin: 45px 45px;
-        animation: rotate 8s linear infinite;
+        animation: rotate 25s linear infinite;
       }
       
       .cube-face {
         fill-opacity: 0.9;
-        stroke: #1a1a1a;
-        stroke-width: 0.5;
+        stroke: none;
       }
       
       .primary-face {
@@ -24,12 +23,49 @@
         fill: #45b7d1;
       }
       
+      .grid-line {
+        stroke: #1a1a1a;
+        stroke-width: 0.3;
+        opacity: 0.4;
+      }
+      
+      .projection-line {
+        stroke: #ff6b6b;
+        stroke-width: 0.5;
+        opacity: 0.6;
+      }
+      
       @keyframes rotate {
         0% {
           transform: rotateX(35deg) rotateY(0deg) rotateZ(0deg);
         }
         100% {
           transform: rotateX(35deg) rotateY(360deg) rotateZ(0deg);
+        }
+      }
+      
+      .fade-element {
+        animation: fade 15s ease-in-out infinite;
+      }
+      
+      .fade-element:nth-child(1) {
+        animation-delay: 0s;
+      }
+      
+      .fade-element:nth-child(2) {
+        animation-delay: 5s;
+      }
+      
+      .fade-element:nth-child(3) {
+        animation-delay: 10s;
+      }
+      
+      @keyframes fade {
+        0%, 100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.8;
         }
       }
     </style>
@@ -41,13 +77,10 @@
     <polygon points="25,70 45,60 45,80 25,90" class="cube-face primary-face"/>
     <polygon points="25,70 45,60 65,70 45,80" class="cube-face secondary-face"/>
     <polygon points="45,60 65,70 65,90 45,80" class="cube-face tertiary-face"/>
-    
-    <!-- Cube Edges -->
-    <line x1="25" y1="70" x2="45" y2="60" stroke="#1a1a1a" stroke-width="0.5"/>
-    <line x1="45" y1="60" x2="65" y2="70" stroke="#1a1a1a" stroke-width="0.5"/>
-    <line x1="65" y1="70" x2="65" y2="90" stroke="#1a1a1a" stroke-width="0.5"/>
-    <line x1="65" y1="90" x2="45" y2="80" stroke="#1a1a1a" stroke-width="0.5"/>
-    <line x1="45" y1="80" x2="25" y2="90" stroke="#1a1a1a" stroke-width="0.5"/>
-    <line x1="25" y1="90" x2="25" y2="70" stroke="#1a1a1a" stroke-width="0.5"/>
   </g>
+  
+  <!-- Bottom indicator -->
+  <rect x="15" y="85" width="60" height="2" fill="#ff6b6b" opacity="0.7">
+    <animate attributeName="width" values="0;60;0" dur="25s" repeatCount="indefinite"/>
+  </rect>
 </svg> 

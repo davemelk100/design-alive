@@ -161,7 +161,7 @@ export const audioTracks: AudioTrack[] = [
   },
   {
     id: 16,
-    title: "Sickly (Instrumental)",
+    title: "Titleist Vokey SM-10 (Instrumental)",
     artist: "BALM",
     url: "/audio/sickly-instrumental.mp3",
     uniqueUrl: "/audio/sickly-instrumental.mp3",
@@ -177,6 +177,16 @@ export const audioTracks: AudioTrack[] = [
     uniqueUrl: "/audio/soulja-boy-as-a-service.mp3",
     duration: "2:15",
     filename: "soulja-boy-as-a-service.mp3",
+    isInstrumental: true,
+  },
+  {
+    id: 18,
+    title: "Beated (Instrumental)",
+    artist: "BALM",
+    url: "/audio/beated.mp3",
+    uniqueUrl: "/audio/beated.mp3",
+    duration: "2:45",
+    filename: "beated.mp3",
     isInstrumental: true,
   },
 ];
