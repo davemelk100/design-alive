@@ -708,7 +708,7 @@ function App() {
                                       article.image
                                     }?v=${Date.now()}`}
                                     alt={article.title}
-                                    className="absolute bottom-0 left-0 right-0 h-1/2 w-full object-contain object-bottom"
+                                    className="absolute bottom-0 left-0 right-0 h-1/2 w-full object-cover object-center"
                                     loading="lazy"
                                   />
                                 </div>
@@ -717,7 +717,7 @@ function App() {
                                 <div
                                   className={`pt-3 pl-3 pr-2 pb-2 ${
                                     articlesView === "grid"
-                                      ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm pr-16"
+                                      ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm pr-20"
                                       : "flex items-center justify-between h-full"
                                   }`}
                                 >
