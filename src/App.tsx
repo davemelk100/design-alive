@@ -886,7 +886,7 @@ function App() {
                                 <img
                                   src={project.image}
                                   alt={project.alt || project.title}
-                                  className="absolute bottom-0 left-0 right-0 h-1/2 w-full object-contain object-bottom"
+                                  className="absolute bottom-0 left-0 right-0 h-full w-full object-contain object-bottom"
                                   loading="lazy"
                                 />
                               </div>
@@ -905,7 +905,7 @@ function App() {
                                 className={`group relative overflow-hidden rounded-lg bg-white border border-gray-200 flex flex-col shadow-md project-card ${
                                   designView === "list"
                                     ? "h-[50px]"
-                                    : "h-[280px] sm:h-[300px] lg:h-[320px]"
+                                    : "h-[360px] sm:h-[380px] lg:h-[400px]"
                                 }`}
                               >
                                 {designView === "grid" && (
@@ -949,7 +949,7 @@ function App() {
                                 className={`group relative overflow-hidden rounded-lg bg-white border border-gray-200 flex flex-col shadow-md project-card ${
                                   designView === "list"
                                     ? "h-[50px]"
-                                    : "h-[280px] sm:h-[300px] lg:h-[320px]"
+                                    : "h-[360px] sm:h-[380px] lg:h-[400px]"
                                 }`}
                               >
                                 {designView === "grid" && (
