@@ -438,6 +438,8 @@ function App() {
                                           ? `/img/ai-nui-alt2.svg?v=${Date.now()}`
                                           : project.title === "HealthAware"
                                           ? `/img/health-aware-animation.svg?v=${Date.now()}`
+                                          : project.title === "JSON AI Prompts"
+                                          ? `/img/json-ai-prompts-animation.svg?v=${Date.now()}`
                                           : project.title ===
                                             "User Testing Config"
                                           ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
@@ -450,6 +452,8 @@ function App() {
                                           ? "Design Panes Animation"
                                           : project.title === "HealthAware"
                                           ? "HealthAware Animation"
+                                          : project.title === "JSON AI Prompts"
+                                          ? "JSON AI Prompts Animation"
                                           : project.title ===
                                             "User Testing Config"
                                           ? "User Testing Config Animation"
@@ -483,6 +487,9 @@ function App() {
                                                       "HealthAware"
                                                     ? `/img/health-aware-animation.svg?v=${Date.now()}`
                                                     : project.title ===
+                                                      "JSON AI Prompts"
+                                                    ? `/img/json-ai-prompts-animation.svg?v=${Date.now()}`
+                                                    : project.title ===
                                                       "User Testing Config"
                                                     ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
                                                     : `/img/lab.svg?v=${Date.now()}`
@@ -496,6 +503,9 @@ function App() {
                                                     : project.title ===
                                                       "HealthAware"
                                                     ? "HealthAware Animation"
+                                                    : project.title ===
+                                                      "JSON AI Prompts"
+                                                    ? "JSON AI Prompts Animation"
                                                     : project.title ===
                                                       "User Testing Config"
                                                     ? "User Testing Config Animation"
@@ -587,6 +597,31 @@ function App() {
                                               "#475569", // Slate Dark - depth/contrast
                                               "#cbd5e1", // Slate Lighter - soft/gentle
                                               "#334155", // Slate Darker - sophisticated
+                                            ].map((color, i) => (
+                                              <span
+                                                key={i}
+                                                role="presentation"
+                                                aria-hidden="true"
+                                                style={{
+                                                  display: "inline-block",
+                                                  width: 12,
+                                                  height: 12,
+                                                  borderRadius: "50%",
+                                                  background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                                  boxShadow:
+                                                    "0 1px 2px rgba(0,0,0,0.08)",
+                                                }}
+                                              />
+                                            ))}
+                                          {project.title ===
+                                            "JSON AI Prompts" &&
+                                            [
+                                              "#6366f1", // Indigo - primary
+                                              "#a5b4fc", // Indigo Light - subtle
+                                              "#4f46e5", // Indigo Dark - depth
+                                              "#c7d2fe", // Indigo Lighter - soft
+                                              "#3730a3", // Indigo Darker - sophisticated
+                                              "#06b6d4", // Cyan - third color
                                             ].map((color, i) => (
                                               <span
                                                 key={i}

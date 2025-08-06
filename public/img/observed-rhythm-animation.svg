@@ -1,110 +1,55 @@
 <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
-      .wave-group {
-        animation: waveFlow 40s ease-in-out infinite;
-      }
-      
       .wave-element {
+        fill: #ff6b6b;
         fill-opacity: 0.8;
         stroke: none;
       }
       
-      .primary-wave {
-        fill: #ff6b6b;
-      }
-      
-      .secondary-wave {
-        fill: #4ecdc4;
-      }
-      
-      .tertiary-wave {
-        fill: #45b7d1;
-      }
-      
       @keyframes waveFlow {
         0% {
-          transform: translateX(-10px) scaleY(0.8);
-        }
-        25% {
-          transform: translateX(5px) scaleY(1.2);
+          transform: translateX(-5px) scaleY(0.9);
         }
         50% {
-          transform: translateX(10px) scaleY(0.9);
-        }
-        75% {
-          transform: translateX(-5px) scaleY(1.1);
+          transform: translateX(5px) scaleY(1.1);
         }
         100% {
-          transform: translateX(-10px) scaleY(0.8);
+          transform: translateX(-5px) scaleY(0.9);
         }
       }
       
       .pulse-dot {
-        animation: pulse 16s ease-in-out infinite;
-      }
-      
-      .pulse-dot:nth-child(1) {
-        animation-delay: 0s;
-      }
-      
-      .pulse-dot:nth-child(2) {
-        animation-delay: 4s;
-      }
-      
-      .pulse-dot:nth-child(3) {
-        animation-delay: 8s;
-      }
-      
-      .pulse-dot:nth-child(4) {
-        animation-delay: 12s;
+        animation: pulse 20s ease-in-out infinite;
       }
       
       @keyframes pulse {
         0%, 100% {
-          opacity: 0.3;
-          transform: scale(0.6);
+          opacity: 0.4;
+          transform: scale(0.8);
         }
         50% {
           opacity: 1;
-          transform: scale(1.4);
+          transform: scale(1.2);
         }
       }
     </style>
   </defs>
   
-  <!-- Flowing Rhythm Waves -->
-  <g class="wave-group">
-         <!-- Primary wave -->
-     <path d="M10,60 Q30,50 50,60 Q70,70 80,60" class="wave-element primary-wave" stroke-width="2">
-       <animate attributeName="d" 
-         values="M10,60 Q30,50 50,60 Q70,70 80,60;M10,65 Q30,55 50,65 Q70,75 80,65;M10,60 Q30,50 50,60 Q70,70 80,60" 
-         dur="30s" repeatCount="indefinite"/>
-     </path>
-     
-     <!-- Secondary wave -->
-     <path d="M10,70 Q30,60 50,70 Q70,80 80,70" class="wave-element secondary-wave" stroke-width="2">
-       <animate attributeName="d" 
-         values="M10,70 Q30,60 50,70 Q70,80 80,70;M10,75 Q30,65 50,75 Q70,85 80,75;M10,70 Q30,60 50,70 Q70,80 80,70" 
-         dur="30s" repeatCount="indefinite" begin="10s"/>
-     </path>
-     
-     <!-- Tertiary wave -->
-     <path d="M10,80 Q30,70 50,80 Q70,90 80,80" class="wave-element tertiary-wave" stroke-width="2">
-       <animate attributeName="d" 
-         values="M10,80 Q30,70 50,80 Q70,90 80,80;M10,85 Q30,75 50,85 Q70,95 80,85;M10,80 Q30,70 50,80 Q70,90 80,80" 
-         dur="30s" repeatCount="indefinite" begin="20s"/>
-     </path>
+  <!-- Simple Rhythm Wave -->
+  <g style="animation: waveFlow 60s ease-in-out infinite;">
+    <path d="M10,70 Q30,60 50,70 Q70,80 80,70" class="wave-element" stroke-width="2">
+      <animate attributeName="d" 
+        values="M10,70 Q30,60 50,70 Q70,80 80,70;M10,75 Q30,65 50,75 Q70,85 80,75;M10,70 Q30,60 50,70 Q70,80 80,70" 
+        dur="60s" repeatCount="indefinite"/>
+    </path>
   </g>
   
-  <!-- Rhythm Pulse Dots -->
-  <circle cx="20" cy="40" r="3" class="primary-wave pulse-dot"/>
-  <circle cx="35" cy="35" r="3" class="secondary-wave pulse-dot"/>
-  <circle cx="50" cy="40" r="3" class="tertiary-wave pulse-dot"/>
-  <circle cx="65" cy="35" r="3" class="primary-wave pulse-dot"/>
+  <!-- Single Rhythm Pulse Dot -->
+  <circle cx="45" cy="40" r="4" class="wave-element pulse-dot"/>
   
-  <!-- Bottom rhythm indicator -->
-  <rect x="15" y="85" width="60" height="2" fill="#ff6b6b" opacity="0.7">
-    <animate attributeName="width" values="0;60;0" dur="40s" repeatCount="indefinite"/>
+  <!-- Simple bottom indicator -->
+  <rect x="20" y="85" width="50" height="1" fill="#ff6b6b" opacity="0.6">
+    <animate attributeName="width" values="0;50;0" dur="60s" repeatCount="indefinite"/>
   </rect>
 </svg> 

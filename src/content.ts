@@ -502,6 +502,13 @@ export const content = {
         image: "/img/design-panes.png",
       },
       {
+        title: "JSON AI Prompts",
+        description: "Design, designs, and designers.",
+        technologies: ["React", "TypeScript", "Tailwind", "Figma API"],
+        demo: "https://designpanes.com/",
+        image: "/img/design-panes.png",
+      },
+      {
         title: "AI NUI",
         description: "Let's make the AI UI better.",
         technologies: ["React", "AI", "UI/UX", "Design Systems"],
