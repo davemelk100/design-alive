@@ -671,10 +671,10 @@ function App() {
                                 duration: 1.8,
                                 delay: index * 0.2,
                               }}
-                              className={`group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 flex flex-col shadow-md ${
+                              className={`group relative overflow-hidden rounded-lg bg-white border border-gray-200 flex flex-col shadow-md ${
                                 articlesView === "list"
                                   ? "h-[50px]"
-                                  : "h-[280px] sm:h-[300px] lg:h-[320px]"
+                                  : "h-[320px] sm:h-[336px] lg:h-[352px]"
                               }`}
                             >
                               {articlesView === "grid" && (
@@ -701,23 +701,23 @@ function App() {
                                 </div>
                               )}
                               {articlesView === "grid" && (
-                                <div className="absolute inset-0 overflow-hidden z-0 p-2">
+                                <div className="absolute inset-0 z-0">
                                   <img
                                     src={`${
                                       (article as any).cardImage ||
                                       article.image
                                     }?v=${Date.now()}`}
                                     alt={article.title}
-                                    className="absolute inset-0 h-full w-full object-cover"
+                                    className="absolute bottom-0 left-0 right-0 h-1/2 w-full object-contain object-bottom"
                                     loading="lazy"
                                   />
                                 </div>
                               )}
-                              <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                              <div className="absolute inset-0 flex flex-col gap-2 z-10">
                                 <div
-                                  className={`rounded-lg p-2 ${
+                                  className={`pt-3 pl-3 pr-2 pb-2 ${
                                     articlesView === "grid"
-                                      ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm pr-12"
+                                      ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm pr-16"
                                       : "flex items-center justify-between h-full"
                                   }`}
                                 >
