@@ -328,10 +328,10 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className={`group relative overflow-visible rounded-lg bg-gray-100/80 dark:bg-transparent border dark:border-gray-500 shadow-md ${
+                                className={`group relative overflow-visible rounded-lg bg-transparent dark:bg-transparent border dark:border-gray-500 shadow-md ${
                                   labView === "list"
                                     ? "h-[50px]"
-                                    : "h-[280px] sm:h-[300px] lg:h-[320px]"
+                                    : "h-[320px] sm:h-[336px] lg:h-[352px]"
                                 }`}
                               >
                                 {labView === "grid" && (
@@ -564,7 +564,7 @@ function App() {
                                               "#b8a095", // Brighter Brown Gray - subtle/calm
                                               "#8b6b4f", // Brighter Brown Dark - depth/contrast
                                               "#e8d5d0", // Brighter Light Beige - soft/gentle
-                                              "#7a5a45", // Brighter Brown Darker - sophisticated
+                                              "#d4a574", // Golden Brown - warm/accent
                                             ].map((color, i) => (
                                               <span
                                                 key={i}
@@ -665,7 +665,7 @@ function App() {
                                 duration: 1.8,
                                 delay: index * 0.2,
                               }}
-                              className={`group relative overflow-hidden rounded-lg bg-white border border-gray-200 flex flex-col shadow-md ${
+                              className={`group relative overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md ${
                                 articlesView === "list"
                                   ? "h-[50px]"
                                   : "h-[320px] sm:h-[336px] lg:h-[352px]"
@@ -903,7 +903,7 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className={`group relative overflow-hidden rounded-lg bg-white border border-gray-200 flex flex-col shadow-md project-card ${
+                                className={`group relative overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md project-card ${
                                   designView === "list"
                                     ? "h-[50px]"
                                     : "h-[330px] sm:h-[350px] lg:h-[370px]"
@@ -947,7 +947,7 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className={`group relative overflow-hidden rounded-lg bg-white border border-gray-200 flex flex-col shadow-md project-card ${
+                                className={`group relative overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md project-card ${
                                   designView === "list"
                                     ? "h-[50px]"
                                     : "h-[330px] sm:h-[350px] lg:h-[370px]"
@@ -1055,7 +1055,7 @@ function App() {
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={{ once: true }}
                               transition={{ duration: 2.4, delay: 0.2 }}
-                              className={`group relative overflow-hidden rounded-lg bg-white border border-gray-200 flex flex-col shadow-md ${
+                              className={`group relative overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md ${
                                 storiesView === "list"
                                   ? "h-[50px]"
                                   : "h-[320px] sm:h-[336px] lg:h-[352px]"
