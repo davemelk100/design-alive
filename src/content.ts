@@ -898,6 +898,68 @@ export const content = {
       },
 
       {
+        id: "negotiating-with-your-co-pilot",
+        title: "Negotiating With Your Co-Pilot",
+        description:
+          "Make an agreement on shared language with the fountain of eternal hallucination, aka your AI co-pilot.",
+        url: "https://davemelk.substack.com/p/negotiating-with-your-co-pilot",
+        content: `<h1>Negotiating With Your Co-Pilot</h1>
+
+<h2>The Language Barrier</h2>
+
+<p>Working with AI is like having a brilliant but sometimes confused co-worker who speaks a different dialect. You might both be speaking English, but you're using different words for the same things. This creates a communication gap that leads to misunderstandings, wasted time, and yes, those infamous AI hallucinations.</p>
+
+<p>The solution isn't to dumb down your requests or accept mediocre results. It's to establish a shared vocabulary - a common language that both you and your AI co-pilot understand clearly.</p>
+
+<h2>Why Shared Language Matters</h2>
+
+<p>When you say "card" and your AI thinks you mean "content container with defined boundaries, shadows, and padding," you're setting yourself up for confusion. But when you both agree that a card is a "card," communication becomes crystal clear.</p>
+
+<p>This isn't just about avoiding misunderstandings. Shared language creates efficiency. You spend less time explaining what you want and more time getting what you need. Your AI co-pilot becomes more predictable, more reliable, and more useful.</p>
+
+<h2>Creating Your Shared Vocabulary</h2>
+
+<p>Start by documenting the terms you use for common elements. In your design system, you have cards, buttons, modals, sections, and more. These aren't just UI components - they're the building blocks of your shared language.</p>
+
+<p>Create a glossary that both you and your AI can reference. When you say "add a card here," your AI should know exactly what that means. No more guessing games or interpretation errors.</p>
+
+<h2>The Hallucination Prevention Protocol</h2>
+
+<p>AI hallucinations often happen when there's ambiguity in language. When you're vague about what you want, the AI fills in the gaps with assumptions. Sometimes these assumptions are helpful, but often they're wrong.</p>
+
+<p>By establishing clear, shared terminology, you reduce the room for interpretation. A button is a button, not a "clickable element that triggers an action." A modal is a modal, not an "overlay dialog that appears above the main content."</p>
+
+<h2>Negotiating the Terms</h2>
+
+<p>This is a two-way conversation. Your AI might suggest alternative terms that are more precise or more commonly understood. Be open to these suggestions, but also be clear about your preferences.</p>
+
+<p>If you've always called something a "card," there's no need to change that just because your AI suggests "content container." But if your AI points out that "modal" is more specific than "popup," that might be worth considering.</p>
+
+<h2>Testing Your Shared Language</h2>
+
+<p>Once you've established your vocabulary, test it. Ask your AI to create a card, then ask it to create a content container. If you get different results, you know your language isn't aligned yet.</p>
+
+<p>Keep refining until you're both speaking the same language. This might take a few iterations, but the payoff is worth it.</p>
+
+<h2>The Long-Term Benefits</h2>
+
+<p>With shared language comes better collaboration. Your AI becomes more like a true co-pilot - someone who understands your workflow, your preferences, and your terminology.</p>
+
+<p>You'll spend less time explaining and more time creating. Your AI will generate more accurate, more useful results. And most importantly, you'll reduce the frustration that comes from miscommunication.</p>
+
+<h2>Making the Agreement</h2>
+
+<p>So here's the deal: establish your shared vocabulary, document it clearly, and stick to it. Use the same terms consistently in your requests, and expect your AI to understand them.</p>
+
+<p>This isn't about limiting creativity or flexibility. It's about creating a foundation for better collaboration. When you and your AI co-pilot speak the same language, you can focus on the important stuff - building great experiences for your users.</p>
+
+<p>Remember, this is a negotiation, not a dictatorship. Be clear about your needs, listen to your AI's suggestions, and find common ground. The result will be a more productive, more enjoyable partnership with your digital co-pilot.</p>`,
+        image: "/img/negotiate-tall.png",
+        date: "January 20, 2025",
+        tags: ["AI", "Communication", "Productivity", "Design Systems"],
+      },
+
+      {
         id: "five-design-genres",
         title: "The Five Design Genres",
         description: "I have defined the five design genres.",

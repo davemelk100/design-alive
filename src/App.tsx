@@ -434,14 +434,17 @@ function App() {
                                               />
                                             </div>
                                           )}
-                                          <h3
-                                            className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap"
+                                          <a
+                                            href={project.demo}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer whitespace-nowrap"
                                             style={{
                                               letterSpacing: "-0.01em",
                                             }}
                                           >
                                             {project.title}
-                                          </h3>
+                                          </a>
                                         </div>
                                         {labView === "list" && (
                                           <a
@@ -731,14 +734,31 @@ function App() {
                                         </div>
                                       )}
                                       <div className="flex flex-col">
-                                        <h3
-                                          className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white"
-                                          style={{
-                                            letterSpacing: "-0.01em",
-                                          }}
-                                        >
-                                          {article.title}
-                                        </h3>
+                                        {article.url.startsWith("http") ? (
+                                          <a
+                                            href={article.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer"
+                                            style={{
+                                              letterSpacing: "-0.01em",
+                                            }}
+                                          >
+                                            {article.title}
+                                          </a>
+                                        ) : (
+                                          <Link
+                                            to={`/article/${slugify(
+                                              article.title
+                                            )}`}
+                                            className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer"
+                                            style={{
+                                              letterSpacing: "-0.01em",
+                                            }}
+                                          >
+                                            {article.title}
+                                          </Link>
+                                        )}
                                         {articlesView === "grid" &&
                                           article.description && (
                                             <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
@@ -839,14 +859,28 @@ function App() {
                                           />
                                         </div>
                                       )}
-                                      <h3
-                                        className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white"
-                                        style={{
-                                          letterSpacing: "-0.01em",
-                                        }}
-                                      >
-                                        {project.title}
-                                      </h3>
+                                      {project.url ? (
+                                        <a
+                                          href={project.url}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer"
+                                          style={{
+                                            letterSpacing: "-0.01em",
+                                          }}
+                                        >
+                                          {project.title}
+                                        </a>
+                                      ) : (
+                                        <h3
+                                          className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white"
+                                          style={{
+                                            letterSpacing: "-0.01em",
+                                          }}
+                                        >
+                                          {project.title}
+                                        </h3>
+                                      )}
                                     </div>
                                     {designView === "list" &&
                                       (project.url ? (
@@ -1112,14 +1146,32 @@ function App() {
                                           )}
                                         </div>
                                       )}
-                                      <h3
-                                        className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap"
-                                        style={{
-                                          letterSpacing: "-0.01em",
-                                        }}
-                                      >
-                                        {story.title}
-                                      </h3>
+                                      {story.hasModal ? (
+                                        <button
+                                          onClick={() =>
+                                            setSelectedStory({
+                                              title: story.title,
+                                              content: story.content,
+                                              subtitle: story.subtitle,
+                                            })
+                                          }
+                                          className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer whitespace-nowrap text-left"
+                                          style={{
+                                            letterSpacing: "-0.01em",
+                                          }}
+                                        >
+                                          {story.title}
+                                        </button>
+                                      ) : (
+                                        <h3
+                                          className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white whitespace-nowrap"
+                                          style={{
+                                            letterSpacing: "-0.01em",
+                                          }}
+                                        >
+                                          {story.title}
+                                        </h3>
+                                      )}
                                     </div>
                                     {storiesView === "list" &&
                                       (story.hasModal ? (
