@@ -1019,7 +1019,7 @@ const NewsAggregator = () => {
                     {/* Yahoo Sports Header */}
                     <div
                       className="p-6 flex-shrink-0"
-                      style={{ minHeight: "320px" }}
+                      style={{ height: "320px" }}
                     >
                       {/* Top Row - Logo, Title, and Carousel Controls */}
                       <div className="flex items-center justify-between mb-4">
