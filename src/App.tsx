@@ -1843,11 +1843,11 @@ function App() {
           <Route path="/archive" element={<Archive />} />
 
           <Route path="/admin" element={<Admin />} />
-          <Route path="/music-player" element={<MusicPlayer />} />
+          <Route path="/music" element={<MusicPlayer />} />
           <Route path="/writing-gallery" element={<WritingGallery />} />
           <Route path="/json-ai-prompts" element={<JsonAiPrompts />} />
           <Route path="/audio-transcript" element={<AudioTranscript />} />
-          <Route path="/news-aggregator" element={<NewsAggregator />} />
+          <Route path="/news" element={<NewsAggregator />} />
         </Routes>
       </Suspense>
 

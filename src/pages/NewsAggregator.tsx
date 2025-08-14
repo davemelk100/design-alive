@@ -139,6 +139,7 @@ const NewsAggregator = () => {
   const [techcrunchIndex, setTechcrunchIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState("all");
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [feedStatus, setFeedStatus] = useState<{
     [key: string]: { working: boolean; error?: string };
   }>({});
@@ -176,114 +177,6 @@ const NewsAggregator = () => {
         return techcrunchIndex;
       default:
         return 0;
-    }
-  };
-
-  const getLogoColor = (sourceName: string) => {
-    switch (sourceName) {
-      case "Ars Technica":
-        return "bg-orange-300";
-      case "WIRED":
-        return "bg-orange-300";
-
-      case "Fox Sports":
-        return "bg-emerald-300";
-      case "CNN - SPORTS":
-        return "bg-emerald-300";
-
-      case "TechRadar":
-        return "bg-orange-300";
-      case "Lambgoat":
-        return "bg-rose-300";
-      case "No Echo":
-        return "bg-rose-300";
-      case "Newsweek":
-        return "bg-violet-300";
-      case "New York Post":
-        return "bg-rose-300";
-      case "Fox News":
-        return "bg-violet-300";
-      case "CBS SPORTS":
-        return "bg-emerald-300";
-      case "Breitbart":
-        return "bg-violet-300";
-
-      case "TechCrunch":
-        return "bg-orange-300";
-      default:
-        return "bg-blue-300";
-    }
-  };
-
-  const getLogoTextColor = (sourceName: string) => {
-    switch (sourceName) {
-      case "Ars Technica":
-        return "text-orange-900";
-      case "WIRED":
-        return "text-orange-900";
-
-      case "Fox Sports":
-        return "text-emerald-900";
-      case "CNN - SPORTS":
-        return "text-emerald-900";
-
-      case "TechRadar":
-        return "text-orange-900";
-      case "Lambgoat":
-        return "text-rose-900";
-      case "No Echo":
-        return "text-rose-900";
-      case "Newsweek":
-        return "text-violet-900";
-      case "New York Post":
-        return "text-rose-900";
-      case "Fox News":
-        return "text-violet-900";
-      case "CBS SPORTS":
-        return "text-emerald-900";
-      case "Breitbart":
-        return "text-violet-900";
-
-      case "TechCrunch":
-        return "text-orange-900";
-      default:
-        return "text-blue-900";
-    }
-  };
-
-  const getLogoText = (sourceName: string) => {
-    switch (sourceName) {
-      case "Ars Technica":
-        return "T";
-      case "WIRED":
-        return "T";
-
-      case "Fox Sports":
-        return "S";
-      case "CNN - SPORTS":
-        return "S";
-
-      case "TechRadar":
-        return "T";
-      case "Lambgoat":
-        return "E";
-      case "No Echo":
-        return "E";
-      case "Newsweek":
-        return "B";
-      case "New York Post":
-        return "E";
-      case "Fox News":
-        return "B";
-      case "CBS SPORTS":
-        return "S";
-      case "Breitbart":
-        return "B";
-
-      case "TechCrunch":
-        return "T";
-      default:
-        return "";
     }
   };
 
@@ -1166,11 +1059,19 @@ const NewsAggregator = () => {
             </svg>
           </button>
 
+          {/* Mobile Navigation Backdrop */}
+          {isMobileNavOpen && (
+            <div
+              className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
+              onClick={() => setIsMobileNavOpen(false)}
+            />
+          )}
+
           {/* Left Navigation Sidebar */}
           <nav
             className={`${
               isMobileNavOpen ? "translate-x-0" : "-translate-x-full"
-            } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen p-4 transition-transform duration-300 ease-in-out lg:transition-none`}
+            } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen p-4 transition-transform duration-300 ease-in-out lg:transition-none lg:block`}
           >
             <div className="mb-6">
               <div className="flex items-center justify-between">
@@ -1208,78 +1109,51 @@ const NewsAggregator = () => {
                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-blue-300 rounded flex items-center justify-center">
-                    <span className="text-blue-900 text-xs font-bold">A</span>
-                  </div>
-                  <span className="font-medium">All News</span>
-                </div>
+                <span className="font-medium">All News</span>
               </button>
 
               <button
                 onClick={() => setActiveCategory("technology")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   activeCategory === "technology"
-                    ? "bg-orange-50 dark:bg-orange-900/30 text-orange-900 dark:text-orange-100 border-l-4 border-orange-300"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    ? "bg-[#fef2de] dark:bg-[#f79d84]/30 text-gray-800 dark:text-gray-200 border-l-4 border-[#f79d84]"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-[#fef2de] dark:hover:bg-[#f79d84]/20"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-orange-300 rounded flex items-center justify-center">
-                    <span className="text-orange-900 text-xs font-bold">T</span>
-                  </div>
-                  <span className="font-medium">Technology</span>
-                </div>
+                <span className="font-medium">Technology</span>
               </button>
 
               <button
                 onClick={() => setActiveCategory("sports")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   activeCategory === "sports"
-                    ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-100 border-l-4 border-emerald-300"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    ? "bg-[#def5e9] dark:bg-[#59cd90]/30 text-gray-800 dark:text-gray-200 border-l-4 border-[#59cd90]"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-[#def5e9] dark:hover:bg-[#59cd90]/20"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-emerald-300 rounded flex items-center justify-center">
-                    <span className="text-emerald-900 text-xs font-bold">
-                      S
-                    </span>
-                  </div>
-                  <span className="font-medium">Sports</span>
-                </div>
+                <span className="font-medium">Sports</span>
               </button>
 
               <button
                 onClick={() => setActiveCategory("business")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   activeCategory === "business"
-                    ? "bg-violet-50 dark:bg-violet-900/30 text-violet-900 dark:text-violet-100 border-l-4 border-violet-300"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    ? "bg-[#d8edf7] dark:bg-[#3fa7d6]/30 text-gray-800 dark:text-gray-200 border-l-4 border-[#3fa7d6]"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-[#d8edf7] dark:hover:bg-[#3fa7d6]/20"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-violet-300 rounded flex items-center justify-center">
-                    <span className="text-violet-900 text-xs font-bold">B</span>
-                  </div>
-                  <span className="font-medium">Business</span>
-                </div>
+                <span className="font-medium">Business</span>
               </button>
 
               <button
                 onClick={() => setActiveCategory("entertainment")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   activeCategory === "entertainment"
-                    ? "bg-rose-50 dark:bg-rose-900/30 text-rose-900 dark:text-rose-100 border-l-4 border-rose-300"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    ? "bg-[#fef2de] dark:bg-[#fac05e]/30 text-gray-800 dark:text-gray-200 border-l-4 border-[#fac05e]"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-[#fef2de] dark:hover:bg-[#fac05e]/20"
                 }`}
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-rose-300 rounded flex items-center justify-center">
-                    <span className="text-rose-900 text-xs font-bold">M</span>
-                  </div>
-                  <span className="font-medium">Music</span>
-                </div>
+                <span className="font-medium">Entertainment</span>
               </button>
             </div>
           </nav>
@@ -1304,6 +1178,55 @@ const NewsAggregator = () => {
             {/* News Grid Section */}
             <section className="py-4 sm:py-6 lg:py-8">
               <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+                {/* View Toggle */}
+                <div className="flex justify-end mb-6">
+                  <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                    <button
+                      onClick={() => setViewMode("grid")}
+                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                        viewMode === "grid"
+                          ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
+                          : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                      }`}
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => setViewMode("list")}
+                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                        viewMode === "list"
+                          ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
+                          : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                      }`}
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M4 6h16M4 10h16M4 14h16M4 18h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
                 {loading ? (
                   <div className="flex justify-center items-center py-12">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -1331,7 +1254,11 @@ const NewsAggregator = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1.8, delay: 0.8 }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                    className={`${
+                      viewMode === "grid"
+                        ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                        : "space-y-4"
+                    }`}
                   >
                     {/* Dynamic News Cards */}
                     {(() => {
@@ -1383,31 +1310,46 @@ const NewsAggregator = () => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.3 }}
-                            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[350px] flex flex-col"
+                            className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
+                              viewMode === "grid"
+                                ? "h-[500px]"
+                                : "h-auto justify-center"
+                            }`}
                           >
                             {/* Card Header */}
-                            <div className="p-6 flex-shrink-0">
-                              {/* Top Row - Logo, Title, and Carousel Controls */}
-                              <div className="flex items-center justify-between mb-4">
-                                {/* Logo and Source Title */}
-                                <div className="flex items-center gap-3">
-                                  <div
-                                    className={`w-6 h-6 ${getLogoColor(
-                                      feed.name
-                                    )} rounded flex items-center justify-center`}
-                                  >
-                                    <span
-                                      className={`${getLogoTextColor(
-                                        feed.name
-                                      )} font-bold text-xs`}
-                                    >
-                                      {getLogoText(feed.name)}
-                                    </span>
-                                  </div>
-                                  <h4 className="text-base font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide">
-                                    {feed.name}
-                                  </h4>
-                                </div>
+                            <div
+                              className={`${
+                                viewMode === "list" ? "px-4 py-3" : "px-6 pt-6"
+                              } flex-shrink-0`}
+                            >
+                              {/* Top Row - Source Title, Article Title, and Carousel Controls */}
+                              <div
+                                className={`flex items-center justify-between ${
+                                  viewMode === "list" ? "" : "mb-4"
+                                }`}
+                              >
+                                {/* Source Title */}
+                                <h4 className="text-base font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                                  {feed.name}
+                                </h4>
+
+                                {/* Article Title - Only show in list view */}
+                                {viewMode === "list" &&
+                                  feedItems.length > 0 && (
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight flex-1 mx-4">
+                                      <a
+                                        href={feedItems[currentIndex]?.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                                      >
+                                        {truncateText(
+                                          feedItems[currentIndex]?.title || "",
+                                          60
+                                        )}
+                                      </a>
+                                    </h3>
+                                  )}
 
                                 {/* Carousel Controls - Only show if there are items */}
                                 {feedItems.length > 1 && (
@@ -1433,21 +1375,72 @@ const NewsAggregator = () => {
                                 )}
                               </div>
 
-                              {/* Article Title or Status Message */}
-                              {feedItems.length > 0 ? (
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
-                                  <a
-                                    href={feedItems[currentIndex]?.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                              {/* Category Chip - Hidden in list view */}
+                              {viewMode === "grid" && (
+                                <div className="mb-3">
+                                  <span
+                                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                      feed.category === "technology"
+                                        ? "bg-[#fef2de] text-[#422b02] dark:bg-[#f79d84]/30 dark:text-[#f79d84]"
+                                        : feed.category === "sports"
+                                        ? "bg-[#def5e9] text-[#0e2e1d] dark:bg-[#59cd90]/30 dark:text-[#59cd90]"
+                                        : feed.category === "business"
+                                        ? "bg-[#d8edf7] text-[#0a222d] dark:bg-[#3fa7d6]/30 dark:text-[#3fa7d84]/30 dark:text-[#3fa7d6]"
+                                        : feed.category === "entertainment"
+                                        ? "bg-[#fef2de] text-[#422b02] dark:bg-[#fac05e]/30 dark:text-[#fac05e]"
+                                        : feed.category === "politics"
+                                        ? "bg-[#fdebe6] text-[#471305] dark:bg-[#f79d84]/30 dark:text-[#f79d84]"
+                                        : "bg-[#d8edf7] text-[#0a222d] dark:bg-[#3fa7d6]/30 dark:text-[#3fa7d6]"
+                                    }`}
                                   >
-                                    {truncateText(
-                                      feedItems[currentIndex]?.title || "",
-                                      90
+                                    {feed.category === "technology"
+                                      ? "Technology"
+                                      : feed.category === "sports"
+                                      ? "Sports"
+                                      : feed.category === "business"
+                                      ? "Business"
+                                      : feed.category === "entertainment"
+                                      ? "Entertainment"
+                                      : feed.category === "politics"
+                                      ? "Politics"
+                                      : "All News"}
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Article Title or Status Message - Hidden in list view */}
+                              {feedItems.length > 0 ? (
+                                <>
+                                  {viewMode === "grid" && (
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+                                      <a
+                                        href={feedItems[currentIndex]?.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                                      >
+                                        {truncateText(
+                                          feedItems[currentIndex]?.title || "",
+                                          90
+                                        )}
+                                      </a>
+                                    </h3>
+                                  )}
+
+                                  {/* Subtitle below headline - Hidden in list view */}
+                                  {viewMode === "grid" &&
+                                    feedItems[currentIndex]?.excerpt && (
+                                      <div className="mt-3 flex items-center">
+                                        <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                                          {truncateText(
+                                            feedItems[currentIndex]?.excerpt ||
+                                              "",
+                                            400
+                                          )}
+                                        </p>
+                                      </div>
                                     )}
-                                  </a>
-                                </h3>
+                                </>
                               ) : (
                                 <div className="text-center py-8">
                                   {currentFeedStatus?.working === false ? (
@@ -1477,13 +1470,18 @@ const NewsAggregator = () => {
 
                             {/* Card Content */}
                             <div
-                              className="px-6 pb-6 flex-1 flex flex-col"
-                              style={{ height: "180px" }}
+                              className={`px-6 pb-6 flex-1 flex flex-col ${
+                                viewMode === "list" ? "hidden" : ""
+                              }`}
+                              style={
+                                viewMode === "list" ? {} : { height: "180px" }
+                              }
                             >
-                              {/* Image or Placeholder */}
-                              {feedItems.length > 0 &&
+                              {/* Image or Placeholder - Hidden in list view */}
+                              {viewMode === "grid" &&
+                              feedItems.length > 0 &&
                               feedItems[currentIndex]?.image &&
-                              !feedItems[currentIndex]?.image.startsWith(
+                              !feedItems[currentIndex]?.image!.startsWith(
                                 "placeholder:"
                               ) ? (
                                 <div
@@ -1554,19 +1552,9 @@ const NewsAggregator = () => {
                                       )}
                                     </div>
                                   )}
-
-                                  {/* Subtitle overlay on hover */}
-                                  <div className="absolute inset-0 bg-black bg-opacity-75 text-white p-4 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
-                                    <p className="text-sm leading-relaxed text-center">
-                                      {truncateText(
-                                        feedItems[currentIndex]?.excerpt || "",
-                                        150
-                                      )}
-                                    </p>
-                                  </div>
                                 </div>
-                              ) : (
-                                // No image available or placeholder - show styled placeholder
+                              ) : viewMode === "grid" ? (
+                                // No image available or placeholder - show styled placeholder (only in grid view)
                                 <div
                                   className="mt-auto w-full h-36 rounded-lg flex items-center justify-center"
                                   style={{
@@ -1577,7 +1565,7 @@ const NewsAggregator = () => {
                                 >
                                   {feedItems.length > 0 &&
                                   feedItems[currentIndex]?.image &&
-                                  feedItems[currentIndex]?.image.startsWith(
+                                  feedItems[currentIndex]?.image!.startsWith(
                                     "placeholder:"
                                   ) ? (
                                     // Show styled placeholder for this source
@@ -1656,7 +1644,7 @@ const NewsAggregator = () => {
                                     </div>
                                   )}
                                 </div>
-                              )}
+                              ) : null}
                             </div>
                           </motion.div>
                         );
@@ -1682,24 +1670,31 @@ const NewsAggregator = () => {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.3 }}
-                            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[350px] flex flex-col"
-                            style={{ height: "320px" }}
+                            className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
+                              viewMode === "list"
+                                ? "h-auto justify-center"
+                                : "h-[500px]"
+                            }`}
+                            style={
+                              viewMode === "list" ? {} : { height: "470px" }
+                            }
                           >
                             {/* Custom Feed Header */}
-                            <div className="p-6 flex-shrink-0">
+                            <div
+                              className={`${
+                                viewMode === "list" ? "px-4 py-3" : "px-6 pt-6"
+                              } flex-shrink-0`}
+                            >
                               {/* Top Row - Logo, Title, and Remove Button */}
-                              <div className="flex items-center justify-between mb-4">
-                                {/* Logo and Source Title */}
-                                <div className="flex items-center gap-3">
-                                  <div className="w-6 h-6 bg-purple-300 rounded flex items-center justify-center">
-                                    <span className="text-purple-900 font-bold text-xs">
-                                      CF
-                                    </span>
-                                  </div>
-                                  <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                                    {customFeed.name}
-                                  </h4>
-                                </div>
+                              <div
+                                className={`flex items-center justify-between ${
+                                  viewMode === "list" ? "" : "mb-4"
+                                }`}
+                              >
+                                {/* Source Title */}
+                                <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                                  {customFeed.name}
+                                </h4>
 
                                 {/* Remove Button */}
                                 <button
@@ -1719,30 +1714,59 @@ const NewsAggregator = () => {
                                 </button>
                               </div>
 
-                              {/* Article Title */}
-                              <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
-                                <a
-                                  href={customFeedItems[0]?.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                                >
-                                  {truncateText(
-                                    customFeedItems[0]?.title || "",
-                                    90
-                                  )}
-                                </a>
-                              </h3>
+                              {/* Category Chip - Hidden in list view */}
+                              {viewMode === "grid" && (
+                                <div className="mb-3">
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#fdebe6] text-[#471305] dark:bg-[#f79d84]/30 dark:text-[#f79d84]">
+                                    Custom Feed
+                                  </span>
+                                </div>
+                              )}
+
+                              {/* Article Title - Hidden in list view */}
+                              {viewMode === "grid" && (
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+                                  <a
+                                    href={customFeedItems[0]?.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                                  >
+                                    {truncateText(
+                                      customFeedItems[0]?.title || "",
+                                      90
+                                    )}
+                                  </a>
+                                </h3>
+                              )}
+
+                              {/* Subtitle below headline - Hidden in list view */}
+                              {viewMode === "grid" &&
+                                customFeedItems[0]?.excerpt && (
+                                  <div className="mt-3 flex items-center">
+                                    <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                                      {truncateText(
+                                        customFeedItems[0]?.excerpt || "",
+                                        400
+                                      )}
+                                    </p>
+                                  </div>
+                                )}
                             </div>
 
                             {/* Custom Feed Content */}
                             <div
-                              className="px-6 pb-6 flex-1 flex flex-col"
-                              style={{ height: "180px" }}
+                              className={`px-6 pb-6 flex-1 flex flex-col ${
+                                viewMode === "list" ? "hidden" : ""
+                              }`}
+                              style={
+                                viewMode === "list" ? {} : { height: "180px" }
+                              }
                             >
-                              {/* Image */}
-                              {customFeedItems[0]?.image &&
-                              !customFeedItems[0]?.image.startsWith(
+                              {/* Image - Hidden in list view */}
+                              {viewMode === "grid" &&
+                              customFeedItems[0]?.image &&
+                              !customFeedItems[0]?.image!.startsWith(
                                 "placeholder:"
                               ) ? (
                                 <div
@@ -1787,19 +1811,9 @@ const NewsAggregator = () => {
                                       <div className="text-4xl">📰</div>
                                     </div>
                                   </div>
-
-                                  {/* Subtitle overlay on hover */}
-                                  <div className="absolute inset-0 bg-black bg-opacity-75 text-white p-4 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
-                                    <p className="text-sm leading-relaxed text-center">
-                                      {truncateText(
-                                        customFeedItems[0]?.excerpt || "",
-                                        150
-                                      )}
-                                    </p>
-                                  </div>
                                 </div>
-                              ) : (
-                                // No image available or placeholder - show styled placeholder
+                              ) : viewMode === "grid" ? (
+                                // No image available or placeholder - show styled placeholder (only in grid view)
                                 <div
                                   className="mt-auto w-full h-36 rounded-lg flex items-center justify-center"
                                   style={{
@@ -1808,7 +1822,8 @@ const NewsAggregator = () => {
                                     maxHeight: "150px",
                                   }}
                                 >
-                                  {customFeedItems[0]?.image?.startsWith(
+                                  {customFeedItems[0]?.image &&
+                                  customFeedItems[0]?.image!.startsWith(
                                     "placeholder:"
                                   ) ? (
                                     // Show styled placeholder for this source
@@ -1838,7 +1853,7 @@ const NewsAggregator = () => {
                                     </div>
                                   )}
                                 </div>
-                              )}
+                              ) : null}
                             </div>
                           </motion.div>
                         );
