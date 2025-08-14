@@ -55,6 +55,28 @@ const rssFeeds: RSSFeed[] = [
     category: "Sports",
     enabled: true,
   },
+  {
+    id: "google-technology",
+    name: "Google Technology",
+    url: "https://rss.app/feeds/8FQMeEmcbPFgAPPo.xml",
+    category: "Technology",
+    enabled: true,
+  },
+
+  {
+    id: "lambgoat",
+    name: "Lambgoat",
+    url: "https://rss.app/feeds/T7FesKRrQP9tDrmC.xml",
+    category: "Music",
+    enabled: true,
+  },
+  {
+    id: "linkedin-google",
+    name: "LinkedIn - Google",
+    url: "https://rss.app/feeds/YmKsNfGanenfg9qN.xml",
+    category: "Technology",
+    enabled: true,
+  },
 ];
 
 const NewsAggregator = () => {
@@ -65,6 +87,127 @@ const NewsAggregator = () => {
   const [wiredIndex, setWiredIndex] = useState(0);
   const [usaTodayIndex, setUsaTodayIndex] = useState(0);
   const [yahooSportsIndex, setYahooSportsIndex] = useState(0);
+  const [googleTechnologyIndex, setGoogleTechnologyIndex] = useState(0);
+
+  const [lambgoatIndex, setLambgoatIndex] = useState(0);
+  const [linkedinGoogleIndex, setLinkedinGoogleIndex] = useState(0);
+  const [activeCategory, setActiveCategory] = useState("all");
+
+  // Helper functions for dynamic cards
+  const getCurrentIndex = (sourceName: string) => {
+    switch (sourceName) {
+      case "Ars Technica":
+        return arsTechnicaIndex;
+      case "WIRED":
+        return wiredIndex;
+      case "USA Today":
+        return usaTodayIndex;
+      case "Yahoo Sports":
+        return yahooSportsIndex;
+      case "Google Technology":
+        return googleTechnologyIndex;
+      case "Lambgoat":
+        return lambgoatIndex;
+      case "LinkedIn - Google":
+        return linkedinGoogleIndex;
+      default:
+        return 0;
+    }
+  };
+
+  const getLogoColor = (sourceName: string) => {
+    switch (sourceName) {
+      case "Ars Technica":
+        return "bg-orange-500";
+      case "WIRED":
+        return "bg-black dark:bg-white";
+      case "USA Today":
+        return "bg-blue-600";
+      case "Yahoo Sports":
+        return "bg-purple-600";
+      case "Google Technology":
+        return "bg-blue-500";
+      case "Lambgoat":
+        return "bg-red-600";
+      case "LinkedIn - Google":
+        return "bg-blue-600";
+      default:
+        return "bg-gray-500";
+    }
+  };
+
+  const getLogoText = (sourceName: string) => {
+    switch (sourceName) {
+      case "Ars Technica":
+        return "AT";
+      case "WIRED":
+        return "W";
+      case "USA Today":
+        return "US";
+      case "Yahoo Sports":
+        return "YS";
+      case "Google Technology":
+        return "GT";
+      case "Lambgoat":
+        return "LG";
+      case "LinkedIn - Google":
+        return "LG";
+      default:
+        return "N";
+    }
+  };
+
+  const goToPrevious = (sourceName: string) => {
+    switch (sourceName) {
+      case "Ars Technica":
+        goToPreviousArsTechnica();
+        break;
+      case "WIRED":
+        goToPreviousWired();
+        break;
+      case "USA Today":
+        goToPreviousUsaToday();
+        break;
+      case "Yahoo Sports":
+        goToPreviousYahooSports();
+        break;
+      case "Google Technology":
+        goToPreviousGoogleTechnology();
+        break;
+      case "Lambgoat":
+        goToPreviousLambgoat();
+        break;
+      case "LinkedIn - Google":
+        goToPreviousLinkedinGoogle();
+        break;
+    }
+  };
+
+  const goToNext = (sourceName: string) => {
+    switch (sourceName) {
+      case "Ars Technica":
+        goToNextArsTechnica();
+        break;
+      case "WIRED":
+        goToNextWired();
+        break;
+      case "USA Today":
+        goToNextUsaToday();
+        break;
+      case "Yahoo Sports":
+        goToNextYahooSports();
+        break;
+      case "Google Technology":
+        goToNextGoogleTechnology();
+        break;
+      case "Lambgoat":
+        goToNextLambgoat();
+        break;
+      case "LinkedIn - Google":
+        goToNextLinkedinGoogle();
+        break;
+    }
+  };
 
   // Function to parse RSS XML
   const parseRSS = (
@@ -349,6 +492,19 @@ const NewsAggregator = () => {
         } catch (feedError) {
           console.error(`Failed to load feed ${feed.name}:`, feedError);
           // Continue with other feeds even if one fails
+          // Add a fallback item to show the feed exists but failed
+          allItems.push({
+            id: Date.now() + Math.random(),
+            title: `Error loading ${feed.name}`,
+            source: feed.name,
+            url: "#",
+            publishedDate: new Date().toISOString(),
+            author: "System",
+            excerpt: `Failed to load content from ${feed.name}. Please try again later.`,
+            category: feed.category,
+            isRss: true,
+            image: "",
+          });
         }
       }
 
@@ -414,6 +570,10 @@ const NewsAggregator = () => {
         setWiredIndex(0); // Reset WIRED carousel
         setUsaTodayIndex(0); // Reset USA Today carousel
         setYahooSportsIndex(0); // Reset Yahoo Sports carousel
+        setGoogleTechnologyIndex(0); // Reset Google Technology carousel
+
+        setLambgoatIndex(0); // Reset Lambgoat carousel
+        setLinkedinGoogleIndex(0); // Reset LinkedIn - Google carousel
       }
     } catch (error) {
       console.error("Error loading RSS feeds:", error);
@@ -525,6 +685,76 @@ const NewsAggregator = () => {
     }
   };
 
+  // Google Technology carousel navigation
+  const goToNextGoogleTechnology = () => {
+    const googleTechnologyItems = newsItems.filter(
+      (item) => item.source === "Google Technology"
+    );
+    if (googleTechnologyItems.length > 0) {
+      setGoogleTechnologyIndex(
+        (prev) => (prev + 1) % googleTechnologyItems.length
+      );
+    }
+  };
+
+  const goToPreviousGoogleTechnology = () => {
+    const googleTechnologyItems = newsItems.filter(
+      (item) => item.source === "Google Technology"
+    );
+    if (googleTechnologyItems.length > 0) {
+      setGoogleTechnologyIndex(
+        (prev) =>
+          (prev - 1 + googleTechnologyItems.length) %
+          googleTechnologyItems.length
+      );
+    }
+  };
+
+  // Reddit HxC carousel navigation
+
+  // Lambgoat carousel navigation
+  const goToNextLambgoat = () => {
+    const lambgoatItems = newsItems.filter(
+      (item) => item.source === "Lambgoat"
+    );
+    if (lambgoatItems.length > 0) {
+      setLambgoatIndex((prev) => (prev + 1) % lambgoatItems.length);
+    }
+  };
+
+  const goToPreviousLambgoat = () => {
+    const lambgoatItems = newsItems.filter(
+      (item) => item.source === "Lambgoat"
+    );
+    if (lambgoatItems.length > 0) {
+      setLambgoatIndex(
+        (prev) => (prev - 1 + lambgoatItems.length) % lambgoatItems.length
+      );
+    }
+  };
+
+  // LinkedIn - Google carousel navigation
+  const goToNextLinkedinGoogle = () => {
+    const linkedinGoogleItems = newsItems.filter(
+      (item) => item.source === "LinkedIn - Google"
+    );
+    if (linkedinGoogleItems.length > 0) {
+      setLinkedinGoogleIndex((prev) => (prev + 1) % linkedinGoogleItems.length);
+    }
+  };
+
+  const goToPreviousLinkedinGoogle = () => {
+    const linkedinGoogleItems = newsItems.filter(
+      (item) => item.source === "LinkedIn - Google"
+    );
+    if (linkedinGoogleItems.length > 0) {
+      setLinkedinGoogleIndex(
+        (prev) =>
+          (prev - 1 + linkedinGoogleItems.length) % linkedinGoogleItems.length
+      );
+    }
+  };
+
   return (
     <div
       className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white font-serif roboto-serif-page"
@@ -540,606 +770,503 @@ const NewsAggregator = () => {
           </div>
         }
       >
-        {/* Hero Section */}
-        <section className="relative flex flex-col justify-center min-h-[80px] sm:min-h-[100px] pt-2 sm:pt-3 lg:pt-4">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-            {/* Header with three-column layout - third column takes full remaining width */}
-            <div className="flex items-start w-full">
-              {/* First column - empty but takes up space */}
-              <div className="w-1/3"></div>
-
-              {/* Second column - centered title */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.8, delay: 0.2 }}
-                className="w-1/3 flex justify-center"
-              >
-                <h1
-                  className="text-[clamp(1.5rem,4vw,3rem)] font-bold mb-1 title-font leading-none relative z-10 text-center"
-                  style={{ letterSpacing: "-0.06em" }}
-                >
-                  News
-                </h1>
-              </motion.div>
+        <div className="flex">
+          {/* Left Navigation Sidebar */}
+          <nav className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen p-4">
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Categories
+              </h2>
             </div>
-          </div>
-        </section>
 
-        {/* Error Message */}
-        {error && (
-          <section className="py-4 sm:py-6 lg:py-8">
-            <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4"
+            {/* Category Tabs */}
+            <div className="space-y-2">
+              <button
+                onClick={() => setActiveCategory("all")}
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                  activeCategory === "all"
+                    ? "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-l-4 border-blue-500"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
               >
-                <p className="text-red-700 dark:text-red-300">{error}</p>
-              </motion.div>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">A</span>
+                  </div>
+                  <span className="font-medium">All News</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setActiveCategory("technology")}
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                  activeCategory === "technology"
+                    ? "bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 border-l-4 border-orange-500"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-orange-500 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">T</span>
+                  </div>
+                  <span className="font-medium">Technology</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setActiveCategory("sports")}
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                  activeCategory === "sports"
+                    ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-l-4 border-green-500"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-green-500 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">S</span>
+                  </div>
+                  <span className="font-medium">Sports</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setActiveCategory("business")}
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                  activeCategory === "business"
+                    ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border-l-4 border-purple-500"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-purple-500 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">B</span>
+                  </div>
+                  <span className="font-medium">Business</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setActiveCategory("entertainment")}
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                  activeCategory === "entertainment"
+                    ? "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border-l-4 border-red-500"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-red-500 rounded flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">E</span>
+                  </div>
+                  <span className="font-medium">Entertainment</span>
+                </div>
+              </button>
             </div>
-          </section>
-        )}
+          </nav>
 
-        {/* News Grid Section */}
-        <section className="py-4 sm:py-6 lg:py-8">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-            {loading ? (
-              <div className="flex justify-center items-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-              </div>
-            ) : error ? (
-              <div className="text-center py-12">
-                <p className="text-red-600 dark:text-red-400 text-lg mb-4">
-                  {error}
-                </p>
-                <button
-                  onClick={loadRSSFeeds}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Try Again
-                </button>
-              </div>
-            ) : newsItems.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-600 dark:text-gray-400 text-lg">
-                  No news available at the moment.
-                </p>
-              </div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.8, delay: 0.8 }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6"
-              >
-                {/* Ars Technica Card with Carousel */}
-                {newsItems.filter((item) => item.source === "Ars Technica")
-                  .length > 0 && (
+          {/* Main Content Area */}
+          <div className="flex-1">
+            {/* Error Message */}
+            {error && (
+              <section className="py-4 sm:py-6 lg:py-8">
+                <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
                   <motion.div
-                    key={`ars-technica-${arsTechnicaIndex}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[450px] flex flex-col"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4"
                   >
-                    {/* Ars Technica Header */}
-                    <div
-                      className="p-6 flex-shrink-0"
-                      style={{ height: "320px" }}
-                    >
-                      {/* Top Row - Logo, Title, and Carousel Controls */}
-                      <div className="flex items-center justify-between mb-4">
-                        {/* Logo and Source Title */}
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">
-                              AT
-                            </span>
-                          </div>
-                          <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                            Ars Technica
-                          </h4>
-                        </div>
-
-                        {/* Carousel Controls */}
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={goToPreviousArsTechnica}
-                            disabled={
-                              newsItems.filter(
-                                (item) => item.source === "Ars Technica"
-                              ).length <= 1
-                            }
-                            className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                          >
-                            ←
-                          </button>
-                          <span className="text-xs text-gray-500 bg-white dark:bg-gray-700 px-2 py-1 rounded border border-gray-200 dark:border-gray-600">
-                            {arsTechnicaIndex + 1}/
-                            {
-                              newsItems.filter(
-                                (item) => item.source === "Ars Technica"
-                              ).length
-                            }
-                          </span>
-                          <button
-                            onClick={goToNextArsTechnica}
-                            disabled={
-                              newsItems.filter(
-                                (item) => item.source === "Ars Technica"
-                              ).length <= 1
-                            }
-                            className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                          >
-                            →
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Article Title */}
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 leading-tight">
-                        <a
-                          href={
-                            newsItems.filter(
-                              (item) => item.source === "Ars Technica"
-                            )[arsTechnicaIndex]?.url
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                        >
-                          {truncateText(
-                            newsItems.filter(
-                              (item) => item.source === "Ars Technica"
-                            )[arsTechnicaIndex]?.title || "",
-                            80
-                          )}
-                        </a>
-                      </h3>
-
-                      {/* Image */}
-                      {newsItems.filter(
-                        (item) => item.source === "Ars Technica"
-                      )[arsTechnicaIndex]?.image && (
-                        <div className="mb-4" style={{ height: "150px" }}>
-                          <img
-                            src={
-                              newsItems.filter(
-                                (item) => item.source === "Ars Technica"
-                              )[arsTechnicaIndex]?.image
-                            }
-                            alt={
-                              newsItems.filter(
-                                (item) => item.source === "Ars Technica"
-                              )[arsTechnicaIndex]?.title
-                            }
-                            className="w-full h-36 object-cover rounded-lg"
-                            style={{
-                              height: "150px",
-                              minHeight: "150px",
-                              maxHeight: "150px",
-                            }}
-                            onError={(e) => {
-                              e.currentTarget.style.display = "none";
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Ars Technica Content */}
-                    <div
-                      className="px-6 pb-6 flex-1 flex flex-col"
-                      style={{ height: "180px" }}
-                    >
-                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1 overflow-hidden">
-                        {truncateText(
-                          newsItems.filter(
-                            (item) => item.source === "Ars Technica"
-                          )[arsTechnicaIndex]?.excerpt || ""
-                        )}
-                      </p>
-                    </div>
+                    <p className="text-red-700 dark:text-red-300">{error}</p>
                   </motion.div>
-                )}
-
-                {/* WIRED Card with Carousel */}
-                {newsItems.filter((item) => item.source === "WIRED").length >
-                  0 && (
-                  <motion.div
-                    key={`wired-${wiredIndex}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[450px] flex flex-col"
-                  >
-                    {/* WIRED Header */}
-                    <div
-                      className="p-6 flex-shrink-0"
-                      style={{ height: "320px" }}
-                    >
-                      {/* Top Row - Logo, Title, and Carousel Controls */}
-                      <div className="flex items-center justify-between mb-4">
-                        {/* Logo and Source Title */}
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-black dark:bg-white rounded-lg flex items-center justify-center">
-                            <span className="text-white dark:text-black font-bold text-sm">
-                              W
-                            </span>
-                          </div>
-                          <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                            WIRED
-                          </h4>
-                        </div>
-
-                        {/* Carousel Controls */}
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={goToPreviousWired}
-                            disabled={
-                              newsItems.filter(
-                                (item) => item.source === "WIRED"
-                              ).length <= 1
-                            }
-                            className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                          >
-                            ←
-                          </button>
-                          <span className="text-xs text-gray-500 bg-white dark:bg-gray-700 px-2 py-1 rounded border border-gray-200 dark:border-gray-600">
-                            {wiredIndex + 1}/
-                            {
-                              newsItems.filter(
-                                (item) => item.source === "WIRED"
-                              ).length
-                            }
-                          </span>
-                          <button
-                            onClick={goToNextWired}
-                            disabled={
-                              newsItems.filter(
-                                (item) => item.source === "WIRED"
-                              ).length <= 1
-                            }
-                            className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                          >
-                            →
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Article Title */}
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 leading-tight">
-                        <a
-                          href={
-                            newsItems.filter((item) => item.source === "WIRED")[
-                              wiredIndex
-                            ]?.url
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                        >
-                          {truncateText(
-                            newsItems.filter((item) => item.source === "WIRED")[
-                              wiredIndex
-                            ]?.title || "",
-                            80
-                          )}
-                        </a>
-                      </h3>
-
-                      {/* Image */}
-                      {newsItems.filter((item) => item.source === "WIRED")[
-                        wiredIndex
-                      ]?.image && (
-                        <div className="mb-4" style={{ height: "150px" }}>
-                          <img
-                            src={
-                              newsItems.filter(
-                                (item) => item.source === "WIRED"
-                              )[wiredIndex]?.image
-                            }
-                            alt={
-                              newsItems.filter(
-                                (item) => item.source === "WIRED"
-                              )[wiredIndex]?.title
-                            }
-                            className="w-full h-36 object-cover rounded-lg"
-                            style={{
-                              height: "150px",
-                              minHeight: "150px",
-                              maxHeight: "150px",
-                            }}
-                            onError={(e) => {
-                              e.currentTarget.style.display = "none";
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* WIRED Content */}
-                    <div
-                      className="px-6 pb-6 flex-1 flex flex-col"
-                      style={{ height: "180px" }}
-                    >
-                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1 overflow-hidden">
-                        {truncateText(
-                          newsItems.filter((item) => item.source === "WIRED")[
-                            wiredIndex
-                          ]?.excerpt || ""
-                        )}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* USA Today Card with Carousel */}
-                {newsItems.filter((item) => item.source === "USA Today")
-                  .length > 0 && (
-                  <motion.div
-                    key={`usa-today-${usaTodayIndex}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[450px] flex flex-col"
-                  >
-                    {/* USA Today Header */}
-                    <div
-                      className="p-6 flex-shrink-0"
-                      style={{ height: "320px" }}
-                    >
-                      {/* Top Row - Logo, Title, and Carousel Controls */}
-                      <div className="flex items-center justify-between mb-4">
-                        {/* Logo and Source Title */}
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">
-                              US
-                            </span>
-                          </div>
-                          <h4 className="text-sm font-medium text-gray-400 dark:text-gray-400 uppercase tracking-wide">
-                            USA Today
-                          </h4>
-                        </div>
-
-                        {/* Carousel Controls */}
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={goToPreviousUsaToday}
-                            disabled={
-                              newsItems.filter(
-                                (item) => item.source === "USA Today"
-                              ).length <= 1
-                            }
-                            className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                          >
-                            ←
-                          </button>
-                          <span className="text-xs text-gray-500 bg-white dark:bg-gray-700 px-2 py-1 rounded border border-gray-200 dark:border-gray-600">
-                            {usaTodayIndex + 1}/
-                            {
-                              newsItems.filter(
-                                (item) => item.source === "USA Today"
-                              ).length
-                            }
-                          </span>
-                          <button
-                            onClick={goToNextUsaToday}
-                            disabled={
-                              newsItems.filter(
-                                (item) => item.source === "USA Today"
-                              ).length <= 1
-                            }
-                            className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                          >
-                            →
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Article Title */}
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 leading-tight">
-                        <a
-                          href={
-                            newsItems.filter(
-                              (item) => item.source === "USA Today"
-                            )[usaTodayIndex]?.url
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                        >
-                          {truncateText(
-                            newsItems.filter(
-                              (item) => item.source === "USA Today"
-                            )[usaTodayIndex]?.title || "",
-                            80
-                          )}
-                        </a>
-                      </h3>
-
-                      {/* Image */}
-                      {newsItems.filter((item) => item.source === "USA Today")[
-                        usaTodayIndex
-                      ]?.image && (
-                        <div className="mb-4" style={{ height: "150px" }}>
-                          <img
-                            src={
-                              newsItems.filter(
-                                (item) => item.source === "USA Today"
-                              )[usaTodayIndex]?.image
-                            }
-                            alt={
-                              newsItems.filter(
-                                (item) => item.source === "USA Today"
-                              )[usaTodayIndex]?.title
-                            }
-                            className="w-full h-36 object-cover rounded-lg"
-                            style={{
-                              height: "150px",
-                              minHeight: "150px",
-                              maxHeight: "150px",
-                            }}
-                            onError={(e) => {
-                              e.currentTarget.style.display = "none";
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* USA Today Content */}
-                    <div
-                      className="px-6 pb-6 flex-1 flex flex-col"
-                      style={{ height: "180px" }}
-                    >
-                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1 overflow-hidden">
-                        {truncateText(
-                          newsItems.filter(
-                            (item) => item.source === "USA Today"
-                          )[usaTodayIndex]?.excerpt || ""
-                        )}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* Yahoo Sports Card with Carousel */}
-                {newsItems.filter((item) => item.source === "Yahoo Sports")
-                  .length > 0 && (
-                  <motion.div
-                    key={`yahoo-sports-${yahooSportsIndex}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[450px] flex flex-col"
-                  >
-                    {/* Yahoo Sports Header */}
-                    <div
-                      className="p-6 flex-shrink-0"
-                      style={{ height: "320px" }}
-                    >
-                      {/* Top Row - Logo, Title, and Carousel Controls */}
-                      <div className="flex items-center justify-between mb-4">
-                        {/* Logo and Source Title */}
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">
-                              YS
-                            </span>
-                          </div>
-                          <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                            Yahoo Sports
-                          </h4>
-                        </div>
-
-                        {/* Carousel Controls */}
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={goToPreviousYahooSports}
-                            disabled={
-                              newsItems.filter(
-                                (item) => item.source === "Yahoo Sports"
-                              ).length <= 1
-                            }
-                            className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                          >
-                            ←
-                          </button>
-                          <span className="text-xs text-gray-500 bg-white dark:bg-gray-700 px-2 py-1 rounded border border-gray-200 dark:border-gray-600">
-                            {yahooSportsIndex + 1}/
-                            {
-                              newsItems.filter(
-                                (item) => item.source === "Yahoo Sports"
-                              ).length
-                            }
-                          </span>
-                          <button
-                            onClick={goToNextYahooSports}
-                            disabled={
-                              newsItems.filter(
-                                (item) => item.source === "Yahoo Sports"
-                              ).length <= 1
-                            }
-                            className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                          >
-                            →
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Article Title */}
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 leading-tight">
-                        <a
-                          href={
-                            newsItems.filter(
-                              (item) => item.source === "Yahoo Sports"
-                            )[yahooSportsIndex]?.url
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                        >
-                          {truncateText(
-                            newsItems.filter(
-                              (item) => item.source === "Yahoo Sports"
-                            )[yahooSportsIndex]?.title || "",
-                            80
-                          )}
-                        </a>
-                      </h3>
-
-                      {/* Image */}
-                      {newsItems.filter(
-                        (item) => item.source === "Yahoo Sports"
-                      )[yahooSportsIndex]?.image && (
-                        <div className="mb-6" style={{ height: "150px" }}>
-                          <img
-                            src={
-                              newsItems.filter(
-                                (item) => item.source === "Yahoo Sports"
-                              )[yahooSportsIndex]?.image
-                            }
-                            alt={
-                              newsItems.filter(
-                                (item) => item.source === "Yahoo Sports"
-                              )[yahooSportsIndex]?.title
-                            }
-                            className="w-full h-36 object-cover rounded-lg"
-                            style={{
-                              height: "150px",
-                              minHeight: "150px",
-                              maxHeight: "150px",
-                            }}
-                            onError={(e) => {
-                              e.currentTarget.style.display = "none";
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Yahoo Sports Content */}
-                    <div
-                      className="px-6 pb-6 flex-1 flex flex-col"
-                      style={{ height: "180px" }}
-                    >
-                      <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed flex-1 overflow-hidden">
-                        {truncateText(
-                          newsItems.filter(
-                            (item) => item.source === "Yahoo Sports"
-                          )[yahooSportsIndex]?.excerpt || ""
-                        )}
-                      </p>
-                    </div>
-                  </motion.div>
-                )}
-              </motion.div>
+                </div>
+              </section>
             )}
+
+            {/* News Grid Section */}
+            <section className="py-4 sm:py-6 lg:py-8">
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+                {loading ? (
+                  <div className="flex justify-center items-center py-12">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                  </div>
+                ) : error ? (
+                  <div className="text-center py-12">
+                    <p className="text-red-600 dark:text-red-400 text-lg mb-4">
+                      {error}
+                    </p>
+                    <button
+                      onClick={loadRSSFeeds}
+                      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                ) : newsItems.length === 0 ? (
+                  <div className="text-center py-12">
+                    <p className="text-gray-600 dark:text-gray-400 text-lg">
+                      No news available at the moment.
+                    </p>
+                  </div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 1.8, delay: 0.8 }}
+                    className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                  >
+                    {/* Dynamic News Cards */}
+                    {rssFeeds.map((feed) => {
+                      const feedItems = newsItems.filter(
+                        (item) => item.source === feed.name
+                      );
+                      const currentIndex = getCurrentIndex(feed.name);
+
+                      if (feedItems.length === 0) return null;
+
+                      return (
+                        <motion.div
+                          key={`${feed.id}-${currentIndex}`}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.3 }}
+                          className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[450px] flex flex-col"
+                        >
+                          {/* Card Header */}
+                          <div className="p-6 flex-shrink-0">
+                            {/* Top Row - Logo, Title, and Carousel Controls */}
+                            <div className="flex items-center justify-between mb-4">
+                              {/* Logo and Source Title */}
+                              <div className="flex items-center gap-3">
+                                <div
+                                  className={`w-8 h-8 ${getLogoColor(
+                                    feed.name
+                                  )} rounded-lg flex items-center justify-center`}
+                                >
+                                  <span className="text-white font-bold text-sm">
+                                    {getLogoText(feed.name)}
+                                  </span>
+                                </div>
+                                <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                                  {feed.name}
+                                </h4>
+                              </div>
+
+                              {/* Carousel Controls */}
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={() => goToPrevious(feed.name)}
+                                  disabled={feedItems.length <= 1}
+                                  className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
+                                >
+                                  ←
+                                </button>
+                                <span className="text-xs text-gray-500 bg-white dark:bg-gray-700 px-2 py-1 rounded border border-gray-200 dark:border-gray-600">
+                                  {currentIndex + 1}/{feedItems.length}
+                                </span>
+                                <button
+                                  onClick={() => goToNext(feed.name)}
+                                  disabled={feedItems.length <= 1}
+                                  className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
+                                >
+                                  →
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Article Title */}
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+                              <a
+                                href={feedItems[currentIndex]?.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                              >
+                                {truncateText(
+                                  feedItems[currentIndex]?.title || "",
+                                  80
+                                )}
+                              </a>
+                            </h3>
+                          </div>
+
+                          {/* Card Content */}
+                          <div
+                            className="px-6 pb-6 flex-1 flex flex-col"
+                            style={{ height: "180px" }}
+                          >
+                            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                              {truncateText(
+                                feedItems[currentIndex]?.excerpt || ""
+                              )}
+                            </p>
+
+                            {/* Image */}
+                            {feedItems[currentIndex]?.image && (
+                              <div
+                                className="mt-auto"
+                                style={{ height: "150px" }}
+                              >
+                                <img
+                                  src={feedItems[currentIndex]?.image}
+                                  alt={feedItems[currentIndex]?.title}
+                                  className="w-full h-36 object-cover rounded-lg"
+                                  style={{
+                                    height: "150px",
+                                    minHeight: "150px",
+                                    maxHeight: "150px",
+                                  }}
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = "none";
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+
+                    {/* Lambgoat Card with Carousel */}
+                    {newsItems.filter((item) => item.source === "Lambgoat")
+                      .length > 0 && (
+                      <motion.div
+                        key={`lambgoat-${lambgoatIndex}`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[450px] flex flex-col"
+                      >
+                        {/* Lambgoat Header */}
+                        <div className="p-4 flex-shrink-0">
+                          {/* Top Row - Logo, Title, and Carousel Controls */}
+                          <div className="flex items-center justify-between mb-4">
+                            {/* Logo and Source Title */}
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
+                                <span className="text-white font-bold text-sm">
+                                  LG
+                                </span>
+                              </div>
+                              <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                                Lambgoat
+                              </h4>
+                            </div>
+
+                            {/* Carousel Controls */}
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={goToPreviousLambgoat}
+                                disabled={
+                                  newsItems.filter(
+                                    (item) => item.source === "Lambgoat"
+                                  ).length <= 1
+                                }
+                                className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
+                              >
+                                ←
+                              </button>
+                              <span className="text-xs text-gray-500 bg-white dark:bg-gray-700 px-2 py-1 rounded border border-gray-200 dark:border-gray-600">
+                                {lambgoatIndex + 1}/
+                                {
+                                  newsItems.filter(
+                                    (item) => item.source === "Lambgoat"
+                                  ).length
+                                }
+                              </span>
+                              <button
+                                onClick={goToNextLambgoat}
+                                disabled={
+                                  newsItems.filter(
+                                    (item) => item.source === "Lambgoat"
+                                  ).length <= 1
+                                }
+                                className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
+                              >
+                                →
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* Article Title */}
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+                            <a
+                              href={
+                                newsItems.filter(
+                                  (item) => item.source === "Lambgoat"
+                                )[lambgoatIndex]?.url
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                            >
+                              {truncateText(
+                                newsItems.filter(
+                                  (item) => item.source === "Lambgoat"
+                                )[lambgoatIndex]?.title || "",
+                                80
+                              )}
+                            </a>
+                          </h3>
+                        </div>
+
+                        {/* Lambgoat Content */}
+                        <div
+                          className="px-6 pb-6 flex-1 flex flex-col"
+                          style={{ height: "180px" }}
+                        >
+                          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                            {truncateText(
+                              newsItems.filter(
+                                (item) => item.source === "Lambgoat"
+                              )[lambgoatIndex]?.excerpt || ""
+                            )}
+                          </p>
+
+                          {/* Image */}
+                          {newsItems.filter(
+                            (item) => item.source === "Lambgoat"
+                          )[lambgoatIndex]?.image && (
+                            <div
+                              className="mt-auto"
+                              style={{ height: "150px" }}
+                            >
+                              <img
+                                src={
+                                  newsItems.filter(
+                                    (item) => item.source === "Lambgoat"
+                                  )[lambgoatIndex]?.image
+                                }
+                                alt={
+                                  newsItems.filter(
+                                    (item) => item.source === "Lambgoat"
+                                  )[lambgoatIndex]?.title
+                                }
+                                className="w-full h-36 object-cover rounded-lg"
+                                style={{
+                                  height: "150px",
+                                  minHeight: "150px",
+                                  maxHeight: "150px",
+                                }}
+                                onError={(e) => {
+                                  e.currentTarget.style.display = "none";
+                                }}
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+
+                    {/* Custom Feeds Section */}
+                    {rssFeeds
+                      .filter((feed) => feed.category === "Custom")
+                      .map((customFeed, index) => {
+                        const customFeedItems = newsItems.filter(
+                          (item) => item.source === customFeed.name
+                        );
+                        if (customFeedItems.length === 0) return null;
+
+                        return (
+                          <motion.div
+                            key={`custom-${customFeed.id}-${index}`}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[450px] flex flex-col"
+                          >
+                            {/* Custom Feed Header */}
+                            <div
+                              className="p-6 flex-shrink-0"
+                              style={{ height: "320px" }}
+                            >
+                              {/* Top Row - Logo, Title, and Remove Button */}
+                              <div className="flex items-center justify-between mb-4">
+                                {/* Logo and Source Title */}
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                                    <span className="text-white font-bold text-sm">
+                                      CF
+                                    </span>
+                                  </div>
+                                  <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                                    {customFeed.name}
+                                  </h4>
+                                </div>
+
+                                {/* Remove Button */}
+                                <button
+                                  onClick={() => {
+                                    const feedIndex = rssFeeds.findIndex(
+                                      (f) => f.id === customFeed.id
+                                    );
+                                    if (feedIndex > -1) {
+                                      rssFeeds.splice(feedIndex, 1);
+                                      loadRSSFeeds();
+                                    }
+                                  }}
+                                  className="w-6 h-6 text-xs text-red-500 hover:text-red-700 bg-white dark:bg-gray-700 rounded border border-red-200 dark:border-red-600 flex items-center justify-center hover:bg-red-50 dark:hover:bg-red-900/20"
+                                  title="Remove this feed"
+                                >
+                                  ×
+                                </button>
+                              </div>
+
+                              {/* Article Title */}
+                              <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+                                <a
+                                  href={customFeedItems[0]?.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                                >
+                                  {truncateText(
+                                    customFeedItems[0]?.title || "",
+                                    80
+                                  )}
+                                </a>
+                              </h3>
+                            </div>
+
+                            {/* Custom Feed Content */}
+                            <div
+                              className="px-6 pb-6 flex-1 flex flex-col"
+                              style={{ height: "180px" }}
+                            >
+                              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                                {truncateText(
+                                  customFeedItems[0]?.excerpt || ""
+                                )}
+                              </p>
+
+                              {/* Image */}
+                              {customFeedItems[0]?.image && (
+                                <div
+                                  className="mt-auto"
+                                  style={{ height: "150px" }}
+                                >
+                                  <img
+                                    src={customFeedItems[0]?.image}
+                                    alt={customFeedItems[0]?.title}
+                                    className="w-full h-36 object-cover rounded-lg"
+                                    style={{
+                                      height: "150px",
+                                      minHeight: "150px",
+                                      maxHeight: "150px",
+                                    }}
+                                    onError={(e) => {
+                                      e.currentTarget.style.display = "none";
+                                    }}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </motion.div>
+                        );
+                      })}
+                  </motion.div>
+                )}
+              </div>
+            </section>
           </div>
-        </section>
+        </div>
       </Suspense>
     </div>
   );
