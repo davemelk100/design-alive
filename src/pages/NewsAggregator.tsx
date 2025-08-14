@@ -58,13 +58,7 @@ const rssFeeds: RSSFeed[] = [
     category: "sports",
     enabled: true,
   },
-  {
-    id: "new-york-times-lifestyle",
-    name: "New York Times - Lifestyle",
-    url: "https://rss.app/feeds/xiLCBOG2ysbYGhk4.xml",
-    category: "lifestyle",
-    enabled: true,
-  },
+
   {
     id: "lambgoat",
     name: "Lambgoat",
@@ -133,8 +127,6 @@ const NewsAggregator = () => {
   const [techradarIndex, setTechradarIndex] = useState(0);
   const [foxSportsIndex, setFoxSportsIndex] = useState(0);
   const [cnnSportsIndex, setCnnSportsIndex] = useState(0);
-  const [newYorkTimesLifestyleIndex, setNewYorkTimesLifestyleIndex] =
-    useState(0);
 
   const [lambgoatIndex, setLambgoatIndex] = useState(0);
   const [noEchoIndex, setNoEchoIndex] = useState(0);
@@ -146,6 +138,7 @@ const NewsAggregator = () => {
 
   const [techcrunchIndex, setTechcrunchIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState("all");
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [feedStatus, setFeedStatus] = useState<{
     [key: string]: { working: boolean; error?: string };
   }>({});
@@ -163,8 +156,7 @@ const NewsAggregator = () => {
         return foxSportsIndex;
       case "CNN - SPORTS":
         return cnnSportsIndex;
-      case "New York Times - Lifestyle":
-        return newYorkTimesLifestyleIndex;
+
       case "Lambgoat":
         return lambgoatIndex;
       case "No Echo":
@@ -193,14 +185,12 @@ const NewsAggregator = () => {
         return "bg-orange-300";
       case "WIRED":
         return "bg-orange-300";
-      case "USA Today":
-        return "bg-teal-300";
+
       case "Fox Sports":
         return "bg-emerald-300";
       case "CNN - SPORTS":
-        return "bg-green-300";
-      case "New York Times - Lifestyle":
-        return "bg-teal-300";
+        return "bg-emerald-300";
+
       case "TechRadar":
         return "bg-orange-300";
       case "Lambgoat":
@@ -212,7 +202,7 @@ const NewsAggregator = () => {
       case "New York Post":
         return "bg-rose-300";
       case "Fox News":
-        return "bg-blue-300";
+        return "bg-violet-300";
       case "CBS SPORTS":
         return "bg-emerald-300";
       case "Breitbart":
@@ -231,14 +221,12 @@ const NewsAggregator = () => {
         return "text-orange-900";
       case "WIRED":
         return "text-orange-900";
-      case "USA Today":
-        return "text-teal-900";
+
       case "Fox Sports":
         return "text-emerald-900";
       case "CNN - SPORTS":
-        return "text-green-900";
-      case "New York Times - Lifestyle":
-        return "text-teal-900";
+        return "text-emerald-900";
+
       case "TechRadar":
         return "text-orange-900";
       case "Lambgoat":
@@ -250,7 +238,7 @@ const NewsAggregator = () => {
       case "New York Post":
         return "text-rose-900";
       case "Fox News":
-        return "text-blue-900";
+        return "text-violet-900";
       case "CBS SPORTS":
         return "text-emerald-900";
       case "Breitbart":
@@ -266,36 +254,34 @@ const NewsAggregator = () => {
   const getLogoText = (sourceName: string) => {
     switch (sourceName) {
       case "Ars Technica":
-        return "";
+        return "T";
       case "WIRED":
-        return "";
-      case "USA Today":
-        return "";
+        return "T";
+
       case "Fox Sports":
-        return "";
+        return "S";
       case "CNN - SPORTS":
-        return "";
-      case "New York Times - Lifestyle":
-        return "";
+        return "S";
+
       case "TechRadar":
-        return "";
+        return "T";
       case "Lambgoat":
-        return "";
+        return "E";
       case "No Echo":
-        return "";
+        return "E";
       case "Newsweek":
-        return "";
+        return "B";
       case "New York Post":
-        return "";
+        return "E";
       case "Fox News":
-        return "";
+        return "B";
       case "CBS SPORTS":
-        return "";
+        return "S";
       case "Breitbart":
-        return "";
+        return "B";
 
       case "TechCrunch":
-        return "";
+        return "T";
       default:
         return "";
     }
@@ -318,9 +304,7 @@ const NewsAggregator = () => {
       case "CNN - SPORTS":
         goToPreviousCnnSports();
         break;
-      case "New York Times - Lifestyle":
-        goToPreviousNewYorkTimesLifestyle();
-        break;
+
       case "Lambgoat":
         goToPreviousLambgoat();
         break;
@@ -366,9 +350,7 @@ const NewsAggregator = () => {
       case "CNN - SPORTS":
         goToNextCnnSports();
         break;
-      case "New York Times - Lifestyle":
-        goToNextNewYorkTimesLifestyle();
-        break;
+
       case "Lambgoat":
         goToNextLambgoat();
         break;
@@ -851,7 +833,7 @@ const NewsAggregator = () => {
       setTechradarIndex(0);
       setFoxSportsIndex(0);
       setCnnSportsIndex(0);
-      setNewYorkTimesLifestyleIndex(0);
+
       setLambgoatIndex(0);
       setNoEchoIndex(0);
       setNewsweekIndex(0); // Reset Newsweek carousel
@@ -923,7 +905,7 @@ const NewsAggregator = () => {
     }
   };
 
-  // USA Today carousel navigation
+  // TechRadar carousel navigation
   const goToNextTechradar = () => {
     const techradarItems = newsItems.filter(
       (item) => item.source === "TechRadar"
@@ -982,31 +964,6 @@ const NewsAggregator = () => {
     if (cnnSportsItems.length > 0) {
       setCnnSportsIndex(
         (prev) => (prev - 1 + cnnSportsItems.length) % cnnSportsItems.length
-      );
-    }
-  };
-
-  // New York Times - Lifestyle carousel navigation
-  const goToNextNewYorkTimesLifestyle = () => {
-    const newYorkTimesLifestyleItems = newsItems.filter(
-      (item) => item.source === "New York Times - Lifestyle"
-    );
-    if (newYorkTimesLifestyleItems.length > 0) {
-      setNewYorkTimesLifestyleIndex(
-        (prev) => (prev + 1) % newYorkTimesLifestyleItems.length
-      );
-    }
-  };
-
-  const goToPreviousNewYorkTimesLifestyle = () => {
-    const newYorkTimesLifestyleItems = newsItems.filter(
-      (item) => item.source === "New York Times - Lifestyle"
-    );
-    if (newYorkTimesLifestyleItems.length > 0) {
-      setNewYorkTimesLifestyleIndex(
-        (prev) =>
-          (prev - 1 + newYorkTimesLifestyleItems.length) %
-          newYorkTimesLifestyleItems.length
       );
     }
   };
@@ -1188,13 +1145,57 @@ const NewsAggregator = () => {
           </div>
         }
       >
-        <div className="flex">
+        <div className="flex relative">
+          {/* Mobile Navigation Toggle */}
+          <button
+            onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+            className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+
           {/* Left Navigation Sidebar */}
-          <nav className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen p-4">
+          <nav
+            className={`${
+              isMobileNavOpen ? "translate-x-0" : "-translate-x-full"
+            } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen p-4 transition-transform duration-300 ease-in-out lg:transition-none`}
+          >
             <div className="mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                davemelk news
-              </h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  davemelk news
+                </h2>
+                <button
+                  onClick={() => setIsMobileNavOpen(false)}
+                  className="lg:hidden p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {/* Category Tabs */}
@@ -1275,32 +1276,16 @@ const NewsAggregator = () => {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 bg-rose-300 rounded flex items-center justify-center">
-                    <span className="text-rose-900 text-xs font-bold">E</span>
+                    <span className="text-rose-900 text-xs font-bold">M</span>
                   </div>
-                  <span className="font-medium">Entertainment</span>
-                </div>
-              </button>
-
-              <button
-                onClick={() => setActiveCategory("lifestyle")}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                  activeCategory === "lifestyle"
-                    ? "bg-teal-50 dark:bg-teal-900/30 text-teal-900 dark:text-teal-100 border-l-4 border-teal-300"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-teal-300 rounded flex items-center justify-center">
-                    <span className="text-teal-900 text-xs font-bold">L</span>
-                  </div>
-                  <span className="font-medium">Lifestyle</span>
+                  <span className="font-medium">Music</span>
                 </div>
               </button>
             </div>
           </nav>
 
           {/* Main Content Area */}
-          <div className="flex-1">
+          <div className="flex-1 lg:ml-0">
             {/* Error Message */}
             {error && (
               <section className="py-4 sm:py-6 lg:py-8">
@@ -1419,7 +1404,7 @@ const NewsAggregator = () => {
                                       {getLogoText(feed.name)}
                                     </span>
                                   </div>
-                                  <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                                  <h4 className="text-base font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide">
                                     {feed.name}
                                   </h4>
                                 </div>
