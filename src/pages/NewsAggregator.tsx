@@ -16,6 +16,9 @@ interface NewsItem {
   category: string;
   isRss?: boolean;
   image?: string;
+  videoUrl?: string;
+  videoDuration?: string;
+  videoType?: string;
 }
 
 interface RSSFeed {
@@ -31,50 +34,92 @@ const rssFeeds: RSSFeed[] = [
     id: "ars-technica",
     name: "Ars Technica",
     url: "https://feeds.arstechnica.com/arstechnica/index",
-    category: "Technology",
+    category: "technology",
     enabled: true,
   },
   {
     id: "wired",
     name: "WIRED",
-    url: "https://rss.app/feeds/8tttlZs7ekrqOLbO.xml",
-    category: "Technology",
+    url: "https://www.wired.com/feed/rss",
+    category: "technology",
     enabled: true,
   },
   {
-    id: "usa-today",
-    name: "USA Today",
-    url: "https://rss.app/feeds/8mq9gH2K0yv6qSqq.xml",
-    category: "News",
+    id: "techradar",
+    name: "TechRadar",
+    url: "https://www.techradar.com/feeds.xml",
+    category: "technology",
     enabled: true,
   },
   {
-    id: "yahoo-sports",
-    name: "Yahoo Sports",
-    url: "https://rss.app/feeds/tppFEcexLVyIBXBM.xml",
-    category: "Sports",
+    id: "fox-sports",
+    name: "Fox Sports",
+    url: "https://api.foxsports.com/v2/content/optimized-rss?partnerKey=MB0Wehpmuj2lUhuRhQaafhBjAJqaPU244mlTDK1i&size=30",
+    category: "sports",
     enabled: true,
   },
   {
-    id: "google-technology",
-    name: "Google Technology",
-    url: "https://rss.app/feeds/8FQMeEmcbPFgAPPo.xml",
-    category: "Technology",
+    id: "new-york-times-lifestyle",
+    name: "New York Times - Lifestyle",
+    url: "https://rss.app/feeds/xiLCBOG2ysbYGhk4.xml",
+    category: "lifestyle",
+    enabled: true,
+  },
+  {
+    id: "lambgoat",
+    name: "Lambgoat",
+    url: "https://rss.app/feeds/rbqQqO2y53KWY7C2.xml",
+    category: "entertainment",
+    enabled: true,
+  },
+  {
+    id: "no-echo",
+    name: "No Echo",
+    url: "https://rss.app/feeds/6VPbwVscIplNrYkC.xml",
+    category: "entertainment",
+    enabled: true,
+  },
+  {
+    id: "newsweek",
+    name: "Newsweek",
+    url: "https://feeds.newsweek.com/feeds/90oh8.rss",
+    category: "business",
+    enabled: true,
+  },
+  {
+    id: "new-york-post",
+    name: "New York Post",
+    url: "https://nypost.com/feed/",
+    category: "entertainment",
+    enabled: true,
+  },
+  {
+    id: "fox-news",
+    name: "Fox News",
+    url: "https://rss.app/feeds/jmwv7HSN9sLVzyMP.xml",
+    category: "business",
+    enabled: true,
+  },
+  {
+    id: "breitbart",
+    name: "Breitbart",
+    url: "https://rss.app/feeds/Ez9O0bz1UTzcmRJu.xml",
+    category: "politics",
     enabled: true,
   },
 
   {
-    id: "lambgoat",
-    name: "Lambgoat",
-    url: "https://rss.app/feeds/T7FesKRrQP9tDrmC.xml",
-    category: "Music",
+    id: "cnn-sports",
+    name: "CNN - SPORTS",
+    url: "https://rss.app/feeds/692Tsxos17wzrYX6.xml",
+    category: "sports",
     enabled: true,
   },
   {
-    id: "linkedin-google",
-    name: "LinkedIn - Google",
-    url: "https://rss.app/feeds/YmKsNfGanenfg9qN.xml",
-    category: "Technology",
+    id: "cbs-sports",
+    name: "CBS SPORTS",
+    url: "https://rss.app/feeds/3woxRS3rir9rtQFO.xml",
+    category: "sports",
     enabled: true,
   },
 ];
@@ -85,13 +130,24 @@ const NewsAggregator = () => {
   const [error, setError] = useState<string | null>(null);
   const [arsTechnicaIndex, setArsTechnicaIndex] = useState(0);
   const [wiredIndex, setWiredIndex] = useState(0);
-  const [usaTodayIndex, setUsaTodayIndex] = useState(0);
-  const [yahooSportsIndex, setYahooSportsIndex] = useState(0);
-  const [googleTechnologyIndex, setGoogleTechnologyIndex] = useState(0);
+  const [techradarIndex, setTechradarIndex] = useState(0);
+  const [foxSportsIndex, setFoxSportsIndex] = useState(0);
+  const [newYorkTimesLifestyleIndex, setNewYorkTimesLifestyleIndex] =
+    useState(0);
 
   const [lambgoatIndex, setLambgoatIndex] = useState(0);
-  const [linkedinGoogleIndex, setLinkedinGoogleIndex] = useState(0);
+  const [noEchoIndex, setNoEchoIndex] = useState(0);
+  const [newsweekIndex, setNewsweekIndex] = useState(0);
+  const [newYorkPostIndex, setNewYorkPostIndex] = useState(0);
+  const [foxNewsIndex, setFoxNewsIndex] = useState(0);
+  const [cbsSportsIndex, setCbsSportsIndex] = useState(0);
+  const [breitbartIndex, setBreitbartIndex] = useState(0);
+
+  const [techcrunchIndex, setTechcrunchIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState("all");
+  const [feedStatus, setFeedStatus] = useState<{
+    [key: string]: { working: boolean; error?: string };
+  }>({});
 
   // Helper functions for dynamic cards
   const getCurrentIndex = (sourceName: string) => {
@@ -100,16 +156,29 @@ const NewsAggregator = () => {
         return arsTechnicaIndex;
       case "WIRED":
         return wiredIndex;
-      case "USA Today":
-        return usaTodayIndex;
-      case "Yahoo Sports":
-        return yahooSportsIndex;
-      case "Google Technology":
-        return googleTechnologyIndex;
+      case "TechRadar":
+        return techradarIndex;
+      case "Fox Sports":
+        return foxSportsIndex;
+      case "New York Times - Lifestyle":
+        return newYorkTimesLifestyleIndex;
       case "Lambgoat":
         return lambgoatIndex;
-      case "LinkedIn - Google":
-        return linkedinGoogleIndex;
+      case "No Echo":
+        return noEchoIndex;
+      case "Newsweek":
+        return newsweekIndex;
+      case "New York Post":
+        return newYorkPostIndex;
+      case "Fox News":
+        return foxNewsIndex;
+      case "CBS SPORTS":
+        return cbsSportsIndex;
+      case "Breitbart":
+        return breitbartIndex;
+
+      case "TechCrunch":
+        return techcrunchIndex;
       default:
         return 0;
     }
@@ -118,42 +187,114 @@ const NewsAggregator = () => {
   const getLogoColor = (sourceName: string) => {
     switch (sourceName) {
       case "Ars Technica":
-        return "bg-orange-500";
+        return "bg-orange-300";
       case "WIRED":
-        return "bg-black dark:bg-white";
+        return "bg-orange-300";
       case "USA Today":
-        return "bg-blue-600";
-      case "Yahoo Sports":
-        return "bg-purple-600";
-      case "Google Technology":
-        return "bg-blue-500";
+        return "bg-teal-300";
+      case "Fox Sports":
+        return "bg-emerald-300";
+      case "CNN - SPORTS":
+        return "bg-green-300";
+      case "New York Times - Lifestyle":
+        return "bg-teal-300";
+      case "TechRadar":
+        return "bg-orange-300";
       case "Lambgoat":
-        return "bg-red-600";
-      case "LinkedIn - Google":
-        return "bg-blue-600";
+        return "bg-rose-300";
+      case "No Echo":
+        return "bg-rose-300";
+      case "Newsweek":
+        return "bg-violet-300";
+      case "New York Post":
+        return "bg-rose-300";
+      case "Fox News":
+        return "bg-blue-300";
+      case "CBS SPORTS":
+        return "bg-emerald-300";
+      case "Breitbart":
+        return "bg-violet-300";
+
+      case "TechCrunch":
+        return "bg-orange-300";
       default:
-        return "bg-gray-500";
+        return "bg-blue-300";
+    }
+  };
+
+  const getLogoTextColor = (sourceName: string) => {
+    switch (sourceName) {
+      case "Ars Technica":
+        return "text-orange-900";
+      case "WIRED":
+        return "text-orange-900";
+      case "USA Today":
+        return "text-teal-900";
+      case "Fox Sports":
+        return "text-emerald-900";
+      case "CNN - SPORTS":
+        return "text-green-900";
+      case "New York Times - Lifestyle":
+        return "text-teal-900";
+      case "TechRadar":
+        return "text-orange-900";
+      case "Lambgoat":
+        return "text-rose-900";
+      case "No Echo":
+        return "text-rose-900";
+      case "Newsweek":
+        return "text-violet-900";
+      case "New York Post":
+        return "text-rose-900";
+      case "Fox News":
+        return "text-blue-900";
+      case "CBS SPORTS":
+        return "text-emerald-900";
+      case "Breitbart":
+        return "text-violet-900";
+
+      case "TechCrunch":
+        return "text-orange-900";
+      default:
+        return "text-blue-900";
     }
   };
 
   const getLogoText = (sourceName: string) => {
     switch (sourceName) {
       case "Ars Technica":
-        return "AT";
+        return "";
       case "WIRED":
-        return "W";
+        return "";
       case "USA Today":
-        return "US";
-      case "Yahoo Sports":
-        return "YS";
-      case "Google Technology":
-        return "GT";
+        return "";
+      case "Fox Sports":
+        return "";
+      case "CNN - SPORTS":
+        return "";
+      case "New York Times - Lifestyle":
+        return "";
+      case "TechRadar":
+        return "";
       case "Lambgoat":
-        return "LG";
-      case "LinkedIn - Google":
-        return "LG";
+        return "";
+      case "No Echo":
+        return "";
+      case "Newsweek":
+        return "";
+      case "New York Post":
+        return "";
+      case "Fox News":
+        return "";
+      case "CBS SPORTS":
+        return "";
+      case "Breitbart":
+        return "";
+
+      case "TechCrunch":
+        return "";
       default:
-        return "N";
+        return "";
     }
   };
 
@@ -165,20 +306,39 @@ const NewsAggregator = () => {
       case "WIRED":
         goToPreviousWired();
         break;
-      case "USA Today":
-        goToPreviousUsaToday();
+      case "TechRadar":
+        goToPreviousTechradar();
         break;
-      case "Yahoo Sports":
-        goToPreviousYahooSports();
+      case "Fox Sports":
+        goToPreviousFoxSports();
         break;
-      case "Google Technology":
-        goToPreviousGoogleTechnology();
+      case "New York Times - Lifestyle":
+        goToPreviousNewYorkTimesLifestyle();
         break;
       case "Lambgoat":
         goToPreviousLambgoat();
         break;
-      case "LinkedIn - Google":
-        goToPreviousLinkedinGoogle();
+      case "No Echo":
+        goToPreviousNoEcho();
+        break;
+      case "Newsweek":
+        goToPreviousNewsweek();
+        break;
+      case "New York Post":
+        goToPreviousNewYorkPost();
+        break;
+      case "Fox News":
+        goToPreviousFoxNews();
+        break;
+      case "CBS SPORTS":
+        goToPreviousCbsSports();
+        break;
+      case "Breitbart":
+        goToPreviousBreitbart();
+        break;
+
+      case "TechCrunch":
+        goToPreviousTechcrunch();
         break;
     }
   };
@@ -191,20 +351,39 @@ const NewsAggregator = () => {
       case "WIRED":
         goToNextWired();
         break;
-      case "USA Today":
-        goToNextUsaToday();
+      case "TechRadar":
+        goToNextTechradar();
         break;
-      case "Yahoo Sports":
-        goToNextYahooSports();
+      case "Fox Sports":
+        goToNextFoxSports();
         break;
-      case "Google Technology":
-        goToNextGoogleTechnology();
+      case "New York Times - Lifestyle":
+        goToNextNewYorkTimesLifestyle();
         break;
       case "Lambgoat":
         goToNextLambgoat();
         break;
-      case "LinkedIn - Google":
-        goToNextLinkedinGoogle();
+      case "No Echo":
+        goToNextNoEcho();
+        break;
+      case "Newsweek":
+        goToNextNewsweek();
+        break;
+      case "New York Post":
+        goToNextNewYorkPost();
+        break;
+      case "Fox News":
+        goToNextFoxNews();
+        break;
+      case "CBS SPORTS":
+        goToNextCbsSports();
+        break;
+      case "Breitbart":
+        goToNextBreitbart();
+        break;
+
+      case "TechCrunch":
+        goToNextTechcrunch();
         break;
     }
   };
@@ -218,12 +397,23 @@ const NewsAggregator = () => {
     console.log(`Parsing RSS XML for ${sourceName}, length: ${xmlText.length}`);
 
     try {
+      // Check if the response is HTML instead of XML (common error case)
+      if (
+        xmlText.trim().startsWith("<!DOCTYPE html") ||
+        xmlText.trim().startsWith("<html")
+      ) {
+        console.warn(
+          `${sourceName} returned HTML instead of RSS XML - likely a 404 or error page`
+        );
+        return [];
+      }
+
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, "text/xml");
 
       console.log(`XML document created, parsing items...`);
 
-      // Try different selectors for RSS items
+      // Try multiple selectors for RSS items
       let items = xmlDoc.querySelectorAll("item");
       console.log(`Found ${items.length} items with 'item' selector`);
 
@@ -233,177 +423,277 @@ const NewsAggregator = () => {
         console.log(`Found ${items.length} items with 'entry' selector`);
       }
 
+      // Try other common selectors
       if (items.length === 0) {
-        // Try to find any content that might be news items
-        const allElements = xmlDoc.querySelectorAll("*");
-        console.log(`Total elements in XML: ${allElements.length}`);
+        items = xmlDoc.querySelectorAll("article, story, news, post");
+        console.log(`Found ${items.length} items with alternative selectors`);
+      }
 
-        // Log the structure to understand what we're working with
-        const channel = xmlDoc.querySelector("channel");
-        if (channel) {
-          console.log(
-            "Channel element found:",
-            channel.innerHTML.substring(0, 500)
-          );
-
-          // Look for any child elements that might contain news
-          const channelChildren = channel.children;
-          console.log(
-            "Channel children:",
-            Array.from(channelChildren).map((child) => ({
-              tagName: child.tagName,
-              textContent: child.textContent?.substring(0, 100),
-            }))
-          );
-        }
-
-        // Look for any elements that might contain news
-        const possibleItems = xmlDoc.querySelectorAll(
-          "article, story, news, post"
-        );
-        console.log(`Possible news elements: ${possibleItems.length}`);
-
-        if (possibleItems.length > 0) {
-          items = possibleItems;
-        }
-
-        // For NYT specifically, let's check if there are any other elements
-        if (sourceName.includes("New York Times")) {
-          console.log(
-            "NYT feed detected, checking for alternative structure..."
-          );
-
-          // Check if there are any elements with content
-          const allTextElements = xmlDoc.querySelectorAll(
-            "title, description, link"
-          );
-          console.log(
-            "NYT text elements found:",
-            Array.from(allTextElements).map((el) => ({
-              tagName: el.tagName,
-              textContent: el.textContent?.substring(0, 100),
-            }))
-          );
-
-          // Check if there are any namespaced elements
-          const nytElements = xmlDoc.querySelectorAll("[xmlns\\:nyt] *");
-          console.log("NYT namespaced elements:", nytElements.length);
-        }
+      if (items.length === 0) {
+        console.warn(`No items found for ${sourceName}, returning empty array`);
+        return [];
       }
 
       const parsedItems: NewsItem[] = [];
 
       items.forEach((item, index) => {
-        const title =
-          item.querySelector("title")?.textContent ||
-          item.querySelector("name")?.textContent ||
-          item.querySelector("headline")?.textContent ||
-          "No Title";
+        try {
+          // More flexible title extraction
+          const title =
+            item.querySelector("title")?.textContent?.trim() ||
+            item.querySelector("name")?.textContent?.trim() ||
+            item.querySelector("headline")?.textContent?.trim() ||
+            "";
 
-        const link =
-          item.querySelector("link")?.textContent ||
-          item.querySelector("url")?.textContent ||
-          item.querySelector("href")?.textContent ||
-          "#";
+          // More flexible link extraction
+          const link =
+            item.querySelector("link")?.textContent?.trim() ||
+            item.querySelector("url")?.textContent?.trim() ||
+            item.querySelector("href")?.textContent?.trim() ||
+            "";
 
-        const description =
-          item.querySelector("description")?.textContent ||
-          item.querySelector("summary")?.textContent ||
-          item.querySelector("content")?.textContent ||
-          item.querySelector("excerpt")?.textContent ||
-          "No description available";
+          // More flexible description extraction
+          const description =
+            item.querySelector("description")?.textContent?.trim() ||
+            item.querySelector("summary")?.textContent?.trim() ||
+            item.querySelector("content")?.textContent?.trim() ||
+            item.querySelector("excerpt")?.textContent?.trim() ||
+            "";
 
-        const pubDate =
-          item.querySelector("pubDate")?.textContent ||
-          item.querySelector("published")?.textContent ||
-          item.querySelector("date")?.textContent ||
-          new Date().toISOString();
+          // More flexible date extraction
+          const pubDate =
+            item.querySelector("pubDate")?.textContent?.trim() ||
+            item.querySelector("published")?.textContent?.trim() ||
+            item.querySelector("date")?.textContent?.trim() ||
+            item.querySelector("updated")?.textContent?.trim() ||
+            new Date().toISOString();
 
-        const author =
-          item.querySelector("author")?.textContent ||
-          item.querySelector("creator")?.textContent ||
-          item.querySelector("writer")?.textContent ||
-          "Unknown Author";
+          // More flexible author extraction
+          const author =
+            item.querySelector("author")?.textContent?.trim() ||
+            item.querySelector("dc\\:creator")?.textContent?.trim() ||
+            item.querySelector("creator")?.textContent?.trim() ||
+            item.querySelector("writer")?.textContent?.trim() ||
+            "";
 
-        // Extract image from various RSS formats
-        let image = "";
-        const mediaContent = item.querySelector("media\\:content, content");
-        const enclosure = item.querySelector("enclosure");
-        const ogImage = item.querySelector("meta[property='og:image']");
+          // Comprehensive image extraction
+          let image = "";
 
-        if (mediaContent && mediaContent.getAttribute("url")) {
-          image = mediaContent.getAttribute("url") || "";
-        } else if (
-          enclosure &&
-          enclosure.getAttribute("type")?.startsWith("image/")
-        ) {
-          image = enclosure.getAttribute("url") || "";
-        } else if (ogImage && ogImage.getAttribute("content")) {
-          image = ogImage.getAttribute("content") || "";
+          // Try enclosure tags first
+          const enclosure = item.querySelector("enclosure[type*='image']");
+          if (enclosure) {
+            image = enclosure.getAttribute("url") || "";
+          }
+
+          // Try media:content tags
+          if (!image) {
+            const mediaContent = item.querySelector(
+              "media\\:content[type*='image'], content[type*='image']"
+            );
+            if (mediaContent) {
+              image = mediaContent.getAttribute("url") || "";
+            }
+          }
+
+          // Try media:thumbnail
+          if (!image) {
+            const mediaThumb = item.querySelector(
+              "media\\:thumbnail, thumbnail"
+            );
+            if (mediaThumb) {
+              image = mediaThumb.getAttribute("url") || "";
+            }
+          }
+
+          // Try og:image meta tags
+          if (!image) {
+            const ogImage = item.querySelector(
+              "meta[property='og:image'], meta[property='og:image:secure_url']"
+            );
+            if (ogImage) {
+              image = ogImage.getAttribute("content") || "";
+            }
+          }
+
+          // Try to extract from description if it contains HTML with images
+          if (!image && description.includes("<img")) {
+            const imgMatch = description.match(
+              /<img[^>]+src=["']([^"']+)["']/i
+            );
+            if (imgMatch) {
+              image = imgMatch[1];
+            }
+          }
+
+          // Try to extract from content field if it exists
+          if (!image) {
+            const content = item.querySelector("content")?.textContent || "";
+            if (content.includes("<img")) {
+              const imgMatch = content.match(/<img[^>]+src=["']([^"']+)["']/i);
+              if (imgMatch) {
+                image = imgMatch[1];
+              }
+            }
+          }
+
+          // Try to extract from summary field if it exists
+          if (!image) {
+            const summary = item.querySelector("summary")?.textContent || "";
+            if (summary.includes("<img")) {
+              const imgMatch = summary.match(/<img[^>]+src=["']([^"']+)["']/i);
+              if (imgMatch) {
+                image = imgMatch[1];
+              }
+            }
+          }
+
+          // Try to find any image-like URL in the item
+          if (!image) {
+            const allElements = item.querySelectorAll("*");
+            for (const element of allElements) {
+              const url =
+                element.getAttribute("url") ||
+                element.getAttribute("src") ||
+                element.getAttribute("href");
+              if (
+                url &&
+                (url.includes(".jpg") ||
+                  url.includes(".jpeg") ||
+                  url.includes(".png") ||
+                  url.includes(".gif") ||
+                  url.includes(".webp"))
+              ) {
+                image = url;
+                break;
+              }
+            }
+          }
+
+          // Try to extract from description if it contains HTML with images
+          if (!image && description.includes("<img")) {
+            const imgMatch = description.match(
+              /<img[^>]+src=["']([^"']+)["']/i
+            );
+            if (imgMatch) {
+              image = imgMatch[1];
+              console.log(
+                `Image extracted from description for ${sourceName}: ${image}`
+              );
+            }
+          }
+
+          // Try to find any image URL in the item's text content
+          if (!image) {
+            const allText = item.textContent || "";
+            const imageUrlMatch = allText.match(
+              /(https?:\/\/[^"\s]+\.(?:jpg|jpeg|png|gif|webp))/i
+            );
+            if (imageUrlMatch) {
+              image = imageUrlMatch[1];
+              console.log(
+                `Image URL found in text content for ${sourceName}: ${image}`
+              );
+            }
+          }
+
+          // If still no image, try to generate a fallback based on the source
+          if (!image) {
+            // Use a special placeholder value that we'll handle in the UI
+            image = `placeholder:${sourceName}`;
+          }
+
+          // Extract video content information
+          let videoUrl = "";
+
+          // Try to find video media:content
+          const videoMediaContent = item.querySelector(
+            "media\\:content[medium='video'], media\\:content[type*='video']"
+          );
+          if (videoMediaContent) {
+            videoUrl = videoMediaContent.getAttribute("url") || "";
+          }
+
+          // Also check for video enclosure tags
+          const videoEnclosure = item.querySelector("enclosure[type*='video']");
+          if (videoEnclosure && !videoUrl) {
+            videoUrl = videoEnclosure.getAttribute("url") || "";
+          }
+
+          // Log image extraction result
+          if (image) {
+            console.log(
+              `Image found for ${sourceName}: ${image.substring(0, 100)}...`
+            );
+          } else {
+            console.log(`No image found for ${sourceName}, using placeholder`);
+          }
+
+          // Skip items without essential data
+          if (!title || !link) {
+            console.log(
+              `Skipping item ${index} from ${sourceName} - missing title or link`
+            );
+            return;
+          }
+
+          // Special handling for Lambgoat to filter out forum posts
+          if (sourceName === "Lambgoat" && title.includes("Forum:")) {
+            console.log(
+              `Filtering out Forum item from Lambgoat: ${title.substring(
+                0,
+                50
+              )}`
+            );
+            return; // Skip this item
+          }
+
+          // Clean up description (remove HTML tags)
+          const cleanDescription = description
+            ? description.replace(/<[^>]*>/g, "").substring(0, 200) + "..."
+            : "No description available";
+
+          parsedItems.push({
+            id: index + 1,
+            title: title,
+            source: sourceName,
+            url: link,
+            publishedDate: pubDate,
+            author: author,
+            excerpt: cleanDescription,
+            category: category,
+            isRss: true,
+            image: image,
+          });
+
+          console.log(
+            `Successfully parsed item ${index + 1} from ${sourceName}:`,
+            {
+              title: title.substring(0, 50),
+              image: image
+                ? `Found: ${image.substring(0, 50)}...`
+                : "Not found",
+              description: cleanDescription.substring(0, 50),
+              category: category,
+            }
+          );
+        } catch (itemError) {
+          console.warn(
+            `Error parsing item ${index} from ${sourceName}:`,
+            itemError
+          );
+          // Continue parsing other items
         }
-
-        console.log(`Item ${index + 1}:`, {
-          title: title.substring(0, 50),
-          link: link.substring(0, 50),
-          description: description.substring(0, 100),
-          image: image.substring(0, 50),
-        });
-
-        // Clean up description (remove HTML tags)
-        const cleanDescription =
-          description.replace(/<[^>]*>/g, "").substring(0, 200) + "...";
-
-        parsedItems.push({
-          id: index + 1,
-          title: title,
-          source: sourceName,
-          url: link,
-          publishedDate: pubDate,
-          author: author,
-          excerpt: cleanDescription,
-          category: category,
-          isRss: true,
-          image: image,
-        });
       });
 
-      console.log(`Successfully parsed ${parsedItems.length} items`);
-
-      // If still no items, create a fallback item with the feed info
-      if (parsedItems.length === 0) {
-        const channelTitle =
-          xmlDoc.querySelector("channel > title")?.textContent || sourceName;
-        const channelLink =
-          xmlDoc.querySelector("channel > link")?.textContent || "#";
-        const channelDesc =
-          xmlDoc.querySelector("channel > description")?.textContent ||
-          "No description available";
-
-        console.log("No items found, creating fallback from channel info:", {
-          channelTitle,
-          channelLink,
-          channelDesc,
-        });
-
-        // Instead of creating fallback content, throw an error
-        throw new Error(
-          `RSS feed loaded but no news items found. Feed structure may be different than expected. Channel: ${channelTitle}`
-        );
-      }
+      console.log(
+        `Successfully parsed ${parsedItems.length} items from ${sourceName}`
+      );
 
       return parsedItems.slice(0, 10); // Limit to 10 items for carousel
     } catch (parseError) {
-      console.error(`Error parsing RSS XML:`, parseError);
+      console.error(`Error parsing RSS XML for ${sourceName}:`, parseError);
       console.error(`XML content:`, xmlText.substring(0, 1000));
-
-      // Throw the error instead of returning fallback content
-      throw new Error(
-        `Failed to parse RSS XML for ${sourceName}: ${
-          parseError instanceof Error
-            ? parseError.message
-            : "Unknown parsing error"
-        }`
-      );
+      return []; // Return empty array instead of throwing error
     }
   };
 
@@ -417,10 +707,12 @@ const NewsAggregator = () => {
         `https://corsproxy.io/?${encodeURIComponent(feed.url)}`,
         `https://api.allorigins.win/raw?url=${encodeURIComponent(feed.url)}`,
         `https://thingproxy.freeboard.io/fetch/${feed.url}`,
-        `https://cors-anywhere.herokuapp.com/${feed.url}`,
         `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(
           feed.url
         )}`,
+        `https://cors-anywhere.herokuapp.com/${feed.url}`,
+        `https://cors.bridged.cc/${feed.url}`,
+        `https://cors.eu.org/${feed.url}`,
       ];
 
       let xmlText = "";
@@ -434,6 +726,8 @@ const NewsAggregator = () => {
             headers: {
               Accept: "application/xml, text/xml, */*",
             },
+            // Add timeout
+            signal: AbortSignal.timeout(10000), // 10 second timeout
           });
 
           console.log(`Response status: ${response.status}`);
@@ -456,21 +750,14 @@ const NewsAggregator = () => {
       }
 
       if (!xmlText || xmlText.length < 100) {
-        throw new Error(
-          "All proxy services failed or returned invalid content"
-        );
+        console.warn(`All proxy services failed for ${feed.name}`);
+        return []; // Return empty array instead of throwing error
       }
 
       return parseRSS(xmlText, feed.name, feed.category);
     } catch (error) {
       console.error(`Error fetching RSS feed ${feed.name}:`, error);
-
-      // Throw the error instead of returning fallback data
-      throw new Error(
-        `Failed to fetch RSS feed ${feed.name}: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      return []; // Return empty array instead of throwing error
     }
   };
 
@@ -481,111 +768,94 @@ const NewsAggregator = () => {
     setError(null);
 
     try {
-      const allItems: NewsItem[] = [];
+      const allNewsItems: NewsItem[] = [];
+      const feedResults = await Promise.allSettled(
+        rssFeeds.map(async (feed) => {
+          try {
+            const items = await fetchRSSFeed(feed);
+            console.log(`Feed ${feed.name}: ${items.length} items loaded`);
+            return { feed, items, success: true };
+          } catch (feedError) {
+            console.warn(`Feed ${feed.name} failed:`, feedError);
+            return { feed, items: [], success: false, error: feedError };
+          }
+        })
+      );
 
-      for (const feed of rssFeeds.filter((f) => f.enabled)) {
-        console.log(`Processing feed: ${feed.name}`);
-        try {
-          const items = await fetchRSSFeed(feed);
-          console.log(`Got ${items.length} items from ${feed.name}:`, items);
-          allItems.push(...items);
-        } catch (feedError) {
-          console.error(`Failed to load feed ${feed.name}:`, feedError);
-          // Continue with other feeds even if one fails
-          // Add a fallback item to show the feed exists but failed
-          allItems.push({
-            id: Date.now() + Math.random(),
-            title: `Error loading ${feed.name}`,
-            source: feed.name,
-            url: "#",
-            publishedDate: new Date().toISOString(),
-            author: "System",
-            excerpt: `Failed to load content from ${feed.name}. Please try again later.`,
-            category: feed.category,
-            isRss: true,
-            image: "",
-          });
+      // Process successful feeds
+      const newFeedStatus: {
+        [key: string]: { working: boolean; error?: string };
+      } = {};
+
+      console.log("Processing feed results:", feedResults);
+
+      feedResults.forEach((result) => {
+        if (result.status === "fulfilled" && result.value.success) {
+          allNewsItems.push(...result.value.items);
+          newFeedStatus[result.value.feed.name] = { working: true };
+          console.log(`Feed ${result.value.feed.name} marked as working`);
+        } else if (result.status === "fulfilled" && !result.value.success) {
+          console.warn(
+            `Feed ${result.value.feed.name} failed to load:`,
+            result.value.error
+          );
+          newFeedStatus[result.value.feed.name] = {
+            working: false,
+            error:
+              result.value.error instanceof Error
+                ? result.value.error.message
+                : "Unknown error",
+          };
+          console.log(`Feed ${result.value.feed.name} marked as failed`);
+        } else if (result.status === "rejected") {
+          console.warn(`Feed failed with rejected promise:`, result.reason);
+          // For rejected promises, we don't have the feed name, so we can't set specific status
+          // This is a fallback case
         }
-      }
+      });
 
-      console.log(`Total items collected: ${allItems.length}`, allItems);
+      console.log("Final feed status:", newFeedStatus);
+      setFeedStatus(newFeedStatus);
 
-      if (allItems.length === 0) {
-        console.log("No items collected from any feeds");
+      // Count successful vs failed feeds
+      const successfulFeeds = feedResults.filter(
+        (result) => result.status === "fulfilled" && result.value.success
+      ).length;
+      const totalFeeds = rssFeeds.length;
+
+      console.log(`Successfully loaded ${successfulFeeds}/${totalFeeds} feeds`);
+
+      if (successfulFeeds === 0) {
         setError(
-          "No RSS feeds could be loaded. All configured feeds failed to fetch or parse content. Check the console for detailed error information."
+          "All RSS feeds failed to load. Please check your internet connection and try again."
         );
-
-        // Show example content so the component works
-        setNewsItems([
-          {
-            id: 1,
-            title: "Loading Ars Technica Feed...",
-            source: "Ars Technica",
-            url: "https://arstechnica.com",
-            publishedDate: new Date().toISOString(),
-            author: "Ars Technica",
-            excerpt:
-              "Attempting to load the latest technology and science news from Ars Technica, including AI stories. If this persists, there may be an issue with the RSS feed or CORS proxy services.",
-            category: "Technology",
-            isRss: false,
-          },
-          {
-            id: 2,
-            title: "Carousel Navigation",
-            source: "System",
-            url: "#",
-            publishedDate: new Date().toISOString(),
-            author: "System",
-            excerpt:
-              "When RSS feeds load successfully, you'll be able to navigate through multiple stories using the arrow buttons and story indicators below.",
-            category: "System",
-            isRss: false,
-          },
-          {
-            id: 3,
-            title: "Story Navigation",
-            source: "System",
-            url: "#",
-            publishedDate: new Date().toISOString(),
-            author: "System",
-            excerpt:
-              "Use the left and right arrows to browse through all available stories from the feed. The dots below show your current position.",
-            category: "System",
-            isRss: false,
-          },
-        ]);
-      } else {
-        // Sort by publication date (newest first)
-        allItems.sort(
-          (a, b) =>
-            new Date(b.publishedDate).getTime() -
-            new Date(a.publishedDate).getTime()
-        );
-
-        console.log("Setting news items:", allItems);
-        setNewsItems(allItems);
-        setError(null);
-        setArsTechnicaIndex(0); // Reset Ars Technica carousel
-        setWiredIndex(0); // Reset WIRED carousel
-        setUsaTodayIndex(0); // Reset USA Today carousel
-        setYahooSportsIndex(0); // Reset Yahoo Sports carousel
-        setGoogleTechnologyIndex(0); // Reset Google Technology carousel
-
-        setLambgoatIndex(0); // Reset Lambgoat carousel
-        setLinkedinGoogleIndex(0); // Reset LinkedIn - Google carousel
+      } else if (successfulFeeds < totalFeeds) {
+        console.warn(`${totalFeeds - successfulFeeds} feeds failed to load`);
+        // Don't set error if some feeds are working
       }
+
+      setNewsItems(allNewsItems);
+
+      // Reset all carousel indices
+      setArsTechnicaIndex(0);
+      setWiredIndex(0);
+      setTechradarIndex(0);
+      setFoxSportsIndex(0);
+      setNewYorkTimesLifestyleIndex(0);
+      setLambgoatIndex(0);
+      setNoEchoIndex(0);
+      setNewsweekIndex(0); // Reset Newsweek carousel
+      setNewYorkPostIndex(0); // Reset New York Post carousel
+      setFoxNewsIndex(0); // Reset Fox News carousel
+      setCbsSportsIndex(0); // Reset CBS Sports carousel
+      setBreitbartIndex(0); // Reset Breitbart carousel
+
+      setTechcrunchIndex(0); // Reset TechCrunch carousel
     } catch (error) {
       console.error("Error loading RSS feeds:", error);
-      setError(
-        `Failed to load RSS feeds: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }. Check the browser console for details.`
-      );
-      setNewsItems([]);
+      setError("Failed to load RSS feeds. Please try again later.");
     } finally {
       setLoading(false);
-      console.log("Finished loading RSS feeds");
     }
   };
 
@@ -644,68 +914,68 @@ const NewsAggregator = () => {
   };
 
   // USA Today carousel navigation
-  const goToNextUsaToday = () => {
-    const usaTodayItems = newsItems.filter(
-      (item) => item.source === "USA Today"
+  const goToNextTechradar = () => {
+    const techradarItems = newsItems.filter(
+      (item) => item.source === "TechRadar"
     );
-    if (usaTodayItems.length > 0) {
-      setUsaTodayIndex((prev) => (prev + 1) % usaTodayItems.length);
+    if (techradarItems.length > 0) {
+      setTechradarIndex((prev) => (prev + 1) % techradarItems.length);
     }
   };
 
-  const goToPreviousUsaToday = () => {
-    const usaTodayItems = newsItems.filter(
-      (item) => item.source === "USA Today"
+  const goToPreviousTechradar = () => {
+    const techradarItems = newsItems.filter(
+      (item) => item.source === "TechRadar"
     );
-    if (usaTodayItems.length > 0) {
-      setUsaTodayIndex(
-        (prev) => (prev - 1 + usaTodayItems.length) % usaTodayItems.length
+    if (techradarItems.length > 0) {
+      setTechradarIndex(
+        (prev) => (prev - 1 + techradarItems.length) % techradarItems.length
       );
     }
   };
 
-  // Yahoo Sports carousel navigation
-  const goToNextYahooSports = () => {
-    const yahooSportsItems = newsItems.filter(
-      (item) => item.source === "Yahoo Sports"
+  // Fox Sports carousel navigation
+  const goToNextFoxSports = () => {
+    const foxSportsItems = newsItems.filter(
+      (item) => item.source === "Fox Sports"
     );
-    if (yahooSportsItems.length > 0) {
-      setYahooSportsIndex((prev) => (prev + 1) % yahooSportsItems.length);
+    if (foxSportsItems.length > 0) {
+      setFoxSportsIndex((prev) => (prev + 1) % foxSportsItems.length);
     }
   };
 
-  const goToPreviousYahooSports = () => {
-    const yahooSportsItems = newsItems.filter(
-      (item) => item.source === "Yahoo Sports"
+  const goToPreviousFoxSports = () => {
+    const foxSportsItems = newsItems.filter(
+      (item) => item.source === "Fox Sports"
     );
-    if (yahooSportsItems.length > 0) {
-      setYahooSportsIndex(
-        (prev) => (prev - 1 + yahooSportsItems.length) % yahooSportsItems.length
+    if (foxSportsItems.length > 0) {
+      setFoxSportsIndex(
+        (prev) => (prev - 1 + foxSportsItems.length) % foxSportsItems.length
       );
     }
   };
 
-  // Google Technology carousel navigation
-  const goToNextGoogleTechnology = () => {
-    const googleTechnologyItems = newsItems.filter(
-      (item) => item.source === "Google Technology"
+  // New York Times - Lifestyle carousel navigation
+  const goToNextNewYorkTimesLifestyle = () => {
+    const newYorkTimesLifestyleItems = newsItems.filter(
+      (item) => item.source === "New York Times - Lifestyle"
     );
-    if (googleTechnologyItems.length > 0) {
-      setGoogleTechnologyIndex(
-        (prev) => (prev + 1) % googleTechnologyItems.length
+    if (newYorkTimesLifestyleItems.length > 0) {
+      setNewYorkTimesLifestyleIndex(
+        (prev) => (prev + 1) % newYorkTimesLifestyleItems.length
       );
     }
   };
 
-  const goToPreviousGoogleTechnology = () => {
-    const googleTechnologyItems = newsItems.filter(
-      (item) => item.source === "Google Technology"
+  const goToPreviousNewYorkTimesLifestyle = () => {
+    const newYorkTimesLifestyleItems = newsItems.filter(
+      (item) => item.source === "New York Times - Lifestyle"
     );
-    if (googleTechnologyItems.length > 0) {
-      setGoogleTechnologyIndex(
+    if (newYorkTimesLifestyleItems.length > 0) {
+      setNewYorkTimesLifestyleIndex(
         (prev) =>
-          (prev - 1 + googleTechnologyItems.length) %
-          googleTechnologyItems.length
+          (prev - 1 + newYorkTimesLifestyleItems.length) %
+          newYorkTimesLifestyleItems.length
       );
     }
   };
@@ -733,24 +1003,141 @@ const NewsAggregator = () => {
     }
   };
 
-  // LinkedIn - Google carousel navigation
-  const goToNextLinkedinGoogle = () => {
-    const linkedinGoogleItems = newsItems.filter(
-      (item) => item.source === "LinkedIn - Google"
-    );
-    if (linkedinGoogleItems.length > 0) {
-      setLinkedinGoogleIndex((prev) => (prev + 1) % linkedinGoogleItems.length);
+  // No Echo carousel navigation
+  const goToNextNoEcho = () => {
+    const noEchoItems = newsItems.filter((item) => item.source === "No Echo");
+    if (noEchoItems.length > 0) {
+      setNoEchoIndex((prev) => (prev + 1) % noEchoItems.length);
     }
   };
 
-  const goToPreviousLinkedinGoogle = () => {
-    const linkedinGoogleItems = newsItems.filter(
-      (item) => item.source === "LinkedIn - Google"
+  const goToPreviousNoEcho = () => {
+    const noEchoItems = newsItems.filter((item) => item.source === "No Echo");
+    if (noEchoItems.length > 0) {
+      setNoEchoIndex(
+        (prev) => (prev - 1 + noEchoItems.length) % noEchoItems.length
+      );
+    }
+  };
+
+  // Newsweek carousel navigation
+  const goToNextNewsweek = () => {
+    const newsweekItems = newsItems.filter(
+      (item) => item.source === "Newsweek"
     );
-    if (linkedinGoogleItems.length > 0) {
-      setLinkedinGoogleIndex(
-        (prev) =>
-          (prev - 1 + linkedinGoogleItems.length) % linkedinGoogleItems.length
+    if (newsweekItems.length > 0) {
+      setNewsweekIndex((prev) => (prev + 1) % newsweekItems.length);
+    }
+  };
+
+  const goToPreviousNewsweek = () => {
+    const newsweekItems = newsItems.filter(
+      (item) => item.source === "Newsweek"
+    );
+    if (newsweekItems.length > 0) {
+      setNewsweekIndex(
+        (prev) => (prev - 1 + newsweekItems.length) % newsweekItems.length
+      );
+    }
+  };
+
+  // New York Post carousel navigation
+  const goToNextNewYorkPost = () => {
+    const newYorkPostItems = newsItems.filter(
+      (item) => item.source === "New York Post"
+    );
+    if (newYorkPostItems.length > 0) {
+      setNewYorkPostIndex((prev) => (prev + 1) % newYorkPostItems.length);
+    }
+  };
+
+  const goToPreviousNewYorkPost = () => {
+    const newYorkPostItems = newsItems.filter(
+      (item) => item.source === "New York Post"
+    );
+    if (newYorkPostItems.length > 0) {
+      setNewYorkPostIndex(
+        (prev) => (prev - 1 + newYorkPostItems.length) % newYorkPostItems.length
+      );
+    }
+  };
+
+  // Fox News carousel navigation
+  const goToNextFoxNews = () => {
+    const foxNewsItems = newsItems.filter((item) => item.source === "Fox News");
+    if (foxNewsItems.length > 0) {
+      setFoxNewsIndex((prev) => (prev + 1) % foxNewsItems.length);
+    }
+  };
+
+  const goToPreviousFoxNews = () => {
+    const foxNewsItems = newsItems.filter((item) => item.source === "Fox News");
+    if (foxNewsItems.length > 0) {
+      setFoxNewsIndex(
+        (prev) => (prev - 1 + foxNewsItems.length) % foxNewsItems.length
+      );
+    }
+  };
+
+  // Breitbart carousel navigation
+  const goToNextBreitbart = () => {
+    const breitbartItems = newsItems.filter(
+      (item) => item.source === "Breitbart"
+    );
+    if (breitbartItems.length > 0) {
+      setBreitbartIndex((prev) => (prev + 1) % breitbartItems.length);
+    }
+  };
+
+  const goToPreviousBreitbart = () => {
+    const breitbartItems = newsItems.filter(
+      (item) => item.source === "Breitbart"
+    );
+    if (breitbartItems.length > 0) {
+      setBreitbartIndex(
+        (prev) => (prev - 1 + breitbartItems.length) % breitbartItems.length
+      );
+    }
+  };
+
+  // CBS Sports carousel navigation
+  const goToNextCbsSports = () => {
+    const cbsSportsItems = newsItems.filter(
+      (item) => item.source === "CBS SPORTS"
+    );
+    if (cbsSportsItems.length > 0) {
+      setCbsSportsIndex((prev) => (prev + 1) % cbsSportsItems.length);
+    }
+  };
+
+  const goToPreviousCbsSports = () => {
+    const cbsSportsItems = newsItems.filter(
+      (item) => item.source === "CBS SPORTS"
+    );
+    if (cbsSportsItems.length > 0) {
+      setCbsSportsIndex(
+        (prev) => (prev - 1 + cbsSportsItems.length) % cbsSportsItems.length
+      );
+    }
+  };
+
+  // TechCrunch carousel navigation
+  const goToNextTechcrunch = () => {
+    const techcrunchItems = newsItems.filter(
+      (item) => item.source === "TechCrunch"
+    );
+    if (techcrunchItems.length > 0) {
+      setTechcrunchIndex((prev) => (prev + 1) % techcrunchItems.length);
+    }
+  };
+
+  const goToPreviousTechcrunch = () => {
+    const techcrunchItems = newsItems.filter(
+      (item) => item.source === "TechCrunch"
+    );
+    if (techcrunchItems.length > 0) {
+      setTechcrunchIndex(
+        (prev) => (prev - 1 + techcrunchItems.length) % techcrunchItems.length
       );
     }
   };
@@ -775,7 +1162,7 @@ const NewsAggregator = () => {
           <nav className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen p-4">
             <div className="mb-6">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Categories
+                davemelk news
               </h2>
             </div>
 
@@ -785,13 +1172,13 @@ const NewsAggregator = () => {
                 onClick={() => setActiveCategory("all")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   activeCategory === "all"
-                    ? "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-l-4 border-blue-500"
+                    ? "bg-blue-50 dark:bg-blue-900/30 text-blue-900 dark:text-blue-100 border-l-4 border-blue-300"
                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-blue-500 rounded flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">A</span>
+                  <div className="w-6 h-6 bg-blue-300 rounded flex items-center justify-center">
+                    <span className="text-blue-900 text-xs font-bold">A</span>
                   </div>
                   <span className="font-medium">All News</span>
                 </div>
@@ -801,13 +1188,13 @@ const NewsAggregator = () => {
                 onClick={() => setActiveCategory("technology")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   activeCategory === "technology"
-                    ? "bg-orange-100 dark:bg-orange-900 text-orange-700 dark:text-orange-300 border-l-4 border-orange-500"
+                    ? "bg-orange-50 dark:bg-orange-900/30 text-orange-900 dark:text-orange-100 border-l-4 border-orange-300"
                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-orange-500 rounded flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">T</span>
+                  <div className="w-6 h-6 bg-orange-300 rounded flex items-center justify-center">
+                    <span className="text-orange-900 text-xs font-bold">T</span>
                   </div>
                   <span className="font-medium">Technology</span>
                 </div>
@@ -817,13 +1204,15 @@ const NewsAggregator = () => {
                 onClick={() => setActiveCategory("sports")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   activeCategory === "sports"
-                    ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-l-4 border-green-500"
+                    ? "bg-emerald-50 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-100 border-l-4 border-emerald-300"
                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-green-500 rounded flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">S</span>
+                  <div className="w-6 h-6 bg-emerald-300 rounded flex items-center justify-center">
+                    <span className="text-emerald-900 text-xs font-bold">
+                      S
+                    </span>
                   </div>
                   <span className="font-medium">Sports</span>
                 </div>
@@ -833,13 +1222,13 @@ const NewsAggregator = () => {
                 onClick={() => setActiveCategory("business")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   activeCategory === "business"
-                    ? "bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border-l-4 border-purple-500"
+                    ? "bg-violet-50 dark:bg-violet-900/30 text-violet-900 dark:text-violet-100 border-l-4 border-violet-300"
                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-purple-500 rounded flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">B</span>
+                  <div className="w-6 h-6 bg-violet-300 rounded flex items-center justify-center">
+                    <span className="text-violet-900 text-xs font-bold">B</span>
                   </div>
                   <span className="font-medium">Business</span>
                 </div>
@@ -849,15 +1238,31 @@ const NewsAggregator = () => {
                 onClick={() => setActiveCategory("entertainment")}
                 className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                   activeCategory === "entertainment"
-                    ? "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border-l-4 border-red-500"
+                    ? "bg-rose-50 dark:bg-rose-900/30 text-rose-900 dark:text-rose-100 border-l-4 border-rose-300"
                     : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-red-500 rounded flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">E</span>
+                  <div className="w-6 h-6 bg-rose-300 rounded flex items-center justify-center">
+                    <span className="text-rose-900 text-xs font-bold">E</span>
                   </div>
                   <span className="font-medium">Entertainment</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => setActiveCategory("lifestyle")}
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                  activeCategory === "lifestyle"
+                    ? "bg-teal-50 dark:bg-teal-900/30 text-teal-900 dark:text-teal-100 border-l-4 border-teal-300"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-teal-300 rounded flex items-center justify-center">
+                    <span className="text-teal-900 text-xs font-bold">L</span>
+                  </div>
+                  <span className="font-medium">Lifestyle</span>
                 </div>
               </button>
             </div>
@@ -894,7 +1299,7 @@ const NewsAggregator = () => {
                     </p>
                     <button
                       onClick={loadRSSFeeds}
-                      className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      className="px-6 py-3 bg-blue-600 text-blue-50 rounded-lg hover:bg-blue-700 transition-colors"
                     >
                       Try Again
                     </button>
@@ -913,276 +1318,365 @@ const NewsAggregator = () => {
                     className="grid grid-cols-1 md:grid-cols-3 gap-6"
                   >
                     {/* Dynamic News Cards */}
-                    {rssFeeds.map((feed) => {
-                      const feedItems = newsItems.filter(
-                        (item) => item.source === feed.name
+                    {(() => {
+                      const filteredFeeds = rssFeeds.filter(
+                        (feed) =>
+                          activeCategory === "all" ||
+                          feed.category === activeCategory
                       );
-                      const currentIndex = getCurrentIndex(feed.name);
 
-                      if (feedItems.length === 0) return null;
+                      console.log(
+                        `Rendering ${filteredFeeds.length} feeds for category: ${activeCategory}`
+                      );
+                      console.log(
+                        "Filtered feeds:",
+                        filteredFeeds.map((f) => ({
+                          name: f.name,
+                          category: f.category,
+                        }))
+                      );
+                      console.log(
+                        "Available news items:",
+                        newsItems.map((item) => ({
+                          source: item.source,
+                          title: item.title.substring(0, 30),
+                        }))
+                      );
+                      console.log("Feed status:", feedStatus);
 
-                      return (
-                        <motion.div
-                          key={`${feed.id}-${currentIndex}`}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 0.3 }}
-                          className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[450px] flex flex-col"
-                        >
-                          {/* Card Header */}
-                          <div className="p-6 flex-shrink-0">
-                            {/* Top Row - Logo, Title, and Carousel Controls */}
-                            <div className="flex items-center justify-between mb-4">
-                              {/* Logo and Source Title */}
-                              <div className="flex items-center gap-3">
-                                <div
-                                  className={`w-8 h-8 ${getLogoColor(
-                                    feed.name
-                                  )} rounded-lg flex items-center justify-center`}
-                                >
-                                  <span className="text-white font-bold text-sm">
-                                    {getLogoText(feed.name)}
-                                  </span>
+                      return filteredFeeds.map((feed) => {
+                        const feedItems = newsItems.filter(
+                          (item) => item.source === feed.name
+                        );
+                        const currentIndex = getCurrentIndex(feed.name);
+                        const currentFeedStatus = feedStatus[feed.name];
+
+                        console.log(`Processing feed: ${feed.name}`, {
+                          hasItems: feedItems.length > 0,
+                          itemCount: feedItems.length,
+                          status: currentFeedStatus,
+                          category: feed.category,
+                          feedId: feed.id,
+                          feedUrl: feed.url,
+                        });
+
+                        // Always show the card, even if no items
+                        return (
+                          <motion.div
+                            key={`${feed.id}-${currentIndex}`}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[350px] flex flex-col"
+                          >
+                            {/* Card Header */}
+                            <div className="p-6 flex-shrink-0">
+                              {/* Top Row - Logo, Title, and Carousel Controls */}
+                              <div className="flex items-center justify-between mb-4">
+                                {/* Logo and Source Title */}
+                                <div className="flex items-center gap-3">
+                                  <div
+                                    className={`w-6 h-6 ${getLogoColor(
+                                      feed.name
+                                    )} rounded flex items-center justify-center`}
+                                  >
+                                    <span
+                                      className={`${getLogoTextColor(
+                                        feed.name
+                                      )} font-bold text-xs`}
+                                    >
+                                      {getLogoText(feed.name)}
+                                    </span>
+                                  </div>
+                                  <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                                    {feed.name}
+                                  </h4>
                                 </div>
-                                <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                                  {feed.name}
-                                </h4>
+
+                                {/* Carousel Controls - Only show if there are items */}
+                                {feedItems.length > 1 && (
+                                  <div className="flex items-center gap-2">
+                                    <button
+                                      onClick={() => goToPrevious(feed.name)}
+                                      disabled={feedItems.length <= 1}
+                                      className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
+                                    >
+                                      ←
+                                    </button>
+                                    <span className="text-xs text-gray-500 bg-white dark:bg-gray-700 px-2 py-1 rounded border border-gray-200 dark:border-gray-600">
+                                      {currentIndex + 1}/{feedItems.length}
+                                    </span>
+                                    <button
+                                      onClick={() => goToNext(feed.name)}
+                                      disabled={feedItems.length <= 1}
+                                      className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
+                                    >
+                                      →
+                                    </button>
+                                  </div>
+                                )}
                               </div>
 
-                              {/* Carousel Controls */}
-                              <div className="flex items-center gap-2">
-                                <button
-                                  onClick={() => goToPrevious(feed.name)}
-                                  disabled={feedItems.length <= 1}
-                                  className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                                >
-                                  ←
-                                </button>
-                                <span className="text-xs text-gray-500 bg-white dark:bg-gray-700 px-2 py-1 rounded border border-gray-200 dark:border-gray-600">
-                                  {currentIndex + 1}/{feedItems.length}
-                                </span>
-                                <button
-                                  onClick={() => goToNext(feed.name)}
-                                  disabled={feedItems.length <= 1}
-                                  className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                                >
-                                  →
-                                </button>
-                              </div>
+                              {/* Article Title or Status Message */}
+                              {feedItems.length > 0 ? (
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+                                  <a
+                                    href={feedItems[currentIndex]?.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                                  >
+                                    {truncateText(
+                                      feedItems[currentIndex]?.title || "",
+                                      90
+                                    )}
+                                  </a>
+                                </h3>
+                              ) : (
+                                <div className="text-center py-8">
+                                  {currentFeedStatus?.working === false ? (
+                                    <div className="text-red-500 dark:text-red-400">
+                                      <div className="text-2xl mb-2">⚠️</div>
+                                      <div className="text-sm font-medium">
+                                        Feed Error
+                                      </div>
+                                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                        {currentFeedStatus.error ||
+                                          "Failed to load"}
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <div className="text-gray-500 dark:text-gray-400">
+                                      <div className="text-sm font-medium">
+                                        No Articles
+                                      </div>
+                                      <div className="text-xs mt-1">
+                                        Feed is empty or loading
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
                             </div>
 
-                            {/* Article Title */}
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
-                              <a
-                                href={feedItems[currentIndex]?.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                              >
-                                {truncateText(
-                                  feedItems[currentIndex]?.title || "",
-                                  80
-                                )}
-                              </a>
-                            </h3>
-                          </div>
+                            {/* Card Content */}
+                            <div
+                              className="px-6 pb-6 flex-1 flex flex-col"
+                              style={{ height: "180px" }}
+                            >
+                              {/* Image or Placeholder */}
+                              {feedItems.length > 0 &&
+                              feedItems[currentIndex]?.image &&
+                              !feedItems[currentIndex]?.image.startsWith(
+                                "placeholder:"
+                              ) ? (
+                                <div
+                                  className="mt-auto relative"
+                                  style={{ height: "150px" }}
+                                >
+                                  <img
+                                    src={feedItems[currentIndex]?.image}
+                                    alt={feedItems[currentIndex]?.title}
+                                    className="w-full h-36 object-cover rounded-lg"
+                                    style={{
+                                      height: "150px",
+                                      minHeight: "150px",
+                                      maxHeight: "150px",
+                                    }}
+                                    onError={(e) => {
+                                      // Replace broken image with placeholder
+                                      const target = e.currentTarget;
+                                      target.style.display = "none";
+                                      const placeholder =
+                                        target.parentElement?.querySelector(
+                                          ".image-placeholder"
+                                        );
+                                      if (placeholder) {
+                                        (
+                                          placeholder as HTMLElement
+                                        ).style.display = "flex";
+                                      }
+                                    }}
+                                  />
 
-                          {/* Card Content */}
-                          <div
-                            className="px-6 pb-6 flex-1 flex flex-col"
-                            style={{ height: "180px" }}
-                          >
-                            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                              {truncateText(
-                                feedItems[currentIndex]?.excerpt || ""
-                              )}
-                            </p>
+                                  {/* Placeholder for when image fails to load */}
+                                  <div
+                                    className="image-placeholder hidden w-full h-36 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
+                                    style={{
+                                      height: "150px",
+                                      minHeight: "150px",
+                                      maxHeight: "150px",
+                                    }}
+                                  >
+                                    <div className="text-center text-gray-500 dark:text-gray-400">
+                                      <div className="text-4xl">📰</div>
+                                    </div>
+                                  </div>
 
-                            {/* Image */}
-                            {feedItems[currentIndex]?.image && (
-                              <div
-                                className="mt-auto"
-                                style={{ height: "150px" }}
-                              >
-                                <img
-                                  src={feedItems[currentIndex]?.image}
-                                  alt={feedItems[currentIndex]?.title}
-                                  className="w-full h-36 object-cover rounded-lg"
+                                  {/* Video indicator if video content exists */}
+                                  {feedItems[currentIndex]?.videoUrl && (
+                                    <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                                      <span>▶️</span>
+                                      <span>VIDEO</span>
+                                      {feedItems[currentIndex]
+                                        ?.videoDuration && (
+                                        <span className="ml-1">
+                                          {Math.floor(
+                                            parseInt(
+                                              feedItems[currentIndex]
+                                                ?.videoDuration || "0"
+                                            ) / 60
+                                          )}
+                                          :
+                                          {String(
+                                            parseInt(
+                                              feedItems[currentIndex]
+                                                ?.videoDuration || "0"
+                                            ) % 60
+                                          ).padStart(2, "0")}
+                                        </span>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {/* Subtitle overlay on hover */}
+                                  <div className="absolute inset-0 bg-black bg-opacity-75 text-white p-4 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
+                                    <p className="text-sm leading-relaxed text-center">
+                                      {truncateText(
+                                        feedItems[currentIndex]?.excerpt || "",
+                                        150
+                                      )}
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : (
+                                // No image available or placeholder - show styled placeholder
+                                <div
+                                  className="mt-auto w-full h-36 rounded-lg flex items-center justify-center"
                                   style={{
                                     height: "150px",
                                     minHeight: "150px",
                                     maxHeight: "150px",
                                   }}
-                                  onError={(e) => {
-                                    e.currentTarget.style.display = "none";
-                                  }}
-                                />
-                              </div>
-                            )}
-                          </div>
-                        </motion.div>
-                      );
-                    })}
+                                >
+                                  {feedItems.length > 0 &&
+                                  feedItems[currentIndex]?.image &&
+                                  feedItems[currentIndex]?.image.startsWith(
+                                    "placeholder:"
+                                  ) ? (
+                                    // Show styled placeholder for this source
+                                    <div className="w-full h-full rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                                      <div
+                                        className={`w-full h-full bg-blue-500 rounded-lg flex items-center justify-center relative`}
+                                      >
+                                        <span className="text-white font-bold text-2xl">
+                                          {
+                                            (
+                                              feedItems[currentIndex]?.source ||
+                                              ""
+                                            ).split(" ")[0]
+                                          }
+                                        </span>
 
-                    {/* Lambgoat Card with Carousel */}
-                    {newsItems.filter((item) => item.source === "Lambgoat")
-                      .length > 0 && (
-                      <motion.div
-                        key={`lambgoat-${lambgoatIndex}`}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                        className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[450px] flex flex-col"
-                      >
-                        {/* Lambgoat Header */}
-                        <div className="p-4 flex-shrink-0">
-                          {/* Top Row - Logo, Title, and Carousel Controls */}
-                          <div className="flex items-center justify-between mb-4">
-                            {/* Logo and Source Title */}
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-sm">
-                                  LG
-                                </span>
-                              </div>
-                              <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                                Lambgoat
-                              </h4>
-                            </div>
+                                        {/* Video indicator if video content exists */}
+                                        {feedItems[currentIndex]?.videoUrl && (
+                                          <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                                            <span>▶️</span>
+                                            <span>VIDEO</span>
+                                            {feedItems[currentIndex]
+                                              ?.videoDuration && (
+                                              <span className="ml-1">
+                                                {Math.floor(
+                                                  parseInt(
+                                                    feedItems[currentIndex]
+                                                      ?.videoDuration || "0"
+                                                  ) / 60
+                                                )}
+                                                :
+                                                {String(
+                                                  parseInt(
+                                                    feedItems[currentIndex]
+                                                      ?.videoDuration || "0"
+                                                  ) % 60
+                                                ).padStart(2, "0")}
+                                              </span>
+                                            )}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    // Show generic placeholder
+                                    <div className="w-full h-36 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
+                                      <div className="text-center text-gray-500 dark:text-gray-400">
+                                        <div className="text-4xl">📰</div>
+                                      </div>
 
-                            {/* Carousel Controls */}
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={goToPreviousLambgoat}
-                                disabled={
-                                  newsItems.filter(
-                                    (item) => item.source === "Lambgoat"
-                                  ).length <= 1
-                                }
-                                className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                              >
-                                ←
-                              </button>
-                              <span className="text-xs text-gray-500 bg-white dark:bg-gray-700 px-2 py-1 rounded border border-gray-200 dark:border-gray-600">
-                                {lambgoatIndex + 1}/
-                                {
-                                  newsItems.filter(
-                                    (item) => item.source === "Lambgoat"
-                                  ).length
-                                }
-                              </span>
-                              <button
-                                onClick={goToNextLambgoat}
-                                disabled={
-                                  newsItems.filter(
-                                    (item) => item.source === "Lambgoat"
-                                  ).length <= 1
-                                }
-                                className="w-6 h-6 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center"
-                              >
-                                →
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Article Title */}
-                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
-                            <a
-                              href={
-                                newsItems.filter(
-                                  (item) => item.source === "Lambgoat"
-                                )[lambgoatIndex]?.url
-                              }
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                            >
-                              {truncateText(
-                                newsItems.filter(
-                                  (item) => item.source === "Lambgoat"
-                                )[lambgoatIndex]?.title || "",
-                                80
+                                      {/* Video indicator if video content exists */}
+                                      {feedItems[currentIndex]?.videoUrl && (
+                                        <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                                          <span>▶️</span>
+                                          <span>VIDEO</span>
+                                          {feedItems[currentIndex]
+                                            ?.videoDuration && (
+                                            <span className="ml-1">
+                                              {Math.floor(
+                                                parseInt(
+                                                  feedItems[currentIndex]
+                                                    ?.videoDuration || "0"
+                                                ) / 60
+                                              )}
+                                              :
+                                              {String(
+                                                parseInt(
+                                                  feedItems[currentIndex]
+                                                    ?.videoDuration || "0"
+                                                ) % 60
+                                              ).padStart(2, "0")}
+                                            </span>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
                               )}
-                            </a>
-                          </h3>
-                        </div>
-
-                        {/* Lambgoat Content */}
-                        <div
-                          className="px-6 pb-6 flex-1 flex flex-col"
-                          style={{ height: "180px" }}
-                        >
-                          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                            {truncateText(
-                              newsItems.filter(
-                                (item) => item.source === "Lambgoat"
-                              )[lambgoatIndex]?.excerpt || ""
-                            )}
-                          </p>
-
-                          {/* Image */}
-                          {newsItems.filter(
-                            (item) => item.source === "Lambgoat"
-                          )[lambgoatIndex]?.image && (
-                            <div
-                              className="mt-auto"
-                              style={{ height: "150px" }}
-                            >
-                              <img
-                                src={
-                                  newsItems.filter(
-                                    (item) => item.source === "Lambgoat"
-                                  )[lambgoatIndex]?.image
-                                }
-                                alt={
-                                  newsItems.filter(
-                                    (item) => item.source === "Lambgoat"
-                                  )[lambgoatIndex]?.title
-                                }
-                                className="w-full h-36 object-cover rounded-lg"
-                                style={{
-                                  height: "150px",
-                                  minHeight: "150px",
-                                  maxHeight: "150px",
-                                }}
-                                onError={(e) => {
-                                  e.currentTarget.style.display = "none";
-                                }}
-                              />
                             </div>
-                          )}
-                        </div>
-                      </motion.div>
-                    )}
+                          </motion.div>
+                        );
+                      });
+                    })()}
 
                     {/* Custom Feeds Section */}
                     {rssFeeds
-                      .filter((feed) => feed.category === "Custom")
-                      .map((customFeed, index) => {
+                      .filter(
+                        (feed) =>
+                          feed.category === "Custom" &&
+                          (activeCategory === "all" ||
+                            activeCategory === "Custom")
+                      )
+                      .map((customFeed) => {
                         const customFeedItems = newsItems.filter(
                           (item) => item.source === customFeed.name
                         );
-                        if (customFeedItems.length === 0) return null;
 
                         return (
                           <motion.div
-                            key={`custom-${customFeed.id}-${index}`}
+                            key={`custom-${customFeed.id}`}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ duration: 0.3 }}
-                            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[450px] flex flex-col"
+                            className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 h-[350px] flex flex-col"
+                            style={{ height: "320px" }}
                           >
                             {/* Custom Feed Header */}
-                            <div
-                              className="p-6 flex-shrink-0"
-                              style={{ height: "320px" }}
-                            >
+                            <div className="p-6 flex-shrink-0">
                               {/* Top Row - Logo, Title, and Remove Button */}
                               <div className="flex items-center justify-between mb-4">
                                 {/* Logo and Source Title */}
                                 <div className="flex items-center gap-3">
-                                  <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                                    <span className="text-white font-bold text-sm">
+                                  <div className="w-6 h-6 bg-purple-300 rounded flex items-center justify-center">
+                                    <span className="text-purple-900 font-bold text-xs">
                                       CF
                                     </span>
                                   </div>
@@ -1219,7 +1713,7 @@ const NewsAggregator = () => {
                                 >
                                   {truncateText(
                                     customFeedItems[0]?.title || "",
-                                    80
+                                    90
                                   )}
                                 </a>
                               </h3>
@@ -1230,16 +1724,13 @@ const NewsAggregator = () => {
                               className="px-6 pb-6 flex-1 flex flex-col"
                               style={{ height: "180px" }}
                             >
-                              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                                {truncateText(
-                                  customFeedItems[0]?.excerpt || ""
-                                )}
-                              </p>
-
                               {/* Image */}
-                              {customFeedItems[0]?.image && (
+                              {customFeedItems[0]?.image &&
+                              !customFeedItems[0]?.image.startsWith(
+                                "placeholder:"
+                              ) ? (
                                 <div
-                                  className="mt-auto"
+                                  className="mt-auto relative"
                                   style={{ height: "150px" }}
                                 >
                                   <img
@@ -1252,9 +1743,84 @@ const NewsAggregator = () => {
                                       maxHeight: "150px",
                                     }}
                                     onError={(e) => {
-                                      e.currentTarget.style.display = "none";
+                                      // Replace broken image with placeholder
+                                      const target = e.currentTarget;
+                                      target.style.display = "none";
+                                      const placeholder =
+                                        target.parentElement?.querySelector(
+                                          ".image-placeholder"
+                                        );
+                                      if (placeholder) {
+                                        (
+                                          placeholder as HTMLElement
+                                        ).style.display = "flex";
+                                      }
                                     }}
                                   />
+
+                                  {/* Placeholder for when image fails to load */}
+                                  <div
+                                    className="image-placeholder hidden w-full h-36 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
+                                    style={{
+                                      height: "150px",
+                                      minHeight: "150px",
+                                      maxHeight: "150px",
+                                    }}
+                                  >
+                                    <div className="text-center text-gray-500 dark:text-gray-400">
+                                      <div className="text-4xl">📰</div>
+                                    </div>
+                                  </div>
+
+                                  {/* Subtitle overlay on hover */}
+                                  <div className="absolute inset-0 bg-black bg-opacity-75 text-white p-4 opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
+                                    <p className="text-sm leading-relaxed text-center">
+                                      {truncateText(
+                                        customFeedItems[0]?.excerpt || "",
+                                        150
+                                      )}
+                                    </p>
+                                  </div>
+                                </div>
+                              ) : (
+                                // No image available or placeholder - show styled placeholder
+                                <div
+                                  className="mt-auto w-full h-36 rounded-lg flex items-center justify-center"
+                                  style={{
+                                    height: "150px",
+                                    minHeight: "150px",
+                                    maxHeight: "150px",
+                                  }}
+                                >
+                                  {customFeedItems[0]?.image?.startsWith(
+                                    "placeholder:"
+                                  ) ? (
+                                    // Show styled placeholder for this source
+                                    <div className="w-full h-full rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                                      {(() => {
+                                        const sourceName =
+                                          customFeedItems[0]?.source || "";
+                                        let bgColor = "bg-purple-500"; // Custom feeds use purple
+
+                                        return (
+                                          <div
+                                            className={`w-full h-full ${bgColor} rounded-lg flex items-center justify-center`}
+                                          >
+                                            <span className="text-white font-bold text-2xl">
+                                              {sourceName.split(" ")[0]}
+                                            </span>
+                                          </div>
+                                        );
+                                      })()}
+                                    </div>
+                                  ) : (
+                                    // Show generic placeholder
+                                    <div className="w-full h-36 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                      <div className="text-center text-gray-500 dark:text-gray-400">
+                                        <div className="text-4xl">📰</div>
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                               )}
                             </div>
