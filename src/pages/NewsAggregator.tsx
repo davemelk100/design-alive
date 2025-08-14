@@ -132,6 +132,7 @@ const NewsAggregator = () => {
   const [wiredIndex, setWiredIndex] = useState(0);
   const [techradarIndex, setTechradarIndex] = useState(0);
   const [foxSportsIndex, setFoxSportsIndex] = useState(0);
+  const [cnnSportsIndex, setCnnSportsIndex] = useState(0);
   const [newYorkTimesLifestyleIndex, setNewYorkTimesLifestyleIndex] =
     useState(0);
 
@@ -160,6 +161,8 @@ const NewsAggregator = () => {
         return techradarIndex;
       case "Fox Sports":
         return foxSportsIndex;
+      case "CNN - SPORTS":
+        return cnnSportsIndex;
       case "New York Times - Lifestyle":
         return newYorkTimesLifestyleIndex;
       case "Lambgoat":
@@ -312,6 +315,9 @@ const NewsAggregator = () => {
       case "Fox Sports":
         goToPreviousFoxSports();
         break;
+      case "CNN - SPORTS":
+        goToPreviousCnnSports();
+        break;
       case "New York Times - Lifestyle":
         goToPreviousNewYorkTimesLifestyle();
         break;
@@ -356,6 +362,9 @@ const NewsAggregator = () => {
         break;
       case "Fox Sports":
         goToNextFoxSports();
+        break;
+      case "CNN - SPORTS":
+        goToNextCnnSports();
         break;
       case "New York Times - Lifestyle":
         goToNextNewYorkTimesLifestyle();
@@ -841,6 +850,7 @@ const NewsAggregator = () => {
       setWiredIndex(0);
       setTechradarIndex(0);
       setFoxSportsIndex(0);
+      setCnnSportsIndex(0);
       setNewYorkTimesLifestyleIndex(0);
       setLambgoatIndex(0);
       setNoEchoIndex(0);
@@ -951,6 +961,27 @@ const NewsAggregator = () => {
     if (foxSportsItems.length > 0) {
       setFoxSportsIndex(
         (prev) => (prev - 1 + foxSportsItems.length) % foxSportsItems.length
+      );
+    }
+  };
+
+  // CNN Sports carousel navigation
+  const goToNextCnnSports = () => {
+    const cnnSportsItems = newsItems.filter(
+      (item) => item.source === "CNN - SPORTS"
+    );
+    if (cnnSportsItems.length > 0) {
+      setCnnSportsIndex((prev) => (prev + 1) % cnnSportsItems.length);
+    }
+  };
+
+  const goToPreviousCnnSports = () => {
+    const cnnSportsItems = newsItems.filter(
+      (item) => item.source === "CNN - SPORTS"
+    );
+    if (cnnSportsItems.length > 0) {
+      setCnnSportsIndex(
+        (prev) => (prev - 1 + cnnSportsItems.length) % cnnSportsItems.length
       );
     }
   };
