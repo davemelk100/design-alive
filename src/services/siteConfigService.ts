@@ -12,8 +12,8 @@ export interface SiteConfigItem {
   value: SiteConfigValue;
   description?: string;
   isPublic: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | null;
+  updatedAt: Date | null;
 }
 
 export class SiteConfigService {
@@ -98,7 +98,7 @@ export class SiteConfigService {
         key: item.key,
         value: item.value as SiteConfigValue,
         description: item.description || undefined,
-        isPublic: item.isPublic,
+        isPublic: item.isPublic || false,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       }));
@@ -338,7 +338,7 @@ export class SiteConfigService {
     ];
 
     for (const config of defaultConfigs) {
-      await this.setConfig(config.key, config.value, config.description, config.isPublic);
+      await this.setConfig(config.key, config.value as SiteConfigValue, config.description, config.isPublic);
     }
   }
 }

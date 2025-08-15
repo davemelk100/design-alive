@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useAuthContext } from '../context/AuthContext';
+import { useAuth } from './useAuth';
 
 export interface SiteConfigValue {
   [key: string]: any;
@@ -16,7 +16,7 @@ export interface SiteConfigItem {
 }
 
 export const useSiteConfig = () => {
-  const { token } = useAuthContext();
+  const { token } = useAuth();
   const [configs, setConfigs] = useState<SiteConfigItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

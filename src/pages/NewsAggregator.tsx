@@ -61,6 +61,13 @@ const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
   {
+    id: "vice-tech",
+    name: "Vice - Tech",
+    url: "https://rss.app/feeds/LNJYM5UVm77UUI0l.xml",
+    category: "technology",
+    enabled: true,
+  },
+  {
     id: "fox-sports",
     name: "Fox Sports",
     url: "https://api.foxsports.com/v2/content/optimized-rss?partnerKey=MB0Wehpmuj2lUhuRhQaafhBjAJqaPU244mlTDK1i&size=30",

@@ -19,7 +19,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
 import ThemeToggle from "./components/ThemeToggle";
 import MobileTrayMenu from "./components/MobileTrayMenu";
-import { AuthHeader } from "./components/AuthHeader";
+
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
 

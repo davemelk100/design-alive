@@ -151,7 +151,7 @@ export class SettingsService {
       const [user] = await db
         .select()
         .from(users)
-        .where(eq(userSettings.userId, user.id));
+        .where(eq(users.email, email));
 
       if (!user) {
         throw new Error('User not found');

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSiteConfig } from "../hooks/useSiteConfig";
 
 export const SiteConfigAdmin: React.FC = () => {
-  const { configs, loading, error, setConfig, updateConfig, deleteConfig } =
+  const { configs, loading, error, setConfig, deleteConfig } =
     useSiteConfig();
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({
