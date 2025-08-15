@@ -89,13 +89,7 @@ const rssFeeds: RSSFeed[] = [
     category: "entertainment",
     enabled: true,
   },
-  {
-    id: "soft-white-underbelly",
-    name: "Soft White Underbelly",
-    url: "https://rss.app/feeds/AZYTttw3zO51zYok.xml",
-    category: "entertainment",
-    enabled: true,
-  },
+
   {
     id: "hardlore",
     name: "Hardlore",
@@ -245,7 +239,7 @@ const NewsAggregator = () => {
   const [wiredIndex, setWiredIndex] = useState(0);
   const [techradarIndex, setTechradarIndex] = useState(0);
   const [windows11Index, setWindows11Index] = useState(0);
-  const [softWhiteUnderbellyIndex, setSoftWhiteUnderbellyIndex] = useState(0);
+
   const [hardloreIndex, setHardloreIndex] = useState(0);
   const [watchmojoIndex, setWatchmojoIndex] = useState(0);
 
@@ -308,8 +302,7 @@ const NewsAggregator = () => {
         return lambgoatIndex;
       case "No Echo":
         return noEchoIndex;
-      case "Soft White Underbelly":
-        return softWhiteUnderbellyIndex;
+
       case "Hardlore":
         return hardloreIndex;
       case "WatchMojo":
@@ -360,9 +353,7 @@ const NewsAggregator = () => {
       case "No Echo":
         goToPreviousNoEcho();
         break;
-      case "Soft White Underbelly":
-        goToPreviousSoftWhiteUnderbelly();
-        break;
+
       case "Hardlore":
         goToPreviousHardlore();
         break;
@@ -419,9 +410,7 @@ const NewsAggregator = () => {
       case "No Echo":
         goToNextNoEcho();
         break;
-      case "Soft White Underbelly":
-        goToNextSoftWhiteUnderbelly();
-        break;
+
       case "Hardlore":
         goToNextHardlore();
         break;
@@ -1097,31 +1086,6 @@ const NewsAggregator = () => {
     if (noEchoItems.length > 0) {
       setNoEchoIndex(
         (prev) => (prev - 1 + noEchoItems.length) % noEchoItems.length
-      );
-    }
-  };
-
-  // Soft White Underbelly carousel navigation
-  const goToNextSoftWhiteUnderbelly = () => {
-    const softWhiteUnderbellyItems = newsItems.filter(
-      (item) => item.source === "Soft White Underbelly"
-    );
-    if (softWhiteUnderbellyItems.length > 0) {
-      setSoftWhiteUnderbellyIndex(
-        (prev) => (prev + 1) % softWhiteUnderbellyItems.length
-      );
-    }
-  };
-
-  const goToPreviousSoftWhiteUnderbelly = () => {
-    const softWhiteUnderbellyItems = newsItems.filter(
-      (item) => item.source === "Soft White Underbelly"
-    );
-    if (softWhiteUnderbellyItems.length > 0) {
-      setSoftWhiteUnderbellyIndex(
-        (prev) =>
-          (prev - 1 + softWhiteUnderbellyItems.length) %
-          softWhiteUnderbellyItems.length
       );
     }
   };
