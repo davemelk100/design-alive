@@ -90,6 +90,20 @@ const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
   {
+    id: "soft-white-underbelly",
+    name: "Soft White Underbelly",
+    url: "https://rss.app/feeds/AZYTttw3zO51zYok.xml",
+    category: "entertainment",
+    enabled: true,
+  },
+  {
+    id: "morbid-facts",
+    name: "Morbid Facts",
+    url: "https://rss.app/feeds/01omUfA6c4IRWbQO.xml",
+    category: "entertainment",
+    enabled: true,
+  },
+  {
     id: "newsweek",
     name: "Newsweek",
     url: "https://feeds.newsweek.com/feeds/90oh8.rss",
@@ -223,6 +237,8 @@ const NewsAggregator = () => {
   const [wiredIndex, setWiredIndex] = useState(0);
   const [techradarIndex, setTechradarIndex] = useState(0);
   const [windows11Index, setWindows11Index] = useState(0);
+  const [softWhiteUnderbellyIndex, setSoftWhiteUnderbellyIndex] = useState(0);
+  const [morbidFactsIndex, setMorbidFactsIndex] = useState(0);
   const [foxSportsIndex, setFoxSportsIndex] = useState(0);
   const [cnnSportsIndex, setCnnSportsIndex] = useState(0);
 
@@ -282,6 +298,10 @@ const NewsAggregator = () => {
         return lambgoatIndex;
       case "No Echo":
         return noEchoIndex;
+      case "Soft White Underbelly":
+        return softWhiteUnderbellyIndex;
+      case "Morbid Facts":
+        return morbidFactsIndex;
       case "Newsweek":
         return newsweekIndex;
       case "New York Post":
@@ -326,6 +346,12 @@ const NewsAggregator = () => {
         break;
       case "No Echo":
         goToPreviousNoEcho();
+        break;
+      case "Soft White Underbelly":
+        goToPreviousSoftWhiteUnderbelly();
+        break;
+      case "Morbid Facts":
+        goToPreviousMorbidFacts();
         break;
       case "Newsweek":
         goToPreviousNewsweek();
@@ -375,6 +401,12 @@ const NewsAggregator = () => {
         break;
       case "No Echo":
         goToNextNoEcho();
+        break;
+      case "Soft White Underbelly":
+        goToNextSoftWhiteUnderbelly();
+        break;
+      case "Morbid Facts":
+        goToNextMorbidFacts();
         break;
       case "Newsweek":
         goToNextNewsweek();
@@ -1044,6 +1076,52 @@ const NewsAggregator = () => {
     if (noEchoItems.length > 0) {
       setNoEchoIndex(
         (prev) => (prev - 1 + noEchoItems.length) % noEchoItems.length
+      );
+    }
+  };
+
+  // Soft White Underbelly carousel navigation
+  const goToNextSoftWhiteUnderbelly = () => {
+    const softWhiteUnderbellyItems = newsItems.filter(
+      (item) => item.source === "Soft White Underbelly"
+    );
+    if (softWhiteUnderbellyItems.length > 0) {
+      setSoftWhiteUnderbellyIndex(
+        (prev) => (prev + 1) % softWhiteUnderbellyItems.length
+      );
+    }
+  };
+
+  const goToPreviousSoftWhiteUnderbelly = () => {
+    const softWhiteUnderbellyItems = newsItems.filter(
+      (item) => item.source === "Soft White Underbelly"
+    );
+    if (softWhiteUnderbellyItems.length > 0) {
+      setSoftWhiteUnderbellyIndex(
+        (prev) =>
+          (prev - 1 + softWhiteUnderbellyItems.length) %
+          softWhiteUnderbellyItems.length
+      );
+    }
+  };
+
+  // Morbid Facts carousel navigation
+  const goToNextMorbidFacts = () => {
+    const morbidFactsItems = newsItems.filter(
+      (item) => item.source === "Morbid Facts"
+    );
+    if (morbidFactsItems.length > 0) {
+      setMorbidFactsIndex((prev) => (prev + 1) % morbidFactsItems.length);
+    }
+  };
+
+  const goToPreviousMorbidFacts = () => {
+    const morbidFactsItems = newsItems.filter(
+      (item) => item.source === "Morbid Facts"
+    );
+    if (morbidFactsItems.length > 0) {
+      setMorbidFactsIndex(
+        (prev) => (prev - 1 + morbidFactsItems.length) % morbidFactsItems.length
       );
     }
   };

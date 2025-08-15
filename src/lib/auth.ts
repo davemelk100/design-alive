@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
+const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret";
 
 export interface JWTPayload {
   userId: string;
@@ -14,7 +14,7 @@ export interface MagicLinkPayload {
 }
 
 export const generateToken = (payload: JWTPayload): string => {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 };
 
 export const verifyToken = (token: string): JWTPayload | null => {
@@ -25,18 +25,23 @@ export const verifyToken = (token: string): JWTPayload | null => {
   }
 };
 
-export const extractTokenFromHeader = (authorization: string | undefined): string | null => {
-  if (!authorization || !authorization.startsWith('Bearer ')) {
+export const extractTokenFromHeader = (
+  authorization: string | undefined
+): string | null => {
+  if (!authorization || !authorization.startsWith("Bearer ")) {
     return null;
   }
   return authorization.substring(7);
 };
 
 export const generateMagicLinkToken = (): string => {
-  return crypto.randomBytes(32).toString('hex');
+  return crypto.randomBytes(32).toString("hex");
 };
 
-export const generateMagicLinkPayload = (email: string, token: string): MagicLinkPayload => {
+export const generateMagicLinkPayload = (
+  email: string,
+  token: string
+): MagicLinkPayload => {
   return { email, token };
 };
 

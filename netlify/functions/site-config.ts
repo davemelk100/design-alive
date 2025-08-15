@@ -1,6 +1,6 @@
 import type { Handler } from "@netlify/functions";
 import { SiteConfigService } from "../../src/services/siteConfigService";
-import { verifyJWT } from "../../src/lib/auth";
+import { verifyToken } from "../../src/lib/auth";
 
 export const handler: Handler = async (event) => {
   // Enable CORS
@@ -32,7 +32,7 @@ export const handler: Handler = async (event) => {
     }
 
     const token = authHeader.substring(7);
-    const decoded = verifyJWT(token);
+    const decoded = verifyToken(token);
     if (!decoded) {
       return {
         statusCode: 401,
@@ -72,7 +72,7 @@ export const handler: Handler = async (event) => {
 
 async function handleGet(event: any) {
   const { key } = event.queryStringParameters || {};
-  
+
   if (key) {
     // Get specific config
     const config = await SiteConfigService.getConfig(key);
@@ -83,7 +83,7 @@ async function handleGet(event: any) {
         body: JSON.stringify({ error: "Configuration not found" }),
       };
     }
-    
+
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
@@ -112,8 +112,13 @@ async function handlePost(event: any) {
     };
   }
 
-  const success = await SiteConfigService.setConfig(key, value, description, isPublic);
-  
+  const success = await SiteConfigService.setConfig(
+    key,
+    value,
+    description,
+    isPublic
+  );
+
   if (success) {
     return {
       statusCode: 200,
@@ -141,8 +146,13 @@ async function handlePut(event: any) {
     };
   }
 
-  const success = await SiteConfigService.setConfig(key, value, description, isPublic);
-  
+  const success = await SiteConfigService.setConfig(
+    key,
+    value,
+    description,
+    isPublic
+  );
+
   if (success) {
     return {
       statusCode: 200,
@@ -160,7 +170,7 @@ async function handlePut(event: any) {
 
 async function handleDelete(event: any) {
   const { key } = event.queryStringParameters || {};
-  
+
   if (!key) {
     return {
       statusCode: 400,
@@ -170,7 +180,7 @@ async function handleDelete(event: any) {
   }
 
   const success = await SiteConfigService.deleteConfig(key);
-  
+
   if (success) {
     return {
       statusCode: 200,

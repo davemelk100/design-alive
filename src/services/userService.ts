@@ -1,8 +1,8 @@
-import { db } from '../db';
-import { users, userSettings, magicLinks } from '../db/schema';
-import { generateToken, generateMagicLinkToken } from '../lib/auth';
-import { EmailService } from './emailService';
-import { eq, and, lt } from 'drizzle-orm';
+import { db } from "../db";
+import { users, userSettings, magicLinks } from "../db/schema";
+import { generateToken, generateMagicLinkToken } from "../lib/auth";
+import { EmailService } from "./emailService";
+import { eq, and, gt, lt } from "drizzle-orm";
 
 export interface CreateUserData {
   email: string;
@@ -16,18 +16,21 @@ export interface MagicLinkData {
 export class UserService {
   static async createUser(data: CreateUserData) {
     try {
-      const [user] = await db.insert(users).values({
-        email: data.email,
-        name: data.name,
-        emailVerified: true, // Since they're using magic link
-      }).returning();
+      const [user] = await db
+        .insert(users)
+        .values({
+          email: data.email,
+          name: data.name,
+          emailVerified: true, // Since they're using magic link
+        })
+        .returning();
 
       // Create default settings for the user
       await db.insert(userSettings).values({
         userId: user.id,
-        theme: 'light',
-        viewMode: 'grid',
-        activeCategory: 'all',
+        theme: "light",
+        viewMode: "grid",
+        activeCategory: "all",
         customFeeds: [],
         preferences: {},
       });
@@ -39,7 +42,7 @@ export class UserService {
 
       return { user, token };
     } catch (error) {
-      throw new Error('Failed to create user');
+      throw new Error("Failed to create user");
     }
   }
 
@@ -58,9 +61,7 @@ export class UserService {
       }
 
       // Clean up old magic links for this email
-      await db
-        .delete(magicLinks)
-        .where(eq(magicLinks.email, data.email));
+      await db.delete(magicLinks).where(eq(magicLinks.email, data.email));
 
       // Generate new magic link
       const token = generateMagicLinkToken();
@@ -73,15 +74,19 @@ export class UserService {
       });
 
       // Send magic link email
-      const emailSent = await EmailService.sendMagicLink(data.email, token, baseUrl);
+      const emailSent = await EmailService.sendMagicLink(
+        data.email,
+        token,
+        baseUrl
+      );
 
       if (!emailSent) {
-        throw new Error('Failed to send magic link email');
+        throw new Error("Failed to send magic link email");
       }
 
-      return { success: true, message: 'Magic link sent to your email' };
+      return { success: true, message: "Magic link sent to your email" };
     } catch (error) {
-      throw new Error('Failed to send magic link');
+      throw new Error("Failed to send magic link");
     }
   }
 
@@ -96,12 +101,12 @@ export class UserService {
             eq(magicLinks.email, email),
             eq(magicLinks.token, token),
             eq(magicLinks.used, false),
-            lt(magicLinks.expiresAt, new Date())
+            gt(magicLinks.expiresAt, new Date())
           )
         );
 
       if (!magicLink) {
-        throw new Error('Invalid or expired magic link');
+        throw new Error("Invalid or expired magic link");
       }
 
       // Mark magic link as used
@@ -111,13 +116,10 @@ export class UserService {
         .where(eq(magicLinks.id, magicLink.id));
 
       // Get or create user
-      let [user] = await db
-        .select()
-        .from(users)
-        .where(eq(users.email, email));
+      let [user] = await db.select().from(users).where(eq(users.email, email));
 
       if (!user) {
-        throw new Error('User not found');
+        throw new Error("User not found");
       }
 
       // Mark email as verified
@@ -134,20 +136,17 @@ export class UserService {
 
       return { user, token: jwtToken };
     } catch (error) {
-      throw new Error('Failed to verify magic link');
+      throw new Error("Failed to verify magic link");
     }
   }
 
   static async getUserById(userId: string) {
     try {
-      const [user] = await db
-        .select()
-        .from(users)
-        .where(eq(users.id, userId));
+      const [user] = await db.select().from(users).where(eq(users.id, userId));
 
       return user;
     } catch (error) {
-      throw new Error('Failed to get user');
+      throw new Error("Failed to get user");
     }
   }
 
@@ -160,11 +159,14 @@ export class UserService {
 
       return settings;
     } catch (error) {
-      throw new Error('Failed to get user settings');
+      throw new Error("Failed to get user settings");
     }
   }
 
-  static async updateUserSettings(userId: string, updates: Partial<typeof userSettings.$inferInsert>) {
+  static async updateUserSettings(
+    userId: string,
+    updates: Partial<typeof userSettings.$inferInsert>
+  ) {
     try {
       const [updatedSettings] = await db
         .update(userSettings)
@@ -177,19 +179,17 @@ export class UserService {
 
       return updatedSettings;
     } catch (error) {
-      throw new Error('Failed to update user settings');
+      throw new Error("Failed to update user settings");
     }
   }
 
   static async cleanupExpiredMagicLinks() {
     try {
-      await db
-        .delete(magicLinks)
-        .where(lt(magicLinks.expiresAt, new Date()));
+      await db.delete(magicLinks).where(lt(magicLinks.expiresAt, new Date()));
 
-      return { success: true, message: 'Expired magic links cleaned up' };
+      return { success: true, message: "Expired magic links cleaned up" };
     } catch (error) {
-      throw new Error('Failed to cleanup expired magic links');
+      throw new Error("Failed to cleanup expired magic links");
     }
   }
 }
