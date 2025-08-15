@@ -287,4 +287,11 @@
   .roboto-serif-page * {
     font-family: "Roboto Serif", serif !important;
   }
+
+  /* Custom breakpoint for 1400px */
+  @media (min-width: 1400px) {
+    .grid-cols-3-at-1400 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
 }

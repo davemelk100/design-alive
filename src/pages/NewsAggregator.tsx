@@ -54,6 +54,13 @@ const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
   {
+    id: "windows11",
+    name: "#Windows11",
+    url: "https://rss.app/feeds/tMbiKRyJYYawUbRX.xml",
+    category: "technology",
+    enabled: true,
+  },
+  {
     id: "fox-sports",
     name: "Fox Sports",
     url: "https://api.foxsports.com/v2/content/optimized-rss?partnerKey=MB0Wehpmuj2lUhuRhQaafhBjAJqaPU244mlTDK1i&size=30",
@@ -208,6 +215,7 @@ const NewsAggregator = () => {
   const [arsTechnicaIndex, setArsTechnicaIndex] = useState(0);
   const [wiredIndex, setWiredIndex] = useState(0);
   const [techradarIndex, setTechradarIndex] = useState(0);
+  const [windows11Index, setWindows11Index] = useState(0);
   const [foxSportsIndex, setFoxSportsIndex] = useState(0);
   const [cnnSportsIndex, setCnnSportsIndex] = useState(0);
 
@@ -256,6 +264,8 @@ const NewsAggregator = () => {
         return wiredIndex;
       case "TechRadar":
         return techradarIndex;
+      case "#Windows11":
+        return windows11Index;
       case "Fox Sports":
         return foxSportsIndex;
       case "CNN - SPORTS":
@@ -293,6 +303,9 @@ const NewsAggregator = () => {
         break;
       case "TechRadar":
         goToPreviousTechradar();
+        break;
+      case "#Windows11":
+        goToPreviousWindows11();
         break;
       case "Fox Sports":
         goToPreviousFoxSports();
@@ -339,6 +352,9 @@ const NewsAggregator = () => {
         break;
       case "TechRadar":
         goToNextTechradar();
+        break;
+      case "#Windows11":
+        goToNextWindows11();
         break;
       case "Fox Sports":
         goToNextFoxSports();
@@ -922,6 +938,27 @@ const NewsAggregator = () => {
     }
   };
 
+  // Windows11 carousel navigation
+  const goToNextWindows11 = () => {
+    const windows11Items = newsItems.filter(
+      (item) => item.source === "#Windows11"
+    );
+    if (windows11Items.length > 0) {
+      setWindows11Index((prev) => (prev + 1) % windows11Items.length);
+    }
+  };
+
+  const goToPreviousWindows11 = () => {
+    const windows11Items = newsItems.filter(
+      (item) => item.source === "#Windows11"
+    );
+    if (windows11Items.length > 0) {
+      setWindows11Index(
+        (prev) => (prev - 1 + windows11Items.length) % windows11Items.length
+      );
+    }
+  };
+
   // Fox Sports carousel navigation
   const goToNextFoxSports = () => {
     const foxSportsItems = newsItems.filter(
@@ -1301,6 +1338,30 @@ const NewsAggregator = () => {
             {/* News Grid Section */}
             <section className="py-4 sm:py-6 lg:py-8">
               <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+                {/* Dynamic Category Title */}
+                <div className="mb-6">
+                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                    {activeCategory === "all"
+                      ? "All News"
+                      : activeCategory === "technology"
+                      ? "Technology News"
+                      : activeCategory === "sports"
+                      ? "Sports News"
+                      : activeCategory === "business"
+                      ? "Business News"
+                      : activeCategory === "entertainment"
+                      ? "Entertainment News"
+                      : activeCategory === "politics"
+                      ? "Politics News"
+                      : "News"}
+                  </h1>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    {activeCategory === "all"
+                      ? "Latest articles from all categories"
+                      : `Latest ${activeCategory} articles and updates`}
+                  </p>
+                </div>
+
                 {/* View Toggle */}
                 <div className="flex justify-end mb-6">
                   <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
@@ -1385,7 +1446,7 @@ const NewsAggregator = () => {
                     transition={{ duration: 1.8, delay: 0.8 }}
                     className={`${
                       viewMode === "grid"
-                        ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                        ? "grid grid-cols-1 md:grid-cols-2 gap-6 grid-cols-3-at-1400"
                         : "space-y-4"
                     }`}
                   >
@@ -1442,7 +1503,7 @@ const NewsAggregator = () => {
                             className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
                               viewMode === "grid"
                                 ? "h-[500px]"
-                                : "h-auto justify-center border-l-4 min-h-[120px]"
+                                : "h-auto justify-center border-l-4 min-h-[120px] relative"
                             }`}
                             style={
                               viewMode === "list"
@@ -1466,7 +1527,9 @@ const NewsAggregator = () => {
                             {/* Card Header */}
                             <div
                               className={`${
-                                viewMode === "list" ? "px-4 py-3" : "px-6 pt-6"
+                                viewMode === "list"
+                                  ? "px-4 py-3 pr-18"
+                                  : "px-6 pt-6"
                               } flex-shrink-0`}
                             >
                               {/* Top Row - Source Title, Article Title, and Category Chip */}
@@ -1476,27 +1539,35 @@ const NewsAggregator = () => {
                                 }`}
                               >
                                 {/* Left side: Source Title and Article Title */}
-                                <div className="flex items-center flex-1">
+                                <div
+                                  className={`flex-1 ${
+                                    viewMode === "list"
+                                      ? "flex items-center space-x-4"
+                                      : "flex items-center"
+                                  }`}
+                                >
                                   {/* Source Title */}
-                                  <h4 className="text-base font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide">
+                                  <h4
+                                    className={`font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide flex-shrink-0 ${
+                                      viewMode === "list"
+                                        ? "text-sm"
+                                        : "text-base"
+                                    }`}
+                                  >
                                     {feed.name}
                                   </h4>
 
                                   {/* Article Title - Only show in list view */}
                                   {viewMode === "list" &&
                                     feedItems.length > 0 && (
-                                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight ml-4">
+                                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white leading-tight flex-1">
                                         <a
                                           href={feedItems[currentIndex]?.url}
                                           target="_blank"
                                           rel="noopener noreferrer"
                                           className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
                                         >
-                                          {truncateText(
-                                            feedItems[currentIndex]?.title ||
-                                              "",
-                                            60
-                                          )}
+                                          {feedItems[currentIndex]?.title || ""}
                                         </a>
                                       </h3>
                                     )}
@@ -1534,9 +1605,27 @@ const NewsAggregator = () => {
                                 )}
                               </div>
 
+                              {/* Thumbnail Image - Only show in list view */}
+                              {viewMode === "list" &&
+                                feedItems.length > 0 &&
+                                feedItems[currentIndex]?.image && (
+                                  <div className="absolute right-0 top-0 bottom-0 w-24 h-full">
+                                    <img
+                                      src={feedItems[currentIndex]?.image}
+                                      alt={feedItems[currentIndex]?.title}
+                                      className="w-full h-full object-cover rounded-r-lg"
+                                      onError={(e) => {
+                                        // Hide broken images
+                                        const target = e.currentTarget;
+                                        target.style.display = "none";
+                                      }}
+                                    />
+                                  </div>
+                                )}
+
                               {/* Second Row - Chip and Carousel Controls (list view only) */}
                               {viewMode === "list" && (
-                                <div className="flex items-center justify-between mt-2 relative z-10">
+                                <div className="flex items-center justify-between mt-2 relative z-10 px-0 pb-3 pr-18">
                                   {/* Category Chip - Left side */}
                                   <span
                                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium shadow-sm border ${
@@ -1569,7 +1658,7 @@ const NewsAggregator = () => {
 
                                   {/* Carousel Controls - Right side, only show if there are items */}
                                   {feedItems.length > 1 && (
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-1 mr-28">
                                       <button
                                         onClick={() => goToPrevious(feed.name)}
                                         disabled={feedItems.length <= 1}
