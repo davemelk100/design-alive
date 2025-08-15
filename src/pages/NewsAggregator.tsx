@@ -125,13 +125,6 @@ const rssFeeds: RSSFeed[] = [
     category: "sports",
     enabled: true,
   },
-  {
-    id: "pga-tour",
-    name: "PGA",
-    url: "https://www.pgatour.com/news",
-    category: "sports",
-    enabled: true,
-  },
 ];
 
 const NewsAggregator = () => {
@@ -1509,7 +1502,7 @@ const NewsAggregator = () => {
                             transition={{ duration: 0.3 }}
                             className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
                               viewMode === "grid"
-                                ? "h-[530px]"
+                                ? "h-[470px]"
                                 : "h-auto justify-center border-l-4 min-h-[120px] sm:min-h-[140px] md:min-h-[160px] relative"
                             }`}
                             style={
@@ -1539,7 +1532,7 @@ const NewsAggregator = () => {
                                   : "px-6 pt-6"
                               } flex-shrink-0`}
                             >
-                              {/* Top Row - Source Title, Article Title, and Category Chip */}
+                              {/* Top Row - Source Title, Article Title, and Carousel Controls */}
                               <div
                                 className={`flex items-center justify-between ${
                                   viewMode === "list" ? "" : "mb-4"
@@ -1580,36 +1573,29 @@ const NewsAggregator = () => {
                                     )}
                                 </div>
 
-                                {/* Right side: Category Chip - Only show in grid view */}
-                                {viewMode === "grid" && (
-                                  <span
-                                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                      feed.category === "technology"
-                                        ? `${categoryColors.technology.chip.bg} ${categoryColors.technology.chip.text}`
-                                        : feed.category === "sports"
-                                        ? `${categoryColors.sports.chip.bg} ${categoryColors.sports.chip.text}`
-                                        : feed.category === "business"
-                                        ? `${categoryColors.business.chip.bg} ${categoryColors.business.chip.text}`
-                                        : feed.category === "entertainment"
-                                        ? `${categoryColors.entertainment.chip.bg} ${categoryColors.entertainment.chip.text}`
-                                        : feed.category === "politics"
-                                        ? `${categoryColors.politics.chip.bg} ${categoryColors.politics.chip.text}`
-                                        : `${categoryColors.all.chip.bg} ${categoryColors.all.chip.text}`
-                                    }`}
-                                  >
-                                    {feed.category === "technology"
-                                      ? "Technology"
-                                      : feed.category === "sports"
-                                      ? "Sports"
-                                      : feed.category === "business"
-                                      ? "Business"
-                                      : feed.category === "entertainment"
-                                      ? "Entertainment"
-                                      : feed.category === "politics"
-                                      ? "Politics"
-                                      : "All News"}
-                                  </span>
-                                )}
+                                {/* Right side: Carousel Controls - Only show in grid view */}
+                                {viewMode === "grid" &&
+                                  feedItems.length > 1 && (
+                                    <div className="flex items-center gap-1">
+                                      <button
+                                        onClick={() => goToPrevious(feed.name)}
+                                        disabled={feedItems.length <= 1}
+                                        className="carousel-button w-5 h-5 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                                      >
+                                        ←
+                                      </button>
+                                      <span className="text-xs text-gray-500 bg-white dark:bg-gray-700 px-1.5 py-0.5 rounded border border-gray-200 dark:border-gray-600">
+                                        {currentIndex + 1}/{feedItems.length}
+                                      </span>
+                                      <button
+                                        onClick={() => goToNext(feed.name)}
+                                        disabled={feedItems.length <= 1}
+                                        className="carousel-button w-5 h-5 text-xs text-gray-500 hover:text-gray-700 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded border border-gray-200 dark:border-gray-600 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                                      >
+                                        →
+                                      </button>
+                                    </div>
+                                  )}
                               </div>
 
                               {/* Thumbnail Image - Only show in list view */}
@@ -1767,8 +1753,8 @@ const NewsAggregator = () => {
                                 "placeholder:"
                               ) ? (
                                 <div
-                                  className="mt-2 relative"
-                                  style={{ height: "150px" }}
+                                  className="relative z-0"
+                                  style={{ height: "150px", marginTop: "20px" }}
                                 >
                                   <img
                                     src={feedItems[currentIndex]?.image}
@@ -1838,7 +1824,7 @@ const NewsAggregator = () => {
                               ) : (
                                 // No image available or placeholder - show styled placeholder
                                 <div
-                                  className="mt-2 w-full h-36 rounded-lg flex items-center justify-center"
+                                  className="mt-auto w-full h-36 rounded-lg flex items-center justify-center"
                                   style={{
                                     height: "150px",
                                     minHeight: "150px",
@@ -1929,26 +1915,36 @@ const NewsAggregator = () => {
                               )}
                             </div>
 
-                            {/* Carousel Controls for Grid View */}
-                            {viewMode === "grid" && feedItems.length > 1 && (
-                              <div className="px-4 sm:px-6 pb-4 flex items-center justify-center gap-1 relative z-10">
-                                <button
-                                  onClick={() => goToPrevious(feed.name)}
-                                  disabled={feedItems.length <= 1}
-                                  className="carousel-button w-6 h-6 text-sm text-gray-600 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm"
+                            {/* Category Chip below image - Only show in grid view */}
+                            {viewMode === "grid" && (
+                              <div className="px-6 pb-3 relative z-10">
+                                <span
+                                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                    feed.category === "technology"
+                                      ? `${categoryColors.technology.chip.bg} ${categoryColors.technology.chip.text}`
+                                      : feed.category === "sports"
+                                      ? `${categoryColors.sports.chip.bg} ${categoryColors.sports.chip.text}`
+                                      : feed.category === "business"
+                                      ? `${categoryColors.business.chip.bg} ${categoryColors.business.chip.text}`
+                                      : feed.category === "entertainment"
+                                      ? `${categoryColors.entertainment.chip.bg} ${categoryColors.entertainment.chip.text}`
+                                      : feed.category === "politics"
+                                      ? `${categoryColors.politics.chip.bg} ${categoryColors.politics.chip.text}`
+                                      : `${categoryColors.all.chip.bg} ${categoryColors.all.chip.text}`
+                                  }`}
                                 >
-                                  ←
-                                </button>
-                                <span className="text-xs text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-700 px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-600 shadow-sm">
-                                  {currentIndex + 1}/{feedItems.length}
+                                  {feed.category === "technology"
+                                    ? "Technology"
+                                    : feed.category === "sports"
+                                    ? "Sports"
+                                    : feed.category === "business"
+                                    ? "Business"
+                                    : feed.category === "entertainment"
+                                    ? "Entertainment"
+                                    : feed.category === "politics"
+                                    ? "Politics"
+                                    : "All News"}
                                 </span>
-                                <button
-                                  onClick={() => goToNext(feed.name)}
-                                  disabled={feedItems.length <= 1}
-                                  className="carousel-button w-6 h-6 text-sm text-gray-600 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-white dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm"
-                                >
-                                  →
-                                </button>
                               </div>
                             )}
                           </motion.div>
@@ -1978,12 +1974,12 @@ const NewsAggregator = () => {
                             className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
                               viewMode === "list"
                                 ? "h-auto justify-center border-l-4"
-                                : "h-[530px]"
+                                : "h-[470px]"
                             }`}
                             style={
                               viewMode === "list"
                                 ? { borderLeftColor: "#ef4444" }
-                                : { height: "500px" }
+                                : { height: "470px" }
                             }
                           >
                             {/* Custom Feed Header */}
@@ -2091,8 +2087,8 @@ const NewsAggregator = () => {
                                 "placeholder:"
                               ) ? (
                                 <div
-                                  className="mt-2 relative"
-                                  style={{ height: "150px" }}
+                                  className="relative z-0"
+                                  style={{ height: "150px", marginTop: "20px" }}
                                 >
                                   <img
                                     src={customFeedItems[0]?.image}
