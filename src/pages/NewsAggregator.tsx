@@ -467,6 +467,9 @@ const NewsAggregator = () => {
       case "TMZ":
         goToNextTmz();
         break;
+      case "Soft White Underbelly":
+        goToNextSoftWhiteUnderbelly();
+        break;
       case "Fox Sports":
         goToNextFoxSports();
         break;
@@ -988,6 +991,7 @@ const NewsAggregator = () => {
       setBreitbartIndex(0); // Reset Breitbart carousel
 
       setTechcrunchIndex(0); // Reset TechCrunch carousel
+      setSoftWhiteUnderbellyIndex(0); // Reset Soft White Underbelly carousel
     } catch (error) {
       console.error("Error loading RSS feeds:", error);
       setError("Failed to load RSS feeds. Please try again later.");
@@ -1395,6 +1399,31 @@ const NewsAggregator = () => {
     if (techcrunchItems.length > 0) {
       setTechcrunchIndex(
         (prev) => (prev - 1 + techcrunchItems.length) % techcrunchItems.length
+      );
+    }
+  };
+
+  // Soft White Underbelly carousel navigation
+  const goToNextSoftWhiteUnderbelly = () => {
+    const softWhiteUnderbellyItems = newsItems.filter(
+      (item) => item.source === "Soft White Underbelly"
+    );
+    if (softWhiteUnderbellyItems.length > 0) {
+      setSoftWhiteUnderbellyIndex(
+        (prev) => (prev + 1) % softWhiteUnderbellyItems.length
+      );
+    }
+  };
+
+  const goToPreviousSoftWhiteUnderbelly = () => {
+    const softWhiteUnderbellyItems = newsItems.filter(
+      (item) => item.source === "Soft White Underbelly"
+    );
+    if (softWhiteUnderbellyItems.length > 0) {
+      setSoftWhiteUnderbellyIndex(
+        (prev) =>
+          (prev - 1 + softWhiteUnderbellyItems.length) %
+          softWhiteUnderbellyItems.length
       );
     }
   };
@@ -1868,45 +1897,10 @@ const NewsAggregator = () => {
                                   </div>
                                 )}
 
-                              {/* Second Row - Category Chip (list view only) */}
-                              {viewMode === "list" && (
-                                <div className="px-0 pb-2 pr-12 sm:pr-18">
-                                  {/* Category Chip */}
-                                  <span
-                                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium shadow-sm border ${
-                                      feed.category === "technology"
-                                        ? `${categoryColors.technology.chip.bg} ${categoryColors.technology.chip.text} ${categoryColors.technology.chip.border}`
-                                        : feed.category === "sports"
-                                        ? `${categoryColors.sports.chip.bg} ${categoryColors.sports.chip.text} ${categoryColors.sports.chip.border}`
-                                        : feed.category === "business"
-                                        ? `${categoryColors.business.chip.bg} ${categoryColors.business.chip.text} ${categoryColors.business.chip.border}`
-                                        : feed.category === "entertainment"
-                                        ? `${categoryColors.entertainment.chip.bg} ${categoryColors.entertainment.chip.text} ${categoryColors.entertainment.chip.border}`
-                                        : feed.category === "politics"
-                                        ? `${categoryColors.politics.chip.bg} ${categoryColors.politics.chip.text} ${categoryColors.politics.chip.border}`
-                                        : `${categoryColors.all.chip.bg} ${categoryColors.all.chip.text} ${categoryColors.all.chip.border}`
-                                    }`}
-                                    title={`Category: ${feed.category}`}
-                                  >
-                                    {feed.category === "technology"
-                                      ? "Technology"
-                                      : feed.category === "sports"
-                                      ? "Sports"
-                                      : feed.category === "business"
-                                      ? "Business"
-                                      : feed.category === "entertainment"
-                                      ? "Entertainment"
-                                      : feed.category === "politics"
-                                      ? "Politics"
-                                      : "All News"}
-                                  </span>
-                                </div>
-                              )}
-
-                              {/* Third Row - Carousel Controls (list view only) */}
+                              {/* Third Row - Carousel Controls and Category Chip (list view only) */}
                               {viewMode === "list" && feedItems.length > 1 && (
                                 <div className="px-0 pb-3 pr-12 sm:pr-18">
-                                  {/* Carousel Controls */}
+                                  {/* Carousel Controls and Category Chip */}
                                   <div className="flex items-center gap-1">
                                     <button
                                       onClick={() => goToPrevious(feed.name)}
@@ -1925,6 +1919,36 @@ const NewsAggregator = () => {
                                     >
                                       →
                                     </button>
+
+                                    {/* Category Chip - positioned to the right of carousel */}
+                                    <span
+                                      className={`ml-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium shadow-sm border ${
+                                        feed.category === "technology"
+                                          ? `${categoryColors.technology.chip.bg} ${categoryColors.technology.chip.text} ${categoryColors.technology.chip.border}`
+                                          : feed.category === "sports"
+                                          ? `${categoryColors.sports.chip.bg} ${categoryColors.sports.chip.text} ${categoryColors.sports.chip.border}`
+                                          : feed.category === "business"
+                                          ? `${categoryColors.business.chip.bg} ${categoryColors.business.chip.text} ${categoryColors.business.chip.border}`
+                                          : feed.category === "entertainment"
+                                          ? `${categoryColors.entertainment.chip.bg} ${categoryColors.entertainment.chip.text} ${categoryColors.entertainment.chip.border}`
+                                          : feed.category === "politics"
+                                          ? `${categoryColors.politics.chip.bg} ${categoryColors.politics.chip.text} ${categoryColors.politics.chip.border}`
+                                          : `${categoryColors.all.chip.bg} ${categoryColors.all.chip.text} ${categoryColors.all.chip.border}`
+                                      }`}
+                                      title={`Category: ${feed.category}`}
+                                    >
+                                      {feed.category === "technology"
+                                        ? "Technology"
+                                        : feed.category === "sports"
+                                        ? "Sports"
+                                        : feed.category === "business"
+                                        ? "Business"
+                                        : feed.category === "entertainment"
+                                        ? "Entertainment"
+                                        : feed.category === "politics"
+                                        ? "Politics"
+                                        : "All News"}
+                                    </span>
                                   </div>
                                 </div>
                               )}
