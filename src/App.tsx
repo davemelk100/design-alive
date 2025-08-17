@@ -1873,7 +1873,10 @@ function App() {
           onClose={() => setSelectedStory(null)}
         />
       )}
-      <MobileTrayMenu />
+      {/* Hide MobileTrayMenu on news and music pages */}
+      {location.pathname !== "/news" && location.pathname !== "/music" && (
+        <MobileTrayMenu />
+      )}
 
       {/* Back to Top Arrow and Theme Toggle */}
       <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 flex flex-col gap-2 sm:gap-3">

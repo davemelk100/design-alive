@@ -44,7 +44,7 @@ const MusicPlayer: React.FC = () => {
     if (audioRef.current && tracks.length > 0) {
       const currentTrackData = tracks[0];
       const trackUrl = getTrackUrl(currentTrackData, trackVersion);
-      console.log("Loading audio file:", trackUrl);
+
       audioRef.current.src = trackUrl;
       audioRef.current.load();
       audioRef.current.volume = volume;
@@ -79,14 +79,7 @@ const MusicPlayer: React.FC = () => {
     if (audioRef.current) {
       const currentTrackData = tracks[index];
       const trackUrl = getTrackUrl(currentTrackData, trackVersion);
-      console.log(
-        "Loading track:",
-        tracks[index].title,
-        "URL:",
-        trackUrl,
-        "Version:",
-        trackVersion
-      );
+
       audioRef.current.src = trackUrl;
       audioRef.current.load();
       // Ensure volume is properly set after loading
@@ -149,9 +142,6 @@ const MusicPlayer: React.FC = () => {
     }
     // Update mute state based on volume
     setIsMuted(newVolume === 0);
-
-    // Add visual feedback
-    console.log(`Volume changed to: ${Math.round(newVolume * 100)}%`);
   };
 
   const toggleMute = () => {
@@ -180,19 +170,15 @@ const MusicPlayer: React.FC = () => {
 
       // Only switch if instrumental version exists
       if (newVersion === "instrumental" && !currentTrackData.instrumentalUrl) {
-        console.log("No instrumental version available for this track");
         return;
       }
 
-      console.log("Switching to", newVersion, "version:", trackUrl);
       audioRef.current.src = trackUrl;
       audioRef.current.load();
 
       // If currently playing, continue playing
       if (isPlaying) {
-        audioRef.current.play().catch(() => {
-          console.log("Failed to play after version switch");
-        });
+        audioRef.current.play().catch(() => {});
       }
     }
   };

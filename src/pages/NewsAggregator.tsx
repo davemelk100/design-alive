@@ -519,8 +519,6 @@ const NewsAggregator = () => {
     sourceName: string,
     category: string
   ): NewsItem[] => {
-    console.log(`Parsing RSS XML for ${sourceName}, length: ${xmlText.length}`);
-
     try {
       // Check if the response is HTML instead of XML (common error case)
       if (
@@ -536,26 +534,20 @@ const NewsAggregator = () => {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(xmlText, "text/xml");
 
-      console.log(`XML document created, parsing items...`);
-
       // Try multiple selectors for RSS items
       let items = xmlDoc.querySelectorAll("item");
-      console.log(`Found ${items.length} items with 'item' selector`);
 
       // If no items found, try alternative selectors
       if (items.length === 0) {
         items = xmlDoc.querySelectorAll("entry"); // Atom feeds use 'entry'
-        console.log(`Found ${items.length} items with 'entry' selector`);
       }
 
       // Try other common selectors
       if (items.length === 0) {
         items = xmlDoc.querySelectorAll("article, story, news, post");
-        console.log(`Found ${items.length} items with alternative selectors`);
       }
 
       if (items.length === 0) {
-        console.warn(`No items found for ${sourceName}, returning empty array`);
         return [];
       }
 
@@ -701,9 +693,6 @@ const NewsAggregator = () => {
             );
             if (imgMatch) {
               image = imgMatch[1];
-              console.log(
-                `Image extracted from description for ${sourceName}: ${image}`
-              );
             }
           }
 
@@ -715,9 +704,6 @@ const NewsAggregator = () => {
             );
             if (imageUrlMatch) {
               image = imageUrlMatch[1];
-              console.log(
-                `Image URL found in text content for ${sourceName}: ${image}`
-              );
             }
           }
 
@@ -745,30 +731,14 @@ const NewsAggregator = () => {
           }
 
           // Log image extraction result
-          if (image) {
-            console.log(
-              `Image found for ${sourceName}: ${image.substring(0, 100)}...`
-            );
-          } else {
-            console.log(`No image found for ${sourceName}, using placeholder`);
-          }
 
           // Skip items without essential data
           if (!title || !link) {
-            console.log(
-              `Skipping item ${index} from ${sourceName} - missing title or link`
-            );
             return;
           }
 
           // Special handling for Lambgoat to filter out forum posts
           if (sourceName === "Lambgoat" && title.includes("Forum:")) {
-            console.log(
-              `Filtering out Forum item from Lambgoat: ${title.substring(
-                0,
-                50
-              )}`
-            );
             return; // Skip this item
           }
 
@@ -777,9 +747,6 @@ const NewsAggregator = () => {
             sourceName === "Lambgoat" &&
             title === "Hardcore News & Metal News"
           ) {
-            console.log(
-              `Filtering out "Hardcore News & Metal News" entry from Lambgoat`
-            );
             return; // Skip this item
           }
 
@@ -800,18 +767,6 @@ const NewsAggregator = () => {
             isRss: true,
             image: image,
           });
-
-          console.log(
-            `Successfully parsed item ${index + 1} from ${sourceName}:`,
-            {
-              title: title.substring(0, 50),
-              image: image
-                ? `Found: ${image.substring(0, 50)}...`
-                : "Not found",
-              description: cleanDescription.substring(0, 50),
-              category: category,
-            }
-          );
         } catch (itemError) {
           console.warn(
             `Error parsing item ${index} from ${sourceName}:`,
@@ -820,10 +775,6 @@ const NewsAggregator = () => {
           // Continue parsing other items
         }
       });
-
-      console.log(
-        `Successfully parsed ${parsedItems.length} items from ${sourceName}`
-      );
 
       return parsedItems.slice(0, 10); // Limit to 10 items for carousel
     } catch (parseError) {
@@ -836,8 +787,6 @@ const NewsAggregator = () => {
   // Function to fetch RSS feed using reliable CORS proxies
   const fetchRSSFeed = async (feed: RSSFeed): Promise<NewsItem[]> => {
     try {
-      console.log(`Fetching RSS feed: ${feed.name} from ${feed.url}`);
-
       // Use reliable CORS proxy services
       const proxyServices = [
         `https://corsproxy.io/?${encodeURIComponent(feed.url)}`,
@@ -853,8 +802,6 @@ const NewsAggregator = () => {
 
       for (const proxyUrl of proxyServices) {
         try {
-          console.log(`Trying proxy: ${proxyUrl}`);
-
           const response = await fetch(proxyUrl, {
             method: "GET",
             headers: {
@@ -863,11 +810,8 @@ const NewsAggregator = () => {
             signal: AbortSignal.timeout(12000), // 12 second timeout
           });
 
-          console.log(`Response status: ${response.status}`);
-
           if (response.ok) {
             xmlText = await response.text();
-            console.log(`Received XML text, length: ${xmlText.length}`);
 
             if (
               xmlText.length > 100 &&
@@ -875,12 +819,10 @@ const NewsAggregator = () => {
                 xmlText.includes("<rss") ||
                 xmlText.includes("<feed"))
             ) {
-              console.log(`Successfully fetched via proxy: ${proxyUrl}`);
               break;
             }
           }
         } catch (proxyError) {
-          console.log(`Proxy failed: ${proxyUrl}`, proxyError);
           continue;
         }
       }
@@ -899,7 +841,6 @@ const NewsAggregator = () => {
 
   // Function to load all RSS feeds
   const loadRSSFeeds = async () => {
-    console.log("Starting to load RSS feeds...");
     setLoading(true);
     setError(null);
 
@@ -909,7 +850,6 @@ const NewsAggregator = () => {
         rssFeeds.map(async (feed) => {
           try {
             const items = await fetchRSSFeed(feed);
-            console.log(`Feed ${feed.name}: ${items.length} items loaded`);
             return { feed, items, success: true };
           } catch (feedError) {
             console.warn(`Feed ${feed.name} failed:`, feedError);
@@ -923,13 +863,10 @@ const NewsAggregator = () => {
         [key: string]: { working: boolean; error?: string };
       } = {};
 
-      console.log("Processing feed results:", feedResults);
-
       feedResults.forEach((result) => {
         if (result.status === "fulfilled" && result.value.success) {
           allNewsItems.push(...result.value.items);
           newFeedStatus[result.value.feed.name] = { working: true };
-          console.log(`Feed ${result.value.feed.name} marked as working`);
         } else if (result.status === "fulfilled" && !result.value.success) {
           console.warn(
             `Feed ${result.value.feed.name} failed to load:`,
@@ -942,7 +879,6 @@ const NewsAggregator = () => {
                 ? result.value.error.message
                 : "Unknown error",
           };
-          console.log(`Feed ${result.value.feed.name} marked as failed`);
         } else if (result.status === "rejected") {
           console.warn(`Feed failed with rejected promise:`, result.reason);
           // For rejected promises, we don't have the feed name, so we can't set specific status
@@ -950,7 +886,6 @@ const NewsAggregator = () => {
         }
       });
 
-      console.log("Final feed status:", newFeedStatus);
       setFeedStatus(newFeedStatus);
 
       // Count successful vs failed feeds
@@ -958,8 +893,6 @@ const NewsAggregator = () => {
         (result) => result.status === "fulfilled" && result.value.success
       ).length;
       const totalFeeds = rssFeeds.length;
-
-      console.log(`Successfully loaded ${successfulFeeds}/${totalFeeds} feeds`);
 
       if (successfulFeeds === 0) {
         setError(
@@ -1739,40 +1672,12 @@ const NewsAggregator = () => {
                           feed.category === activeCategory
                       );
 
-                      console.log(
-                        `Rendering ${filteredFeeds.length} feeds for category: ${activeCategory}`
-                      );
-                      console.log(
-                        "Filtered feeds:",
-                        filteredFeeds.map((f) => ({
-                          name: f.name,
-                          category: f.category,
-                        }))
-                      );
-                      console.log(
-                        "Available news items:",
-                        newsItems.map((item) => ({
-                          source: item.source,
-                          title: item.title.substring(0, 30),
-                        }))
-                      );
-                      console.log("Feed status:", feedStatus);
-
                       return filteredFeeds.map((feed) => {
                         const feedItems = newsItems.filter(
                           (item) => item.source === feed.name
                         );
                         const currentIndex = getCurrentIndex(feed.name);
                         const currentFeedStatus = feedStatus[feed.name];
-
-                        console.log(`Processing feed: ${feed.name}`, {
-                          hasItems: feedItems.length > 0,
-                          itemCount: feedItems.length,
-                          status: currentFeedStatus,
-                          category: feed.category,
-                          feedId: feed.id,
-                          feedUrl: feed.url,
-                        });
 
                         // Always show the card, even if no items
                         return (
@@ -1784,7 +1689,7 @@ const NewsAggregator = () => {
                             className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
                               viewMode === "grid"
                                 ? "h-[470px]"
-                                : "h-auto justify-center border-l-4 min-h-[100px] sm:min-h-[110px] md:min-h-[120px] relative"
+                                : "w-full h-auto justify-center border-l-4 min-h-[95px] sm:min-h-[105px] md:min-h-[115px] relative"
                             }`}
                             style={
                               viewMode === "list"
@@ -1841,12 +1746,12 @@ const NewsAggregator = () => {
                                   {/* Article Title - Only show in list view */}
                                   {viewMode === "list" &&
                                     feedItems.length > 0 && (
-                                      <h3 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white leading-tight flex-1 min-w-0 overflow-hidden">
+                                      <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white leading-tight flex-1 min-w-0">
                                         <a
                                           href={feedItems[currentIndex]?.url}
                                           target="_blank"
                                           rel="noopener noreferrer"
-                                          className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer break-words block truncate"
+                                          className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer break-words block"
                                         >
                                           {feedItems[currentIndex]?.title || ""}
                                         </a>
@@ -1857,21 +1762,21 @@ const NewsAggregator = () => {
                                 {/* Right side: Carousel Controls - Only show in grid view */}
                                 {viewMode === "grid" &&
                                   feedItems.length > 1 && (
-                                    <div className="flex items-center gap-1">
+                                    <div className="flex items-center gap-2">
                                       <button
                                         onClick={() => goToPrevious(feed.name)}
                                         disabled={feedItems.length <= 1}
-                                        className="carousel-button w-8 h-8 text-sm text-white dark:text-gray-200 hover:text-white disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-700 dark:bg-gray-600 rounded border border-gray-600 dark:border-gray-500 flex items-center justify-center hover:bg-gray-600 dark:hover:bg-gray-500 transition-colors"
+                                        className="carousel-button w-12 h-8 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
                                       >
                                         ←
                                       </button>
-                                      <span className="text-sm text-gray-500 dark:text-gray-400 w-8 h-8 flex items-center justify-center">
+                                      <span className="text-base text-gray-500 dark:text-gray-400 w-8 h-8 flex items-center justify-center mx-1">
                                         {currentIndex + 1}/{feedItems.length}
                                       </span>
                                       <button
                                         onClick={() => goToNext(feed.name)}
                                         disabled={feedItems.length <= 1}
-                                        className="carousel-button w-8 h-8 text-sm text-white dark:text-gray-200 hover:text-white disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-700 dark:bg-gray-600 rounded border border-gray-600 dark:border-gray-500 flex items-center justify-center hover:bg-gray-600 dark:hover:bg-gray-500 transition-colors"
+                                        className="carousel-button w-12 h-8 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
                                       >
                                         →
                                       </button>
@@ -1899,23 +1804,23 @@ const NewsAggregator = () => {
 
                               {/* Third Row - Carousel Controls and Category Chip (list view only) */}
                               {viewMode === "list" && feedItems.length > 1 && (
-                                <div className="px-0 pb-3 pr-12 sm:pr-18">
+                                <div className="px-0 pb-3 pr-12 sm:pr-18 mt-4">
                                   {/* Carousel Controls and Category Chip */}
-                                  <div className="flex items-center gap-1">
+                                  <div className="flex items-center gap-2">
                                     <button
                                       onClick={() => goToPrevious(feed.name)}
                                       disabled={feedItems.length <= 1}
-                                      className="carousel-button w-8 h-8 text-sm text-white dark:text-gray-200 hover:text-white disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-700 dark:bg-gray-600 rounded border border-gray-600 dark:border-gray-500 flex items-center justify-center"
+                                      className="carousel-button w-12 h-8 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center"
                                     >
                                       ←
                                     </button>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400 w-8 h-8 flex items-center justify-center">
+                                    <span className="text-base text-gray-500 dark:text-gray-400 w-8 h-8 flex items-center justify-center mx-1">
                                       {currentIndex + 1}/{feedItems.length}
                                     </span>
                                     <button
                                       onClick={() => goToNext(feed.name)}
                                       disabled={feedItems.length <= 1}
-                                      className="carousel-button w-8 h-8 text-sm text-white dark:text-gray-200 hover:text-white disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-700 dark:bg-gray-600 rounded border border-gray-600 dark:border-gray-500 flex items-center justify-center"
+                                      className="carousel-button w-12 h-8 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center"
                                     >
                                       →
                                     </button>
@@ -2457,10 +2362,9 @@ const NewsAggregator = () => {
                                     onClick={() => {
                                       // For custom feeds, we'll need to implement index tracking
                                       // For now, this is a placeholder
-                                      console.log("Previous custom feed item");
                                     }}
                                     disabled={customFeedItems.length <= 1}
-                                    className="carousel-button w-8 h-8 text-sm text-white dark:text-gray-200 hover:text-white disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-700 dark:bg-gray-600 rounded border border-gray-600 dark:border-gray-500 flex items-center justify-center hover:bg-gray-600 dark:hover:bg-gray-500 transition-colors"
+                                    className="carousel-button w-12 h-8 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
                                   >
                                     ←
                                   </button>
@@ -2471,10 +2375,9 @@ const NewsAggregator = () => {
                                     onClick={() => {
                                       // For custom feeds, we'll need to implement index tracking
                                       // For now, this is a placeholder
-                                      console.log("Next custom feed item");
                                     }}
                                     disabled={customFeedItems.length <= 1}
-                                    className="carousel-button w-8 h-8 text-sm text-white dark:text-gray-200 hover:text-white disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-700 dark:bg-gray-600 rounded border border-gray-600 dark:border-gray-500 flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                                    className="carousel-button w-12 h-8 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
                                   >
                                     →
                                   </button>
