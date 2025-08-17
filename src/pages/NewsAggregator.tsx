@@ -1791,6 +1791,23 @@ const NewsAggregator = () => {
                                         TECHRADAR
                                       </h4>
                                     </div>
+                                  ) : feed.name === "Vice - Tech" ? (
+                                    /* VICE Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/vice-logo.png"
+                                        alt="VICE Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        VICE
+                                      </h4>
+                                    </div>
                                   ) : (
                                     /* Source Title for other feeds */
                                     <h4
