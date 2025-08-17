@@ -75,6 +75,13 @@ const rssFeeds: RSSFeed[] = [
     category: "sports",
     enabled: true,
   },
+  {
+    id: "the-onion",
+    name: "The Onion",
+    url: "https://rss.app/feeds/5J4NfaeokQ4r4GGP.xml",
+    category: "entertainment",
+    enabled: true,
+  },
 
   {
     id: "lambgoat",
@@ -277,6 +284,7 @@ const NewsAggregator = () => {
   const [watchmojoIndex, setWatchmojoIndex] = useState(0);
 
   const [foxSportsIndex, setFoxSportsIndex] = useState(0);
+  const [theOnionIndex, setTheOnionIndex] = useState(0);
   const [cnnSportsIndex, setCnnSportsIndex] = useState(0);
 
   const [lambgoatIndex, setLambgoatIndex] = useState(0);
@@ -335,6 +343,8 @@ const NewsAggregator = () => {
         return softWhiteUnderbellyIndex;
       case "Fox Sports":
         return foxSportsIndex;
+      case "The Onion":
+        return theOnionIndex;
       case "CNN - SPORTS":
         return cnnSportsIndex;
 
@@ -392,6 +402,9 @@ const NewsAggregator = () => {
         break;
       case "Fox Sports":
         goToPreviousFoxSports();
+        break;
+      case "The Onion":
+        goToPreviousTheOnion();
         break;
       case "CNN - SPORTS":
         goToPreviousCnnSports();
@@ -459,6 +472,9 @@ const NewsAggregator = () => {
         break;
       case "Fox Sports":
         goToNextFoxSports();
+        break;
+      case "The Onion":
+        goToNextTheOnion();
         break;
       case "CNN - SPORTS":
         goToNextCnnSports();
@@ -737,6 +753,14 @@ const NewsAggregator = () => {
             return; // Skip this item
           }
 
+          // Special handling for Fox News to filter out "Latest Breaking News Videos" entry
+          if (
+            sourceName === "Fox News" &&
+            title === "Latest Breaking News Videos"
+          ) {
+            return; // Skip this item
+          }
+
           // Clean up description (remove HTML tags)
           const cleanDescription = description
             ? description.replace(/<[^>]*>/g, "").substring(0, 200) + "..."
@@ -900,6 +924,7 @@ const NewsAggregator = () => {
       setViceTechIndex(0);
 
       setFoxSportsIndex(0);
+      setTheOnionIndex(0);
       setCnnSportsIndex(0);
 
       setLambgoatIndex(0);
@@ -1069,6 +1094,27 @@ const NewsAggregator = () => {
     if (foxSportsItems.length > 0) {
       setFoxSportsIndex(
         (prev) => (prev - 1 + foxSportsItems.length) % foxSportsItems.length
+      );
+    }
+  };
+
+  // The Onion carousel navigation
+  const goToNextTheOnion = () => {
+    const theOnionItems = newsItems.filter(
+      (item) => item.source === "The Onion"
+    );
+    if (theOnionItems.length > 0) {
+      setTheOnionIndex((prev) => (prev + 1) % theOnionItems.length);
+    }
+  };
+
+  const goToPreviousTheOnion = () => {
+    const theOnionItems = newsItems.filter(
+      (item) => item.source === "The Onion"
+    );
+    if (theOnionItems.length > 0) {
+      setTheOnionIndex(
+        (prev) => (prev - 1 + theOnionItems.length) % theOnionItems.length
       );
     }
   };
@@ -1694,16 +1740,69 @@ const NewsAggregator = () => {
                                       : "flex items-center"
                                   }`}
                                 >
-                                  {/* Source Title */}
-                                  <h4
-                                    className={`font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide flex-shrink-0 ${
-                                      viewMode === "list"
-                                        ? "text-xs sm:text-sm"
-                                        : "text-base"
-                                    }`}
-                                  >
-                                    {feed.name}
-                                  </h4>
+                                  {/* WIRED Logo and Title - Stacked and aligned */}
+                                  {feed.name === "WIRED" ? (
+                                    <div className="mb-2">
+                                      <img
+                                        src="https://www.wired.com/verso/static/wired-us/assets/logo.svg"
+                                        alt="WIRED Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        WIRED
+                                      </h4>
+                                    </div>
+                                  ) : feed.name === "Ars Technica" ? (
+                                    /* Ars Technica Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/ars-technica-logo.svg"
+                                        alt="Ars Technica Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        ARS TECHNICA
+                                      </h4>
+                                    </div>
+                                  ) : feed.name === "TechRadar" ? (
+                                    /* TechRadar Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/techradar-logo.svg"
+                                        alt="TechRadar Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        TECHRADAR
+                                      </h4>
+                                    </div>
+                                  ) : (
+                                    /* Source Title for other feeds */
+                                    <h4
+                                      className={`font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide flex-shrink-0 ${
+                                        viewMode === "list"
+                                          ? "text-xs sm:text-sm"
+                                          : "text-base"
+                                      }`}
+                                    >
+                                      {feed.name}
+                                    </h4>
+                                  )}
 
                                   {/* Article Title - Only show in list view */}
                                   {viewMode === "list" &&
