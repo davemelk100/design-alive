@@ -119,13 +119,6 @@ const rssFeeds: RSSFeed[] = [
     category: "video",
     enabled: true,
   },
-  {
-    id: "tmz",
-    name: "TMZ",
-    url: "https://rss.app/feeds/nmR2x975IlI9epfR.xml",
-    category: "entertainment",
-    enabled: true,
-  },
 
   {
     id: "soft-white-underbelly",
@@ -283,8 +276,6 @@ const NewsAggregator = () => {
 
   const [viceTechIndex, setViceTechIndex] = useState(0);
 
-  const [tmzIndex, setTmzIndex] = useState(0);
-
   const [softWhiteUnderbellyIndex, setSoftWhiteUnderbellyIndex] = useState(0);
 
   const [hardloreIndex, setHardloreIndex] = useState(0);
@@ -345,8 +336,6 @@ const NewsAggregator = () => {
       case "Vice - Tech":
         return viceTechIndex;
 
-      case "TMZ":
-        return tmzIndex;
       case "Soft White Underbelly":
         return softWhiteUnderbellyIndex;
       case "Fox Sports":
@@ -404,9 +393,6 @@ const NewsAggregator = () => {
         goToPreviousViceTech();
         break;
 
-      case "TMZ":
-        goToPreviousTmz();
-        break;
       case "Soft White Underbelly":
         goToPreviousSoftWhiteUnderbelly();
         break;
@@ -477,9 +463,6 @@ const NewsAggregator = () => {
         goToNextViceTech();
         break;
 
-      case "TMZ":
-        goToNextTmz();
-        break;
       case "Soft White Underbelly":
         goToNextSoftWhiteUnderbelly();
         break;
@@ -1076,21 +1059,6 @@ const NewsAggregator = () => {
       setViceTechIndex(
         (prev) => (prev - 1 + viceTechItems.length) % viceTechItems.length
       );
-    }
-  };
-
-  // TMZ carousel navigation
-  const goToNextTmz = () => {
-    const tmzItems = newsItems.filter((item) => item.source === "TMZ");
-    if (tmzItems.length > 0) {
-      setTmzIndex((prev) => (prev + 1) % tmzItems.length);
-    }
-  };
-
-  const goToPreviousTmz = () => {
-    const tmzItems = newsItems.filter((item) => item.source === "TMZ");
-    if (tmzItems.length > 0) {
-      setTmzIndex((prev) => (prev - 1 + tmzItems.length) % tmzItems.length);
     }
   };
 
@@ -1966,12 +1934,12 @@ const NewsAggregator = () => {
                                         BREITBART
                                       </h4>
                                     </div>
-                                  ) : feed.name === "TMZ" ? (
-                                    /* TMZ Logo and Title - Stacked and aligned */
+                                  ) : feed.name === "Newsweek" ? (
+                                    /* Newsweek Logo and Title - Stacked and aligned */
                                     <div className="mb-2">
                                       <img
-                                        src="/img/tmz.png"
-                                        alt="TMZ Logo"
+                                        src="/img/newsweek.svg"
+                                        alt="Newsweek Logo"
                                         className="w-full max-w-[120px] h-auto opacity-80 mb-1"
                                         onError={(e) => {
                                           // Hide broken logo
@@ -1980,7 +1948,7 @@ const NewsAggregator = () => {
                                         }}
                                       />
                                       <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        TMZ
+                                        NEWSWEEK
                                       </h4>
                                     </div>
                                   ) : (
