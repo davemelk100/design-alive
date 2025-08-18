@@ -1864,6 +1864,125 @@ const NewsAggregator = () => {
                                         THE ONION
                                       </h4>
                                     </div>
+                                  ) : feed.name === "The Hard Times" ? (
+                                    /* The Hard Times Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/hard-times.png"
+                                        alt="The Hard Times Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        THE HARD TIMES
+                                      </h4>
+                                    </div>
+                                  ) : feed.name === "#Windows11" ? (
+                                    /* Windows 11 Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/windows-11.svg"
+                                        alt="Windows 11 Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        WINDOWS 11
+                                      </h4>
+                                    </div>
+                                  ) : feed.name === "Fox Sports" ? (
+                                    /* Fox Sports Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/fox-sports.png"
+                                        alt="Fox Sports Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        FOX SPORTS
+                                      </h4>
+                                    </div>
+                                  ) : feed.name === "Lambgoat" ? (
+                                    /* Lambgoat Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/lambgoat.png"
+                                        alt="Lambgoat Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        LAMBBGOAT
+                                      </h4>
+                                    </div>
+                                  ) : feed.name === "No Echo" ? (
+                                    /* No Echo Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/no-echo.png"
+                                        alt="No Echo Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        NO ECHO
+                                      </h4>
+                                    </div>
+                                  ) : feed.name === "Breitbart" ? (
+                                    /* Breitbart Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/breitbart.png"
+                                        alt="Breitbart Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        BREITBART
+                                      </h4>
+                                    </div>
+                                  ) : feed.name === "TMZ" ? (
+                                    /* TMZ Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/tmz.png"
+                                        alt="TMZ Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        TMZ
+                                      </h4>
+                                    </div>
                                   ) : (
                                     /* Source Title for other feeds */
                                     <h4
