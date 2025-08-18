@@ -106,21 +106,6 @@ const rssFeeds: RSSFeed[] = [
   },
 
   {
-    id: "hardlore",
-    name: "Hardlore",
-    url: "https://rss.app/feeds/7XApueAqoS0fpQ8F.xml",
-    category: "entertainment",
-    enabled: true,
-  },
-  {
-    id: "watchmojo",
-    name: "WatchMojo",
-    url: "https://rss.app/feeds/84SmpaFg0pwHNrfz.xml",
-    category: "video",
-    enabled: true,
-  },
-
-  {
     id: "newsweek",
     name: "Newsweek",
     url: "https://feeds.newsweek.com/feeds/90oh8.rss",
@@ -267,10 +252,6 @@ const NewsAggregator = () => {
   const [windows11Index, setWindows11Index] = useState(0);
 
   const [viceTechIndex, setViceTechIndex] = useState(0);
-
-  const [hardloreIndex, setHardloreIndex] = useState(0);
-  const [watchmojoIndex, setWatchmojoIndex] = useState(0);
-
   const [foxSportsIndex, setFoxSportsIndex] = useState(0);
   const [theOnionIndex, setTheOnionIndex] = useState(0);
   const [theHardTimesIndex, setTheHardTimesIndex] = useState(0);
@@ -340,11 +321,6 @@ const NewsAggregator = () => {
       case "No Echo":
         return noEchoIndex;
 
-      case "Hardlore":
-        return hardloreIndex;
-      case "WatchMojo":
-        return watchmojoIndex;
-
       case "Newsweek":
         return newsweekIndex;
       case "New York Post":
@@ -399,13 +375,6 @@ const NewsAggregator = () => {
         break;
       case "No Echo":
         goToPreviousNoEcho();
-        break;
-
-      case "Hardlore":
-        goToPreviousHardlore();
-        break;
-      case "WatchMojo":
-        goToPreviousWatchmojo();
         break;
 
       case "Newsweek":
@@ -466,13 +435,6 @@ const NewsAggregator = () => {
         break;
       case "No Echo":
         goToNextNoEcho();
-        break;
-
-      case "Hardlore":
-        goToNextHardlore();
-        break;
-      case "WatchMojo":
-        goToNextWatchmojo();
         break;
 
       case "Newsweek":
@@ -1164,48 +1126,6 @@ const NewsAggregator = () => {
     if (noEchoItems.length > 0) {
       setNoEchoIndex(
         (prev) => (prev - 1 + noEchoItems.length) % noEchoItems.length
-      );
-    }
-  };
-
-  // Hardlore carousel navigation
-  const goToNextHardlore = () => {
-    const hardloreItems = newsItems.filter(
-      (item) => item.source === "Hardlore"
-    );
-    if (hardloreItems.length > 0) {
-      setHardloreIndex((prev) => (prev + 1) % hardloreItems.length);
-    }
-  };
-
-  const goToPreviousHardlore = () => {
-    const hardloreItems = newsItems.filter(
-      (item) => item.source === "Hardlore"
-    );
-    if (hardloreItems.length > 0) {
-      setHardloreIndex(
-        (prev) => (prev - 1 + hardloreItems.length) % hardloreItems.length
-      );
-    }
-  };
-
-  // WatchMojo carousel navigation
-  const goToNextWatchmojo = () => {
-    const watchmojoItems = newsItems.filter(
-      (item) => item.source === "WatchMojo"
-    );
-    if (watchmojoItems.length > 0) {
-      setWatchmojoIndex((prev) => (prev + 1) % watchmojoItems.length);
-    }
-  };
-
-  const goToPreviousWatchmojo = () => {
-    const watchmojoItems = newsItems.filter(
-      (item) => item.source === "WatchMojo"
-    );
-    if (watchmojoItems.length > 0) {
-      setWatchmojoIndex(
-        (prev) => (prev - 1 + watchmojoItems.length) % watchmojoItems.length
       );
     }
   };
@@ -1958,6 +1878,23 @@ const NewsAggregator = () => {
                                         CNN SPORTS
                                       </h4>
                                     </div>
+                                  ) : feed.name === "Fox News" ? (
+                                    /* Fox News Logo and Title - Stacked and aligned */
+                                    <div className="mb-2">
+                                      <img
+                                        src="/img/fox-news.png"
+                                        alt="Fox News Logo"
+                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
+                                        FOX NEWS
+                                      </h4>
+                                    </div>
                                   ) : (
                                     /* Source Title for other feeds */
                                     <h4
@@ -2081,6 +2018,14 @@ const NewsAggregator = () => {
                                         : feed.category === "politics"
                                         ? "Politics"
                                         : "All News"}
+                                    </span>
+
+                                    {/* Source Chip - positioned to the right of category chip */}
+                                    <span
+                                      className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium shadow-sm border bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600"
+                                      title={`Source: ${feed.name}`}
+                                    >
+                                      {feed.name}
                                     </span>
                                   </div>
                                 </div>
@@ -2331,33 +2276,43 @@ const NewsAggregator = () => {
                             {/* Category Chip below image - Only show in grid view */}
                             {viewMode === "grid" && (
                               <div className="px-6 pb-3 relative z-10">
-                                <span
-                                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                    feed.category === "technology"
-                                      ? `${categoryColors.technology.chip.bg} ${categoryColors.technology.chip.text}`
+                                <div className="flex items-center gap-2">
+                                  <span
+                                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                      feed.category === "technology"
+                                        ? `${categoryColors.technology.chip.bg} ${categoryColors.technology.chip.text}`
+                                        : feed.category === "sports"
+                                        ? `${categoryColors.sports.chip.bg} ${categoryColors.sports.chip.text}`
+                                        : feed.category === "business"
+                                        ? `${categoryColors.business.chip.bg} ${categoryColors.business.chip.text}`
+                                        : feed.category === "entertainment"
+                                        ? `${categoryColors.entertainment.chip.bg} ${categoryColors.entertainment.chip.text}`
+                                        : feed.category === "politics"
+                                        ? `${categoryColors.politics.chip.bg} ${categoryColors.politics.chip.text}`
+                                        : `${categoryColors.all.chip.bg} ${categoryColors.all.chip.text}`
+                                    }`}
+                                  >
+                                    {feed.category === "technology"
+                                      ? "Technology"
                                       : feed.category === "sports"
-                                      ? `${categoryColors.sports.chip.bg} ${categoryColors.sports.chip.text}`
+                                      ? "Sports"
                                       : feed.category === "business"
-                                      ? `${categoryColors.business.chip.bg} ${categoryColors.business.chip.text}`
+                                      ? "Business"
                                       : feed.category === "entertainment"
-                                      ? `${categoryColors.entertainment.chip.bg} ${categoryColors.entertainment.chip.text}`
+                                      ? "Entertainment"
                                       : feed.category === "politics"
-                                      ? `${categoryColors.politics.chip.bg} ${categoryColors.politics.chip.text}`
-                                      : `${categoryColors.all.chip.bg} ${categoryColors.all.chip.text}`
-                                  }`}
-                                >
-                                  {feed.category === "technology"
-                                    ? "Technology"
-                                    : feed.category === "sports"
-                                    ? "Sports"
-                                    : feed.category === "business"
-                                    ? "Business"
-                                    : feed.category === "entertainment"
-                                    ? "Entertainment"
-                                    : feed.category === "politics"
-                                    ? "Politics"
-                                    : "All News"}
-                                </span>
+                                      ? "Politics"
+                                      : "All News"}
+                                  </span>
+
+                                  {/* Source Chip - positioned to the right of category chip */}
+                                  <span
+                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                                    title={`Source: ${feed.name}`}
+                                  >
+                                    {feed.name}
+                                  </span>
+                                </div>
                               </div>
                             )}
                           </motion.div>
@@ -2416,11 +2371,21 @@ const NewsAggregator = () => {
 
                                 {/* Category Chip - Only show in grid view */}
                                 {viewMode === "grid" && (
-                                  <span
-                                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${categoryColors.custom.chip.bg} ${categoryColors.custom.chip.text}`}
-                                  >
-                                    Custom Feed
-                                  </span>
+                                  <div className="flex items-center gap-2">
+                                    <span
+                                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${categoryColors.custom.chip.bg} ${categoryColors.custom.chip.text}`}
+                                    >
+                                      Custom Feed
+                                    </span>
+
+                                    {/* Source Chip - positioned to the right of category chip */}
+                                    <span
+                                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                                      title={`Source: ${customFeed.name}`}
+                                    >
+                                      {customFeed.name}
+                                    </span>
+                                  </div>
                                 )}
                               </div>
 
