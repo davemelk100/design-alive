@@ -5,7 +5,7 @@ export const useSettingsSync = () => {
   const { user, settings, updateSettings, isAuthenticated } = useAuth();
 
   // Sync view mode changes
-  const syncViewMode = useCallback(async (viewMode: 'grid' | 'list') => {
+  const syncViewMode = useCallback(async (viewMode: 'grid' | 'list' | 'small') => {
     if (isAuthenticated && user) {
       try {
         await updateSettings({ viewMode });

@@ -745,7 +745,7 @@ function App() {
                                             href={article.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer"
+                                            className="text-[16px] font-medium mb-1 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer opacity-80"
                                             style={{
                                               letterSpacing: "-0.01em",
                                             }}
@@ -757,7 +757,7 @@ function App() {
                                             to={`/article/${slugify(
                                               article.title
                                             )}`}
-                                            className="text-[18px] font-semibold mb-1 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer"
+                                            className="text-[16px] font-medium mb-1 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer opacity-80"
                                             style={{
                                               letterSpacing: "-0.01em",
                                             }}
@@ -767,7 +767,7 @@ function App() {
                                         )}
                                         {articlesView === "grid" &&
                                           article.description && (
-                                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+                                            <p className="text-xs text-gray-600 dark:text-gray-300 mb-2 opacity-70">
                                               {article.description}
                                             </p>
                                           )}

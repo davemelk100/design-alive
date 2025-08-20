@@ -536,6 +536,99 @@ export const content = {
     title: "Articles",
     subtitle: "As an English major, I found it natural to start writing these.",
     items: [
+      {
+        id: "manifest-development",
+        title: "MANIFEST Development",
+        description:
+          "An artifact from a development approach I put together for building better software and, often more importantly, a better team.",
+        url: "https://davemelk.substack.com/p/manifest-development-yes-its-an-acronym",
+        content: `<h1>MANIFEST Development (Yes, it's an acronym)</h1>
+
+<h2>An artifact from a development approach I put together for building better software and, often more importantly, a better team.</h2>
+
+<p>As a younger developer, I went to quite a few tech conferences and traveled considerably. I noticed a common theme in many of these talks and conference events, and the theme is still relevant today. Boiled down to its essence - developers want to do a good job, but they also want to innovate. And the two are obviously not mutually exclusive.</p>
+
+<p>Anyway, here is the aforementioned 'manifesto':</p>
+
+<h2><strong>MANIFEST Development</strong></h2>
+
+<h3><strong>M</strong>ake<br>
+<strong>A</strong>ll<br>
+<strong>N</strong>ecessary<br>
+<strong>I</strong>nteractions<br>
+<strong>F</strong>easible,<br>
+<strong>E</strong>xtendable,<br>
+<strong>S</strong>ignificant,<br>
+<strong>T</strong>ruthful</h3>
+
+<p>This document is intended to make you a better developer, and also potentially a better human being altogether.</p>
+
+<p>If you work in the software development field, we'll just go ahead and assume you have the technical chops required to retain a job in this industry. But as we all know, not all developers are created equal. Technical prowess aside, some developers simply 'get it' more than others. These folks are usually courteous, attentive to details, cooperative, patient and great decision makers. We've seen people who fail miserably at this part of their job. Great coder, terrible teammate.</p>
+
+<p>They won't ever be the great developer that they see themselves as today. If they can't surpass their inability to cooperate effectively with others, they will remain stagnant within the self-imposed ceiling they'll continue to hit.</p>
+
+<p>This manifesto contains small chunks of advice we believe - if followed - will set you apart from the rest of the industry. It will endear you not only to your peers but also to your partners in the business, and the management at large. But ultimately it will fulfill YOU most. You can become a respected member of the community simply by your actions, decisions and ability to communicate effectively.</p>
+
+<h2><strong>Technology Agnosticism</strong></h2>
+
+<p>Balance open-mindedness with healthy skepticism. Trends in this field fade quickly.<br>
+There isn't always a clear way to select a technology. The newest, shiniest product/framework/design pattern/methodology, etc. is not necessarily the right tool for the job. Or for your team. Or for your project. Or based upon the constraints within your infrastructure. Try them all, evaluate without emotion or bias, then make a choice based on which approach satisfies each one of your requirements.</p>
+
+<h3><strong>Scalable Methods Of Practice</strong></h3>
+
+<p>Treat the way you learn like the way you code. Build your knowledge based on not only the hands-on necessities to get code up and running, but also using high-level conceptual learning techniques. Be able to analyze the tool you have chosen or not only syntax, but for the overall methodology it employs. Have you seen this pattern before? Does it use best practice for all involved parties? This not only helps you understand this specific technology, but makes you better at choosing technologies in the future.</p>
+
+<h3><strong>Patience In Decision</strong></h3>
+
+<p>Be patient. In doing so, you will absolutely make better decisions. Don't mistake hastiness for a sense of urgency.</p>
+
+<h2><strong>Quality-Focus</strong></h2>
+
+<p>Don't hurry up to satisfy unrealistic deadlines. Plead your case to the teams to insist on producing the right measure of quality for all code you commit and deploy.</p>
+
+<h3><strong>Testing and Diagnosis</strong></h3>
+
+<p>Before you code, nail down what you will use to test. This includes tools, test cases, etc. This isn't optional. Test everything, everywhere. This will make you a better developer, guaranteed.</p>
+
+<p>The most successful developers are often the ones who are able to diagnose code well. We aren't always able to start with a codebase we approve of and we almost always inherit code we would have done differently. Regardless, your ability to use skills and tools that aid you in diagnosing code will prove major dividends to you as not only a defect resolver, but as a reverse engineer when a situation calls for it.</p>
+
+<h3><strong>Commitment To Process</strong></h3>
+
+<p>Process does not exist to make your life more difficult. Process exists to ensure consistent, repeatable tasks get done as efficiently and effectively as necessary without having to improvise a new solution each time you conduct the same task. Process is the business equivalent to programming.</p>
+
+<p>At a conference, I learned that at Etsy, they make each new developer change code and then deploy it to production as an exercise in testing their process. If the new developer fails at this, then Etsy concludes that their process isn't robust enough.</p>
+
+<h2><strong>Perpetual Innovation</strong></h2>
+
+<h3><strong>Fearless Coding</strong></h3>
+
+<p>Do not be afraid. When you open your code editor, get ready to break rules and break functionality. The only way to get better is to break down, re-examine and re-build. Don't worry about status quo. Deadlines always need to be met, but don't sell yourself short on the amount of reckless productivity you can generate by being inquisitive, curious and intent on finding a better way.</p>
+
+<h3><strong>Focus On The Next</strong></h3>
+
+<p>Be the razor that cuts the bleeding edge. Define the bleeding edge. Don't sit around reading about people who theorize it. Do it. Make it. Stop sitting there and innovate.</p>
+
+<h3><strong>Create The Future</strong></h3>
+
+<p>The future has zero blueprints. Nobody can predict what is going to happen. It is incumbent upon you to thrust features and technology into people's lives that will inspire them about what is to come. We are today's manufacturing class. We create experiences and tools that help people live better lives.</p>
+
+<h2><strong>Cooperation-Centric</strong></h2>
+
+<p>I've seen many a developer meet failure because of a lack of ability to get along with partners on a project. There's no way you can bulldoze your ideas and opinions through a team of your peers and expect to succeed.</p>
+
+<h3><strong>Constraint Cognizance</strong></h3>
+
+<p>You will never have a job that doesn't have constraints. Resist every urge you have to complain about it. Read "The Obstacle Is The Way" by Ryan Holiday. He has great advice about re-envisioning your struggles and how to use them to your advantage.</p>
+
+<h3><strong>Comfort Zone Re-Zoning</strong></h3>
+
+<p>As uncomfortable as it is for many of us, you must speak to actual people, preferably in a conversational construct. We all probably enjoy this least, but this is what may ultimately serve you best.</p>
+
+<p>Take a fresh approach to interacting with your peers and business partners. Concede that you are going to be more successful by discussing and learning about this project by having a better relationship with these folks. This is exactly how you get better at your job. You can't live your whole life under the headphones and in a bubble.</p>`,
+        image: "/img/manifesto.png",
+        date: "August 19, 2025",
+        tags: ["Development", "Team Building", "Best Practices", "Leadership"],
+      },
       // {
       //   id: "mobile-web-seamless-experience",
       //   title: "Building for Mobile on Web: The Small Details That Matter",

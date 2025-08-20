@@ -49,6 +49,7 @@ const config: Config = {
           "Arial",
           "sans-serif",
         ],
+        serif: ["Roboto Serif", "Georgia", "Times", "Times New Roman", "serif"],
       },
       fontSize: {
         // Custom typography scale

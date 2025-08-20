@@ -3,9 +3,7 @@ import { Suspense, useState, useEffect } from "react";
 import { AuthHeader } from "../components/AuthHeader";
 import { useSettingsSync } from "../hooks/useSettingsSync";
 
-// Import Roboto Serif font
-import "@fontsource/roboto-serif/400.css";
-import "@fontsource/roboto-serif/700.css";
+// Font imports moved to globals.css
 
 interface NewsItem {
   id: number;
@@ -130,7 +128,7 @@ const rssFeeds: RSSFeed[] = [
     id: "breitbart",
     name: "Breitbart",
     url: "https://rss.app/feeds/Ez9O0bz1UTzcmRJu.xml",
-    category: "politics",
+    category: "business",
     enabled: true,
   },
 
@@ -268,7 +266,7 @@ const NewsAggregator = () => {
   const [techcrunchIndex, setTechcrunchIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState("all");
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list" | "small">("small");
   const [feedStatus, setFeedStatus] = useState<{
     [key: string]: { working: boolean; error?: string };
   }>({});
@@ -1442,8 +1440,8 @@ const NewsAggregator = () => {
             <section className="py-4 sm:py-6 lg:py-8">
               <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
                 {/* Dynamic Category Title and View Toggle */}
-                <div className="flex items-center justify-between mb-6">
-                  <div>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+                  <div className="w-full">
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
                       {activeCategory === "all"
                         ? "All News"
@@ -1469,57 +1467,51 @@ const NewsAggregator = () => {
                   </div>
 
                   {/* View Toggle */}
-                  <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-                    <button
-                      onClick={() => {
-                        setViewMode("grid");
-                        syncViewMode("grid");
-                      }}
-                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                        viewMode === "grid"
-                          ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
-                          : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                      }`}
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Columns
+                    </span>
+                    <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                      <button
+                        onClick={() => {
+                          setViewMode("list");
+                          syncViewMode("list");
+                        }}
+                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                          viewMode === "list"
+                            ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
+                            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                        />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => {
-                        setViewMode("list");
-                        syncViewMode("list");
-                      }}
-                      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                        viewMode === "list"
-                          ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
-                          : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                      }`}
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                        <span className="text-sm font-bold">1</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setViewMode("grid");
+                          syncViewMode("grid");
+                        }}
+                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                          viewMode === "grid"
+                            ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
+                            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4 6h16M4 10h16M4 14h16M4 18h16"
-                        />
-                      </svg>
-                    </button>
+                        <span className="text-sm font-bold">2</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          setViewMode("small");
+                          syncViewMode("small");
+                        }}
+                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                          viewMode === "small"
+                            ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
+                            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                        }`}
+                      >
+                        <span className="text-sm font-bold">4</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
                 {loading ? (
@@ -1552,6 +1544,8 @@ const NewsAggregator = () => {
                     className={`${
                       viewMode === "grid"
                         ? "grid grid-cols-1 md:grid-cols-2 gap-6 grid-cols-3-at-1400"
+                        : viewMode === "small"
+                        ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
                         : "space-y-2 sm:space-y-3 md:space-y-4"
                     }`}
                   >
@@ -1580,6 +1574,8 @@ const NewsAggregator = () => {
                             className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
                               viewMode === "grid"
                                 ? "h-[470px]"
+                                : viewMode === "small"
+                                ? "h-[320px]"
                                 : "w-full h-auto justify-center border-l-4 min-h-[95px] sm:min-h-[105px] md:min-h-[115px] relative"
                             }`}
                             style={
@@ -1606,294 +1602,382 @@ const NewsAggregator = () => {
                               className={`${
                                 viewMode === "list"
                                   ? "px-3 py-2 sm:px-4 sm:py-3 pr-16 sm:pr-20 md:pr-18"
+                                  : viewMode === "small"
+                                  ? "px-4 pt-4"
                                   : "px-6 pt-6"
                               } flex-shrink-0`}
                             >
-                              {/* Top Row - Source Title, Article Title, and Carousel Controls */}
+                              {/* Top Row - Logo, Title, and Carousel Controls */}
                               <div
-                                className={`flex items-center justify-between ${
-                                  viewMode === "list" ? "" : "mb-4"
+                                className={`${
+                                  viewMode === "list"
+                                    ? "flex items-center justify-between"
+                                    : viewMode === "small"
+                                    ? "flex items-center justify-between"
+                                    : "flex items-center justify-between mb-4"
                                 }`}
                               >
-                                {/* Left side: Source Title and Article Title */}
+                                {/* Left side: Logo and Content */}
                                 <div
                                   className={`flex-1 min-w-0 ${
                                     viewMode === "list"
                                       ? "flex items-center space-x-4"
-                                      : "flex items-center"
+                                      : viewMode === "small"
+                                      ? "flex items-center space-x-3"
+                                      : "flex flex-col"
                                   }`}
                                 >
                                   {/* WIRED Logo and Title - Stacked and aligned */}
                                   {feed.name === "WIRED" ? (
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="https://www.wired.com/verso/static/wired-us/assets/logo.svg"
-                                        alt="WIRED Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="wired"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        WIRED
-                                      </h4>
                                     </div>
                                   ) : feed.name === "Ars Technica" ? (
                                     /* Ars Technica Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/ars-technica-logo.svg"
-                                        alt="Ars Technica Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="ars technica"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        ARS TECHNICA
-                                      </h4>
                                     </div>
                                   ) : feed.name === "TechRadar" ? (
                                     /* TechRadar Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/techradar-logo.svg"
-                                        alt="TechRadar Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="techradar"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        TECHRADAR
-                                      </h4>
                                     </div>
                                   ) : feed.name === "Vice - Tech" ? (
                                     /* VICE Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/vice-logo.png"
-                                        alt="VICE Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="vice"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        VICE
-                                      </h4>
                                     </div>
                                   ) : feed.name === "The Onion" ? (
                                     /* The Onion Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/the-onion.png"
-                                        alt="The Onion Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="the onion"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        THE ONION
-                                      </h4>
                                     </div>
                                   ) : feed.name === "The Hard Times" ? (
                                     /* The Hard Times Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/hard-times.png"
-                                        alt="The Hard Times Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="the hard times"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        THE HARD TIMES
-                                      </h4>
                                     </div>
                                   ) : feed.name === "#Windows11" ? (
                                     /* Windows 11 Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/windows-11.svg"
-                                        alt="Windows 11 Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="windows 11"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        WINDOWS 11
-                                      </h4>
                                     </div>
                                   ) : feed.name === "Fox Sports" ? (
                                     /* Fox Sports Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/fox-sports.png"
-                                        alt="Fox Sports Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="fox sports"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        FOX SPORTS
-                                      </h4>
                                     </div>
                                   ) : feed.name === "Lambgoat" ? (
                                     /* Lambgoat Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/lambgoat.png"
-                                        alt="Lambgoat Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="lambgoat"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        LAMBBGOAT
-                                      </h4>
                                     </div>
                                   ) : feed.name === "No Echo" ? (
                                     /* No Echo Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/no-echo.png"
-                                        alt="No Echo Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="no echo"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        NO ECHO
-                                      </h4>
                                     </div>
                                   ) : feed.name === "Breitbart" ? (
                                     /* Breitbart Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/breitbart.png"
-                                        alt="Breitbart Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="breitbart"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        BREITBART
-                                      </h4>
                                     </div>
                                   ) : feed.name === "Newsweek" ? (
                                     /* Newsweek Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/newsweek.svg"
-                                        alt="Newsweek Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="newsweek"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        NEWSWEEK
-                                      </h4>
                                     </div>
                                   ) : feed.name === "New York Post" ? (
                                     /* NY Post Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/nypost.png"
-                                        alt="NY Post Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="ny post"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        NY POST
-                                      </h4>
                                     </div>
                                   ) : feed.name === "CBS SPORTS" ? (
                                     /* CBS Sports Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/cbs-sports.svg"
-                                        alt="CBS Sports Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="cbs sports"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        CBS SPORTS
-                                      </h4>
                                     </div>
                                   ) : feed.name === "CNN - SPORTS" ? (
                                     /* CNN Sports Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/cnnsi.png"
-                                        alt="CNN Sports Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="cnn sports"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        CNN SPORTS
-                                      </h4>
                                     </div>
                                   ) : feed.name === "Fox News" ? (
                                     /* Fox News Logo and Title - Stacked and aligned */
-                                    <div className="mb-2">
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
                                       <img
                                         src="/img/fox-news.png"
-                                        alt="Fox News Logo"
-                                        className="w-full max-w-[120px] h-auto opacity-80 mb-1"
+                                        alt="fox news"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
                                         onError={(e) => {
                                           // Hide broken logo
                                           const target = e.currentTarget;
                                           target.style.display = "none";
                                         }}
                                       />
-                                      <h4 className="font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide text-sm">
-                                        FOX NEWS
-                                      </h4>
                                     </div>
                                   ) : (
                                     /* Source Title for other feeds */
@@ -1907,47 +1991,71 @@ const NewsAggregator = () => {
                                       {feed.name}
                                     </h4>
                                   )}
-
-                                  {/* Article Title - Only show in list view */}
-                                  {viewMode === "list" &&
-                                    feedItems.length > 0 && (
-                                      <h3 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white leading-tight flex-1 min-w-0">
-                                        <a
-                                          href={feedItems[currentIndex]?.url}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer break-words block"
-                                        >
-                                          {feedItems[currentIndex]?.title || ""}
-                                        </a>
-                                      </h3>
-                                    )}
                                 </div>
 
-                                {/* Right side: Carousel Controls - Only show in grid view */}
-                                {viewMode === "grid" &&
+                                {/* Right side: Carousel Controls - Show in grid and small views */}
+                                {(viewMode === "grid" ||
+                                  viewMode === "small") &&
                                   feedItems.length > 1 && (
                                     <div className="flex items-center gap-2">
                                       <button
                                         onClick={() => goToPrevious(feed.name)}
                                         disabled={feedItems.length <= 1}
-                                        className="carousel-button w-12 h-8 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
+                                        className={`carousel-button text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors ${
+                                          viewMode === "small"
+                                            ? "w-8 h-6 text-xs"
+                                            : "w-12 h-8"
+                                        }`}
                                       >
                                         ←
                                       </button>
-                                      <span className="text-base text-gray-500 dark:text-gray-400 w-8 h-8 flex items-center justify-center mx-1">
+                                      <span
+                                        className={`text-gray-500 dark:text-gray-400 flex items-center justify-center mx-1 ${
+                                          viewMode === "small"
+                                            ? "text-xs w-6 h-6"
+                                            : "text-base w-8 h-8"
+                                        }`}
+                                      >
                                         {currentIndex + 1}/{feedItems.length}
                                       </span>
                                       <button
                                         onClick={() => goToNext(feed.name)}
                                         disabled={feedItems.length <= 1}
-                                        className="carousel-button w-12 h-8 text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
+                                        className={`carousel-button text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors ${
+                                          viewMode === "small"
+                                            ? "w-8 h-6 text-xs"
+                                            : "w-12 h-8"
+                                        }`}
                                       >
                                         →
                                       </button>
                                     </div>
                                   )}
                               </div>
+
+                              {/* Article Title Row - Show in all view modes */}
+                              {feedItems.length > 0 && (
+                                <div className="mt-3">
+                                  <h3
+                                    className={`font-semibold text-gray-900 dark:text-white leading-tight ${
+                                      viewMode === "small"
+                                        ? "text-xs"
+                                        : viewMode === "list"
+                                        ? "text-sm sm:text-base"
+                                        : "text-base"
+                                    }`}
+                                  >
+                                    <a
+                                      href={feedItems[currentIndex]?.url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer break-words block"
+                                    >
+                                      {feedItems[currentIndex]?.title || ""}
+                                    </a>
+                                  </h3>
+                                </div>
+                              )}
 
                               {/* Thumbnail Image - Only show in list view */}
                               {viewMode === "list" &&
@@ -2031,34 +2139,25 @@ const NewsAggregator = () => {
                                 </div>
                               )}
 
-                              {/* Article Title or Status Message - Hidden in list view */}
+                              {/* Article Excerpts - Show in grid and small views */}
                               {feedItems.length > 0 ? (
                                 <>
-                                  {viewMode === "grid" && (
-                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
-                                      <a
-                                        href={feedItems[currentIndex]?.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                                      >
-                                        {truncateText(
-                                          feedItems[currentIndex]?.title || "",
-                                          90
-                                        )}
-                                      </a>
-                                    </h3>
-                                  )}
-
-                                  {/* Subtitle below headline - Hidden in list view */}
-                                  {viewMode === "grid" &&
+                                  {/* Subtitle below headline - Show in grid and small views */}
+                                  {(viewMode === "grid" ||
+                                    viewMode === "small") &&
                                     feedItems[currentIndex]?.excerpt && (
                                       <div className="mt-2 flex items-center">
-                                        <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                                        <p
+                                          className={`leading-relaxed text-gray-600 dark:text-gray-400 ${
+                                            viewMode === "small"
+                                              ? "text-[10px]"
+                                              : "text-sm"
+                                          }`}
+                                        >
                                           {truncateText(
                                             feedItems[currentIndex]?.excerpt ||
                                               "",
-                                            400
+                                            viewMode === "small" ? 150 : 400
                                           )}
                                         </p>
                                       </div>
@@ -2107,20 +2206,30 @@ const NewsAggregator = () => {
                                 "placeholder:"
                               ) ? (
                                 <div
-                                  className="relative z-0 mt-auto"
+                                  className="relative z-0 mt-auto mb-0"
                                   style={{
-                                    height: "150px",
-                                    marginBottom: "10px",
+                                    height:
+                                      viewMode === "small" ? "100px" : "150px",
+                                    marginBottom: "0px",
                                   }}
                                 >
                                   <img
                                     src={feedItems[currentIndex]?.image}
                                     alt={feedItems[currentIndex]?.title}
-                                    className="w-full h-48 object-cover rounded-lg"
+                                    className="w-full object-cover rounded-lg"
                                     style={{
-                                      height: "192px",
-                                      minHeight: "192px",
-                                      maxHeight: "192px",
+                                      height:
+                                        viewMode === "small"
+                                          ? "100px"
+                                          : "192px",
+                                      minHeight:
+                                        viewMode === "small"
+                                          ? "100px"
+                                          : "192px",
+                                      maxHeight:
+                                        viewMode === "small"
+                                          ? "100px"
+                                          : "192px",
                                     }}
                                     onError={(e) => {
                                       // Replace broken image with placeholder
@@ -2140,15 +2249,32 @@ const NewsAggregator = () => {
 
                                   {/* Placeholder for when image fails to load */}
                                   <div
-                                    className="image-placeholder hidden w-full h-36 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
+                                    className="image-placeholder hidden w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
                                     style={{
-                                      height: "150px",
-                                      minHeight: "150px",
-                                      maxHeight: "150px",
+                                      height:
+                                        viewMode === "small"
+                                          ? "100px"
+                                          : "150px",
+                                      minHeight:
+                                        viewMode === "small"
+                                          ? "100px"
+                                          : "150px",
+                                      maxHeight:
+                                        viewMode === "small"
+                                          ? "100px"
+                                          : "150px",
                                     }}
                                   >
                                     <div className="text-center text-gray-500 dark:text-gray-400">
-                                      <div className="text-4xl">📰</div>
+                                      <div
+                                        className={
+                                          viewMode === "small"
+                                            ? "text-2xl"
+                                            : "text-4xl"
+                                        }
+                                      >
+                                        📰
+                                      </div>
                                     </div>
                                   </div>
 
@@ -2186,7 +2312,7 @@ const NewsAggregator = () => {
                                     height: "150px",
                                     minHeight: "150px",
                                     maxHeight: "150px",
-                                    marginBottom: "10px",
+                                    marginBottom: "0px",
                                   }}
                                 >
                                   {feedItems.length > 0 &&
@@ -2495,7 +2621,7 @@ const NewsAggregator = () => {
 
                                   {/* Placeholder for when image fails to load */}
                                   <div
-                                    className="image-placeholder hidden w-full h-36 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
+                                    className="image-placeholder hidden w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
                                     style={{
                                       height: "150px",
                                       minHeight: "150px",
@@ -2515,7 +2641,7 @@ const NewsAggregator = () => {
                                     height: "150px",
                                     minHeight: "150px",
                                     maxHeight: "150px",
-                                    marginBottom: "10px",
+                                    marginBottom: "0px",
                                   }}
                                 >
                                   {customFeedItems[0]?.image &&

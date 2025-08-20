@@ -4,8 +4,7 @@ import { Play, Pause, Volume2, Video, Headphones } from "lucide-react";
 import { useState, useRef } from "react";
 
 // Import Roboto Serif font
-import "@fontsource/roboto-serif/400.css";
-import "@fontsource/roboto-serif/700.css";
+// Font imports moved to main.tsx
 
 interface AudioTrack {
   id: number;

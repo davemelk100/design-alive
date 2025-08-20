@@ -8,7 +8,7 @@ interface User {
 
 interface UserSettings {
   theme: "light" | "dark";
-  viewMode: "grid" | "list";
+  viewMode: "grid" | "list" | "small";
   activeCategory: string;
   customFeeds: any[];
   preferences: Record<string, any>;
