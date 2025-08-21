@@ -16,7 +16,7 @@ import Preloader from "./components/Preloader";
 import { BrowserRouter as Router } from "react-router-dom";
 import ArticleModal from "./components/ArticleModal";
 import { ThemeProvider } from "./context/ThemeContext";
-import { AuthProvider } from "./context/AuthContext";
+
 import ThemeToggle from "./components/ThemeToggle";
 import MobileTrayMenu from "./components/MobileTrayMenu";
 
@@ -27,15 +27,12 @@ import { lazy, Suspense } from "react";
 const Article = lazy(() => import("./pages/Article"));
 const Archive = lazy(() => import("./pages/Archive"));
 
-const Admin = lazy(() => import("./pages/Admin"));
 const MusicPlayer = lazy(() => import("./pages/MusicPlayer"));
 
 const JsonAiPrompts = lazy(() => import("./pages/JsonAiPrompts"));
 const AudioTranscript = lazy(() => import("./pages/AudioTranscript"));
 const NewsAggregator = lazy(() => import("./pages/NewsAggregator"));
-const MagicLinkVerification = lazy(
-  () => import("./pages/MagicLinkVerification")
-);
+
 import { slugify } from "./utils/slugify";
 import LazyVideo from "./components/LazyVideo";
 
@@ -1847,13 +1844,11 @@ function App() {
           <Route path="/article/:slug" element={<Article />} />
           <Route path="/archive" element={<Archive />} />
 
-          <Route path="/admin" element={<Admin />} />
           <Route path="/music" element={<MusicPlayer />} />
 
           <Route path="/json-ai-prompts" element={<JsonAiPrompts />} />
           <Route path="/audio-transcript" element={<AudioTranscript />} />
           <Route path="/news" element={<NewsAggregator />} />
-          <Route path="/auth/verify" element={<MagicLinkVerification />} />
         </Routes>
       </Suspense>
 
@@ -1921,9 +1916,7 @@ export default function AppWithRouter() {
   return (
     <Router>
       <ThemeProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
+        <App />
       </ThemeProvider>
     </Router>
   );

@@ -1,5 +1,5 @@
 import { Suspense, useState, useEffect } from "react";
-import { AuthHeader } from "../components/AuthHeader";
+
 import { useSettingsSync } from "../hooks/useSettingsSync";
 
 // Font imports moved to globals.css
@@ -69,6 +69,13 @@ const rssFeeds: RSSFeed[] = [
     id: "fox-sports",
     name: "Fox Sports",
     url: "https://api.foxsports.com/v2/content/optimized-rss?partnerKey=MB0Wehpmuj2lUhuRhQaafhBjAJqaPU244mlTDK1i&size=30",
+    category: "sports",
+    enabled: true,
+  },
+  {
+    id: "espn",
+    name: "ESPN",
+    url: "https://www.espn.com/espn/rss/news",
     category: "sports",
     enabled: true,
   },
@@ -255,6 +262,7 @@ const NewsAggregator = () => {
 
   const [viceTechIndex, setViceTechIndex] = useState(0);
   const [foxSportsIndex, setFoxSportsIndex] = useState(0);
+  const [espnIndex, setEspnIndex] = useState(0);
   const [theOnionIndex, setTheOnionIndex] = useState(0);
   const [theHardTimesIndex, setTheHardTimesIndex] = useState(0);
   const [cnnSportsIndex, setCnnSportsIndex] = useState(0);
@@ -277,25 +285,19 @@ const NewsAggregator = () => {
     [key: string]: { working: boolean; error?: string };
   }>({});
 
-  // Settings sync hook for authentication
-  const {
-    syncViewMode,
-    syncActiveCategory,
-    getCurrentSettings,
-    isAuthenticated,
-  } = useSettingsSync();
+  // Settings sync hook
+  const { syncViewMode, syncActiveCategory, getCurrentSettings } =
+    useSettingsSync();
 
-  // Load user settings on mount and when authentication changes
+  // Load user settings on mount
   useEffect(() => {
-    if (isAuthenticated) {
-      const savedSettings = getCurrentSettings();
-      if (savedSettings) {
-        if (savedSettings.viewMode) setViewMode(savedSettings.viewMode);
-        if (savedSettings.activeCategory)
-          setActiveCategory(savedSettings.activeCategory);
-      }
+    const savedSettings = getCurrentSettings();
+    if (savedSettings) {
+      if (savedSettings.viewMode) setViewMode(savedSettings.viewMode);
+      if (savedSettings.activeCategory)
+        setActiveCategory(savedSettings.activeCategory);
     }
-  }, [isAuthenticated, getCurrentSettings]);
+  }, [getCurrentSettings]);
 
   // Helper functions for dynamic cards
   const getCurrentIndex = (sourceName: string) => {
@@ -313,6 +315,8 @@ const NewsAggregator = () => {
 
       case "Fox Sports":
         return foxSportsIndex;
+      case "ESPN":
+        return espnIndex;
       case "The Onion":
         return theOnionIndex;
       case "The Hard Times":
@@ -369,6 +373,9 @@ const NewsAggregator = () => {
 
       case "Fox Sports":
         goToPreviousFoxSports();
+        break;
+      case "ESPN":
+        goToPreviousEspn();
         break;
       case "The Onion":
         goToPreviousTheOnion();
@@ -437,6 +444,9 @@ const NewsAggregator = () => {
 
       case "Fox Sports":
         goToNextFoxSports();
+        break;
+      case "ESPN":
+        goToNextEspn();
         break;
       case "The Onion":
         goToNextTheOnion();
@@ -1055,6 +1065,21 @@ const NewsAggregator = () => {
     }
   };
 
+  // ESPN carousel navigation
+  const goToNextEspn = () => {
+    const espnItems = newsItems.filter((item) => item.source === "ESPN");
+    if (espnItems.length > 0) {
+      setEspnIndex((prev) => (prev + 1) % espnItems.length);
+    }
+  };
+
+  const goToPreviousEspn = () => {
+    const espnItems = newsItems.filter((item) => item.source === "ESPN");
+    if (espnItems.length > 0) {
+      setEspnIndex((prev) => (prev - 1 + espnItems.length) % espnItems.length);
+    }
+  };
+
   // The Onion carousel navigation
   const goToNextTheOnion = () => {
     const theOnionItems = newsItems.filter(
@@ -1404,10 +1429,10 @@ const NewsAggregator = () => {
                   setActiveCategory("all");
                   syncActiveCategory("all");
                 }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors border-l-4 ${
                   activeCategory === "all"
-                    ? `${categoryColors.all.bg} ${categoryColors.all.text} border-l-4 ${categoryColors.all.border}`
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    ? `${categoryColors.all.bg} ${categoryColors.all.text} ${categoryColors.all.border}`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 ${categoryColors.all.border}`
                 }`}
               >
                 <span className="font-medium">All News</span>
@@ -1418,10 +1443,10 @@ const NewsAggregator = () => {
                   setActiveCategory("technology");
                   syncActiveCategory("technology");
                 }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors border-l-4 ${
                   activeCategory === "technology"
-                    ? `${categoryColors.technology.bg} ${categoryColors.technology.text} border-l-4 ${categoryColors.technology.border}`
-                    : `text-gray-700 dark:text-gray-300 ${categoryColors.technology.hover}`
+                    ? `${categoryColors.technology.bg} ${categoryColors.technology.text} ${categoryColors.technology.border}`
+                    : `text-gray-700 dark:text-gray-300 ${categoryColors.technology.hover} ${categoryColors.technology.border}`
                 }`}
               >
                 <span className="font-medium">Technology</span>
@@ -1432,10 +1457,10 @@ const NewsAggregator = () => {
                   setActiveCategory("sports");
                   syncActiveCategory("sports");
                 }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors border-l-4 ${
                   activeCategory === "sports"
-                    ? `${categoryColors.sports.bg} ${categoryColors.sports.text} border-l-4 ${categoryColors.sports.border}`
-                    : `text-gray-700 dark:text-gray-300 ${categoryColors.sports.hover}`
+                    ? `${categoryColors.sports.bg} ${categoryColors.sports.text} ${categoryColors.sports.border}`
+                    : `text-gray-700 dark:text-gray-300 ${categoryColors.sports.hover} ${categoryColors.sports.border}`
                 }`}
               >
                 <span className="font-medium">Sports</span>
@@ -1446,10 +1471,10 @@ const NewsAggregator = () => {
                   setActiveCategory("business");
                   syncActiveCategory("business");
                 }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors border-l-4 ${
                   activeCategory === "business"
-                    ? `${categoryColors.business.bg} ${categoryColors.business.text} border-l-4 ${categoryColors.business.border}`
-                    : `text-gray-700 dark:text-gray-300 ${categoryColors.business.hover}`
+                    ? `${categoryColors.business.bg} ${categoryColors.business.text} ${categoryColors.business.border}`
+                    : `text-gray-700 dark:text-gray-300 ${categoryColors.business.hover} ${categoryColors.business.border}`
                 }`}
               >
                 <span className="font-medium">Business</span>
@@ -1460,19 +1485,14 @@ const NewsAggregator = () => {
                   setActiveCategory("entertainment");
                   syncActiveCategory("entertainment");
                 }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
+                className={`w-full text-left px-4 py-3 rounded-lg transition-colors border-l-4 ${
                   activeCategory === "entertainment"
-                    ? `${categoryColors.entertainment.bg} ${categoryColors.entertainment.text} border-l-4 ${categoryColors.entertainment.border}`
-                    : `text-gray-700 dark:text-gray-300 ${categoryColors.entertainment.hover}`
+                    ? `${categoryColors.entertainment.bg} ${categoryColors.entertainment.text} ${categoryColors.entertainment.border}`
+                    : `text-gray-700 dark:text-gray-300 ${categoryColors.entertainment.hover} ${categoryColors.entertainment.border}`
                 }`}
               >
                 <span className="font-medium">Entertainment</span>
               </button>
-            </div>
-
-            {/* Authentication Section - Bottom of Navigation */}
-            <div className="mt-auto pt-6 border-t border-gray-200 dark:border-gray-700">
-              <AuthHeader />
             </div>
           </nav>
 
@@ -1621,7 +1641,7 @@ const NewsAggregator = () => {
                               viewMode === "grid"
                                 ? "h-[500px] sm:h-[600px]"
                                 : viewMode === "small"
-                                ? "h-[380px]"
+                                ? "h-[320px]"
                                 : "w-full h-auto justify-center min-h-[95px] sm:min-h-[105px] md:min-h-[115px] relative"
                             }`}
                             style={{
@@ -1833,6 +1853,28 @@ const NewsAggregator = () => {
                                       <img
                                         src="/img/fox-sports.png"
                                         alt="fox sports"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                    </div>
+                                  ) : feed.name === "ESPN" ? (
+                                    /* ESPN Logo and Title - Stacked and aligned */
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
+                                      <img
+                                        src="https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg"
+                                        alt="espn"
                                         className={`w-full h-auto opacity-80 ${
                                           viewMode === "small"
                                             ? "max-w-[80px]"
@@ -2201,44 +2243,6 @@ const NewsAggregator = () => {
                                     >
                                       →
                                     </button>
-
-                                    {/* Category Chip - positioned to the right of carousel */}
-                                    <span
-                                      className={`ml-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium shadow-sm border ${
-                                        feed.category === "technology"
-                                          ? `${categoryColors.technology.chip.bg} ${categoryColors.technology.chip.text} ${categoryColors.technology.chip.border}`
-                                          : feed.category === "sports"
-                                          ? `${categoryColors.sports.chip.bg} ${categoryColors.sports.chip.text} ${categoryColors.sports.chip.border}`
-                                          : feed.category === "business"
-                                          ? `${categoryColors.business.chip.bg} ${categoryColors.business.chip.text} ${categoryColors.business.chip.border}`
-                                          : feed.category === "entertainment"
-                                          ? `${categoryColors.entertainment.chip.bg} ${categoryColors.entertainment.chip.text} ${categoryColors.entertainment.chip.border}`
-                                          : feed.category === "politics"
-                                          ? `${categoryColors.politics.chip.bg} ${categoryColors.politics.chip.text} ${categoryColors.politics.chip.border}`
-                                          : `${categoryColors.all.chip.bg} ${categoryColors.all.chip.text} ${categoryColors.all.chip.border}`
-                                      }`}
-                                      title={`Category: ${feed.category}`}
-                                    >
-                                      {feed.category === "technology"
-                                        ? "Technology"
-                                        : feed.category === "sports"
-                                        ? "Sports"
-                                        : feed.category === "business"
-                                        ? "Business"
-                                        : feed.category === "entertainment"
-                                        ? "Entertainment"
-                                        : feed.category === "politics"
-                                        ? "Politics"
-                                        : "All News"}
-                                    </span>
-
-                                    {/* Source Chip - positioned to the right of category chip */}
-                                    <span
-                                      className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium shadow-sm border bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600"
-                                      title={`Source: ${feed.name}`}
-                                    >
-                                      {feed.name}
-                                    </span>
                                   </div>
                                 </div>
                               )}
@@ -2246,24 +2250,19 @@ const NewsAggregator = () => {
                               {/* Article Excerpts - Show in grid and small views */}
                               {feedItems.length > 0 ? (
                                 <>
-                                  {/* Subtitle below headline - Show in grid and small views */}
-                                  {(viewMode === "grid" ||
-                                    viewMode === "small") &&
+                                  {/* Subtitle below headline - Show in grid view only */}
+                                  {viewMode === "grid" &&
                                     feedItems[currentIndex]?.excerpt &&
                                     feed.name !== "The Hard Times" && (
                                       <div className="mt-2 flex items-center">
                                         <p
-                                          className={`text-gray-600 dark:text-gray-400 ${
-                                            viewMode === "small"
-                                              ? "text-sm"
-                                              : "text-base"
-                                          }`}
+                                          className="text-gray-600 dark:text-gray-400 text-base"
                                           style={{ lineHeight: "1.5" }}
                                         >
                                           {truncateText(
                                             feedItems[currentIndex]?.excerpt ||
                                               "",
-                                            viewMode === "small" ? 150 : 400
+                                            400
                                           )}
                                         </p>
                                       </div>
@@ -2308,7 +2307,7 @@ const NewsAggregator = () => {
                                   ? {}
                                   : {
                                       height:
-                                        viewMode === "small" ? "180px" : "auto",
+                                        viewMode === "small" ? "70px" : "auto",
                                     }
                               }
                             >
@@ -2319,10 +2318,12 @@ const NewsAggregator = () => {
                                 "placeholder:"
                               ) ? (
                                 <div
-                                  className="relative z-0 mt-auto mb-0"
+                                  className={`relative z-0 ${
+                                    viewMode === "small" ? "mt-2" : "mt-auto"
+                                  }`}
                                   style={{
                                     height:
-                                      viewMode === "small" ? "100px" : "auto",
+                                      viewMode === "small" ? "140px" : "auto",
                                     marginBottom: "0px",
                                   }}
                                 >
@@ -2336,11 +2337,11 @@ const NewsAggregator = () => {
                                     }`}
                                     style={{
                                       height:
-                                        viewMode === "small" ? "100px" : "auto",
+                                        viewMode === "small" ? "140px" : "auto",
                                       minHeight:
-                                        viewMode === "small" ? "100px" : "auto",
+                                        viewMode === "small" ? "140px" : "auto",
                                       maxHeight:
-                                        viewMode === "small" ? "100px" : "auto",
+                                        viewMode === "small" ? "140px" : "auto",
                                     }}
                                     onError={(e) => {
                                       // Replace broken image with placeholder
@@ -2418,7 +2419,9 @@ const NewsAggregator = () => {
                               ) : (
                                 // No image available or placeholder - show styled placeholder
                                 <div
-                                  className="mt-auto w-full rounded-lg flex items-center justify-center"
+                                  className={`w-full rounded-lg flex items-center justify-center ${
+                                    viewMode === "small" ? "mt-2" : "mt-auto"
+                                  }`}
                                   style={{
                                     height: "150px",
                                     minHeight: "150px",
@@ -2509,49 +2512,6 @@ const NewsAggregator = () => {
                                 </div>
                               )}
                             </div>
-
-                            {/* Category Chip below image - Show in grid and small views */}
-                            {(viewMode === "grid" || viewMode === "small") && (
-                              <div className="px-6 pb-3 relative z-10">
-                                <div className="flex items-center gap-2">
-                                  <span
-                                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                                      feed.category === "technology"
-                                        ? `${categoryColors.technology.chip.bg} ${categoryColors.technology.chip.text}`
-                                        : feed.category === "sports"
-                                        ? `${categoryColors.sports.chip.bg} ${categoryColors.sports.chip.text}`
-                                        : feed.category === "business"
-                                        ? `${categoryColors.business.chip.bg} ${categoryColors.business.chip.text}`
-                                        : feed.category === "entertainment"
-                                        ? `${categoryColors.entertainment.chip.bg} ${categoryColors.entertainment.chip.text}`
-                                        : feed.category === "politics"
-                                        ? `${categoryColors.politics.chip.bg} ${categoryColors.politics.chip.text}`
-                                        : `${categoryColors.all.chip.bg} ${categoryColors.all.chip.text}`
-                                    }`}
-                                  >
-                                    {feed.category === "technology"
-                                      ? "Technology"
-                                      : feed.category === "sports"
-                                      ? "Sports"
-                                      : feed.category === "business"
-                                      ? "Business"
-                                      : feed.category === "entertainment"
-                                      ? "Entertainment"
-                                      : feed.category === "politics"
-                                      ? "Politics"
-                                      : "All News"}
-                                  </span>
-
-                                  {/* Source Chip - positioned to the right of category chip */}
-                                  <span
-                                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                                    title={`Source: ${feed.name}`}
-                                  >
-                                    {feed.name}
-                                  </span>
-                                </div>
-                              </div>
-                            )}
                           </div>
                         );
                       });
@@ -2604,36 +2564,11 @@ const NewsAggregator = () => {
                                 </h4>
 
                                 {/* Category Chip - Show in grid and small views */}
-                                {(viewMode === "grid" ||
-                                  viewMode === "small") && (
-                                  <div className="flex items-center gap-2">
-                                    <span
-                                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${categoryColors.custom.chip.bg} ${categoryColors.custom.chip.text}`}
-                                    >
-                                      Custom Feed
-                                    </span>
-
-                                    {/* Source Chip - positioned to the right of category chip */}
-                                    <span
-                                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
-                                      title={`Source: ${customFeed.name}`}
-                                    >
-                                      {customFeed.name}
-                                    </span>
-                                  </div>
-                                )}
                               </div>
 
-                              {/* Second Row - Chip and Remove Button (list view only) */}
+                              {/* Second Row - Remove Button (list view only) */}
                               {viewMode === "list" && (
-                                <div className="flex items-center justify-between mt-2">
-                                  {/* Category Chip - Left side */}
-                                  <span
-                                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${categoryColors.custom.chip.bg} ${categoryColors.custom.chip.text} ${categoryColors.custom.chip.border} shadow-sm`}
-                                  >
-                                    Custom Feed
-                                  </span>
-
+                                <div className="flex items-center justify-end mt-2">
                                   {/* Remove Button - Right side */}
                                   <button
                                     onClick={() => {
@@ -2671,8 +2606,8 @@ const NewsAggregator = () => {
                                 </h3>
                               )}
 
-                              {/* Subtitle below headline - Show in grid and small views */}
-                              {(viewMode === "grid" || viewMode === "small") &&
+                              {/* Subtitle below headline - Show in grid view only */}
+                              {viewMode === "grid" &&
                                 customFeedItems[0]?.excerpt && (
                                   <div className="mt-3 flex items-center">
                                     <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
@@ -2687,11 +2622,18 @@ const NewsAggregator = () => {
 
                             {/* Custom Feed Content */}
                             <div
-                              className={`px-6 pb-6 flex-1 flex flex-col ${
+                              className={`px-6 ${
+                                viewMode === "small" ? "pb-0" : "pb-6"
+                              } flex-1 flex flex-col ${
                                 viewMode === "list" ? "hidden" : ""
                               }`}
                               style={
-                                viewMode === "list" ? {} : { height: "180px" }
+                                viewMode === "list"
+                                  ? {}
+                                  : {
+                                      height:
+                                        viewMode === "small" ? "70px" : "180px",
+                                    }
                               }
                             >
                               {/* Image - Show in grid and small views */}
@@ -2702,7 +2644,12 @@ const NewsAggregator = () => {
                               ) ? (
                                 <div
                                   className="relative z-0"
-                                  style={{ height: "150px", marginTop: "20px" }}
+                                  style={{
+                                    height: "150px",
+                                    marginTop:
+                                      viewMode === "small" ? "8px" : "20px",
+                                    marginBottom: "0px",
+                                  }}
                                 >
                                   <img
                                     src={customFeedItems[0]?.image}
@@ -2746,7 +2693,9 @@ const NewsAggregator = () => {
                               ) : (
                                 // No image available or placeholder - show styled placeholder
                                 <div
-                                  className="mt-auto w-full rounded-lg flex items-center justify-center"
+                                  className={`w-full rounded-lg flex items-center justify-center ${
+                                    viewMode === "small" ? "mt-2" : "mt-auto"
+                                  }`}
                                   style={{
                                     height: "150px",
                                     minHeight: "150px",

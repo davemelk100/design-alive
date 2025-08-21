@@ -242,21 +242,10 @@ export const storage = {
 
 // Storage keys for consistent usage across the app
 export const STORAGE_KEYS = {
-
-  ADMIN_SESSION: "adminSession",
   MUSIC_PLAYER_SETTINGS: "musicPlayerSettings",
   THEME_PREFERENCES: "themePreferences",
   USER_PREFERENCES: "userPreferences",
 } as const;
-
-
-
-export const adminSessionStorage = {
-  getSession: () => storage.get(STORAGE_KEYS.ADMIN_SESSION, null),
-  setSession: (session: any) =>
-    storage.set(STORAGE_KEYS.ADMIN_SESSION, session),
-  clearSession: () => storage.remove(STORAGE_KEYS.ADMIN_SESSION),
-};
 
 export const musicPlayerStorage = {
   getSettings: () => storage.get(STORAGE_KEYS.MUSIC_PLAYER_SETTINGS, {}),
