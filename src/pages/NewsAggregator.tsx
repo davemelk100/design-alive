@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Suspense, useState, useEffect } from "react";
 import { AuthHeader } from "../components/AuthHeader";
 import { useSettingsSync } from "../hooks/useSettingsSync";
@@ -221,17 +220,7 @@ const NewsAggregator = () => {
         border: "border-[#a855f7] dark:border-[#a855f7]",
       },
     },
-    video: {
-      bg: "bg-[#e0f2fe] dark:bg-[#0ea5e9]/30",
-      text: "text-gray-800 dark:text-gray-200",
-      border: "border-[#0ea5e9]",
-      hover: "hover:bg-[#e0f2fe] dark:hover:bg-[#0ea5e9]/20",
-      chip: {
-        bg: "bg-[#e0f2fe] dark:bg-[#0ea5e9]/30",
-        text: "text-gray-800 dark:text-gray-200",
-        border: "border-[#0ea5e9] dark:border-[#0ea5e9]",
-      },
-    },
+
     politics: {
       bg: "bg-[#fdebe6] dark:bg-[#f97316]/30",
       text: "text-gray-800 dark:text-gray-200",
@@ -283,7 +272,7 @@ const NewsAggregator = () => {
   const [techcrunchIndex, setTechcrunchIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState("all");
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<"grid" | "list" | "small">("small");
+  const [viewMode, setViewMode] = useState<"grid" | "list" | "small">("grid");
   const [feedStatus, setFeedStatus] = useState<{
     [key: string]: { working: boolean; error?: string };
   }>({});
@@ -1479,20 +1468,6 @@ const NewsAggregator = () => {
               >
                 <span className="font-medium">Entertainment</span>
               </button>
-
-              <button
-                onClick={() => {
-                  setActiveCategory("video");
-                  syncActiveCategory("video");
-                }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
-                  activeCategory === "video"
-                    ? `${categoryColors.video.bg} ${categoryColors.video.text} border-l-4 ${categoryColors.video.border}`
-                    : `text-gray-700 dark:text-gray-300 ${categoryColors.video.hover}`
-                }`}
-              >
-                <span className="font-medium">Video</span>
-              </button>
             </div>
 
             {/* Authentication Section - Bottom of Navigation */}
@@ -1507,13 +1482,9 @@ const NewsAggregator = () => {
             {error && (
               <section className="py-4 sm:py-6 lg:py-8">
                 <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4"
-                  >
+                  <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
                     <p className="text-red-700 dark:text-red-300">{error}</p>
-                  </motion.div>
+                  </div>
                 </div>
               </section>
             )}
@@ -1535,8 +1506,6 @@ const NewsAggregator = () => {
                         ? "Business News"
                         : activeCategory === "entertainment"
                         ? "Entertainment News"
-                        : activeCategory === "video"
-                        ? "Video News"
                         : activeCategory === "politics"
                         ? "Politics News"
                         : "News"}
@@ -1548,18 +1517,18 @@ const NewsAggregator = () => {
                     </p>
                   </div>
 
-                  {/* View Toggle */}
-                  <div className="flex items-center gap-3">
+                  {/* View Toggle - Hidden on mobile, visible on tablet and desktop */}
+                  <div className="hidden sm:flex items-center gap-3">
                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       Columns
                     </span>
-                    <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                    <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-0.5">
                       <button
                         onClick={() => {
                           setViewMode("list");
                           syncViewMode("list");
                         }}
-                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                        className={`px-4 py-1 rounded-md text-sm font-medium transition-colors ${
                           viewMode === "list"
                             ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
                             : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
@@ -1572,7 +1541,7 @@ const NewsAggregator = () => {
                           setViewMode("grid");
                           syncViewMode("grid");
                         }}
-                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                        className={`px-4 py-1 rounded-md text-sm font-medium transition-colors ${
                           viewMode === "grid"
                             ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
                             : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
@@ -1585,7 +1554,7 @@ const NewsAggregator = () => {
                           setViewMode("small");
                           syncViewMode("small");
                         }}
-                        className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                        className={`px-4 py-1 rounded-md text-sm font-medium transition-colors ${
                           viewMode === "small"
                             ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
                             : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
@@ -1596,6 +1565,7 @@ const NewsAggregator = () => {
                     </div>
                   </div>
                 </div>
+
                 {loading ? (
                   <div className="flex justify-center items-center py-12">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -1619,13 +1589,10 @@ const NewsAggregator = () => {
                     </p>
                   </div>
                 ) : (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1.8, delay: 0.8 }}
+                  <div
                     className={`${
                       viewMode === "grid"
-                        ? "grid grid-cols-1 md:grid-cols-2 gap-6 grid-cols-3-at-1400"
+                        ? "grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
                         : viewMode === "small"
                         ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
                         : "space-y-2 sm:space-y-3 md:space-y-4"
@@ -1648,42 +1615,35 @@ const NewsAggregator = () => {
 
                         // Always show the card, even if no items
                         return (
-                          <motion.div
+                          <div
                             key={`${feed.id}-${currentIndex}`}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.3 }}
-                            className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
+                            className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border-l-4 ${
                               viewMode === "grid"
-                                ? "h-[600px]"
+                                ? "h-[500px] sm:h-[600px]"
                                 : viewMode === "small"
-                                ? "h-[320px]"
-                                : "w-full h-auto justify-center border-l-4 min-h-[95px] sm:min-h-[105px] md:min-h-[115px] relative"
+                                ? "h-[380px]"
+                                : "w-full h-auto justify-center min-h-[95px] sm:min-h-[105px] md:min-h-[115px] relative"
                             }`}
-                            style={
-                              viewMode === "list"
-                                ? {
-                                    borderLeftColor:
-                                      feed.category === "technology"
-                                        ? "#f79d84"
-                                        : feed.category === "sports"
-                                        ? "#59cd90"
-                                        : feed.category === "business"
-                                        ? "#3fa7d6"
-                                        : feed.category === "entertainment"
-                                        ? "#fac05e"
-                                        : feed.category === "politics"
-                                        ? "#f79d84"
-                                        : "#6b7280",
-                                  }
-                                : {}
-                            }
+                            style={{
+                              borderLeftColor:
+                                feed.category === "technology"
+                                  ? "#f79d84"
+                                  : feed.category === "sports"
+                                  ? "#59cd90"
+                                  : feed.category === "business"
+                                  ? "#3fa7d6"
+                                  : feed.category === "entertainment"
+                                  ? "#fac05e"
+                                  : feed.category === "politics"
+                                  ? "#f79d84"
+                                  : "#6b7280",
+                            }}
                           >
                             {/* Card Header */}
                             <div
                               className={`${
                                 viewMode === "list"
-                                  ? "px-3 py-2 sm:px-4 sm:py-3 pr-16 sm:pr-20 md:pr-18"
+                                  ? "px-3 py-2 sm:px-4 sm:py-3 pr-28 sm:pr-36 md:pr-44"
                                   : viewMode === "small"
                                   ? "px-4 pt-4"
                                   : "px-6 pt-6"
@@ -2165,7 +2125,7 @@ const NewsAggregator = () => {
                                   <h3
                                     className={`font-semibold text-gray-900 dark:text-white leading-tight ${
                                       viewMode === "small"
-                                        ? "text-sm"
+                                        ? "text-base"
                                         : viewMode === "list"
                                         ? "text-base sm:text-lg"
                                         : "text-lg"
@@ -2180,6 +2140,24 @@ const NewsAggregator = () => {
                                       {feedItems[currentIndex]?.title || ""}
                                     </a>
                                   </h3>
+
+                                  {/* Subheading/Excerpt - Show in list view */}
+                                  {viewMode === "list" &&
+                                    feedItems[currentIndex]?.excerpt &&
+                                    feed.name !== "The Hard Times" && (
+                                      <div className="mt-2">
+                                        <p
+                                          className="text-sm text-gray-600 dark:text-gray-400"
+                                          style={{ lineHeight: "1.5" }}
+                                        >
+                                          {truncateText(
+                                            feedItems[currentIndex]?.excerpt ||
+                                              "",
+                                            200
+                                          )}
+                                        </p>
+                                      </div>
+                                    )}
                                 </div>
                               )}
 
@@ -2187,7 +2165,7 @@ const NewsAggregator = () => {
                               {viewMode === "list" &&
                                 feedItems.length > 0 &&
                                 feedItems[currentIndex]?.image && (
-                                  <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-20 md:w-24 h-full">
+                                  <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 h-full">
                                     <img
                                       src={feedItems[currentIndex]?.image}
                                       alt={feedItems[currentIndex]?.title}
@@ -2203,7 +2181,7 @@ const NewsAggregator = () => {
 
                               {/* Third Row - Carousel Controls and Category Chip (list view only) */}
                               {viewMode === "list" && feedItems.length > 1 && (
-                                <div className="px-0 pb-3 pr-12 sm:pr-18 mt-4">
+                                <div className="px-0 pb-3 pr-32 sm:pr-40 md:pr-48 mt-4">
                                   {/* Carousel Controls and Category Chip */}
                                   <div className="flex items-center gap-2">
                                     <button
@@ -2275,11 +2253,12 @@ const NewsAggregator = () => {
                                     feed.name !== "The Hard Times" && (
                                       <div className="mt-2 flex items-center">
                                         <p
-                                          className={`leading-relaxed text-gray-600 dark:text-gray-400 ${
+                                          className={`text-gray-600 dark:text-gray-400 ${
                                             viewMode === "small"
-                                              ? "text-xs"
+                                              ? "text-sm"
                                               : "text-base"
                                           }`}
+                                          style={{ lineHeight: "1.5" }}
                                         >
                                           {truncateText(
                                             feedItems[currentIndex]?.excerpt ||
@@ -2531,8 +2510,8 @@ const NewsAggregator = () => {
                               )}
                             </div>
 
-                            {/* Category Chip below image - Only show in grid view */}
-                            {viewMode === "grid" && (
+                            {/* Category Chip below image - Show in grid and small views */}
+                            {(viewMode === "grid" || viewMode === "small") && (
                               <div className="px-6 pb-3 relative z-10">
                                 <div className="flex items-center gap-2">
                                   <span
@@ -2573,7 +2552,7 @@ const NewsAggregator = () => {
                                 </div>
                               </div>
                             )}
-                          </motion.div>
+                          </div>
                         );
                       });
                     })()}
@@ -2592,12 +2571,9 @@ const NewsAggregator = () => {
                         );
 
                         return (
-                          <motion.div
+                          <div
                             key={`custom-${customFeed.id}`}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.3 }}
-                            className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
+                            className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
                               viewMode === "list"
                                 ? "h-auto justify-center border-l-4"
                                 : "h-[470px]"
@@ -2627,8 +2603,9 @@ const NewsAggregator = () => {
                                   {customFeed.name}
                                 </h4>
 
-                                {/* Category Chip - Only show in grid view */}
-                                {viewMode === "grid" && (
+                                {/* Category Chip - Show in grid and small views */}
+                                {(viewMode === "grid" ||
+                                  viewMode === "small") && (
                                   <div className="flex items-center gap-2">
                                     <span
                                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${categoryColors.custom.chip.bg} ${categoryColors.custom.chip.text}`}
@@ -2676,8 +2653,9 @@ const NewsAggregator = () => {
                                 </div>
                               )}
 
-                              {/* Article Title - Hidden in list view */}
-                              {viewMode === "grid" && (
+                              {/* Article Title - Show in grid and small views */}
+                              {(viewMode === "grid" ||
+                                viewMode === "small") && (
                                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
                                   <a
                                     href={customFeedItems[0]?.url}
@@ -2693,8 +2671,8 @@ const NewsAggregator = () => {
                                 </h3>
                               )}
 
-                              {/* Subtitle below headline - Hidden in list view */}
-                              {viewMode === "grid" &&
+                              {/* Subtitle below headline - Show in grid and small views */}
+                              {(viewMode === "grid" || viewMode === "small") &&
                                 customFeedItems[0]?.excerpt && (
                                   <div className="mt-3 flex items-center">
                                     <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
@@ -2716,8 +2694,8 @@ const NewsAggregator = () => {
                                 viewMode === "list" ? {} : { height: "180px" }
                               }
                             >
-                              {/* Image - Hidden in list view */}
-                              {viewMode === "grid" &&
+                              {/* Image - Show in grid and small views */}
+                              {(viewMode === "grid" || viewMode === "small") &&
                               customFeedItems[0]?.image &&
                               !customFeedItems[0]?.image!.startsWith(
                                 "placeholder:"
@@ -2810,8 +2788,8 @@ const NewsAggregator = () => {
                               )}
                             </div>
 
-                            {/* Carousel Controls for Custom Feeds Grid View */}
-                            {viewMode === "grid" &&
+                            {/* Carousel Controls for Custom Feeds Grid and Small Views */}
+                            {(viewMode === "grid" || viewMode === "small") &&
                               customFeedItems.length > 1 && (
                                 <div className="px-4 sm:px-6 pb-4 flex items-center justify-center gap-1">
                                   <button
@@ -2839,10 +2817,10 @@ const NewsAggregator = () => {
                                   </button>
                                 </div>
                               )}
-                          </motion.div>
+                          </div>
                         );
                       })}
-                  </motion.div>
+                  </div>
                 )}
               </div>
             </section>
