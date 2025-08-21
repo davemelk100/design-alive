@@ -80,6 +80,13 @@ const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
   {
+    id: "ats-io",
+    name: "ATS.io",
+    url: "https://ats.io/feed/",
+    category: "sports",
+    enabled: true,
+  },
+  {
     id: "the-onion",
     name: "The Onion",
     url: "https://rss.app/feeds/5J4NfaeokQ4r4GGP.xml",
@@ -263,6 +270,7 @@ const NewsAggregator = () => {
   const [viceTechIndex, setViceTechIndex] = useState(0);
   const [foxSportsIndex, setFoxSportsIndex] = useState(0);
   const [espnIndex, setEspnIndex] = useState(0);
+  const [atsIoIndex, setAtsIoIndex] = useState(0);
   const [theOnionIndex, setTheOnionIndex] = useState(0);
   const [theHardTimesIndex, setTheHardTimesIndex] = useState(0);
   const [cnnSportsIndex, setCnnSportsIndex] = useState(0);
@@ -317,6 +325,8 @@ const NewsAggregator = () => {
         return foxSportsIndex;
       case "ESPN":
         return espnIndex;
+      case "ATS.io":
+        return atsIoIndex;
       case "The Onion":
         return theOnionIndex;
       case "The Hard Times":
@@ -376,6 +386,9 @@ const NewsAggregator = () => {
         break;
       case "ESPN":
         goToPreviousEspn();
+        break;
+      case "ATS.io":
+        goToPreviousAtsIo();
         break;
       case "The Onion":
         goToPreviousTheOnion();
@@ -447,6 +460,9 @@ const NewsAggregator = () => {
         break;
       case "ESPN":
         goToNextEspn();
+        break;
+      case "ATS.io":
+        goToNextAtsIo();
         break;
       case "The Onion":
         goToNextTheOnion();
@@ -1080,6 +1096,23 @@ const NewsAggregator = () => {
     }
   };
 
+  // ATS.io carousel navigation
+  const goToNextAtsIo = () => {
+    const atsIoItems = newsItems.filter((item) => item.source === "ATS.io");
+    if (atsIoItems.length > 0) {
+      setAtsIoIndex((prev) => (prev + 1) % atsIoItems.length);
+    }
+  };
+
+  const goToPreviousAtsIo = () => {
+    const atsIoItems = newsItems.filter((item) => item.source === "ATS.io");
+    if (atsIoItems.length > 0) {
+      setAtsIoIndex(
+        (prev) => (prev - 1 + atsIoItems.length) % atsIoItems.length
+      );
+    }
+  };
+
   // The Onion carousel navigation
   const goToNextTheOnion = () => {
     const theOnionItems = newsItems.filter(
@@ -1639,7 +1672,7 @@ const NewsAggregator = () => {
                             key={`${feed.id}-${currentIndex}`}
                             className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border-l-4 ${
                               viewMode === "grid"
-                                ? "h-[500px] sm:h-[600px]"
+                                ? "h-auto"
                                 : viewMode === "small"
                                 ? "h-[320px]"
                                 : "w-full h-auto justify-center min-h-[95px] sm:min-h-[105px] md:min-h-[115px] relative"
@@ -1875,6 +1908,28 @@ const NewsAggregator = () => {
                                       <img
                                         src="https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg"
                                         alt="espn"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                    </div>
+                                  ) : feed.name === "ATS.io" ? (
+                                    /* ATS.io Logo and Title - Stacked and aligned */
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
+                                      <img
+                                        src="/img/ats.png"
+                                        alt="ats.io"
                                         className={`w-full h-auto opacity-80 ${
                                           viewMode === "small"
                                             ? "max-w-[80px]"
@@ -2299,7 +2354,9 @@ const NewsAggregator = () => {
                             <div
                               className={`px-6 ${
                                 viewMode === "small" ? "pb-2" : "pb-6"
-                              } flex-1 flex flex-col ${
+                              } ${
+                                viewMode === "grid" ? "flex-none" : "flex-1"
+                              } flex flex-col justify-end ${
                                 viewMode === "list" ? "hidden" : ""
                               }`}
                               style={
@@ -2307,7 +2364,11 @@ const NewsAggregator = () => {
                                   ? {}
                                   : {
                                       height:
-                                        viewMode === "small" ? "70px" : "auto",
+                                        viewMode === "small"
+                                          ? "70px"
+                                          : viewMode === "grid"
+                                          ? "auto"
+                                          : "auto",
                                     }
                               }
                             >
@@ -2323,8 +2384,12 @@ const NewsAggregator = () => {
                                   }`}
                                   style={{
                                     height:
-                                      viewMode === "small" ? "140px" : "auto",
-                                    marginBottom: "0px",
+                                      viewMode === "small"
+                                        ? "140px"
+                                        : viewMode === "grid"
+                                        ? "auto"
+                                        : "auto",
+                                    marginBottom: "15px",
                                   }}
                                 >
                                   <img
@@ -2333,15 +2398,29 @@ const NewsAggregator = () => {
                                     className={`w-full rounded-lg ${
                                       viewMode === "small"
                                         ? "object-cover"
+                                        : viewMode === "grid"
+                                        ? "object-cover"
                                         : "object-contain"
                                     }`}
                                     style={{
                                       height:
-                                        viewMode === "small" ? "140px" : "auto",
+                                        viewMode === "small"
+                                          ? "140px"
+                                          : viewMode === "grid"
+                                          ? "auto"
+                                          : "auto",
                                       minHeight:
-                                        viewMode === "small" ? "140px" : "auto",
+                                        viewMode === "small"
+                                          ? "140px"
+                                          : viewMode === "grid"
+                                          ? "200px"
+                                          : "auto",
                                       maxHeight:
-                                        viewMode === "small" ? "140px" : "auto",
+                                        viewMode === "small"
+                                          ? "140px"
+                                          : viewMode === "grid"
+                                          ? "none"
+                                          : "auto",
                                     }}
                                     onError={(e) => {
                                       // Replace broken image with placeholder
@@ -2426,7 +2505,7 @@ const NewsAggregator = () => {
                                     height: "150px",
                                     minHeight: "150px",
                                     maxHeight: "150px",
-                                    marginBottom: "0px",
+                                    marginBottom: "15px",
                                   }}
                                 >
                                   {feedItems.length > 0 &&
@@ -2700,7 +2779,7 @@ const NewsAggregator = () => {
                                     height: "150px",
                                     minHeight: "150px",
                                     maxHeight: "150px",
-                                    marginBottom: "0px",
+                                    marginBottom: "15px",
                                   }}
                                 >
                                   {customFeedItems[0]?.image &&
