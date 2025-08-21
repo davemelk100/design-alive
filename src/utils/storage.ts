@@ -242,20 +242,14 @@ export const storage = {
 
 // Storage keys for consistent usage across the app
 export const STORAGE_KEYS = {
-  WRITING_GALLERY_PIECES: "writingGalleryPieces",
+
   ADMIN_SESSION: "adminSession",
   MUSIC_PLAYER_SETTINGS: "musicPlayerSettings",
   THEME_PREFERENCES: "themePreferences",
   USER_PREFERENCES: "userPreferences",
 } as const;
 
-// Type-safe storage helpers
-export const writingGalleryStorage = {
-  getPieces: () => storage.get(STORAGE_KEYS.WRITING_GALLERY_PIECES, []),
-  setPieces: (pieces: any[]) =>
-    storage.set(STORAGE_KEYS.WRITING_GALLERY_PIECES, pieces),
-  clearPieces: () => storage.remove(STORAGE_KEYS.WRITING_GALLERY_PIECES),
-};
+
 
 export const adminSessionStorage = {
   getSession: () => storage.get(STORAGE_KEYS.ADMIN_SESSION, null),

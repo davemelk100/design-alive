@@ -102,6 +102,13 @@ const rssFeeds: RSSFeed[] = [
     category: "entertainment",
     enabled: true,
   },
+  {
+    id: "soft-white-underbelly",
+    name: "Soft White Underbelly",
+    url: "https://rss.app/feeds/fqdEpS42RgOKsQ8W.xml",
+    category: "entertainment",
+    enabled: true,
+  },
 
   {
     id: "newsweek",
@@ -128,6 +135,14 @@ const rssFeeds: RSSFeed[] = [
     id: "breitbart",
     name: "Breitbart",
     url: "https://rss.app/feeds/Ez9O0bz1UTzcmRJu.xml",
+    category: "business",
+    enabled: true,
+  },
+
+  {
+    id: "cnn",
+    name: "CNN News",
+    url: "https://rss.app/feeds/OJWoTBSij0sRCOiv.xml",
     category: "business",
     enabled: true,
   },
@@ -257,11 +272,13 @@ const NewsAggregator = () => {
 
   const [lambgoatIndex, setLambgoatIndex] = useState(0);
   const [noEchoIndex, setNoEchoIndex] = useState(0);
+  const [softWhiteUnderbellyIndex, setSoftWhiteUnderbellyIndex] = useState(0);
   const [newsweekIndex, setNewsweekIndex] = useState(0);
   const [newYorkPostIndex, setNewYorkPostIndex] = useState(0);
   const [foxNewsIndex, setFoxNewsIndex] = useState(0);
   const [cbsSportsIndex, setCbsSportsIndex] = useState(0);
   const [breitbartIndex, setBreitbartIndex] = useState(0);
+  const [cnnIndex, setCnnIndex] = useState(0);
 
   const [techcrunchIndex, setTechcrunchIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState("all");
@@ -319,6 +336,9 @@ const NewsAggregator = () => {
       case "No Echo":
         return noEchoIndex;
 
+      case "Soft White Underbelly":
+        return softWhiteUnderbellyIndex;
+
       case "Newsweek":
         return newsweekIndex;
       case "New York Post":
@@ -329,6 +349,9 @@ const NewsAggregator = () => {
         return cbsSportsIndex;
       case "Breitbart":
         return breitbartIndex;
+
+      case "CNN News":
+        return cnnIndex;
 
       case "TechCrunch":
         return techcrunchIndex;
@@ -375,6 +398,10 @@ const NewsAggregator = () => {
         goToPreviousNoEcho();
         break;
 
+      case "Soft White Underbelly":
+        goToPreviousSoftWhiteUnderbelly();
+        break;
+
       case "Newsweek":
         goToPreviousNewsweek();
         break;
@@ -389,6 +416,10 @@ const NewsAggregator = () => {
         break;
       case "Breitbart":
         goToPreviousBreitbart();
+        break;
+
+      case "CNN News":
+        goToPreviousCnn();
         break;
 
       case "TechCrunch":
@@ -435,6 +466,10 @@ const NewsAggregator = () => {
         goToNextNoEcho();
         break;
 
+      case "Soft White Underbelly":
+        goToNextSoftWhiteUnderbelly();
+        break;
+
       case "Newsweek":
         goToNextNewsweek();
         break;
@@ -449,6 +484,10 @@ const NewsAggregator = () => {
         break;
       case "Breitbart":
         goToNextBreitbart();
+        break;
+
+      case "CNN News":
+        goToNextCnn();
         break;
 
       case "TechCrunch":
@@ -824,6 +863,7 @@ const NewsAggregator = () => {
             `Feed ${result.value.feed.name} failed to load:`,
             result.value.error
           );
+
           newFeedStatus[result.value.feed.name] = {
             working: false,
             error:
@@ -871,11 +911,13 @@ const NewsAggregator = () => {
 
       setLambgoatIndex(0);
       setNoEchoIndex(0);
+      setSoftWhiteUnderbellyIndex(0); // Reset Soft White Underbelly carousel
       setNewsweekIndex(0); // Reset Newsweek carousel
       setNewYorkPostIndex(0); // Reset New York Post carousel
       setFoxNewsIndex(0); // Reset Fox News carousel
       setCbsSportsIndex(0); // Reset CBS Sports carousel
       setBreitbartIndex(0); // Reset Breitbart carousel
+      setCnnIndex(0); // Reset CNN carousel
 
       setTechcrunchIndex(0); // Reset TechCrunch carousel
     } catch (error) {
@@ -1128,6 +1170,31 @@ const NewsAggregator = () => {
     }
   };
 
+  // Soft White Underbelly carousel navigation
+  const goToNextSoftWhiteUnderbelly = () => {
+    const softWhiteUnderbellyItems = newsItems.filter(
+      (item) => item.source === "Soft White Underbelly"
+    );
+    if (softWhiteUnderbellyItems.length > 0) {
+      setSoftWhiteUnderbellyIndex(
+        (prev) => (prev + 1) % softWhiteUnderbellyItems.length
+      );
+    }
+  };
+
+  const goToPreviousSoftWhiteUnderbelly = () => {
+    const softWhiteUnderbellyItems = newsItems.filter(
+      (item) => item.source === "Soft White Underbelly"
+    );
+    if (softWhiteUnderbellyItems.length > 0) {
+      setSoftWhiteUnderbellyIndex(
+        (prev) =>
+          (prev - 1 + softWhiteUnderbellyItems.length) %
+          softWhiteUnderbellyItems.length
+      );
+    }
+  };
+
   // Newsweek carousel navigation
   const goToNextNewsweek = () => {
     const newsweekItems = newsItems.filter(
@@ -1208,6 +1275,21 @@ const NewsAggregator = () => {
     }
   };
 
+  // CNN carousel navigation
+  const goToNextCnn = () => {
+    const cnnItems = newsItems.filter((item) => item.source === "CNN News");
+    if (cnnItems.length > 0) {
+      setCnnIndex((prev) => (prev + 1) % cnnItems.length);
+    }
+  };
+
+  const goToPreviousCnn = () => {
+    const cnnItems = newsItems.filter((item) => item.source === "CNN News");
+    if (cnnItems.length > 0) {
+      setCnnIndex((prev) => (prev - 1 + cnnItems.length) % cnnItems.length);
+    }
+  };
+
   // CBS Sports carousel navigation
   const goToNextCbsSports = () => {
     const cbsSportsItems = newsItems.filter(
@@ -1252,8 +1334,8 @@ const NewsAggregator = () => {
 
   return (
     <div
-      className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white font-serif roboto-serif-page"
-      style={{ fontFamily: "Roboto Serif, serif !important" }}
+      className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white"
+      style={{ fontFamily: "Helvetica, Roboto, sans-serif !important" }}
     >
       <Suspense
         fallback={
@@ -1573,7 +1655,7 @@ const NewsAggregator = () => {
                             transition={{ duration: 0.3 }}
                             className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
                               viewMode === "grid"
-                                ? "h-[470px]"
+                                ? "h-[600px]"
                                 : viewMode === "small"
                                 ? "h-[320px]"
                                 : "w-full h-auto justify-center border-l-4 min-h-[95px] sm:min-h-[105px] md:min-h-[115px] relative"
@@ -1847,6 +1929,28 @@ const NewsAggregator = () => {
                                         }}
                                       />
                                     </div>
+                                  ) : feed.name === "Soft White Underbelly" ? (
+                                    /* Soft White Underbelly Logo and Title - Stacked and aligned */
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
+                                      <img
+                                        src="/img/swu.jpg"
+                                        alt="soft white underbelly"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                    </div>
                                   ) : feed.name === "Breitbart" ? (
                                     /* Breitbart Logo and Title - Stacked and aligned */
                                     <div
@@ -1857,6 +1961,28 @@ const NewsAggregator = () => {
                                       <img
                                         src="/img/breitbart.png"
                                         alt="breitbart"
+                                        className={`w-full h-auto opacity-80 ${
+                                          viewMode === "small"
+                                            ? "max-w-[80px]"
+                                            : "max-w-[120px]"
+                                        }`}
+                                        onError={(e) => {
+                                          // Hide broken logo
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                        }}
+                                      />
+                                    </div>
+                                  ) : feed.name === "CNN News" ? (
+                                    /* CNN News Logo and Title - Stacked and aligned */
+                                    <div
+                                      className={
+                                        viewMode === "small" ? "" : "mb-3"
+                                      }
+                                    >
+                                      <img
+                                        src="/img/cnn.svg"
+                                        alt="cnn news"
                                         className={`w-full h-auto opacity-80 ${
                                           viewMode === "small"
                                             ? "max-w-[80px]"
@@ -2039,10 +2165,10 @@ const NewsAggregator = () => {
                                   <h3
                                     className={`font-semibold text-gray-900 dark:text-white leading-tight ${
                                       viewMode === "small"
-                                        ? "text-xs"
+                                        ? "text-sm"
                                         : viewMode === "list"
-                                        ? "text-sm sm:text-base"
-                                        : "text-base"
+                                        ? "text-base sm:text-lg"
+                                        : "text-lg"
                                     }`}
                                   >
                                     <a
@@ -2145,13 +2271,14 @@ const NewsAggregator = () => {
                                   {/* Subtitle below headline - Show in grid and small views */}
                                   {(viewMode === "grid" ||
                                     viewMode === "small") &&
-                                    feedItems[currentIndex]?.excerpt && (
+                                    feedItems[currentIndex]?.excerpt &&
+                                    feed.name !== "The Hard Times" && (
                                       <div className="mt-2 flex items-center">
                                         <p
                                           className={`leading-relaxed text-gray-600 dark:text-gray-400 ${
                                             viewMode === "small"
-                                              ? "text-[10px]"
-                                              : "text-sm"
+                                              ? "text-xs"
+                                              : "text-base"
                                           }`}
                                         >
                                           {truncateText(
@@ -2192,11 +2319,18 @@ const NewsAggregator = () => {
 
                             {/* Card Content */}
                             <div
-                              className={`px-6 pb-6 flex-1 flex flex-col ${
+                              className={`px-6 ${
+                                viewMode === "small" ? "pb-2" : "pb-6"
+                              } flex-1 flex flex-col ${
                                 viewMode === "list" ? "hidden" : ""
                               }`}
                               style={
-                                viewMode === "list" ? {} : { height: "180px" }
+                                viewMode === "list"
+                                  ? {}
+                                  : {
+                                      height:
+                                        viewMode === "small" ? "180px" : "auto",
+                                    }
                               }
                             >
                               {/* Image or Placeholder */}
@@ -2209,27 +2343,25 @@ const NewsAggregator = () => {
                                   className="relative z-0 mt-auto mb-0"
                                   style={{
                                     height:
-                                      viewMode === "small" ? "100px" : "150px",
+                                      viewMode === "small" ? "100px" : "auto",
                                     marginBottom: "0px",
                                   }}
                                 >
                                   <img
                                     src={feedItems[currentIndex]?.image}
                                     alt={feedItems[currentIndex]?.title}
-                                    className="w-full object-cover rounded-lg"
+                                    className={`w-full rounded-lg ${
+                                      viewMode === "small"
+                                        ? "object-cover"
+                                        : "object-contain"
+                                    }`}
                                     style={{
                                       height:
-                                        viewMode === "small"
-                                          ? "100px"
-                                          : "192px",
+                                        viewMode === "small" ? "100px" : "auto",
                                       minHeight:
-                                        viewMode === "small"
-                                          ? "100px"
-                                          : "192px",
+                                        viewMode === "small" ? "100px" : "auto",
                                       maxHeight:
-                                        viewMode === "small"
-                                          ? "100px"
-                                          : "192px",
+                                        viewMode === "small" ? "100px" : "auto",
                                     }}
                                     onError={(e) => {
                                       // Replace broken image with placeholder

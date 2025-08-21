@@ -1138,40 +1138,7 @@ There isn't always a clear way to select a technology. The newest, shiniest prod
       },
     ],
   },
-  writingGallery: {
-    title: "Writing Gallery",
-    backToSite: "Back to Site",
-    storageNotAvailable: "Storage not available.",
-    defaultPieces: [
-      {
-        excerpt: "AI has made it less frightening for when their parents die.",
-      },
-      {
-        excerpt:
-          "You came to see Shattered Realm, so now is not the time to complain about your helmet being split in two.",
-      },
-      {
-        excerpt:
-          "Thick Goth Chick Gets Ozempic and Leaves Hardcore Guy Who Held Her Down All Those Years Before She Got Thin.",
-      },
-      {
-        excerpt:
-          "Woman Loses Weight, Boyfriend Realizes This Is Just the First Step. Next, She Will Want to Go Outside.",
-      },
-      {
-        excerpt:
-          "(Image of the Wild Wild Country guru Bhagwan Shri Rajneesh) SOUNDGARDEN.",
-      },
-      {
-        excerpt:
-          "Are moustaches still ironic? It seems people are taking them seriously again.",
-      },
-      {
-        excerpt:
-          "Every time I click the 'white' option on a job application, I feel like I'm rolling the dice.",
-      },
-    ],
-  },
+
   designSystem: {
     title: "Design System",
     subtitle: "Component library and design tokens.",

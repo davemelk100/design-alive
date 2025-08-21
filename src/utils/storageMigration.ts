@@ -17,7 +17,6 @@ export const migrateOldStorage = (): MigrationResult => {
   try {
     // Check for old localStorage keys and migrate them
     const oldKeys = [
-      "writingGalleryPieces",
       "adminAuthenticated",
       "adminAuthTime",
     ];
@@ -103,7 +102,6 @@ export const migrateOldStorage = (): MigrationResult => {
 // Check if migration is needed
 export const needsMigration = (): boolean => {
   const oldKeys = [
-    "writingGalleryPieces",
     "adminAuthenticated",
     "adminAuthTime",
   ];

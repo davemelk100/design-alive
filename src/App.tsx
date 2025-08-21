@@ -29,7 +29,7 @@ const Archive = lazy(() => import("./pages/Archive"));
 
 const Admin = lazy(() => import("./pages/Admin"));
 const MusicPlayer = lazy(() => import("./pages/MusicPlayer"));
-const WritingGallery = lazy(() => import("./pages/WritingGallery"));
+
 const JsonAiPrompts = lazy(() => import("./pages/JsonAiPrompts"));
 const AudioTranscript = lazy(() => import("./pages/AudioTranscript"));
 const NewsAggregator = lazy(() => import("./pages/NewsAggregator"));
@@ -1849,7 +1849,7 @@ function App() {
 
           <Route path="/admin" element={<Admin />} />
           <Route path="/music" element={<MusicPlayer />} />
-          <Route path="/writing-gallery" element={<WritingGallery />} />
+
           <Route path="/json-ai-prompts" element={<JsonAiPrompts />} />
           <Route path="/audio-transcript" element={<AudioTranscript />} />
           <Route path="/news" element={<NewsAggregator />} />
