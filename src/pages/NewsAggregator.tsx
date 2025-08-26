@@ -72,20 +72,7 @@ const rssFeeds: RSSFeed[] = [
     category: "sports",
     enabled: true,
   },
-  {
-    id: "espn",
-    name: "ESPN",
-    url: "https://www.espn.com/espn/rss/news",
-    category: "sports",
-    enabled: true,
-  },
-  {
-    id: "ats-io",
-    name: "ATS.io",
-    url: "https://ats.io/feed/",
-    category: "sports",
-    enabled: true,
-  },
+
   {
     id: "the-onion",
     name: "The Onion",
@@ -269,8 +256,6 @@ const NewsAggregator = () => {
 
   const [viceTechIndex, setViceTechIndex] = useState(0);
   const [foxSportsIndex, setFoxSportsIndex] = useState(0);
-  const [espnIndex, setEspnIndex] = useState(0);
-  const [atsIoIndex, setAtsIoIndex] = useState(0);
   const [theOnionIndex, setTheOnionIndex] = useState(0);
   const [theHardTimesIndex, setTheHardTimesIndex] = useState(0);
   const [cnnSportsIndex, setCnnSportsIndex] = useState(0);
@@ -323,10 +308,6 @@ const NewsAggregator = () => {
 
       case "Fox Sports":
         return foxSportsIndex;
-      case "ESPN":
-        return espnIndex;
-      case "ATS.io":
-        return atsIoIndex;
       case "The Onion":
         return theOnionIndex;
       case "The Hard Times":
@@ -383,12 +364,6 @@ const NewsAggregator = () => {
 
       case "Fox Sports":
         goToPreviousFoxSports();
-        break;
-      case "ESPN":
-        goToPreviousEspn();
-        break;
-      case "ATS.io":
-        goToPreviousAtsIo();
         break;
       case "The Onion":
         goToPreviousTheOnion();
@@ -457,12 +432,6 @@ const NewsAggregator = () => {
 
       case "Fox Sports":
         goToNextFoxSports();
-        break;
-      case "ESPN":
-        goToNextEspn();
-        break;
-      case "ATS.io":
-        goToNextAtsIo();
         break;
       case "The Onion":
         goToNextTheOnion();
@@ -1081,38 +1050,6 @@ const NewsAggregator = () => {
     }
   };
 
-  // ESPN carousel navigation
-  const goToNextEspn = () => {
-    const espnItems = newsItems.filter((item) => item.source === "ESPN");
-    if (espnItems.length > 0) {
-      setEspnIndex((prev) => (prev + 1) % espnItems.length);
-    }
-  };
-
-  const goToPreviousEspn = () => {
-    const espnItems = newsItems.filter((item) => item.source === "ESPN");
-    if (espnItems.length > 0) {
-      setEspnIndex((prev) => (prev - 1 + espnItems.length) % espnItems.length);
-    }
-  };
-
-  // ATS.io carousel navigation
-  const goToNextAtsIo = () => {
-    const atsIoItems = newsItems.filter((item) => item.source === "ATS.io");
-    if (atsIoItems.length > 0) {
-      setAtsIoIndex((prev) => (prev + 1) % atsIoItems.length);
-    }
-  };
-
-  const goToPreviousAtsIo = () => {
-    const atsIoItems = newsItems.filter((item) => item.source === "ATS.io");
-    if (atsIoItems.length > 0) {
-      setAtsIoIndex(
-        (prev) => (prev - 1 + atsIoItems.length) % atsIoItems.length
-      );
-    }
-  };
-
   // The Onion carousel navigation
   const goToNextTheOnion = () => {
     const theOnionItems = newsItems.filter(
@@ -1395,13 +1332,22 @@ const NewsAggregator = () => {
         }
       >
         <div className="flex relative">
-          {/* Mobile Navigation Toggle */}
+          {/* Floating Dark Mode Toggle - Top Right Corner */}
           <button
-            onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
-            className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700"
+            onClick={() => {
+              const html = document.documentElement;
+              if (html.classList.contains("dark")) {
+                html.classList.remove("dark");
+                localStorage.setItem("theme", "light");
+              } else {
+                html.classList.add("dark");
+                localStorage.setItem("theme", "dark");
+              }
+            }}
+            className="fixed top-4 right-4 z-50 w-8 h-8 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg border border-gray-200 dark:border-gray-700 flex items-center justify-center hover:bg-white dark:hover:bg-gray-800 transition-all duration-200"
           >
             <svg
-              className="w-6 h-6"
+              className="w-4 h-4 text-gray-700 dark:text-gray-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -1410,18 +1356,23 @@ const NewsAggregator = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+              />
+            </svg>
+            <svg
+              className="w-4 h-4 text-gray-700 dark:text-gray-300 absolute opacity-0 dark:opacity-100 transition-opacity duration-200"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
               />
             </svg>
           </button>
-
-          {/* Mobile Navigation Backdrop */}
-          {isMobileNavOpen && (
-            <div
-              className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-              onClick={() => setIsMobileNavOpen(false)}
-            />
-          )}
 
           {/* Left Navigation Sidebar */}
           <nav
@@ -1530,7 +1481,7 @@ const NewsAggregator = () => {
           </nav>
 
           {/* Main Content Area */}
-          <div className="flex-1 lg:ml-0">
+          <div className="flex-1 lg:ml-0 pb-20 lg:pb-0">
             {/* Error Message */}
             {error && (
               <section className="py-4 sm:py-6 lg:py-8">
@@ -1672,10 +1623,10 @@ const NewsAggregator = () => {
                             key={`${feed.id}-${currentIndex}`}
                             className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border-l-4 ${
                               viewMode === "grid"
-                                ? "h-auto"
+                                ? "h-[500px]"
                                 : viewMode === "small"
-                                ? "h-[320px]"
-                                : "w-full h-auto justify-center min-h-[95px] sm:min-h-[105px] md:min-h-[115px] relative"
+                                ? "h-[480px]"
+                                : "w-full h-auto justify-center min-h-[140px] sm:min-h-[160px] md:min-h-[180px] relative"
                             }`}
                             style={{
                               borderLeftColor:
@@ -1886,50 +1837,6 @@ const NewsAggregator = () => {
                                       <img
                                         src="/img/fox-sports.png"
                                         alt="fox sports"
-                                        className={`w-full h-auto opacity-80 ${
-                                          viewMode === "small"
-                                            ? "max-w-[80px]"
-                                            : "max-w-[120px]"
-                                        }`}
-                                        onError={(e) => {
-                                          // Hide broken logo
-                                          const target = e.currentTarget;
-                                          target.style.display = "none";
-                                        }}
-                                      />
-                                    </div>
-                                  ) : feed.name === "ESPN" ? (
-                                    /* ESPN Logo and Title - Stacked and aligned */
-                                    <div
-                                      className={
-                                        viewMode === "small" ? "" : "mb-3"
-                                      }
-                                    >
-                                      <img
-                                        src="https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg"
-                                        alt="espn"
-                                        className={`w-full h-auto opacity-80 ${
-                                          viewMode === "small"
-                                            ? "max-w-[80px]"
-                                            : "max-w-[120px]"
-                                        }`}
-                                        onError={(e) => {
-                                          // Hide broken logo
-                                          const target = e.currentTarget;
-                                          target.style.display = "none";
-                                        }}
-                                      />
-                                    </div>
-                                  ) : feed.name === "ATS.io" ? (
-                                    /* ATS.io Logo and Title - Stacked and aligned */
-                                    <div
-                                      className={
-                                        viewMode === "small" ? "" : "mb-3"
-                                      }
-                                    >
-                                      <img
-                                        src="/img/ats.png"
-                                        alt="ats.io"
                                         className={`w-full h-auto opacity-80 ${
                                           viewMode === "small"
                                             ? "max-w-[80px]"
@@ -2305,19 +2212,20 @@ const NewsAggregator = () => {
                               {/* Article Excerpts - Show in grid and small views */}
                               {feedItems.length > 0 ? (
                                 <>
-                                  {/* Subtitle below headline - Show in grid view only */}
-                                  {viewMode === "grid" &&
+                                  {/* Subtitle below headline - Show in grid and small views */}
+                                  {(viewMode === "grid" ||
+                                    viewMode === "small") &&
                                     feedItems[currentIndex]?.excerpt &&
                                     feed.name !== "The Hard Times" && (
                                       <div className="mt-2 flex items-center">
                                         <p
-                                          className="text-gray-600 dark:text-gray-400 text-base"
+                                          className="text-gray-600 dark:text-gray-400 text-sm"
                                           style={{ lineHeight: "1.5" }}
                                         >
                                           {truncateText(
                                             feedItems[currentIndex]?.excerpt ||
                                               "",
-                                            400
+                                            viewMode === "small" ? 120 : 400
                                           )}
                                         </p>
                                       </div>
@@ -2353,9 +2261,9 @@ const NewsAggregator = () => {
                             {/* Card Content */}
                             <div
                               className={`px-6 ${
-                                viewMode === "small" ? "pb-2" : "pb-6"
+                                viewMode === "small" ? "pb-4" : "pb-6"
                               } ${
-                                viewMode === "grid" ? "flex-none" : "flex-1"
+                                viewMode === "grid" ? "flex-1" : "flex-1"
                               } flex flex-col justify-end ${
                                 viewMode === "list" ? "hidden" : ""
                               }`}
@@ -2365,7 +2273,7 @@ const NewsAggregator = () => {
                                   : {
                                       height:
                                         viewMode === "small"
-                                          ? "70px"
+                                          ? "120px"
                                           : viewMode === "grid"
                                           ? "auto"
                                           : "auto",
@@ -2385,9 +2293,9 @@ const NewsAggregator = () => {
                                   style={{
                                     height:
                                       viewMode === "small"
-                                        ? "140px"
+                                        ? "200px"
                                         : viewMode === "grid"
-                                        ? "auto"
+                                        ? "250px"
                                         : "auto",
                                     marginBottom: "15px",
                                   }}
@@ -2405,21 +2313,21 @@ const NewsAggregator = () => {
                                     style={{
                                       height:
                                         viewMode === "small"
-                                          ? "140px"
+                                          ? "200px"
                                           : viewMode === "grid"
-                                          ? "auto"
+                                          ? "250px"
                                           : "auto",
                                       minHeight:
                                         viewMode === "small"
-                                          ? "140px"
-                                          : viewMode === "grid"
                                           ? "200px"
+                                          : viewMode === "grid"
+                                          ? "250px"
                                           : "auto",
                                       maxHeight:
                                         viewMode === "small"
-                                          ? "140px"
+                                          ? "200px"
                                           : viewMode === "grid"
-                                          ? "none"
+                                          ? "250px"
                                           : "auto",
                                     }}
                                     onError={(e) => {
@@ -2615,12 +2523,12 @@ const NewsAggregator = () => {
                             className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
                               viewMode === "list"
                                 ? "h-auto justify-center border-l-4"
-                                : "h-[470px]"
+                                : "h-[500px]"
                             }`}
                             style={
                               viewMode === "list"
                                 ? { borderLeftColor: "#ef4444" }
-                                : { height: "470px" }
+                                : { height: "500px" }
                             }
                           >
                             {/* Custom Feed Header */}
@@ -2689,7 +2597,7 @@ const NewsAggregator = () => {
                               {viewMode === "grid" &&
                                 customFeedItems[0]?.excerpt && (
                                   <div className="mt-3 flex items-center">
-                                    <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                                    <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
                                       {truncateText(
                                         customFeedItems[0]?.excerpt || "",
                                         400
@@ -2711,7 +2619,9 @@ const NewsAggregator = () => {
                                   ? {}
                                   : {
                                       height:
-                                        viewMode === "small" ? "70px" : "180px",
+                                        viewMode === "small"
+                                          ? "120px"
+                                          : "200px",
                                     }
                               }
                             >
@@ -2853,6 +2763,151 @@ const NewsAggregator = () => {
               </div>
             </section>
           </div>
+
+          {/* Bottom Tray Navigation - Mobile Only */}
+          <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 lg:hidden">
+            <div className="flex items-center justify-around px-2 py-3">
+              {/* Technology */}
+              <button
+                onClick={() => {
+                  setActiveCategory("technology");
+                  syncActiveCategory("technology");
+                }}
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
+                  activeCategory === "technology"
+                    ? `${categoryColors.technology.bg} ${categoryColors.technology.text}`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`
+                }`}
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+                <span className="text-xs font-medium">Tech</span>
+              </button>
+
+              {/* Sports */}
+              <button
+                onClick={() => {
+                  setActiveCategory("sports");
+                  syncActiveCategory("sports");
+                }}
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
+                  activeCategory === "sports"
+                    ? `${categoryColors.sports.bg} ${categoryColors.sports.text}`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`
+                }`}
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2M9 20h6m-6 0v-2m6 2v-2"
+                  />
+                </svg>
+                <span className="text-xs font-medium">Sports</span>
+              </button>
+
+              {/* All News - Middle Button */}
+              <button
+                onClick={() => {
+                  setActiveCategory("all");
+                  syncActiveCategory("all");
+                }}
+                className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors ${
+                  activeCategory === "all"
+                    ? `${categoryColors.all.bg} ${categoryColors.all.text}`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`
+                }`}
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                  />
+                </svg>
+                <span className="text-xs font-medium">All News</span>
+              </button>
+
+              {/* Business */}
+              <button
+                onClick={() => {
+                  setActiveCategory("business");
+                  syncActiveCategory("business");
+                }}
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
+                  activeCategory === "business"
+                    ? `${categoryColors.business.bg} ${categoryColors.business.text}`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`
+                }`}
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                  />
+                </svg>
+                <span className="text-xs font-medium">Business</span>
+              </button>
+
+              {/* Entertainment */}
+              <button
+                onClick={() => {
+                  setActiveCategory("entertainment");
+                  syncActiveCategory("entertainment");
+                }}
+                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
+                  activeCategory === "entertainment"
+                    ? `${categoryColors.entertainment.bg} ${categoryColors.entertainment.text}`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`
+                }`}
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                  />
+                </svg>
+                <span className="text-xs font-medium">Entertainment</span>
+              </button>
+            </div>
+          </nav>
         </div>
       </Suspense>
     </div>
