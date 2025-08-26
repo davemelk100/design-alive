@@ -272,7 +272,7 @@ const NewsAggregator = () => {
 
   const [techcrunchIndex, setTechcrunchIndex] = useState(0);
   const [activeCategory, setActiveCategory] = useState("all");
-  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
   const [viewMode, setViewMode] = useState<"grid" | "list" | "small">("grid");
   const [feedStatus, setFeedStatus] = useState<{
     [key: string]: { working: boolean; error?: string };
@@ -1394,114 +1394,8 @@ const NewsAggregator = () => {
             </svg>
           </button>
 
-          {/* Left Navigation Sidebar */}
-          <nav
-            className={`${
-              isMobileNavOpen ? "translate-x-0" : "-translate-x-full"
-            } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 min-h-screen p-4 transition-transform duration-300 ease-in-out lg:transition-none lg:block flex flex-col`}
-          >
-            <div className="mb-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  davemelk news
-                </h2>
-                <button
-                  onClick={() => setIsMobileNavOpen(false)}
-                  className="lg:hidden p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Category Tabs */}
-            <div className="space-y-2">
-              <button
-                onClick={() => {
-                  setActiveCategory("all");
-                  syncActiveCategory("all");
-                }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors border-l-4 ${
-                  activeCategory === "all"
-                    ? `${categoryColors.all.bg} ${categoryColors.all.text} ${categoryColors.all.border}`
-                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 ${categoryColors.all.border}`
-                }`}
-              >
-                <span className="font-medium">All News</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setActiveCategory("technology");
-                  syncActiveCategory("technology");
-                }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors border-l-4 ${
-                  activeCategory === "technology"
-                    ? `${categoryColors.technology.bg} ${categoryColors.technology.text} ${categoryColors.technology.border}`
-                    : `text-gray-700 dark:text-gray-300 ${categoryColors.technology.hover} ${categoryColors.technology.border}`
-                }`}
-              >
-                <span className="font-medium">Technology</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setActiveCategory("sports");
-                  syncActiveCategory("sports");
-                }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors border-l-4 ${
-                  activeCategory === "sports"
-                    ? `${categoryColors.sports.bg} ${categoryColors.sports.text} ${categoryColors.sports.border}`
-                    : `text-gray-700 dark:text-gray-300 ${categoryColors.sports.hover} ${categoryColors.sports.border}`
-                }`}
-              >
-                <span className="font-medium">Sports</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setActiveCategory("business");
-                  syncActiveCategory("business");
-                }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors border-l-4 ${
-                  activeCategory === "business"
-                    ? `${categoryColors.business.bg} ${categoryColors.business.text} ${categoryColors.business.border}`
-                    : `text-gray-700 dark:text-gray-300 ${categoryColors.business.hover} ${categoryColors.business.border}`
-                }`}
-              >
-                <span className="font-medium">Business</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setActiveCategory("entertainment");
-                  syncActiveCategory("entertainment");
-                }}
-                className={`w-full text-left px-4 py-3 rounded-lg transition-colors border-l-4 ${
-                  activeCategory === "entertainment"
-                    ? `${categoryColors.entertainment.bg} ${categoryColors.entertainment.text} ${categoryColors.entertainment.border}`
-                    : `text-gray-700 dark:text-gray-300 ${categoryColors.entertainment.hover} ${categoryColors.entertainment.border}`
-                }`}
-              >
-                <span className="font-medium">Entertainment</span>
-              </button>
-            </div>
-          </nav>
-
           {/* Main Content Area */}
-          <div className="flex-1 lg:ml-0 pb-20 lg:pb-0">
+          <div className="flex-1 pb-20">
             {/* Error Message */}
             {error && (
               <section className="py-4 sm:py-6 lg:py-8">
@@ -1584,7 +1478,7 @@ const NewsAggregator = () => {
                             : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                         }`}
                       >
-                        <span className="text-sm font-bold">4</span>
+                        <span className="text-sm font-bold">3</span>
                       </button>
                     </div>
                   </div>
@@ -1618,7 +1512,7 @@ const NewsAggregator = () => {
                       viewMode === "grid"
                         ? "grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6"
                         : viewMode === "small"
-                        ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                        ? "grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4"
                         : "space-y-2 sm:space-y-3 md:space-y-4"
                     }`}
                   >
@@ -2316,7 +2210,7 @@ const NewsAggregator = () => {
                                         ? "200px"
                                         : viewMode === "grid"
                                         ? "250px"
-                                        : "auto",
+                                        : "75px",
                                     marginBottom: "15px",
                                   }}
                                 >
@@ -2336,19 +2230,19 @@ const NewsAggregator = () => {
                                           ? "200px"
                                           : viewMode === "grid"
                                           ? "250px"
-                                          : "auto",
+                                          : "75px",
                                       minHeight:
                                         viewMode === "small"
                                           ? "200px"
                                           : viewMode === "grid"
                                           ? "250px"
-                                          : "auto",
+                                          : "75px",
                                       maxHeight:
                                         viewMode === "small"
                                           ? "200px"
                                           : viewMode === "grid"
                                           ? "250px"
-                                          : "auto",
+                                          : "75px",
                                     }}
                                     onError={(e) => {
                                       // Replace broken image with placeholder
@@ -2373,14 +2267,20 @@ const NewsAggregator = () => {
                                       height:
                                         viewMode === "small"
                                           ? "100px"
+                                          : viewMode === "list"
+                                          ? "75px"
                                           : "150px",
                                       minHeight:
                                         viewMode === "small"
                                           ? "100px"
+                                          : viewMode === "list"
+                                          ? "75px"
                                           : "150px",
                                       maxHeight:
                                         viewMode === "small"
                                           ? "100px"
+                                          : viewMode === "list"
+                                          ? "75px"
                                           : "150px",
                                     }}
                                   >
@@ -2484,7 +2384,11 @@ const NewsAggregator = () => {
                                     </div>
                                   ) : (
                                     // Show generic placeholder
-                                    <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center relative">
+                                    <div
+                                      className={`w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center relative ${
+                                        viewMode === "list" ? "h-24" : "h-48"
+                                      }`}
+                                    >
                                       <div className="text-center text-gray-500 dark:text-gray-400">
                                         <div className="text-4xl">📰</div>
                                       </div>
@@ -2736,7 +2640,11 @@ const NewsAggregator = () => {
                                     </div>
                                   ) : (
                                     // Show generic placeholder
-                                    <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+                                    <div
+                                      className={`w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center ${
+                                        viewMode === "list" ? "h-24" : "h-48"
+                                      }`}
+                                    >
                                       <div className="text-center text-gray-500 dark:text-gray-400">
                                         <div className="text-4xl">📰</div>
                                       </div>
@@ -2784,8 +2692,8 @@ const NewsAggregator = () => {
             </section>
           </div>
 
-          {/* Bottom Tray Navigation - Mobile Only */}
-          <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 lg:hidden">
+          {/* Bottom Tray Navigation - All Viewports */}
+          <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-around px-2 py-3">
               {/* Technology */}
               <button
@@ -2884,7 +2792,7 @@ const NewsAggregator = () => {
                 }`}
               >
                 <svg
-                  className="w-5 h-5"
+                  className="w-6 h-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
