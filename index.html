@@ -21,28 +21,36 @@
       href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Flex:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Slab:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
-      /* Ensure Helvetica loads immediately with fallback */
+      /* Ensure Roboto Flex loads immediately with fallback */
       body {
-        font-family: "Helvetica", "Roboto", -apple-system, BlinkMacSystemFont,
+        font-family: "Roboto Flex", -apple-system, BlinkMacSystemFont,
           "Segoe UI", "Arial", sans-serif !important;
       }
 
       /* Font loading detection */
       .font-loaded {
-        font-family: "Helvetica", "Roboto", -apple-system, BlinkMacSystemFont,
+        font-family: "Roboto Flex", -apple-system, BlinkMacSystemFont,
           "Segoe UI", "Arial", sans-serif;
       }
 
       /* Font loading fallback */
       .wf-loading {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica",
-          "Arial", sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial",
+          sans-serif;
       }
 
       .wf-active {
-        font-family: "Helvetica", "Roboto", -apple-system, BlinkMacSystemFont,
+        font-family: "Roboto Flex", -apple-system, BlinkMacSystemFont,
           "Segoe UI", "Arial", sans-serif;
       }
     </style>
@@ -50,12 +58,13 @@
       // Font loading detection
       if ("fonts" in document) {
         Promise.all([
-          document.fonts.load("400 1em Helvetica"),
-          document.fonts.load("500 1em Helvetica"),
-          document.fonts.load("600 1em Helvetica"),
-          document.fonts.load("700 1em Helvetica"),
           document.fonts.load("400 1em 'Roboto Serif'"),
           document.fonts.load("700 1em 'Roboto Serif'"),
+          document.fonts.load("400 1em 'Roboto Flex'"),
+          document.fonts.load("500 1em 'Roboto Flex'"),
+          document.fonts.load("700 1em 'Roboto Flex'"),
+          document.fonts.load("400 1em 'Roboto Slab'"),
+          document.fonts.load("700 1em 'Roboto Slab'"),
         ])
           .then(() => {
             document.documentElement.classList.add("wf-active");

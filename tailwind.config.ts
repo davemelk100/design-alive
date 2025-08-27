@@ -47,6 +47,21 @@ const config: Config = {
           "sans-serif",
         ],
         serif: ["Roboto Serif", "Georgia", "Times", "Times New Roman", "serif"],
+        roboto: [
+          "Roboto Flex",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Arial",
+          "sans-serif",
+        ],
+        "roboto-slab": [
+          "Roboto Slab",
+          "Georgia",
+          "Times",
+          "Times New Roman",
+          "serif",
+        ],
       },
       fontSize: {
         // Custom typography scale

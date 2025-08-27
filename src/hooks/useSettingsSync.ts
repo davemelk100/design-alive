@@ -5,6 +5,7 @@ export const useSettingsSync = () => {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [customFeeds, setCustomFeeds] = useState<any[]>([]);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [fontFamily, setFontFamily] = useState<"sans" | "serif">("sans");
 
   // Load settings from localStorage on mount
   useEffect(() => {
@@ -15,6 +16,9 @@ export const useSettingsSync = () => {
     const savedActiveCategory = localStorage.getItem("activeCategory");
     const savedCustomFeeds = localStorage.getItem("customFeeds");
     const savedTheme = localStorage.getItem("theme") as "light" | "dark";
+    const savedFontFamily = localStorage.getItem("fontFamily") as
+      | "sans"
+      | "serif";
 
     if (savedViewMode) setViewMode(savedViewMode);
     if (savedActiveCategory) setActiveCategory(savedActiveCategory);
@@ -26,6 +30,7 @@ export const useSettingsSync = () => {
       }
     }
     if (savedTheme) setTheme(savedTheme);
+    if (savedFontFamily) setFontFamily(savedFontFamily);
   }, []);
 
   // Sync view mode changes
@@ -55,6 +60,15 @@ export const useSettingsSync = () => {
     localStorage.setItem("theme", newTheme);
   }, []);
 
+  // Sync font family changes
+  const syncFontFamily = useCallback(
+    async (newFontFamily: "sans" | "serif") => {
+      setFontFamily(newFontFamily);
+      localStorage.setItem("fontFamily", newFontFamily);
+    },
+    []
+  );
+
   // Get current settings for the component
   const getCurrentSettings = useCallback(() => {
     return {
@@ -62,18 +76,21 @@ export const useSettingsSync = () => {
       activeCategory,
       customFeeds,
       theme,
+      fontFamily,
     };
-  }, [viewMode, activeCategory, customFeeds, theme]);
+  }, [viewMode, activeCategory, customFeeds, theme, fontFamily]);
 
   return {
     syncViewMode,
     syncActiveCategory,
     syncCustomFeeds,
     syncTheme,
+    syncFontFamily,
     getCurrentSettings,
     viewMode,
     activeCategory,
     customFeeds,
     theme,
+    fontFamily,
   };
 };
