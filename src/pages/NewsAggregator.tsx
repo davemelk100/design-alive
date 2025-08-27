@@ -274,7 +274,7 @@ const NewsAggregator = () => {
   const [activeCategory, setActiveCategory] = useState("all");
 
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
-  const [fontFamily, setFontFamily] = useState<"sans" | "serif">("sans");
+
   const [feedStatus, setFeedStatus] = useState<{
     [key: string]: { working: boolean; error?: string };
   }>({});
@@ -1351,10 +1351,7 @@ const NewsAggregator = () => {
   };
 
   return (
-    <div
-      className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white"
-      style={{ fontFamily: "Helvetica, Roboto, sans-serif !important" }}
-    >
+    <div className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white">
       <Suspense
         fallback={
           <div className="min-h-screen bg-white flex items-center justify-center">
@@ -1575,34 +1572,6 @@ const NewsAggregator = () => {
             {/* News Grid Section */}
             <section className="py-4 sm:py-6 lg:py-8">
               <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-                {/* Dynamic Category Title and View Toggle */}
-                <div className="flex flex-col items-center text-center mb-6 gap-4">
-                  <div className="w-full">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                      {activeCategory === "all"
-                        ? "All News"
-                        : activeCategory === "technology"
-                        ? "Technology News"
-                        : activeCategory === "sports"
-                        ? "Sports News"
-                        : activeCategory === "business"
-                        ? "Business News"
-                        : activeCategory === "entertainment"
-                        ? "Entertainment News"
-                        : activeCategory === "politics"
-                        ? "Politics News"
-                        : "News"}
-                    </h1>
-                    <p className="text-gray-600 dark:text-gray-400">
-                      {activeCategory === "all"
-                        ? "Latest articles from all categories"
-                        : `Latest ${activeCategory} articles and updates`}
-                    </p>
-                  </div>
-
-                  {/* View Toggle - Hidden on mobile, visible on tablet and desktop */}
-                </div>
-
                 {loading ? (
                   <div className="flex justify-center items-center py-12">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
