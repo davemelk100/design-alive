@@ -274,14 +274,29 @@ const NewsAggregator = () => {
   const [activeCategory, setActiveCategory] = useState("all");
 
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
+  const [customFeedUrl, setCustomFeedUrl] = useState("");
+  const [isCreatingFeed, setIsCreatingFeed] = useState(false);
+  const [feedCreationStatus, setFeedCreationStatus] = useState<{
+    type: "success" | "error";
+    message: string;
+    rssXml?: string;
+    siteName?: string;
+  } | null>(null);
+  const [isRSSModalOpen, setIsRSSModalOpen] = useState(false);
+  const [selectedCustomCategory, setSelectedCustomCategory] = useState("");
 
   const [feedStatus, setFeedStatus] = useState<{
     [key: string]: { working: boolean; error?: string };
   }>({});
 
   // Settings sync hook
-  const { syncViewMode, syncActiveCategory, getCurrentSettings } =
-    useSettingsSync();
+  const {
+    syncViewMode,
+    syncActiveCategory,
+    syncCustomFeeds,
+    customFeeds,
+    getCurrentSettings,
+  } = useSettingsSync();
 
   // Load user settings on mount
   useEffect(() => {
@@ -374,6 +389,7 @@ const NewsAggregator = () => {
       case "TechCrunch":
         return techcrunchIndex;
       default:
+        // For custom feeds, return 0 as default index
         return 0;
     }
   };
@@ -512,6 +528,170 @@ const NewsAggregator = () => {
         goToNextTechcrunch();
         break;
     }
+  };
+
+  // Custom RSS Feed Creator
+  const createCustomRSSFeed = async () => {
+    if (!customFeedUrl) return;
+
+    setIsCreatingFeed(true);
+    setFeedCreationStatus(null);
+
+    try {
+      // Validate URL format
+      if (!customFeedUrl.trim()) {
+        throw new Error("Please enter a URL");
+      }
+
+      // Add protocol if missing
+      let urlToProcess = customFeedUrl.trim();
+      if (
+        !urlToProcess.startsWith("http://") &&
+        !urlToProcess.startsWith("https://")
+      ) {
+        urlToProcess = "https://" + urlToProcess;
+      }
+
+      // Validate URL
+      const url = new URL(urlToProcess);
+
+      // Create a proxy request to fetch the HTML content
+      const response = await fetch(`/.netlify/functions/create-rss-feed`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: urlToProcess }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create RSS feed");
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        setFeedCreationStatus({
+          type: "success",
+          message: `Successfully created RSS feed for ${url.hostname}! The feed has been added to your custom feeds.`,
+          rssXml: result.rssXml,
+          siteName: url.hostname.replace("www.", ""),
+        });
+        setCustomFeedUrl("");
+
+        // Refresh the feeds to show the new one
+        loadRSSFeeds();
+      } else {
+        setFeedCreationStatus({
+          type: "error",
+          message:
+            result.error ||
+            "Failed to create RSS feed. Please try a different URL.",
+        });
+      }
+    } catch (error) {
+      console.error("Error creating RSS feed:", error);
+
+      let errorMessage =
+        "Failed to create RSS feed. The website may not be accessible or may not have parseable content.";
+
+      if (error instanceof Error) {
+        if (error.message === "Please enter a URL") {
+          errorMessage = "Please enter a valid URL";
+        } else if (error.message.includes("Invalid URL")) {
+          errorMessage = "Please enter a valid URL (e.g., https://example.com)";
+        } else if (error.message.includes("Failed to create RSS feed")) {
+          errorMessage =
+            "Failed to create RSS feed. The website may not be accessible or may not have parseable content.";
+        }
+      }
+
+      setFeedCreationStatus({
+        type: "error",
+        message: errorMessage,
+      });
+    } finally {
+      setIsCreatingFeed(false);
+    }
+  };
+
+  // Helper function to download RSS feed as XML file
+  const downloadRSSFeed = (rssXml: string, filename: string) => {
+    const blob = new Blob([rssXml], { type: "application/xml" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${filename}.xml`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // Helper function to copy RSS feed to clipboard
+  const copyRSSFeedToClipboard = async (rssXml: string) => {
+    try {
+      await navigator.clipboard.writeText(rssXml);
+      // Show a brief success message
+      setFeedCreationStatus((prev) =>
+        prev
+          ? {
+              ...prev,
+              message: prev.message + " RSS feed copied to clipboard!",
+            }
+          : null
+      );
+    } catch (error) {
+      console.error("Failed to copy to clipboard:", error);
+      setFeedCreationStatus((prev) =>
+        prev
+          ? {
+              ...prev,
+              message: prev.message + " Failed to copy to clipboard.",
+            }
+          : null
+      );
+    }
+  };
+
+  // Function to save custom RSS feed with category
+  const saveCustomFeed = () => {
+    if (!selectedCustomCategory || !feedCreationStatus?.rssXml) return;
+
+    // Create a new custom feed
+    const newCustomFeed = {
+      id: `custom-${Date.now()}`,
+      name: feedCreationStatus.siteName || "Custom Feed",
+      url: customFeedUrl,
+      category: selectedCustomCategory,
+      enabled: true,
+      rssXml: feedCreationStatus.rssXml,
+    };
+
+    // Add to custom feeds
+    const updatedCustomFeeds = [...customFeeds, newCustomFeed];
+    syncCustomFeeds(updatedCustomFeeds);
+
+    // Update success message
+    setFeedCreationStatus((prev) =>
+      prev
+        ? {
+            ...prev,
+            message: `RSS feed saved to ${selectedCustomCategory} category! The feed has been added to your custom feeds.`,
+          }
+        : null
+    );
+
+    // Reset the form
+    setCustomFeedUrl("");
+    setSelectedCustomCategory("");
+
+    // Close modal after a short delay
+    setTimeout(() => {
+      setIsRSSModalOpen(false);
+      // Refresh feeds to show the new custom feed
+      loadRSSFeeds();
+    }, 2000);
   };
 
   // Function to parse RSS XML
@@ -855,6 +1035,8 @@ const NewsAggregator = () => {
 
     try {
       const allNewsItems: NewsItem[] = [];
+
+      // Load predefined RSS feeds
       const feedResults = await Promise.allSettled(
         rssFeeds.map(async (feed) => {
           try {
@@ -867,11 +1049,34 @@ const NewsAggregator = () => {
         })
       );
 
+      // Load custom feeds
+      const customFeedResults = await Promise.allSettled(
+        customFeeds
+          .filter((feed) => feed.enabled)
+          .map(async (feed) => {
+            try {
+              // For custom feeds, we already have the RSS XML, so parse it directly
+              if (feed.rssXml) {
+                const items = parseRSS(feed.rssXml, feed.name, feed.category);
+                return { feed, items, success: true };
+              } else {
+                // Fallback to fetching if no RSS XML stored
+                const items = await fetchRSSFeed(feed);
+                return { feed, items, success: true };
+              }
+            } catch (feedError) {
+              console.warn(`Custom feed ${feed.name} failed:`, feedError);
+              return { feed, items: [], success: false, error: feedError };
+            }
+          })
+      );
+
       // Process successful feeds
       const newFeedStatus: {
         [key: string]: { working: boolean; error?: string };
       } = {};
 
+      // Process regular feeds
       feedResults.forEach((result) => {
         if (result.status === "fulfilled" && result.value.success) {
           allNewsItems.push(...result.value.items);
@@ -896,13 +1101,44 @@ const NewsAggregator = () => {
         }
       });
 
+      // Process custom feeds
+      customFeedResults.forEach((result) => {
+        if (result.status === "fulfilled" && result.value.success) {
+          allNewsItems.push(...result.value.items);
+          newFeedStatus[result.value.feed.name] = { working: true };
+        } else if (result.status === "fulfilled" && !result.value.success) {
+          console.warn(
+            `Custom feed ${result.value.feed.name} failed to load:`,
+            result.value.error
+          );
+
+          newFeedStatus[result.value.feed.name] = {
+            working: false,
+            error:
+              result.value.error instanceof Error
+                ? result.value.error.message
+                : "Unknown error",
+          };
+        } else if (result.status === "rejected") {
+          console.warn(
+            `Custom feed failed with rejected promise:`,
+            result.reason
+          );
+        }
+      });
+
       setFeedStatus(newFeedStatus);
 
       // Count successful vs failed feeds
-      const successfulFeeds = feedResults.filter(
-        (result) => result.status === "fulfilled" && result.value.success
-      ).length;
-      const totalFeeds = rssFeeds.length;
+      const successfulFeeds =
+        feedResults.filter(
+          (result) => result.status === "fulfilled" && result.value.success
+        ).length +
+        customFeedResults.filter(
+          (result) => result.status === "fulfilled" && result.value.success
+        ).length;
+      const totalFeeds =
+        rssFeeds.length + customFeeds.filter((feed) => feed.enabled).length;
 
       if (successfulFeeds === 0) {
         setError(
@@ -1376,55 +1612,35 @@ const NewsAggregator = () => {
               </section>
             )}
 
-            {/* Category Title and Subtitle - Above Navigation */}
-            <div className="block bg-white dark:bg-gray-800 py-6">
-              <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-                <div className="text-center">
-                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                    {activeCategory === "all"
-                      ? "All News"
-                      : activeCategory === "technology"
-                      ? "Technology News"
-                      : activeCategory === "sports"
-                      ? "Sports News"
-                      : activeCategory === "business"
-                      ? "Business News"
-                      : activeCategory === "entertainment"
-                      ? "Entertainment News"
-                      : activeCategory === "politics"
-                      ? "Politics News"
-                      : activeCategory === "custom"
-                      ? "Custom Feeds"
-                      : `${
-                          activeCategory.charAt(0).toUpperCase() +
-                          activeCategory.slice(1)
-                        } News`}
-                  </h1>
-                  <p className="text-lg text-gray-600 dark:text-gray-400">
-                    Latest articles from{" "}
-                    {activeCategory === "all"
-                      ? "all sources"
-                      : activeCategory === "technology"
-                      ? "technology sources"
-                      : activeCategory === "sports"
-                      ? "sports sources"
-                      : activeCategory === "business"
-                      ? "business sources"
-                      : activeCategory === "entertainment"
-                      ? "entertainment sources"
-                      : activeCategory === "politics"
-                      ? "politics sources"
-                      : activeCategory === "custom"
-                      ? "custom feeds"
-                      : activeCategory}
-                  </p>
-                </div>
-              </div>
-            </div>
-
             {/* Top Navigation - Tablet and Desktop Only */}
-            <div className="hidden md:block border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-              <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+            <div className="hidden md:block bg-white dark:bg-gray-800">
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-8 relative">
+                {/* Plus Button - Positioned to the left of navigation */}
+                <button
+                  onClick={() => {
+                    setIsRSSModalOpen(true);
+                    setSelectedCustomCategory("");
+                    setCustomFeedUrl("");
+                    setFeedCreationStatus(null);
+                  }}
+                  className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-12 w-10 h-10 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-colors shadow-lg"
+                  title="Create Custom RSS Feed"
+                >
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                </button>
+
                 <nav className="flex items-center justify-between py-4">
                   {/* All News */}
                   <button
@@ -1568,6 +1784,202 @@ const NewsAggregator = () => {
                 </nav>
               </div>
             </div>
+
+            {/* Category Title - Below Navigation */}
+            <div className="block bg-white dark:bg-gray-800 py-4">
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+                <div className="text-left">
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {activeCategory === "all"
+                      ? "All News"
+                      : activeCategory === "technology"
+                      ? "Technology News"
+                      : activeCategory === "sports"
+                      ? "Sports News"
+                      : activeCategory === "business"
+                      ? "Business News"
+                      : activeCategory === "entertainment"
+                      ? "Entertainment News"
+                      : activeCategory === "politics"
+                      ? "Politics News"
+                      : activeCategory === "custom"
+                      ? "Custom Feeds"
+                      : `${
+                          activeCategory.charAt(0).toUpperCase() +
+                          activeCategory.slice(1)
+                        } News`}
+                  </h1>
+                </div>
+              </div>
+            </div>
+
+            {/* RSS Feed Creator Modal */}
+            {isRSSModalOpen && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-6">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                        Create Custom RSS Feed
+                      </h3>
+                      <button
+                        onClick={() => setIsRSSModalOpen(false)}
+                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                      >
+                        <svg
+                          className="w-6 h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      Enter a website URL to generate a custom RSS feed. This
+                      will parse the site and create an RSS feed for you. Works
+                      best with news sites, blogs, and content-heavy websites.
+                    </p>
+
+                    <p className="text-xs text-gray-500 dark:text-gray-500 mb-6">
+                      💡 Tip: If parsing fails, the site may use JavaScript to
+                      load content or have a complex structure. Try refreshing
+                      the page or using a different URL from the same site.
+                    </p>
+
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        if (customFeedUrl && !isCreatingFeed) {
+                          createCustomRSSFeed();
+                        }
+                      }}
+                      className="flex flex-col sm:flex-row gap-3 mb-6"
+                    >
+                      <input
+                        type="url"
+                        placeholder="https://example.com"
+                        value={customFeedUrl}
+                        onChange={(e) => setCustomFeedUrl(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (
+                            e.key === "Enter" &&
+                            customFeedUrl &&
+                            !isCreatingFeed
+                          ) {
+                            e.preventDefault();
+                            createCustomRSSFeed();
+                          }
+                        }}
+                        className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                      <button
+                        type="submit"
+                        disabled={!customFeedUrl || isCreatingFeed}
+                        className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+                      >
+                        {isCreatingFeed ? "Creating..." : "Create Feed"}
+                      </button>
+                    </form>
+
+                    {feedCreationStatus && (
+                      <div
+                        className={`p-4 rounded-lg ${
+                          feedCreationStatus.type === "success"
+                            ? "bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800"
+                            : "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800"
+                        }`}
+                      >
+                        <p
+                          className={`text-sm ${
+                            feedCreationStatus.type === "success"
+                              ? "text-green-700 dark:text-green-300"
+                              : "text-red-700 dark:text-red-300"
+                          }`}
+                        >
+                          {feedCreationStatus.message}
+                        </p>
+
+                        {feedCreationStatus.type === "success" &&
+                          feedCreationStatus.rssXml && (
+                            <>
+                              {/* Category Selection */}
+                              <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                                <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+                                  📂 Select a category for this RSS feed:
+                                </p>
+                                <div className="flex flex-col sm:flex-row gap-3">
+                                  <select
+                                    value={selectedCustomCategory}
+                                    onChange={(e) =>
+                                      setSelectedCustomCategory(e.target.value)
+                                    }
+                                    className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  >
+                                    <option value="">
+                                      Choose a category...
+                                    </option>
+                                    <option value="technology">
+                                      Technology
+                                    </option>
+                                    <option value="sports">Sports</option>
+                                    <option value="business">Business</option>
+                                    <option value="entertainment">
+                                      Entertainment
+                                    </option>
+                                    <option value="politics">Politics</option>
+                                    <option value="custom">Custom</option>
+                                  </select>
+                                  <button
+                                    onClick={() => saveCustomFeed()}
+                                    disabled={!selectedCustomCategory}
+                                    className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                                  >
+                                    Save Feed
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Download Options */}
+                              <div className="mt-3 flex gap-2">
+                                <button
+                                  onClick={() =>
+                                    downloadRSSFeed(
+                                      feedCreationStatus.rssXml!,
+                                      feedCreationStatus.siteName ||
+                                        "custom-feed"
+                                    )
+                                  }
+                                  className="px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
+                                >
+                                  Download RSS Feed
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    copyRSSFeedToClipboard(
+                                      feedCreationStatus.rssXml!
+                                    )
+                                  }
+                                  className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors"
+                                >
+                                  Copy to Clipboard
+                                </button>
+                              </div>
+                            </>
+                          )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* News Grid Section */}
             <section className="py-4 sm:py-6 lg:py-8">
@@ -2504,12 +2916,13 @@ const NewsAggregator = () => {
                       })()}
 
                       {/* Custom Feeds Section */}
-                      {rssFeeds
+                      {customFeeds
                         .filter(
                           (feed) =>
-                            feed.category === "Custom" &&
+                            feed.enabled &&
                             (activeCategory === "all" ||
-                              activeCategory === "Custom")
+                              activeCategory === feed.category ||
+                              activeCategory === "custom")
                         )
                         .map((customFeed) => {
                           const customFeedItems = newsItems.filter(
@@ -2558,13 +2971,12 @@ const NewsAggregator = () => {
                                     {/* Remove Button - Right side */}
                                     <button
                                       onClick={() => {
-                                        const feedIndex = rssFeeds.findIndex(
-                                          (f) => f.id === customFeed.id
-                                        );
-                                        if (feedIndex > -1) {
-                                          rssFeeds.splice(feedIndex, 1);
-                                          loadRSSFeeds();
-                                        }
+                                        const updatedCustomFeeds =
+                                          customFeeds.filter(
+                                            (f) => f.id !== customFeed.id
+                                          );
+                                        syncCustomFeeds(updatedCustomFeeds);
+                                        loadRSSFeeds();
                                       }}
                                       className="w-5 h-5 text-xs text-red-500 hover:text-red-700 bg-white dark:bg-gray-700 rounded border border-red-200 dark:border-red-600 flex items-center justify-center hover:bg-red-50 dark:hover:bg-red-900/20"
                                       title="Remove this feed"
@@ -2839,7 +3251,7 @@ const NewsAggregator = () => {
                 }`}
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-8 h-8"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

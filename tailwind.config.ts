@@ -20,8 +20,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: [
-          "Helvetica",
-          "Roboto",
+          "Roboto Flex",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
@@ -29,8 +28,7 @@ const config: Config = {
           "sans-serif",
         ],
         title: [
-          "Helvetica",
-          "Roboto",
+          "Roboto Flex",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
@@ -38,8 +36,7 @@ const config: Config = {
           "sans-serif",
         ],
         card: [
-          "Helvetica",
-          "Roboto",
+          "Roboto Flex",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
