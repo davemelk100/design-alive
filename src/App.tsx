@@ -1902,9 +1902,9 @@ function App() {
 
       {/* Global Dark Mode Toggle and View Toggle - Visible on all pages */}
       <div className="fixed top-2 right-0 z-50 flex items-center gap-2">
-        {/* View Toggle - Only show on news page */}
+        {/* View Toggle - Only show on news page and hide on mobile */}
         {location.pathname === "/news" && (
-          <div className="flex items-center gap-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-1 shadow-lg">
+          <div className="hidden md:flex items-center gap-1 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-1 shadow-lg">
             <button
               onClick={() => {
                 // This will be handled by the NewsAggregator component

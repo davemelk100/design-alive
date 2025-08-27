@@ -1377,7 +1377,7 @@ const NewsAggregator = () => {
             )}
 
             {/* Category Title and Subtitle - Above Navigation */}
-            <div className="hidden md:block bg-white dark:bg-gray-800 py-6">
+            <div className="block bg-white dark:bg-gray-800 py-6">
               <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
                 <div className="text-center">
                   <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -1425,7 +1425,7 @@ const NewsAggregator = () => {
             {/* Top Navigation - Tablet and Desktop Only */}
             <div className="hidden md:block border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
               <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-                <nav className="flex items-center justify-center space-x-8 py-4">
+                <nav className="flex items-center justify-between py-4">
                   {/* All News */}
                   <button
                     onClick={() => {
