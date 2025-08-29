@@ -1586,7 +1586,23 @@ const NewsAggregator = () => {
       >
         <div className="flex relative">
           {/* Main Content Area */}
-          <div className="flex-1 pb-20 md:pb-0">
+          <div
+            className={`flex-1 pb-20 md:pb-0 min-h-screen ${
+              activeCategory === "all"
+                ? "bg-gray-100 dark:bg-gray-700"
+                : activeCategory === "technology"
+                ? "bg-[#fef2de] dark:bg-[#f79d84]/30"
+                : activeCategory === "sports"
+                ? "bg-[#def5e9] dark:bg-[#59cd90]/30"
+                : activeCategory === "business"
+                ? "bg-[#d8edf7] dark:bg-[#3fa7d6]/30"
+                : activeCategory === "entertainment"
+                ? "bg-[#f3e8ff] dark:bg-[#a855f7]/30"
+                : activeCategory === "politics"
+                ? "bg-[#fdebe6] dark:bg-[#f79d84]/30"
+                : "bg-gray-100 dark:bg-gray-700"
+            }`}
+          >
             {/* Error Message */}
             {error && (
               <section className="py-4 sm:py-6 lg:py-8">
@@ -1917,23 +1933,7 @@ const NewsAggregator = () => {
 
             {/* News Grid Section */}
             <section className="py-2 sm:py-3 lg:py-0">
-              <div
-                className={`w-full py-2 sm:py-3 lg:py-4 rounded-lg ${
-                  activeCategory === "all"
-                    ? "bg-gray-100 dark:bg-gray-700"
-                    : activeCategory === "technology"
-                    ? "bg-[#fef2de] dark:bg-[#f79d84]/30"
-                    : activeCategory === "sports"
-                    ? "bg-[#def5e9] dark:bg-[#59cd90]/30"
-                    : activeCategory === "business"
-                    ? "bg-[#d8edf7] dark:bg-[#3fa7d6]/30"
-                    : activeCategory === "entertainment"
-                    ? "bg-[#f3e8ff] dark:bg-[#a855f7]/30"
-                    : activeCategory === "politics"
-                    ? "bg-[#fdebe6] dark:bg-[#f79d84]/30"
-                    : "bg-gray-100 dark:bg-gray-700"
-                }`}
-              >
+              <div className="w-full py-2 sm:py-3 lg:py-4">
                 <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
                   {loading ? (
                     <div className="flex justify-center items-center py-12">
@@ -3281,10 +3281,10 @@ const NewsAggregator = () => {
                   setActiveCategory("business");
                   syncActiveCategory("business");
                 }}
-                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
+                className={`flex flex-col items-center gap-1 px-3 py-2 transition-colors ${
                   activeCategory === "business"
-                    ? `${categoryColors.business.bg} ${categoryColors.business.text}`
-                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`
+                    ? `${categoryColors.business.bg} ${categoryColors.business.text} rounded-t-lg`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
                 }`}
               >
                 <svg
@@ -3309,10 +3309,10 @@ const NewsAggregator = () => {
                   setActiveCategory("entertainment");
                   syncActiveCategory("entertainment");
                 }}
-                className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors ${
+                className={`flex flex-col items-center gap-1 px-3 py-2 transition-colors ${
                   activeCategory === "entertainment"
-                    ? `${categoryColors.entertainment.bg} ${categoryColors.entertainment.text}`
-                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700`
+                    ? `${categoryColors.entertainment.bg} ${categoryColors.entertainment.text} rounded-t-lg`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
                 }`}
               >
                 <svg
