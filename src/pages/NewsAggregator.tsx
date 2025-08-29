@@ -151,7 +151,7 @@ const rssFeeds: RSSFeed[] = [
     name: "Bloomberg",
     url: "https://news.google.com/rss/search?q=when:24h+allinurl:bloomberg.com&hl=en-US&gl=US&ceid=US:en",
     category: "business",
-    enabled: true,
+    enabled: false,
   },
 
   {
@@ -1598,12 +1598,40 @@ const NewsAggregator = () => {
               </section>
             )}
 
+            {/* Category Title - Above Navigation */}
+            <div className="block bg-white dark:bg-gray-800 py-4">
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+                <div className="flex items-center justify-between">
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {activeCategory === "all"
+                      ? "All News"
+                      : activeCategory === "technology"
+                      ? "Technology News"
+                      : activeCategory === "sports"
+                      ? "Sports News"
+                      : activeCategory === "business"
+                      ? "Business News"
+                      : activeCategory === "entertainment"
+                      ? "Entertainment News"
+                      : activeCategory === "politics"
+                      ? "Politics News"
+                      : activeCategory === "custom"
+                      ? "Custom Feeds"
+                      : `${
+                          activeCategory.charAt(0).toUpperCase() +
+                          activeCategory.slice(1)
+                        } News`}
+                  </h1>
+                </div>
+              </div>
+            </div>
+
             {/* Top Navigation - Tablet and Desktop Only */}
             <div className="hidden md:block bg-white dark:bg-gray-800">
               <div className="max-w-[1200px] mx-auto px-4 sm:px-8 relative">
                 <nav className="flex items-center justify-between py-4">
-                  {/* Left side - Category buttons */}
-                  <div className="flex items-center gap-2">
+                  {/* Category buttons - evenly distributed */}
+                  <div className="flex items-center justify-between w-full">
                     {/* All News */}
                     <button
                       onClick={() => {
@@ -1748,34 +1776,6 @@ const NewsAggregator = () => {
               </div>
             </div>
 
-            {/* Category Title - Below Navigation */}
-            <div className="block bg-white dark:bg-gray-800 py-4">
-              <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-                <div className="flex items-center justify-between">
-                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {activeCategory === "all"
-                      ? "All News"
-                      : activeCategory === "technology"
-                      ? "Technology News"
-                      : activeCategory === "sports"
-                      ? "Sports News"
-                      : activeCategory === "business"
-                      ? "Business News"
-                      : activeCategory === "entertainment"
-                      ? "Entertainment News"
-                      : activeCategory === "politics"
-                      ? "Politics News"
-                      : activeCategory === "custom"
-                      ? "Custom Feeds"
-                      : `${
-                          activeCategory.charAt(0).toUpperCase() +
-                          activeCategory.slice(1)
-                        } News`}
-                  </h1>
-                </div>
-              </div>
-            </div>
-
             {/* RSS Feed Creator Modal */}
             {isRSSModalOpen && (
               <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -1916,905 +1916,969 @@ const NewsAggregator = () => {
             )}
 
             {/* News Grid Section */}
-            <section className="py-4 sm:py-6 lg:py-8">
-              <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-                {loading ? (
-                  <div className="flex justify-center items-center py-12">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                  </div>
-                ) : error ? (
-                  <div className="text-center py-12">
-                    <p className="text-red-600 dark:text-red-400 text-lg mb-4">
-                      {error}
-                    </p>
-                    <button
-                      onClick={loadRSSFeeds}
-                      className="px-6 py-3 bg-blue-600 text-blue-50 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Try Again
-                    </button>
-                  </div>
-                ) : newsItems.length === 0 ? (
-                  <div className="text-center py-12">
-                    <p className="text-gray-600 dark:text-gray-400 text-lg">
-                      No news available at the moment.
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    {/* View Toggle - Above Cards, Right Aligned */}
+            <section className="py-2 sm:py-3 lg:py-4">
+              <div
+                className={`w-full py-2 sm:py-3 lg:py-4 rounded-lg ${
+                  activeCategory === "all"
+                    ? "bg-gray-100 dark:bg-gray-700"
+                    : activeCategory === "technology"
+                    ? "bg-[#fef2de] dark:bg-[#f79d84]/30"
+                    : activeCategory === "sports"
+                    ? "bg-[#def5e9] dark:bg-[#59cd90]/30"
+                    : activeCategory === "business"
+                    ? "bg-[#d8edf7] dark:bg-[#3fa7d6]/30"
+                    : activeCategory === "entertainment"
+                    ? "bg-[#f3e8ff] dark:bg-[#a855f7]/30"
+                    : activeCategory === "politics"
+                    ? "bg-[#fdebe6] dark:bg-[#f79d84]/30"
+                    : "bg-gray-100 dark:bg-gray-700"
+                }`}
+              >
+                <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+                  {loading ? (
+                    <div className="flex justify-center items-center py-12">
+                      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                    </div>
+                  ) : error ? (
+                    <div className="text-center py-12">
+                      <p className="text-red-600 dark:text-red-400 text-lg mb-4">
+                        {error}
+                      </p>
+                      <button
+                        onClick={loadRSSFeeds}
+                        className="px-6 py-3 bg-blue-600 text-blue-50 rounded-lg hover:bg-blue-700 transition-colors"
+                      >
+                        Try Again
+                      </button>
+                    </div>
+                  ) : newsItems.length === 0 ? (
+                    <div className="text-center py-12">
+                      <p className="text-gray-600 dark:text-gray-400 text-lg">
+                        No news available at the moment.
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      {/* View Toggle - Above Cards, Right Aligned */}
 
-                    <div
-                      className={`${
-                        viewMode === "grid"
-                          ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"
-                          : "space-y-2 sm:space-y-3 md:space-y-4"
-                      }`}
-                    >
-                      {/* Dynamic News Cards */}
-                      {(() => {
-                        const filteredFeeds = rssFeeds.filter(
-                          (feed) =>
-                            activeCategory === "all" ||
-                            feed.category === activeCategory
-                        );
-
-                        return filteredFeeds.map((feed) => {
-                          const feedItems = newsItems.filter(
-                            (item) => item.source === feed.name
+                      <div
+                        className={`${
+                          viewMode === "grid"
+                            ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"
+                            : "space-y-2 sm:space-y-3 md:space-y-4"
+                        }`}
+                      >
+                        {/* Dynamic News Cards */}
+                        {(() => {
+                          const filteredFeeds = rssFeeds.filter(
+                            (feed) =>
+                              activeCategory === "all" ||
+                              feed.category === activeCategory
                           );
-                          const currentIndex = getCurrentIndex(feed.name);
-                          const currentFeedStatus = feedStatus[feed.name];
 
-                          // Always show the card, even if no items
-                          return (
-                            <div
-                              key={`${feed.id}-${currentIndex}`}
-                              className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border-l-4 font-roboto ${
-                                viewMode === "grid"
-                                  ? "h-[480px]"
-                                  : "w-full h-auto justify-center relative"
-                              }`}
-                              style={{
-                                borderLeftColor:
-                                  feed.category === "technology"
-                                    ? "#f79d84"
-                                    : feed.category === "sports"
-                                    ? "#59cd90"
-                                    : feed.category === "business"
-                                    ? "#3fa7d6"
-                                    : feed.category === "entertainment"
-                                    ? "#a855f7"
-                                    : feed.category === "politics"
-                                    ? "#f79d84"
-                                    : "#6b7280",
-                              }}
-                            >
-                              {/* Card Header */}
+                          return filteredFeeds.map((feed) => {
+                            const feedItems = newsItems.filter(
+                              (item) => item.source === feed.name
+                            );
+                            const currentIndex = getCurrentIndex(feed.name);
+                            const currentFeedStatus = feedStatus[feed.name];
+
+                            // Always show the card, even if no items
+                            return (
                               <div
-                                className={`${
-                                  viewMode === "list"
-                                    ? "px-3 py-2 sm:px-4 pr-28 sm:pr-36 md:pr-44"
-                                    : viewMode === "grid"
-                                    ? "px-4 pt-4"
-                                    : "px-6 pt-6"
-                                } flex-shrink-0`}
+                                key={`${feed.id}-${currentIndex}`}
+                                className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border-l-4 font-roboto ${
+                                  viewMode === "grid"
+                                    ? "h-[480px]"
+                                    : "w-full h-auto justify-center relative"
+                                }`}
+                                style={{
+                                  borderLeftColor:
+                                    feed.category === "technology"
+                                      ? "#f79d84"
+                                      : feed.category === "sports"
+                                      ? "#59cd90"
+                                      : feed.category === "business"
+                                      ? "#3fa7d6"
+                                      : feed.category === "entertainment"
+                                      ? "#a855f7"
+                                      : feed.category === "politics"
+                                      ? "#f79d84"
+                                      : "#6b7280",
+                                }}
                               >
-                                {/* Top Row - Logo, Title, and Carousel Controls */}
+                                {/* Card Header */}
                                 <div
                                   className={`${
                                     viewMode === "list"
-                                      ? "flex items-center justify-between"
+                                      ? "px-3 py-2 sm:px-4 pr-28 sm:pr-36 md:pr-44"
                                       : viewMode === "grid"
-                                      ? "flex items-center justify-between pt-2 pb-4"
-                                      : "flex items-center justify-between mb-4 pt-3 pb-6"
-                                  }`}
+                                      ? "px-4 pt-4"
+                                      : "px-6 pt-6"
+                                  } flex-shrink-0`}
                                 >
-                                  {/* Left side: Logo */}
+                                  {/* Top Row - Logo, Title, and Carousel Controls */}
                                   <div
                                     className={`${
                                       viewMode === "list"
-                                        ? "flex items-center"
+                                        ? "flex items-center justify-between"
                                         : viewMode === "grid"
-                                        ? "flex items-center space-x-3"
-                                        : "flex flex-col"
+                                        ? "flex items-center justify-between pt-2 pb-4"
+                                        : "flex items-center justify-between mb-4 pt-3 pb-6"
                                     }`}
                                   >
-                                    {/* WIRED Logo and Title - Stacked and aligned */}
-                                    {feed.name === "WIRED" ? (
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="https://www.wired.com/verso/static/wired-us/assets/logo.svg"
-                                          alt="wired"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "Ars Technica" ? (
-                                      /* Ars Technica Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/ars-technica-logo.svg"
-                                          alt="ars technica"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "TechRadar" ? (
-                                      /* TechRadar Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/techradar-logo.svg"
-                                          alt="techradar"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "Vice - Tech" ? (
-                                      /* VICE Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/vice-logo.png"
-                                          alt="vice"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "The Onion" ? (
-                                      /* The Onion Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/the-onion.png"
-                                          alt="the onion"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "The Hard Times" ? (
-                                      /* The Hard Times Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/hard-times.png"
-                                          alt="the hard times"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "#Windows11" ? (
-                                      /* Windows 11 Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/windows-11.svg"
-                                          alt="windows 11"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "Fox Sports" ? (
-                                      /* Fox Sports Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/fox-sports.png"
-                                          alt="fox sports"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "Lambgoat" ? (
-                                      /* Lambgoat Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/lambgoat.png"
-                                          alt="lambgoat"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "No Echo" ? (
-                                      /* No Echo Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/no-echo.png"
-                                          alt="no echo"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name ===
-                                      "Soft White Underbelly" ? (
-                                      /* Soft White Underbelly Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/swu.jpg"
-                                          alt="soft white underbelly"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "Breitbart" ? (
-                                      /* Breitbart Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/breitbart.png"
-                                          alt="breitbart"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "Reuters" ? (
-                                      /* Reuters Business Text Title */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <div className="text-center">
-                                          <h3
-                                            className={`font-bold text-blue-700 dark:text-blue-400 ${
-                                              viewMode === "grid"
-                                                ? "text-lg"
-                                                : "text-xl"
-                                            }`}
-                                          >
-                                            Reuters
-                                          </h3>
-                                        </div>
-                                      </div>
-                                    ) : feed.name === "CNN News" ? (
-                                      /* CNN News Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/cnn.svg"
-                                          alt="cnn news"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "Bloomberg" ? (
-                                      /* Bloomberg Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/bloomberg.svg"
-                                          alt="bloomberg"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "Newsweek" ? (
-                                      /* Newsweek Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/newsweek.svg"
-                                          alt="newsweek"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "New York Post" ? (
-                                      /* NY Post Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/nypost.png"
-                                          alt="ny post"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "CBS SPORTS" ? (
-                                      /* CBS Sports Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/cbs-sports.svg"
-                                          alt="cbs sports"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "CNN - SPORTS" ? (
-                                      /* CNN Sports Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/cnnsi.png"
-                                          alt="cnn sports"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : feed.name === "Fox News" ? (
-                                      /* Fox News Logo and Title - Stacked and aligned */
-                                      <div
-                                        className={
-                                          viewMode === "grid" ? "" : "mb-3"
-                                        }
-                                      >
-                                        <img
-                                          src="/img/fox-news.png"
-                                          alt="fox news"
-                                          className={`w-full h-auto opacity-80 ${
-                                            viewMode === "grid"
-                                              ? "max-w-[80px]"
-                                              : "max-w-[120px]"
-                                          }`}
-                                          onError={(e) => {
-                                            // Hide broken logo
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
-                                    ) : (
-                                      /* Source Title for other feeds */
-                                      <h4
-                                        className={`font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide flex-shrink-0 ${
-                                          viewMode === "list"
-                                            ? "text-xs sm:text-sm"
-                                            : "text-base"
-                                        }`}
-                                      >
-                                        {feed.name}
-                                      </h4>
-                                    )}
-                                  </div>
-
-                                  {/* Carousel Controls - Show in list view only */}
-                                  {viewMode === "list" &&
-                                    feedItems.length > 1 && (
-                                      <div className="flex items-center gap-2">
-                                        <button
-                                          onClick={() =>
-                                            goToPrevious(feed.name)
-                                          }
-                                          disabled={feedItems.length <= 1}
-                                          className="carousel-button w-10 h-7 text-xs text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
-                                        >
-                                          ←
-                                        </button>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400 w-6 h-6 flex items-center justify-center">
-                                          {currentIndex + 1}/{feedItems.length}
-                                        </span>
-                                        <button
-                                          onClick={() => goToNext(feed.name)}
-                                          disabled={feedItems.length <= 1}
-                                          className="carousel-button w-10 h-7 text-xs text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
-                                        >
-                                          →
-                                        </button>
-                                      </div>
-                                    )}
-
-                                  {/* Right side: Carousel Controls - Show in grid view only */}
-                                  {viewMode === "grid" &&
-                                    feedItems.length > 1 && (
-                                      <div className="flex items-center gap-2">
-                                        <button
-                                          onClick={() =>
-                                            goToPrevious(feed.name)
-                                          }
-                                          disabled={feedItems.length <= 1}
-                                          className={`carousel-button text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors ${
-                                            viewMode === "grid"
-                                              ? "w-8 h-6 text-xs"
-                                              : "w-12 h-8"
-                                          }`}
-                                        >
-                                          ←
-                                        </button>
-                                        <span
-                                          className={`text-gray-500 dark:text-gray-400 flex items-center justify-center mx-1 ${
-                                            viewMode === "grid"
-                                              ? "text-xs w-6 h-6"
-                                              : "text-base w-8 h-8"
-                                          }`}
-                                        >
-                                          {currentIndex + 1}/{feedItems.length}
-                                        </span>
-                                        <button
-                                          onClick={() => goToNext(feed.name)}
-                                          disabled={feedItems.length <= 1}
-                                          className={`carousel-button text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors ${
-                                            viewMode === "grid"
-                                              ? "w-8 h-6 text-xs"
-                                              : "w-12 h-8"
-                                          }`}
-                                        >
-                                          →
-                                        </button>
-                                      </div>
-                                    )}
-                                </div>
-
-                                {/* Article Title Row - Show in all view modes */}
-                                {feedItems.length > 0 && (
-                                  <div className="mt-0">
-                                    <h3
-                                      className={`font-semibold text-gray-900 dark:text-white leading-tight ${
-                                        viewMode === "grid"
-                                          ? "text-base"
-                                          : viewMode === "list"
-                                          ? "text-base sm:text-lg"
-                                          : "text-lg"
+                                    {/* Left side: Logo */}
+                                    <div
+                                      className={`${
+                                        viewMode === "list"
+                                          ? "flex items-center"
+                                          : viewMode === "grid"
+                                          ? "flex items-center space-x-3"
+                                          : "flex flex-col"
                                       }`}
                                     >
-                                      <a
-                                        href={feedItems[currentIndex]?.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer break-words block"
-                                      >
-                                        {feedItems[currentIndex]?.title || ""}
-                                      </a>
-                                    </h3>
+                                      {/* WIRED Logo and Title - Stacked and aligned */}
+                                      {feed.name === "WIRED" ? (
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="https://www.wired.com/verso/static/wired-us/assets/logo.svg"
+                                            alt="wired"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "Ars Technica" ? (
+                                        /* Ars Technica Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/ars-technica-logo.svg"
+                                            alt="ars technica"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "TechRadar" ? (
+                                        /* TechRadar Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/techradar-logo.svg"
+                                            alt="techradar"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "Vice - Tech" ? (
+                                        /* VICE Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/vice-logo.png"
+                                            alt="vice"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "The Onion" ? (
+                                        /* The Onion Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/the-onion.png"
+                                            alt="the onion"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "The Hard Times" ? (
+                                        /* The Hard Times Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/hard-times.png"
+                                            alt="the hard times"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "#Windows11" ? (
+                                        /* Windows 11 Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/windows-11.svg"
+                                            alt="windows 11"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "Fox Sports" ? (
+                                        /* Fox Sports Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/fox-sports.png"
+                                            alt="fox sports"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "Lambgoat" ? (
+                                        /* Lambgoat Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/lambgoat.png"
+                                            alt="lambgoat"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "No Echo" ? (
+                                        /* No Echo Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/no-echo.png"
+                                            alt="no echo"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name ===
+                                        "Soft White Underbelly" ? (
+                                        /* Soft White Underbelly Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/swu.jpg"
+                                            alt="soft white underbelly"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "Breitbart" ? (
+                                        /* Breitbart Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/breitbart.png"
+                                            alt="breitbart"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "Reuters" ? (
+                                        /* Reuters Business Text Title */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <div className="text-center">
+                                            <h3
+                                              className={`font-bold text-blue-700 dark:text-blue-400 ${
+                                                viewMode === "grid"
+                                                  ? "text-lg"
+                                                  : "text-xl"
+                                              }`}
+                                            >
+                                              Reuters
+                                            </h3>
+                                          </div>
+                                        </div>
+                                      ) : feed.name === "CNN News" ? (
+                                        /* CNN News Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/cnn.svg"
+                                            alt="cnn news"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "Bloomberg" ? (
+                                        /* Bloomberg Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/bloomberg.svg"
+                                            alt="bloomberg"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "Newsweek" ? (
+                                        /* Newsweek Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/newsweek.svg"
+                                            alt="newsweek"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "New York Post" ? (
+                                        /* NY Post Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/nypost.png"
+                                            alt="ny post"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "CBS SPORTS" ? (
+                                        /* CBS Sports Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/cbs-sports.svg"
+                                            alt="cbs sports"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "CNN - SPORTS" ? (
+                                        /* CNN Sports Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/cnnsi.png"
+                                            alt="cnn sports"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : feed.name === "Fox News" ? (
+                                        /* Fox News Logo and Title - Stacked and aligned */
+                                        <div
+                                          className={
+                                            viewMode === "grid" ? "" : "mb-3"
+                                          }
+                                        >
+                                          <img
+                                            src="/img/fox-news.png"
+                                            alt="fox news"
+                                            className={`w-full h-auto opacity-80 ${
+                                              viewMode === "grid"
+                                                ? "max-w-[80px]"
+                                                : "max-w-[120px]"
+                                            }`}
+                                            onError={(e) => {
+                                              // Hide broken logo
+                                              const target = e.currentTarget;
+                                              target.style.display = "none";
+                                            }}
+                                          />
+                                        </div>
+                                      ) : (
+                                        /* Source Title for other feeds */
+                                        <h4
+                                          className={`font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide flex-shrink-0 ${
+                                            viewMode === "list"
+                                              ? "text-xs sm:text-sm"
+                                              : "text-base"
+                                          }`}
+                                        >
+                                          {feed.name}
+                                        </h4>
+                                      )}
+                                    </div>
 
-                                    {/* Subheading/Excerpt - Show in list view */}
+                                    {/* Carousel Controls - Show in list view only */}
                                     {viewMode === "list" &&
-                                      feedItems[currentIndex]?.excerpt &&
-                                      feed.name !== "The Hard Times" && (
-                                        <div className="mt-2">
-                                          <p
-                                            className="text-sm text-gray-600 dark:text-gray-400"
-                                            style={{ lineHeight: "1.5" }}
+                                      feedItems.length > 1 && (
+                                        <div className="flex items-center gap-2">
+                                          <button
+                                            onClick={() =>
+                                              goToPrevious(feed.name)
+                                            }
+                                            disabled={feedItems.length <= 1}
+                                            className="carousel-button w-10 h-7 text-xs text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
                                           >
-                                            {truncateText(
-                                              feedItems[currentIndex]
-                                                ?.excerpt || "",
-                                              200
-                                            )}
-                                          </p>
+                                            ←
+                                          </button>
+                                          <span className="text-xs text-gray-500 dark:text-gray-400 w-6 h-6 flex items-center justify-center">
+                                            {currentIndex + 1}/
+                                            {feedItems.length}
+                                          </span>
+                                          <button
+                                            onClick={() => goToNext(feed.name)}
+                                            disabled={feedItems.length <= 1}
+                                            className="carousel-button w-10 h-7 text-xs text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
+                                          >
+                                            →
+                                          </button>
+                                        </div>
+                                      )}
+
+                                    {/* Right side: Carousel Controls - Show in grid view only */}
+                                    {viewMode === "grid" &&
+                                      feedItems.length > 1 && (
+                                        <div className="flex items-center gap-2">
+                                          <button
+                                            onClick={() =>
+                                              goToPrevious(feed.name)
+                                            }
+                                            disabled={feedItems.length <= 1}
+                                            className={`carousel-button text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors ${
+                                              viewMode === "grid"
+                                                ? "w-8 h-6 text-xs"
+                                                : "w-12 h-8"
+                                            }`}
+                                          >
+                                            ←
+                                          </button>
+                                          <span
+                                            className={`text-gray-500 dark:text-gray-400 flex items-center justify-center mx-1 ${
+                                              viewMode === "grid"
+                                                ? "text-xs w-6 h-6"
+                                                : "text-base w-8 h-8"
+                                            }`}
+                                          >
+                                            {currentIndex + 1}/
+                                            {feedItems.length}
+                                          </span>
+                                          <button
+                                            onClick={() => goToNext(feed.name)}
+                                            disabled={feedItems.length <= 1}
+                                            className={`carousel-button text-sm text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors ${
+                                              viewMode === "grid"
+                                                ? "w-8 h-6 text-xs"
+                                                : "w-12 h-8"
+                                            }`}
+                                          >
+                                            →
+                                          </button>
                                         </div>
                                       )}
                                   </div>
-                                )}
 
-                                {/* Thumbnail Image - Only show in list view */}
-                                {viewMode === "list" &&
-                                  feedItems.length > 0 &&
-                                  feedItems[currentIndex]?.image && (
-                                    <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40">
-                                      <img
-                                        src={feedItems[currentIndex]?.image}
-                                        alt={feedItems[currentIndex]?.title}
-                                        className="w-full h-full object-cover rounded-r-lg"
-                                        onError={(e) => {
-                                          // Hide broken images
-                                          const target = e.currentTarget;
-                                          target.style.display = "none";
-                                        }}
-                                      />
+                                  {/* Article Title Row - Show in all view modes */}
+                                  {feedItems.length > 0 && (
+                                    <div className="mt-0">
+                                      <h3
+                                        className={`font-semibold text-gray-900 dark:text-white leading-tight ${
+                                          viewMode === "grid"
+                                            ? "text-base"
+                                            : viewMode === "list"
+                                            ? "text-base sm:text-lg"
+                                            : "text-lg"
+                                        }`}
+                                      >
+                                        <a
+                                          href={feedItems[currentIndex]?.url}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer break-words block"
+                                        >
+                                          {feedItems[currentIndex]?.title || ""}
+                                        </a>
+                                      </h3>
+
+                                      {/* Subheading/Excerpt - Show in list view */}
+                                      {viewMode === "list" &&
+                                        feedItems[currentIndex]?.excerpt &&
+                                        feed.name !== "The Hard Times" && (
+                                          <div className="mt-2">
+                                            <p
+                                              className="text-sm text-gray-600 dark:text-gray-400"
+                                              style={{ lineHeight: "1.5" }}
+                                            >
+                                              {truncateText(
+                                                feedItems[currentIndex]
+                                                  ?.excerpt || "",
+                                                200
+                                              )}
+                                            </p>
+                                          </div>
+                                        )}
                                     </div>
                                   )}
 
-                                {/* Article Excerpts - Show in grid and small views */}
-                                {feedItems.length > 0 ? (
-                                  <>
-                                    {/* Subtitle below headline - Show in grid view only */}
-                                    {viewMode === "grid" &&
-                                      feedItems[currentIndex]?.excerpt &&
-                                      feed.name !== "The Hard Times" && (
-                                        <div className="mt-2 flex items-center">
-                                          <p
-                                            className="text-gray-600 dark:text-gray-400 text-sm"
-                                            style={{ lineHeight: "1.5" }}
-                                          >
-                                            {truncateText(
-                                              feedItems[currentIndex]
-                                                ?.excerpt || "",
-                                              viewMode === "grid" ? 120 : 400
-                                            )}
-                                          </p>
-                                        </div>
-                                      )}
-                                  </>
-                                ) : (
-                                  <div className="text-center py-8">
-                                    {currentFeedStatus?.working === false ? (
-                                      <div className="text-red-500 dark:text-red-400">
-                                        <div className="text-2xl mb-2">⚠️</div>
-                                        <div className="text-sm font-medium">
-                                          Feed Error
-                                        </div>
-                                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                          {currentFeedStatus.error ||
-                                            "Failed to load"}
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      <div className="text-gray-500 dark:text-gray-400">
-                                        <div className="text-sm font-medium">
-                                          No Articles
-                                        </div>
-                                        <div className="text-xs mt-1">
-                                          Feed is empty or loading
-                                        </div>
+                                  {/* Thumbnail Image - Only show in list view */}
+                                  {viewMode === "list" &&
+                                    feedItems.length > 0 &&
+                                    feedItems[currentIndex]?.image && (
+                                      <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40">
+                                        <img
+                                          src={feedItems[currentIndex]?.image}
+                                          alt={feedItems[currentIndex]?.title}
+                                          className="w-full h-full object-cover rounded-r-lg"
+                                          onError={(e) => {
+                                            // Hide broken images
+                                            const target = e.currentTarget;
+                                            target.style.display = "none";
+                                          }}
+                                        />
                                       </div>
                                     )}
-                                  </div>
-                                )}
-                              </div>
 
-                              {/* Card Content */}
-                              <div
-                                className={`px-6 ${
-                                  viewMode === "grid" ? "pb-4" : "pb-6"
-                                } ${"flex-1"} flex flex-col justify-end ${
-                                  viewMode === "list" ? "hidden" : ""
-                                }`}
-                                style={
-                                  viewMode === "list"
-                                    ? {}
-                                    : {
-                                        height:
-                                          viewMode === "grid"
-                                            ? "120px"
-                                            : viewMode === "grid"
-                                            ? "auto"
-                                            : "auto",
-                                      }
-                                }
-                              >
-                                {/* Image or Placeholder */}
-                                {feedItems.length > 0 &&
-                                feedItems[currentIndex]?.image &&
-                                !feedItems[currentIndex]?.image!.startsWith(
-                                  "placeholder:"
-                                ) ? (
-                                  <div
-                                    className={`relative z-0 ${
-                                      viewMode === "grid" ? "mt-2" : "mt-auto"
-                                    }`}
-                                    style={{
-                                      height:
-                                        viewMode === "grid" ? "200px" : "75px",
-                                      marginBottom: "15px",
-                                    }}
-                                  >
-                                    <img
-                                      src={feedItems[currentIndex]?.image}
-                                      alt={feedItems[currentIndex]?.title}
-                                      className={`w-full rounded-lg ${
-                                        viewMode === "grid"
-                                          ? "object-cover"
-                                          : "object-contain"
+                                  {/* Article Excerpts - Show in grid and small views */}
+                                  {feedItems.length > 0 ? (
+                                    <>
+                                      {/* Subtitle below headline - Show in grid view only */}
+                                      {viewMode === "grid" &&
+                                        feedItems[currentIndex]?.excerpt &&
+                                        feed.name !== "The Hard Times" && (
+                                          <div className="mt-2 flex items-center">
+                                            <p
+                                              className="text-gray-600 dark:text-gray-400 text-sm"
+                                              style={{ lineHeight: "1.5" }}
+                                            >
+                                              {truncateText(
+                                                feedItems[currentIndex]
+                                                  ?.excerpt || "",
+                                                viewMode === "grid" ? 120 : 400
+                                              )}
+                                            </p>
+                                          </div>
+                                        )}
+                                    </>
+                                  ) : (
+                                    <div className="text-center py-8">
+                                      {currentFeedStatus?.working === false ? (
+                                        <div className="text-red-500 dark:text-red-400">
+                                          <div className="text-2xl mb-2">
+                                            ⚠️
+                                          </div>
+                                          <div className="text-sm font-medium">
+                                            Feed Error
+                                          </div>
+                                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                            {currentFeedStatus.error ||
+                                              "Failed to load"}
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <div className="text-gray-500 dark:text-gray-400">
+                                          <div className="text-sm font-medium">
+                                            No Articles
+                                          </div>
+                                          <div className="text-xs mt-1">
+                                            Feed is empty or loading
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+
+                                {/* Card Content */}
+                                <div
+                                  className={`px-6 ${
+                                    viewMode === "grid" ? "pb-4" : "pb-6"
+                                  } ${"flex-1"} flex flex-col justify-end ${
+                                    viewMode === "list" ? "hidden" : ""
+                                  }`}
+                                  style={
+                                    viewMode === "list"
+                                      ? {}
+                                      : {
+                                          height:
+                                            viewMode === "grid"
+                                              ? "120px"
+                                              : viewMode === "grid"
+                                              ? "auto"
+                                              : "auto",
+                                        }
+                                  }
+                                >
+                                  {/* Image or Placeholder */}
+                                  {feedItems.length > 0 &&
+                                  feedItems[currentIndex]?.image &&
+                                  !feedItems[currentIndex]?.image!.startsWith(
+                                    "placeholder:"
+                                  ) ? (
+                                    <div
+                                      className={`relative z-0 ${
+                                        viewMode === "grid" ? "mt-2" : "mt-auto"
                                       }`}
                                       style={{
                                         height:
                                           viewMode === "grid"
                                             ? "200px"
                                             : "75px",
-                                        minHeight:
-                                          viewMode === "grid"
-                                            ? "200px"
-                                            : "75px",
-                                        maxHeight:
-                                          viewMode === "grid"
-                                            ? "200px"
-                                            : "75px",
-                                      }}
-                                      onError={(e) => {
-                                        // Replace broken image with placeholder
-                                        const target = e.currentTarget;
-                                        target.style.display = "none";
-                                        const placeholder =
-                                          target.parentElement?.querySelector(
-                                            ".image-placeholder"
-                                          );
-                                        if (placeholder) {
-                                          (
-                                            placeholder as HTMLElement
-                                          ).style.display = "flex";
-                                        }
-                                      }}
-                                    />
-
-                                    {/* Placeholder for when image fails to load */}
-                                    <div
-                                      className="image-placeholder hidden w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
-                                      style={{
-                                        height:
-                                          viewMode === "grid"
-                                            ? "100px"
-                                            : viewMode === "list"
-                                            ? "75px"
-                                            : "150px",
-                                        minHeight:
-                                          viewMode === "grid"
-                                            ? "100px"
-                                            : viewMode === "list"
-                                            ? "75px"
-                                            : "150px",
-                                        maxHeight:
-                                          viewMode === "grid"
-                                            ? "100px"
-                                            : viewMode === "list"
-                                            ? "75px"
-                                            : "150px",
+                                        marginBottom: "15px",
                                       }}
                                     >
-                                      <div className="text-center text-gray-500 dark:text-gray-400">
-                                        <div
-                                          className={
+                                      <img
+                                        src={feedItems[currentIndex]?.image}
+                                        alt={feedItems[currentIndex]?.title}
+                                        className={`w-full rounded-lg ${
+                                          viewMode === "grid"
+                                            ? "object-cover"
+                                            : "object-contain"
+                                        }`}
+                                        style={{
+                                          height:
                                             viewMode === "grid"
-                                              ? "text-2xl"
-                                              : "text-4xl"
+                                              ? "200px"
+                                              : "75px",
+                                          minHeight:
+                                            viewMode === "grid"
+                                              ? "200px"
+                                              : "75px",
+                                          maxHeight:
+                                            viewMode === "grid"
+                                              ? "200px"
+                                              : "75px",
+                                        }}
+                                        onError={(e) => {
+                                          // Replace broken image with placeholder
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                          const placeholder =
+                                            target.parentElement?.querySelector(
+                                              ".image-placeholder"
+                                            );
+                                          if (placeholder) {
+                                            (
+                                              placeholder as HTMLElement
+                                            ).style.display = "flex";
                                           }
-                                        >
-                                          📰
+                                        }}
+                                      />
+
+                                      {/* Placeholder for when image fails to load */}
+                                      <div
+                                        className="image-placeholder hidden w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
+                                        style={{
+                                          height:
+                                            viewMode === "grid"
+                                              ? "100px"
+                                              : viewMode === "list"
+                                              ? "75px"
+                                              : "150px",
+                                          minHeight:
+                                            viewMode === "grid"
+                                              ? "100px"
+                                              : viewMode === "list"
+                                              ? "75px"
+                                              : "150px",
+                                          maxHeight:
+                                            viewMode === "grid"
+                                              ? "100px"
+                                              : viewMode === "list"
+                                              ? "75px"
+                                              : "150px",
+                                        }}
+                                      >
+                                        <div className="text-center text-gray-500 dark:text-gray-400">
+                                          <div
+                                            className={
+                                              viewMode === "grid"
+                                                ? "text-2xl"
+                                                : "text-4xl"
+                                            }
+                                          >
+                                            📰
+                                          </div>
                                         </div>
                                       </div>
-                                    </div>
 
-                                    {/* Video indicator if video content exists */}
-                                    {feedItems[currentIndex]?.videoUrl && (
-                                      <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                                        <span>▶️</span>
-                                        <span>VIDEO</span>
-                                        {feedItems[currentIndex]
-                                          ?.videoDuration && (
-                                          <span className="ml-1">
-                                            {Math.floor(
-                                              parseInt(
-                                                feedItems[currentIndex]
-                                                  ?.videoDuration || "0"
-                                              ) / 60
+                                      {/* Video indicator if video content exists */}
+                                      {feedItems[currentIndex]?.videoUrl && (
+                                        <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                                          <span>▶️</span>
+                                          <span>VIDEO</span>
+                                          {feedItems[currentIndex]
+                                            ?.videoDuration && (
+                                            <span className="ml-1">
+                                              {Math.floor(
+                                                parseInt(
+                                                  feedItems[currentIndex]
+                                                    ?.videoDuration || "0"
+                                                ) / 60
+                                              )}
+                                              :
+                                              {String(
+                                                parseInt(
+                                                  feedItems[currentIndex]
+                                                    ?.videoDuration || "0"
+                                                ) % 60
+                                              ).padStart(2, "0")}
+                                            </span>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    // No image available or placeholder - show styled placeholder
+                                    <div
+                                      className={`w-full rounded-lg flex items-center justify-center ${
+                                        viewMode === "grid" ? "mt-2" : "mt-auto"
+                                      }`}
+                                      style={{
+                                        height: "150px",
+                                        minHeight: "150px",
+                                        maxHeight: "150px",
+                                        marginBottom: "15px",
+                                      }}
+                                    >
+                                      {feedItems.length > 0 &&
+                                      feedItems[currentIndex]?.image &&
+                                      feedItems[
+                                        currentIndex
+                                      ]?.image!.startsWith("placeholder:") ? (
+                                        // Show styled placeholder for this source
+                                        <div className="w-full h-full rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                                          <div
+                                            className={`w-full h-full bg-blue-500 rounded-lg flex items-center justify-center relative`}
+                                          >
+                                            <span className="text-white font-bold text-2xl">
+                                              {
+                                                (
+                                                  feedItems[currentIndex]
+                                                    ?.source || ""
+                                                ).split(" ")[0]
+                                              }
+                                            </span>
+
+                                            {/* Video indicator if video content exists */}
+                                            {feedItems[currentIndex]
+                                              ?.videoUrl && (
+                                              <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                                                <span>▶️</span>
+                                                <span>VIDEO</span>
+                                                {feedItems[currentIndex]
+                                                  ?.videoDuration && (
+                                                  <span className="ml-1">
+                                                    {Math.floor(
+                                                      parseInt(
+                                                        feedItems[currentIndex]
+                                                          ?.videoDuration || "0"
+                                                      ) / 60
+                                                    )}
+                                                    :
+                                                    {String(
+                                                      parseInt(
+                                                        feedItems[currentIndex]
+                                                          ?.videoDuration || "0"
+                                                      ) % 60
+                                                    ).padStart(2, "0")}
+                                                  </span>
+                                                )}
+                                              </div>
                                             )}
-                                            :
-                                            {String(
-                                              parseInt(
-                                                feedItems[currentIndex]
-                                                  ?.videoDuration || "0"
-                                              ) % 60
-                                            ).padStart(2, "0")}
-                                          </span>
-                                        )}
-                                      </div>
-                                    )}
-                                  </div>
-                                ) : (
-                                  // No image available or placeholder - show styled placeholder
-                                  <div
-                                    className={`w-full rounded-lg flex items-center justify-center ${
-                                      viewMode === "grid" ? "mt-2" : "mt-auto"
-                                    }`}
-                                    style={{
-                                      height: "150px",
-                                      minHeight: "150px",
-                                      maxHeight: "150px",
-                                      marginBottom: "15px",
-                                    }}
-                                  >
-                                    {feedItems.length > 0 &&
-                                    feedItems[currentIndex]?.image &&
-                                    feedItems[currentIndex]?.image!.startsWith(
-                                      "placeholder:"
-                                    ) ? (
-                                      // Show styled placeholder for this source
-                                      <div className="w-full h-full rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        // Show generic placeholder
                                         <div
-                                          className={`w-full h-full bg-blue-500 rounded-lg flex items-center justify-center relative`}
+                                          className={`w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center relative ${
+                                            viewMode === "list"
+                                              ? "h-24"
+                                              : "h-48"
+                                          }`}
                                         >
-                                          <span className="text-white font-bold text-2xl">
-                                            {
-                                              (
-                                                feedItems[currentIndex]
-                                                  ?.source || ""
-                                              ).split(" ")[0]
-                                            }
-                                          </span>
+                                          <div className="text-center text-gray-500 dark:text-gray-400">
+                                            <div className="text-4xl">📰</div>
+                                          </div>
 
                                           {/* Video indicator if video content exists */}
                                           {feedItems[currentIndex]
@@ -2843,314 +2907,283 @@ const NewsAggregator = () => {
                                             </div>
                                           )}
                                         </div>
-                                      </div>
-                                    ) : (
-                                      // Show generic placeholder
-                                      <div
-                                        className={`w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center relative ${
-                                          viewMode === "list" ? "h-24" : "h-48"
-                                        }`}
-                                      >
-                                        <div className="text-center text-gray-500 dark:text-gray-400">
-                                          <div className="text-4xl">📰</div>
-                                        </div>
-
-                                        {/* Video indicator if video content exists */}
-                                        {feedItems[currentIndex]?.videoUrl && (
-                                          <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                                            <span>▶️</span>
-                                            <span>VIDEO</span>
-                                            {feedItems[currentIndex]
-                                              ?.videoDuration && (
-                                              <span className="ml-1">
-                                                {Math.floor(
-                                                  parseInt(
-                                                    feedItems[currentIndex]
-                                                      ?.videoDuration || "0"
-                                                  ) / 60
-                                                )}
-                                                :
-                                                {String(
-                                                  parseInt(
-                                                    feedItems[currentIndex]
-                                                      ?.videoDuration || "0"
-                                                  ) % 60
-                                                ).padStart(2, "0")}
-                                              </span>
-                                            )}
-                                          </div>
-                                        )}
-                                      </div>
-                                    )}
-                                  </div>
-                                )}
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          );
-                        });
-                      })()}
+                            );
+                          });
+                        })()}
 
-                      {/* Custom Feeds Section */}
-                      {customFeeds
-                        .filter(
-                          (feed) =>
-                            feed.enabled &&
-                            (activeCategory === "all" ||
-                              activeCategory === feed.category ||
-                              activeCategory === "custom")
-                        )
-                        .filter(
-                          (feed) => !feed.name.toLowerCase().includes("lawn")
-                        )
-                        .map((customFeed) => {
-                          const customFeedItems = newsItems.filter(
-                            (item) => item.source === customFeed.name
-                          );
+                        {/* Custom Feeds Section */}
+                        {customFeeds
+                          .filter(
+                            (feed) =>
+                              feed.enabled &&
+                              (activeCategory === "all" ||
+                                activeCategory === feed.category ||
+                                activeCategory === "custom")
+                          )
+                          .filter(
+                            (feed) => !feed.name.toLowerCase().includes("lawn")
+                          )
+                          .map((customFeed) => {
+                            const customFeedItems = newsItems.filter(
+                              (item) => item.source === customFeed.name
+                            );
 
-                          return (
-                            <div
-                              key={`custom-${customFeed.id}`}
-                              className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
-                                viewMode === "list"
-                                  ? "h-auto justify-center border-l-4"
-                                  : "h-[500px]"
-                              }`}
-                              style={
-                                viewMode === "list"
-                                  ? { borderLeftColor: "#ef4444" }
-                                  : { height: "500px" }
-                              }
-                            >
-                              {/* Custom Feed Header */}
+                            return (
                               <div
-                                className={`${
+                                key={`custom-${customFeed.id}`}
+                                className={`bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col ${
                                   viewMode === "list"
-                                    ? "px-3 py-2 sm:px-4 sm:py-3"
-                                    : "px-6 pt-6"
-                                } flex-shrink-0`}
+                                    ? "h-auto justify-center border-l-4"
+                                    : "h-[500px]"
+                                }`}
+                                style={
+                                  viewMode === "list"
+                                    ? { borderLeftColor: "#ef4444" }
+                                    : { height: "500px" }
+                                }
                               >
-                                {/* Top Row - Source Title and Carousel Controls */}
+                                {/* Custom Feed Header */}
                                 <div
-                                  className={`flex items-center justify-between ${
-                                    viewMode === "list" ? "" : "mb-4"
-                                  }`}
+                                  className={`${
+                                    viewMode === "list"
+                                      ? "px-3 py-2 sm:px-4 sm:py-3"
+                                      : "px-6 pt-6"
+                                  } flex-shrink-0`}
                                 >
-                                  {/* Source Title */}
-                                  <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                                    {customFeed.name}
-                                  </h4>
+                                  {/* Top Row - Source Title and Carousel Controls */}
+                                  <div
+                                    className={`flex items-center justify-between ${
+                                      viewMode === "list" ? "" : "mb-4"
+                                    }`}
+                                  >
+                                    {/* Source Title */}
+                                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                                      {customFeed.name}
+                                    </h4>
 
-                                  {/* Carousel Controls - Show in grid view only */}
+                                    {/* Carousel Controls - Show in grid view only */}
+                                    {viewMode === "grid" &&
+                                      customFeedItems.length > 1 && (
+                                        <div className="flex items-center gap-2">
+                                          <button
+                                            onClick={() => {
+                                              // For custom feeds, we'll need to implement index tracking
+                                              // For now, this is a placeholder
+                                            }}
+                                            disabled={
+                                              customFeedItems.length <= 1
+                                            }
+                                            className="carousel-button w-8 h-6 text-xs text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
+                                          >
+                                            ←
+                                          </button>
+                                          <span className="text-gray-500 dark:text-gray-400 flex items-center justify-center mx-1 text-xs w-6 h-6">
+                                            1/{customFeedItems.length}
+                                          </span>
+                                          <button
+                                            onClick={() => {
+                                              // For custom feeds, we'll need to implement index tracking
+                                              // For now, this is a placeholder
+                                            }}
+                                            disabled={
+                                              customFeedItems.length <= 1
+                                            }
+                                            className="carousel-button w-8 h-6 text-xs text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
+                                          >
+                                            →
+                                          </button>
+                                        </div>
+                                      )}
+                                  </div>
+
+                                  {/* Second Row - Remove Button (list view only) */}
+                                  {viewMode === "list" && (
+                                    <div className="flex items-center justify-end mt-2">
+                                      {/* Remove Button - Right side */}
+                                      <button
+                                        onClick={() => {
+                                          const updatedCustomFeeds =
+                                            customFeeds.filter(
+                                              (f) => f.id !== customFeed.id
+                                            );
+                                          syncCustomFeeds(updatedCustomFeeds);
+                                          loadRSSFeeds();
+                                        }}
+                                        className="w-5 h-5 text-xs text-red-500 hover:text-red-700 bg-white dark:bg-gray-700 rounded border border-red-200 dark:border-red-600 flex items-center justify-center hover:bg-red-50 dark:hover:bg-red-900/20"
+                                        title="Remove this feed"
+                                      >
+                                        ×
+                                      </button>
+                                    </div>
+                                  )}
+
+                                  {/* Article Title - Show in grid view only */}
+                                  {viewMode === "grid" && (
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+                                      <a
+                                        href={customFeedItems[0]?.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+                                      >
+                                        {truncateText(
+                                          customFeedItems[0]?.title || "",
+                                          90
+                                        )}
+                                      </a>
+                                    </h3>
+                                  )}
+
+                                  {/* Subtitle below headline - Show in grid view only */}
                                   {viewMode === "grid" &&
-                                    customFeedItems.length > 1 && (
-                                      <div className="flex items-center gap-2">
-                                        <button
-                                          onClick={() => {
-                                            // For custom feeds, we'll need to implement index tracking
-                                            // For now, this is a placeholder
-                                          }}
-                                          disabled={customFeedItems.length <= 1}
-                                          className="carousel-button w-8 h-6 text-xs text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
-                                        >
-                                          ←
-                                        </button>
-                                        <span className="text-gray-500 dark:text-gray-400 flex items-center justify-center mx-1 text-xs w-6 h-6">
-                                          1/{customFeedItems.length}
-                                        </span>
-                                        <button
-                                          onClick={() => {
-                                            // For custom feeds, we'll need to implement index tracking
-                                            // For now, this is a placeholder
-                                          }}
-                                          disabled={customFeedItems.length <= 1}
-                                          className="carousel-button w-8 h-6 text-xs text-gray-700 dark:text-gray-200 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed bg-gray-200 dark:bg-gray-500 rounded border border-gray-300 dark:border-gray-400 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-400 transition-colors"
-                                        >
-                                          →
-                                        </button>
+                                    customFeedItems[0]?.excerpt && (
+                                      <div className="mt-3 flex items-center">
+                                        <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
+                                          {truncateText(
+                                            customFeedItems[0]?.excerpt || "",
+                                            400
+                                          )}
+                                        </p>
                                       </div>
                                     )}
                                 </div>
 
-                                {/* Second Row - Remove Button (list view only) */}
-                                {viewMode === "list" && (
-                                  <div className="flex items-center justify-end mt-2">
-                                    {/* Remove Button - Right side */}
-                                    <button
-                                      onClick={() => {
-                                        const updatedCustomFeeds =
-                                          customFeeds.filter(
-                                            (f) => f.id !== customFeed.id
-                                          );
-                                        syncCustomFeeds(updatedCustomFeeds);
-                                        loadRSSFeeds();
-                                      }}
-                                      className="w-5 h-5 text-xs text-red-500 hover:text-red-700 bg-white dark:bg-gray-700 rounded border border-red-200 dark:border-red-600 flex items-center justify-center hover:bg-red-50 dark:hover:bg-red-900/20"
-                                      title="Remove this feed"
-                                    >
-                                      ×
-                                    </button>
-                                  </div>
-                                )}
-
-                                {/* Article Title - Show in grid view only */}
-                                {viewMode === "grid" && (
-                                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
-                                    <a
-                                      href={customFeedItems[0]?.url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
-                                    >
-                                      {truncateText(
-                                        customFeedItems[0]?.title || "",
-                                        90
-                                      )}
-                                    </a>
-                                  </h3>
-                                )}
-
-                                {/* Subtitle below headline - Show in grid view only */}
-                                {viewMode === "grid" &&
-                                  customFeedItems[0]?.excerpt && (
-                                    <div className="mt-3 flex items-center">
-                                      <p className="text-xs leading-relaxed text-gray-600 dark:text-gray-400">
-                                        {truncateText(
-                                          customFeedItems[0]?.excerpt || "",
-                                          400
-                                        )}
-                                      </p>
-                                    </div>
-                                  )}
-                              </div>
-
-                              {/* Custom Feed Content */}
-                              <div
-                                className={`px-6 ${
-                                  viewMode === "grid" ? "pb-0" : "pb-6"
-                                } flex-1 flex flex-col ${
-                                  viewMode === "list" ? "hidden" : ""
-                                }`}
-                                style={
-                                  viewMode === "list"
-                                    ? {}
-                                    : {
-                                        height:
-                                          viewMode === "grid"
-                                            ? "120px"
-                                            : "200px",
-                                      }
-                                }
-                              >
-                                {/* Image - Show in grid view only */}
-                                {viewMode === "grid" &&
-                                customFeedItems[0]?.image &&
-                                !customFeedItems[0]?.image!.startsWith(
-                                  "placeholder:"
-                                ) ? (
-                                  <div
-                                    className="relative z-0"
-                                    style={{
-                                      height: "150px",
-                                      marginTop:
-                                        viewMode === "grid" ? "8px" : "20px",
-                                      marginBottom: "0px",
-                                    }}
-                                  >
-                                    <img
-                                      src={customFeedItems[0]?.image}
-                                      alt={customFeedItems[0]?.title}
-                                      className="w-full h-48 object-cover rounded-lg"
-                                      style={{
-                                        height: "192px",
-                                        minHeight: "192px",
-                                        maxHeight: "192px",
-                                      }}
-                                      onError={(e) => {
-                                        // Replace broken image with placeholder
-                                        const target = e.currentTarget;
-                                        target.style.display = "none";
-                                        const placeholder =
-                                          target.parentElement?.querySelector(
-                                            ".image-placeholder"
-                                          );
-                                        if (placeholder) {
-                                          (
-                                            placeholder as HTMLElement
-                                          ).style.display = "flex";
+                                {/* Custom Feed Content */}
+                                <div
+                                  className={`px-6 ${
+                                    viewMode === "grid" ? "pb-0" : "pb-6"
+                                  } flex-1 flex flex-col ${
+                                    viewMode === "list" ? "hidden" : ""
+                                  }`}
+                                  style={
+                                    viewMode === "list"
+                                      ? {}
+                                      : {
+                                          height:
+                                            viewMode === "grid"
+                                              ? "120px"
+                                              : "200px",
                                         }
-                                      }}
-                                    />
-
-                                    {/* Placeholder for when image fails to load */}
+                                  }
+                                >
+                                  {/* Image - Show in grid view only */}
+                                  {viewMode === "grid" &&
+                                  customFeedItems[0]?.image &&
+                                  !customFeedItems[0]?.image!.startsWith(
+                                    "placeholder:"
+                                  ) ? (
                                     <div
-                                      className="image-placeholder hidden w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
+                                      className="relative z-0"
                                       style={{
                                         height: "150px",
-                                        minHeight: "150px",
-                                        maxHeight: "150px",
+                                        marginTop:
+                                          viewMode === "grid" ? "8px" : "20px",
+                                        marginBottom: "0px",
                                       }}
                                     >
-                                      <div className="text-center text-gray-500 dark:text-gray-400">
-                                        <div className="text-4xl">📰</div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                ) : (
-                                  // No image available or placeholder - show styled placeholder
-                                  <div
-                                    className={`w-full rounded-lg flex items-center justify-center ${
-                                      viewMode === "grid" ? "mt-2" : "mt-auto"
-                                    }`}
-                                    style={{
-                                      height: "150px",
-                                      minHeight: "150px",
-                                      maxHeight: "150px",
-                                      marginBottom: "15px",
-                                    }}
-                                  >
-                                    {customFeedItems[0]?.image &&
-                                    customFeedItems[0]?.image!.startsWith(
-                                      "placeholder:"
-                                    ) ? (
-                                      // Show styled placeholder for this source
-                                      <div className="w-full h-full rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                                        {(() => {
-                                          const sourceName =
-                                            customFeedItems[0]?.source || "";
-                                          let bgColor = "bg-purple-500"; // Custom feeds use purple
+                                      <img
+                                        src={customFeedItems[0]?.image}
+                                        alt={customFeedItems[0]?.title}
+                                        className="w-full h-48 object-cover rounded-lg"
+                                        style={{
+                                          height: "192px",
+                                          minHeight: "192px",
+                                          maxHeight: "192px",
+                                        }}
+                                        onError={(e) => {
+                                          // Replace broken image with placeholder
+                                          const target = e.currentTarget;
+                                          target.style.display = "none";
+                                          const placeholder =
+                                            target.parentElement?.querySelector(
+                                              ".image-placeholder"
+                                            );
+                                          if (placeholder) {
+                                            (
+                                              placeholder as HTMLElement
+                                            ).style.display = "flex";
+                                          }
+                                        }}
+                                      />
 
-                                          return (
-                                            <div
-                                              className={`w-full h-full ${bgColor} rounded-lg flex items-center justify-center`}
-                                            >
-                                              <span className="text-white font-bold text-2xl">
-                                                {sourceName.split(" ")[0]}
-                                              </span>
-                                            </div>
-                                          );
-                                        })()}
-                                      </div>
-                                    ) : (
-                                      // Show generic placeholder
+                                      {/* Placeholder for when image fails to load */}
                                       <div
-                                        className={`w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center ${
-                                          viewMode === "list" ? "h-24" : "h-48"
-                                        }`}
+                                        className="image-placeholder hidden w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
+                                        style={{
+                                          height: "150px",
+                                          minHeight: "150px",
+                                          maxHeight: "150px",
+                                        }}
                                       >
                                         <div className="text-center text-gray-500 dark:text-gray-400">
                                           <div className="text-4xl">📰</div>
                                         </div>
                                       </div>
-                                    )}
-                                  </div>
-                                )}
+                                    </div>
+                                  ) : (
+                                    // No image available or placeholder - show styled placeholder
+                                    <div
+                                      className={`w-full rounded-lg flex items-center justify-center ${
+                                        viewMode === "grid" ? "mt-2" : "mt-auto"
+                                      }`}
+                                      style={{
+                                        height: "150px",
+                                        minHeight: "150px",
+                                        maxHeight: "150px",
+                                        marginBottom: "15px",
+                                      }}
+                                    >
+                                      {customFeedItems[0]?.image &&
+                                      customFeedItems[0]?.image!.startsWith(
+                                        "placeholder:"
+                                      ) ? (
+                                        // Show styled placeholder for this source
+                                        <div className="w-full h-full rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                                          {(() => {
+                                            const sourceName =
+                                              customFeedItems[0]?.source || "";
+                                            let bgColor = "bg-purple-500"; // Custom feeds use purple
+
+                                            return (
+                                              <div
+                                                className={`w-full h-full ${bgColor} rounded-lg flex items-center justify-center`}
+                                              >
+                                                <span className="text-white font-bold text-2xl">
+                                                  {sourceName.split(" ")[0]}
+                                                </span>
+                                              </div>
+                                            );
+                                          })()}
+                                        </div>
+                                      ) : (
+                                        // Show generic placeholder
+                                        <div
+                                          className={`w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center ${
+                                            viewMode === "list"
+                                              ? "h-24"
+                                              : "h-48"
+                                          }`}
+                                        >
+                                          <div className="text-center text-gray-500 dark:text-gray-400">
+                                            <div className="text-4xl">📰</div>
+                                          </div>
+                                        </div>
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
                               </div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  </>
-                )}
+                            );
+                          })}
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </section>
           </div>
