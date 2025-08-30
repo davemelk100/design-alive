@@ -64,6 +64,13 @@ const rssFeeds: RSSFeed[] = [
     category: "technology",
     enabled: true,
   },
+  {
+    id: "bleepingcomputer",
+    name: "BleepingComputer",
+    url: "https://www.bleepingcomputer.com/feed/",
+    category: "technology",
+    enabled: true,
+  },
 
   {
     id: "fox-sports",
@@ -168,6 +175,13 @@ const rssFeeds: RSSFeed[] = [
     category: "sports",
     enabled: true,
   },
+  {
+    id: "espn",
+    name: "ESPN",
+    url: "https://www.espn.com/espn/rss/news",
+    category: "sports",
+    enabled: true,
+  },
 ];
 
 const NewsAggregator = () => {
@@ -262,6 +276,7 @@ const NewsAggregator = () => {
   const [windows11Index, setWindows11Index] = useState(0);
 
   const [viceTechIndex, setViceTechIndex] = useState(0);
+  const [bleepingComputerIndex, setBleepingComputerIndex] = useState(0);
   const [foxSportsIndex, setFoxSportsIndex] = useState(0);
   const [theOnionIndex, setTheOnionIndex] = useState(0);
   const [theHardTimesIndex, setTheHardTimesIndex] = useState(0);
@@ -274,6 +289,7 @@ const NewsAggregator = () => {
   const [newYorkPostIndex, setNewYorkPostIndex] = useState(0);
   const [foxNewsIndex, setFoxNewsIndex] = useState(0);
   const [cbsSportsIndex, setCbsSportsIndex] = useState(0);
+  const [espnIndex, setEspnIndex] = useState(0);
 
   const [breitbartIndex, setBreitbartIndex] = useState(0);
 
@@ -281,7 +297,44 @@ const NewsAggregator = () => {
   const [bloombergIndex, setBloombergIndex] = useState(0);
 
   const [techcrunchIndex, setTechcrunchIndex] = useState(0);
+
+  // Drag and drop state
+  const [draggedFeedId, setDraggedFeedId] = useState<string | null>(null);
+  const [feedOrder, setFeedOrder] = useState<string[]>(() =>
+    rssFeeds.map((feed) => feed.id)
+  );
   const [activeCategory, setActiveCategory] = useState("all");
+
+  // Drag and drop handlers
+  const handleDragStart = (e: React.DragEvent, feedId: string) => {
+    setDraggedFeedId(feedId);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDrop = (e: React.DragEvent, targetFeedId: string) => {
+    e.preventDefault();
+    if (!draggedFeedId || draggedFeedId === targetFeedId) return;
+
+    const newOrder = [...feedOrder];
+    const draggedIndex = newOrder.indexOf(draggedFeedId);
+    const targetIndex = newOrder.indexOf(targetFeedId);
+
+    // Remove dragged item and insert at target position
+    newOrder.splice(draggedIndex, 1);
+    newOrder.splice(targetIndex, 0, draggedFeedId);
+
+    setFeedOrder(newOrder);
+    setDraggedFeedId(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedFeedId(null);
+  };
 
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [customFeedUrl, setCustomFeedUrl] = useState("");
@@ -365,6 +418,8 @@ const NewsAggregator = () => {
         return windows11Index;
       case "Vice - Tech":
         return viceTechIndex;
+      case "BleepingComputer":
+        return bleepingComputerIndex;
 
       case "Fox Sports":
         return foxSportsIndex;
@@ -392,6 +447,8 @@ const NewsAggregator = () => {
         return foxNewsIndex;
       case "CBS SPORTS":
         return cbsSportsIndex;
+      case "ESPN":
+        return espnIndex;
       case "Breitbart":
         return breitbartIndex;
 
@@ -425,6 +482,9 @@ const NewsAggregator = () => {
         break;
       case "Vice - Tech":
         goToPreviousViceTech();
+        break;
+      case "BleepingComputer":
+        goToPreviousBleepingComputer();
         break;
 
       case "Fox Sports":
@@ -464,6 +524,9 @@ const NewsAggregator = () => {
       case "CBS SPORTS":
         goToPreviousCbsSports();
         break;
+      case "ESPN":
+        goToPreviousEspn();
+        break;
       case "Breitbart":
         goToPreviousBreitbart();
         break;
@@ -498,6 +561,9 @@ const NewsAggregator = () => {
         break;
       case "Vice - Tech":
         goToNextViceTech();
+        break;
+      case "BleepingComputer":
+        goToNextBleepingComputer();
         break;
 
       case "Fox Sports":
@@ -536,6 +602,9 @@ const NewsAggregator = () => {
         break;
       case "CBS SPORTS":
         goToNextCbsSports();
+        break;
+      case "ESPN":
+        goToNextEspn();
         break;
       case "Breitbart":
         goToNextBreitbart();
@@ -631,6 +700,36 @@ const NewsAggregator = () => {
     } finally {
       setIsCreatingFeed(false);
     }
+  };
+
+  // Helper function to generate default image URLs for sources
+  const generateDefaultImageUrl = (sourceName: string): string | null => {
+    const defaultImages: { [key: string]: string } = {
+      "Ars Technica": "/img/ars-technica-logo.svg",
+      WIRED: "https://www.wired.com/verso/static/wired-us/assets/logo.svg",
+      TechRadar: "/img/techradar-logo.png",
+      "#Windows11": "/img/windows11-logo.png",
+      "Vice - Tech": "/img/vice-logo.png",
+      BleepingComputer: "/img/bleepingcomputer-logo.png",
+      "Fox Sports": "/img/fox-sports-logo.png",
+      "CNN - SPORTS": "/img/cnn-sports-logo.png",
+      "CBS SPORTS": "/img/cbs-sports-logo.png",
+      ESPN: "/img/espn-logo.png",
+      "The Onion": "/img/the-onion-logo.png",
+      "The Hard Times": "/img/the-hard-times-logo.png",
+      Lambgoat: "/img/lambgoat-logo.png",
+      "No Echo": "/img/no-echo-logo.png",
+      "Soft White Underbelly": "/img/soft-white-underbelly-logo.png",
+      Newsweek: "/img/newsweek-logo.png",
+      "New York Post": "/img/new-york-post-logo.png",
+      "Fox News": "/img/fox-news-logo.png",
+      Breitbart: "/img/breitbart-logo.png",
+      "CNN News": "/img/cnn-logo.png",
+      Bloomberg: "/img/bloomberg-logo.png",
+      TechCrunch: "/img/techcrunch-logo.png",
+    };
+
+    return defaultImages[sourceName] || null;
   };
 
   // Function to parse RSS XML
@@ -829,8 +928,14 @@ const NewsAggregator = () => {
 
           // If still no image, try to generate a fallback based on the source
           if (!image) {
-            // Use a special placeholder value that we'll handle in the UI
-            image = `placeholder:${sourceName}`;
+            // Try to generate a default image URL based on the source
+            const defaultImageUrl = generateDefaultImageUrl(sourceName);
+            if (defaultImageUrl) {
+              image = defaultImageUrl;
+            } else {
+              // Use a special placeholder value that we'll handle in the UI
+              image = `placeholder:${sourceName}`;
+            }
           }
 
           // Extract video content information
@@ -1264,6 +1369,31 @@ const NewsAggregator = () => {
     }
   };
 
+  // BleepingComputer carousel navigation
+  const goToNextBleepingComputer = () => {
+    const bleepingComputerItems = newsItems.filter(
+      (item) => item.source === "BleepingComputer"
+    );
+    if (bleepingComputerItems.length > 0) {
+      setBleepingComputerIndex(
+        (prev) => (prev + 1) % bleepingComputerItems.length
+      );
+    }
+  };
+
+  const goToPreviousBleepingComputer = () => {
+    const bleepingComputerItems = newsItems.filter(
+      (item) => item.source === "BleepingComputer"
+    );
+    if (bleepingComputerItems.length > 0) {
+      setBleepingComputerIndex(
+        (prev) =>
+          (prev - 1 + bleepingComputerItems.length) %
+          bleepingComputerItems.length
+      );
+    }
+  };
+
   // Fox Sports carousel navigation
   const goToNextFoxSports = () => {
     const foxSportsItems = newsItems.filter(
@@ -1551,6 +1681,21 @@ const NewsAggregator = () => {
     }
   };
 
+  // ESPN carousel navigation
+  const goToNextEspn = () => {
+    const espnItems = newsItems.filter((item) => item.source === "ESPN");
+    if (espnItems.length > 0) {
+      setEspnIndex((prev) => (prev + 1) % espnItems.length);
+    }
+  };
+
+  const goToPreviousEspn = () => {
+    const espnItems = newsItems.filter((item) => item.source === "ESPN");
+    if (espnItems.length > 0) {
+      setEspnIndex((prev) => (prev - 1 + espnItems.length) % espnItems.length);
+    }
+  };
+
   // TechCrunch carousel navigation
   const goToNextTechcrunch = () => {
     const techcrunchItems = newsItems.filter(
@@ -1656,8 +1801,8 @@ const NewsAggregator = () => {
                       }}
                       className={`flex items-center gap-2 px-4 py-2 transition-colors ${
                         activeCategory === "all"
-                          ? `${categoryColors.all.bg} ${categoryColors.all.text} rounded-t-lg`
-                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
+                          ? `${categoryColors.all.bg} ${categoryColors.all.text} rounded-t-lg rounded-b-none`
+                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
                       <svg
@@ -1684,8 +1829,8 @@ const NewsAggregator = () => {
                       }}
                       className={`flex items-center gap-2 px-4 py-2 transition-colors ${
                         activeCategory === "technology"
-                          ? `${categoryColors.technology.bg} ${categoryColors.technology.text} rounded-t-lg`
-                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
+                          ? `${categoryColors.technology.bg} ${categoryColors.technology.text} rounded-t-lg rounded-b-none`
+                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
                       <svg
@@ -1712,8 +1857,8 @@ const NewsAggregator = () => {
                       }}
                       className={`flex items-center gap-2 px-4 py-2 transition-colors ${
                         activeCategory === "sports"
-                          ? `${categoryColors.sports.bg} ${categoryColors.sports.text} rounded-t-lg`
-                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
+                          ? `${categoryColors.sports.bg} ${categoryColors.sports.text} rounded-t-lg rounded-b-none`
+                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
                       <svg
@@ -1740,8 +1885,8 @@ const NewsAggregator = () => {
                       }}
                       className={`flex items-center gap-2 px-4 py-2 transition-colors ${
                         activeCategory === "business"
-                          ? `${categoryColors.business.bg} ${categoryColors.business.text} rounded-t-lg`
-                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
+                          ? `${categoryColors.business.bg} ${categoryColors.business.text} rounded-t-lg rounded-b-none`
+                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
                       <svg
@@ -1768,8 +1913,8 @@ const NewsAggregator = () => {
                       }}
                       className={`flex items-center gap-2 px-4 py-2 transition-colors ${
                         activeCategory === "entertainment"
-                          ? `${categoryColors.entertainment.bg} ${categoryColors.entertainment.text} rounded-t-lg`
-                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
+                          ? `${categoryColors.entertainment.bg} ${categoryColors.entertainment.text} rounded-t-lg rounded-b-none`
+                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
                       <svg
@@ -1976,7 +2121,16 @@ const NewsAggregator = () => {
                               feed.category === activeCategory
                           );
 
-                          return filteredFeeds.map((feed) => {
+                          // Sort feeds according to the drag and drop order
+                          const sortedFeeds = [...filteredFeeds].sort(
+                            (a, b) => {
+                              const aIndex = feedOrder.indexOf(a.id);
+                              const bIndex = feedOrder.indexOf(b.id);
+                              return aIndex - bIndex;
+                            }
+                          );
+
+                          return sortedFeeds.map((feed) => {
                             const feedItems = newsItems.filter(
                               (item) => item.source === feed.name
                             );
@@ -1987,10 +2141,23 @@ const NewsAggregator = () => {
                             return (
                               <div
                                 key={`${feed.id}-${currentIndex}`}
+                                draggable
+                                onDragStart={(e) => handleDragStart(e, feed.id)}
+                                onDragOver={handleDragOver}
+                                onDrop={(e) => handleDrop(e, feed.id)}
+                                onDragEnd={handleDragEnd}
                                 className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border-l-4 font-roboto ${
                                   viewMode === "grid"
-                                    ? "h-[480px]"
+                                    ? "h-[400px]"
                                     : "w-full h-auto justify-center relative"
+                                } ${
+                                  draggedFeedId === feed.id
+                                    ? "opacity-50 scale-95"
+                                    : ""
+                                } ${
+                                  draggedFeedId && draggedFeedId !== feed.id
+                                    ? "border-2 border-dashed border-blue-400"
+                                    : ""
                                 }`}
                                 style={{
                                   borderLeftColor:
@@ -2828,7 +2995,56 @@ const NewsAggregator = () => {
                                         // Show styled placeholder for this source
                                         <div className="w-full h-full rounded-lg flex items-center justify-center text-white font-bold text-lg">
                                           <div
-                                            className={`w-full h-full bg-blue-500 rounded-lg flex items-center justify-center relative`}
+                                            className={`w-full h-full rounded-lg flex items-center justify-center relative ${
+                                              feedItems[currentIndex]
+                                                ?.source === "Ars Technica" ||
+                                              feedItems[currentIndex]
+                                                ?.source === "WIRED" ||
+                                              feedItems[currentIndex]
+                                                ?.source === "TechRadar" ||
+                                              feedItems[currentIndex]
+                                                ?.source === "#Windows11" ||
+                                              feedItems[currentIndex]
+                                                ?.source === "Vice - Tech" ||
+                                              feedItems[currentIndex]
+                                                ?.source === "BleepingComputer"
+                                                ? "bg-[#f79d84]"
+                                                : feedItems[currentIndex]
+                                                    ?.source === "Fox Sports" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source ===
+                                                    "CNN - SPORTS" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source === "CBS SPORTS"
+                                                ? "bg-[#59cd90]"
+                                                : feedItems[currentIndex]
+                                                    ?.source === "Newsweek" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source === "Fox News" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source === "Breitbart" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source === "CNN News" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source === "Bloomberg"
+                                                ? "bg-[#3fa7d6]"
+                                                : feedItems[currentIndex]
+                                                    ?.source === "The Onion" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source ===
+                                                    "The Hard Times" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source === "Lambgoat" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source === "No Echo" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source ===
+                                                    "Soft White Underbelly" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source === "New York Post"
+                                                ? "bg-[#a855f7]"
+                                                : "bg-blue-500"
+                                            }`}
                                           >
                                             <span className="text-white font-bold text-2xl">
                                               {
@@ -2870,14 +3086,67 @@ const NewsAggregator = () => {
                                       ) : (
                                         // Show generic placeholder
                                         <div
-                                          className={`w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center relative ${
+                                          className={`w-full rounded-lg flex items-center justify-center relative ${
                                             viewMode === "list"
                                               ? "h-24"
                                               : "h-48"
+                                          } ${
+                                            feedItems[currentIndex]?.source ===
+                                              "Ars Technica" ||
+                                            feedItems[currentIndex]?.source ===
+                                              "WIRED" ||
+                                            feedItems[currentIndex]?.source ===
+                                              "TechRadar" ||
+                                            feedItems[currentIndex]?.source ===
+                                              "#Windows11" ||
+                                            feedItems[currentIndex]?.source ===
+                                              "Vice - Tech" ||
+                                            feedItems[currentIndex]?.source ===
+                                              "BleepingComputer"
+                                              ? "bg-[#fef2de] dark:bg-[#f79d84]/30"
+                                              : feedItems[currentIndex]
+                                                  ?.source === "Fox Sports" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "CNN - SPORTS" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "CBS SPORTS" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "ESPN"
+                                              ? "bg-[#def5e9] dark:bg-[#59cd90]/30"
+                                              : feedItems[currentIndex]
+                                                  ?.source === "Newsweek" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Fox News" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Breitbart" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "CNN News" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Bloomberg"
+                                              ? "bg-[#d8edf7] dark:bg-[#3fa7d6]/30"
+                                              : feedItems[currentIndex]
+                                                  ?.source === "The Onion" ||
+                                                feedItems[currentIndex]
+                                                  ?.source ===
+                                                  "The Hard Times" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Lambgoat" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "No Echo" ||
+                                                feedItems[currentIndex]
+                                                  ?.source ===
+                                                  "Soft White Underbelly" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "New York Post"
+                                              ? "bg-[#f3e8ff] dark:bg-[#a855f7]/30"
+                                              : "bg-gray-200 dark:bg-gray-700"
                                           }`}
                                         >
                                           <div className="text-center text-gray-500 dark:text-gray-400">
                                             <div className="text-4xl">📰</div>
+                                            <div className="text-xs mt-1 font-medium">
+                                              {feedItems[currentIndex]?.source}
+                                            </div>
                                           </div>
 
                                           {/* Video indicator if video content exists */}
@@ -3199,12 +3468,12 @@ const NewsAggregator = () => {
                 }}
                 className={`flex flex-col items-center gap-1 px-3 py-2 transition-colors ${
                   activeCategory === "technology"
-                    ? `${categoryColors.technology.bg} ${categoryColors.technology.text} rounded-t-lg`
-                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
+                    ? `${categoryColors.technology.bg} ${categoryColors.technology.text} rounded-t-lg rounded-b-none`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                 }`}
               >
                 <svg
-                  className="w-5 h-5"
+                  className="w-7 h-7"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -3227,12 +3496,12 @@ const NewsAggregator = () => {
                 }}
                 className={`flex flex-col items-center gap-1 px-3 py-2 transition-colors ${
                   activeCategory === "sports"
-                    ? `${categoryColors.sports.bg} ${categoryColors.sports.text} rounded-t-lg`
-                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
+                    ? `${categoryColors.sports.bg} ${categoryColors.sports.text} rounded-t-lg rounded-b-none`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                 }`}
               >
                 <svg
-                  className="w-5 h-5"
+                  className="w-7 h-7"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -3255,12 +3524,12 @@ const NewsAggregator = () => {
                 }}
                 className={`flex flex-col items-center gap-1 px-4 py-2 transition-colors ${
                   activeCategory === "all"
-                    ? `${categoryColors.all.bg} ${categoryColors.all.text} rounded-t-lg`
-                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
+                    ? `${categoryColors.all.bg} ${categoryColors.all.text} rounded-t-lg rounded-b-none`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                 }`}
               >
                 <svg
-                  className="w-8 h-8"
+                  className="w-9 h-9"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -3283,12 +3552,12 @@ const NewsAggregator = () => {
                 }}
                 className={`flex flex-col items-center gap-1 px-3 py-2 transition-colors ${
                   activeCategory === "business"
-                    ? `${categoryColors.business.bg} ${categoryColors.business.text} rounded-t-lg`
-                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
+                    ? `${categoryColors.business.bg} ${categoryColors.business.text} rounded-t-lg rounded-b-none`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                 }`}
               >
                 <svg
-                  className="w-6 h-6"
+                  className="w-7 h-7"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -3311,12 +3580,12 @@ const NewsAggregator = () => {
                 }}
                 className={`flex flex-col items-center gap-1 px-3 py-2 transition-colors ${
                   activeCategory === "entertainment"
-                    ? `${categoryColors.entertainment.bg} ${categoryColors.entertainment.text} rounded-t-lg`
-                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg`
+                    ? `${categoryColors.entertainment.bg} ${categoryColors.entertainment.text} rounded-t-lg rounded-b-none`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                 }`}
               >
                 <svg
-                  className="w-5 h-5"
+                  className="w-7 h-7"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
