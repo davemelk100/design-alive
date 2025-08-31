@@ -3003,11 +3003,19 @@ const NewsAggregator = () => {
                                           <div
                                             className={
                                               viewMode === "grid"
-                                                ? "text-2xl"
-                                                : "text-4xl"
+                                                ? "text-6xl mb-2"
+                                                : "text-4xl mb-2"
                                             }
                                           >
-                                            📰
+                                            {getCategoryIcon(
+                                              getFeedCategory(
+                                                feedItems[currentIndex]
+                                                  ?.source || ""
+                                              )
+                                            )}
+                                          </div>
+                                          <div className="text-xs mt-1 font-medium">
+                                            {feedItems[currentIndex]?.source}
                                           </div>
                                         </div>
                                       </div>
