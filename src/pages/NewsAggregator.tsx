@@ -210,6 +210,13 @@ const rssFeeds: RSSFeed[] = [
     category: "food",
     enabled: true,
   },
+  {
+    id: "mcdonalds",
+    name: "McDonald's",
+    url: "https://www.foodbusinessnews.net/rss/topic/334-mcdonald-s-corp",
+    category: "food",
+    enabled: true,
+  },
 ];
 
 const NewsAggregator = () => {
@@ -253,7 +260,12 @@ const NewsAggregator = () => {
     ) {
       return "entertainment";
     } else if (
-      ["Hot Peppers", "Minimalist Baker", "Tips For BBQ"].includes(sourceName)
+      [
+        "Hot Peppers",
+        "Minimalist Baker",
+        "Tips For BBQ",
+        "McDonald's",
+      ].includes(sourceName)
     ) {
       return "food";
     } else {
@@ -409,6 +421,7 @@ const NewsAggregator = () => {
   const [hotPeppersIndex, setHotPeppersIndex] = useState(0);
   const [minimalistBakerIndex, setMinimalistBakerIndex] = useState(0);
   const [tipsForBbqIndex, setTipsForBbqIndex] = useState(0);
+  const [mcdonaldsIndex, setMcdonaldsIndex] = useState(0);
 
   // Drag and drop state
   const [draggedFeedId, setDraggedFeedId] = useState<string | null>(null);
@@ -580,6 +593,8 @@ const NewsAggregator = () => {
         return minimalistBakerIndex;
       case "Tips For BBQ":
         return tipsForBbqIndex;
+      case "McDonald's":
+        return mcdonaldsIndex;
       default:
         // For custom feeds, return 0 as default index
         return 0;
@@ -674,6 +689,9 @@ const NewsAggregator = () => {
       case "Tips For BBQ":
         goToPreviousTipsForBbq();
         break;
+      case "McDonald's":
+        goToPreviousMcdonalds();
+        break;
     }
   };
 
@@ -764,6 +782,9 @@ const NewsAggregator = () => {
         break;
       case "Tips For BBQ":
         goToNextTipsForBbq();
+        break;
+      case "McDonald's":
+        goToNextMcdonalds();
         break;
     }
   };
@@ -1944,6 +1965,27 @@ const NewsAggregator = () => {
     }
   };
 
+  // McDonald's carousel navigation
+  const goToNextMcdonalds = () => {
+    const mcdonaldsItems = newsItems.filter(
+      (item) => item.source === "McDonald's"
+    );
+    if (mcdonaldsItems.length > 0) {
+      setMcdonaldsIndex((prev) => (prev + 1) % mcdonaldsItems.length);
+    }
+  };
+
+  const goToPreviousMcdonalds = () => {
+    const mcdonaldsItems = newsItems.filter(
+      (item) => item.source === "McDonald's"
+    );
+    if (mcdonaldsItems.length > 0) {
+      setMcdonaldsIndex(
+        (prev) => (prev - 1 + mcdonaldsItems.length) % mcdonaldsItems.length
+      );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white">
       <Suspense
@@ -1996,17 +2038,17 @@ const NewsAggregator = () => {
                     {activeCategory === "all"
                       ? "All News"
                       : activeCategory === "technology"
-                      ? "Technology News"
+                      ? "Technology"
                       : activeCategory === "sports"
-                      ? "Sports News"
+                      ? "Sports"
                       : activeCategory === "business"
-                      ? "Business News"
+                      ? "Business"
                       : activeCategory === "entertainment"
-                      ? "Entertainment News"
+                      ? "Entertainment"
                       : activeCategory === "food"
-                      ? "Food News"
+                      ? "Food"
                       : activeCategory === "politics"
-                      ? "Politics News"
+                      ? "Politics"
                       : activeCategory === "custom"
                       ? "Custom Feeds"
                       : `${
@@ -2036,20 +2078,7 @@ const NewsAggregator = () => {
                           : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
-                      <svg
-                        className="w-6 h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-                        />
-                      </svg>
-                      <span className="font-medium">All News</span>
+                      <span className="font-medium uppercase">All News</span>
                     </button>
 
                     {/* Technology */}
@@ -2064,20 +2093,7 @@ const NewsAggregator = () => {
                           : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                        />
-                      </svg>
-                      <span className="font-medium">Technology</span>
+                      <span className="font-medium uppercase">Technology</span>
                     </button>
 
                     {/* Sports */}
@@ -2092,20 +2108,7 @@ const NewsAggregator = () => {
                           : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2M9 20h6m-6 0v-2m6 2v-2"
-                        />
-                      </svg>
-                      <span className="font-medium">Sports</span>
+                      <span className="font-medium uppercase">Sports</span>
                     </button>
 
                     {/* Business */}
@@ -2120,20 +2123,7 @@ const NewsAggregator = () => {
                           : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
-                      <svg
-                        className="w-6 h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                        />
-                      </svg>
-                      <span className="font-medium">Business</span>
+                      <span className="font-medium uppercase">Business</span>
                     </button>
 
                     {/* Entertainment */}
@@ -2148,20 +2138,9 @@ const NewsAggregator = () => {
                           : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                        />
-                      </svg>
-                      <span className="font-medium">Entertainment</span>
+                      <span className="font-medium uppercase">
+                        Entertainment
+                      </span>
                     </button>
 
                     {/* Food */}
@@ -2176,20 +2155,7 @@ const NewsAggregator = () => {
                           : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
                       }`}
                     >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                        />
-                      </svg>
-                      <span className="font-medium">Food</span>
+                      <span className="font-medium uppercase">Food</span>
                     </button>
                   </div>
                 </nav>
@@ -2588,22 +2554,125 @@ const NewsAggregator = () => {
                                     </div>
                                   )}
 
-                                  {/* Thumbnail Image - Only show in list view */}
+                                  {/* Thumbnail Image or Emoji Placeholder - Only show in list view */}
                                   {viewMode === "list" &&
-                                    feedItems.length > 0 &&
-                                    feedItems[currentIndex]?.image && (
-                                      <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40">
-                                        <img
-                                          src={feedItems[currentIndex]?.image}
-                                          alt={feedItems[currentIndex]?.title}
-                                          className="w-full h-full object-cover rounded-r-lg"
-                                          onError={(e) => {
-                                            // Hide broken images
-                                            const target = e.currentTarget;
-                                            target.style.display = "none";
-                                          }}
-                                        />
-                                      </div>
+                                    feedItems.length > 0 && (
+                                      <>
+                                        {/* Show image if available and not a placeholder */}
+                                        {feedItems[currentIndex]?.image &&
+                                        !feedItems[
+                                          currentIndex
+                                        ]?.image!.startsWith("placeholder:") ? (
+                                          <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40">
+                                            <img
+                                              src={
+                                                feedItems[currentIndex]?.image
+                                              }
+                                              alt={
+                                                feedItems[currentIndex]?.title
+                                              }
+                                              className="w-full h-full object-cover rounded-r-lg"
+                                              onError={(e) => {
+                                                // Hide broken images
+                                                const target = e.currentTarget;
+                                                target.style.display = "none";
+                                              }}
+                                            />
+                                          </div>
+                                        ) : (
+                                          /* Show emoji placeholder when no image or placeholder image */
+                                          <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 flex items-center justify-center">
+                                            <div
+                                              className={`w-full h-full rounded-r-lg flex items-center justify-center ${
+                                                feedItems[currentIndex]
+                                                  ?.source === "Ars Technica" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "WIRED" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "TechRadar" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "#Windows11" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Vice - Tech" ||
+                                                feedItems[currentIndex]
+                                                  ?.source ===
+                                                  "BleepingComputer"
+                                                  ? "bg-[#f79d84]"
+                                                  : feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "Fox Sports" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "CNN - SPORTS" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "CBS SPORTS" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source === "ESPN"
+                                                  ? "bg-[#59cd90]"
+                                                  : feedItems[currentIndex]
+                                                      ?.source === "Newsweek" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source === "Fox News" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "Breitbart" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source === "CNN News" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source === "Bloomberg"
+                                                  ? "bg-[#3fa7d6]"
+                                                  : feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "The Onion" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "The Hard Times" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source === "Lambgoat" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source === "No Echo" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "Soft White Underbelly" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "New York Post"
+                                                  ? "bg-[#a855f7]"
+                                                  : feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "Hot Peppers" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "Tips For BBQ" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source ===
+                                                      "Minimalist Baker" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source === "McDonald's"
+                                                  ? "bg-[#e5e7eb]"
+                                                  : "bg-blue-500"
+                                              }`}
+                                            >
+                                              <span className="text-white font-bold text-2xl">
+                                                {feedItems[currentIndex]
+                                                  ?.source === "Hot Peppers"
+                                                  ? "🌶️"
+                                                  : feedItems[currentIndex]
+                                                      ?.source ===
+                                                    "Tips For BBQ"
+                                                  ? "♨️"
+                                                  : getCategoryIcon(
+                                                      getFeedCategory(
+                                                        feedItems[currentIndex]
+                                                          ?.source || ""
+                                                      )
+                                                    )}
+                                              </span>
+                                            </div>
+                                          </div>
+                                        )}
+                                      </>
                                     )}
 
                                   {/* Article Excerpts - Show in grid and small views */}
@@ -2762,12 +2831,62 @@ const NewsAggregator = () => {
                                               : feedItems[currentIndex]
                                                   ?.source === "Tips For BBQ"
                                               ? "♨️"
-                                              : getCategoryIcon(
-                                                  getFeedCategory(
-                                                    feedItems[currentIndex]
-                                                      ?.source || ""
-                                                  )
-                                                )}
+                                              : feedItems[currentIndex]
+                                                  ?.source === "Ars Technica" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "WIRED" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "TechRadar" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "#Windows11" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Vice - Tech" ||
+                                                feedItems[currentIndex]
+                                                  ?.source ===
+                                                  "BleepingComputer"
+                                              ? "💻"
+                                              : feedItems[currentIndex]
+                                                  ?.source === "Fox Sports" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "CNN - SPORTS" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "CBS SPORTS" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "ESPN"
+                                              ? "⚾"
+                                              : feedItems[currentIndex]
+                                                  ?.source === "Newsweek" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Fox News" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Breitbart" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "CNN News" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Bloomberg"
+                                              ? "💼"
+                                              : feedItems[currentIndex]
+                                                  ?.source === "The Onion" ||
+                                                feedItems[currentIndex]
+                                                  ?.source ===
+                                                  "The Hard Times" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Lambgoat" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "No Echo" ||
+                                                feedItems[currentIndex]
+                                                  ?.source ===
+                                                  "Soft White Underbelly" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "New York Post"
+                                              ? "🎭"
+                                              : feedItems[currentIndex]
+                                                  ?.source ===
+                                                  "Minimalist Baker" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "McDonald's"
+                                              ? "🍽️"
+                                              : "📰"}
                                           </div>
                                           <div className="text-xs mt-1 font-medium">
                                             {feedItems[currentIndex]?.source ===
@@ -2885,7 +3004,9 @@ const NewsAggregator = () => {
                                                     "Tips For BBQ" ||
                                                   feedItems[currentIndex]
                                                     ?.source ===
-                                                    "Minimalist Baker"
+                                                    "Minimalist Baker" ||
+                                                  feedItems[currentIndex]
+                                                    ?.source === "McDonald's"
                                                 ? "bg-[#e5e7eb]"
                                                 : "bg-blue-500"
                                             }`}
@@ -2993,7 +3114,9 @@ const NewsAggregator = () => {
                                                   ?.source === "Tips For BBQ" ||
                                                 feedItems[currentIndex]
                                                   ?.source ===
-                                                  "Minimalist Baker"
+                                                  "Minimalist Baker" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "McDonald's"
                                               ? "bg-[#e5e7eb] dark:bg-[#e5e7eb]"
                                               : "bg-gray-200 dark:bg-gray-700"
                                           }`}
@@ -3345,6 +3468,34 @@ const NewsAggregator = () => {
           {/* Bottom Tray Navigation - Mobile Only */}
           <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between max-w-[1200px] mx-auto px-4 sm:px-8 py-3">
+              {/* All News */}
+              <button
+                onClick={() => {
+                  setActiveCategory("all");
+                  syncActiveCategory("all");
+                }}
+                className={`flex flex-col items-center gap-1 px-4 py-2 transition-colors ${
+                  activeCategory === "all"
+                    ? `${categoryColors.all.bg} ${categoryColors.all.text} rounded-t-lg rounded-b-none`
+                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
+                }`}
+              >
+                <svg
+                  className="w-9 h-9"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                  />
+                </svg>
+                <span className="text-xs font-medium">All News</span>
+              </button>
+
               {/* Technology */}
               <button
                 onClick={() => {
@@ -3395,38 +3546,16 @@ const NewsAggregator = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m-9 0h10m-10 0a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2M9 20h6m-6 0v-2m6 2v-2"
+                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
-                </svg>
-                <span className="text-xs font-medium">Sports</span>
-              </button>
-
-              {/* All News - Middle Button */}
-              <button
-                onClick={() => {
-                  setActiveCategory("all");
-                  syncActiveCategory("all");
-                }}
-                className={`flex flex-col items-center gap-1 px-4 py-2 transition-colors ${
-                  activeCategory === "all"
-                    ? `${categoryColors.all.bg} ${categoryColors.all.text} rounded-t-lg rounded-b-none`
-                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
-                }`}
-              >
-                <svg
-                  className="w-9 h-9"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                    d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"
                   />
                 </svg>
-                <span className="text-xs font-medium">All News</span>
+                <span className="text-xs font-medium">Sports</span>
               </button>
 
               {/* Business */}
@@ -3510,7 +3639,7 @@ const NewsAggregator = () => {
                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                   />
                 </svg>
-                <span className="text-xs font-medium">Food</span>
+                <span className="text-xs font-medium uppercase">Food</span>
               </button>
             </div>
           </nav>
