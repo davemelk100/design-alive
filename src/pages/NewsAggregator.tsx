@@ -190,6 +190,13 @@ const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
   {
+    id: "mets-sny",
+    name: "Mets - SNY",
+    url: "https://sny.tv/mets-feed",
+    category: "sports",
+    enabled: true,
+  },
+  {
     id: "hot-peppers",
     name: "Hot Peppers",
     url: "https://news.google.com/rss/search?q=%22hot+peppers%22&hl=en-US&gl=US&ceid=US:en",
@@ -234,7 +241,13 @@ const NewsAggregator = () => {
     ) {
       return "technology";
     } else if (
-      ["Fox Sports", "CNN - SPORTS", "CBS SPORTS", "ESPN"].includes(sourceName)
+      [
+        "Fox Sports",
+        "CNN - SPORTS",
+        "CBS SPORTS",
+        "ESPN",
+        "Mets - SNY",
+      ].includes(sourceName)
     ) {
       return "sports";
     } else if (
@@ -411,6 +424,7 @@ const NewsAggregator = () => {
   const [abcNewsIndex, setAbcNewsIndex] = useState(0);
   const [cbsSportsIndex, setCbsSportsIndex] = useState(0);
   const [espnIndex, setEspnIndex] = useState(0);
+  const [metsSnyIndex, setMetsSnyIndex] = useState(0);
 
   const [breitbartIndex, setBreitbartIndex] = useState(0);
 
@@ -576,6 +590,8 @@ const NewsAggregator = () => {
         return cbsSportsIndex;
       case "ESPN":
         return espnIndex;
+      case "Mets - SNY":
+        return metsSnyIndex;
       case "Breitbart":
         return breitbartIndex;
 
@@ -664,6 +680,9 @@ const NewsAggregator = () => {
         break;
       case "ESPN":
         goToPreviousEspn();
+        break;
+      case "Mets - SNY":
+        goToPreviousMetsSny();
         break;
       case "Breitbart":
         goToPreviousBreitbart();
@@ -758,6 +777,9 @@ const NewsAggregator = () => {
         break;
       case "ESPN":
         goToNextEspn();
+        break;
+      case "Mets - SNY":
+        goToNextMetsSny();
         break;
       case "Breitbart":
         goToNextBreitbart();
@@ -1878,6 +1900,27 @@ const NewsAggregator = () => {
     }
   };
 
+  // Mets - SNY carousel navigation
+  const goToNextMetsSny = () => {
+    const metsSnyItems = newsItems.filter(
+      (item) => item.source === "Mets - SNY"
+    );
+    if (metsSnyItems.length > 0) {
+      setMetsSnyIndex((prev) => (prev + 1) % metsSnyItems.length);
+    }
+  };
+
+  const goToPreviousMetsSny = () => {
+    const metsSnyItems = newsItems.filter(
+      (item) => item.source === "Mets - SNY"
+    );
+    if (metsSnyItems.length > 0) {
+      setMetsSnyIndex(
+        (prev) => (prev - 1 + metsSnyItems.length) % metsSnyItems.length
+      );
+    }
+  };
+
   // TechCrunch carousel navigation
   const goToNextTechcrunch = () => {
     const techcrunchItems = newsItems.filter(
@@ -2608,7 +2651,9 @@ const NewsAggregator = () => {
                                                       ?.source ===
                                                       "CBS SPORTS" ||
                                                     feedItems[currentIndex]
-                                                      ?.source === "ESPN"
+                                                      ?.source === "ESPN" ||
+                                                    feedItems[currentIndex]
+                                                      ?.source === "Mets - SNY"
                                                   ? "bg-[#59cd90]"
                                                   : feedItems[currentIndex]
                                                       ?.source === "Newsweek" ||
@@ -2852,7 +2897,9 @@ const NewsAggregator = () => {
                                                 feedItems[currentIndex]
                                                   ?.source === "CBS SPORTS" ||
                                                 feedItems[currentIndex]
-                                                  ?.source === "ESPN"
+                                                  ?.source === "ESPN" ||
+                                                feedItems[currentIndex]
+                                                  ?.source === "Mets - SNY"
                                               ? "⚾"
                                               : feedItems[currentIndex]
                                                   ?.source === "Newsweek" ||
@@ -3481,7 +3528,7 @@ const NewsAggregator = () => {
                 }`}
               >
                 <svg
-                  className="w-9 h-9"
+                  className="w-8 h-8"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -3490,10 +3537,10 @@ const NewsAggregator = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                    d="M4 6h16M4 10h16M4 14h16M4 18h16"
                   />
                 </svg>
-                <span className="text-xs font-medium">All News</span>
+                <span className="text-xs font-medium uppercase">All News</span>
               </button>
 
               {/* Technology */}
@@ -3509,7 +3556,7 @@ const NewsAggregator = () => {
                 }`}
               >
                 <svg
-                  className="w-7 h-7"
+                  className="w-8 h-8"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -3518,10 +3565,10 @@ const NewsAggregator = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
                   />
                 </svg>
-                <span className="text-xs font-medium">Tech</span>
+                <span className="text-xs font-medium uppercase">Tech</span>
               </button>
 
               {/* Sports */}
@@ -3537,7 +3584,7 @@ const NewsAggregator = () => {
                 }`}
               >
                 <svg
-                  className="w-7 h-7"
+                  className="w-8 h-8"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -3546,16 +3593,10 @@ const NewsAggregator = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
                   />
                 </svg>
-                <span className="text-xs font-medium">Sports</span>
+                <span className="text-xs font-medium uppercase">Sports</span>
               </button>
 
               {/* Business */}
@@ -3583,7 +3624,7 @@ const NewsAggregator = () => {
                     d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
                   />
                 </svg>
-                <span className="text-xs font-medium">Business</span>
+                <span className="text-xs font-medium uppercase">Business</span>
               </button>
 
               {/* Entertainment */}
@@ -3599,7 +3640,7 @@ const NewsAggregator = () => {
                 }`}
               >
                 <svg
-                  className="w-7 h-7"
+                  className="w-8 h-8"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -3611,7 +3652,9 @@ const NewsAggregator = () => {
                     d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
                   />
                 </svg>
-                <span className="text-xs font-medium">Entertainment</span>
+                <span className="text-xs font-medium uppercase">
+                  Entertainment
+                </span>
               </button>
 
               {/* Food */}
@@ -3627,7 +3670,7 @@ const NewsAggregator = () => {
                 }`}
               >
                 <svg
-                  className="w-7 h-7"
+                  className="w-8 h-8"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
