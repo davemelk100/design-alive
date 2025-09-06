@@ -208,58 +208,58 @@ export const content = {
       {
         title: "Senior Product Designer",
         company: "Powerley Inc., Detroit, MI",
-        period: "January 2025 - Present",
+        period: "January 2025 – Present",
         description:
-          "Designed mobile and desktop interfaces for bill analysis dashboard. Leveraged AI tools for accessibility testing and user-facing language optimization. Conducted user testing sessions and market research. Built interactive prototypes and design system components using Figma and React.",
+          "Designed mobile and desktop bill analysis dashboard. Used AI tools for accessibility testing and language optimization. Conducted user testing and market research. Built interactive prototypes and design system components in Figma and React.",
       },
       {
         title: "User Experience and Development Consultant",
         company: "Melkonian Industries",
-        period: "November 2024 - January 2025",
+        period: "November 2024 – January 2025",
         description:
-          "Migrated WordPress/eBay site to Shopify and Wix site to WordPress with WooCommerce. Implemented SEO strategies and AI-powered tools. Designed scheduling application using Figma, Next.js, and React. Conducted usability audits and accessibility testing for enterprise clients.",
+          "Migrated WordPress/eBay site to Shopify and Wix site to WordPress with WooCommerce. Applied SEO strategies and AI-powered tools. Designed scheduling app in Figma, Next.js, and React. Conducted usability audits and accessibility testing for enterprise clients.",
       },
       {
         title: "Principal UX/UI Developer",
         company: "Propio Language Services Inc., Overland Park, KS",
-        period: "July 2023 - November 2024",
+        period: "July 2023 – November 2024",
         description:
-          "Led accessibility compliance and interactive prototype development. Improved video call application accessibility from 78% to 98%. Designed live AI interpreter feature. Created user narratives and visualized complex user flows to drive cross-functional alignment.",
+          "Led accessibility compliance and prototype development. Increased video call app accessibility from 78% to 98%. Designed live AI interpreter feature. Created user narratives and mapped complex user flows for cross-functional alignment.",
       },
       {
         title: "Senior User Experience Lead Designer and Developer",
         company: "Dewpoint Inc., Lansing, MI",
-        period: "May 2016 - July 2023",
+        period: "May 2016 – July 2023",
         description:
-          "Established enterprise-wide accessibility standards and UX methodologies. Conducted usability evaluations and implemented accessibility support models. Led design across four Agile scrum teams. Created visual style guides and pattern libraries. Mentored team members and expanded organizational UX expertise.",
+          "Established accessibility standards and UX methodologies. Performed usability evaluations and implemented support models. Directed design across four Agile scrum teams. Produced visual style guides and pattern libraries. Mentored team members and advanced organizational UX expertise.",
       },
       {
         title: "Manager of Application Delivery",
         company: "Meridian Health Plan, Detroit, MI",
-        period: "June 2015 - May 2016",
+        period: "June 2015 – May 2016",
         description:
-          "Managed web team of 20 designers and developers. Built UX discipline from scratch, creating strategy and methodology. Conducted user research and developed personas. Implemented Agile Scrum framework. Reported to CIO on strategic direction for mobile and web engineers.",
+          "Managed web team of 20. Built UX discipline with strategy and methodology. Conducted user research and created personas. Implemented Agile Scrum framework. Reported to CIO on mobile and web strategy.",
       },
       {
         title: "Software Development Manager",
         company: "Optum and United Healthcare Group, Southfield, MI",
-        period: "October 2012 - June 2015",
+        period: "October 2012 – June 2015",
         description:
-          "Consulted on Federal Exchange (HealthCare.gov) identifying UI/UX issues. Created pattern library and framework. Managed team of 30 across multiple project tracks. Staffed and trained dev teams globally. Conducted user research and created journey maps. Interviewed 75+ candidates for web developer positions.",
+          "Consulted on HealthCare.gov UI/UX issues. Built pattern library and framework. Managed team of 30 across multiple tracks. Staffed and trained global dev teams. Conducted user research and created journey maps. Interviewed 75+ web developer candidates.",
       },
       {
         title: "Senior Web Developer",
         company: "Blue Cross Blue Shield of Michigan, Detroit, MI",
-        period: "August 2002 - October 2012",
+        period: "August 2002 – October 2012",
         description:
-          "Built dynamic websites using ColdFusion. Maintained BCBSM.com and MiBCN.com. Created award-winning BCBSM Foundation site. Developed streaming media webcasts and interactive training guides. Conducted user testing sessions.",
+          "Built dynamic sites in ColdFusion. Maintained BCBSM.com and MiBCN.com. Created award-winning BCBSM Foundation site. Developed streaming media webcasts and interactive training guides. Conducted user testing.",
       },
       {
-        title: "Technical Writing & Early Digital Experience",
-        company: "Ford, GM (Contract) - Michigan",
+        title: "Technical Writing and Early Digital Experience",
+        company: "Ford, GM (Contract), Michigan",
         period: "Early Career",
         description:
-          "Created help content, training docs, and early web materials for automotive teams. Wrote interactive training guides and software bulletins for Ford's prototype systems. Created service manuals and user guides. Helped launch GM's service information database. Built project schedules and risk assessments for large-scale documentation.",
+          "Produced help content, training docs, and early web materials. Wrote interactive training guides and software bulletins for Ford prototype systems. Developed service manuals and user guides. Helped launch GM service information database. Built project schedules and risk assessments.",
       },
     ],
   },
