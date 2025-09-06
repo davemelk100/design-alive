@@ -992,8 +992,8 @@ function App() {
                               <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                                 <div className="rounded-lg p-1 sm:p-2 pr-8 sm:pr-12">
                                   <div className="flex flex-col gap-0.5">
-                                    <div className="flex items-center justify-between w-full">
-                                      <div className="flex items-center gap-2 min-w-0 flex-1">
+                                    <div className="flex items-start justify-between w-full">
+                                      <div className="flex items-start gap-2 min-w-0 flex-1">
                                         {story.hasModal ? (
                                           <button
                                             onClick={() =>
@@ -1003,7 +1003,7 @@ function App() {
                                                 subtitle: story.subtitle,
                                               })
                                             }
-                                            className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer lab-card-title"
+                                            className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer lab-card-title text-left"
                                             style={{
                                               letterSpacing: "-0.01em",
                                               lineHeight: "1.25",
@@ -1018,7 +1018,7 @@ function App() {
                                           </button>
                                         ) : (
                                           <h3
-                                            className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white lab-card-title"
+                                            className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white lab-card-title text-left"
                                             style={{
                                               letterSpacing: "-0.01em",
                                               lineHeight: "1.25",
