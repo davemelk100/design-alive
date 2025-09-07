@@ -140,7 +140,6 @@ function App() {
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [currentSlide] = useState(0);
   const [currentViewMode, setCurrentViewMode] = useState<"list" | "grid">(
     "grid"
   );
@@ -207,12 +206,11 @@ function App() {
             element={
               <>
                 {/* Hero Section */}
-                <section className="relative flex flex-col justify-center min-h-[120px] sm:min-h-[160px] pt-4 sm:pt-6 lg:pt-8">
-                  <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
-                    {/* Two-column layout: Left content + Right video card */}
-                    <div className="flex flex-col md:flex-row gap-8 lg:gap-12 items-start">
-                      {/* Left Column: Title, Navigation, Summary */}
-                      <div className="flex flex-col items-start flex-1">
+                <section className="py-4 sm:py-4xl:py-4 relative">
+                  <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 gap-6 sm:gap-8">
+                      {/* Hero Content */}
+                      <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg">
                         {/* Title */}
                         <motion.div
                           initial={{ opacity: 0, y: 20 }}
@@ -269,44 +267,6 @@ function App() {
                           </p>
                         </motion.div>
                       </div>
-
-                      {/* Video Carousel */}
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1.8, delay: 0.8 }}
-                        className="hidden"
-                      >
-                        <div className="relative overflow-hidden h-[175px] group rounded-lg shadow-lg">
-                          {/* Carousel Slides */}
-                          <div className="relative w-full h-full">
-                            {/* Axonometric Projection Slide */}
-                            <div
-                              className={`absolute inset-0 transition-opacity duration-500 ${
-                                currentSlide === 0 ? "opacity-100" : "opacity-0"
-                              }`}
-                            >
-                              <div className="absolute inset-0 z-0 flex items-end justify-center mt-8">
-                                <img
-                                  src="/img/axonometric-animation.svg"
-                                  className="w-full h-auto object-contain shadow-none border-0"
-                                  alt="Axonometric Projection Animation"
-                                />
-                              </div>
-                              {/* Title above animation */}
-                              <div className="absolute inset-0 z-10 flex flex-col justify-start p-4">
-                                <div className="text-gray-900 dark:text-white">
-                                  <h3 className="text-base font-semibold mb-1">
-                                    Axonometric Projection
-                                  </h3>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Navigation Arrows */}
-                        </div>
-                      </motion.div>
                     </div>
                   </div>
                 </section>
@@ -341,7 +301,7 @@ function App() {
                                 }}
                                 className="group relative overflow-hidden rounded-lg bg-transparent dark:bg-transparent border dark:border-gray-500 shadow-md h-[120px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                               >
-                                <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20">
+                                <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                   <a
                                     href={project.demo}
                                     target="_blank"
@@ -610,7 +570,7 @@ function App() {
                               }}
                               className="group relative overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[120px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
-                              <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20">
+                              <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {article.url.startsWith("http") ? (
                                   <a
                                     href={article.url}
@@ -760,7 +720,7 @@ function App() {
                               }}
                               className="group relative overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[120px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
-                              <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20">
+                              <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {project.url ? (
                                   <a
                                     href={project.url}
@@ -926,7 +886,7 @@ function App() {
                               transition={{ duration: 2.4, delay: index * 0.2 }}
                               className="group relative overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[120px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
-                              <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20">
+                              <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {story.hasModal ? (
                                   <button
                                     onClick={() =>
