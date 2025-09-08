@@ -197,6 +197,20 @@ const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
   {
+    id: "pride-of-lions",
+    name: "Pride of Lions",
+    url: "https://feeds.megaphone.fm/pride-of-detroit-lions",
+    category: "sports",
+    enabled: true,
+  },
+  {
+    id: "white-sox-si",
+    name: "White Sox - SI",
+    url: "https://www.si.com/mlb/whitesox/feed",
+    category: "sports",
+    enabled: true,
+  },
+  {
     id: "hot-peppers",
     name: "Hot Peppers",
     url: "https://news.google.com/rss/search?q=%22hot+peppers%22&hl=en-US&gl=US&ceid=US:en",
@@ -247,6 +261,7 @@ const NewsAggregator = () => {
         "CBS SPORTS",
         "ESPN",
         "Mets - SNY",
+        "White Sox - SI",
       ].includes(sourceName)
     ) {
       return "sports";
@@ -425,6 +440,8 @@ const NewsAggregator = () => {
   const [cbsSportsIndex, setCbsSportsIndex] = useState(0);
   const [espnIndex, setEspnIndex] = useState(0);
   const [metsSnyIndex, setMetsSnyIndex] = useState(0);
+  const [prideOfLionsIndex, setPrideOfLionsIndex] = useState(0);
+  const [whiteSoxSiIndex, setWhiteSoxSiIndex] = useState(0);
 
   const [breitbartIndex, setBreitbartIndex] = useState(0);
 
@@ -592,6 +609,10 @@ const NewsAggregator = () => {
         return espnIndex;
       case "Mets - SNY":
         return metsSnyIndex;
+      case "Pride of Lions":
+        return prideOfLionsIndex;
+      case "White Sox - SI":
+        return whiteSoxSiIndex;
       case "Breitbart":
         return breitbartIndex;
 
@@ -612,7 +633,6 @@ const NewsAggregator = () => {
       case "McDonald's":
         return mcdonaldsIndex;
       default:
-        // For custom feeds, return 0 as default index
         return 0;
     }
   };
@@ -683,6 +703,12 @@ const NewsAggregator = () => {
         break;
       case "Mets - SNY":
         goToPreviousMetsSny();
+        break;
+      case "Pride of Lions":
+        goToPreviousPrideOfLions();
+        break;
+      case "White Sox - SI":
+        goToPreviousWhiteSoxSi();
         break;
       case "Breitbart":
         goToPreviousBreitbart();
@@ -780,6 +806,12 @@ const NewsAggregator = () => {
         break;
       case "Mets - SNY":
         goToNextMetsSny();
+        break;
+      case "Pride of Lions":
+        goToNextPrideOfLions();
+        break;
+      case "White Sox - SI":
+        goToNextWhiteSoxSi();
         break;
       case "Breitbart":
         goToNextBreitbart();
@@ -926,6 +958,11 @@ const NewsAggregator = () => {
     category: string
   ): NewsItem[] => {
     try {
+      if (sourceName === "Pride of Lions") {
+        console.log(
+          `Parsing Pride of Lions RSS feed, XML length: ${xmlText.length}`
+        );
+      }
       // Check if the response is HTML instead of XML (common error case)
       if (
         xmlText.trim().startsWith("<!DOCTYPE html") ||
@@ -954,7 +991,14 @@ const NewsAggregator = () => {
       }
 
       if (items.length === 0) {
+        if (sourceName === "Pride of Lions") {
+          console.log("Pride of Lions: No items found in RSS feed");
+        }
         return [];
+      }
+
+      if (sourceName === "Pride of Lions") {
+        console.log(`Pride of Lions: Found ${items.length} items in RSS feed`);
       }
 
       const parsedItems: NewsItem[] = [];
@@ -969,11 +1013,19 @@ const NewsAggregator = () => {
             "";
 
           // More flexible link extraction
-          const link =
+          let link =
             item.querySelector("link")?.textContent?.trim() ||
             item.querySelector("url")?.textContent?.trim() ||
             item.querySelector("href")?.textContent?.trim() ||
             "";
+
+          // For podcast feeds, if no unique link, use enclosure URL as fallback
+          if (!link || link === "") {
+            const enclosure = item.querySelector("enclosure");
+            if (enclosure) {
+              link = enclosure.getAttribute("url") || "";
+            }
+          }
 
           // More flexible description extraction
           const description =
@@ -1144,6 +1196,11 @@ const NewsAggregator = () => {
 
           // Skip items without essential data
           if (!title || !link) {
+            if (sourceName === "Pride of Lions") {
+              console.log(
+                `Pride of Lions item ${index} skipped - title: "${title}", link: "${link}"`
+              );
+            }
             return;
           }
 
@@ -1194,7 +1251,13 @@ const NewsAggregator = () => {
         }
       });
 
-      return parsedItems.slice(0, 10); // Limit to 10 items for carousel
+      const result = parsedItems.slice(0, 10); // Limit to 10 items for carousel
+      if (sourceName === "Pride of Lions") {
+        console.log(
+          `Pride of Lions: Parsed ${parsedItems.length} items, returning ${result.length} items`
+        );
+      }
+      return result;
     } catch (parseError) {
       console.error(`Error parsing RSS XML for ${sourceName}:`, parseError);
       console.error(`XML content:`, xmlText.substring(0, 1000));
@@ -1424,6 +1487,8 @@ const NewsAggregator = () => {
       setNewYorkPostIndex(0); // Reset New York Post carousel
       setFoxNewsIndex(0); // Reset Fox News carousel
       setCbsSportsIndex(0); // Reset CBS Sports carousel
+      setPrideOfLionsIndex(0); // Reset Pride of Lions carousel
+      setWhiteSoxSiIndex(0); // Reset White Sox - SI carousel
       setBreitbartIndex(0); // Reset Breitbart carousel
 
       setCnnIndex(0); // Reset CNN carousel
@@ -1921,6 +1986,49 @@ const NewsAggregator = () => {
     }
   };
 
+  // Pride of Lions carousel navigation
+  const goToNextPrideOfLions = () => {
+    const prideOfLionsItems = newsItems.filter(
+      (item) => item.source === "Pride of Lions"
+    );
+    if (prideOfLionsItems.length > 0) {
+      setPrideOfLionsIndex((prev) => (prev + 1) % prideOfLionsItems.length);
+    }
+  };
+
+  const goToPreviousPrideOfLions = () => {
+    const prideOfLionsItems = newsItems.filter(
+      (item) => item.source === "Pride of Lions"
+    );
+    if (prideOfLionsItems.length > 0) {
+      setPrideOfLionsIndex(
+        (prev) =>
+          (prev - 1 + prideOfLionsItems.length) % prideOfLionsItems.length
+      );
+    }
+  };
+
+  // White Sox - SI carousel navigation
+  const goToNextWhiteSoxSi = () => {
+    const whiteSoxSiItems = newsItems.filter(
+      (item) => item.source === "White Sox - SI"
+    );
+    if (whiteSoxSiItems.length > 0) {
+      setWhiteSoxSiIndex((prev) => (prev + 1) % whiteSoxSiItems.length);
+    }
+  };
+
+  const goToPreviousWhiteSoxSi = () => {
+    const whiteSoxSiItems = newsItems.filter(
+      (item) => item.source === "White Sox - SI"
+    );
+    if (whiteSoxSiItems.length > 0) {
+      setWhiteSoxSiIndex(
+        (prev) => (prev - 1 + whiteSoxSiItems.length) % whiteSoxSiItems.length
+      );
+    }
+  };
+
   // TechCrunch carousel navigation
   const goToNextTechcrunch = () => {
     const techcrunchItems = newsItems.filter(
@@ -2030,7 +2138,7 @@ const NewsAggregator = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white">
+    <div className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-600 dark:text-gray-300">
       <Suspense
         fallback={
           <div className="min-h-screen bg-white flex items-center justify-center">
@@ -2077,7 +2185,7 @@ const NewsAggregator = () => {
             <div className="block bg-white dark:bg-gray-800 py-4">
               <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
                 <div className="flex items-center justify-between">
-                  <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-600 dark:text-gray-300">
                     {activeCategory === "all"
                       ? "All News"
                       : activeCategory === "technology"
@@ -2211,7 +2319,7 @@ const NewsAggregator = () => {
                 <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                   <div className="p-6">
                     <div className="flex items-center justify-between mb-6">
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-600 dark:text-gray-300">
                         Create Custom RSS Feed
                       </h3>
                       <button
@@ -2269,14 +2377,14 @@ const NewsAggregator = () => {
                           placeholder="Feed Name (e.g., My Blog)"
                           value={customFeedName}
                           onChange={(e) => setCustomFeedName(e.target.value)}
-                          className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-600 dark:text-gray-300 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                         <select
                           value={customFeedCategory}
                           onChange={(e) =>
                             setCustomFeedCategory(e.target.value)
                           }
-                          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         >
                           <option value="technology">Technology</option>
                           <option value="sports">Sports</option>
@@ -2303,7 +2411,7 @@ const NewsAggregator = () => {
                               addCustomRSSFeed();
                             }
                           }}
-                          className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-600 dark:text-gray-300 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         />
                         <button
                           type="submit"
@@ -2313,7 +2421,7 @@ const NewsAggregator = () => {
                             !customFeedCategory ||
                             isCreatingFeed
                           }
-                          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
+                          className="px-6 py-2 bg-blue-600 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
                         >
                           {isCreatingFeed ? "Adding..." : "Add Feed"}
                         </button>
@@ -2559,7 +2667,7 @@ const NewsAggregator = () => {
                                   {feedItems.length > 0 && (
                                     <div className="mt-0">
                                       <h3
-                                        className={`font-semibold text-gray-900 dark:text-white leading-tight ${
+                                        className={`font-semibold text-gray-900 dark:text-gray-600 dark:text-gray-300 leading-tight ${
                                           viewMode === "grid"
                                             ? "text-base"
                                             : viewMode === "list"
@@ -2605,7 +2713,11 @@ const NewsAggregator = () => {
                                         {feedItems[currentIndex]?.image &&
                                         !feedItems[
                                           currentIndex
-                                        ]?.image!.startsWith("placeholder:") ? (
+                                        ]?.image!.startsWith("placeholder:") &&
+                                        feedItems[currentIndex]?.source !==
+                                          "BleepingComputer" &&
+                                        feedItems[currentIndex]?.source !==
+                                          "Bloomberg" ? (
                                           <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40">
                                             <img
                                               src={
@@ -2625,81 +2737,8 @@ const NewsAggregator = () => {
                                         ) : (
                                           /* Show emoji placeholder when no image or placeholder image */
                                           <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 flex items-center justify-center">
-                                            <div
-                                              className={`w-full h-full rounded-r-lg flex items-center justify-center ${
-                                                feedItems[currentIndex]
-                                                  ?.source === "Ars Technica" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "WIRED" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "TechRadar" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "#Windows11" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "Vice - Tech" ||
-                                                feedItems[currentIndex]
-                                                  ?.source ===
-                                                  "BleepingComputer"
-                                                  ? "bg-[#f79d84]"
-                                                  : feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "Fox Sports" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "CNN - SPORTS" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "CBS SPORTS" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source === "ESPN" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source === "Mets - SNY"
-                                                  ? "bg-[#59cd90]"
-                                                  : feedItems[currentIndex]
-                                                      ?.source === "Newsweek" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source === "Fox News" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "Breitbart" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source === "CNN News" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source === "Bloomberg"
-                                                  ? "bg-[#3fa7d6]"
-                                                  : feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "The Onion" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "The Hard Times" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source === "Lambgoat" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source === "No Echo" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "Soft White Underbelly" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "New York Post"
-                                                  ? "bg-[#a855f7]"
-                                                  : feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "Hot Peppers" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "Tips For BBQ" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source ===
-                                                      "Minimalist Baker" ||
-                                                    feedItems[currentIndex]
-                                                      ?.source === "McDonald's"
-                                                  ? "bg-[#e5e7eb]"
-                                                  : "bg-blue-500"
-                                              }`}
-                                            >
-                                              <span className="text-white font-bold text-4xl">
+                                            <div className="w-full h-full rounded-r-lg flex items-center justify-center">
+                                              <span className="text-gray-600 dark:text-gray-300 font-bold text-4xl">
                                                 {feedItems[currentIndex]
                                                   ?.source === "Hot Peppers"
                                                   ? "🌶️"
@@ -2707,6 +2746,14 @@ const NewsAggregator = () => {
                                                       ?.source ===
                                                     "Tips For BBQ"
                                                   ? "♨️"
+                                                  : feedItems[currentIndex]
+                                                      ?.source ===
+                                                    "Pride of Lions"
+                                                  ? "🏈"
+                                                  : feedItems[currentIndex]
+                                                      ?.source ===
+                                                    "White Sox - SI"
+                                                  ? "⚾"
                                                   : getCategoryIcon(
                                                       getFeedCategory(
                                                         feedItems[currentIndex]
@@ -2850,7 +2897,7 @@ const NewsAggregator = () => {
 
                                       {/* Placeholder for when image fails to load */}
                                       <div
-                                        className="image-placeholder hidden w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center"
+                                        className="image-placeholder hidden w-full rounded-lg flex items-center justify-center"
                                         style={{
                                           height:
                                             viewMode === "grid"
@@ -2862,43 +2909,63 @@ const NewsAggregator = () => {
                                           maxHeight: "250px",
                                         }}
                                       >
-                                        <div className="text-center text-gray-500 dark:text-gray-400">
-                                          <div
-                                            className={
-                                              viewMode === "grid"
-                                                ? "text-8xl mb-2"
-                                                : "text-6xl mb-2"
-                                            }
-                                          >
-                                            {feedItems[currentIndex]?.source ===
-                                            "Hot Peppers"
-                                              ? "🌶️"
-                                              : feedItems[currentIndex]
-                                                  ?.source === "Tips For BBQ"
-                                              ? "♨️"
-                                              : getCategoryIcon(
-                                                  getFeedCategory(
-                                                    feedItems[currentIndex]
-                                                      ?.source || ""
-                                                  )
-                                                )}
-                                          </div>
-                                          <div className="text-xs mt-1 font-medium">
-                                            {feedItems[currentIndex]?.source ===
-                                              "ESPN" ||
-                                            feedItems[currentIndex]?.source ===
-                                              "BleepingComputer" ||
-                                            feedItems[currentIndex]?.source ===
-                                              "Bloomberg"
-                                              ? ""
-                                              : feedItems[currentIndex]?.source}
+                                        <div className="w-full h-full rounded-lg flex items-center justify-center">
+                                          <div className="text-center flex flex-col justify-center h-full">
+                                            <div
+                                              className={
+                                                viewMode === "grid"
+                                                  ? "text-8xl mb-2"
+                                                  : "text-6xl mb-2"
+                                              }
+                                            >
+                                              <span className="text-gray-600 dark:text-gray-300 font-bold">
+                                                {feedItems[currentIndex]
+                                                  ?.source === "Hot Peppers"
+                                                  ? "🌶️"
+                                                  : feedItems[currentIndex]
+                                                      ?.source ===
+                                                    "Tips For BBQ"
+                                                  ? "♨️"
+                                                  : feedItems[currentIndex]
+                                                      ?.source ===
+                                                    "Pride of Lions"
+                                                  ? "🏈"
+                                                  : feedItems[currentIndex]
+                                                      ?.source ===
+                                                    "White Sox - SI"
+                                                  ? "⚾"
+                                                  : getCategoryIcon(
+                                                      getFeedCategory(
+                                                        feedItems[currentIndex]
+                                                          ?.source || ""
+                                                      )
+                                                    )}
+                                              </span>
+                                            </div>
+                                            {feedItems[currentIndex]?.source !==
+                                              "ESPN" &&
+                                            feedItems[currentIndex]?.source !==
+                                              "BleepingComputer" &&
+                                            feedItems[currentIndex]?.source !==
+                                              "Bloomberg" ? (
+                                              <div className="text-xs mt-1 font-medium text-gray-600 dark:text-gray-300">
+                                                {
+                                                  feedItems[currentIndex]
+                                                    ?.source
+                                                }
+                                              </div>
+                                            ) : (
+                                              <div className="text-xs mt-1 font-medium text-gray-600 dark:text-gray-300 opacity-0">
+                                                Placeholder
+                                              </div>
+                                            )}
                                           </div>
                                         </div>
                                       </div>
 
                                       {/* Video indicator if video content exists */}
                                       {feedItems[currentIndex]?.videoUrl && (
-                                        <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                                        <div className="absolute top-2 right-2 bg-red-600 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
                                           <span>▶️</span>
                                           <span>VIDEO</span>
                                           {feedItems[currentIndex]
@@ -2941,88 +3008,55 @@ const NewsAggregator = () => {
                                         currentIndex
                                       ]?.image!.startsWith("placeholder:") ? (
                                         // Show styled placeholder for this source
-                                        <div className="w-full h-full rounded-lg flex items-center justify-center text-white font-bold text-lg">
-                                          <div
-                                            className={`w-full h-full rounded-lg flex items-center justify-center relative ${
-                                              feedItems[currentIndex]
-                                                ?.source === "Ars Technica" ||
-                                              feedItems[currentIndex]
-                                                ?.source === "WIRED" ||
-                                              feedItems[currentIndex]
-                                                ?.source === "TechRadar" ||
-                                              feedItems[currentIndex]
-                                                ?.source === "#Windows11" ||
-                                              feedItems[currentIndex]
-                                                ?.source === "Vice - Tech" ||
-                                              feedItems[currentIndex]
-                                                ?.source === "BleepingComputer"
-                                                ? "bg-[#f79d84]"
-                                                : feedItems[currentIndex]
-                                                    ?.source === "Fox Sports" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source ===
-                                                    "CNN - SPORTS" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source === "CBS SPORTS"
-                                                ? "bg-[#59cd90]"
-                                                : feedItems[currentIndex]
-                                                    ?.source === "Newsweek" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source === "Fox News" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source === "Breitbart" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source === "CNN News" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source === "Bloomberg"
-                                                ? "bg-[#3fa7d6]"
-                                                : feedItems[currentIndex]
-                                                    ?.source === "The Onion" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source ===
-                                                    "The Hard Times" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source === "Lambgoat" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source === "No Echo" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source ===
-                                                    "Soft White Underbelly" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source === "New York Post"
-                                                ? "bg-[#a855f7]"
-                                                : feedItems[currentIndex]
-                                                    ?.source ===
-                                                    "Hot Peppers" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source ===
-                                                    "Tips For BBQ" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source ===
-                                                    "Minimalist Baker" ||
-                                                  feedItems[currentIndex]
-                                                    ?.source === "McDonald's"
-                                                ? "bg-[#e5e7eb]"
-                                                : "bg-blue-500"
-                                            }`}
-                                          >
-                                            <span className="text-white font-bold text-8xl">
+                                        <div className="w-full h-full rounded-lg flex items-center justify-center text-gray-600 dark:text-gray-300 font-bold text-lg">
+                                          <div className="w-full h-full rounded-lg flex items-center justify-center relative">
+                                            <div className="text-center flex flex-col justify-center h-full">
+                                              <div className="text-8xl mb-2">
+                                                <span className="text-gray-600 dark:text-gray-300 font-bold">
+                                                  {feedItems[currentIndex]
+                                                    ?.source === "Hot Peppers"
+                                                    ? "🌶️"
+                                                    : feedItems[currentIndex]
+                                                        ?.source ===
+                                                      "Tips For BBQ"
+                                                    ? "♨️"
+                                                    : feedItems[currentIndex]
+                                                        ?.source ===
+                                                      "Pride of Lions"
+                                                    ? "🏈"
+                                                    : getCategoryIcon(
+                                                        getFeedCategory(
+                                                          feedItems[
+                                                            currentIndex
+                                                          ]?.source || ""
+                                                        )
+                                                      )}
+                                                </span>
+                                              </div>
                                               {feedItems[currentIndex]
-                                                ?.source === "Hot Peppers"
-                                                ? "🌶️"
-                                                : feedItems[currentIndex]
-                                                    ?.source === "Tips For BBQ"
-                                                ? "♨️"
-                                                : (
+                                                ?.source !== "ESPN" &&
+                                              feedItems[currentIndex]
+                                                ?.source !==
+                                                "BleepingComputer" &&
+                                              feedItems[currentIndex]
+                                                ?.source !== "Bloomberg" ? (
+                                                <div className="text-xs mt-1 font-medium text-gray-600 dark:text-gray-300">
+                                                  {
                                                     feedItems[currentIndex]
-                                                      ?.source || ""
-                                                  ).split(" ")[0]}
-                                            </span>
+                                                      ?.source
+                                                  }
+                                                </div>
+                                              ) : (
+                                                <div className="text-xs mt-1 font-medium text-gray-600 dark:text-gray-300 opacity-0">
+                                                  Placeholder
+                                                </div>
+                                              )}
+                                            </div>
 
                                             {/* Video indicator if video content exists */}
                                             {feedItems[currentIndex]
                                               ?.videoUrl && (
-                                              <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                                              <div className="absolute top-2 right-2 bg-red-600 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
                                                 <span>▶️</span>
                                                 <span>VIDEO</span>
                                                 {feedItems[currentIndex]
@@ -3054,66 +3088,6 @@ const NewsAggregator = () => {
                                             viewMode === "list"
                                               ? "h-24"
                                               : "h-96"
-                                          } ${
-                                            feedItems[currentIndex]?.source ===
-                                              "Ars Technica" ||
-                                            feedItems[currentIndex]?.source ===
-                                              "WIRED" ||
-                                            feedItems[currentIndex]?.source ===
-                                              "TechRadar" ||
-                                            feedItems[currentIndex]?.source ===
-                                              "#Windows11" ||
-                                            feedItems[currentIndex]?.source ===
-                                              "Vice - Tech" ||
-                                            feedItems[currentIndex]?.source ===
-                                              "BleepingComputer"
-                                              ? "bg-[#fef2de] dark:bg-[#f79d84]/30"
-                                              : feedItems[currentIndex]
-                                                  ?.source === "Fox Sports" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "CNN - SPORTS" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "CBS SPORTS" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "ESPN"
-                                              ? "bg-[#def5e9] dark:bg-[#59cd90]/30"
-                                              : feedItems[currentIndex]
-                                                  ?.source === "Newsweek" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "Fox News" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "Breitbart" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "CNN News" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "Bloomberg"
-                                              ? "bg-[#d8edf7] dark:bg-[#3fa7d6]/30"
-                                              : feedItems[currentIndex]
-                                                  ?.source === "The Onion" ||
-                                                feedItems[currentIndex]
-                                                  ?.source ===
-                                                  "The Hard Times" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "Lambgoat" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "No Echo" ||
-                                                feedItems[currentIndex]
-                                                  ?.source ===
-                                                  "Soft White Underbelly" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "New York Post"
-                                              ? "bg-[#f3e8ff] dark:bg-[#a855f7]/30"
-                                              : feedItems[currentIndex]
-                                                  ?.source === "Hot Peppers" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "Tips For BBQ" ||
-                                                feedItems[currentIndex]
-                                                  ?.source ===
-                                                  "Minimalist Baker" ||
-                                                feedItems[currentIndex]
-                                                  ?.source === "McDonald's"
-                                              ? "bg-[#e5e7eb] dark:bg-[#e5e7eb]"
-                                              : "bg-gray-200 dark:bg-gray-700"
                                           }`}
                                         >
                                           <div className="text-center text-gray-500 dark:text-gray-400">
@@ -3121,6 +3095,10 @@ const NewsAggregator = () => {
                                               {feedItems[currentIndex]
                                                 ?.source === "Hot Peppers"
                                                 ? "🌶️"
+                                                : feedItems[currentIndex]
+                                                    ?.source ===
+                                                  "Pride of Lions"
+                                                ? "🏈"
                                                 : getCategoryIcon(
                                                     getFeedCategory(
                                                       feedItems[currentIndex]
@@ -3128,24 +3106,29 @@ const NewsAggregator = () => {
                                                     )
                                                   )}
                                             </div>
-                                            <div className="text-xs mt-1 font-medium">
-                                              {feedItems[currentIndex]
-                                                ?.source === "ESPN" ||
-                                              feedItems[currentIndex]
-                                                ?.source ===
-                                                "BleepingComputer" ||
-                                              feedItems[currentIndex]
-                                                ?.source === "Bloomberg"
-                                                ? ""
-                                                : feedItems[currentIndex]
-                                                    ?.source}
-                                            </div>
+                                            {feedItems[currentIndex]?.source !==
+                                              "ESPN" &&
+                                            feedItems[currentIndex]?.source !==
+                                              "BleepingComputer" &&
+                                            feedItems[currentIndex]?.source !==
+                                              "Bloomberg" ? (
+                                              <div className="text-xs mt-1 font-medium">
+                                                {
+                                                  feedItems[currentIndex]
+                                                    ?.source
+                                                }
+                                              </div>
+                                            ) : (
+                                              <div className="text-xs mt-1 font-medium opacity-0">
+                                                Placeholder
+                                              </div>
+                                            )}
                                           </div>
 
                                           {/* Video indicator if video content exists */}
                                           {feedItems[currentIndex]
                                             ?.videoUrl && (
-                                            <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                                            <div className="absolute top-2 right-2 bg-red-600 text-gray-600 dark:text-gray-300 px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
                                               <span>▶️</span>
                                               <span>VIDEO</span>
                                               {feedItems[currentIndex]
@@ -3286,7 +3269,7 @@ const NewsAggregator = () => {
 
                                   {/* Article Title - Show in grid view only */}
                                   {viewMode === "grid" && (
-                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-600 dark:text-gray-300 leading-tight">
                                       <a
                                         href={customFeedItems[0]?.url}
                                         target="_blank"
@@ -3410,7 +3393,7 @@ const NewsAggregator = () => {
                                         "placeholder:"
                                       ) ? (
                                         // Show styled placeholder for this source
-                                        <div className="w-full h-full rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                                        <div className="w-full h-full rounded-lg flex items-center justify-center text-gray-600 dark:text-gray-300 font-bold text-lg">
                                           {(() => {
                                             const sourceName =
                                               customFeedItems[0]?.source || "";
@@ -3420,7 +3403,7 @@ const NewsAggregator = () => {
                                               <div
                                                 className={`w-full h-full ${bgColor} rounded-lg flex items-center justify-center`}
                                               >
-                                                <span className="text-white font-bold text-4xl">
+                                                <span className="text-gray-600 dark:text-gray-300 font-bold text-4xl">
                                                   {sourceName.split(" ")[0]}
                                                 </span>
                                               </div>
