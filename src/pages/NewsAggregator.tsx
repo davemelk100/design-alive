@@ -3067,24 +3067,9 @@ const NewsAggregator = () => {
                                                   </span>
                                                 )}
                                               </div>
-                                              {feedItems[currentIndex]
-                                                ?.source !== "ESPN" &&
-                                              feedItems[currentIndex]
-                                                ?.source !==
-                                                "BleepingComputer" &&
-                                              feedItems[currentIndex]
-                                                ?.source !== "Bloomberg" ? (
-                                                <div className="text-xs mt-1 font-medium text-gray-600 dark:text-gray-300">
-                                                  {
-                                                    feedItems[currentIndex]
-                                                      ?.source
-                                                  }
-                                                </div>
-                                              ) : (
-                                                <div className="text-xs mt-1 font-medium text-gray-600 dark:text-gray-300 opacity-0">
-                                                  Placeholder
-                                                </div>
-                                              )}
+                                              <div className="text-xs mt-1 font-medium text-gray-600 dark:text-gray-300 opacity-0">
+                                                Placeholder
+                                              </div>
                                             </div>
 
                                             {/* Video indicator if video content exists */}
