@@ -261,7 +261,16 @@ function App() {
                           className="mt-4 sm:mt-6"
                         >
                           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-left">
-                          I’m David Melkonian, a UX and front-end leader with over 15 years of experience. I specialize in design systems, accessibility, and bridging design with React and modern front-end development. I’ve led teams of up to 30, built UX practices from scratch, and improved accessibility compliance to nearly 100% at multiple organizations. What I bring is a mix of hands-on design, code, and team leadership to deliver products that are engaging, consistent, and inclusive.
+                            I’m David Melkonian, a UX and front-end leader with
+                            over 15 years of experience. I specialize in design
+                            systems, accessibility, and bridging design with
+                            React and modern front-end development. I’ve led
+                            teams of up to 30, built UX practices from scratch,
+                            and improved accessibility compliance to nearly 100%
+                            at multiple organizations. What I bring is a mix of
+                            hands-on design, code, and team leadership to
+                            deliver products that are engaging, consistent, and
+                            inclusive.
                           </p>
                         </motion.div>
                       </div>
@@ -270,7 +279,7 @@ function App() {
                 </section>
 
                 {/* Lab Section */}
-                <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
+                <section className="py-2 sm:py-3 lg:py-4 xl:py-6 relative">
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 gap-6 sm:gap-8">
                       {/* Lab Section */}
