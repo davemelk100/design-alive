@@ -2523,7 +2523,7 @@ const NewsAggregator = () => {
                                 onDragOver={handleDragOver}
                                 onDrop={(e) => handleDrop(e, feed.id)}
                                 onDragEnd={handleDragEnd}
-                                className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border-l-4 font-roboto ${
+                                className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border-l-4 ${
                                   viewMode === "grid"
                                     ? "min-h-[500px] h-auto"
                                     : "w-full h-auto justify-center relative"

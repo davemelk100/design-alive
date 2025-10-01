@@ -531,7 +531,7 @@ export const content = {
       },
       {
         title: "User Testing Config",
-        description: "User testing configuration and management system.",
+        description: "Configurable user testing.",
         technologies: ["React", "TypeScript", "Tailwind", "Testing APIs"],
         demo: "https://stupendous-paprenjak-06c1cc.netlify.app/",
         image: "/img/user-testing-config-animation.svg",

@@ -80,23 +80,27 @@
 
   body {
     @apply bg-background text-gray-900 dark:bg-gray-900 dark:text-white overflow-x-hidden antialiased;
-    font-family: "Roboto Flex", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
     font-size: 16px;
     line-height: 1.6;
   }
 
-  /* Force Roboto Flex to load */
+  /* Force Nunito Sans to load */
   * {
-    font-family: "Roboto Flex", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
-  /* Ensure all text elements use Roboto Flex by default */
+  /* Use Nunito for headings */
   h1,
   h2,
   h3,
   h4,
   h5,
-  h6,
+  h6 {
+    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+  }
+
+  /* Use Nunito Sans for body text and other elements */
   p,
   span,
   div,
@@ -106,19 +110,49 @@
   select,
   label,
   a {
-    font-family: "Roboto Flex", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+  }
+
+  /* Make button text same size as body text */
+  button {
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Set line-height and font-size for all paragraph tags */
+  p,
+  p.text-sm,
+  p.text-base,
+  p.text-lg,
+  .article-intro p,
+  .point-section p,
+  .counter-point-section p {
+    line-height: 1.5 !important;
+    font-size: 1rem !important;
   }
 
   /* Override any remaining font references */
   .font-sans,
-  .font-title,
   .font-card {
-    font-family: "Roboto Flex", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
   }
 
-  /* Ensure Tailwind utilities use Roboto Flex */
-  [class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *) {
-    font-family: "Roboto Flex", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+  .font-title {
+    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+  }
+
+  /* Ensure Tailwind utilities use appropriate fonts */
+  h1[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
+  h2[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
+  h3[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
+  h4[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
+  h5[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
+  h6[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *) {
+    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+  }
+
+  [class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
   }
 
   /* Responsive improvements */
@@ -180,7 +214,7 @@
 
 @layer components {
   .title-font {
-    font-family: "Roboto Flex", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
   .article-intro {
@@ -236,6 +270,7 @@
 
   .article-content p {
     @apply mb-4 text-gray-700 dark:text-gray-300;
+    line-height: 1.5 !important;
   }
 
   .article-content ul,

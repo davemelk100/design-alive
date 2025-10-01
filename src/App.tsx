@@ -61,12 +61,7 @@ const SectionHeader = ({
     <div className={`${className}`}>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2 sm:gap-3">
         <div className="flex items-center gap-2 sm:gap-3">
-          <h2
-            className="text-[clamp(1.25rem,3vw,2.5rem)] font-bold title-font leading-tight"
-            style={{
-              letterSpacing: "-0.01em",
-            }}
-          >
+          <h2 className="text-[clamp(1.25rem,3vw,2.5rem)] font-bold title-font leading-tight">
             {title}
           </h2>
           {icon && <div className="flex items-center gap-2">{icon}</div>}
@@ -210,7 +205,7 @@ function App() {
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 gap-6 sm:gap-8">
                       {/* Hero Content */}
-                      <div className="p-4 sm:p-6 rounded-lg">
+                      <div className="pt-4 rounded-lg">
                         {/* Title */}
                         <motion.div
                           initial={{ opacity: 0, y: 20 }}
@@ -218,10 +213,7 @@ function App() {
                           transition={{ duration: 1.8, delay: 0.2 }}
                           className="mb-6 sm:mb-8"
                         >
-                          <h1
-                            className="text-[clamp(1.5rem,4vw,3rem)] font-bold mb-1 title-font leading-none relative z-10 text-left"
-                            style={{ letterSpacing: "-0.06em" }}
-                          >
+                          <h1 className="text-[clamp(1.5rem,4vw,3rem)] font-bold mb-1 title-font leading-none relative z-10 text-left">
                             {content.siteInfo.subtitle}
                           </h1>
                         </motion.div>
@@ -366,9 +358,6 @@ function App() {
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="font-semibold mb-0 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer text-[18px] whitespace-nowrap truncate lab-card-title"
-                                            style={{
-                                              letterSpacing: "-0.01em",
-                                            }}
                                           >
                                             {project.title}
                                           </a>
@@ -633,7 +622,6 @@ function App() {
                                             rel="noopener noreferrer"
                                             className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer lab-card-title"
                                             style={{
-                                              letterSpacing: "-0.01em",
                                               lineHeight: "1.25",
                                             }}
                                           >
@@ -651,7 +639,6 @@ function App() {
                                             )}`}
                                             className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer lab-card-title"
                                             style={{
-                                              letterSpacing: "-0.01em",
                                               lineHeight: "1.25",
                                             }}
                                           >
@@ -782,7 +769,6 @@ function App() {
                                             rel="noopener noreferrer"
                                             className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer lab-card-title"
                                             style={{
-                                              letterSpacing: "-0.01em",
                                               lineHeight: "1.25",
                                             }}
                                           >
@@ -797,7 +783,6 @@ function App() {
                                           <h3
                                             className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white lab-card-title"
                                             style={{
-                                              letterSpacing: "-0.01em",
                                               lineHeight: "1.25",
                                             }}
                                           >
@@ -965,7 +950,6 @@ function App() {
                                             }
                                             className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer lab-card-title text-left"
                                             style={{
-                                              letterSpacing: "-0.01em",
                                               lineHeight: "1.25",
                                             }}
                                           >
@@ -980,7 +964,6 @@ function App() {
                                           <h3
                                             className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white lab-card-title text-left"
                                             style={{
-                                              letterSpacing: "-0.01em",
                                               lineHeight: "1.25",
                                             }}
                                           >
@@ -1034,10 +1017,7 @@ function App() {
                           key={position.title + position.period}
                           className=""
                         >
-                          <h3
-                            className="text-lg font-semibold mb-1 dark:text-white title-font"
-                            style={{ letterSpacing: "-0.01em" }}
-                          >
+                          <h3 className="text-lg font-semibold mb-1 dark:text-white title-font">
                             {position.title}
                           </h3>
                           <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 font-medium">
@@ -1156,7 +1136,6 @@ function App() {
                           <div className="pr-12 flex items-center gap-2">
                             <h3
                               className="text-[20px] font-semibold mb-0 dark:text-black title-font"
-                              style={{ letterSpacing: "-0.01em" }}
                             >
                               Violet
                             </h3>
@@ -1183,7 +1162,6 @@ function App() {
                           <div className="pr-12 flex items-center gap-2">
                             <h3
                               className="text-[20px] font-semibold mb-0 dark:text-black title-font"
-                              style={{ letterSpacing: "-0.01em" }}
                             >
                               Sam
                             </h3>
@@ -1209,7 +1187,6 @@ function App() {
                           <div className="pr-12 flex items-center gap-2">
                             <h3
                               className="text-[20px] font-semibold mb-0 dark:text-black title-font"
-                              style={{ letterSpacing: "-0.01em" }}
                             >
                               Golf
                             </h3>
@@ -1431,12 +1408,7 @@ function App() {
                           </div>
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                             <div className="pr-12 flex items-center gap-2">
-                              <h3
-                                className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font"
-                                style={{
-                                  letterSpacing: "-0.01em",
-                                }}
-                              >
+                              <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">
                                 Video Card
                               </h3>
                             </div>
@@ -1466,12 +1438,7 @@ function App() {
                           </div>
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                             <div className="pr-12 flex items-center gap-2">
-                              <h3
-                                className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font"
-                                style={{
-                                  letterSpacing: "-0.01em",
-                                }}
-                              >
+                              <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">
                                 Lab Card
                               </h3>
                               {/* Greyscale colored balls */}
