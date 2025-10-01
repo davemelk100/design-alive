@@ -1041,10 +1041,10 @@ function App() {
                     </div>
                     {/* Certifications & Education */}
                     <div className="mt-4 pt-2 max-w-3xl">
-                      <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200 text-sm">
+                      <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
                         Certifications
                       </div>
-                      <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 mb-4">
+                      <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4">
                         <li>Certified ScrumMaster (Scrum Alliance)</li>
                         <li>
                           Certified Usability Analyst (Human Factors
@@ -1052,10 +1052,10 @@ function App() {
                         </li>
                         <li>ITIL Foundation Certificate (Axelos)</li>
                       </ul>
-                      <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200 text-sm">
+                      <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
                         Education
                       </div>
-                      <div className="text-sm text-gray-700 dark:text-gray-300">
+                      <div className="text-gray-700 dark:text-gray-300">
                         Oakland University | Rochester MI
                         <br />
                         Bachelor of Arts in English
