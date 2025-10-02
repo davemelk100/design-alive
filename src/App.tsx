@@ -61,15 +61,15 @@ const SectionHeader = ({
     <div className={`${className}`}>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2 sm:gap-3">
         <div className="flex items-center gap-2 sm:gap-3">
-          <h2 className="text-[clamp(1.25rem,3vw,2.5rem)] font-bold title-font leading-tight">
+          <h2 className="text-4xl font-bold title-font leading-tight">
             {title}
           </h2>
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="bg-black text-white dark:bg-white/10 dark:text-white p-2 rounded-full shadow-lg hover:opacity-80 transition-opacity flex-shrink-0"
+            className="bg-black text-white dark:bg-white/10 dark:text-white rounded-full shadow-lg hover:opacity-80 transition-opacity flex-shrink-0 flex items-center justify-center w-8 h-8 p-0 min-w-8 min-h-8"
             aria-label="Scroll to top"
           >
-            <ArrowUp className="h-4 w-4 text-white dark:text-white" />
+            <ArrowUp className="h-4 w-4 m-0 flex-shrink-0" />
           </button>
           {icon && <div className="flex items-center gap-2">{icon}</div>}
           {showUpArrow && (
@@ -220,7 +220,7 @@ function App() {
                           transition={{ duration: 1.8, delay: 0.2 }}
                           className="mb-6 sm:mb-8"
                         >
-                          <h1 className="text-[clamp(1.5rem,4vw,3rem)] font-bold mb-1 title-font leading-none relative z-10 text-left">
+                          <h1 className="text-5xl font-bold mb-1 title-font leading-none relative z-10 text-left">
                             {content.siteInfo.subtitle}
                           </h1>
                         </motion.div>
@@ -260,16 +260,12 @@ function App() {
                           className="mt-4 sm:mt-6"
                         >
                           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-left">
-                            I’m David Melkonian, a UX and front-end leader with
-                            over 15 years of experience. I specialize in design
+                            I'm David Melkonian, a UX and front-end leader with
+                            15+ years of experience. I specialize in design
                             systems, accessibility, and bridging design with
-                            React and modern front-end development. I’ve led
-                            teams of up to 30, built UX practices from scratch,
-                            and improved accessibility compliance to nearly 100%
-                            at multiple organizations. What I bring is a mix of
-                            hands-on design, code, and team leadership to
-                            deliver products that are engaging, consistent, and
-                            inclusive.
+                            development using React, Figma and more. I've led teams of 30+, built UX
+                            practices from scratch, and achieved near-100%
+                            accessibility compliance.
                           </p>
                         </motion.div>
                       </div>
@@ -305,7 +301,7 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className="group relative overflow-hidden rounded-lg bg-transparent dark:bg-transparent border dark:border-gray-500 shadow-md h-[120px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
+                                className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                               >
                                 <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                   <a
@@ -492,7 +488,7 @@ function App() {
                                       </div>
                                     </div>
                                     <p
-                                      className="text-sm text-gray-600 dark:text-white mb-1 sm:mb-2 flex-1 overflow-hidden"
+                                      className="text-sm text-gray-600 dark:text-white mb-1 sm:mb-2 flex-1"
                                       style={{
                                         display: "-webkit-box",
                                         WebkitLineClamp: 2,
@@ -571,7 +567,7 @@ function App() {
                                 duration: 1.8,
                                 delay: index * 0.2,
                               }}
-                              className="group relative overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[120px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
+                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
                               <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {article.url.startsWith("http") ? (
@@ -601,7 +597,7 @@ function App() {
                                     (article as any).cardImage || article.image
                                   }?v=${Date.now()}`}
                                   alt={article.title}
-                                  className="absolute inset-0 w-full h-full object-cover object-center opacity-10 scale-110"
+                                  className="absolute inset-0 w-full h-full object-cover object-center opacity-10"
                                   loading="lazy"
                                 />
                               </div>
@@ -661,7 +657,7 @@ function App() {
                                     </div>
                                     {article.description && (
                                       <p
-                                        className="text-sm text-gray-600 dark:text-gray-300 opacity-80 overflow-hidden hidden sm:block"
+                                        className="text-sm text-gray-600 dark:text-gray-300 opacity-80 hidden sm:block"
                                         style={{
                                           lineHeight: "1.2",
                                         }}
@@ -719,7 +715,7 @@ function App() {
                                 duration: 1.8,
                                 delay: index * 0.2,
                               }}
-                              className="group relative overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[120px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
+                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
                               <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {project.url ? (
@@ -743,7 +739,7 @@ function App() {
                                 <img
                                   src={project.image}
                                   alt={project.alt || project.title}
-                                  className="absolute inset-0 w-full h-full object-cover object-center opacity-10 scale-110"
+                                  className="absolute inset-0 w-full h-full object-cover object-center opacity-10"
                                   loading="lazy"
                                 />
                               </div>
@@ -804,7 +800,7 @@ function App() {
                                       </div>
                                     </div>
                                     {project.description && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-300 opacity-80 overflow-hidden hidden sm:block">
+                                      <p className="text-sm text-gray-600 dark:text-gray-300 opacity-80 hidden sm:block">
                                         {project.description}
                                       </p>
                                     )}
@@ -883,7 +879,7 @@ function App() {
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={{ once: true }}
                               transition={{ duration: 2.4, delay: index * 0.2 }}
-                              className="group relative overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[120px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
+                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
                               <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {story.hasModal ? (
@@ -912,7 +908,7 @@ function App() {
                                   <img
                                     src={story.image}
                                     alt={story.title}
-                                    className="absolute inset-0 w-full h-full object-cover object-center opacity-10 scale-110"
+                                    className="absolute inset-0 w-full h-full object-cover object-center opacity-10"
                                     loading="lazy"
                                   />
                                 ) : (
@@ -985,7 +981,7 @@ function App() {
                                       </div>
                                     </div>
                                     {story.subtitle && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-300 opacity-80 overflow-hidden hidden sm:block">
+                                      <p className="text-sm text-gray-600 dark:text-gray-300 opacity-80 hidden sm:block">
                                         {story.subtitle}
                                       </p>
                                     )}

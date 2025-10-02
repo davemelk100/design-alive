@@ -82,7 +82,7 @@
     @apply bg-background text-gray-900 dark:bg-gray-900 dark:text-white overflow-x-hidden antialiased;
     font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
     font-size: 16px;
-    line-height: 1.6;
+    line-height: 1.7;
   }
 
   /* Force Nunito Sans to load */
@@ -90,14 +90,14 @@
     font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
-  /* Use Nunito for headings */
+  /* Use PT Sans for headings */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+    font-family: "PT Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
   /* Use Nunito Sans for body text and other elements */
@@ -116,7 +116,40 @@
   /* Make button text same size as body text */
   button {
     font-size: 1rem !important;
-    line-height: 1.5 !important;
+    line-height: 1.7 !important;
+  }
+
+  /* Fix up arrow button size to prevent mobile scaling */
+  button[aria-label="Scroll to top"] {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  button[aria-label="Scroll to top"] svg {
+    width: 16px !important;
+    height: 16px !important;
+    min-width: 16px !important;
+    min-height: 16px !important;
+    max-width: 16px !important;
+    max-height: 16px !important;
+  }
+
+  /* Ensure lab card text doesn't get cut off on mobile */
+  @media (max-width: 639px) {
+    .group.overflow-visible {
+      min-height: 180px !important;
+    }
+
+    .group.overflow-visible .lab-card-title {
+      padding-bottom: 0 !important;
+      margin-bottom: 0 !important;
+    }
   }
 
   /* Set line-height and font-size for all paragraph tags */
@@ -127,7 +160,7 @@
   .article-intro p,
   .point-section p,
   .counter-point-section p {
-    line-height: 1.5 !important;
+    line-height: 1.7 !important;
     font-size: 1rem !important;
   }
 
@@ -138,7 +171,7 @@
   }
 
   .font-title {
-    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+    font-family: "PT Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
   }
 
   /* Ensure Tailwind utilities use appropriate fonts */
@@ -148,7 +181,7 @@
   h4[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
   h5[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
   h6[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *) {
-    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+    font-family: "PT Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
   }
 
   [class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
@@ -270,7 +303,7 @@
 
   .article-content p {
     @apply mb-4 text-gray-700 dark:text-gray-300;
-    line-height: 1.5 !important;
+    line-height: 1.7 !important;
   }
 
   .article-content ul,

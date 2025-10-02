@@ -109,20 +109,6 @@ const MobileTrayMenu: React.FC = () => {
               </button>
             );
           })}
-
-          {/* Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`flex flex-col items-center gap-1 px-2 py-2 transition-colors ${
-              isMobileMenuOpen
-                ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-            }`}
-            aria-label="Toggle mobile menu"
-          >
-            <Menu className="w-6 h-6" />
-            <span className="text-xs font-medium">More</span>
-          </button>
         </div>
       </nav>
 
