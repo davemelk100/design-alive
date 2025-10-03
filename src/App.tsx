@@ -263,9 +263,9 @@ function App() {
                             I'm David Melkonian, a UX and front-end leader with
                             15+ years of experience. I specialize in design
                             systems, accessibility, and bridging design with
-                            development using React, Figma and more. I've led teams of 30+, built UX
-                            practices from scratch, and achieved near-100%
-                            accessibility compliance.
+                            development using React, Figma and more. I've led
+                            teams of 30+, built UX practices from scratch, and
+                            achieved 100% accessibility compliance.
                           </p>
                         </motion.div>
                       </div>

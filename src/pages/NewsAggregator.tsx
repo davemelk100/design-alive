@@ -155,13 +155,6 @@ const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
   {
-    id: "abc-news",
-    name: "ABC News",
-    url: "https://rss.app/feeds/erfbNS2JqHjLMSQ4.xml",
-    category: "business",
-    enabled: true,
-  },
-  {
     id: "bloomberg",
     name: "Bloomberg",
     url: "https://news.google.com/rss/search?q=when:24h+allinurl:bloomberg.com&hl=en-US&gl=US&ceid=US:en",
@@ -267,14 +260,9 @@ const NewsAggregator = () => {
     ) {
       return "sports";
     } else if (
-      [
-        "Newsweek",
-        "Fox News",
-        "Breitbart",
-        "CNN News",
-        "ABC News",
-        "Bloomberg",
-      ].includes(sourceName)
+      ["Newsweek", "Fox News", "Breitbart", "CNN News", "Bloomberg"].includes(
+        sourceName
+      )
     ) {
       return "business";
     } else if (
@@ -437,7 +425,6 @@ const NewsAggregator = () => {
   const [newsweekIndex, setNewsweekIndex] = useState(0);
   const [newYorkPostIndex, setNewYorkPostIndex] = useState(0);
   const [foxNewsIndex, setFoxNewsIndex] = useState(0);
-  const [abcNewsIndex, setAbcNewsIndex] = useState(0);
   const [cbsSportsIndex, setCbsSportsIndex] = useState(0);
   const [espnIndex, setEspnIndex] = useState(0);
   const [metsSnyIndex, setMetsSnyIndex] = useState(0);
@@ -602,8 +589,6 @@ const NewsAggregator = () => {
         return newYorkPostIndex;
       case "Fox News":
         return foxNewsIndex;
-      case "ABC News":
-        return abcNewsIndex;
       case "CBS SPORTS":
         return cbsSportsIndex;
       case "ESPN":
@@ -692,9 +677,6 @@ const NewsAggregator = () => {
         break;
       case "Fox News":
         goToPreviousFoxNews();
-        break;
-      case "ABC News":
-        goToPreviousAbcNews();
         break;
       case "CBS SPORTS":
         goToPreviousCbsSports();
@@ -795,9 +777,6 @@ const NewsAggregator = () => {
         break;
       case "Fox News":
         goToNextFoxNews();
-        break;
-      case "ABC News":
-        goToNextAbcNews();
         break;
       case "CBS SPORTS":
         goToNextCbsSports();
@@ -1889,23 +1868,6 @@ const NewsAggregator = () => {
     const cnnItems = newsItems.filter((item) => item.source === "CNN News");
     if (cnnItems.length > 0) {
       setCnnIndex((prev) => (prev - 1 + cnnItems.length) % cnnItems.length);
-    }
-  };
-
-  // ABC News carousel navigation
-  const goToNextAbcNews = () => {
-    const abcNewsItems = newsItems.filter((item) => item.source === "ABC News");
-    if (abcNewsItems.length > 0) {
-      setAbcNewsIndex((prev) => (prev + 1) % abcNewsItems.length);
-    }
-  };
-
-  const goToPreviousAbcNews = () => {
-    const abcNewsItems = newsItems.filter((item) => item.source === "ABC News");
-    if (abcNewsItems.length > 0) {
-      setAbcNewsIndex(
-        (prev) => (prev - 1 + abcNewsItems.length) % abcNewsItems.length
-      );
     }
   };
 
