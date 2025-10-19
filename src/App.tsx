@@ -318,7 +318,7 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
+                                className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[140px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                               >
                                 <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                   <a
