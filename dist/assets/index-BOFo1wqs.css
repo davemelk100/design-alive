@@ -1350,6 +1350,9 @@ video {
 .h-96 {
   height: 24rem;
 }
+.h-\[140px\] {
+  height: 140px;
+}
 .h-\[180px\] {
   height: 180px;
 }
@@ -1421,6 +1424,9 @@ video {
 }
 .w-4 {
   width: 1rem;
+}
+.w-4\/5 {
+  width: 80%;
 }
 .w-5 {
   width: 1.25rem;
@@ -3676,16 +3682,8 @@ video {
     margin-bottom: 2rem;
   }
 
-  .sm\:mb-\[10px\] {
-    margin-bottom: 10px;
-  }
-
   .sm\:ml-2 {
     margin-left: 0.5rem;
-  }
-
-  .sm\:mt-1 {
-    margin-top: 0.25rem;
   }
 
   .sm\:mt-6 {

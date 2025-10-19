@@ -338,12 +338,8 @@ function App() {
                                 <div className="absolute inset-0 overflow-hidden z-0 p-2 hidden sm:block">
                                   <img
                                     src={
-                                      project.title === "Design Panes"
-                                        ? `/img/dpanez.png?v=${Date.now()}`
-                                        : project.title === "AI NUI"
+                                      project.title === "AI NUI"
                                         ? `/img/ai-nui-alt2.svg?v=${Date.now()}`
-                                        : project.title === "HealthAware"
-                                        ? `/img/healthaware.png?v=${Date.now()}`
                                         : project.title === "JSON AI Prompts"
                                         ? `/img/json-ai-prompts-animation.svg?v=${Date.now()}`
                                         : project.title ===
@@ -352,12 +348,8 @@ function App() {
                                         : `/img/lab.svg?v=${Date.now()}`
                                     }
                                     alt={
-                                      project.title === "Design Panes"
-                                        ? "Design Panes"
-                                        : project.title === "AI NUI"
-                                        ? "Design Panes Animation"
-                                        : project.title === "HealthAware"
-                                        ? "HealthAware Animation"
+                                      project.title === "AI NUI"
+                                        ? "AI NUI Animation"
                                         : project.title === "JSON AI Prompts"
                                         ? "JSON AI Prompts Animation"
                                         : project.title ===
@@ -365,11 +357,7 @@ function App() {
                                         ? "User Testing Config Animation"
                                         : "Lab"
                                     }
-                                    className={`absolute inset-0 h-full w-full object-contain object-bottom ${
-                                      project.title === "Design Panes"
-                                        ? "w-4/5 h-auto left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                                        : ""
-                                    }`}
+                                    className="absolute inset-0 h-full w-full object-contain object-bottom"
                                   />
                                 </div>
                                 <div className="absolute inset-0 p-2 sm:p-3 flex flex-col gap-1 sm:gap-2 z-10">
