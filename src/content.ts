@@ -143,6 +143,22 @@ export const content = {
         alt: "Band Shirt Design",
         url: "https://dribbble.com/shots/20590794-band-shirt-design",
       },
+      {
+        title: "Design Panes",
+        description: "Design, designs, and designers.",
+        categories: "Design Systems, UX, Web Development",
+        image: "/img/dpanez.png",
+        alt: "Design Panes",
+        url: "https://designpanes.com/",
+      },
+      {
+        title: "HealthAware",
+        description: "A health monitoring system.",
+        categories: "Health Tech, UX, IoT, Real-time Data",
+        image: "/img/healthaware.png",
+        alt: "HealthAware",
+        url: "https://my-health-powerered-vehicle.netlify.app/",
+      },
     ],
   },
 
@@ -512,7 +528,7 @@ export const content = {
         title: "JSON AI Prompts",
         description: "Structured prompts for AI agents.",
         technologies: ["React", "TypeScript", "Tailwind", "Figma API"],
-        demo: "/json-ai-prompts",
+        demo: "/json",
         image: "/img/design-panes.png",
       },
       {

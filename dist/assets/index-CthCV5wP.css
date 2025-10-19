@@ -2346,6 +2346,12 @@ video {
 .underline {
   text-decoration-line: underline;
 }
+.decoration-1 {
+  text-decoration-thickness: 1px;
+}
+.underline-offset-2 {
+  text-underline-offset: 2px;
+}
 .placeholder-gray-500::-moz-placeholder {
   --tw-placeholder-opacity: 1;
   color: rgb(107 114 128 / var(--tw-placeholder-opacity));
@@ -3181,6 +3187,10 @@ video {
 .hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.hover\:decoration-2:hover {
+  text-decoration-thickness: 2px;
 }
 
 .hover\:opacity-70:hover {

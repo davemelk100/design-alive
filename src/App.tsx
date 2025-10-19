@@ -269,6 +269,17 @@ function App() {
                             achieved 100% accessibility compliance.
                           </p>
                         </motion.div>
+                        <p className="my-4">
+                          <a
+                            href="https://rococo-paprenjak-da1be1.netlify.app/samples"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gray-900 dark:text-white hover:text-primary transition-colors inline-flex items-center gap-2 underline decoration-1 underline-offset-2 hover:decoration-2"
+                          >
+                            Previous Portfolio with OpenAI integration
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -291,7 +302,12 @@ function App() {
                         />
                         <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
                           {content.currentProjects.projects
-                            .filter((project) => project.title !== "Chatbots")
+                            .filter(
+                              (project) =>
+                                project.title !== "Chatbots" &&
+                                project.title !== "Design Panes" &&
+                                project.title !== "HealthAware"
+                            )
                             .map((project, index) => (
                               <motion.div
                                 key={index}
@@ -323,11 +339,11 @@ function App() {
                                   <img
                                     src={
                                       project.title === "Design Panes"
-                                        ? `/img/design-panes-alt2.svg?v=${Date.now()}`
+                                        ? `/img/dpanez.png?v=${Date.now()}`
                                         : project.title === "AI NUI"
                                         ? `/img/ai-nui-alt2.svg?v=${Date.now()}`
                                         : project.title === "HealthAware"
-                                        ? `/img/health-aware-animation.svg?v=${Date.now()}`
+                                        ? `/img/healthaware.png?v=${Date.now()}`
                                         : project.title === "JSON AI Prompts"
                                         ? `/img/json-ai-prompts-animation.svg?v=${Date.now()}`
                                         : project.title ===
@@ -349,7 +365,11 @@ function App() {
                                         ? "User Testing Config Animation"
                                         : "Lab"
                                     }
-                                    className="absolute inset-0 h-full w-full object-contain object-bottom"
+                                    className={`absolute inset-0 h-full w-full object-contain object-bottom ${
+                                      project.title === "Design Panes"
+                                        ? "w-4/5 h-auto left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                                        : ""
+                                    }`}
                                   />
                                 </div>
                                 <div className="absolute inset-0 p-2 sm:p-3 flex flex-col gap-1 sm:gap-2 z-10">
@@ -369,32 +389,9 @@ function App() {
                                       </div>
                                       {/* Colored balls for each Lab card, now on a new row */}
                                       <div
-                                        className="flex items-center gap-1 mt-0 sm:mt-1 mb-1 sm:mb-[10px]"
+                                        className="flex items-center gap-1"
                                         role="presentation"
                                       >
-                                        {project.title === "Design Panes" &&
-                                          [
-                                            "#ffd700", // Gold from Design Panes animation
-                                            "#355c7d", // Deep Blue from Design Panes animation
-                                            "#88d498", // Soft Green from Design Panes animation
-                                            "#e6b800", // Darker Gold from Design Panes animation
-                                            "#26425a", // Darker Blue from Design Panes animation
-                                            "#5", // Darker Green from Design Panes animation
-                                          ].map((color, i) => (
-                                            <span
-                                              key={i}
-                                              role="presentation"
-                                              aria-hidden="true"
-                                              className="w-3 h-3"
-                                              style={{
-                                                display: "inline-block",
-                                                borderRadius: "50%",
-                                                background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
-                                                boxShadow:
-                                                  "0 1px 2px rgba(0,0,0,0.08)",
-                                              }}
-                                            />
-                                          ))}
                                         {project.title === "AI NUI" &&
                                           [
                                             "#ff6b35", // Orange from AI NUI animation
@@ -403,28 +400,6 @@ function App() {
                                             "#e55a2b", // Darker Orange from AI NUI animation
                                             "#457a", // Darker Teal from AI NUI animation
                                             "#58", // Darker Gray from AI NUI animation
-                                          ].map((color, i) => (
-                                            <span
-                                              key={i}
-                                              role="presentation"
-                                              aria-hidden="true"
-                                              className="w-3 h-3"
-                                              style={{
-                                                display: "inline-block",
-                                                borderRadius: "50%",
-                                                background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
-                                                boxShadow:
-                                                  "0 1px 2px rgba(0,0,0,0.08)",
-                                              }}
-                                            />
-                                          ))}
-                                        {project.title === "HealthAware" &&
-                                          [
-                                            "#64748b", // Slate - neutral/monitoring
-                                            "#94a3b8", // Slate Light - subtle/calm
-                                            "#475569", // Slate Dark - depth/contrast
-                                            "#cbd5e1", // Slate Lighter - soft/gentle
-                                            "#334155", // Slate Darker - sophisticated
                                           ].map((color, i) => (
                                             <span
                                               key={i}
@@ -756,6 +731,8 @@ function App() {
                                       : project.title ===
                                         "Figma Mobile Prototype"
                                       ? "h-3/4 w-3/4 mx-auto"
+                                      : project.title === "Design Panes"
+                                      ? "h-auto w-4/5 mx-auto"
                                       : "h-full w-full"
                                   }`}
                                   loading="lazy"
