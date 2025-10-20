@@ -1364,14 +1364,6 @@ function App() {
                         </div>
 
                         <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
-                          <div className="absolute top-3 right-3 z-20">
-                            <button
-                              className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center"
-                              aria-label="View Video Card"
-                            >
-                              <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
-                            </button>
-                          </div>
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                             <div className="pr-12 flex items-center gap-2">
                               <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">
@@ -1394,14 +1386,6 @@ function App() {
                           </div>
                         </div>
                         <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
-                          <div className="absolute top-3 right-3 z-20">
-                            <button
-                              className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center"
-                              aria-label="View Lab Card"
-                            >
-                              <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
-                            </button>
-                          </div>
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                             <div className="pr-12 flex items-center gap-2">
                               <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">
