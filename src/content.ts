@@ -1159,6 +1159,35 @@ There isn't always a clear way to select a technology. The newest, shiniest prod
         date: "January 15, 2025",
         tags: ["AI", "Prompt Engineering", "Creativity", "Productivity"],
       },
+
+      {
+        id: "cultivating-development-growth",
+        title: "Cultivating Development Growth",
+        description:
+          "Strategies for fostering professional growth and development in software engineering teams.",
+        url: "https://open.substack.com/pub/davemelk/p/cultivating-development-growth-in?r=1jgk3k&utm_campaign=post&utm_medium=web&showWelcomeOnShare=false",
+        content: `
+<h2>Cultivating Development Growth</h2>
+
+<p>Building a culture of continuous learning and growth within development teams is essential for long-term success. This article explores practical strategies for fostering professional development in software engineering environments.</p>
+
+<h3>Key Areas Covered</h3>
+
+<ul>
+<li>Creating learning opportunities within the team</li>
+<li>Mentorship and knowledge sharing programs</li>
+<li>Encouraging experimentation and innovation</li>
+<li>Building a growth mindset culture</li>
+<li>Measuring and tracking development progress</li>
+</ul>
+
+<p>Read the full article on <a href="https://open.substack.com/pub/davemelk/p/cultivating-development-growth-in?r=1jgk3k&utm_campaign=post&utm_medium=web&showWelcomeOnShare=false" target="_blank" rel="noopener noreferrer">Substack</a>.</p>
+`,
+        image: "/img/dev-mgr.png",
+        cardImage: "/img/dev-mgr.png",
+        date: "January 20, 2025",
+        tags: ["Development", "Team Building", "Leadership", "Growth"],
+      },
     ],
   },
 

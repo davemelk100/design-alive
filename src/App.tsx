@@ -1348,14 +1348,7 @@ function App() {
                       </h2>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
                         <div className="group relative overflow-hidden rounded-lg bg-gray-100/80">
-                          <div className="absolute top-3 right-3 z-20">
-                            <button
-                              className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center"
-                              aria-label="View Background Card"
-                            >
-                              <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
-                            </button>
-                          </div>
+
                           <div className="p-4 sm:p-6">
                             <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
                               Background Card
