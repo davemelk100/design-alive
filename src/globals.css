@@ -90,14 +90,14 @@
     font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
-  /* Use Poppins for headings */
+  /* Use Aeonik for headings */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+    font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
   /* Use Nunito Sans for body text and other elements */
@@ -185,7 +185,7 @@
   }
 
   .font-title {
-    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+    font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
   }
 
   /* Ensure Tailwind utilities use appropriate fonts */
@@ -195,7 +195,7 @@
   h4[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
   h5[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
   h6[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *) {
-    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+    font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
   }
 
   [class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {

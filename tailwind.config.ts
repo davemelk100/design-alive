@@ -29,7 +29,7 @@ const config: Config = {
           "sans-serif",
         ],
         title: [
-          "Roboto Flex",
+          "Aeonik",
           "-apple-system",
           "BlinkMacSystemFont",
           "Segoe UI",
@@ -59,6 +59,14 @@ const config: Config = {
           "Times",
           "Times New Roman",
           "serif",
+        ],
+        aeonik: [
+          "Aeonik",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Arial",
+          "sans-serif",
         ],
       },
       fontSize: {

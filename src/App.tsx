@@ -221,7 +221,7 @@ function App() {
                           transition={{ duration: 1.8, delay: 0.2 }}
                           className="mb-6 sm:mb-8"
                         >
-                          <h1 className="text-5xl font-bold mb-1 title-font leading-none relative z-10 text-left">
+                          <h1 className="tracking-tighter text-5xl font-bold mb-1 title-font leading-none relative z-10 text-left">
                             {content.siteInfo.subtitle}
                           </h1>
                         </motion.div>
