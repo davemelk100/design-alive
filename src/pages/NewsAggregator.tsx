@@ -52,13 +52,6 @@ const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
   {
-    id: "windows11",
-    name: "#Windows11",
-    url: "https://rss.app/feeds/tMbiKRyJYYawUbRX.xml",
-    category: "technology",
-    enabled: true,
-  },
-  {
     id: "vice-tech",
     name: "Vice - Tech",
     url: "https://rss.app/feeds/LNJYM5UVm77UUI0l.xml",
@@ -82,43 +75,6 @@ const rssFeeds: RSSFeed[] = [
   },
 
   {
-    id: "the-onion",
-    name: "The Onion",
-    url: "https://rss.app/feeds/5J4NfaeokQ4r4GGP.xml",
-    category: "entertainment",
-    enabled: true,
-  },
-  {
-    id: "the-hard-times",
-    name: "The Hard Times",
-    url: "https://rss.app/feeds/wWxWK2sGD1AJ8NXu.xml",
-    category: "entertainment",
-    enabled: true,
-  },
-
-  {
-    id: "lambgoat",
-    name: "Lambgoat",
-    url: "https://rss.app/feeds/rbqQqO2y53KWY7C2.xml",
-    category: "entertainment",
-    enabled: true,
-  },
-  {
-    id: "no-echo",
-    name: "No Echo",
-    url: "https://rss.app/feeds/6VPbwVscIplNrYkC.xml",
-    category: "entertainment",
-    enabled: true,
-  },
-  {
-    id: "soft-white-underbelly",
-    name: "Soft White Underbelly",
-    url: "https://rss.app/feeds/fqdEpS42RgOKsQ8W.xml",
-    category: "entertainment",
-    enabled: true,
-  },
-
-  {
     id: "newsweek",
     name: "Newsweek",
     url: "https://feeds.newsweek.com/feeds/90oh8.rss",
@@ -132,28 +88,7 @@ const rssFeeds: RSSFeed[] = [
     category: "entertainment",
     enabled: true,
   },
-  {
-    id: "fox-news",
-    name: "Fox News",
-    url: "https://rss.app/feeds/jmwv7HSN9sLVzyMP.xml",
-    category: "business",
-    enabled: true,
-  },
-  {
-    id: "breitbart",
-    name: "Breitbart",
-    url: "https://rss.app/feeds/Ez9O0bz1UTzcmRJu.xml",
-    category: "business",
-    enabled: true,
-  },
 
-  {
-    id: "cnn",
-    name: "CNN News",
-    url: "https://rss.app/feeds/OJWoTBSij0sRCOiv.xml",
-    category: "business",
-    enabled: true,
-  },
   {
     id: "bloomberg",
     name: "Bloomberg",
@@ -162,20 +97,6 @@ const rssFeeds: RSSFeed[] = [
     enabled: false,
   },
 
-  {
-    id: "cnn-sports",
-    name: "CNN - SPORTS",
-    url: "https://rss.app/feeds/692Tsxos17wzrYX6.xml",
-    category: "sports",
-    enabled: true,
-  },
-  {
-    id: "cbs-sports",
-    name: "CBS SPORTS",
-    url: "https://rss.app/feeds/3woxRS3rir9rtQFO.xml",
-    category: "sports",
-    enabled: true,
-  },
   {
     id: "espn",
     name: "ESPN",
@@ -222,13 +143,6 @@ const rssFeeds: RSSFeed[] = [
     id: "tips-for-bbq",
     name: "Tips For BBQ",
     url: "http://tipsforbbq.com/RSS",
-    category: "food",
-    enabled: true,
-  },
-  {
-    id: "mcdonalds",
-    name: "McDonald's",
-    url: "https://www.foodbusinessnews.net/rss/topic/334-mcdonald-s-corp",
     category: "food",
     enabled: true,
   },
