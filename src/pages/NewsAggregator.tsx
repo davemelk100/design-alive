@@ -52,13 +52,6 @@ const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
   {
-    id: "vice-tech",
-    name: "Vice - Tech",
-    url: "https://rss.app/feeds/LNJYM5UVm77UUI0l.xml",
-    category: "technology",
-    enabled: true,
-  },
-  {
     id: "bleepingcomputer",
     name: "BleepingComputer",
     url: "https://www.bleepingcomputer.com/feed/",
