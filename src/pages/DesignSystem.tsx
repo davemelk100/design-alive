@@ -243,21 +243,23 @@ const DesignSystem: React.FC = () => {
 
         {/* Buttons */}
         <section className="mb-16">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Buttons</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+            Buttons
+          </h2>
           <div className="flex flex-wrap gap-4">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button className="px-4 py-2 bg-blue-800 text-black rounded-lg hover:bg-blue-900 transition-colors dark:bg-blue-700 dark:hover:bg-blue-800 dark:text-white">
               Primary Button
             </button>
-            <button className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors">
+            <button className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors dark:bg-gray-600 dark:hover:bg-gray-700">
               Secondary Button
             </button>
-            <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+            <button className="px-4 py-2 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
               Tertiary Button
             </button>
-            <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-colors">
+            <button className="px-4 py-2 border border-blue-800 text-blue-800 rounded-lg hover:bg-blue-800 hover:text-white transition-colors dark:border-blue-600 dark:text-blue-600 dark:hover:bg-blue-700">
               Outline Primary
             </button>
-            <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+            <button className="px-4 py-2 border border-gray-600 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors dark:border-gray-400 dark:text-gray-300 dark:hover:bg-gray-800">
               Outline Secondary
             </button>
           </div>

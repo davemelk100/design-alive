@@ -1328,7 +1328,7 @@ function App() {
                         Buttons
                       </h2>
                       <div className="flex flex-wrap gap-2 sm:gap-4">
-                        <button className="px-3 sm:px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm sm:text-base">
+                        <button className="px-3 sm:px-4 py-2 bg-primary text-black rounded-lg hover:bg-primary/90 transition-colors text-sm sm:text-base">
                           Primary Button
                         </button>
                         <button className="px-3 sm:px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors text-sm sm:text-base">
@@ -1337,7 +1337,7 @@ function App() {
                         <button className="px-3 sm:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm sm:text-base">
                           Tertiary Button
                         </button>
-                        <button className="px-3 sm:px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-colors text-sm sm:text-base">
+                        <button className="px-3 sm:px-4 py-2 border border-primary text-black rounded-lg hover:bg-primary hover:text-white transition-colors text-sm sm:text-base">
                           Outline Primary
                         </button>
                         <button className="px-3 sm:px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base">
@@ -1439,19 +1439,19 @@ function App() {
                             Default Chips
                           </h3>
                           <div className="flex flex-wrap gap-2">
-                            <span className="px-3 py-1 bg-primary text-white rounded-full text-sm font-medium">
+                            <span className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm font-medium dark:bg-blue-500">
                               Primary
                             </span>
-                            <span className="px-3 py-1 bg-secondary text-white rounded-full text-sm font-medium">
+                            <span className="px-3 py-1 bg-gray-700 text-white rounded-full text-sm font-medium dark:bg-gray-600">
                               Secondary
                             </span>
-                            <span className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium">
+                            <span className="px-3 py-1 bg-gray-100 text-gray-900 rounded-full text-sm font-medium dark:bg-gray-800 dark:text-gray-100">
                               Neutral
                             </span>
-                            <span className="px-3 py-1 bg-[#D2691E] text-white rounded-full text-sm font-medium">
+                            <span className="px-3 py-1 bg-orange-700 text-white rounded-full text-sm font-medium dark:bg-orange-600">
                               Orange
                             </span>
-                            <span className="px-3 py-1 bg-[#20B2AA] text-white rounded-full text-sm font-medium">
+                            <span className="px-3 py-1 bg-teal-700 text-white rounded-full text-sm font-medium dark:bg-teal-600">
                               Teal
                             </span>
                           </div>
@@ -1462,19 +1462,19 @@ function App() {
                             Outline Chips
                           </h3>
                           <div className="flex flex-wrap gap-2">
-                            <span className="px-3 py-1 border border-primary text-primary rounded-full text-sm font-medium">
+                            <span className="px-3 py-1 border border-blue-600 text-blue-600 rounded-full text-sm font-medium dark:border-blue-400 dark:text-blue-400">
                               Primary
                             </span>
-                            <span className="px-3 py-1 border border-secondary text-secondary rounded-full text-sm font-medium">
+                            <span className="px-3 py-1 border border-gray-700 text-gray-700 rounded-full text-sm font-medium dark:border-gray-400 dark:text-gray-300">
                               Secondary
                             </span>
-                            <span className="px-3 py-1 border border-gray-300 text-gray-700 rounded-full text-sm font-medium">
+                            <span className="px-3 py-1 border border-gray-400 text-gray-700 rounded-full text-sm font-medium dark:border-gray-500 dark:text-gray-300">
                               Neutral
                             </span>
-                            <span className="px-3 py-1 border border-[#D2691E] text-[#D2691E] rounded-full text-sm font-medium">
+                            <span className="px-3 py-1 border border-orange-700 text-orange-700 rounded-full text-sm font-medium dark:border-orange-500 dark:text-orange-500">
                               Orange
                             </span>
-                            <span className="px-3 py-1 border border-[#20B2AA] text-[#20B2AA] rounded-full text-sm font-medium">
+                            <span className="px-3 py-1 border border-teal-700 text-teal-700 rounded-full text-sm font-medium dark:border-teal-500 dark:text-teal-500">
                               Teal
                             </span>
                           </div>
@@ -1485,19 +1485,19 @@ function App() {
                             Small Chips
                           </h3>
                           <div className="flex flex-wrap gap-2">
-                            <span className="px-2 py-0.5 bg-primary text-white rounded-full text-xs font-medium">
+                            <span className="px-2 py-0.5 bg-blue-600 text-white rounded-full text-xs font-medium dark:bg-blue-500">
                               Small
                             </span>
-                            <span className="px-2 py-0.5 bg-secondary text-white rounded-full text-xs font-medium">
+                            <span className="px-2 py-0.5 bg-gray-700 text-white rounded-full text-xs font-medium dark:bg-gray-600">
                               Chip
                             </span>
-                            <span className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                            <span className="px-2 py-0.5 bg-gray-100 text-gray-900 rounded-full text-xs font-medium dark:bg-gray-800 dark:text-gray-100">
                               Tags
                             </span>
-                            <span className="px-2 py-0.5 bg-[#D2691E] text-white rounded-full text-xs font-medium">
+                            <span className="px-2 py-0.5 bg-orange-700 text-white rounded-full text-xs font-medium dark:bg-orange-600">
                               Orange
                             </span>
-                            <span className="px-2 py-0.5 bg-[#20B2AA] text-white rounded-full text-xs font-medium">
+                            <span className="px-2 py-0.5 bg-teal-700 text-white rounded-full text-xs font-medium dark:bg-teal-600">
                               Teal
                             </span>
                           </div>
@@ -1508,16 +1508,16 @@ function App() {
                             Interactive Chips
                           </h3>
                           <div className="flex flex-wrap gap-2">
-                            <button className="px-3 py-1 bg-primary text-white rounded-full text-sm font-medium hover:bg-primary/90 transition-colors">
+                            <button className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm font-medium hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600">
                               Clickable
                             </button>
-                            <button className="px-3 py-1 bg-secondary text-white rounded-full text-sm font-medium hover:bg-secondary/90 transition-colors">
+                            <button className="px-3 py-1 bg-gray-700 text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors dark:bg-gray-600 dark:hover:bg-gray-700">
                               Interactive
                             </button>
-                            <button className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors">
+                            <button className="px-3 py-1 bg-gray-100 text-gray-900 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
                               Button
                             </button>
-                            <button className="px-3 py-1 border border-primary text-primary rounded-full text-sm font-medium hover:bg-primary hover:text-white transition-colors">
+                            <button className="px-3 py-1 border border-blue-600 text-blue-600 rounded-full text-sm font-medium hover:bg-blue-600 hover:text-white transition-colors dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-500">
                               Outline
                             </button>
                           </div>
@@ -1618,6 +1618,7 @@ function App() {
               }
             }}
             className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity duration-200"
+            aria-label="Toggle dark mode"
           >
             <svg
               className="w-4 h-4 text-gray-700 dark:text-gray-300"
