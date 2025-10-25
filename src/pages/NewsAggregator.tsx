@@ -58,6 +58,13 @@ const rssFeeds: RSSFeed[] = [
     category: "technology",
     enabled: true,
   },
+  {
+    id: "smashing-mag",
+    name: "SMASHING MAG",
+    url: "https://www.smashingmagazine.com/feed/",
+    category: "technology",
+    enabled: true,
+  },
 
   {
     id: "fox-sports",
@@ -72,6 +79,41 @@ const rssFeeds: RSSFeed[] = [
     name: "Newsweek",
     url: "https://feeds.newsweek.com/feeds/90oh8.rss",
     category: "business",
+    enabled: true,
+  },
+  {
+    id: "bbc",
+    name: "BBC",
+    url: "https://feeds.bbci.co.uk/news/rss.xml",
+    category: "business",
+    enabled: true,
+  },
+  {
+    id: "forbes",
+    name: "Forbes",
+    url: "https://www.forbes.com/business/feed/",
+    category: "business",
+    enabled: true,
+  },
+  {
+    id: "the-economist",
+    name: "THE ECONOMIST",
+    url: "https://www.economist.com/latest/rss.xml",
+    category: "business",
+    enabled: true,
+  },
+  {
+    id: "new-york-times",
+    name: "NEW YORK TIMES",
+    url: "https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml",
+    category: "business",
+    enabled: true,
+  },
+  {
+    id: "e-online",
+    name: "EONLINE",
+    url: "https://eol-feeds.eonline.com/rssfeed/us/top_stories",
+    category: "entertainment",
     enabled: true,
   },
   {
@@ -152,6 +194,7 @@ const NewsAggregator = () => {
         "#Windows11",
         "Vice - Tech",
         "BleepingComputer",
+        "SMASHING MAG",
       ].includes(sourceName)
     ) {
       return "technology";
@@ -167,9 +210,17 @@ const NewsAggregator = () => {
     ) {
       return "sports";
     } else if (
-      ["Newsweek", "Fox News", "Breitbart", "CNN News", "Bloomberg"].includes(
-        sourceName
-      )
+      [
+        "Newsweek",
+        "Fox News",
+        "Breitbart",
+        "CNN News",
+        "Bloomberg",
+        "BBC",
+        "Forbes",
+        "THE ECONOMIST",
+        "NEW YORK TIMES",
+      ].includes(sourceName)
     ) {
       return "business";
     } else if (
@@ -180,6 +231,7 @@ const NewsAggregator = () => {
         "No Echo",
         "Soft White Underbelly",
         "New York Post",
+        "EONLINE",
       ].includes(sourceName)
     ) {
       return "entertainment";
@@ -339,6 +391,12 @@ const NewsAggregator = () => {
   const [whiteSoxSiIndex, setWhiteSoxSiIndex] = useState(0);
 
   const [breitbartIndex, setBreitbartIndex] = useState(0);
+  const [bbcIndex, setBbcIndex] = useState(0);
+  const [forbesIndex, setForbesIndex] = useState(0);
+  const [theEconomistIndex, setTheEconomistIndex] = useState(0);
+  const [newYorkTimesIndex, setNewYorkTimesIndex] = useState(0);
+  const [eonlineIndex, setEonlineIndex] = useState(0);
+  const [smashingMagIndex, setSmashingMagIndex] = useState(0);
 
   const [cnnIndex, setCnnIndex] = useState(0);
   const [bloombergIndex, setBloombergIndex] = useState(0);
@@ -508,6 +566,18 @@ const NewsAggregator = () => {
         return whiteSoxSiIndex;
       case "Breitbart":
         return breitbartIndex;
+      case "BBC":
+        return bbcIndex;
+      case "Forbes":
+        return forbesIndex;
+      case "THE ECONOMIST":
+        return theEconomistIndex;
+      case "NEW YORK TIMES":
+        return newYorkTimesIndex;
+      case "EONLINE":
+        return eonlineIndex;
+      case "SMASHING MAG":
+        return smashingMagIndex;
 
       case "CNN News":
         return cnnIndex;
@@ -602,6 +672,24 @@ const NewsAggregator = () => {
         break;
       case "Breitbart":
         goToPreviousBreitbart();
+        break;
+      case "BBC":
+        goToPreviousBbc();
+        break;
+      case "Forbes":
+        goToPreviousForbes();
+        break;
+      case "THE ECONOMIST":
+        goToPreviousTheEconomist();
+        break;
+      case "NEW YORK TIMES":
+        goToPreviousNewYorkTimes();
+        break;
+      case "EONLINE":
+        goToPreviousEonline();
+        break;
+      case "SMASHING MAG":
+        goToPreviousSmashingMag();
         break;
 
       case "CNN News":
@@ -702,6 +790,24 @@ const NewsAggregator = () => {
         break;
       case "Breitbart":
         goToNextBreitbart();
+        break;
+      case "BBC":
+        goToNextBbc();
+        break;
+      case "Forbes":
+        goToNextForbes();
+        break;
+      case "THE ECONOMIST":
+        goToNextTheEconomist();
+        break;
+      case "NEW YORK TIMES":
+        goToNextNewYorkTimes();
+        break;
+      case "EONLINE":
+        goToNextEonline();
+        break;
+      case "SMASHING MAG":
+        goToNextSmashingMag();
         break;
 
       case "CNN News":
@@ -1377,6 +1483,12 @@ const NewsAggregator = () => {
       setPrideOfLionsIndex(0); // Reset Pride of Lions carousel
       setWhiteSoxSiIndex(0); // Reset White Sox - SI carousel
       setBreitbartIndex(0); // Reset Breitbart carousel
+      setBbcIndex(0); // Reset BBC carousel
+      setForbesIndex(0); // Reset Forbes carousel
+      setTheEconomistIndex(0); // Reset THE ECONOMIST carousel
+      setNewYorkTimesIndex(0); // Reset NEW YORK TIMES carousel
+      setEonlineIndex(0); // Reset EONLINE carousel
+      setSmashingMagIndex(0); // Reset SMASHING MAG carousel
 
       setCnnIndex(0); // Reset CNN carousel
 
@@ -1759,6 +1871,120 @@ const NewsAggregator = () => {
     if (breitbartItems.length > 0) {
       setBreitbartIndex(
         (prev) => (prev - 1 + breitbartItems.length) % breitbartItems.length
+      );
+    }
+  };
+
+  // BBC carousel navigation
+  const goToNextBbc = () => {
+    const bbcItems = newsItems.filter((item) => item.source === "BBC");
+    if (bbcItems.length > 0) {
+      setBbcIndex((prev) => (prev + 1) % bbcItems.length);
+    }
+  };
+
+  const goToPreviousBbc = () => {
+    const bbcItems = newsItems.filter((item) => item.source === "BBC");
+    if (bbcItems.length > 0) {
+      setBbcIndex((prev) => (prev - 1 + bbcItems.length) % bbcItems.length);
+    }
+  };
+
+  // Forbes carousel navigation
+  const goToNextForbes = () => {
+    const forbesItems = newsItems.filter((item) => item.source === "Forbes");
+    if (forbesItems.length > 0) {
+      setForbesIndex((prev) => (prev + 1) % forbesItems.length);
+    }
+  };
+
+  const goToPreviousForbes = () => {
+    const forbesItems = newsItems.filter((item) => item.source === "Forbes");
+    if (forbesItems.length > 0) {
+      setForbesIndex(
+        (prev) => (prev - 1 + forbesItems.length) % forbesItems.length
+      );
+    }
+  };
+
+  // THE ECONOMIST carousel navigation
+  const goToNextTheEconomist = () => {
+    const theEconomistItems = newsItems.filter(
+      (item) => item.source === "THE ECONOMIST"
+    );
+    if (theEconomistItems.length > 0) {
+      setTheEconomistIndex((prev) => (prev + 1) % theEconomistItems.length);
+    }
+  };
+
+  const goToPreviousTheEconomist = () => {
+    const theEconomistItems = newsItems.filter(
+      (item) => item.source === "THE ECONOMIST"
+    );
+    if (theEconomistItems.length > 0) {
+      setTheEconomistIndex(
+        (prev) =>
+          (prev - 1 + theEconomistItems.length) % theEconomistItems.length
+      );
+    }
+  };
+
+  // NEW YORK TIMES carousel navigation
+  const goToNextNewYorkTimes = () => {
+    const newYorkTimesItems = newsItems.filter(
+      (item) => item.source === "NEW YORK TIMES"
+    );
+    if (newYorkTimesItems.length > 0) {
+      setNewYorkTimesIndex((prev) => (prev + 1) % newYorkTimesItems.length);
+    }
+  };
+
+  const goToPreviousNewYorkTimes = () => {
+    const newYorkTimesItems = newsItems.filter(
+      (item) => item.source === "NEW YORK TIMES"
+    );
+    if (newYorkTimesItems.length > 0) {
+      setNewYorkTimesIndex(
+        (prev) =>
+          (prev - 1 + newYorkTimesItems.length) % newYorkTimesItems.length
+      );
+    }
+  };
+
+  // EONLINE carousel navigation
+  const goToNextEonline = () => {
+    const eonlineItems = newsItems.filter((item) => item.source === "EONLINE");
+    if (eonlineItems.length > 0) {
+      setEonlineIndex((prev) => (prev + 1) % eonlineItems.length);
+    }
+  };
+
+  const goToPreviousEonline = () => {
+    const eonlineItems = newsItems.filter((item) => item.source === "EONLINE");
+    if (eonlineItems.length > 0) {
+      setEonlineIndex(
+        (prev) => (prev - 1 + eonlineItems.length) % eonlineItems.length
+      );
+    }
+  };
+
+  // SMASHING MAG carousel navigation
+  const goToNextSmashingMag = () => {
+    const smashingMagItems = newsItems.filter(
+      (item) => item.source === "SMASHING MAG"
+    );
+    if (smashingMagItems.length > 0) {
+      setSmashingMagIndex((prev) => (prev + 1) % smashingMagItems.length);
+    }
+  };
+
+  const goToPreviousSmashingMag = () => {
+    const smashingMagItems = newsItems.filter(
+      (item) => item.source === "SMASHING MAG"
+    );
+    if (smashingMagItems.length > 0) {
+      setSmashingMagIndex(
+        (prev) => (prev - 1 + smashingMagItems.length) % smashingMagItems.length
       );
     }
   };
