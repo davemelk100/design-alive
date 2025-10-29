@@ -2799,7 +2799,7 @@ const NewsAggregator = () => {
                                         feed.name !== "The Hard Times" && (
                                           <div className="mt-2">
                                             <p
-                                              className="text-sm text-gray-600 dark:text-gray-400"
+                                              className="text-sm text-gray-600 dark:text-gray-400 news-card-excerpt"
                                               style={{
                                                 lineHeight: "normal !important",
                                               }}
@@ -2882,7 +2882,7 @@ const NewsAggregator = () => {
                                         feed.name !== "The Hard Times" && (
                                           <div className="mt-2 flex items-center">
                                             <p
-                                              className="text-gray-600 dark:text-gray-400 text-sm"
+                                              className="text-gray-600 dark:text-gray-400 text-sm news-card-excerpt"
                                               style={{
                                                 lineHeight: "normal !important",
                                               }}
@@ -3456,7 +3456,7 @@ const NewsAggregator = () => {
                                     customFeedItems[0]?.excerpt && (
                                       <div className="mt-3 flex items-center">
                                         <p
-                                          className="text-xs text-gray-600 dark:text-gray-400"
+                                          className="text-xs text-gray-600 dark:text-gray-400 news-card-excerpt"
                                           style={{
                                             lineHeight: "normal !important",
                                           }}

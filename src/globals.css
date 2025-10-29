@@ -153,10 +153,10 @@
   }
 
   /* Set line-height and font-size for all paragraph tags */
-  p,
-  p.text-sm,
-  p.text-base,
-  p.text-lg,
+  p:not(.news-card-excerpt),
+  p.text-sm:not(.news-card-excerpt),
+  p.text-base:not(.news-card-excerpt),
+  p.text-lg:not(.news-card-excerpt),
   .article-intro p,
   .point-section p,
   .counter-point-section p {

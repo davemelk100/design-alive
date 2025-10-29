@@ -535,14 +535,14 @@ video {
   }
 
   /* Set line-height and font-size for all paragraph tags */
-  p,
-  p.text-sm,
-  p.text-base,
-  p.text-lg,
+  p:not(.news-card-excerpt),
+  p.text-sm:not(.news-card-excerpt),
+  p.text-base:not(.news-card-excerpt),
+  p.text-lg:not(.news-card-excerpt),
   .article-intro p,
   .point-section p,
   .counter-point-section p {
-    line-height: 1.7 !important;
+    line-height: 1.25 !important;
     font-size: 1rem !important;
   }
 
@@ -888,8 +888,8 @@ video {
     font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
-  p.article-content {
-    line-height: 1.7;
+  p.article-content:not(.news-card-excerpt) {
+    line-height: 1.25;
     font-size: 1rem;
   }
 @media (max-width: 410px) {
@@ -956,8 +956,8 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-  p.article-content h3 {
-    line-height: 1.7;
+  p.article-content h3:not(.news-card-excerpt) {
+    line-height: 1.25;
     font-size: 1rem;
   }
 @media (max-width: 410px) {
@@ -1001,9 +1001,6 @@ video {
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity));
 }
-.article-content p {
-    line-height: 1.7 !important;
-  }
 .article-content ul,
   .article-content ol {
   margin-bottom: 1rem;
@@ -1816,6 +1813,9 @@ video {
 .border-transparent {
   border-color: transparent;
 }
+.border-white\/20 {
+  border-color: rgb(255 255 255 / 0.2);
+}
 .bg-\[\#20B2AA\] {
   --tw-bg-opacity: 1;
   background-color: rgb(32 178 170 / var(--tw-bg-opacity));
@@ -1961,6 +1961,9 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+.bg-white\/10 {
+  background-color: rgb(255 255 255 / 0.1);
 }
 .bg-white\/40 {
   background-color: rgb(255 255 255 / 0.4);
@@ -2435,6 +2438,10 @@ video {
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
+.backdrop-blur-md {
+  --tw-backdrop-blur: blur(12px);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
 .backdrop-blur-sm {
   --tw-backdrop-blur: blur(4px);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
@@ -2490,18 +2497,18 @@ video {
 
 @media (min-width: 640px) {
   
-  p.sm\:text-sm {
-    line-height: 1.7 !important;
+  p.sm\:text-sm:not(.news-card-excerpt) {
+    line-height: 1.25 !important;
     font-size: 1rem !important;
   }
   
-  p.sm\:text-base {
-    line-height: 1.7 !important;
+  p.sm\:text-base:not(.news-card-excerpt) {
+    line-height: 1.25 !important;
     font-size: 1rem !important;
   }
   
-  p.sm\:text-lg {
-    line-height: 1.7 !important;
+  p.sm\:text-lg:not(.news-card-excerpt) {
+    line-height: 1.25 !important;
     font-size: 1rem !important;
   }
   @media (max-width: 410px) {

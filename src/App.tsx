@@ -292,7 +292,15 @@ function App() {
                       {/* Lab Section */}
                       <div
                         id="current-projects"
-                        className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg"
+                        className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden"
+                        style={{
+                          background: `
+                            radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                            radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+                            radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
+                            linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)
+                          `,
+                        }}
                       >
                         <SectionHeader
                           title={content.currentProjects.title}
@@ -318,7 +326,7 @@ function App() {
                                   duration: 1.8,
                                   delay: index * 0.2,
                                 }}
-                                className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[140px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
+                                className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 flex flex-col shadow-xl h-[140px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                               >
                                 <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                   <a
@@ -479,7 +487,17 @@ function App() {
                   className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg">
+                    <div
+                      className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden"
+                      style={{
+                        background: `
+                          radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+                          radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
+                          linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)
+                        `,
+                      }}
+                    >
                       <SectionHeader
                         title="Articles"
                         subtitle={content.articles.subtitle}
@@ -531,7 +549,7 @@ function App() {
                                 duration: 1.8,
                                 delay: index * 0.2,
                               }}
-                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
+                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 flex flex-col shadow-xl h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
                               <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {article.url.startsWith("http") ? (
@@ -645,7 +663,17 @@ function App() {
                   className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg">
+                    <div
+                      className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden"
+                      style={{
+                        background: `
+                          radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+                          radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
+                          linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)
+                        `,
+                      }}
+                    >
                       <SectionHeader
                         title="Design"
                         subtitle={content.work.subtitle}
@@ -679,7 +707,7 @@ function App() {
                                 duration: 1.8,
                                 delay: index * 0.2,
                               }}
-                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
+                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 flex flex-col shadow-xl h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
                               <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {project.url ? (
@@ -832,7 +860,17 @@ function App() {
                   className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg">
+                    <div
+                      className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden"
+                      style={{
+                        background: `
+                          radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+                          radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
+                          linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)
+                        `,
+                      }}
+                    >
                       <SectionHeader
                         title={content.stories.title}
                         subtitle={content.stories.subtitle}
@@ -850,7 +888,7 @@ function App() {
                               whileInView={{ opacity: 1, y: 0 }}
                               viewport={{ once: true }}
                               transition={{ duration: 2.4, delay: index * 0.2 }}
-                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-transparent border border-gray-200 flex flex-col shadow-md h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
+                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 flex flex-col shadow-xl h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
                               <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {story.hasModal ? (
@@ -1385,7 +1423,7 @@ function App() {
                             />
                           </div>
                         </div>
-                        <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
+                        <div className="group relative overflow-visible rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 shadow-xl aspect-[1/1]">
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                             <div className="pr-12 flex items-center gap-2">
                               <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">

@@ -186,13 +186,67 @@ const DesignSystem: React.FC = () => {
           <h2 className="text-xl font-semibold text-gray-900 mb-6">
             {content.designSystem.sections.typography}
           </h2>
+
+          {/* Font Information */}
+          <div className="mb-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Font Families
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Aeonik
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Used for headings (H1-H6)
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  Modern, geometric sans-serif
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Nunito Sans
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Used for body text and UI elements
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  Friendly, rounded sans-serif
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Roboto Flex
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Default sans-serif fallback
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  Variable font with flexible axes
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Roboto Serif
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Used for Audio Transcript page
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  Readable serif for long-form content
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-4">
             <div>
               <h1 className="text-4xl font-bold text-gray-900 mb-2">
                 Whereas disregard and contempt for human rights have resulted
               </h1>
               <p className="text-sm text-gray-800">
-                Component library and design tokens
+                H1 - Aeonik, 4xl (2.25rem), Bold
               </p>
             </div>
             <div>
@@ -200,7 +254,7 @@ const DesignSystem: React.FC = () => {
                 Whereas disregard and contempt for human rights have resulted
               </h2>
               <p className="text-sm text-gray-800">
-                Component library and design tokens
+                H2 - Aeonik, 3xl (1.875rem), Semibold
               </p>
             </div>
             <div>
@@ -208,7 +262,7 @@ const DesignSystem: React.FC = () => {
                 Whereas disregard and contempt for human rights have resulted
               </h3>
               <p className="text-sm text-gray-800">
-                Component library and design tokens
+                H3 - Aeonik, 2xl (1.5rem), Semibold
               </p>
             </div>
             <div>
@@ -216,7 +270,7 @@ const DesignSystem: React.FC = () => {
                 Whereas disregard and contempt for human rights have resulted
               </h4>
               <p className="text-sm text-gray-800">
-                Component library and design tokens
+                H4 - Aeonik, xl (1.25rem), Semibold
               </p>
             </div>
             <div>
@@ -225,7 +279,7 @@ const DesignSystem: React.FC = () => {
                 barbarous acts which have outraged the conscience of mankind.
               </p>
               <p className="text-sm text-gray-600">
-                Body text - This is a paragraph with regular body text styling.
+                Body text - Nunito Sans, base (1rem), Regular
               </p>
             </div>
             <div>
@@ -234,8 +288,7 @@ const DesignSystem: React.FC = () => {
                 barbarous acts which have outraged the conscience of mankind.
               </p>
               <p className="text-sm text-gray-600">
-                Small text - This is smaller text for captions and secondary
-                information.
+                Small text - Nunito Sans, sm (0.875rem), Regular
               </p>
             </div>
           </div>
@@ -268,16 +321,84 @@ const DesignSystem: React.FC = () => {
         {/* Cards */}
         <section className="mb-16">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Cards</h2>
+
+          {/* Card Information */}
+          <div className="mb-8 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Card Types
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Glassmorphic Cards
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Used in Lab, Articles, Design, and Storytelling sections
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  Features: backdrop-blur, semi-transparent background, enhanced
+                  shadows
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Background Cards
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Used for testimonials and simple content
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  Features: solid background, standard shadows, padding
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Video Cards
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Used for animated backgrounds
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  Features: video background, overlay content, aspect ratio
+                  control
+                </p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  Career Cards
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
+                  Used in Career section
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  Features: 3:4 aspect ratio, background cards with icons
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Background Card */}
             <div className="group relative overflow-hidden rounded-lg bg-gray-100/80">
               <div className="p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
                   Background Card
                 </h3>
-                <p className="text-gray-700">Background Card</p>
+                <p className="text-gray-700">
+                  Used for testimonials and simple content display
+                </p>
+                <div className="mt-4 text-xs text-gray-500">
+                  <p>
+                    <strong>Classes:</strong> bg-gray-100/80, shadow-md, p-6
+                  </p>
+                  <p>
+                    <strong>Usage:</strong> Testimonials, simple content
+                  </p>
+                </div>
               </div>
             </div>
 
+            {/* Video Card */}
             <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
               <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                 <div className="pr-12 flex items-center gap-2">
@@ -304,8 +425,19 @@ const DesignSystem: React.FC = () => {
                   playsInline={true}
                 />
               </div>
+              <div className="absolute bottom-2 left-2 text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
+                <p>
+                  <strong>Classes:</strong> bg-gray-100/80, shadow-md,
+                  aspect-[1/1]
+                </p>
+                <p>
+                  <strong>Usage:</strong> Animated backgrounds
+                </p>
+              </div>
             </div>
-            <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
+
+            {/* Glassmorphic Card */}
+            <div className="group relative overflow-visible rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 shadow-xl aspect-[1/1]">
               <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                 <div className="pr-12 flex items-center gap-2">
                   <h3
@@ -314,7 +446,7 @@ const DesignSystem: React.FC = () => {
                       letterSpacing: "-0.01em",
                     }}
                   >
-                    Lab Card
+                    Glassmorphic Card
                   </h3>
                   {/* Greyscale colored balls */}
                   <div
@@ -345,6 +477,73 @@ const DesignSystem: React.FC = () => {
                     ))}
                   </div>
                 </div>
+                <div className="flex-1 flex flex-col">
+                  <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1"></p>
+                </div>
+              </div>
+              <div className="absolute bottom-2 left-2 text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
+                <p>
+                  <strong>Classes:</strong> bg-white/20, backdrop-blur-lg,
+                  border-white/30
+                </p>
+                <p>
+                  <strong>Usage:</strong> Lab, Articles, Design, Storytelling
+                </p>
+              </div>
+            </div>
+
+            {/* Career Card */}
+            <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[3/4]">
+              <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                <div className="pr-12 flex items-center gap-2">
+                  <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">
+                    Career Card
+                  </h3>
+                  <div className="flex items-center gap-1 ml-2">
+                    <Briefcase className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+                  </div>
+                </div>
+                <div className="flex-1 flex flex-col">
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 flex-1"></p>
+                </div>
+              </div>
+              <div className="absolute bottom-2 left-2 text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
+                <p>
+                  <strong>Classes:</strong> bg-gray-100/80, aspect-[3/4]
+                </p>
+                <p>
+                  <strong>Usage:</strong> Career section
+                </p>
+              </div>
+            </div>
+
+            {/* News Card */}
+            <div className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 flex flex-col shadow-xl h-[180px]">
+              <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
+                <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center">
+                  <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
+                </div>
+              </div>
+              <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                <div className="pr-12 flex items-center gap-2">
+                  <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">
+                    News Card
+                  </h3>
+                </div>
+                <div className="flex-1 flex flex-col">
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 flex-1">
+                    RSS feed content with carousel navigation
+                  </p>
+                </div>
+              </div>
+              <div className="absolute bottom-2 left-2 text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
+                <p>
+                  <strong>Classes:</strong> bg-white/20, backdrop-blur-lg,
+                  h-[180px]
+                </p>
+                <p>
+                  <strong>Usage:</strong> News aggregator
+                </p>
               </div>
             </div>
           </div>
