@@ -40,7 +40,6 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
-import LazyVideo from "../components/LazyVideo";
 import { storage } from "../utils/storage";
 import { content } from "../content";
 
@@ -353,14 +352,14 @@ const DesignSystem: React.FC = () => {
               </div>
               <div>
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                  Video Cards
+                  Glassmorphic Cards with Gradients
                 </h4>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                  Used for animated backgrounds
+                  Used for premium card designs with gradient backgrounds
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
-                  Features: video background, overlay content, aspect ratio
-                  control
+                  Features: backdrop-blur, gradient blobs, semi-transparent
+                  card, colored glow effects
                 </p>
               </div>
               <div>
@@ -398,40 +397,52 @@ const DesignSystem: React.FC = () => {
               </div>
             </div>
 
-            {/* Video Card */}
-            <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
-              <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                <div className="pr-12 flex items-center gap-2">
-                  <h3
-                    className="text-[20px] font-semibold mb-1 dark:text-black title-font"
-                    style={{
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
-                    Video Card
-                  </h3>
-                </div>
-                <div className="flex-1 flex flex-col">
-                  <p className="text-sm text-gray-600 dark:text-gray-600 mb-2 flex-1"></p>
+            {/* Glassmorphic Card with Gradient Background */}
+            <div className="group relative overflow-hidden rounded-2xl aspect-[1/1] bg-black">
+              {/* Gradient Background Blobs */}
+              <div className="absolute inset-0">
+                {/* Orange/Pink blob - top left */}
+                <div className="absolute -top-20 -left-20 w-64 h-64 bg-gradient-to-br from-orange-500 via-pink-500 to-transparent rounded-full blur-3xl opacity-60"></div>
+                {/* Hot Pink blob - bottom left */}
+                <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-gradient-to-tr from-pink-500 via-rose-500 to-transparent rounded-full blur-3xl opacity-70"></div>
+                {/* Cyan/Blue blob - top right */}
+                <div className="absolute -top-16 -right-16 w-72 h-72 bg-gradient-to-bl from-cyan-500 via-blue-500 to-transparent rounded-full blur-3xl opacity-65"></div>
+              </div>
+
+              {/* Glassmorphic Card */}
+              <div className="absolute inset-4 rounded-2xl bg-white/40 backdrop-blur-xl border border-white/50 shadow-2xl">
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-pink-500/20 via-transparent to-cyan-500/20"></div>
+                {/* Static/Noise Effect */}
+                <div
+                  className="absolute inset-0 rounded-2xl opacity-30 mix-blend-overlay pointer-events-none"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                    backgroundSize: "200%",
+                    backgroundRepeat: "repeat",
+                  }}
+                ></div>
+                <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                  <div className="pr-12 flex items-center gap-2">
+                    <h3
+                      className="text-[20px] font-semibold mb-1 dark:text-white title-font"
+                      style={{
+                        letterSpacing: "-0.01em",
+                      }}
+                    >
+                      Glassmorphic Card
+                    </h3>
+                  </div>
                 </div>
               </div>
-              <div className="absolute inset-0 overflow-hidden z-0">
-                <LazyVideo
-                  src="/video/jersey.mp4"
-                  className="w-full h-full object-cover opacity-70"
-                  autoPlay={true}
-                  muted={true}
-                  loop={true}
-                  playsInline={true}
-                />
-              </div>
-              <div className="absolute bottom-2 left-2 text-xs text-gray-500 bg-white/80 px-2 py-1 rounded">
+
+              <div className="absolute bottom-2 left-2 text-xs text-gray-400 bg-black/60 backdrop-blur-sm px-2 py-1 rounded">
                 <p>
-                  <strong>Classes:</strong> bg-gray-100/80, shadow-md,
-                  aspect-[1/1]
+                  <strong>Classes:</strong> bg-white/40, backdrop-blur-xl,
+                  border-white/50
                 </p>
                 <p>
-                  <strong>Usage:</strong> Animated backgrounds
+                  <strong>Usage:</strong> Glassmorphic cards with gradient
+                  backgrounds
                 </p>
               </div>
             </div>

@@ -32,6 +32,7 @@ const JsonAiPrompts = lazy(() => import("./pages/JsonAiPrompts"));
 const AudioTranscript = lazy(() => import("./pages/AudioTranscript"));
 const NewsAggregator = lazy(() => import("./pages/NewsAggregator"));
 const Specs = lazy(() => import("./pages/Specs"));
+const Story = lazy(() => import("./pages/Story"));
 
 import { slugify } from "./utils/slugify";
 import LazyVideo from "./components/LazyVideo";
@@ -460,7 +461,7 @@ function App() {
                                       </div>
                                     </div>
                                     <p
-                                      className="text-sm text-gray-600 dark:text-white mb-1 sm:mb-2 flex-1"
+                                      className="text-sm text-gray-600 dark:text-white mt-1 sm:mt-2 flex-1"
                                       style={{
                                         display: "-webkit-box",
                                         WebkitLineClamp: 2,
@@ -487,17 +488,7 @@ function App() {
                   className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <div
-                      className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden"
-                      style={{
-                        background: `
-                          radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                          radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
-                          linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)
-                        `,
-                      }}
-                    >
+                    <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white dark:bg-gray-900">
                       <SectionHeader
                         title="Articles"
                         subtitle={content.articles.subtitle}
@@ -551,6 +542,15 @@ function App() {
                               }}
                               className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 flex flex-col shadow-xl h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
+                              {/* Static/Noise Effect */}
+                              <div
+                                className="absolute inset-0 rounded-lg opacity-30 mix-blend-overlay pointer-events-none z-[5]"
+                                style={{
+                                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                                  backgroundSize: "200%",
+                                  backgroundRepeat: "repeat",
+                                }}
+                              ></div>
                               <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {article.url.startsWith("http") ? (
                                   <a
@@ -860,17 +860,7 @@ function App() {
                   className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                 >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <div
-                      className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden"
-                      style={{
-                        background: `
-                          radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                          radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                          radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
-                          linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)
-                        `,
-                      }}
-                    >
+                    <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white dark:bg-gray-900">
                       <SectionHeader
                         title={content.stories.title}
                         subtitle={content.stories.subtitle}
@@ -890,6 +880,15 @@ function App() {
                               transition={{ duration: 2.4, delay: index * 0.2 }}
                               className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 flex flex-col shadow-xl h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
                             >
+                              {/* Static/Noise Effect */}
+                              <div
+                                className="absolute inset-0 rounded-lg opacity-30 mix-blend-overlay pointer-events-none z-[5]"
+                                style={{
+                                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                                  backgroundSize: "200%",
+                                  backgroundRepeat: "repeat",
+                                }}
+                              ></div>
                               <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
                                 {story.hasModal ? (
                                   <button
@@ -1401,37 +1400,48 @@ function App() {
                           </div>
                         </div>
 
-                        <div className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[1/1]">
-                          <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                            <div className="pr-12 flex items-center gap-2">
-                              <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">
-                                Video Card
-                              </h3>
-                            </div>
-                            <div className="flex-1 flex flex-col">
-                              <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 flex-1"></p>
-                            </div>
+                        {/* Glassmorphic Card with Gradient Background */}
+                        <div className="group relative overflow-hidden rounded-2xl aspect-[1/1] bg-black">
+                          {/* Gradient Background Blobs */}
+                          <div className="absolute inset-0">
+                            {/* Orange/Pink blob - top left */}
+                            <div className="absolute -top-20 -left-20 w-64 h-64 bg-gradient-to-br from-orange-500 via-pink-500 to-transparent rounded-full blur-3xl opacity-60"></div>
+                            {/* Hot Pink blob - bottom left */}
+                            <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-gradient-to-tr from-pink-500 via-rose-500 to-transparent rounded-full blur-3xl opacity-70"></div>
+                            {/* Cyan/Blue blob - top right */}
+                            <div className="absolute -top-16 -right-16 w-72 h-72 bg-gradient-to-bl from-cyan-500 via-blue-500 to-transparent rounded-full blur-3xl opacity-65"></div>
                           </div>
-                          <div className="absolute inset-0 overflow-hidden z-0">
-                            <LazyVideo
-                              src="/video/jersey.mp4"
-                              className="w-full h-full object-cover opacity-70"
-                              autoPlay={true}
-                              muted={true}
-                              loop={true}
-                              playsInline={true}
-                            />
+
+                          {/* Glassmorphic Card */}
+                          <div className="absolute inset-4 rounded-2xl bg-white/40 backdrop-blur-xl border border-white/50 shadow-2xl">
+                            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-pink-500/20 via-transparent to-cyan-500/20"></div>
+                            {/* Static/Noise Effect */}
+                            <div
+                              className="absolute inset-0 rounded-2xl opacity-30 mix-blend-overlay pointer-events-none"
+                              style={{
+                                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+                                backgroundSize: "200%",
+                                backgroundRepeat: "repeat",
+                              }}
+                            ></div>
+                            <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                              <div className="pr-12 flex items-center gap-2">
+                                <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">
+                                  Glassmorphic Card
+                                </h3>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div className="group relative overflow-visible rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 shadow-xl aspect-[1/1]">
                           <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                            <div className="pr-12 flex items-center gap-2">
-                              <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">
+                            <div className="pr-12 flex flex-col gap-2">
+                              <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-0 dark:text-white title-font">
                                 Lab Card
                               </h3>
                               {/* Greyscale colored balls */}
                               <div
-                                className="flex items-center gap-1 ml-2"
+                                className="flex items-center gap-1"
                                 role="presentation"
                               >
                                 {[
@@ -1576,6 +1586,7 @@ function App() {
           <Route path="/audio-transcript" element={<AudioTranscript />} />
           <Route path="/news" element={<NewsAggregator />} />
           <Route path="/specs" element={<Specs />} />
+          <Route path="/story" element={<Story />} />
         </Routes>
       </Suspense>
 
