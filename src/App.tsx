@@ -1391,10 +1391,10 @@ function App() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
                         <div className="group relative overflow-hidden rounded-lg bg-gray-100/80">
                           <div className="p-4 sm:p-6">
-                            <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                            <h3 className="text-base sm:text-lg font-semibold text-black dark:text-black mb-2">
                               Background Card
                             </h3>
-                            <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300">
+                            <p className="text-sm sm:text-base text-black dark:text-black">
                               Background Card
                             </p>
                           </div>
@@ -1425,10 +1425,13 @@ function App() {
                               }}
                             ></div>
                             <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                              <div className="pr-12 flex items-center gap-2">
-                                <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-1 dark:text-white title-font">
+                              <div className="pr-12 flex flex-col gap-1">
+                                <h3 className="text-base sm:text-lg lg:text-xl font-semibold mb-0 text-black dark:text-black title-font">
                                   Glassmorphic Card
                                 </h3>
+                                <p className="text-xs text-black dark:text-black font-medium">
+                                  It's all the rage
+                                </p>
                               </div>
                             </div>
                           </div>
