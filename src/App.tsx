@@ -35,7 +35,6 @@ const Specs = lazy(() => import("./pages/Specs"));
 const Story = lazy(() => import("./pages/Story"));
 
 import { slugify } from "./utils/slugify";
-import LazyVideo from "./components/LazyVideo";
 
 import "./utils/storageMigration"; // Import to trigger migration if needed
 

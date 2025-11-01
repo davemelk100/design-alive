@@ -1,29 +1,51 @@
 # JavaScript files
-*.js Content-Type: application/javascript Cache-Control: public, max-age=31536000, immutable
+/*.js
+  Content-Type: application/javascript
+  Cache-Control: public, max-age=31536000, immutable
 
 # CSS files  
-*.css Content-Type: text/css Cache-Control: public, max-age=31536000, immutable
+/*.css
+  Content-Type: text/css
+  Cache-Control: public, max-age=31536000, immutable
 
 # SVG files
-*.svg Content-Type: image/svg+xml Cache-Control: public, max-age=31536000, immutable
+/*.svg
+  Content-Type: image/svg+xml
+  Cache-Control: public, max-age=31536000, immutable
 
 # Assets directory - JavaScript files
-/assets/*.js Content-Type: application/javascript Cache-Control: public, max-age=31536000, immutable
+/assets/*.js
+  Content-Type: application/javascript
+  Cache-Control: public, max-age=31536000, immutable
 
 # Assets directory - CSS files
-/assets/*.css Content-Type: text/css Cache-Control: public, max-age=31536000, immutable
+/assets/*.css
+  Content-Type: text/css
+  Cache-Control: public, max-age=31536000, immutable
 
 # Assets directory - other files
-/assets/* Cache-Control: public, max-age=31536000, immutable
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
 
 # Audio files
-*.mp3 Content-Type: audio/mpeg Cache-Control: public, max-age=31536000, immutable Access-Control-Allow-Origin: *
+/*.mp3
+  Content-Type: audio/mpeg
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
 
 # Audio directory
-/audio/* Content-Type: audio/mpeg Cache-Control: public, max-age=31536000, immutable Access-Control-Allow-Origin: *
+/audio/*
+  Content-Type: audio/mpeg
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
 
 # HTML files
-/*.html Cache-Control: public, max-age=0, must-revalidate
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
 
 # Security headers for all files
-/* X-Frame-Options: DENY X-XSS-Protection: 1; mode=block X-Content-Type-Options: nosniff Access-Control-Allow-Origin: *
+/*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  X-Content-Type-Options: nosniff
+  Access-Control-Allow-Origin: *
