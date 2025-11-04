@@ -292,15 +292,7 @@ function App() {
                       {/* Lab Section */}
                       <div
                         id="current-projects"
-                        className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden"
-                        style={{
-                          background: `
-                            radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                            radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                            radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%),
-                            linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%)
-                          `,
-                        }}
+                        className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white"
                       >
                         <SectionHeader
                           title={content.currentProjects.title}
@@ -343,31 +335,43 @@ function App() {
                                 <div className="absolute inset-0 bg-white dark:bg-gray-900 sm:hidden"></div>
 
                                 {/* Desktop background - animations */}
-                                <div className="absolute inset-0 overflow-hidden z-0 p-2 hidden sm:block">
-                                  <img
-                                    src={
-                                      project.title === "AI NUI"
-                                        ? `/img/ai-nui-alt2.svg?v=${Date.now()}`
-                                        : project.title === "JSON AI Prompts"
-                                        ? `/img/json-ai-prompts-animation.svg?v=${Date.now()}`
-                                        : project.title ===
-                                          "User Testing Config"
-                                        ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
-                                        : `/img/lab.svg?v=${Date.now()}`
-                                    }
-                                    alt={
-                                      project.title === "AI NUI"
-                                        ? "AI NUI Animation"
-                                        : project.title === "JSON AI Prompts"
-                                        ? "JSON AI Prompts Animation"
-                                        : project.title ===
-                                          "User Testing Config"
-                                        ? "User Testing Config Animation"
-                                        : "Lab"
-                                    }
-                                    className="absolute inset-0 h-full w-full object-contain object-bottom"
-                                  />
-                                </div>
+                                {(project.title === "AI NUI" ||
+                                  project.title === "JSON AI Prompts" ||
+                                  project.title === "User Testing Config" ||
+                                  project.title ===
+                                    "Configurable Multivariate Testing") && (
+                                  <div className="absolute inset-0 overflow-hidden z-0 p-2 hidden sm:block">
+                                    <img
+                                      src={
+                                        project.title === "AI NUI"
+                                          ? `/img/ai-nui-alt2.svg?v=${Date.now()}`
+                                          : project.title === "JSON AI Prompts"
+                                          ? `/img/json-ai-prompts-animation.svg?v=${Date.now()}`
+                                          : project.title ===
+                                            "User Testing Config"
+                                          ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
+                                          : project.title ===
+                                            "Configurable Multivariate Testing"
+                                          ? `/img/multivariate-testing-animation.svg?v=${Date.now()}`
+                                          : ""
+                                      }
+                                      alt={
+                                        project.title === "AI NUI"
+                                          ? "AI NUI Animation"
+                                          : project.title === "JSON AI Prompts"
+                                          ? "JSON AI Prompts Animation"
+                                          : project.title ===
+                                            "User Testing Config"
+                                          ? "User Testing Config Animation"
+                                          : project.title ===
+                                            "Configurable Multivariate Testing"
+                                          ? "Configurable Multivariate Testing Animation"
+                                          : ""
+                                      }
+                                      className="absolute inset-0 h-full w-full object-contain object-bottom"
+                                    />
+                                  </div>
+                                )}
                                 <div className="absolute inset-0 p-2 sm:p-3 flex flex-col gap-1 sm:gap-2 z-10">
                                   <div className="rounded-lg p-1 sm:p-2 pr-10 sm:pr-12">
                                     <div className="flex flex-col gap-0.5 sm:gap-1">
@@ -395,7 +399,6 @@ function App() {
                                             "#6c757d", // Gray from AI NUI animation
                                             "#e55a2b", // Darker Orange from AI NUI animation
                                             "#457a", // Darker Teal from AI NUI animation
-                                            "#58", // Darker Gray from AI NUI animation
                                           ].map((color, i) => (
                                             <span
                                               key={i}
@@ -418,7 +421,6 @@ function App() {
                                             "#4f46e5", // Indigo Dark - depth
                                             "#c7d2fe", // Indigo Lighter - soft
                                             "#3730a3", // Indigo Darker - sophisticated
-                                            "#06b6d4", // Cyan - third color
                                           ].map((color, i) => (
                                             <span
                                               key={i}
@@ -442,6 +444,29 @@ function App() {
                                             "#8b6b4f", // Brighter Brown Dark - depth/contrast
                                             "#e8d5d0", // Brighter Light Beige - soft/gentle
                                             "#d4a574", // Golden Brown - warm/accent
+                                          ].map((color, i) => (
+                                            <span
+                                              key={i}
+                                              role="presentation"
+                                              aria-hidden="true"
+                                              className="w-3 h-3"
+                                              style={{
+                                                display: "inline-block",
+                                                borderRadius: "50%",
+                                                background: `radial-gradient(circle at 70% 70%, ${color} 0%, ${color} 60%, ${color}dd 100%)`,
+                                                boxShadow:
+                                                  "0 1px 2px rgba(0,0,0,0.08)",
+                                              }}
+                                            />
+                                          ))}
+                                        {project.title ===
+                                          "Configurable Multivariate Testing" &&
+                                          [
+                                            "#9333ea", // Purple - primary
+                                            "#a855f7", // Purple Light - vibrant
+                                            "#7c3aed", // Purple Dark - depth
+                                            "#c084fc", // Purple Lighter - soft
+                                            "#6d28d9", // Purple Darker - sophisticated
                                           ].map((color, i) => (
                                             <span
                                               key={i}

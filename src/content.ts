@@ -552,6 +552,13 @@ export const content = {
         demo: "https://stupendous-paprenjak-06c1cc.netlify.app/",
         image: "/img/user-testing-config-animation.svg",
       },
+      {
+        title: "Configurable Multivariate Testing",
+        description: "Configurable multivariate testing.",
+        technologies: ["React", "TypeScript", "Tailwind"],
+        demo: "https://multi-configs.netlify.app/",
+        image: "/img/multivariate-testing-animation.svg",
+      },
     ],
   },
 
