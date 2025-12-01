@@ -295,14 +295,144 @@ def import_work_projects(db: Session, content: str):
 
 
 def import_articles(db: Session, content: str):
-    """Import articles - simplified version"""
-    # This is complex due to HTML content, so we'll do a basic import
-    articles_match = re.search(r'items:\s*\[(.*?)\]', content, re.DOTALL)
-    if articles_match:
-        print("⚠ Articles import is complex - skipping for now")
-        print("  (Articles contain HTML content that requires more sophisticated parsing)")
-    else:
-        print("⚠ No articles found")
+    """Import articles"""
+    # Find the start of articles items array
+    articles_start = content.find('articles:')
+    if articles_start == -1:
+        print("⚠ No articles section found")
+        return
+    
+    # Find items: [
+    items_start = content.find('items: [', articles_start)
+    if items_start == -1:
+        print("⚠ No articles items found")
+        return
+    
+    # Find the matching closing bracket for the items array
+    bracket_start = items_start + len('items: [')
+    bracket_count = 1
+    i = bracket_start
+    
+    while i < len(content) and bracket_count > 0:
+        if content[i] == '[':
+            bracket_count += 1
+        elif content[i] == ']':
+            bracket_count -= 1
+        i += 1
+    
+    articles_str = content[bracket_start:i-1]  # -1 to exclude the closing bracket
+    articles = []
+    
+    # Parse articles - find each article object
+    i = 0
+    while i < len(articles_str):
+        # Skip whitespace, commas, newlines
+        while i < len(articles_str) and articles_str[i] in ' \n\t\r,':
+            i += 1
+        
+        if i >= len(articles_str):
+            break
+        
+        # Skip comments
+        if articles_str[i:i+2] == '//':
+            while i < len(articles_str) and articles_str[i] != '\n':
+                i += 1
+            continue
+        
+        # Look for opening brace
+        if articles_str[i] == '{':
+            brace_count = 1
+            article_start = i
+            i += 1
+            
+            # Find matching closing brace, handling template literals
+            while i < len(articles_str) and brace_count > 0:
+                if articles_str[i] == '`':
+                    # Template literal - find closing backtick
+                    i += 1
+                    while i < len(articles_str) and articles_str[i] != '`':
+                        i += 1
+                    if i < len(articles_str):
+                        i += 1
+                elif articles_str[i] == '{':
+                    brace_count += 1
+                    i += 1
+                elif articles_str[i] == '}':
+                    brace_count -= 1
+                    if brace_count == 0:
+                        # Found complete article
+                        article_str = articles_str[article_start:i+1]
+                        
+                        # Skip if commented
+                        if article_str.strip().startswith('//'):
+                            i += 1
+                            continue
+                        
+                        article = {}
+                        
+                        # Extract title (required)
+                        title_match = re.search(r'title:\s*"([^"]*)"', article_str)
+                        if not title_match:
+                            i += 1
+                            continue
+                        article['title'] = title_match.group(1)
+                        
+                        # Extract other fields
+                        desc_match = re.search(r'description:\s*"([^"]*)"', article_str, re.DOTALL)
+                        article['description'] = desc_match.group(1).strip() if desc_match else ''
+                        
+                        url_match = re.search(r'url:\s*"([^"]*)"', article_str)
+                        article['url'] = url_match.group(1) if url_match else ''
+                        
+                        # Extract content (template literal)
+                        content_match = re.search(r'content:\s*`([^`]*)`', article_str, re.DOTALL)
+                        if content_match:
+                            article['content'] = content_match.group(1)
+                        else:
+                            article['content'] = ''
+                        
+                        image_match = re.search(r'image:\s*"([^"]*)"', article_str)
+                        article['image'] = image_match.group(1) if image_match else ''
+                        
+                        date_match = re.search(r'date:\s*"([^"]*)"', article_str)
+                        article['date'] = date_match.group(1) if date_match else ''
+                        
+                        articles.append(article)
+                        i += 1
+                    else:
+                        i += 1
+                else:
+                    i += 1
+        else:
+            i += 1
+    
+    for idx, article in enumerate(articles):
+        existing = db.query(Article).filter(
+            Article.title == article['title']
+        ).first()
+        
+        if not existing:
+            db_article = Article(
+                title=article['title'],
+                description=article.get('description', ''),
+                content=article.get('content', ''),
+                date=article.get('date', ''),
+                image=article.get('image', ''),
+                url=article.get('url', ''),
+                visible=True,
+                order=idx
+            )
+            db.add(db_article)
+        else:
+            existing.description = article.get('description', existing.description)
+            existing.content = article.get('content', existing.content)
+            existing.date = article.get('date', existing.date)
+            existing.image = article.get('image', existing.image)
+            existing.url = article.get('url', existing.url)
+            existing.order = idx
+    
+    db.commit()
+    print(f"✓ Imported {len(articles)} articles")
 
 
 def import_stories(db: Session, content: str):

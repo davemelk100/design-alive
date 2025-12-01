@@ -107,7 +107,7 @@ class WorkProject(WorkProjectBase):
 
 # Article Schemas
 class ArticleBase(BaseModel):
-    article_id: str
+    article_id: Optional[str] = None
     title: str
     description: Optional[str] = None
     url: Optional[str] = None
