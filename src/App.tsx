@@ -261,12 +261,19 @@ function App() {
                           className="mt-4 sm:mt-6"
                         >
                           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-left">
-                            I'm David Melkonian, a UX and front-end leader with
-                            15+ years of experience. I specialize in design
-                            systems, accessibility, and bridging design with
-                            development using React, Figma and more. I've led
-                            teams of 30+, built UX practices from scratch, and
-                            achieved 100% accessibility compliance.
+                            I'm David Melkonian, a technical product and
+                            experience leader with over a decade of work at the
+                            intersection of UX, front-end engineering, and
+                            digital accessibility. I specialize in designing and
+                            shipping full-stack web and mobile products using
+                            modern stacks like React, TypeScript, Next.js,
+                            Python, and FastAPI, with a strong focus on scalable
+                            design systems, AI-assisted workflows, vector
+                            search, and measurable impact on performance and
+                            usability. I've led teams of 30+, built full-stack
+                            applications with AI integration, and established
+                            enterprise-wide standards for processes and digital
+                            experience delivery.
                           </p>
                         </motion.div>
                         <p className="my-4">
