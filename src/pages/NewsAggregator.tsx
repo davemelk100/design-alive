@@ -146,41 +146,6 @@ const rssFeeds: RSSFeed[] = [
     category: "sports",
     enabled: true,
   },
-  {
-    id: "pride-of-lions",
-    name: "Pride of Lions",
-    url: "https://feeds.megaphone.fm/pride-of-detroit-lions",
-    category: "sports",
-    enabled: true,
-  },
-  {
-    id: "white-sox-si",
-    name: "White Sox - SI",
-    url: "https://www.si.com/mlb/whitesox/feed",
-    category: "sports",
-    enabled: true,
-  },
-  {
-    id: "hot-peppers",
-    name: "Hot Peppers",
-    url: "https://news.google.com/rss/search?q=%22hot+peppers%22&hl=en-US&gl=US&ceid=US:en",
-    category: "food",
-    enabled: true,
-  },
-  {
-    id: "minimalist-baker",
-    name: "Minimalist Baker",
-    url: "https://minimalistbaker.com/feed/",
-    category: "food",
-    enabled: true,
-  },
-  {
-    id: "tips-for-bbq",
-    name: "Tips For BBQ",
-    url: "http://tipsforbbq.com/RSS",
-    category: "food",
-    enabled: true,
-  },
 ];
 
 const NewsAggregator = () => {
@@ -205,7 +170,6 @@ const NewsAggregator = () => {
         "CBS SPORTS",
         "ESPN",
         "Mets - SNY",
-        "White Sox - SI",
       ].includes(sourceName)
     ) {
       return "sports";
@@ -235,14 +199,7 @@ const NewsAggregator = () => {
       ].includes(sourceName)
     ) {
       return "entertainment";
-    } else if (
-      [
-        "Hot Peppers",
-        "Minimalist Baker",
-        "Tips For BBQ",
-        "McDonald's",
-      ].includes(sourceName)
-    ) {
+    } else if (["McDonald's"].includes(sourceName)) {
       return "food";
     } else {
       return "all";
@@ -387,8 +344,6 @@ const NewsAggregator = () => {
   const [cbsSportsIndex, setCbsSportsIndex] = useState(0);
   const [espnIndex, setEspnIndex] = useState(0);
   const [metsSnyIndex, setMetsSnyIndex] = useState(0);
-  const [prideOfLionsIndex, setPrideOfLionsIndex] = useState(0);
-  const [whiteSoxSiIndex, setWhiteSoxSiIndex] = useState(0);
 
   const [breitbartIndex, setBreitbartIndex] = useState(0);
   const [bbcIndex, setBbcIndex] = useState(0);
@@ -402,9 +357,6 @@ const NewsAggregator = () => {
   const [bloombergIndex, setBloombergIndex] = useState(0);
 
   const [techcrunchIndex, setTechcrunchIndex] = useState(0);
-  const [hotPeppersIndex, setHotPeppersIndex] = useState(0);
-  const [minimalistBakerIndex, setMinimalistBakerIndex] = useState(0);
-  const [tipsForBbqIndex, setTipsForBbqIndex] = useState(0);
   const [mcdonaldsIndex, setMcdonaldsIndex] = useState(0);
 
   // Drag and drop state
@@ -560,10 +512,6 @@ const NewsAggregator = () => {
         return espnIndex;
       case "Mets - SNY":
         return metsSnyIndex;
-      case "Pride of Lions":
-        return prideOfLionsIndex;
-      case "White Sox - SI":
-        return whiteSoxSiIndex;
       case "Breitbart":
         return breitbartIndex;
       case "BBC":
@@ -587,12 +535,6 @@ const NewsAggregator = () => {
 
       case "TechCrunch":
         return techcrunchIndex;
-      case "Hot Peppers":
-        return hotPeppersIndex;
-      case "Minimalist Baker":
-        return minimalistBakerIndex;
-      case "Tips For BBQ":
-        return tipsForBbqIndex;
       case "McDonald's":
         return mcdonaldsIndex;
       default:
@@ -664,12 +606,6 @@ const NewsAggregator = () => {
       case "Mets - SNY":
         goToPreviousMetsSny();
         break;
-      case "Pride of Lions":
-        goToPreviousPrideOfLions();
-        break;
-      case "White Sox - SI":
-        goToPreviousWhiteSoxSi();
-        break;
       case "Breitbart":
         goToPreviousBreitbart();
         break;
@@ -702,15 +638,6 @@ const NewsAggregator = () => {
 
       case "TechCrunch":
         goToPreviousTechcrunch();
-        break;
-      case "Hot Peppers":
-        goToPreviousHotPeppers();
-        break;
-      case "Minimalist Baker":
-        goToPreviousMinimalistBaker();
-        break;
-      case "Tips For BBQ":
-        goToPreviousTipsForBbq();
         break;
       case "McDonald's":
         goToPreviousMcdonalds();
@@ -782,12 +709,6 @@ const NewsAggregator = () => {
       case "Mets - SNY":
         goToNextMetsSny();
         break;
-      case "Pride of Lions":
-        goToNextPrideOfLions();
-        break;
-      case "White Sox - SI":
-        goToNextWhiteSoxSi();
-        break;
       case "Breitbart":
         goToNextBreitbart();
         break;
@@ -820,15 +741,6 @@ const NewsAggregator = () => {
 
       case "TechCrunch":
         goToNextTechcrunch();
-        break;
-      case "Hot Peppers":
-        goToNextHotPeppers();
-        break;
-      case "Minimalist Baker":
-        goToNextMinimalistBaker();
-        break;
-      case "Tips For BBQ":
-        goToNextTipsForBbq();
         break;
       case "McDonald's":
         goToNextMcdonalds();
@@ -951,11 +863,6 @@ const NewsAggregator = () => {
     category: string
   ): NewsItem[] => {
     try {
-      if (sourceName === "Pride of Lions") {
-        console.log(
-          `Parsing Pride of Lions RSS feed, XML length: ${xmlText.length}`
-        );
-      }
       // Check if the response is HTML instead of XML (common error case)
       if (
         xmlText.trim().startsWith("<!DOCTYPE html") ||
@@ -984,14 +891,7 @@ const NewsAggregator = () => {
       }
 
       if (items.length === 0) {
-        if (sourceName === "Pride of Lions") {
-          console.log("Pride of Lions: No items found in RSS feed");
-        }
         return [];
-      }
-
-      if (sourceName === "Pride of Lions") {
-        console.log(`Pride of Lions: Found ${items.length} items in RSS feed`);
       }
 
       const parsedItems: NewsItem[] = [];
@@ -1189,11 +1089,6 @@ const NewsAggregator = () => {
 
           // Skip items without essential data
           if (!title || !link) {
-            if (sourceName === "Pride of Lions") {
-              console.log(
-                `Pride of Lions item ${index} skipped - title: "${title}", link: "${link}"`
-              );
-            }
             return;
           }
 
@@ -1245,11 +1140,6 @@ const NewsAggregator = () => {
       });
 
       const result = parsedItems.slice(0, 10); // Limit to 10 items for carousel
-      if (sourceName === "Pride of Lions") {
-        console.log(
-          `Pride of Lions: Parsed ${parsedItems.length} items, returning ${result.length} items`
-        );
-      }
       return result;
     } catch (parseError) {
       console.error(`Error parsing RSS XML for ${sourceName}:`, parseError);
@@ -1480,8 +1370,6 @@ const NewsAggregator = () => {
       setNewYorkPostIndex(0); // Reset New York Post carousel
       setFoxNewsIndex(0); // Reset Fox News carousel
       setCbsSportsIndex(0); // Reset CBS Sports carousel
-      setPrideOfLionsIndex(0); // Reset Pride of Lions carousel
-      setWhiteSoxSiIndex(0); // Reset White Sox - SI carousel
       setBreitbartIndex(0); // Reset Breitbart carousel
       setBbcIndex(0); // Reset BBC carousel
       setForbesIndex(0); // Reset Forbes carousel
@@ -2082,49 +1970,6 @@ const NewsAggregator = () => {
     }
   };
 
-  // Pride of Lions carousel navigation
-  const goToNextPrideOfLions = () => {
-    const prideOfLionsItems = newsItems.filter(
-      (item) => item.source === "Pride of Lions"
-    );
-    if (prideOfLionsItems.length > 0) {
-      setPrideOfLionsIndex((prev) => (prev + 1) % prideOfLionsItems.length);
-    }
-  };
-
-  const goToPreviousPrideOfLions = () => {
-    const prideOfLionsItems = newsItems.filter(
-      (item) => item.source === "Pride of Lions"
-    );
-    if (prideOfLionsItems.length > 0) {
-      setPrideOfLionsIndex(
-        (prev) =>
-          (prev - 1 + prideOfLionsItems.length) % prideOfLionsItems.length
-      );
-    }
-  };
-
-  // White Sox - SI carousel navigation
-  const goToNextWhiteSoxSi = () => {
-    const whiteSoxSiItems = newsItems.filter(
-      (item) => item.source === "White Sox - SI"
-    );
-    if (whiteSoxSiItems.length > 0) {
-      setWhiteSoxSiIndex((prev) => (prev + 1) % whiteSoxSiItems.length);
-    }
-  };
-
-  const goToPreviousWhiteSoxSi = () => {
-    const whiteSoxSiItems = newsItems.filter(
-      (item) => item.source === "White Sox - SI"
-    );
-    if (whiteSoxSiItems.length > 0) {
-      setWhiteSoxSiIndex(
-        (prev) => (prev - 1 + whiteSoxSiItems.length) % whiteSoxSiItems.length
-      );
-    }
-  };
-
   // TechCrunch carousel navigation
   const goToNextTechcrunch = () => {
     const techcrunchItems = newsItems.filter(
@@ -2142,72 +1987,6 @@ const NewsAggregator = () => {
     if (techcrunchItems.length > 0) {
       setTechcrunchIndex(
         (prev) => (prev - 1 + techcrunchItems.length) % techcrunchItems.length
-      );
-    }
-  };
-
-  // Hot Peppers carousel navigation
-  const goToNextHotPeppers = () => {
-    const hotPeppersItems = newsItems.filter(
-      (item) => item.source === "Hot Peppers"
-    );
-    if (hotPeppersItems.length > 0) {
-      setHotPeppersIndex((prev) => (prev + 1) % hotPeppersItems.length);
-    }
-  };
-
-  const goToPreviousHotPeppers = () => {
-    const hotPeppersItems = newsItems.filter(
-      (item) => item.source === "Hot Peppers"
-    );
-    if (hotPeppersItems.length > 0) {
-      setHotPeppersIndex(
-        (prev) => (prev - 1 + hotPeppersItems.length) % hotPeppersItems.length
-      );
-    }
-  };
-
-  // Minimalist Baker carousel navigation
-  const goToNextMinimalistBaker = () => {
-    const minimalistBakerItems = newsItems.filter(
-      (item) => item.source === "Minimalist Baker"
-    );
-    if (minimalistBakerItems.length > 0) {
-      setMinimalistBakerIndex(
-        (prev) => (prev + 1) % minimalistBakerItems.length
-      );
-    }
-  };
-
-  const goToPreviousMinimalistBaker = () => {
-    const minimalistBakerItems = newsItems.filter(
-      (item) => item.source === "Minimalist Baker"
-    );
-    if (minimalistBakerItems.length > 0) {
-      setMinimalistBakerIndex(
-        (prev) =>
-          (prev - 1 + minimalistBakerItems.length) % minimalistBakerItems.length
-      );
-    }
-  };
-
-  // Tips For BBQ carousel navigation
-  const goToNextTipsForBbq = () => {
-    const tipsForBbqItems = newsItems.filter(
-      (item) => item.source === "Tips For BBQ"
-    );
-    if (tipsForBbqItems.length > 0) {
-      setTipsForBbqIndex((prev) => (prev + 1) % tipsForBbqItems.length);
-    }
-  };
-
-  const goToPreviousTipsForBbq = () => {
-    const tipsForBbqItems = newsItems.filter(
-      (item) => item.source === "Tips For BBQ"
-    );
-    if (tipsForBbqItems.length > 0) {
-      setTipsForBbqIndex(
-        (prev) => (prev - 1 + tipsForBbqItems.length) % tipsForBbqItems.length
       );
     }
   };
@@ -2849,23 +2628,12 @@ const NewsAggregator = () => {
                                           <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40 flex items-center justify-center">
                                             <div className="w-full h-full rounded-r-lg flex items-center justify-center">
                                               <span className="text-gray-600 dark:text-gray-300 font-bold text-4xl">
-                                                {feedItems[currentIndex]
-                                                  ?.source === "Hot Peppers"
-                                                  ? "🌶️"
-                                                  : feedItems[currentIndex]
-                                                      ?.source ===
-                                                    "Tips For BBQ"
-                                                  ? "♨️"
-                                                  : feedItems[currentIndex]
-                                                      ?.source ===
-                                                    "White Sox - SI"
-                                                  ? "⚾"
-                                                  : getCategoryIcon(
-                                                      getFeedCategory(
-                                                        feedItems[currentIndex]
-                                                          ?.source || ""
-                                                      )
-                                                    )}
+                                                {getCategoryIcon(
+                                                  getFeedCategory(
+                                                    feedItems[currentIndex]
+                                                      ?.source || ""
+                                                  )
+                                                )}
                                               </span>
                                             </div>
                                           </div>
@@ -3034,14 +2802,6 @@ const NewsAggregator = () => {
                                                   className="mx-auto"
                                                 />
                                               ) : feedItems[currentIndex]
-                                                  ?.source ===
-                                                "Pride of Lions" ? (
-                                                <img
-                                                  src="/img/lions.png"
-                                                  alt="Pride of Lions"
-                                                  className="mx-auto"
-                                                />
-                                              ) : feedItems[currentIndex]
                                                   ?.source === "Bloomberg" ? (
                                                 <img
                                                   src="/img/bloomberg.svg"
@@ -3054,24 +2814,12 @@ const NewsAggregator = () => {
                                                 />
                                               ) : (
                                                 <span className="text-gray-600 dark:text-gray-300 font-bold">
-                                                  {feedItems[currentIndex]
-                                                    ?.source === "Hot Peppers"
-                                                    ? "🌶️"
-                                                    : feedItems[currentIndex]
-                                                        ?.source ===
-                                                      "Tips For BBQ"
-                                                    ? "♨️"
-                                                    : feedItems[currentIndex]
-                                                        ?.source ===
-                                                      "White Sox - SI"
-                                                    ? "⚾"
-                                                    : getCategoryIcon(
-                                                        getFeedCategory(
-                                                          feedItems[
-                                                            currentIndex
-                                                          ]?.source || ""
-                                                        )
-                                                      )}
+                                                  {getCategoryIcon(
+                                                    getFeedCategory(
+                                                      feedItems[currentIndex]
+                                                        ?.source || ""
+                                                    )
+                                                  )}
                                                 </span>
                                               )}
                                             </div>
@@ -3154,28 +2902,12 @@ const NewsAggregator = () => {
                                                   />
                                                 ) : (
                                                   <span className="text-gray-600 dark:text-gray-300 font-bold">
-                                                    {feedItems[currentIndex]
-                                                      ?.source === "Hot Peppers"
-                                                      ? "🌶️"
-                                                      : feedItems[currentIndex]
-                                                          ?.source ===
-                                                        "Tips For BBQ"
-                                                      ? "♨️"
-                                                      : feedItems[currentIndex]
-                                                          ?.source ===
-                                                        "Pride of Lions"
-                                                      ? "🏈"
-                                                      : feedItems[currentIndex]
-                                                          ?.source ===
-                                                        "White Sox - SI"
-                                                      ? "⚾"
-                                                      : getCategoryIcon(
-                                                          getFeedCategory(
-                                                            feedItems[
-                                                              currentIndex
-                                                            ]?.source || ""
-                                                          )
-                                                        )}
+                                                    {getCategoryIcon(
+                                                      getFeedCategory(
+                                                        feedItems[currentIndex]
+                                                          ?.source || ""
+                                                      )
+                                                    )}
                                                   </span>
                                                 )}
                                               </div>
@@ -3231,14 +2963,6 @@ const NewsAggregator = () => {
                                                   className="mx-auto"
                                                 />
                                               ) : feedItems[currentIndex]
-                                                  ?.source ===
-                                                "Pride of Lions" ? (
-                                                <img
-                                                  src="/img/lions.png"
-                                                  alt="Pride of Lions"
-                                                  className="mx-auto"
-                                                />
-                                              ) : feedItems[currentIndex]
                                                   ?.source === "Bloomberg" ? (
                                                 <img
                                                   src="/img/bloomberg.svg"
@@ -3251,24 +2975,12 @@ const NewsAggregator = () => {
                                                 />
                                               ) : (
                                                 <span className="text-gray-600 dark:text-gray-300 font-bold">
-                                                  {feedItems[currentIndex]
-                                                    ?.source === "Hot Peppers"
-                                                    ? "🌶️"
-                                                    : feedItems[currentIndex]
-                                                        ?.source ===
-                                                      "Tips For BBQ"
-                                                    ? "♨️"
-                                                    : feedItems[currentIndex]
-                                                        ?.source ===
-                                                      "White Sox - SI"
-                                                    ? "⚾"
-                                                    : getCategoryIcon(
-                                                        getFeedCategory(
-                                                          feedItems[
-                                                            currentIndex
-                                                          ]?.source || ""
-                                                        )
-                                                      )}
+                                                  {getCategoryIcon(
+                                                    getFeedCategory(
+                                                      feedItems[currentIndex]
+                                                        ?.source || ""
+                                                    )
+                                                  )}
                                                 </span>
                                               )}
                                             </div>

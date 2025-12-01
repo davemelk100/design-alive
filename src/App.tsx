@@ -484,152 +484,6 @@ function App() {
                   </div>
                 </section>
 
-                {/* Design Section */}
-                <section
-                  id="work"
-                  className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
-                >
-                  <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white">
-                      <SectionHeader
-                        title="Design"
-                        subtitle={content.work.subtitle}
-                        className="mb-6"
-                        showArchiveLink={false}
-                        icon={
-                          <a
-                            href={content.navigation.social.dribbble.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
-                            aria-label="Dribbble"
-                          >
-                            <Dribbble className="h-5 w-5 text-black" />
-                          </a>
-                        }
-                      />
-                      <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
-                        {content.work.projects
-                          .filter(
-                            (project: any) =>
-                              project.title !== "3D Conversion UX Plan"
-                          )
-                          .map((project: any, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, y: 20 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
-                              transition={{
-                                duration: 1.8,
-                                delay: index * 0.2,
-                              }}
-                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 flex flex-col shadow-xl h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
-                            >
-                              <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
-                                {project.url ? (
-                                  <a
-                                    href={project.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
-                                    aria-label={`View project: ${project.title}`}
-                                  >
-                                    <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
-                                  </a>
-                                ) : (
-                                  <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center">
-                                    <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
-                                  </div>
-                                )}
-                              </div>
-                              {/* Mobile background - semi-transparent partial image */}
-                              <div className="absolute inset-0 z-0 sm:hidden">
-                                <img
-                                  src={project.image}
-                                  alt={project.alt || project.title}
-                                  className="absolute inset-0 w-full h-full object-cover object-center opacity-10"
-                                  loading="lazy"
-                                />
-                              </div>
-
-                              {/* Desktop background - images */}
-                              <div className="absolute inset-0 z-0 hidden sm:block">
-                                <img
-                                  src={project.image}
-                                  alt={project.alt || project.title}
-                                  className={`absolute bottom-0 left-0 right-0 object-contain object-bottom ${
-                                    project.title === "Band Shirt Design"
-                                      ? "h-2/3 w-2/3 mx-auto"
-                                      : project.title ===
-                                        "Figma Mobile Prototype"
-                                      ? "h-3/4 w-3/4 mx-auto"
-                                      : project.title === "Design Panes"
-                                      ? "h-auto w-3/5 mx-auto"
-                                      : project.title === "Hex Code Pop Art"
-                                      ? "h-4/5 w-4/5 mx-auto"
-                                      : project.title ===
-                                        "Logos for Sports Podcast"
-                                      ? "h-4/5 w-4/5 mx-auto"
-                                      : "h-full w-full"
-                                  }`}
-                                  loading="lazy"
-                                />
-                              </div>
-                              <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
-                                <div className="rounded-lg p-1 sm:p-2 pr-8 sm:pr-12">
-                                  <div className="flex flex-col gap-0.5">
-                                    <div className="flex items-center justify-between w-full">
-                                      <div className="flex items-center gap-2 min-w-0 flex-1">
-                                        {project.url ? (
-                                          <a
-                                            href={project.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer lab-card-title"
-                                            style={{
-                                              lineHeight: "1.25",
-                                            }}
-                                          >
-                                            {project.title.length > 40
-                                              ? `${project.title.substring(
-                                                  0,
-                                                  40
-                                                )}...`
-                                              : project.title}
-                                          </a>
-                                        ) : (
-                                          <h3
-                                            className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white lab-card-title"
-                                            style={{
-                                              lineHeight: "1.25",
-                                            }}
-                                          >
-                                            {project.title.length > 40
-                                              ? `${project.title.substring(
-                                                  0,
-                                                  40
-                                                )}...`
-                                              : project.title}
-                                          </h3>
-                                        )}
-                                      </div>
-                                    </div>
-                                    {project.description && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-300 opacity-80 hidden sm:block">
-                                        {project.description}
-                                      </p>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            </motion.div>
-                          ))}
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
                 {/* Testimonials Section */}
                 {/**
                 <section id="testimonials" className="py-12 sm:py-16 lg:py-20">
@@ -670,6 +524,81 @@ function App() {
                   </div>
                 </section>
                 */}
+
+                {/* Career Timeline Section */}
+                <section id="career" className="py-4 sm:py-6 lg:py-8 xl:py-12">
+                  <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+                    <SectionHeader
+                      title={content.career.title}
+                      subtitle={content.career.subtitle}
+                      className="mb-8 sm:mb-6"
+                      icon={
+                        <a
+                          href={content.navigation.social.linkedin.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                          aria-label="LinkedIn"
+                        >
+                          <LinkedInLogoIcon className="h-5 w-5 text-black" />
+                        </a>
+                      }
+                    />
+                    <div className="space-y-8">
+                      {content.career.positions.map((position) => (
+                        <div
+                          key={position.title + position.period}
+                          className=""
+                        >
+                          <h3 className="text-lg font-semibold mb-1 dark:text-white title-font">
+                            {position.title}
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 font-medium">
+                            {position.company}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                            {position.period}
+                          </p>
+                          {Array.isArray(position.description) ? (
+                            <ul className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
+                              {position.description.map((item, index) => (
+                                <li key={index}>{item}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                              {position.description}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    {/* Certifications & Education */}
+                    <div className="mt-4 pt-2 max-w-3xl">
+                      <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
+                        Certifications
+                      </div>
+                      <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4">
+                        <li>Certified ScrumMaster (Scrum Alliance)</li>
+                        <li>
+                          Certified Usability Analyst (Human Factors
+                          International)
+                        </li>
+                        <li>ITIL Foundation Certificate (Axelos)</li>
+                      </ul>
+                      <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
+                        Education
+                      </div>
+                      <div className="text-gray-700 dark:text-gray-300">
+                        Oakland University | Rochester MI
+                        <br />
+                        Bachelor of Arts in English
+                        <br />
+                        Minor in Public Relations
+                      </div>
+                    </div>
+                  </div>
+                </section>
 
                 {/* Storytelling Section */}
                 <section
@@ -820,76 +749,147 @@ function App() {
                   </div>
                 </section>
 
-                {/* Career Timeline Section */}
-                <section id="career" className="py-4 sm:py-6 lg:py-8 xl:py-12">
+                {/* Design Section */}
+                <section
+                  id="work"
+                  className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
+                >
                   <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <SectionHeader
-                      title={content.career.title}
-                      subtitle={content.career.subtitle}
-                      className="mb-8 sm:mb-6"
-                      icon={
-                        <a
-                          href={content.navigation.social.linkedin.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
-                          aria-label="LinkedIn"
-                        >
-                          <LinkedInLogoIcon className="h-5 w-5 text-black" />
-                        </a>
-                      }
-                    />
-                    <div className="space-y-8">
-                      {content.career.positions.map((position) => (
-                        <div
-                          key={position.title + position.period}
-                          className=""
-                        >
-                          <h3 className="text-lg font-semibold mb-1 dark:text-white title-font">
-                            {position.title}
-                          </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 font-medium">
-                            {position.company}
-                          </p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                            {position.period}
-                          </p>
-                          {Array.isArray(position.description) ? (
-                            <ul className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
-                              {position.description.map((item, index) => (
-                                <li key={index}>{item}</li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                              {position.description}
-                            </p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    {/* Certifications & Education */}
-                    <div className="mt-4 pt-2 max-w-3xl">
-                      <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
-                        Certifications
-                      </div>
-                      <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4">
-                        <li>Certified ScrumMaster (Scrum Alliance)</li>
-                        <li>
-                          Certified Usability Analyst (Human Factors
-                          International)
-                        </li>
-                        <li>ITIL Foundation Certificate (Axelos)</li>
-                      </ul>
-                      <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
-                        Education
-                      </div>
-                      <div className="text-gray-700 dark:text-gray-300">
-                        Oakland University | Rochester MI
-                        <br />
-                        Bachelor of Arts in English
-                        <br />
-                        Minor in Public Relations
+                    <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white">
+                      <SectionHeader
+                        title="Design"
+                        subtitle={content.work.subtitle}
+                        className="mb-6"
+                        showArchiveLink={false}
+                        icon={
+                          <a
+                            href={content.navigation.social.dribbble.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                            aria-label="Dribbble"
+                          >
+                            <Dribbble className="h-5 w-5 text-black" />
+                          </a>
+                        }
+                      />
+                      <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+                        {content.work.projects
+                          .filter(
+                            (project: any) =>
+                              project.title !== "3D Conversion UX Plan"
+                          )
+                          .map((project: any, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, y: 20 }}
+                              whileInView={{ opacity: 1, y: 0 }}
+                              viewport={{ once: true }}
+                              transition={{
+                                duration: 1.8,
+                                delay: index * 0.2,
+                              }}
+                              className="group relative overflow-visible sm:overflow-hidden rounded-lg bg-white/20 backdrop-blur-lg border border-white/30 flex flex-col shadow-xl h-[180px] sm:h-[320px] md:h-[336px] lg:h-[352px]"
+                            >
+                              <div className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 hidden sm:block">
+                                {project.url ? (
+                                  <a
+                                    href={project.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="rounded-full p-1.5 hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+                                    aria-label={`View project: ${project.title}`}
+                                  >
+                                    <ExternalLink className="h-4 w-4 text-gray-600 dark:text-white" />
+                                  </a>
+                                ) : (
+                                  <div className="rounded-full p-1.5 w-8 h-8 flex items-center justify-center">
+                                    <Eye className="h-4 w-4 text-gray-600 dark:text-white" />
+                                  </div>
+                                )}
+                              </div>
+                              {/* Mobile background - semi-transparent partial image */}
+                              <div className="absolute inset-0 z-0 sm:hidden">
+                                <img
+                                  src={project.image}
+                                  alt={project.alt || project.title}
+                                  className="absolute inset-0 w-full h-full object-cover object-center opacity-10"
+                                  loading="lazy"
+                                />
+                              </div>
+
+                              {/* Desktop background - images */}
+                              <div className="absolute inset-0 z-0 hidden sm:block">
+                                <img
+                                  src={project.image}
+                                  alt={project.alt || project.title}
+                                  className={`absolute bottom-0 left-0 right-0 object-contain object-bottom ${
+                                    project.title === "Band Shirt Design"
+                                      ? "h-2/3 w-2/3 mx-auto"
+                                      : project.title ===
+                                        "Figma Mobile Prototype"
+                                      ? "h-3/4 w-3/4 mx-auto"
+                                      : project.title === "Design Panes"
+                                      ? "h-auto w-3/5 mx-auto"
+                                      : project.title === "Hex Code Pop Art"
+                                      ? "h-4/5 w-4/5 mx-auto"
+                                      : project.title ===
+                                        "Logos for Sports Podcast"
+                                      ? "h-4/5 w-4/5 mx-auto"
+                                      : "h-full w-full"
+                                  }`}
+                                  loading="lazy"
+                                />
+                              </div>
+                              <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
+                                <div className="rounded-lg p-1 sm:p-2 pr-8 sm:pr-12">
+                                  <div className="flex flex-col gap-0.5">
+                                    <div className="flex items-center justify-between w-full">
+                                      <div className="flex items-center gap-2 min-w-0 flex-1">
+                                        {project.url ? (
+                                          <a
+                                            href={project.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white hover:text-primary transition-colors cursor-pointer lab-card-title"
+                                            style={{
+                                              lineHeight: "1.25",
+                                            }}
+                                          >
+                                            {project.title.length > 40
+                                              ? `${project.title.substring(
+                                                  0,
+                                                  40
+                                                )}...`
+                                              : project.title}
+                                          </a>
+                                        ) : (
+                                          <h3
+                                            className="text-[18px] font-semibold mb-0 title-font text-black dark:text-white lab-card-title"
+                                            style={{
+                                              lineHeight: "1.25",
+                                            }}
+                                          >
+                                            {project.title.length > 40
+                                              ? `${project.title.substring(
+                                                  0,
+                                                  40
+                                                )}...`
+                                              : project.title}
+                                          </h3>
+                                        )}
+                                      </div>
+                                    </div>
+                                    {project.description && (
+                                      <p className="text-sm text-gray-600 dark:text-gray-300 opacity-80 hidden sm:block">
+                                        {project.description}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))}
                       </div>
                     </div>
                   </div>
@@ -1066,63 +1066,6 @@ function App() {
                             </motion.div>
                           ))}
                       </div>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Skills and Software Section */}
-                <section
-                  id="skills-and-software"
-                  className="py-4 sm:py-6 lg:py-8 xl:py-12"
-                >
-                  <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <SectionHeader
-                      title={content.skillsAndSoftware.title}
-                      subtitle={content.skillsAndSoftware.subtitle}
-                      className="mb-8 sm:mb-6"
-                    />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                      {content.skillsAndSoftware.categories.map(
-                        (category, categoryIndex) => (
-                          <motion.div
-                            key={category.name}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{
-                              duration: 0.8,
-                              delay: categoryIndex * 0.1,
-                            }}
-                            className="bg-gray-50/50 dark:bg-gray-800/50 rounded-lg p-4 sm:p-6"
-                          >
-                            <h3 className="text-lg sm:text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                              {category.name}
-                            </h3>
-                            <div className="space-y-4">
-                              {category.skills.map((skill, skillIndex) => (
-                                <div
-                                  key={skillIndex}
-                                  className="border-l-4 border-[#D2691E] pl-3 sm:pl-4"
-                                >
-                                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">
-                                    {skill.skill}
-                                  </p>
-                                  <div className="flex flex-wrap gap-2">
-                                    {skill.software.map((tool, toolIndex) => (
-                                      <span
-                                        key={toolIndex}
-                                        className="inline-block px-2 sm:px-3 py-1 text-xs bg-[#D2691E]/10 dark:bg-[#D2691E]/20 text-[rgb(133,58,4)] dark:text-[#E8A87C] rounded-full border border-[#D2691E]/30 dark:border-[#D2691E]/40"
-                                      >
-                                        {tool}
-                                      </span>
-                                    ))}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )
-                      )}
                     </div>
                   </div>
                 </section>

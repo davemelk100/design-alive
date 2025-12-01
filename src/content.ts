@@ -17,20 +17,20 @@ export const content = {
         text: "Lab",
       },
       {
-        id: "articles",
-        text: "Articles",
-      },
-      {
-        id: "work",
-        text: "Design",
+        id: "career",
+        text: "Career",
       },
       {
         id: "stories",
         text: "Storytelling",
       },
       {
-        id: "career",
-        text: "Career",
+        id: "work",
+        text: "Design",
+      },
+      {
+        id: "articles",
+        text: "Articles",
       },
       {
         id: "design-system",
