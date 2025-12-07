@@ -17,11 +17,16 @@ class Settings(BaseSettings):
     ADMIN_EMAIL: str = "davemelk@gmail.com"
     
     # CORS
-    CORS_ORIGINS: list[str] = [
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://localhost:8080",
-    ]
+    # Can be comma-separated string or list
+    # In production, set via environment variable: CORS_ORIGINS=https://yourdomain.com,https://www.yourdomain.com
+    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000,http://localhost:8080"
+    
+    @property
+    def cors_origins_list(self) -> list[str]:
+        """Parse CORS_ORIGINS string into list"""
+        if isinstance(self.CORS_ORIGINS, str):
+            return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+        return self.CORS_ORIGINS if isinstance(self.CORS_ORIGINS, list) else []
     
     class Config:
         env_file = ".env"

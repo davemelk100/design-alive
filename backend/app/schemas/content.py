@@ -173,7 +173,7 @@ class CareerPositionBase(BaseModel):
     title: str
     company: str
     period: str
-    description: List[str] = Field(default_factory=list)
+    description: str = ""
     order: int = 0
 
 

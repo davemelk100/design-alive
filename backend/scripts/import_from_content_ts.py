@@ -447,24 +447,73 @@ def import_stories(db: Session, content: str):
 
 def import_career_positions(db: Session, content: str):
     """Import career positions"""
-    # Find career section first
-    career_match = re.search(r'career:\s*\{[^}]*positions:\s*\[(.*?)\]', content, re.DOTALL)
+    # Find career section - need to match the full positions array including nested arrays
+    # Look for career: { ... positions: [ ... ] }
+    career_match = re.search(r'career:\s*\{[^}]*positions:\s*\[', content, re.DOTALL)
     if not career_match:
         print("⚠ No career positions found")
         return
     
-    positions_str = career_match.group(1)
+    # Find the start of positions array
+    start_pos = career_match.end()
+    
+    # Now find matching closing bracket, accounting for nested brackets
+    bracket_count = 1
+    i = start_pos
+    end_pos = start_pos
+    
+    while i < len(content) and bracket_count > 0:
+        if content[i] == '[':
+            bracket_count += 1
+        elif content[i] == ']':
+            bracket_count -= 1
+            if bracket_count == 0:
+                end_pos = i
+                break
+        i += 1
+    
+    if bracket_count != 0:
+        print("⚠ Could not parse career positions array")
+        return
+    
+    positions_str = content[start_pos:end_pos]
     
     positions = []
     
-    # Extract each position - need to handle nested arrays in description
-    # Use a simpler approach: find all position objects
-    position_pattern = r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}'
-    for pos_match in re.finditer(position_pattern, positions_str):
-        pos_str = pos_match.group(0)
+    # Now extract each position object from the array
+    # Each position is: { title: "...", company: "...", period: "...", description: [...] }
+    # We need to handle nested arrays in description
+    
+    i = 0
+    while i < len(positions_str):
+        # Find start of position object
+        obj_start = positions_str.find('{', i)
+        if obj_start == -1:
+            break
+        
+        # Find matching closing brace, accounting for nested braces and arrays
+        brace_count = 1
+        j = obj_start + 1
+        obj_end = -1
+        
+        while j < len(positions_str) and brace_count > 0:
+            if positions_str[j] == '{':
+                brace_count += 1
+            elif positions_str[j] == '}':
+                brace_count -= 1
+                if brace_count == 0:
+                    obj_end = j
+                    break
+            j += 1
+        
+        if obj_end == -1:
+            break
+        
+        pos_str = positions_str[obj_start:obj_end + 1]
         
         # Skip if it's just an empty object or comment
         if not pos_str.strip() or '//' in pos_str.split('\n')[0]:
+            i = obj_end + 1
             continue
         
         position = {}
@@ -476,22 +525,46 @@ def import_career_positions(db: Session, content: str):
                 position[field] = field_match.group(1)
         
         if not position.get('title'):
+            i = obj_end + 1
             continue
         
-        # Extract description (could be array or string)
-        desc_match = re.search(r'description:\s*(\[[^\]]*\]|"[^"]*")', pos_str, re.DOTALL)
+        # Extract description - handle nested array
+        # Look for description: [ ... ]
+        desc_match = re.search(r'description:\s*\[', pos_str)
         if desc_match:
-            desc_str = desc_match.group(1)
-            if desc_str.startswith('['):
-                # Array of strings - extract all quoted strings
-                desc_items = re.findall(r'"([^"]*)"', desc_str)
+            desc_start = desc_match.end()
+            # Find matching closing bracket
+            bracket_count = 1
+            k = desc_start
+            desc_end = -1
+            
+            while k < len(pos_str) and bracket_count > 0:
+                if pos_str[k] == '[':
+                    bracket_count += 1
+                elif pos_str[k] == ']':
+                    bracket_count -= 1
+                    if bracket_count == 0:
+                        desc_end = k
+                        break
+                k += 1
+            
+            if desc_end != -1:
+                desc_array_str = pos_str[desc_start:desc_end]
+                # Extract all quoted strings from the array
+                desc_items = re.findall(r'"([^"]*)"', desc_array_str)
                 position['description'] = '\n'.join(desc_items)
             else:
-                position['description'] = desc_str.strip('"')
+                position['description'] = ''
         else:
-            position['description'] = ''
+            # Try to match as a simple string
+            desc_str_match = re.search(r'description:\s*"([^"]*)"', pos_str)
+            if desc_str_match:
+                position['description'] = desc_str_match.group(1)
+            else:
+                position['description'] = ''
         
         positions.append(position)
+        i = obj_end + 1
     
     for idx, position in enumerate(positions):
         existing = db.query(CareerPosition).filter(

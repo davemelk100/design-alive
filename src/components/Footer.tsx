@@ -17,7 +17,7 @@ export const Footer = () => {
             >
               davemelk@gmail.com
             </a>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-500">
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
               © {currentYear} Dave Melkonian. All rights reserved.
             </p>
           </div>

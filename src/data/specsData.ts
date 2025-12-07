@@ -34,9 +34,9 @@ export const techCategories: TechCategory[] = [
         description: "Modern React with concurrent features",
         example: {
           title: "Interactive Components",
-          description: "Music player with state management and hooks",
-          link: "/music",
-          code: "useState, useEffect, useRef hooks for audio controls",
+          description: "Component state management and hooks",
+          link: "/",
+          code: "useState, useEffect, useRef hooks for interactive controls",
         },
       },
       {
@@ -265,8 +265,8 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Route-Based Splitting",
           description: "Pages loaded on demand for faster initial load",
-          link: "/music",
-          code: "React.lazy(() => import('./MusicPlayer'))",
+          link: "/json",
+          code: "React.lazy(() => import('./JsonAiPrompts'))",
         },
       },
       {
@@ -367,7 +367,7 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Screen Reader Support",
           description: "Descriptive labels for all interactive elements",
-          link: "/music",
+          link: "/",
           code: "aria-label and role attributes",
         },
       },
@@ -405,16 +405,6 @@ export const techCategories: TechCategory[] = [
           description: "Real-time RSS feed aggregation and parsing",
           link: "/news",
           code: "RSS proxy functions for CORS handling",
-        },
-      },
-      {
-        name: "Audio Player",
-        description: "Custom music player with 18 tracks",
-        example: {
-          title: "Interactive Music Player",
-          description: "Custom audio controls with playlist management",
-          link: "/music",
-          code: "HTML5 Audio API with React state management",
         },
       },
       {
@@ -467,7 +457,6 @@ export const keyFeatures: string[] = [
   "Dark/Light Mode Toggle",
   "Responsive Design (Mobile-First)",
   "Smooth Animations & Transitions",
-  "Music Player with 18 Tracks",
   "News Aggregator with RSS Feeds",
   "Interactive SVG Animations",
   "Article Modal System",

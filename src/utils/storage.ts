@@ -242,17 +242,9 @@ export const storage = {
 
 // Storage keys for consistent usage across the app
 export const STORAGE_KEYS = {
-  MUSIC_PLAYER_SETTINGS: "musicPlayerSettings",
   THEME_PREFERENCES: "themePreferences",
   USER_PREFERENCES: "userPreferences",
 } as const;
-
-export const musicPlayerStorage = {
-  getSettings: () => storage.get(STORAGE_KEYS.MUSIC_PLAYER_SETTINGS, {}),
-  setSettings: (settings: any) =>
-    storage.set(STORAGE_KEYS.MUSIC_PLAYER_SETTINGS, settings),
-  clearSettings: () => storage.remove(STORAGE_KEYS.MUSIC_PLAYER_SETTINGS),
-};
 
 export const themeStorage = {
   getPreferences: () => storage.get(STORAGE_KEYS.THEME_PREFERENCES, {}),

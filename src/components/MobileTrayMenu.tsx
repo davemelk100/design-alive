@@ -57,7 +57,9 @@ const MobileTrayMenu: React.FC = () => {
     if (location.pathname !== "/") return;
 
     const handleScroll = () => {
-      const sections = content.navigation.links.map((link) => link.id);
+      const sections = content.navigation.links
+        .filter((link) => link.id !== "design-system")
+        .map((link) => link.id);
       let currentSection = "";
 
       for (const sectionId of sections) {
@@ -90,24 +92,26 @@ const MobileTrayMenu: React.FC = () => {
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between max-w-[1200px] mx-auto px-2 py-2">
-          {content.navigation.links.map((link) => {
-            const isActive = isActiveSection(link.id);
-            return (
-              <button
-                key={link.id}
-                onClick={() => handleNavClick(link.id)}
-                className={`flex flex-col items-center gap-1 px-2 py-2 transition-colors ${
-                  isActive
-                    ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                }`}
-                aria-label={`Navigate to ${link.text}`}
-              >
-                {getNavIcon(link.id)}
-                <span className="text-xs font-medium">{link.text}</span>
-              </button>
-            );
-          })}
+          {content.navigation.links
+            .filter((link) => link.id !== "design-system")
+            .map((link) => {
+              const isActive = isActiveSection(link.id);
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => handleNavClick(link.id)}
+                  className={`flex flex-col items-center gap-1 px-2 py-2 transition-colors ${
+                    isActive
+                      ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                  }`}
+                  aria-label={`Navigate to ${link.text}`}
+                >
+                  {getNavIcon(link.id)}
+                  <span className="text-xs font-medium">{link.text}</span>
+                </button>
+              );
+            })}
         </div>
       </nav>
 
