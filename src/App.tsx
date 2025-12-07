@@ -322,7 +322,7 @@ function App() {
                             className="mb-6"
                             showUpArrow={false}
                           />
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                             {content.currentProjects.projects
                               .filter(
                                 (project) =>
@@ -525,7 +525,7 @@ function App() {
                           subtitle={content.stories.subtitle}
                           className="mb-8"
                         />
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                           {content.stories.items
                             .filter(
                               (story) => story.title !== "Design Management"
@@ -613,7 +613,7 @@ function App() {
                             </a>
                           }
                         />
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                           {content.work.projects
                             .filter(
                               (project: any) =>
@@ -692,7 +692,7 @@ function App() {
                             </a>
                           }
                         />
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                           {content.articles.items
                             .filter(
                               (article) =>
