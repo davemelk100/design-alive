@@ -162,10 +162,10 @@
   }
 
   /* Set line-height and font-size for all paragraph tags */
-  p:not(.news-card-excerpt),
-  p.text-sm:not(.news-card-excerpt),
-  p.text-base:not(.news-card-excerpt),
-  p.text-lg:not(.news-card-excerpt),
+  p:not(.news-card-excerpt):not(.hero-intro),
+  p.text-sm:not(.news-card-excerpt):not(.hero-intro),
+  p.text-base:not(.news-card-excerpt):not(.hero-intro),
+  p.text-lg:not(.news-card-excerpt):not(.hero-intro),
   .article-intro p,
   .point-section p,
   .counter-point-section p {
@@ -173,15 +173,28 @@
     font-size: 1.25rem !important;
   }
 
+  /* Hero intro text - allow Tailwind classes to work */
+  .hero-intro {
+    font-size: 1rem !important;
+    line-height: inherit !important;
+  }
+
+  @media (min-width: 640px) {
+    .hero-intro {
+      font-size: 34px !important;
+      line-height: 50px !important;
+    }
+  }
+
   /* Responsive paragraph sizing for small screens */
   @media (max-width: 410px) {
 
-    p,
+    p:not(.hero-intro),
     ul,
     ol,
-    p.text-sm,
-    p.text-base,
-    p.text-lg,
+    p.text-sm:not(.hero-intro),
+    p.text-base:not(.hero-intro),
+    p.text-lg:not(.hero-intro),
     .article-intro p,
     .point-section p,
     .counter-point-section p {

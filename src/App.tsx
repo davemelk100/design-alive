@@ -299,7 +299,7 @@ function App() {
                             transition={{ duration: 1.8, delay: 0.6 }}
                             className="mt-4 sm:mt-6"
                           >
-                            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed text-left">
+                            <p className="hero-intro text-base sm:text-5xl text-muted-foreground leading-relaxed text-left">
                               I'm David Melkonian, a technical product and
                               experience leader with over a decade of work at
                               the intersection of UX, front-end engineering, and

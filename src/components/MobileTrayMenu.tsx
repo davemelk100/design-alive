@@ -91,9 +91,24 @@ const MobileTrayMenu: React.FC = () => {
     <>
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between max-w-[1200px] mx-auto px-2 py-2">
+        <div className="flex items-center justify-between max-w-[1000px] mx-auto px-2 py-2">
           {content.navigation.links
             .filter((link) => link.id !== "design-system")
+            .sort((a, b) => {
+              // Define the desired order: Lab, Storytelling, Design, Articles, Career
+              const order = [
+                "current-projects",
+                "stories",
+                "work",
+                "articles",
+                "career",
+              ];
+              const indexA = order.indexOf(a.id);
+              const indexB = order.indexOf(b.id);
+              return (
+                (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB)
+              );
+            })
             .map((link) => {
               const isActive = isActiveSection(link.id);
               return (
