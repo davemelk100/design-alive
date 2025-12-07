@@ -83,7 +83,7 @@ export default function Archive() {
           {filteredArticles.map((article, index) => (
             <div
               key={index}
-              className="group relative overflow-hidden rounded-lg bg-gray-100/80 p-6 transition-all duration-300 hover:bg-gray-200/80 dark:bg-gray-800/80 dark:hover:bg-gray-700/80 shadow-md"
+              className="group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 transition-all duration-300 hover:bg-gray-200/80 dark:hover:bg-white/15 dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] shadow-md border border-transparent dark:border-white/30"
             >
               <div className="grid md:grid-cols-3 gap-8 items-center">
                 {/* Image */}
@@ -110,7 +110,7 @@ export default function Archive() {
                     <span>Dave Melkonian</span>
                   </div>
 
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                  <p className="text-gray-600 dark:text-white mb-4 line-clamp-3">
                     {article.description}
                   </p>
 

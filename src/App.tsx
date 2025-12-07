@@ -219,7 +219,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-white pb-20 sm:pb-0 flex flex-col relative">
+    <div className="min-h-screen text-gray-900 transition-colors duration-300 dark:text-white pb-20 sm:pb-0 flex flex-col relative">
       {/* Background Video with Parallax - Full Page */}
       <div className="fixed inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
         <video
@@ -228,7 +228,7 @@ function App() {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-30 dark:opacity-20"
+          className="absolute inset-0 w-full h-full object-cover opacity-30 dark:opacity-35"
           style={{
             transform: `translateY(${parallaxOffset}px) scale(1.1)`,
             willChange: "transform",
@@ -236,7 +236,7 @@ function App() {
             height: "100%",
           }}
         >
-          <source src="/video/geo.mp4" type="video/mp4" />
+          <source src="/video/new-geo.mp4" type="video/mp4" />
         </video>
       </div>
 
@@ -369,7 +369,7 @@ function App() {
                         {/* Lab Section */}
                         <div
                           id="current-projects"
-                          className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white dark:bg-gray-900"
+                          className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-transparent"
                         >
                           <SectionHeader
                             title={content.currentProjects.title}
@@ -404,10 +404,10 @@ function App() {
                                       duration: 1.8,
                                       delay: index * 0.2,
                                     }}
-                                    className="group relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                                    className="group relative overflow-hidden rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 flex flex-col shadow-md dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] hover:shadow-lg dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow cursor-pointer"
                                   >
                                     {/* Card Image */}
-                                    <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                    <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-transparent">
                                       {project.title === "JSON AI Prompts" ||
                                       project.title === "User Testing Config" ||
                                       project.title === "RAG App" ? (
@@ -441,7 +441,7 @@ function App() {
                                       <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors">
                                         {project.title}
                                       </h3>
-                                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-2">
                                         {project.description}
                                       </p>
                                     </div>
@@ -473,10 +473,10 @@ function App() {
                                       duration: 0.5,
                                       delay: index * 0.05,
                                     }}
-                                    className="group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer"
+                                    className="group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 hover:shadow-md dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all cursor-pointer"
                                   >
                                     {/* Compact Image */}
-                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-gray-900">
+                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-transparent">
                                       {project.title === "JSON AI Prompts" ||
                                       project.title === "User Testing Config" ||
                                       project.title === "RAG App" ? (
@@ -510,7 +510,7 @@ function App() {
                                       <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
                                         {project.title}
                                       </h3>
-                                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-1 mt-1">
+                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-1 mt-1">
                                         {project.description}
                                       </p>
                                     </div>
@@ -573,7 +573,7 @@ function App() {
                     className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                   >
                     <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
-                      <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white dark:bg-gray-900">
+                      <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-transparent">
                         <SectionHeader
                           title={content.stories.title}
                           subtitle={content.stories.subtitle}
@@ -606,12 +606,12 @@ function App() {
                                     duration: 2.4,
                                     delay: index * 0.2,
                                   }}
-                                  className={`group relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col shadow-md hover:shadow-lg transition-shadow ${
+                                  className={`group relative overflow-hidden rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 flex flex-col shadow-md dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] hover:shadow-lg dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow ${
                                     story.hasModal ? "cursor-pointer" : ""
                                   }`}
                                 >
                                   {/* Card Image */}
-                                  <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                  <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-transparent">
                                     {story.image ? (
                                       <img
                                         src={story.image}
@@ -634,7 +634,7 @@ function App() {
                                       {story.title}
                                     </h3>
                                     {story.subtitle && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-2">
                                         {story.subtitle}
                                       </p>
                                     )}
@@ -667,12 +667,12 @@ function App() {
                                     duration: 0.5,
                                     delay: index * 0.05,
                                   }}
-                                  className={`group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all ${
+                                  className={`group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 hover:shadow-md dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all ${
                                     story.hasModal ? "cursor-pointer" : ""
                                   }`}
                                 >
                                   {/* Compact Image */}
-                                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-gray-900">
+                                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-transparent">
                                     {story.image ? (
                                       <img
                                         src={story.image}
@@ -695,7 +695,7 @@ function App() {
                                       {story.title}
                                     </h3>
                                     {story.subtitle && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-1 mt-1">
+                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-1 mt-1">
                                         {story.subtitle}
                                       </p>
                                     )}
@@ -719,7 +719,7 @@ function App() {
                     className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                   >
                     <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
-                      <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white dark:bg-gray-900">
+                      <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-transparent">
                         <SectionHeader
                           title="Design"
                           subtitle={content.work.subtitle}
@@ -759,10 +759,10 @@ function App() {
                                     duration: 1.8,
                                     delay: index * 0.2,
                                   }}
-                                  className="group relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                                  className="group relative overflow-hidden rounded-lg bg-transparent dark:backdrop-blur-xl dark:border-white/20 border border-gray-200 dark:border-gray-700 flex flex-col shadow-md hover:shadow-lg transition-shadow cursor-pointer"
                                 >
                                   {/* Card Image */}
-                                  <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                  <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-transparent">
                                     <img
                                       src={project.image}
                                       alt={project.alt || project.title}
@@ -777,7 +777,7 @@ function App() {
                                       {project.title}
                                     </h3>
                                     {project.description && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-2">
                                         {project.description}
                                       </p>
                                     )}
@@ -808,7 +808,7 @@ function App() {
                                   className="group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer"
                                 >
                                   {/* Compact Image */}
-                                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-gray-900">
+                                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-transparent">
                                     <img
                                       src={project.image}
                                       alt={project.alt || project.title}
@@ -823,7 +823,7 @@ function App() {
                                       {project.title}
                                     </h3>
                                     {project.description && (
-                                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-1 mt-1">
+                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-1 mt-1">
                                         {project.description}
                                       </p>
                                     )}
@@ -845,7 +845,7 @@ function App() {
                     className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                   >
                     <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
-                      <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white dark:bg-gray-900">
+                      <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-transparent">
                         <SectionHeader
                           title="Articles"
                           subtitle={content.articles.subtitle}
@@ -917,10 +917,10 @@ function App() {
                                       duration: 1.8,
                                       delay: index * 0.2,
                                     }}
-                                    className="group relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex flex-col shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                                    className="group relative overflow-hidden rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 flex flex-col shadow-md dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] hover:shadow-lg dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow cursor-pointer"
                                   >
                                     {/* Card Image */}
-                                    <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-gray-900">
+                                    <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-transparent">
                                       <img
                                         src={`${
                                           (article as any).cardImage ||
@@ -938,7 +938,7 @@ function App() {
                                         {article.title}
                                       </h3>
                                       {article.description && (
-                                        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                        <p className="text-sm text-gray-600 dark:text-white line-clamp-2">
                                           {article.description}
                                         </p>
                                       )}
@@ -993,10 +993,10 @@ function App() {
                                       duration: 0.5,
                                       delay: index * 0.05,
                                     }}
-                                    className="group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer"
+                                    className="group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 hover:shadow-md dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all cursor-pointer"
                                   >
                                     {/* Compact Image */}
-                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-gray-900">
+                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-transparent">
                                       <img
                                         src={`${
                                           (article as any).cardImage ||
@@ -1014,7 +1014,7 @@ function App() {
                                         {article.title}
                                       </h3>
                                       {article.description && (
-                                        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-1 mt-1">
+                                        <p className="text-sm text-gray-600 dark:text-white line-clamp-1 mt-1">
                                           {article.description}
                                         </p>
                                       )}

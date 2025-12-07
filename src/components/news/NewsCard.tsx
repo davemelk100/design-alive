@@ -1,6 +1,10 @@
 import { ExternalLink } from "lucide-react";
 import { NewsItem, RSSFeed, ViewMode } from "../../types/news";
-import { getCategoryIcon, getFeedCategory, truncateText } from "../../utils/newsUtils";
+import {
+  getCategoryIcon,
+  getFeedCategory,
+  truncateText,
+} from "../../utils/newsUtils";
 
 interface NewsCardProps {
   feed: RSSFeed;
@@ -59,13 +63,11 @@ export const NewsCard = ({
       onDragOver={onDragOver}
       onDrop={(e) => onDrop?.(e, feed.id)}
       onDragEnd={onDragEnd}
-      className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border-l-4 ${
+      className={`bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] rounded-lg shadow-lg dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all duration-300 flex flex-col border-l-4 ${
         viewMode === "grid"
           ? "min-h-[650px] h-auto"
           : "w-full h-auto justify-center relative"
-      } ${
-        isDragging ? "opacity-50 scale-95" : ""
-      } ${
+      } ${isDragging ? "opacity-50 scale-95" : ""} ${
         isDropTarget ? "border-2 border-dashed border-blue-400" : ""
       }`}
       style={{
@@ -93,10 +95,8 @@ export const NewsCard = ({
           }`}
         >
           <h4
-            className={`font-normal text-gray-700 dark:text-gray-300 uppercase tracking-wide flex-shrink-0 ${
-              viewMode === "list"
-                ? "text-xs sm:text-sm"
-                : "text-base"
+            className={`font-normal text-gray-700 dark:text-white uppercase tracking-wide flex-shrink-0 ${
+              viewMode === "list" ? "text-xs sm:text-sm" : "text-base"
             }`}
           >
             {feed.name}
@@ -132,7 +132,7 @@ export const NewsCard = ({
 
         {/* Article Title - Show in grid view only */}
         {viewMode === "grid" && (
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-300 leading-tight mb-2">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight mb-2">
             <a
               href={currentItem.url}
               target="_blank"
@@ -149,7 +149,7 @@ export const NewsCard = ({
         {viewMode === "grid" && currentItem.excerpt && (
           <div className="mt-3 flex items-center">
             <p
-              className="text-xs text-gray-600 dark:text-gray-400 news-card-excerpt"
+              className="text-xs text-gray-600 dark:text-white news-card-excerpt"
               style={{
                 lineHeight: "normal !important",
               }}
@@ -170,8 +170,7 @@ export const NewsCard = ({
             : "h-96"
         }`}
       >
-        {currentItem.image &&
-        !currentItem.image.startsWith("placeholder:") ? (
+        {currentItem.image && !currentItem.image.startsWith("placeholder:") ? (
           <img
             src={currentItem.image}
             alt={currentItem.title}
@@ -187,7 +186,7 @@ export const NewsCard = ({
             }}
           />
         ) : (
-          <div className="image-placeholder w-full h-full rounded-lg flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+          <div className="image-placeholder w-full h-full rounded-lg flex items-center justify-center bg-gray-100 dark:bg-transparent">
             <span className="text-gray-600 dark:text-gray-300 font-bold text-4xl">
               {icon}
             </span>
@@ -197,4 +196,3 @@ export const NewsCard = ({
     </div>
   );
 };
-
