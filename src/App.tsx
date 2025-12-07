@@ -225,7 +225,7 @@ function App() {
                 <>
                   {/* Hero Section */}
                   <section className="py-4 sm:py-4xl:py-4 relative">
-                    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
                       <div className="grid grid-cols-1 gap-6 sm:gap-8">
                         {/* Hero Content */}
                         <div className="pt-4 rounded-lg">
@@ -256,6 +256,22 @@ function App() {
                           >
                             {content.navigation.links
                               .filter((link) => link.id !== "design-system")
+                              .sort((a, b) => {
+                                // Define the desired order: Lab, Storytelling, Design, Articles, Career
+                                const order = [
+                                  "current-projects",
+                                  "stories",
+                                  "work",
+                                  "articles",
+                                  "career",
+                                ];
+                                const indexA = order.indexOf(a.id);
+                                const indexB = order.indexOf(b.id);
+                                return (
+                                  (indexA === -1 ? 999 : indexA) -
+                                  (indexB === -1 ? 999 : indexB)
+                                );
+                              })
                               .map((link) => (
                                 <button
                                   key={link.id}
@@ -317,7 +333,7 @@ function App() {
 
                   {/* Lab Section */}
                   <section className="py-2 sm:py-3 lg:py-4 xl:py-6 relative">
-                    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
                       <div className="grid grid-cols-1 gap-6 sm:gap-8">
                         {/* Lab Section */}
                         <div
@@ -482,7 +498,7 @@ function App() {
                   {/* Testimonials Section */}
                   {/**
                 <section id="testimonials" className="py-12 sm:py-16 lg:py-20">
-                  <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+                  <div className="max-w-[1000px] mx-auto px-4 sm:px-8">
                     <SectionHeader
                       title={content.testimonials.title}
                       subtitle={content.testimonials.subtitle}
@@ -520,90 +536,12 @@ function App() {
                 </section>
                 */}
 
-                  {/* Career Timeline Section */}
-                  <section
-                    id="career"
-                    className="py-4 sm:py-6 lg:py-8 xl:py-12"
-                  >
-                    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-                      <SectionHeader
-                        title={content.career.title}
-                        subtitle={content.career.subtitle}
-                        className="mb-8 sm:mb-6"
-                        icon={
-                          <a
-                            href={content.navigation.social.linkedin.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
-                            aria-label="LinkedIn"
-                          >
-                            <LinkedInLogoIcon className="h-5 w-5 text-black" />
-                          </a>
-                        }
-                      />
-                      <div className="space-y-8">
-                        {content.career.positions.map((position) => (
-                          <div
-                            key={position.title + position.period}
-                            className=""
-                          >
-                            <h3 className="text-lg font-semibold mb-1 dark:text-white title-font">
-                              {position.title}
-                            </h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 font-medium">
-                              {position.company}
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                              {position.period}
-                            </p>
-                            {Array.isArray(position.description) ? (
-                              <ul className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
-                                {position.description.map((item, index) => (
-                                  <li key={index}>{item}</li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                                {position.description}
-                              </p>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                      {/* Certifications & Education */}
-                      <div className="mt-4 pt-2 max-w-3xl">
-                        <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
-                          Certifications
-                        </div>
-                        <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4">
-                          <li>Certified ScrumMaster (Scrum Alliance)</li>
-                          <li>
-                            Certified Usability Analyst (Human Factors
-                            International)
-                          </li>
-                          <li>ITIL Foundation Certificate (Axelos)</li>
-                        </ul>
-                        <div className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
-                          Education
-                        </div>
-                        <div className="text-gray-700 dark:text-gray-300">
-                          Oakland University | Rochester MI
-                          <br />
-                          Bachelor of Arts in English
-                          <br />
-                          Minor in Public Relations
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-
                   {/* Storytelling Section */}
                   <section
                     id="stories"
                     className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                   >
-                    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
                       <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white dark:bg-gray-900">
                         <SectionHeader
                           title={content.stories.title}
@@ -749,7 +687,7 @@ function App() {
                     id="work"
                     className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                   >
-                    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
                       <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white dark:bg-gray-900">
                         <SectionHeader
                           title="Design"
@@ -875,7 +813,7 @@ function App() {
                     id="articles"
                     className="py-4 sm:py-6 lg:py-8 xl:py-12 relative"
                   >
-                    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
                       <div className="border border-gray-300 dark:border-gray-600 p-4 sm:p-6 rounded-lg relative overflow-hidden bg-white dark:bg-gray-900">
                         <SectionHeader
                           title="Articles"
@@ -1062,9 +1000,85 @@ function App() {
                     </div>
                   </section>
 
+                  {/* Career Timeline Section */}
+                  <section
+                    id="career"
+                    className="py-4 sm:py-6 lg:py-8 xl:py-12"
+                  >
+                    <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+                      <SectionHeader
+                        title={content.career.title}
+                        subtitle={content.career.subtitle}
+                        className="mb-8 sm:mb-6"
+                        icon={
+                          <a
+                            href={content.navigation.social.linkedin.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                            aria-label="LinkedIn"
+                          >
+                            <LinkedInLogoIcon className="h-5 w-5 text-black" />
+                          </a>
+                        }
+                      />
+                      <div className="space-y-8">
+                        {content.career.positions.map((position) => (
+                          <div
+                            key={position.title + position.period}
+                            className=""
+                          >
+                            <h3 className="text-lg font-semibold mb-1 dark:text-white title-font">
+                              {position.title}
+                            </h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 font-medium">
+                              {position.company}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                              {position.period}
+                            </p>
+                            {Array.isArray(position.description) ? (
+                              <ul className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
+                                {position.description.map((item, index) => (
+                                  <li key={index}>{item}</li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                                {position.description}
+                              </p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      {/* Certifications & Education */}
+                      <div className="mt-4 pt-2 max-w-3xl">
+                        <h3 className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
+                          Certifications
+                        </h3>
+                        <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4">
+                          <li>Certified ScrumMaster (Scrum Alliance)</li>
+                          <li>
+                            Certified Usability Analyst (Human Factors
+                            International)
+                          </li>
+                          <li>ITIL Foundation Certificate (Axelos)</li>
+                        </ul>
+                        <h3 className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
+                          Education
+                        </h3>
+                        <ul className="list-disc list-inside text-gray-700 dark:text-gray-300">
+                          <li>Oakland University | Rochester MI</li>
+                          <li>Bachelor of Arts in English</li>
+                          <li>Minor in Public Relations</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </section>
+
                   {/* Personal Section */}
                   {/* <section id="personal" className="py-12 sm:py-16 lg:py-20">
-                  <div className="max-w-[1200px] mx-auto px-4 sm:px-8">
+                  <div className="max-w-[1000px] mx-auto px-4 sm:px-8">
                     <SectionHeader
                       title="Personal"
                       subtitle="Personal projects and interests"
@@ -1157,7 +1171,7 @@ function App() {
                       id="design-system"
                       className="py-4 sm:py-6 lg:py-8 xl:py-12"
                     >
-                      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+                      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
                         <SectionHeader
                           title="Design System"
                           subtitle="Component library and design tokens"

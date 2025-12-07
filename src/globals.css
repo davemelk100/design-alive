@@ -115,7 +115,7 @@
 
   /* Make button text same size as body text */
   button {
-    font-size: 1rem !important;
+    font-size: 1.25rem !important;
     line-height: 1.7 !important;
   }
 
@@ -152,6 +152,15 @@
     }
   }
 
+  /* Set font-size for all non-title text elements */
+  p,
+  ul,
+  ol,
+  a,
+  button {
+    font-size: 1.25rem !important;
+  }
+
   /* Set line-height and font-size for all paragraph tags */
   p:not(.news-card-excerpt),
   p.text-sm:not(.news-card-excerpt),
@@ -161,13 +170,15 @@
   .point-section p,
   .counter-point-section p {
     line-height: 1.5 !important;
-    font-size: 1rem !important;
+    font-size: 1.25rem !important;
   }
 
   /* Responsive paragraph sizing for small screens */
   @media (max-width: 410px) {
 
     p,
+    ul,
+    ol,
     p.text-sm,
     p.text-base,
     p.text-lg,
@@ -219,6 +230,8 @@
     }
 
     p,
+    ul,
+    ol,
     span,
     div,
     button,
