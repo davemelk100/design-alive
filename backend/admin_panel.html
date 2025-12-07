@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Portfolio Content Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .tab:hover {
+            color: #667eea;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        tr:hover {
+            background: #f9fafb;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h2 {
+            font-size: 1.5rem;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+        
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-visible {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .badge-hidden {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-actions">
+            <div>
+                <h1>Portfolio Admin Panel</h1>
+                <p style="opacity: 0.9; font-size: 0.9rem;">Content Management System</p>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="tabs" id="tabs"></div>
+        
+        <div id="content-sections"></div>
+    </div>
+    
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Edit Item</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = window.location.origin;
+        let authToken = localStorage.getItem('admin_token');
+        
+        // Content types configuration
+        const contentTypes = {
+            'site-info': {
+                name: 'Site Info',
+                endpoint: '/api/content/site-info',
+                fields: [
+                    { key: 'title', label: 'Title', type: 'text', required: true },
+                    { key: 'subtitle', label: 'Subtitle', type: 'text', required: true },
+                    { key: 'description', label: 'Description', type: 'textarea' },
+                    { key: 'scroll_text', label: 'Scroll Text', type: 'text' }
+                ],
+                isSingle: true
+            },
+            'navigation-links': {
+                name: 'Navigation Links',
+                endpoint: '/api/content/navigation-links',
+                fields: [
+                    { key: 'link_id', label: 'Link ID', type: 'text', required: true },
+                    { key: 'text', label: 'Text', type: 'text', required: true },
+                    { key: 'order', label: 'Order', type: 'number', default: 0 }
+                ],
+                idField: 'link_id'
+            },
+            'social-links': {
+                name: 'Social Links',
+                endpoint: '/api/content/social-links',
+                fields: [
+                    { key: 'platform', label: 'Platform', type: 'text', required: true },
+                    { key: 'text', label: 'Text', type: 'text', required: true },
+                    { key: 'url', label: 'URL', type: 'text', required: true }
+                ],
+                idField: 'platform'
+            },
+            'work-projects': {
+                name: 'Work Projects',
+                endpoint: '/api/content/work-projects',
+                fields: [
+                    { key: 'title', label: 'Title', type: 'text', required: true },
+                    { key: 'description', label: 'Description', type: 'textarea' },
+                    { key: 'categories', label: 'Categories', type: 'text' },
+                    { key: 'image', label: 'Image URL', type: 'text' },
+                    { key: 'alt', label: 'Alt Text', type: 'text' },
+                    { key: 'url', label: 'URL', type: 'text' },
+                    { key: 'visible', label: 'Visible', type: 'checkbox', default: true },
+                    { key: 'order', label: 'Order', type: 'number', default: 0 }
+                ]
+            },
+            'articles': {
+                name: 'Articles',
+                endpoint: '/api/content/articles',
+                fields: [
+                    { key: 'title', label: 'Title', type: 'text', required: true },
+                    { key: 'description', label: 'Description', type: 'textarea' },
+                    { key: 'content', label: 'Content', type: 'textarea' },
+                    { key: 'date', label: 'Date', type: 'date', required: true },
+                    { key: 'image', label: 'Image URL', type: 'text' },
+                    { key: 'url', label: 'URL', type: 'text' },
+                    { key: 'visible', label: 'Visible', type: 'checkbox', default: true },
+                    { key: 'order', type: 'number', default: 0 }
+                ]
+            },
+            'stories': {
+                name: 'Stories',
+                endpoint: '/api/content/stories',
+                fields: [
+                    { key: 'title', label: 'Title', type: 'text', required: true },
+                    { key: 'subtitle', label: 'Subtitle', type: 'text' },
+                    { key: 'content', label: 'Content', type: 'textarea' },
+                    { key: 'image', label: 'Image URL', type: 'text' },
+                    { key: 'has_modal', label: 'Has Modal', type: 'checkbox', default: false },
+                    { key: 'visible', label: 'Visible', type: 'checkbox', default: true },
+                    { key: 'order', label: 'Order', type: 'number', default: 0 }
+                ]
+            },
+            'career-positions': {
+                name: 'Career Positions',
+                endpoint: '/api/content/career-positions',
+                fields: [
+                    { key: 'title', label: 'Title', type: 'text', required: true },
+                    { key: 'company', label: 'Company', type: 'text', required: true },
+                    { key: 'period', label: 'Period', type: 'text', required: true },
+                    { key: 'description', label: 'Description', type: 'textarea' },
+                    { key: 'order', label: 'Order', type: 'number', default: 0 }
+                ]
+            },
+            'current-projects': {
+                name: 'Current Projects',
+                endpoint: '/api/content/current-projects',
+                fields: [
+                    { key: 'title', label: 'Title', type: 'text', required: true },
+                    { key: 'description', label: 'Description', type: 'textarea' },
+                    { key: 'demo', label: 'Demo URL', type: 'text' },
+                    { key: 'visible', label: 'Visible', type: 'checkbox', default: true },
+                    { key: 'order', label: 'Order', type: 'number', default: 0 }
+                ]
+            },
+            'testimonials': {
+                name: 'Testimonials',
+                endpoint: '/api/content/testimonials',
+                fields: [
+                    { key: 'name', label: 'Name', type: 'text', required: true },
+                    { key: 'role', label: 'Role', type: 'text' },
+                    { key: 'company', label: 'Company', type: 'text' },
+                    { key: 'quote', label: 'Quote', type: 'textarea', required: true },
+                    { key: 'visible', label: 'Visible', type: 'checkbox', default: true },
+                    { key: 'order', label: 'Order', type: 'number', default: 0 }
+                ]
+            }
+        };
+        
+        // Check authentication
+        if (!authToken) {
+            window.location.href = '/login';
+        }
+        
+        // Initialize
+        init();
+        
+        async function init() {
+            // Create tabs
+            const tabsContainer = document.getElementById('tabs');
+            const contentSections = document.getElementById('content-sections');
+            
+            let firstTab = true;
+            for (const [key, config] of Object.entries(contentTypes)) {
+                // Create tab
+                const tab = document.createElement('button');
+                tab.className = `tab ${firstTab ? 'active' : ''}`;
+                tab.textContent = config.name;
+                tab.onclick = () => switchTab(key);
+                tabsContainer.appendChild(tab);
+                
+                // Create content section
+                const section = document.createElement('div');
+                section.className = `content-section ${firstTab ? 'active' : ''}`;
+                section.id = `section-${key}`;
+                contentSections.appendChild(section);
+                
+                if (firstTab) {
+                    loadContent(key);
+                    firstTab = false;
+                }
+            }
+        }
+        
+        function switchTab(key) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update sections
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(`section-${key}`).classList.add('active');
+            
+            // Load content if not loaded
+            const section = document.getElementById(`section-${key}`);
+            if (!section.dataset.loaded) {
+                loadContent(key);
+            }
+        }
+        
+        async function loadContent(type) {
+            const section = document.getElementById(`section-${type}`);
+            const config = contentTypes[type];
+            
+            section.innerHTML = '<p>Loading...</p>';
+            
+            try {
+                const response = await fetch(`${API_BASE}${config.endpoint}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                const data = await response.json();
+                const items = Array.isArray(data) ? data : [data];
+                
+                renderContent(type, items, section);
+                section.dataset.loaded = 'true';
+            } catch (error) {
+                section.innerHTML = `<div class="alert alert-error">Error loading content: ${error.message}</div>`;
+            }
+        }
+        
+        function renderContent(type, items, container) {
+            const config = contentTypes[type];
+            const idField = config.idField || 'id';
+            
+            let html = `
+                <div class="section-header">
+                    <h2>${config.name}</h2>
+                    <button class="btn btn-primary" onclick="openCreateModal('${type}')">+ Add New</button>
+                </div>
+            `;
+            
+            if (items.length === 0) {
+                html += '<div class="empty-state">No items found. Click "Add New" to create one.</div>';
+            } else {
+                html += '<div class="table-container"><table><thead><tr>';
+                
+                // Table headers
+                config.fields.forEach(field => {
+                    html += `<th>${field.label || field.key}</th>`;
+                });
+                html += '<th>Actions</th></tr></thead><tbody>';
+                
+                // Table rows
+                items.forEach(item => {
+                    html += '<tr>';
+                    config.fields.forEach(field => {
+                        let value = item[field.key] || '';
+                        if (field.type === 'checkbox') {
+                            value = item[field.key] ? '<span class="badge badge-visible">Visible</span>' : '<span class="badge badge-hidden">Hidden</span>';
+                        } else if (field.type === 'textarea' && value.length > 50) {
+                            value = value.substring(0, 50) + '...';
+                        }
+                        html += `<td>${value}</td>`;
+                    });
+                    html += `<td class="actions">
+                        <button class="btn btn-secondary btn-small" onclick="openEditModal('${type}', ${JSON.stringify(item).replace(/"/g, '&quot;')})">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteItem('${type}', '${item[idField]}')">Delete</button>
+                    </td></tr>`;
+                });
+                
+                html += '</tbody></table></div>';
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function openCreateModal(type) {
+            const config = contentTypes[type];
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            
+            modalTitle.textContent = `Create ${config.name.slice(0, -1)}`;
+            
+            let formHtml = '<form id="item-form">';
+            config.fields.forEach(field => {
+                formHtml += `<div class="form-group">
+                    <label>${field.label || field.key}${field.required ? ' *' : ''}</label>`;
+                
+                if (field.type === 'textarea') {
+                    formHtml += `<textarea name="${field.key}" ${field.required ? 'required' : ''}>${field.default || ''}</textarea>`;
+                } else if (field.type === 'checkbox') {
+                    formHtml += `<div class="checkbox-group">
+                        <input type="checkbox" name="${field.key}" ${field.default ? 'checked' : ''}>
+                        <label>${field.label || field.key}</label>
+                    </div>`;
+                } else {
+                    const inputType = field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text';
+                    formHtml += `<input type="${inputType}" name="${field.key}" value="${field.default || ''}" ${field.required ? 'required' : ''}>`;
+                }
+                
+                formHtml += '</div>';
+            });
+            
+            formHtml += `
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>`;
+            
+            modalBody.innerHTML = formHtml;
+            modal.classList.add('active');
+            
+            document.getElementById('item-form').onsubmit = (e) => {
+                e.preventDefault();
+                createItem(type);
+            };
+        }
+        
+        function openEditModal(type, item) {
+            const config = contentTypes[type];
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalBody = document.getElementById('modal-body');
+            const idField = config.idField || 'id';
+            
+            modalTitle.textContent = `Edit ${config.name.slice(0, -1)}`;
+            
+            let formHtml = '<form id="item-form">';
+            config.fields.forEach(field => {
+                const value = item[field.key] || field.default || '';
+                formHtml += `<div class="form-group">
+                    <label>${field.label || field.key}${field.required ? ' *' : ''}</label>`;
+                
+                if (field.type === 'textarea') {
+                    formHtml += `<textarea name="${field.key}" ${field.required ? 'required' : ''}>${value}</textarea>`;
+                } else if (field.type === 'checkbox') {
+                    formHtml += `<div class="checkbox-group">
+                        <input type="checkbox" name="${field.key}" ${value ? 'checked' : ''}>
+                        <label>${field.label || field.key}</label>
+                    </div>`;
+                } else {
+                    const inputType = field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text';
+                    formHtml += `<input type="${inputType}" name="${field.key}" value="${value}" ${field.required ? 'required' : ''}>`;
+                }
+                
+                formHtml += '</div>';
+            });
+            
+            formHtml += `
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>`;
+            
+            modalBody.innerHTML = formHtml;
+            modal.classList.add('active');
+            
+            document.getElementById('item-form').onsubmit = (e) => {
+                e.preventDefault();
+                updateItem(type, item[idField]);
+            };
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+        
+        async function createItem(type) {
+            const config = contentTypes[type];
+            const form = document.getElementById('item-form');
+            const formData = new FormData(form);
+            
+            const data = {};
+            config.fields.forEach(field => {
+                if (field.type === 'checkbox') {
+                    data[field.key] = formData.get(field.key) === 'on';
+                } else if (field.type === 'number') {
+                    const value = formData.get(field.key);
+                    data[field.key] = value ? parseInt(value) : (field.default || 0);
+                } else {
+                    data[field.key] = formData.get(field.key) || '';
+                }
+            });
+            
+            try {
+                const response = await fetch(`${API_BASE}${config.endpoint}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to create item');
+                }
+                
+                closeModal();
+                loadContent(type);
+                showAlert('Item created successfully!', 'success');
+            } catch (error) {
+                showAlert(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function updateItem(type, id) {
+            const config = contentTypes[type];
+            const form = document.getElementById('item-form');
+            const formData = new FormData(form);
+            const idField = config.idField || 'id';
+            
+            const data = {};
+            config.fields.forEach(field => {
+                if (field.type === 'checkbox') {
+                    data[field.key] = formData.get(field.key) === 'on';
+                } else if (field.type === 'number') {
+                    const value = formData.get(field.key);
+                    data[field.key] = value ? parseInt(value) : (field.default || 0);
+                } else {
+                    data[field.key] = formData.get(field.key) || '';
+                }
+            });
+            
+            try {
+                const endpoint = config.isSingle 
+                    ? config.endpoint 
+                    : `${config.endpoint}/${id}`;
+                
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to update item');
+                }
+                
+                closeModal();
+                loadContent(type);
+                showAlert('Item updated successfully!', 'success');
+            } catch (error) {
+                showAlert(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function deleteItem(type, id) {
+            if (!confirm('Are you sure you want to delete this item?')) {
+                return;
+            }
+            
+            const config = contentTypes[type];
+            
+            try {
+                const endpoint = `${config.endpoint}/${id}`;
+                const response = await fetch(`${API_BASE}${endpoint}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                if (response.status === 401) {
+                    logout();
+                    return;
+                }
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to delete item');
+                }
+                
+                loadContent(type);
+                showAlert('Item deleted successfully!', 'success');
+            } catch (error) {
+                showAlert(`Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            document.querySelector('.container').insertBefore(alert, document.querySelector('.tabs'));
+            
+            setTimeout(() => alert.remove(), 3000);
+        }
+        
+        function logout() {
+            localStorage.removeItem('admin_token');
+            localStorage.removeItem('token_type');
+            window.location.href = '/login';
+        }
+        
+        // Close modal on outside click
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
+

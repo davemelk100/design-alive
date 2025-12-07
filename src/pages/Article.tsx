@@ -43,7 +43,7 @@ export default function Article() {
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Articles
           </Link>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold dark:text-white mb-6 font-card">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 font-card">
             Article Not Found
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
@@ -78,7 +78,7 @@ export default function Article() {
         return (
           <h2
             key={`heading-${index}`}
-            className="text-xl font-bold mt-8 mb-4 dark:text-white"
+            className="text-xl font-bold mt-8 mb-4 text-gray-900 dark:text-white"
           >
             {paragraph.replace("##", "").trim()}
           </h2>
@@ -99,7 +99,7 @@ export default function Article() {
                 "
               </span>
             </div>
-            <p key={`paragraph-${index}`} className="mb-4 dark:text-gray-300">
+            <p key={`paragraph-${index}`} className="mb-4 text-gray-700 dark:text-gray-300">
               {paragraph}
             </p>
           </>
@@ -108,7 +108,7 @@ export default function Article() {
       if (paragraph.includes("if your product has 10,000 users")) {
         return (
           <>
-            <p key={`paragraph-${index}`} className="mb-4 dark:text-gray-300">
+            <p key={`paragraph-${index}`} className="mb-4 text-gray-700 dark:text-gray-300">
               {paragraph}
             </p>
             <div
@@ -148,7 +148,7 @@ export default function Article() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Articles
         </Link>
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold dark:text-white mb-6 font-card">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 font-card">
           {article.title}
         </h1>
         <div className="mb-6">

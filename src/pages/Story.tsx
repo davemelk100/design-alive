@@ -68,25 +68,27 @@ const Story = () => {
                 transition={{ duration: 1.8, delay: 0.4 }}
                 className="hidden lg:flex flex-wrap justify-start gap-2 sm:gap-3 mb-2 sm:mb-4"
               >
-                {content.navigation.links.map((link) => (
-                  <button
-                    key={link.id}
-                    onClick={() => {
-                      navigate("/");
-                      setTimeout(() => {
-                        const element = document.getElementById(link.id);
-                        if (element) {
-                          element.scrollIntoView({
-                            behavior: "smooth",
-                          });
-                        }
-                      }, 100);
-                    }}
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    {link.text}
-                  </button>
-                ))}
+                {content.navigation.links
+                  .filter((link) => link.id !== "design-system")
+                  .map((link) => (
+                    <button
+                      key={link.id}
+                      onClick={() => {
+                        navigate("/");
+                        setTimeout(() => {
+                          const element = document.getElementById(link.id);
+                          if (element) {
+                            element.scrollIntoView({
+                              behavior: "smooth",
+                            });
+                          }
+                        }, 100);
+                      }}
+                      className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      {link.text}
+                    </button>
+                  ))}
               </motion.div>
             </div>
           </div>

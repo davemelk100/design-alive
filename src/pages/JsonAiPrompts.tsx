@@ -5,6 +5,7 @@ import { ArrowLeft, Copy, Check } from "lucide-react";
 import { content } from "../content";
 import MobileTrayMenu from "../components/MobileTrayMenu";
 import { useState } from "react";
+import { ADMIN_PANEL_URL } from "../config/api";
 
 const JsonAiPrompts = () => {
   const navigate = useNavigate();
@@ -23,44 +24,290 @@ const JsonAiPrompts = () => {
   };
 
   const handleCopyJson = async () => {
-    const jsonText = `{
-  "application": {
-    "name": "Dave Melkonian Portfolio",
-    "type": "Personal Portfolio Website",
-    "description": "A modern, responsive portfolio website for Dave Melkonian, a Senior UX and Product Designer with 15+ years of experience. Features design work showcase, articles, music player, interactive animations, and multiple specialized pages.",
-    "version": "0.1.0",
-    "framework": "React + TypeScript + Vite",
-    "styling": "Tailwind CSS + Framer Motion",
-    "deployment": "Netlify with serverless functions"
-  },
-  "architecture": {
-    "frontend": {
-      "framework": "React 18",
-      "language": "TypeScript",
-      "buildTool": "Vite",
-      "routing": "React Router DOM v7",
-      "stateManagement": "React Hooks (useState, useEffect, useContext)",
-      "animations": "Framer Motion",
-      "styling": "Tailwind CSS",
-      "uiComponents": "Radix UI + Custom Components",
-      "forms": "React Hook Form + Zod validation",
-      "icons": "Lucide React + Radix UI Icons"
-    },
-    "backend": {
-      "platform": "Netlify Functions",
-      "database": "Neon PostgreSQL with Drizzle ORM",
-      "authentication": "NextAuth.js",
-      "storage": "LocalStorage with migration system",
-      "apis": "RSS proxy, site configuration, content management"
-    },
-    "deployment": {
-      "platform": "Netlify",
-      "staticSite": true,
-      "serviceWorker": true,
-      "functions": "Serverless functions for dynamic content"
-    }
-  }
-}`;
+    const jsonText = JSON.stringify(
+      {
+        application: {
+          name: "Dave Melkonian Portfolio",
+          type: "Personal Portfolio Website",
+          description:
+            "A modern, responsive portfolio website for Dave Melkonian, a Senior UX and Product Designer with 15+ years of experience. Features design work showcase, articles, music player, interactive animations, and multiple specialized pages.",
+          version: "0.1.0",
+          framework: "React + TypeScript + Vite",
+          styling: "Tailwind CSS + Framer Motion",
+          deployment: "Netlify (frontend) + Python FastAPI (backend)",
+        },
+        architecture: {
+          frontend: {
+            framework: "React 18",
+            language: "TypeScript",
+            buildTool: "Vite",
+            routing: "React Router DOM v7",
+            stateManagement: "React Hooks (useState, useEffect, useContext)",
+            animations: "Framer Motion",
+            styling: "Tailwind CSS",
+            uiComponents: "Radix UI + Custom Components",
+            forms: "React Hook Form + Zod validation",
+            icons: "Lucide React + Radix UI Icons",
+          },
+          backend: {
+            platform: "Python FastAPI",
+            database: "SQLite with SQLAlchemy ORM",
+            authentication: "JWT tokens",
+            storage: "SQLite database + LocalStorage for frontend preferences",
+            apis: "RSS proxy, content management, admin panel",
+          },
+          deployment: {
+            platform: "Netlify (frontend), Local/Cloud (backend)",
+            staticSite: true,
+            serviceWorker: true,
+            adminPanel: "FastAPI backend with HTML admin interface",
+          },
+        },
+        siteStructure: {
+          mainPage: {
+            path: "/",
+            sections: content.navigation.links
+              .filter((link) => link.id !== "design-system")
+              .map((link) => ({
+                id: link.id,
+                text: link.text,
+              })),
+          },
+          specializedPages: {
+            "/json": {
+              title: "JSON AI Prompts",
+              description: "Structured AI prompt engineering examples",
+              features: ["Current site specification", "Application examples"],
+            },
+            "/specs": {
+              title: "Technical Specifications",
+              description:
+                "Complete technical stack and methodology documentation",
+              sections: [
+                "Technology Stack",
+                "Development Methodologies",
+                "Key Features",
+                "Performance Metrics",
+              ],
+            },
+            "/music": {
+              title: "Music Player",
+              description:
+                "Full-featured audio player with instrumental tracks",
+              features: [
+                "18 tracks",
+                "8 instrumental versions",
+                "Playlist management",
+              ],
+            },
+            "/news": {
+              title: "News Aggregator",
+              description: "RSS feed aggregator with category filtering",
+              sources: [
+                "Ars Technica",
+                "Reuters",
+                "Breitbart",
+                "Lambgoat",
+                "No Echo",
+              ],
+            },
+            "/archive": {
+              title: "Articles Archive",
+              description: "Complete archive of all articles with search",
+            },
+            "/login": {
+              title: "Admin Login",
+              description: "Backend admin panel login page",
+            },
+          },
+        },
+        contentManagement: {
+          structure: {
+            contentFile: "src/content.ts",
+            types: [
+              "Articles",
+              "Work Projects",
+              "Current Projects",
+              "Testimonials",
+              "Stories",
+              "Career Positions",
+              "Social Links",
+              "Navigation Links",
+            ],
+            visibilityControls: "Granular show/hide for all content types",
+          },
+          adminPanel: {
+            status: "Active - Python FastAPI backend",
+            url: "http://localhost:8000/admin",
+            features: [
+              "Real-time content management via web UI",
+              "CRUD operations for all content types",
+              "JWT authentication",
+              "Database persistence with SQLite",
+              "Import from content.ts file",
+            ],
+          },
+          storageSystem: {
+            type: "SQLite database (backend) + LocalStorage (frontend)",
+            features: [
+              "Persistent settings",
+              "Content preferences",
+              "Migration system",
+              "Import/export functionality",
+            ],
+          },
+        },
+        contentCounts: {
+          currentProjects: content.currentProjects.projects.length,
+          workProjects: content.work.projects.length,
+          articles: content.articles.items.length,
+          stories: content.stories.items.length,
+          careerPositions: content.career.positions.length,
+          testimonials: content.testimonials.items.length,
+          navigationLinks: content.navigation.links.filter(
+            (link) => link.id !== "design-system"
+          ).length,
+          socialLinks: Object.keys(content.navigation.social).length,
+        },
+        keyFeatures: {
+          navigation: {
+            type: "Single Page Application with smooth scrolling",
+            mobileMenu: "Responsive mobile tray menu",
+            themeToggle: "Dark/Light mode switching",
+            backNavigation: "Consistent back navigation on all pages",
+            hiddenSections: [
+              "Design System section and navigation link are hidden",
+            ],
+          },
+          animations: {
+            type: "SVG-based animations with Framer Motion",
+            carousel: {
+              description: "Video card carousel with animated transitions",
+              slides: [
+                "Axonometric Projection (rotating 3D cube)",
+                "Observed Rhythm (flowing waves and pulsing dots)",
+              ],
+              navigation: "Previous/Next buttons",
+              autoPlay: false,
+            },
+            pageTransitions: "Smooth page transitions with motion",
+            scrollAnimations: "Scroll-triggered animations throughout",
+          },
+          musicPlayer: {
+            description: "Full-featured audio player with instrumental tracks",
+            features: [
+              "Play/pause controls",
+              "Volume control",
+              "Progress bar",
+              "Track switching",
+              "Instrumental version toggle",
+              "Playlist management",
+            ],
+            audioFormats: "MP3",
+            trackCount: 18,
+            instrumentalTracks: 8,
+          },
+          rssAggregator: {
+            description: "News feed aggregator with multiple sources",
+            features: [
+              "Category filtering",
+              "Search functionality",
+              "Responsive design",
+            ],
+            sources: 5,
+            categories: [
+              "Technology",
+              "Sports",
+              "Business",
+              "Entertainment",
+              "Food",
+              "Politics",
+            ],
+          },
+        },
+        designSystem: {
+          typography: {
+            primaryFont: "DM Sans",
+            fontWeights: ["300", "400", "500", "600", "700"],
+            fontSizes: {
+              xs: "0.75rem",
+              sm: "0.875rem",
+              base: "1rem",
+              lg: "1.125rem",
+              xl: "1.25rem",
+              "2xl": "1.5rem",
+              "3xl": "1.875rem",
+              "4xl": "2.25rem",
+              "5xl": "3rem",
+              hero: "clamp(6rem, 15vw, 16rem)",
+              display: "clamp(8rem, 20vw, 24rem)",
+            },
+          },
+          colors: {
+            light: {
+              background: "white",
+              text: "gray-900",
+              muted: "gray-600",
+            },
+            dark: {
+              background: "gray-900",
+              text: "white",
+              muted: "gray-300",
+            },
+            accent: {
+              primary: "#ff6b6b",
+              secondary: "#4ecdc4",
+              tertiary: "#45b7d1",
+            },
+          },
+          components: {
+            uiLibrary: "Radix UI primitives",
+            customComponents: "Built on top of Radix UI",
+            formComponents: "React Hook Form integration",
+            iconSystem: "Lucide React + Radix UI Icons",
+          },
+        },
+        performance: {
+          optimizations: {
+            lazyLoading: "React.lazy for route-based code splitting",
+            imageOptimization: "SVG animations for lightweight graphics",
+            audioOptimization: "MP3 format for web compatibility",
+            bundleSplitting: "Separate chunks for different page types",
+          },
+          caching: {
+            serviceWorker: "Offline functionality",
+            staticAssets: "Long-term caching for images and audio",
+            localStorage: "Persistent user preferences and settings",
+          },
+          accessibility: {
+            ariaLabels: "Comprehensive ARIA labeling",
+            keyboardNavigation: "Full keyboard support",
+            screenReader: "Screen reader compatibility",
+            colorContrast: "WCAG compliant color contrast",
+          },
+        },
+        developmentWorkflow: {
+          buildTools: {
+            bundler: "Vite",
+            typeChecking: "TypeScript",
+            linting: "ESLint",
+            formatting: "Prettier",
+          },
+          database: {
+            backend: "SQLite with SQLAlchemy ORM",
+            migrations: "SQLAlchemy Alembic (if needed)",
+            adminInterface: "FastAPI admin panel with HTML UI",
+          },
+          deployment: {
+            platform: "Netlify (frontend)",
+            backend: "Python FastAPI (local or cloud deployment)",
+            environment: "Environment-specific configuration",
+          },
+        },
+      },
+      null,
+      2
+    );
 
     try {
       await navigator.clipboard.writeText(jsonText);
@@ -108,26 +355,28 @@ const JsonAiPrompts = () => {
                 transition={{ duration: 1.8, delay: 0.4 }}
                 className="hidden lg:flex flex-wrap justify-start gap-2 sm:gap-3 mb-2 sm:mb-4"
               >
-                {content.navigation.links.map((link) => (
-                  <button
-                    key={link.id}
-                    onClick={() => {
-                      navigate("/");
-                      // Wait for navigation to complete before scrolling
-                      setTimeout(() => {
-                        const element = document.getElementById(link.id);
-                        if (element) {
-                          element.scrollIntoView({
-                            behavior: "smooth",
-                          });
-                        }
-                      }, 100);
-                    }}
-                    className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    {link.text}
-                  </button>
-                ))}
+                {content.navigation.links
+                  .filter((link) => link.id !== "design-system")
+                  .map((link) => (
+                    <button
+                      key={link.id}
+                      onClick={() => {
+                        navigate("/");
+                        // Wait for navigation to complete before scrolling
+                        setTimeout(() => {
+                          const element = document.getElementById(link.id);
+                          if (element) {
+                            element.scrollIntoView({
+                              behavior: "smooth",
+                            });
+                          }
+                        }, 100);
+                      }}
+                      className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                    >
+                      {link.text}
+                    </button>
+                  ))}
               </motion.div>
             </div>
           </div>
@@ -297,262 +546,293 @@ const JsonAiPrompts = () => {
                       )}
                     </button>
                     <pre className="text-xs sm:text-sm font-mono text-gray-800 dark:text-gray-200 leading-relaxed pt-8">
-                      {`{
-  "application": {
-    "name": "Dave Melkonian Portfolio",
-    "type": "Personal Portfolio Website",
-    "description": "A modern, responsive portfolio website for Dave Melkonian, a Senior UX and Product Designer with 15+ years of experience. Features design work showcase, articles, music player, interactive animations, and multiple specialized pages.",
-    "version": "0.1.0",
-    "framework": "React + TypeScript + Vite",
-    "styling": "Tailwind CSS + Framer Motion",
-    "deployment": "Netlify with serverless functions"
-  },
-  "architecture": {
-    "frontend": {
-      "framework": "React 18",
-      "language": "TypeScript",
-      "buildTool": "Vite",
-      "routing": "React Router DOM v7",
-      "stateManagement": "React Hooks (useState, useEffect, useContext)",
-      "animations": "Framer Motion",
-      "styling": "Tailwind CSS",
-      "uiComponents": "Radix UI + Custom Components",
-      "forms": "React Hook Form + Zod validation",
-      "icons": "Lucide React + Radix UI Icons"
-    },
-    "backend": {
-      "platform": "Netlify Functions",
-      "database": "Neon PostgreSQL with Drizzle ORM",
-      "authentication": "NextAuth.js",
-      "storage": "LocalStorage with migration system",
-      "apis": "RSS proxy, site configuration, content management"
-    },
-    "deployment": {
-      "platform": "Netlify",
-      "staticSite": true,
-      "serviceWorker": true,
-      "functions": "Serverless functions for dynamic content"
-    }
-  },
-  "siteStructure": {
-    "mainPage": {
-      "path": "/",
-      "sections": [
-        {
-          "id": "current-projects",
-          "title": "Lab",
-          "description": "New design and development projects",
-          "projects": [
-            "Chatbots - Interactive chatbot experiments",
-            "Design Panes - Design, designs, and designers",
-            "JSON AI Prompts - Structured prompts for AI agents",
-            "AI NUI - Let's make the AI UI better",
-            "HealthAware - A health monitoring system",
-            "User Testing Config - Configurable user testing"
-          ]
-        },
-        {
-          "id": "articles",
-          "title": "Articles",
-          "description": "Thoughts on design, technology, and user experience",
-          "features": ["Article modal system", "Archive page", "Search functionality"]
-        },
-        {
-          "id": "work",
-          "title": "Design",
-          "description": "Portfolio of design work and case studies",
-          "categories": ["Prototyping", "Design Systems", "UX", "Mobile Design", "Wireframing"]
-        },
-        {
-          "id": "stories",
-          "title": "Storytelling",
-          "description": "Personal stories and experiences"
-        },
-        {
-          "id": "career",
-          "title": "Career",
-          "description": "Professional journey and achievements"
-        },
-        {
-          "id": "design-system",
-          "title": "Design System",
-          "description": "Comprehensive design system documentation"
-        }
-      ]
-    },
-    "specializedPages": {
-      "/json": {
-        "title": "JSON AI Prompts",
-        "description": "Structured AI prompt engineering examples",
-        "features": ["Current site specification", "Application examples"]
-      },
-      "/specs": {
-        "title": "Technical Specifications",
-        "description": "Complete technical stack and methodology documentation",
-        "sections": ["Technology Stack", "Development Methodologies", "Key Features", "Performance Metrics"]
-      },
-      "/music": {
-        "title": "Music Player",
-        "description": "Full-featured audio player with instrumental tracks",
-        "features": ["18 tracks", "8 instrumental versions", "Playlist management"]
-      },
-      "/news": {
-        "title": "News Aggregator",
-        "description": "RSS feed aggregator with category filtering",
-        "sources": ["Ars Technica", "Reuters", "Breitbart", "Lambgoat", "No Echo"]
-      },
-      "/audio-transcript": {
-        "title": "Audio Transcript",
-        "description": "Audio transcription and analysis tools"
-      },
-      "/archive": {
-        "title": "Articles Archive",
-        "description": "Complete archive of all articles with search"
-      }
-    }
-  },
-  "contentManagement": {
-    "structure": {
-      "contentFile": "src/content.ts",
-      "types": ["Articles", "Work Projects", "Current Projects", "Testimonials", "Stories"],
-      "visibilityControls": "Granular show/hide for all content types"
-    },
-    "adminPanel": {
-      "status": "Built but not currently active",
-      "features": [
-        "Real-time content management",
-        "Visibility controls",
-        "Export/import functionality",
-        "Backup/restore capabilities"
-      ]
-    },
-    "storageSystem": {
-      "type": "LocalStorage with migration",
-      "features": ["Persistent settings", "Content preferences", "Migration system"]
-    }
-  },
-  "keyFeatures": {
-    "navigation": {
-      "type": "Single Page Application with smooth scrolling",
-      "mobileMenu": "Responsive mobile tray menu",
-      "themeToggle": "Dark/Light mode switching",
-      "backNavigation": "Consistent back navigation on all pages"
-    },
-    "animations": {
-      "type": "SVG-based animations with Framer Motion",
-      "carousel": {
-        "description": "Video card carousel with animated transitions",
-        "slides": [
-          "Axonometric Projection (rotating 3D cube)",
-          "Observed Rhythm (flowing waves and pulsing dots)"
-        ],
-        "navigation": "Previous/Next buttons",
-        "autoPlay": false
-      },
-      "pageTransitions": "Smooth page transitions with motion",
-      "scrollAnimations": "Scroll-triggered animations throughout"
-    },
-    "musicPlayer": {
-      "description": "Full-featured audio player with instrumental tracks",
-      "features": [
-        "Play/pause controls",
-        "Volume control", 
-        "Progress bar",
-        "Track switching",
-        "Instrumental version toggle",
-        "Playlist management"
-      ],
-      "audioFormats": "MP3",
-      "trackCount": 18,
-      "instrumentalTracks": 8
-    },
-    "rssAggregator": {
-      "description": "News feed aggregator with multiple sources",
-      "features": ["Category filtering", "Search functionality", "Responsive design"],
-      "sources": 5,
-      "categories": ["Technology", "Sports", "Business", "Entertainment", "Food", "Politics"]
-    }
-  },
-  "designSystem": {
-    "typography": {
-      "primaryFont": "DM Sans",
-      "fontWeights": ["300", "400", "500", "600", "700"],
-      "fontSizes": {
-        "xs": "0.75rem",
-        "sm": "0.875rem", 
-        "base": "1rem",
-        "lg": "1.125rem",
-        "xl": "1.25rem",
-        "2xl": "1.5rem",
-        "3xl": "1.875rem",
-        "4xl": "2.25rem",
-        "5xl": "3rem",
-        "hero": "clamp(6rem, 15vw, 16rem)",
-        "display": "clamp(8rem, 20vw, 24rem)"
-      }
-    },
-    "colors": {
-      "light": {
-        "background": "white",
-        "text": "gray-900",
-        "muted": "gray-600"
-      },
-      "dark": {
-        "background": "gray-900", 
-        "text": "white",
-        "muted": "gray-300"
-      },
-      "accent": {
-        "primary": "#ff6b6b",
-        "secondary": "#4ecdc4", 
-        "tertiary": "#45b7d1"
-      }
-    },
-    "components": {
-      "uiLibrary": "Radix UI primitives",
-      "customComponents": "Built on top of Radix UI",
-      "formComponents": "React Hook Form integration",
-      "iconSystem": "Lucide React + Radix UI Icons"
-    }
-  },
-  "performance": {
-    "optimizations": {
-      "lazyLoading": "React.lazy for route-based code splitting",
-      "imageOptimization": "SVG animations for lightweight graphics",
-      "audioOptimization": "MP3 format for web compatibility",
-      "bundleSplitting": "Separate chunks for different page types"
-    },
-    "caching": {
-      "serviceWorker": "Offline functionality",
-      "staticAssets": "Long-term caching for images and audio",
-      "localStorage": "Persistent user preferences and settings"
-    },
-    "accessibility": {
-      "ariaLabels": "Comprehensive ARIA labeling",
-      "keyboardNavigation": "Full keyboard support",
-      "screenReader": "Screen reader compatibility",
-      "colorContrast": "WCAG compliant color contrast"
-    }
-  },
-  "developmentWorkflow": {
-    "buildTools": {
-      "bundler": "Vite",
-      "typeChecking": "TypeScript",
-      "linting": "ESLint",
-      "formatting": "Prettier"
-    },
-    "database": {
-      "orm": "Drizzle ORM",
-      "migrations": "Drizzle Kit",
-      "studio": "Database management interface"
-    },
-    "deployment": {
-      "platform": "Netlify",
-      "functions": "Serverless functions for dynamic features",
-      "environment": "Environment-specific configuration"
-    }
-  }
-}`}
+                      {JSON.stringify(
+                        {
+                          application: {
+                            name: "Dave Melkonian Portfolio",
+                            type: "Personal Portfolio Website",
+                            description:
+                              "A modern, responsive portfolio website for Dave Melkonian, a Senior UX and Product Designer with 15+ years of experience. Features design work showcase, articles, music player, interactive animations, and multiple specialized pages.",
+                            version: "0.1.0",
+                            framework: "React + TypeScript + Vite",
+                            styling: "Tailwind CSS + Framer Motion",
+                            deployment:
+                              "Netlify (frontend) + Python FastAPI (backend)",
+                          },
+                          architecture: {
+                            frontend: {
+                              framework: "React 18",
+                              language: "TypeScript",
+                              buildTool: "Vite",
+                              routing: "React Router DOM v7",
+                              stateManagement:
+                                "React Hooks (useState, useEffect, useContext)",
+                              animations: "Framer Motion",
+                              styling: "Tailwind CSS",
+                              uiComponents: "Radix UI + Custom Components",
+                              forms: "React Hook Form + Zod validation",
+                              icons: "Lucide React + Radix UI Icons",
+                            },
+                            backend: {
+                              platform: "Python FastAPI",
+                              database: "SQLite with SQLAlchemy ORM",
+                              authentication: "JWT tokens",
+                              storage:
+                                "SQLite database + LocalStorage for frontend preferences",
+                              apis: "RSS proxy, content management, admin panel",
+                            },
+                            deployment: {
+                              platform:
+                                "Netlify (frontend), Local/Cloud (backend)",
+                              staticSite: true,
+                              serviceWorker: true,
+                              adminPanel:
+                                "FastAPI backend with HTML admin interface",
+                            },
+                          },
+                          siteStructure: {
+                            mainPage: {
+                              path: "/",
+                              sections: content.navigation.links
+                                .filter((link) => link.id !== "design-system")
+                                .map((link) => ({
+                                  id: link.id,
+                                  text: link.text,
+                                })),
+                            },
+                            specializedPages: {
+                              "/json": {
+                                title: "JSON AI Prompts",
+                                description:
+                                  "Structured AI prompt engineering examples",
+                                features: [
+                                  "Current site specification",
+                                  "Application examples",
+                                ],
+                              },
+                              "/specs": {
+                                title: "Technical Specifications",
+                                description:
+                                  "Complete technical stack and methodology documentation",
+                                sections: [
+                                  "Technology Stack",
+                                  "Development Methodologies",
+                                  "Key Features",
+                                  "Performance Metrics",
+                                ],
+                              },
+                              "/news": {
+                                title: "News Aggregator",
+                                description:
+                                  "RSS feed aggregator with category filtering",
+                                sources: [
+                                  "Ars Technica",
+                                  "Reuters",
+                                  "Breitbart",
+                                  "Lambgoat",
+                                  "No Echo",
+                                ],
+                              },
+                              "/archive": {
+                                title: "Articles Archive",
+                                description:
+                                  "Complete archive of all articles with search",
+                              },
+                              "/login": {
+                                title: "Admin Login",
+                                description: "Backend admin panel login page",
+                              },
+                            },
+                          },
+                          contentManagement: {
+                            structure: {
+                              contentFile: "src/content.ts",
+                              types: [
+                                "Articles",
+                                "Work Projects",
+                                "Current Projects",
+                                "Testimonials",
+                                "Stories",
+                                "Career Positions",
+                                "Social Links",
+                                "Navigation Links",
+                              ],
+                              visibilityControls:
+                                "Granular show/hide for all content types",
+                            },
+                            adminPanel: {
+                              status: "Active - Python FastAPI backend",
+                              url: ADMIN_PANEL_URL,
+                              features: [
+                                "Real-time content management via web UI",
+                                "CRUD operations for all content types",
+                                "JWT authentication",
+                                "Database persistence with SQLite",
+                                "Import from content.ts file",
+                              ],
+                            },
+                            storageSystem: {
+                              type: "SQLite database (backend) + LocalStorage (frontend)",
+                              features: [
+                                "Persistent settings",
+                                "Content preferences",
+                                "Migration system",
+                                "Import/export functionality",
+                              ],
+                            },
+                          },
+                          contentCounts: {
+                            currentProjects:
+                              content.currentProjects.projects.length,
+                            workProjects: content.work.projects.length,
+                            articles: content.articles.items.length,
+                            stories: content.stories.items.length,
+                            careerPositions: content.career.positions.length,
+                            testimonials: content.testimonials.items.length,
+                            navigationLinks: content.navigation.links.filter(
+                              (link) => link.id !== "design-system"
+                            ).length,
+                            socialLinks: Object.keys(content.navigation.social)
+                              .length,
+                          },
+                          keyFeatures: {
+                            navigation: {
+                              type: "Single Page Application with smooth scrolling",
+                              mobileMenu: "Responsive mobile tray menu",
+                              themeToggle: "Dark/Light mode switching",
+                              backNavigation:
+                                "Consistent back navigation on all pages",
+                              hiddenSections: [
+                                "Design System section and navigation link are hidden",
+                              ],
+                            },
+                            animations: {
+                              type: "SVG-based animations with Framer Motion",
+                              carousel: {
+                                description:
+                                  "Video card carousel with animated transitions",
+                                slides: [
+                                  "Axonometric Projection (rotating 3D cube)",
+                                  "Observed Rhythm (flowing waves and pulsing dots)",
+                                ],
+                                navigation: "Previous/Next buttons",
+                                autoPlay: false,
+                              },
+                              pageTransitions:
+                                "Smooth page transitions with motion",
+                              scrollAnimations:
+                                "Scroll-triggered animations throughout",
+                            },
+                            rssAggregator: {
+                              description:
+                                "News feed aggregator with multiple sources",
+                              features: [
+                                "Category filtering",
+                                "Search functionality",
+                                "Responsive design",
+                              ],
+                              sources: 5,
+                              categories: [
+                                "Technology",
+                                "Sports",
+                                "Business",
+                                "Entertainment",
+                                "Food",
+                                "Politics",
+                              ],
+                            },
+                          },
+                          designSystem: {
+                            typography: {
+                              primaryFont: "DM Sans",
+                              fontWeights: ["300", "400", "500", "600", "700"],
+                              fontSizes: {
+                                xs: "0.75rem",
+                                sm: "0.875rem",
+                                base: "1rem",
+                                lg: "1.125rem",
+                                xl: "1.25rem",
+                                "2xl": "1.5rem",
+                                "3xl": "1.875rem",
+                                "4xl": "2.25rem",
+                                "5xl": "3rem",
+                                hero: "clamp(6rem, 15vw, 16rem)",
+                                display: "clamp(8rem, 20vw, 24rem)",
+                              },
+                            },
+                            colors: {
+                              light: {
+                                background: "white",
+                                text: "gray-900",
+                                muted: "gray-600",
+                              },
+                              dark: {
+                                background: "gray-900",
+                                text: "white",
+                                muted: "gray-300",
+                              },
+                              accent: {
+                                primary: "#ff6b6b",
+                                secondary: "#4ecdc4",
+                                tertiary: "#45b7d1",
+                              },
+                            },
+                            components: {
+                              uiLibrary: "Radix UI primitives",
+                              customComponents: "Built on top of Radix UI",
+                              formComponents: "React Hook Form integration",
+                              iconSystem: "Lucide React + Radix UI Icons",
+                            },
+                          },
+                          performance: {
+                            optimizations: {
+                              lazyLoading:
+                                "React.lazy for route-based code splitting",
+                              imageOptimization:
+                                "SVG animations for lightweight graphics",
+                              audioOptimization:
+                                "MP3 format for web compatibility",
+                              bundleSplitting:
+                                "Separate chunks for different page types",
+                            },
+                            caching: {
+                              serviceWorker: "Offline functionality",
+                              staticAssets:
+                                "Long-term caching for images and audio",
+                              localStorage:
+                                "Persistent user preferences and settings",
+                            },
+                            accessibility: {
+                              ariaLabels: "Comprehensive ARIA labeling",
+                              keyboardNavigation: "Full keyboard support",
+                              screenReader: "Screen reader compatibility",
+                              colorContrast: "WCAG compliant color contrast",
+                            },
+                          },
+                          developmentWorkflow: {
+                            buildTools: {
+                              bundler: "Vite",
+                              typeChecking: "TypeScript",
+                              linting: "ESLint",
+                              formatting: "Prettier",
+                            },
+                            database: {
+                              backend: "SQLite with SQLAlchemy ORM",
+                              migrations: "SQLAlchemy Alembic (if needed)",
+                              adminInterface:
+                                "FastAPI admin panel with HTML UI",
+                            },
+                            deployment: {
+                              platform: "Netlify (frontend)",
+                              backend:
+                                "Python FastAPI (local or cloud deployment)",
+                              environment: "Environment-specific configuration",
+                            },
+                          },
+                        },
+                        null,
+                        2
+                      )}
                     </pre>
                   </motion.div>
 

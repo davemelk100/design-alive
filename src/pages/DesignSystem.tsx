@@ -424,14 +424,14 @@ const DesignSystem: React.FC = () => {
                 <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                   <div className="pr-12 flex flex-col gap-1">
                     <h3
-                      className="text-[20px] font-semibold mb-0 text-black dark:text-black title-font"
+                      className="text-[20px] font-semibold mb-0 text-black dark:text-white title-font"
                       style={{
                         letterSpacing: "-0.01em",
                       }}
                     >
                       Glassmorphic Card
                     </h3>
-                    <p className="text-xs text-black dark:text-black font-medium">
+                    <p className="text-xs text-black dark:text-gray-300 font-medium">
                       It's all the rage
                     </p>
                   </div>
@@ -455,7 +455,7 @@ const DesignSystem: React.FC = () => {
               <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
                 <div className="pr-12 flex items-center gap-2">
                   <h3
-                    className="text-[20px] font-semibold mb-1 dark:text-black title-font"
+                    className="text-[20px] font-semibold mb-1 text-black dark:text-white title-font"
                     style={{
                       letterSpacing: "-0.01em",
                     }}

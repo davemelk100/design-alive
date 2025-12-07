@@ -47,7 +47,7 @@ export default function Archive() {
             Back to Articles
           </Link>
 
-          <h1 className="text-3xl font-bold dark:text-white mb-4 title-font">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4 title-font">
             Articles Archive
           </h1>
           <p className="text-base text-gray-600 dark:text-gray-400 mb-8">
@@ -97,7 +97,7 @@ export default function Archive() {
 
                 {/* Content */}
                 <div className="md:col-span-2">
-                  <h3 className="mb-3 text-xl font-semibold dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-card">
+                  <h3 className="mb-3 text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-card">
                     {article.title}
                   </h3>
 
