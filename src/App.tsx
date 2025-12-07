@@ -404,10 +404,10 @@ function App() {
                                       duration: 1.8,
                                       delay: index * 0.2,
                                     }}
-                                    className="group relative overflow-hidden rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 flex flex-col shadow-md dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] hover:shadow-lg dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow cursor-pointer"
+                                    className="group relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 flex flex-col hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow cursor-pointer"
                                   >
                                     {/* Card Image */}
-                                    <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-transparent">
+                                    <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-transparent">
                                       {project.title === "JSON AI Prompts" ||
                                       project.title === "User Testing Config" ||
                                       project.title === "RAG App" ? (
@@ -473,10 +473,10 @@ function App() {
                                       duration: 0.5,
                                       delay: index * 0.05,
                                     }}
-                                    className="group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 hover:shadow-md dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all cursor-pointer"
+                                    className="group flex items-center gap-4 p-3 rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all cursor-pointer"
                                   >
                                     {/* Compact Image */}
-                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-transparent">
+                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-transparent">
                                       {project.title === "JSON AI Prompts" ||
                                       project.title === "User Testing Config" ||
                                       project.title === "RAG App" ? (
@@ -606,12 +606,12 @@ function App() {
                                     duration: 2.4,
                                     delay: index * 0.2,
                                   }}
-                                  className={`group relative overflow-hidden rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 flex flex-col shadow-md dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] hover:shadow-lg dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow ${
+                                  className={`group relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 flex flex-col hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow ${
                                     story.hasModal ? "cursor-pointer" : ""
                                   }`}
                                 >
                                   {/* Card Image */}
-                                  <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-transparent">
+                                  <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-transparent">
                                     {story.image ? (
                                       <img
                                         src={story.image}
@@ -667,12 +667,12 @@ function App() {
                                     duration: 0.5,
                                     delay: index * 0.05,
                                   }}
-                                  className={`group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 hover:shadow-md dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all ${
+                                  className={`group flex items-center gap-4 p-3 rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all ${
                                     story.hasModal ? "cursor-pointer" : ""
                                   }`}
                                 >
                                   {/* Compact Image */}
-                                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-transparent">
+                                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-transparent">
                                     {story.image ? (
                                       <img
                                         src={story.image}
@@ -762,7 +762,7 @@ function App() {
                                   className="group relative overflow-hidden rounded-lg bg-transparent dark:backdrop-blur-xl dark:border-white/20 border border-gray-200 dark:border-gray-700 flex flex-col shadow-md hover:shadow-lg transition-shadow cursor-pointer"
                                 >
                                   {/* Card Image */}
-                                  <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-transparent">
+                                  <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-transparent">
                                     <img
                                       src={project.image}
                                       alt={project.alt || project.title}
@@ -808,7 +808,7 @@ function App() {
                                   className="group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer"
                                 >
                                   {/* Compact Image */}
-                                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-transparent">
+                                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-transparent">
                                     <img
                                       src={project.image}
                                       alt={project.alt || project.title}
@@ -917,10 +917,10 @@ function App() {
                                       duration: 1.8,
                                       delay: index * 0.2,
                                     }}
-                                    className="group relative overflow-hidden rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 flex flex-col shadow-md dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] hover:shadow-lg dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow cursor-pointer"
+                                    className="group relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 flex flex-col hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow cursor-pointer"
                                   >
                                     {/* Card Image */}
-                                    <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-gray-100 dark:bg-transparent">
+                                    <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-transparent">
                                       <img
                                         src={`${
                                           (article as any).cardImage ||
@@ -993,10 +993,10 @@ function App() {
                                       duration: 0.5,
                                       delay: index * 0.05,
                                     }}
-                                    className="group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 hover:shadow-md dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all cursor-pointer"
+                                    className="group flex items-center gap-4 p-3 rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all cursor-pointer"
                                   >
                                     {/* Compact Image */}
-                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-gray-100 dark:bg-transparent">
+                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-transparent">
                                       <img
                                         src={`${
                                           (article as any).cardImage ||

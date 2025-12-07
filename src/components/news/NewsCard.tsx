@@ -63,7 +63,7 @@ export const NewsCard = ({
       onDragOver={onDragOver}
       onDrop={(e) => onDrop?.(e, feed.id)}
       onDragEnd={onDragEnd}
-      className={`bg-white dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] rounded-lg shadow-lg dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all duration-300 flex flex-col border-l-4 ${
+      className={`bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] rounded-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all duration-300 flex flex-col border-l-4 ${
         viewMode === "grid"
           ? "min-h-[650px] h-auto"
           : "w-full h-auto justify-center relative"
@@ -186,7 +186,7 @@ export const NewsCard = ({
             }}
           />
         ) : (
-          <div className="image-placeholder w-full h-full rounded-lg flex items-center justify-center bg-gray-100 dark:bg-transparent">
+          <div className="image-placeholder w-full h-full rounded-lg flex items-center justify-center bg-transparent">
             <span className="text-gray-600 dark:text-gray-300 font-bold text-4xl">
               {icon}
             </span>

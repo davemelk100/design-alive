@@ -83,7 +83,7 @@ export default function Archive() {
           {filteredArticles.map((article, index) => (
             <div
               key={index}
-              className="group relative overflow-hidden rounded-lg bg-gray-100/80 dark:bg-white/10 dark:backdrop-blur-2xl dark:border-white/30 dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 transition-all duration-300 hover:bg-gray-200/80 dark:hover:bg-white/15 dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] shadow-md border border-transparent dark:border-white/30"
+              className="group relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] p-6 transition-all duration-300 hover:bg-white/15 dark:hover:bg-white/15 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] border border-gray-200/50 dark:border-gray-700/50"
             >
               <div className="grid md:grid-cols-3 gap-8 items-center">
                 {/* Image */}
