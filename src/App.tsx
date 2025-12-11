@@ -251,10 +251,27 @@ function App() {
           loop
           muted
           playsInline
+          preload="auto"
           className="absolute inset-0 w-full h-full object-cover opacity-30 dark:opacity-35"
           style={{
             minHeight: "100vh",
             height: "100%",
+          }}
+          onError={(e) => {
+            console.error("Video loading error:", e);
+            const video = e.currentTarget;
+            console.error("Video error details:", {
+              error: video.error,
+              networkState: video.networkState,
+              readyState: video.readyState,
+              src: video.currentSrc,
+            });
+          }}
+          onLoadStart={() => {
+            console.log("Video load started: /video/new-geo.mp4");
+          }}
+          onCanPlay={() => {
+            console.log("Video can play: /video/new-geo.mp4");
           }}
         >
           <source src="/video/new-geo.mp4" type="video/mp4" />
