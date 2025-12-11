@@ -910,7 +910,7 @@ video {
   }
 }
 .title-font {
-    font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
   p.article-content:not(.news-card-excerpt):not(.hero-intro) {
@@ -1336,6 +1336,9 @@ video {
 .inline-block {
   display: inline-block;
 }
+.inline {
+  display: inline;
+}
 .flex {
   display: flex;
 }
@@ -1538,9 +1541,6 @@ video {
 .max-w-\[900px\] {
   max-width: 900px;
 }
-.max-w-md {
-  max-width: 28rem;
-}
 .max-w-none {
   max-width: none;
 }
@@ -1559,11 +1559,6 @@ video {
 }
 .translate-y-\[2px\] {
   --tw-translate-y: 2px;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-.scale-95 {
-  --tw-scale-x: .95;
-  --tw-scale-y: .95;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .transform {
@@ -1784,9 +1779,6 @@ video {
 .border-t {
   border-top-width: 1px;
 }
-.border-dashed {
-  border-style: dashed;
-}
 .border-\[\#3fa7d6\] {
   --tw-border-opacity: 1;
   border-color: rgb(63 167 214 / var(--tw-border-opacity));
@@ -1814,10 +1806,6 @@ video {
 .border-blue-300 {
   --tw-border-opacity: 1;
   border-color: rgb(147 197 253 / var(--tw-border-opacity));
-}
-.border-blue-400 {
-  --tw-border-opacity: 1;
-  border-color: rgb(96 165 250 / var(--tw-border-opacity));
 }
 .border-blue-600 {
   --tw-border-opacity: 1;
@@ -2517,9 +2505,6 @@ video {
 }
 .opacity-30 {
   opacity: 0.3;
-}
-.opacity-50 {
-  opacity: 0.5;
 }
 .opacity-60 {
   opacity: 0.6;
@@ -3574,13 +3559,6 @@ video {
   border-color: rgb(255 255 255 / 0.2);
 }
 
-<<<<<<<< HEAD:dist/assets/index-DfB384kS.css
-========
-:is(.dark .dark\:border-white\/30) {
-  border-color: rgb(255 255 255 / 0.3);
-}
-
->>>>>>>> 4097988 (lots):dist/assets/index-BB6YbF6q.css
 :is(.dark .dark\:bg-\[\#3fa7d6\]\/30) {
   background-color: rgb(63 167 214 / 0.3);
 }
@@ -3831,14 +3809,6 @@ video {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-<<<<<<<< HEAD:dist/assets/index-DfB384kS.css
-========
-:is(.dark .dark\:backdrop-blur-2xl) {
-  --tw-backdrop-blur: blur(40px);
-  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
-}
-
->>>>>>>> 4097988 (lots):dist/assets/index-BB6YbF6q.css
 :is(.dark .dark\:backdrop-blur-xl) {
   --tw-backdrop-blur: blur(24px);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);

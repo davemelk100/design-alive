@@ -25,7 +25,6 @@ const generateDefaultImageUrl = (sourceName: string): string | null => {
     "Fox News": "/img/fox-news-logo.png",
     Breitbart: "/img/breitbart-logo.png",
     "CNN News": "/img/cnn-logo.png",
-    Bloomberg: "/img/bloomberg-logo.png",
     TechCrunch: "/img/techcrunch-logo.png",
   };
 
@@ -278,9 +277,7 @@ export const fetchRSSFeed = async (feed: RSSFeed): Promise<NewsItem[]> => {
     const proxyServices = [
       `https://corsproxy.io/?${encodeURIComponent(feed.url)}`,
       `https://thingproxy.freeboard.io/fetch/${feed.url}`,
-      `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(
-        feed.url
-      )}`,
+      `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(feed.url)}`,
     ];
 
     for (const proxyUrl of proxyServices) {
@@ -310,4 +307,3 @@ export const fetchRSSFeed = async (feed: RSSFeed): Promise<NewsItem[]> => {
     return [];
   }
 };
-

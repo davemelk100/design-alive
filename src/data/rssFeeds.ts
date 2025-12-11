@@ -93,13 +93,6 @@ export const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
   {
-    id: "bloomberg",
-    name: "Bloomberg",
-    url: "https://news.google.com/rss/search?q=when:24h+allinurl:bloomberg.com&hl=en-US&gl=US&ceid=US:en",
-    category: "business",
-    enabled: false,
-  },
-  {
     id: "espn",
     name: "ESPN",
     url: "https://www.espn.com/espn/rss/news",
@@ -114,4 +107,3 @@ export const rssFeeds: RSSFeed[] = [
     enabled: true,
   },
 ];
-

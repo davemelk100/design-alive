@@ -99,7 +99,10 @@ export default function Article() {
                 "
               </span>
             </div>
-            <p key={`paragraph-${index}`} className="mb-4 text-gray-700 dark:text-gray-300">
+            <p
+              key={`paragraph-${index}`}
+              className="mb-4 text-gray-700 dark:text-gray-300"
+            >
               {paragraph}
             </p>
           </>
@@ -108,7 +111,10 @@ export default function Article() {
       if (paragraph.includes("if your product has 10,000 users")) {
         return (
           <>
-            <p key={`paragraph-${index}`} className="mb-4 text-gray-700 dark:text-gray-300">
+            <p
+              key={`paragraph-${index}`}
+              className="mb-4 text-gray-700 dark:text-gray-300"
+            >
               {paragraph}
             </p>
             <div
@@ -140,14 +146,14 @@ export default function Article() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 p-8 pb-32">
       <div className="max-w-4xl mx-auto">
-        <Link
-          to="/"
+        <a
+          href="#screen-1"
           onClick={handleBackClick}
           className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mb-8 relative z-50"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Articles
-        </Link>
+        </a>
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 font-card">
           {article.title}
         </h1>
@@ -166,6 +172,8 @@ export default function Article() {
                 src={article.image}
                 alt={article.title}
                 className="w-full rounded-lg h-auto"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>

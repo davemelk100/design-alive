@@ -27,7 +27,6 @@ export const getFeedCategory = (sourceName: string): NewsCategory => {
     "Fox News",
     "Breitbart",
     "CNN News",
-    "Bloomberg",
     "BBC",
     "Forbes",
     "THE ECONOMIST",
@@ -186,4 +185,3 @@ export const truncateText = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength).trim() + "...";
 };
-

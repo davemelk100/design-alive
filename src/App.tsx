@@ -1,25 +1,10 @@
-import { motion } from "framer-motion";
-import {
-  Dribbble,
-  ArrowUp,
-  ExternalLink,
-  LayoutGrid,
-  List,
-} from "lucide-react";
-import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import React, { useState, useEffect, useRef } from "react";
 
 import { content } from "./content";
-import Preloader from "./components/Preloader";
-
-import { BrowserRouter as Router } from "react-router-dom";
-import ArticleModal from "./components/ArticleModal";
 import { ThemeProvider } from "./context/ThemeContext";
 
-import MobileTrayMenu from "./components/MobileTrayMenu";
-import { Footer } from "./components/Footer";
-
 import {
+  BrowserRouter as Router,
   Routes,
   Route,
   Link,
@@ -38,10 +23,53 @@ const NewsAggregator = lazy(() => import("./pages/NewsAggregator"));
 const Specs = lazy(() => import("./pages/Specs"));
 const Story = lazy(() => import("./pages/Story"));
 
-import { slugify } from "./utils/slugify";
-import { ADMIN_LOGIN_URL } from "./config/api";
+// Lazy load non-critical UI components to reduce critical path
+const MobileTrayMenu = lazy(() => import("./components/MobileTrayMenu"));
+const Footer = lazy(() =>
+  import("./components/Footer").then((module) => ({ default: module.Footer }))
+);
 
-import "./utils/storageMigration"; // Import to trigger migration if needed
+import { slugify } from "./utils/slugify";
+
+// Lazy load icons to reduce initial bundle size
+const LazyArrowUp = React.lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.ArrowUp }))
+);
+const LazyLayoutGrid = React.lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.LayoutGrid }))
+);
+const LazyList = React.lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.List }))
+);
+const LazyExternalLink = React.lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.ExternalLink }))
+);
+const LazyDribbble = React.lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Dribbble }))
+);
+const LazyLinkedInLogoIcon = React.lazy(() =>
+  import("@radix-ui/react-icons").then((mod) => ({
+    default: mod.LinkedInLogoIcon,
+  }))
+);
+
+// Lazy load ArticleModal
+const ArticleModal = lazy(() => import("./components/ArticleModal"));
+
+// Icon wrapper with Suspense fallback
+const IconWrapper = ({
+  Icon,
+  className,
+  fallback = "↗",
+}: {
+  Icon: React.LazyExoticComponent<React.ComponentType<any>>;
+  className?: string;
+  fallback?: string;
+}) => (
+  <React.Suspense fallback={<span className={className}>{fallback}</span>}>
+    <Icon className={className} />
+  </React.Suspense>
+);
 
 // Add SectionHeader component
 const SectionHeader = ({
@@ -75,7 +103,10 @@ const SectionHeader = ({
             className="bg-black text-white dark:bg-white/10 dark:text-white rounded-full shadow-lg hover:opacity-80 transition-opacity flex-shrink-0 flex items-center justify-center w-8 h-8 p-0 min-w-8 min-h-8"
             aria-label="Scroll to top"
           >
-            <ArrowUp className="h-4 w-4 m-0 flex-shrink-0" />
+            <IconWrapper
+              Icon={LazyArrowUp}
+              className="h-4 w-4 m-0 flex-shrink-0"
+            />
           </button>
           {icon && <div className="flex items-center gap-2">{icon}</div>}
           {showUpArrow && (
@@ -84,7 +115,10 @@ const SectionHeader = ({
               className="bg-black text-white dark:bg-white/10 dark:text-white p-2 rounded-full shadow-lg hover:opacity-80 transition-opacity"
               aria-label="Scroll to top"
             >
-              <ArrowUp className="h-4 w-4 text-white dark:text-white" />
+              <IconWrapper
+                Icon={LazyArrowUp}
+                className="h-4 w-4 text-white dark:text-white"
+              />
             </button>
           )}
         </div>
@@ -100,7 +134,7 @@ const SectionHeader = ({
                 }`}
                 onClick={() => toggleView("grid")}
               >
-                <LayoutGrid className="h-4 w-4" />
+                <IconWrapper Icon={LazyLayoutGrid} className="h-4 w-4" />
               </button>
               <button
                 aria-label="List view"
@@ -111,7 +145,7 @@ const SectionHeader = ({
                 }`}
                 onClick={() => toggleView("list")}
               >
-                <List className="h-4 w-4" />
+                <IconWrapper Icon={LazyList} className="h-4 w-4" />
               </button>
             </div>
           )}
@@ -136,6 +170,7 @@ const SectionHeader = ({
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedArticle, setSelectedArticle] = useState<{
     title: string;
     content: string;
@@ -147,7 +182,6 @@ function App() {
     content: string;
     subtitle?: string;
   } | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   const [currentViewMode, setCurrentViewMode] = useState<"list" | "grid">(
     "grid"
@@ -162,9 +196,6 @@ function App() {
   );
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [parallaxOffset, setParallaxOffset] = useState(0);
-
-  const location = useLocation();
 
   // Scroll to top on route change (but not for internal navigation)
   useEffect(() => {
@@ -174,20 +205,24 @@ function App() {
     }
   }, [location.pathname]);
 
-  // Close mobile menu when route changes
-  useEffect(() => {}, [location.pathname]);
-
   // Listen for view mode changes from NewsAggregator
   useEffect(() => {
     const handleViewModeChange = (event: CustomEvent) => {
       setCurrentViewMode(event.detail);
     };
 
-    // Initialize view mode from localStorage
-    const savedViewMode = localStorage.getItem("viewMode") as "list" | "grid";
-    if (savedViewMode) {
-      setCurrentViewMode(savedViewMode);
-    }
+    // Defer localStorage read to avoid blocking initial render
+    requestIdleCallback(
+      () => {
+        const savedViewMode = localStorage.getItem("viewMode") as
+          | "list"
+          | "grid";
+        if (savedViewMode) {
+          setCurrentViewMode(savedViewMode);
+        }
+      },
+      { timeout: 100 }
+    );
 
     window.addEventListener(
       "viewModeChanged",
@@ -202,25 +237,9 @@ function App() {
     };
   }, []);
 
-  // Parallax scroll effect for video background
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      // Subtle parallax: move video at 20% of scroll speed for a gentle effect
-      setParallaxOffset(scrollY * 0.2);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  if (isLoading) {
-    return <Preloader onComplete={() => setIsLoading(false)} />;
-  }
-
   return (
     <div className="min-h-screen text-gray-900 transition-colors duration-300 dark:text-white pb-20 sm:pb-0 flex flex-col relative">
-      {/* Background Video with Parallax - Full Page */}
+      {/* Background Video - Full Page */}
       <div className="fixed inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
         <video
           ref={videoRef}
@@ -230,8 +249,6 @@ function App() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover opacity-30 dark:opacity-35"
           style={{
-            transform: `translateY(${parallaxOffset}px) scale(1.1)`,
-            willChange: "transform",
             minHeight: "100vh",
             height: "100%",
           }}
@@ -242,17 +259,8 @@ function App() {
 
       {/* Remove Header Navigation from here */}
 
-      <div className="flex-1 relative z-10">
-        <Suspense
-          fallback={
-            <div className="min-h-screen bg-white flex items-center justify-center">
-              <div className="text-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-                <p className="text-gray-600">Loading...</p>
-              </div>
-            </div>
-          }
-        >
+      <main className="flex-1 relative z-10">
+        <Suspense fallback={null}>
           <Routes>
             <Route
               path="/"
@@ -265,12 +273,7 @@ function App() {
                         {/* Hero Content */}
                         <div className="pt-4 rounded-lg">
                           {/* Title and Navigation Row */}
-                          <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1.8, delay: 0.2 }}
-                            className="mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-start lg:justify-between lg:gap-4"
-                          >
+                          <div className="mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-start lg:justify-between lg:gap-4">
                             <div className="flex-1">
                               <h1 className="tracking-tighter text-5xl font-bold mb-1 title-font leading-none relative z-10 text-left">
                                 {content.siteInfo.subtitle}
@@ -278,12 +281,7 @@ function App() {
                             </div>
 
                             {/* Navigation Links */}
-                            <motion.div
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 1.8, delay: 0.4 }}
-                              className="hidden lg:flex flex-wrap justify-end gap-2 sm:gap-3 mt-2 lg:mt-0"
-                            >
+                            <div className="hidden lg:flex flex-wrap justify-end gap-2 sm:gap-3 mt-2 lg:mt-0">
                               {content.navigation.links
                                 .filter((link) => link.id !== "design-system")
                                 .sort((a, b) => {
@@ -320,16 +318,11 @@ function App() {
                                     {link.text}
                                   </button>
                                 ))}
-                            </motion.div>
-                          </motion.div>
+                            </div>
+                          </div>
 
                           {/* Summary Text */}
-                          <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 1.8, delay: 0.6 }}
-                            className="mt-4 sm:mt-6"
-                          >
+                          <div className="mt-4 sm:mt-6">
                             <p className="hero-intro text-base sm:text-5xl text-muted-foreground leading-relaxed text-left">
                               I'm David Melkonian, a technical product and
                               experience leader with over a decade of work at
@@ -345,7 +338,7 @@ function App() {
                               and established enterprise-wide standards for
                               processes and digital experience delivery.
                             </p>
-                          </motion.div>
+                          </div>
                           <p className="my-4">
                             <a
                               href="https://rococo-paprenjak-da1be1.netlify.app/samples"
@@ -354,7 +347,10 @@ function App() {
                               className="text-gray-900 dark:text-white hover:text-primary transition-colors inline-flex items-center gap-2 underline decoration-1 underline-offset-2 hover:decoration-2"
                             >
                               Previous Portfolio with OpenAI integration
-                              <ExternalLink className="w-4 h-4" />
+                              <IconWrapper
+                                Icon={LazyExternalLink}
+                                className="w-4 h-4"
+                              />
                             </a>
                           </p>
                         </div>
@@ -392,18 +388,11 @@ function App() {
                                       "Configurable Multivariate Testing"
                                 )
                                 .map((project, index) => (
-                                  <motion.a
+                                  <a
                                     key={index}
                                     href={project.demo}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{
-                                      duration: 1.8,
-                                      delay: index * 0.2,
-                                    }}
                                     className="group relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 flex flex-col hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow cursor-pointer"
                                   >
                                     {/* Card Image */}
@@ -425,6 +414,9 @@ function App() {
                                           alt={project.title}
                                           className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
                                           loading="lazy"
+                                          decoding="async"
+                                          width="512"
+                                          height="512"
                                         />
                                       ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
@@ -445,7 +437,7 @@ function App() {
                                         {project.description}
                                       </p>
                                     </div>
-                                  </motion.a>
+                                  </a>
                                 ))}
                             </div>
                           ) : (
@@ -461,18 +453,11 @@ function App() {
                                       "Configurable Multivariate Testing"
                                 )
                                 .map((project, index) => (
-                                  <motion.a
+                                  <a
                                     key={index}
                                     href={project.demo}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{
-                                      duration: 0.5,
-                                      delay: index * 0.05,
-                                    }}
                                     className="group flex items-center gap-4 p-3 rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all cursor-pointer"
                                   >
                                     {/* Compact Image */}
@@ -494,6 +479,9 @@ function App() {
                                           alt={project.title}
                                           className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
                                           loading="lazy"
+                                          decoding="async"
+                                          width="512"
+                                          height="512"
                                         />
                                       ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
@@ -516,8 +504,11 @@ function App() {
                                     </div>
 
                                     {/* External Link Icon */}
-                                    <ExternalLink className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors flex-shrink-0" />
-                                  </motion.a>
+                                    <IconWrapper
+                                      Icon={LazyExternalLink}
+                                      className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors flex-shrink-0"
+                                    />
+                                  </a>
                                 ))}
                             </div>
                           )}
@@ -537,12 +528,8 @@ function App() {
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {content.testimonials.items.map((testimonial, index) => (
-                        <motion.div
+                        <div
                           key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.8, delay: index * 0.2 }}
                           className="group relative overflow-hidden rounded-lg bg-gray-100/80 shadow-md p-6"
                         >
                           <div className="flex flex-col h-full">
@@ -560,7 +547,7 @@ function App() {
                               </p>
                             </div>
                           </div>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -587,8 +574,8 @@ function App() {
                               .filter(
                                 (story) => story.title !== "Design Management"
                               )
-                              .map((story, index) => (
-                                <motion.div
+                              .map((story) => (
+                                <div
                                   key={story.title}
                                   onClick={() => {
                                     if (story.hasModal) {
@@ -598,13 +585,6 @@ function App() {
                                         subtitle: story.subtitle,
                                       });
                                     }
-                                  }}
-                                  initial={{ opacity: 0, y: 20 }}
-                                  whileInView={{ opacity: 1, y: 0 }}
-                                  viewport={{ once: true }}
-                                  transition={{
-                                    duration: 2.4,
-                                    delay: index * 0.2,
                                   }}
                                   className={`group relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 flex flex-col hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow ${
                                     story.hasModal ? "cursor-pointer" : ""
@@ -618,6 +598,9 @@ function App() {
                                         alt={story.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         loading="lazy"
+                                        decoding="async"
+                                        width="512"
+                                        height="512"
                                       />
                                     ) : (
                                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
@@ -639,7 +622,7 @@ function App() {
                                       </p>
                                     )}
                                   </div>
-                                </motion.div>
+                                </div>
                               ))}
                           </div>
                         ) : (
@@ -648,8 +631,8 @@ function App() {
                               .filter(
                                 (story) => story.title !== "Design Management"
                               )
-                              .map((story, index) => (
-                                <motion.div
+                              .map((story) => (
+                                <div
                                   key={story.title}
                                   onClick={() => {
                                     if (story.hasModal) {
@@ -659,13 +642,6 @@ function App() {
                                         subtitle: story.subtitle,
                                       });
                                     }
-                                  }}
-                                  initial={{ opacity: 0, x: -20 }}
-                                  whileInView={{ opacity: 1, x: 0 }}
-                                  viewport={{ once: true }}
-                                  transition={{
-                                    duration: 0.5,
-                                    delay: index * 0.05,
                                   }}
                                   className={`group flex items-center gap-4 p-3 rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all ${
                                     story.hasModal ? "cursor-pointer" : ""
@@ -679,6 +655,9 @@ function App() {
                                         alt={story.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         loading="lazy"
+                                        decoding="async"
+                                        width="512"
+                                        height="512"
                                       />
                                     ) : (
                                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
@@ -703,9 +682,12 @@ function App() {
 
                                   {/* External Link Icon (only show if clickable) */}
                                   {story.hasModal && (
-                                    <ExternalLink className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors flex-shrink-0" />
+                                    <IconWrapper
+                                      Icon={LazyExternalLink}
+                                      className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors flex-shrink-0"
+                                    />
                                   )}
-                                </motion.div>
+                                </div>
                               ))}
                           </div>
                         )}
@@ -735,7 +717,10 @@ function App() {
                               className="bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
                               aria-label="Dribbble"
                             >
-                              <Dribbble className="h-5 w-5 text-black dark:text-white" />
+                              <IconWrapper
+                                Icon={LazyDribbble}
+                                className="h-5 w-5 text-black dark:text-white"
+                              />
                             </a>
                           }
                         />
@@ -747,18 +732,11 @@ function App() {
                                   project.title !== "3D Conversion UX Plan"
                               )
                               .map((project: any, index) => (
-                                <motion.a
+                                <a
                                   key={index}
                                   href={project.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  initial={{ opacity: 0, y: 20 }}
-                                  whileInView={{ opacity: 1, y: 0 }}
-                                  viewport={{ once: true }}
-                                  transition={{
-                                    duration: 1.8,
-                                    delay: index * 0.2,
-                                  }}
                                   className="group relative overflow-hidden rounded-lg bg-transparent dark:backdrop-blur-xl dark:border-white/20 border border-gray-200 dark:border-gray-700 flex flex-col shadow-md hover:shadow-lg transition-shadow cursor-pointer"
                                 >
                                   {/* Card Image */}
@@ -768,6 +746,9 @@ function App() {
                                       alt={project.alt || project.title}
                                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                       loading="lazy"
+                                      decoding="async"
+                                      width="512"
+                                      height="512"
                                     />
                                   </div>
 
@@ -782,7 +763,7 @@ function App() {
                                       </p>
                                     )}
                                   </div>
-                                </motion.a>
+                                </a>
                               ))}
                           </div>
                         ) : (
@@ -793,18 +774,11 @@ function App() {
                                   project.title !== "3D Conversion UX Plan"
                               )
                               .map((project: any, index) => (
-                                <motion.a
+                                <a
                                   key={index}
                                   href={project.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  initial={{ opacity: 0, x: -20 }}
-                                  whileInView={{ opacity: 1, x: 0 }}
-                                  viewport={{ once: true }}
-                                  transition={{
-                                    duration: 0.5,
-                                    delay: index * 0.05,
-                                  }}
                                   className="group flex items-center gap-4 p-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all cursor-pointer"
                                 >
                                   {/* Compact Image */}
@@ -814,6 +788,9 @@ function App() {
                                       alt={project.alt || project.title}
                                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                       loading="lazy"
+                                      decoding="async"
+                                      width="512"
+                                      height="512"
                                     />
                                   </div>
 
@@ -830,8 +807,11 @@ function App() {
                                   </div>
 
                                   {/* External Link Icon */}
-                                  <ExternalLink className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors flex-shrink-0" />
-                                </motion.a>
+                                  <IconWrapper
+                                    Icon={LazyExternalLink}
+                                    className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors flex-shrink-0"
+                                  />
+                                </a>
                               ))}
                           </div>
                         )}
@@ -907,16 +887,9 @@ function App() {
                                 };
 
                                 return (
-                                  <motion.div
+                                  <div
                                     key={index}
                                     onClick={handleClick}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{
-                                      duration: 1.8,
-                                      delay: index * 0.2,
-                                    }}
                                     className="group relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 flex flex-col hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-shadow cursor-pointer"
                                   >
                                     {/* Card Image */}
@@ -929,6 +902,9 @@ function App() {
                                         alt={article.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         loading="lazy"
+                                        decoding="async"
+                                        width="512"
+                                        height="512"
                                       />
                                     </div>
 
@@ -943,7 +919,7 @@ function App() {
                                         </p>
                                       )}
                                     </div>
-                                  </motion.div>
+                                  </div>
                                 );
                               })}
                           </div>
@@ -983,16 +959,9 @@ function App() {
                                 };
 
                                 return (
-                                  <motion.div
+                                  <div
                                     key={index}
                                     onClick={handleClick}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{
-                                      duration: 0.5,
-                                      delay: index * 0.05,
-                                    }}
                                     className="group flex items-center gap-4 p-3 rounded-lg bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] border border-gray-200/50 dark:border-gray-700/50 hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all cursor-pointer"
                                   >
                                     {/* Compact Image */}
@@ -1005,6 +974,9 @@ function App() {
                                         alt={article.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         loading="lazy"
+                                        decoding="async"
+                                        width="512"
+                                        height="512"
                                       />
                                     </div>
 
@@ -1021,8 +993,11 @@ function App() {
                                     </div>
 
                                     {/* External Link Icon */}
-                                    <ExternalLink className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors flex-shrink-0" />
-                                  </motion.div>
+                                    <IconWrapper
+                                      Icon={LazyExternalLink}
+                                      className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors flex-shrink-0"
+                                    />
+                                  </div>
                                 );
                               })}
                           </div>
@@ -1049,7 +1024,10 @@ function App() {
                             className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
                             aria-label="LinkedIn"
                           >
-                            <LinkedInLogoIcon className="h-5 w-5 text-black" />
+                            <IconWrapper
+                              Icon={LazyLinkedInLogoIcon}
+                              className="h-5 w-5 text-black"
+                            />
                           </a>
                         }
                       />
@@ -1116,11 +1094,7 @@ function App() {
                       className="mb-8"
                     />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.8, delay: 0.2 }}
+                      <div
                         className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[3/4]"
                       >
                         <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
@@ -1141,12 +1115,8 @@ function App() {
                         <div className="absolute inset-0 overflow-hidden z-0">
                           <LazyVideo src="/video/violet.mp4" />
                         </div>
-                      </motion.div>
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.8, delay: 0.4 }}
+                      </div>
+                      <div
                         className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[3/4]"
                       >
                         <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
@@ -1166,12 +1136,8 @@ function App() {
                         <div className="absolute inset-0 overflow-hidden z-0">
                           <LazyVideo src="/video/sam.mp4" />
                         </div>
-                      </motion.div>
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 1.8, delay: 0.6 }}
+                      </div>
+                      <div
                         className="group relative overflow-visible rounded-lg bg-gray-100/80 shadow-md aspect-[3/4]"
                       >
                         <div className="absolute inset-0 p-3 flex flex-col gap-2 z-10">
@@ -1191,7 +1157,7 @@ function App() {
                         <div className="absolute inset-0 overflow-hidden z-0">
                           <LazyVideo src="/video/golfnew.mp4" />
                         </div>
-                      </motion.div>
+                      </div>
                     </div>
                   </div>
                 </section> */}
@@ -1583,63 +1549,46 @@ function App() {
             />
             <Route path="/article/:slug" element={<Article />} />
             <Route path="/archive" element={<Archive />} />
-
             <Route path="/json" element={<JsonAiPrompts />} />
             <Route path="/audio-transcript" element={<AudioTranscript />} />
             <Route path="/news" element={<NewsAggregator />} />
             <Route path="/specs" element={<Specs />} />
             <Route path="/story" element={<Story />} />
-            <Route
-              path="/login"
-              element={
-                <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-8">
-                  <div className="max-w-md w-full text-center">
-                    <h1 className="text-2xl font-bold mb-4 dark:text-white">
-                      Admin Login
-                    </h1>
-                    <p className="text-gray-600 dark:text-gray-400 mb-6">
-                      The admin login is hosted on the backend server.
-                    </p>
-                    <a
-                      href={ADMIN_LOGIN_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Open Admin Login
-                    </a>
-                    <p className="text-sm text-gray-500 dark:text-gray-500 mt-4">
-                      Make sure the backend server is running on port 8000
-                    </p>
-                  </div>
-                </div>
-              }
-            />
           </Routes>
         </Suspense>
-      </div>
+      </main>
 
       {selectedArticle && (
-        <ArticleModal
-          title={selectedArticle.title}
-          content={selectedArticle.content}
-          image={selectedArticle.image}
-          onClose={() => setSelectedArticle(null)}
-        />
+        <Suspense fallback={null}>
+          <ArticleModal
+            title={selectedArticle.title}
+            content={selectedArticle.content}
+            image={selectedArticle.image}
+            onClose={() => setSelectedArticle(null)}
+          />
+        </Suspense>
       )}
 
       {selectedStory && (
-        <ArticleModal
-          title={selectedStory.title}
-          content={selectedStory.content}
-          onClose={() => setSelectedStory(null)}
-        />
+        <Suspense fallback={null}>
+          <ArticleModal
+            title={selectedStory.title}
+            content={selectedStory.content}
+            onClose={() => setSelectedStory(null)}
+          />
+        </Suspense>
       )}
       {/* Hide MobileTrayMenu on news page */}
-      {location.pathname !== "/news" && <MobileTrayMenu />}
+      {location.pathname !== "/news" && (
+        <Suspense fallback={null}>
+          <MobileTrayMenu />
+        </Suspense>
+      )}
 
       {/* Footer */}
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
 
       {/* Global Dark Mode Toggle and View Toggle - Visible on all pages */}
       <div className="fixed top-2 right-0 z-50 flex items-center gap-2">
@@ -1661,7 +1610,7 @@ function App() {
               }`}
               aria-label="List view"
             >
-              <List className="w-4 h-4" />
+              <IconWrapper Icon={LazyList} className="w-4 h-4" />
             </button>
             <button
               onClick={() => {
@@ -1678,7 +1627,7 @@ function App() {
               }`}
               aria-label="Grid view"
             >
-              <LayoutGrid className="w-4 h-4" />
+              <IconWrapper Icon={LazyLayoutGrid} className="w-4 h-4" />
             </button>
           </div>
         )}

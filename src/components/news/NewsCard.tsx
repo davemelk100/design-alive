@@ -13,12 +13,6 @@ interface NewsCardProps {
   viewMode: ViewMode;
   onNext: () => void;
   onPrevious: () => void;
-  onDragStart?: (e: React.DragEvent, feedId: string) => void;
-  onDragOver?: (e: React.DragEvent) => void;
-  onDrop?: (e: React.DragEvent, feedId: string) => void;
-  onDragEnd?: (e: React.DragEvent) => void;
-  isDragging?: boolean;
-  isDropTarget?: boolean;
 }
 
 export const NewsCard = ({
@@ -28,12 +22,6 @@ export const NewsCard = ({
   viewMode,
   onNext,
   onPrevious,
-  onDragStart,
-  onDragOver,
-  onDrop,
-  onDragEnd,
-  isDragging = false,
-  isDropTarget = false,
 }: NewsCardProps) => {
   const currentItem = feedItems[currentIndex];
   if (!currentItem) return null;
@@ -58,17 +46,10 @@ export const NewsCard = ({
 
   return (
     <div
-      draggable={!!onDragStart}
-      onDragStart={(e) => onDragStart?.(e, feed.id)}
-      onDragOver={onDragOver}
-      onDrop={(e) => onDrop?.(e, feed.id)}
-      onDragEnd={onDragEnd}
       className={`bg-white/10 backdrop-blur-2xl border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)] dark:shadow-[0_8px_32px_0_rgba(255,255,255,0.1)] rounded-lg border border-gray-200/50 dark:border-gray-700/50 overflow-hidden hover:shadow-[0_12px_40px_0_rgba(0,0,0,0.15)] dark:hover:shadow-[0_12px_40px_0_rgba(255,255,255,0.15)] transition-all duration-300 flex flex-col border-l-4 ${
         viewMode === "grid"
           ? "min-h-[650px] h-auto"
           : "w-full h-auto justify-center relative"
-      } ${isDragging ? "opacity-50 scale-95" : ""} ${
-        isDropTarget ? "border-2 border-dashed border-blue-400" : ""
       }`}
       style={{
         borderLeftColor: borderColor,
@@ -170,6 +151,8 @@ export const NewsCard = ({
             src={currentItem.image}
             alt={currentItem.title}
             className="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
             onError={(e) => {
               const target = e.currentTarget;
               target.style.display = "none";

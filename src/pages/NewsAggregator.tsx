@@ -125,14 +125,6 @@ const rssFeeds: RSSFeed[] = [
   },
 
   {
-    id: "bloomberg",
-    name: "Bloomberg",
-    url: "https://news.google.com/rss/search?q=when:24h+allinurl:bloomberg.com&hl=en-US&gl=US&ceid=US:en",
-    category: "business",
-    enabled: false,
-  },
-
-  {
     id: "espn",
     name: "ESPN",
     url: "https://www.espn.com/espn/rss/news",
@@ -179,7 +171,6 @@ const NewsAggregator = () => {
         "Fox News",
         "Breitbart",
         "CNN News",
-        "Bloomberg",
         "BBC",
         "Forbes",
         "THE ECONOMIST",
@@ -200,7 +191,7 @@ const NewsAggregator = () => {
     ) {
       return "entertainment";
     } else if (["McDonald's"].includes(sourceName)) {
-      return "food";
+      return "all"; // Changed from "food" to "all" since food category is removed
     } else {
       return "all";
     }
@@ -217,8 +208,6 @@ const NewsAggregator = () => {
         return "💼";
       case "entertainment":
         return "🎭";
-      case "food":
-        return "🌶️";
       case "politics":
         return "🏛️";
       case "custom":
@@ -285,17 +274,6 @@ const NewsAggregator = () => {
         border: "border-[#a855f7] dark:border-[#a855f7]",
       },
     },
-    food: {
-      bg: "bg-[#fef2f2] dark:bg-[#ef4444]/30",
-      text: "text-gray-800 dark:text-gray-200",
-      border: "border-[#ef4444]",
-      hover: "hover:bg-[#fef2f2] dark:hover:bg-[#ef4444]/20",
-      chip: {
-        bg: "bg-[#fef2f2] dark:bg-[#ef4444]/30",
-        text: "text-gray-800 dark:text-gray-200",
-        border: "border-[#ef4444] dark:border-[#ef4444]",
-      },
-    },
     politics: {
       bg: "bg-[#fdebe6] dark:bg-[#f97316]/30",
       text: "text-gray-800 dark:text-gray-200",
@@ -354,48 +332,11 @@ const NewsAggregator = () => {
   const [smashingMagIndex, setSmashingMagIndex] = useState(0);
 
   const [cnnIndex, setCnnIndex] = useState(0);
-  const [bloombergIndex, setBloombergIndex] = useState(0);
 
   const [techcrunchIndex, setTechcrunchIndex] = useState(0);
   const [mcdonaldsIndex, setMcdonaldsIndex] = useState(0);
 
-  // Drag and drop state
-  const [draggedFeedId, setDraggedFeedId] = useState<string | null>(null);
-  const [feedOrder, setFeedOrder] = useState<string[]>(() =>
-    rssFeeds.map((feed) => feed.id)
-  );
   const [activeCategory, setActiveCategory] = useState("all");
-
-  // Drag and drop handlers
-  const handleDragStart = (e: React.DragEvent, feedId: string) => {
-    setDraggedFeedId(feedId);
-    e.dataTransfer.effectAllowed = "move";
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-  };
-
-  const handleDrop = (e: React.DragEvent, targetFeedId: string) => {
-    e.preventDefault();
-    if (!draggedFeedId || draggedFeedId === targetFeedId) return;
-
-    const newOrder = [...feedOrder];
-    const draggedIndex = newOrder.indexOf(draggedFeedId);
-    const targetIndex = newOrder.indexOf(targetFeedId);
-
-    // Remove dragged item and insert at target position
-    newOrder.splice(draggedIndex, 1);
-    newOrder.splice(targetIndex, 0, draggedFeedId);
-
-    setFeedOrder(newOrder);
-    setDraggedFeedId(null);
-  };
-
-  const handleDragEnd = () => {
-    setDraggedFeedId(null);
-  };
 
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [customFeedUrl, setCustomFeedUrl] = useState("");
@@ -530,9 +471,6 @@ const NewsAggregator = () => {
       case "CNN News":
         return cnnIndex;
 
-      case "Bloomberg":
-        return bloombergIndex;
-
       case "TechCrunch":
         return techcrunchIndex;
       case "McDonald's":
@@ -632,10 +570,6 @@ const NewsAggregator = () => {
         goToPreviousCnn();
         break;
 
-      case "Bloomberg":
-        goToPreviousBloomberg();
-        break;
-
       case "TechCrunch":
         goToPreviousTechcrunch();
         break;
@@ -733,10 +667,6 @@ const NewsAggregator = () => {
 
       case "CNN News":
         goToNextCnn();
-        break;
-
-      case "Bloomberg":
-        goToNextBloomberg();
         break;
 
       case "TechCrunch":
@@ -849,7 +779,6 @@ const NewsAggregator = () => {
       "Fox News": "/img/fox-news-logo.png",
       Breitbart: "/img/breitbart-logo.png",
       "CNN News": "/img/cnn-logo.png",
-      Bloomberg: "/img/bloomberg-logo.png",
       TechCrunch: "/img/techcrunch-logo.png",
     };
 
@@ -1380,8 +1309,6 @@ const NewsAggregator = () => {
 
       setCnnIndex(0); // Reset CNN carousel
 
-      setBloombergIndex(0); // Reset Bloomberg carousel
-
       setTechcrunchIndex(0); // Reset TechCrunch carousel
     } catch (error) {
       console.error("Error loading RSS feeds:", error);
@@ -1892,27 +1819,6 @@ const NewsAggregator = () => {
     }
   };
 
-  // Bloomberg carousel navigation
-  const goToNextBloomberg = () => {
-    const bloombergItems = newsItems.filter(
-      (item) => item.source === "Bloomberg"
-    );
-    if (bloombergItems.length > 0) {
-      setBloombergIndex((prev) => (prev + 1) % bloombergItems.length);
-    }
-  };
-
-  const goToPreviousBloomberg = () => {
-    const bloombergItems = newsItems.filter(
-      (item) => item.source === "Bloomberg"
-    );
-    if (bloombergItems.length > 0) {
-      setBloombergIndex(
-        (prev) => (prev - 1 + bloombergItems.length) % bloombergItems.length
-      );
-    }
-  };
-
   // CBS Sports carousel navigation
   const goToNextCbsSports = () => {
     const cbsSportsItems = newsItems.filter(
@@ -2041,8 +1947,6 @@ const NewsAggregator = () => {
                 ? "bg-[#d8edf7] dark:bg-[#3fa7d6]/30"
                 : activeCategory === "entertainment"
                 ? "bg-[#f3e8ff] dark:bg-[#a855f7]/30"
-                : activeCategory === "food"
-                ? "bg-[#fef2f2] dark:bg-[#ef4444]/30"
                 : activeCategory === "politics"
                 ? "bg-[#fdebe6] dark:bg-[#f79d84]/30"
                 : "bg-gray-100 dark:bg-gray-700"
@@ -2074,8 +1978,6 @@ const NewsAggregator = () => {
                       ? "Business"
                       : activeCategory === "entertainment"
                       ? "Entertainment"
-                      : activeCategory === "food"
-                      ? "Food"
                       : activeCategory === "politics"
                       ? "Politics"
                       : activeCategory === "custom"
@@ -2170,21 +2072,6 @@ const NewsAggregator = () => {
                       <span className="font-medium uppercase">
                         Entertainment
                       </span>
-                    </button>
-
-                    {/* Food */}
-                    <button
-                      onClick={() => {
-                        setActiveCategory("food");
-                        syncActiveCategory("food");
-                      }}
-                      className={`flex items-center gap-2 px-4 py-2 transition-colors ${
-                        activeCategory === "food"
-                          ? `${categoryColors.food.bg} ${categoryColors.food.text} rounded-t-lg rounded-b-none`
-                          : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
-                      }`}
-                    >
-                      <span className="font-medium uppercase">Food</span>
                     </button>
                   </div>
                 </nav>
@@ -2375,16 +2262,7 @@ const NewsAggregator = () => {
                               feed.category === activeCategory
                           );
 
-                          // Sort feeds according to the drag and drop order
-                          const sortedFeeds = [...filteredFeeds].sort(
-                            (a, b) => {
-                              const aIndex = feedOrder.indexOf(a.id);
-                              const bIndex = feedOrder.indexOf(b.id);
-                              return aIndex - bIndex;
-                            }
-                          );
-
-                          return sortedFeeds.map((feed) => {
+                          return filteredFeeds.map((feed) => {
                             const feedItems = newsItems.filter(
                               (item) => item.source === feed.name
                             );
@@ -2395,23 +2273,10 @@ const NewsAggregator = () => {
                             return (
                               <div
                                 key={`${feed.id}-${currentIndex}`}
-                                draggable
-                                onDragStart={(e) => handleDragStart(e, feed.id)}
-                                onDragOver={handleDragOver}
-                                onDrop={(e) => handleDrop(e, feed.id)}
-                                onDragEnd={handleDragEnd}
                                 className={`bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col border-l-4 ${
                                   viewMode === "grid"
                                     ? "min-h-[650px] h-auto"
                                     : "w-full h-auto justify-center relative"
-                                } ${
-                                  draggedFeedId === feed.id
-                                    ? "opacity-50 scale-95"
-                                    : ""
-                                } ${
-                                  draggedFeedId && draggedFeedId !== feed.id
-                                    ? "border-2 border-dashed border-blue-400"
-                                    : ""
                                 }`}
                                 style={{
                                   borderLeftColor:
@@ -2423,8 +2288,6 @@ const NewsAggregator = () => {
                                       ? "#3fa7d6"
                                       : feed.category === "entertainment"
                                       ? "#a855f7"
-                                      : feed.category === "food"
-                                      ? "#ef4444"
                                       : feed.category === "politics"
                                       ? "#f79d84"
                                       : "#6b7280",
@@ -2604,9 +2467,7 @@ const NewsAggregator = () => {
                                           currentIndex
                                         ]?.image!.startsWith("placeholder:") &&
                                         feedItems[currentIndex]?.source !==
-                                          "BleepingComputer" &&
-                                        feedItems[currentIndex]?.source !==
-                                          "Bloomberg" ? (
+                                          "BleepingComputer" ? (
                                           <div className="absolute right-0 top-0 bottom-0 w-24 sm:w-32 md:w-40">
                                             <img
                                               src={
@@ -2796,17 +2657,6 @@ const NewsAggregator = () => {
                                                   alt="ESPN"
                                                   className="mx-auto"
                                                 />
-                                              ) : feedItems[currentIndex]
-                                                  ?.source === "Bloomberg" ? (
-                                                <img
-                                                  src="/img/bloomberg.svg"
-                                                  alt="Bloomberg"
-                                                  className="mx-auto"
-                                                  style={{
-                                                    width: "200px",
-                                                    height: "auto",
-                                                  }}
-                                                />
                                               ) : (
                                                 <span className="text-gray-600 dark:text-gray-300 font-bold">
                                                   {getCategoryIcon(
@@ -2821,9 +2671,7 @@ const NewsAggregator = () => {
                                             {feedItems[currentIndex]?.source !==
                                               "ESPN" &&
                                             feedItems[currentIndex]?.source !==
-                                              "BleepingComputer" &&
-                                            feedItems[currentIndex]?.source !==
-                                              "Bloomberg" ? (
+                                              "BleepingComputer" ? (
                                               <div className="text-xs mt-1 font-medium text-gray-600 dark:text-gray-300">
                                                 {
                                                   feedItems[currentIndex]
@@ -2957,17 +2805,6 @@ const NewsAggregator = () => {
                                                   alt="ESPN"
                                                   className="mx-auto"
                                                 />
-                                              ) : feedItems[currentIndex]
-                                                  ?.source === "Bloomberg" ? (
-                                                <img
-                                                  src="/img/bloomberg.svg"
-                                                  alt="Bloomberg"
-                                                  className="mx-auto"
-                                                  style={{
-                                                    width: "200px",
-                                                    height: "auto",
-                                                  }}
-                                                />
                                               ) : (
                                                 <span className="text-gray-600 dark:text-gray-300 font-bold">
                                                   {getCategoryIcon(
@@ -2982,9 +2819,7 @@ const NewsAggregator = () => {
                                             {feedItems[currentIndex]?.source !==
                                               "ESPN" &&
                                             feedItems[currentIndex]?.source !==
-                                              "BleepingComputer" &&
-                                            feedItems[currentIndex]?.source !==
-                                              "Bloomberg" ? (
+                                              "BleepingComputer" ? (
                                               <div className="text-xs mt-1 font-medium">
                                                 {
                                                   feedItems[currentIndex]
@@ -3465,34 +3300,6 @@ const NewsAggregator = () => {
                 <span className="text-xs font-medium uppercase">
                   Entertainment
                 </span>
-              </button>
-
-              {/* Food */}
-              <button
-                onClick={() => {
-                  setActiveCategory("food");
-                  syncActiveCategory("food");
-                }}
-                className={`flex flex-col items-center gap-1 px-3 py-2 transition-colors ${
-                  activeCategory === "food"
-                    ? `${categoryColors.food.bg} ${categoryColors.food.text} rounded-t-lg rounded-b-none`
-                    : `text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-t-lg rounded-b-none`
-                }`}
-              >
-                <svg
-                  className="w-8 h-8"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                  />
-                </svg>
-                <span className="text-xs font-medium uppercase">Food</span>
               </button>
             </div>
           </nav>
