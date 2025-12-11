@@ -3,6 +3,20 @@ import ReactDOM from "react-dom/client";
 import AppWithRouter from "./App";
 import "./globals.css";
 
+// Defer storage migration to avoid blocking initial render
+if (typeof requestIdleCallback !== "undefined") {
+  requestIdleCallback(
+    () => {
+      import("./utils/storageMigration");
+    },
+    { timeout: 1000 }
+  );
+} else {
+  setTimeout(() => {
+    import("./utils/storageMigration");
+  }, 1000);
+}
+
 // Register service worker for caching and offline support
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {

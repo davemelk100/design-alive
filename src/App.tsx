@@ -3,9 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { content } from "./content";
 import { ThemeProvider } from "./context/ThemeContext";
 
-import MobileTrayMenu from "./components/MobileTrayMenu";
-import { Footer } from "./components/Footer";
-
 import {
   BrowserRouter as Router,
   Routes,
@@ -26,9 +23,13 @@ const NewsAggregator = lazy(() => import("./pages/NewsAggregator"));
 const Specs = lazy(() => import("./pages/Specs"));
 const Story = lazy(() => import("./pages/Story"));
 
-import { slugify } from "./utils/slugify";
+// Lazy load non-critical UI components to reduce critical path
+const MobileTrayMenu = lazy(() => import("./components/MobileTrayMenu"));
+const Footer = lazy(() =>
+  import("./components/Footer").then((module) => ({ default: module.Footer }))
+);
 
-import "./utils/storageMigration"; // Import to trigger migration if needed
+import { slugify } from "./utils/slugify";
 
 // Lazy load icons to reduce initial bundle size
 const LazyArrowUp = React.lazy(() =>
@@ -413,6 +414,9 @@ function App() {
                                           alt={project.title}
                                           className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
                                           loading="lazy"
+                                          decoding="async"
+                                          width="512"
+                                          height="512"
                                         />
                                       ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
@@ -475,6 +479,9 @@ function App() {
                                           alt={project.title}
                                           className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
                                           loading="lazy"
+                                          decoding="async"
+                                          width="512"
+                                          height="512"
                                         />
                                       ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
@@ -591,6 +598,9 @@ function App() {
                                         alt={story.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         loading="lazy"
+                                        decoding="async"
+                                        width="512"
+                                        height="512"
                                       />
                                     ) : (
                                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
@@ -645,6 +655,9 @@ function App() {
                                         alt={story.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         loading="lazy"
+                                        decoding="async"
+                                        width="512"
+                                        height="512"
                                       />
                                     ) : (
                                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
@@ -733,6 +746,9 @@ function App() {
                                       alt={project.alt || project.title}
                                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                       loading="lazy"
+                                      decoding="async"
+                                      width="512"
+                                      height="512"
                                     />
                                   </div>
 
@@ -772,6 +788,9 @@ function App() {
                                       alt={project.alt || project.title}
                                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                       loading="lazy"
+                                      decoding="async"
+                                      width="512"
+                                      height="512"
                                     />
                                   </div>
 
@@ -883,6 +902,9 @@ function App() {
                                         alt={article.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         loading="lazy"
+                                        decoding="async"
+                                        width="512"
+                                        height="512"
                                       />
                                     </div>
 
@@ -952,6 +974,9 @@ function App() {
                                         alt={article.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         loading="lazy"
+                                        decoding="async"
+                                        width="512"
+                                        height="512"
                                       />
                                     </div>
 
@@ -1554,10 +1579,16 @@ function App() {
         </Suspense>
       )}
       {/* Hide MobileTrayMenu on news page */}
-      {location.pathname !== "/news" && <MobileTrayMenu />}
+      {location.pathname !== "/news" && (
+        <Suspense fallback={null}>
+          <MobileTrayMenu />
+        </Suspense>
+      )}
 
       {/* Footer */}
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
 
       {/* Global Dark Mode Toggle and View Toggle - Visible on all pages */}
       <div className="fixed top-2 right-0 z-50 flex items-center gap-2">

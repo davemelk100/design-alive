@@ -172,6 +172,8 @@ export default function Article() {
                 src={article.image}
                 alt={article.title}
                 className="w-full rounded-lg h-auto"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>

@@ -18,3 +18,19 @@
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Headers for caching and compression (Netlify automatically applies gzip/brotli compression)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
