@@ -1,0 +1,22 @@
+# Headers for all HTML files
+/*.html
+  Content-Encoding: gzip, br
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Headers for all JS files
+/assets/*.js
+  Content-Encoding: gzip, br
+  Cache-Control: public, max-age=31536000, immutable
+
+# Headers for all CSS files
+/assets/*.css
+  Content-Encoding: gzip, br
+  Cache-Control: public, max-age=31536000, immutable
+
+# Headers for images
+/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Headers for fonts
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable

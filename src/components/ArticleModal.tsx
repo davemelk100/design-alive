@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
+import { getOptimizedImage } from "../utils/imageOptimizer";
 
 interface ArticleModalProps {
   title: string;
@@ -124,7 +125,7 @@ export default function ArticleModal({
             {image && (
               <div className="float-right ml-8 mb-4 w-1/2 aspect-video overflow-hidden rounded-lg">
                 <img
-                  src={image}
+                  src={getOptimizedImage(image, 800)}
                   alt={title}
                   className="w-full h-full object-cover"
                   loading="lazy"

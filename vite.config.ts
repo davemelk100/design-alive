@@ -82,8 +82,13 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
   },
   optimizeDeps: {
-    include: ["react", "react-dom", "react-router-dom", "framer-motion"],
-    // Pre-bundle framer-motion to avoid long dependency chains in dev mode
-    // Production build still chunks it separately for better code splitting
+    include: ["react", "react-dom", "react-router-dom"],
+    // Exclude large dependencies that are only used in lazy-loaded components
+    // This prevents them from being pre-bundled and blocking the critical path in dev mode
+    exclude: [
+      "lucide-react",
+      "@radix-ui/react-icons",
+      "framer-motion", // Only used in lazy-loaded pages/components
+    ],
   },
 });

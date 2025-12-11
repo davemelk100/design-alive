@@ -7,10 +7,22 @@ All images now have:
 - ✅ `loading="lazy"` - Lazy loads images below the fold
 - ✅ `decoding="async"` - Allows async decoding to prevent blocking
 - ✅ `width` and `height` attributes - Prevents layout shift (CLS)
+- ✅ **Automatic WebP conversion via Netlify Image CDN** - Images are automatically converted to WebP format in production
 
-## Remaining Optimizations Needed
+## Implementation
 
-### 1. Image Format Conversion (WebP/AVIF)
+All image references now use the `getOptimizedImage()` utility function which:
+
+- Automatically converts PNG/JPG to WebP format in production via Netlify Image CDN
+- Applies width optimization based on display size
+- Falls back to original images in development
+- Works transparently without manual image conversion needed
+
+## Additional Optimizations (Optional)
+
+### 1. Manual Image Format Conversion (WebP/AVIF) - Optional
+
+**Note**: This is now **optional** as Netlify Image CDN automatically converts images to WebP in production. Manual conversion can provide even better control over quality and file sizes.
 
 The Lighthouse report indicates significant savings from converting PNG images to modern formats:
 

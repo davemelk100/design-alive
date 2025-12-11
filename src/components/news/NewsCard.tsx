@@ -5,6 +5,7 @@ import {
   getFeedCategory,
   truncateText,
 } from "../../utils/newsUtils";
+import { getOptimizedImage } from "../../utils/imageOptimizer";
 
 interface NewsCardProps {
   feed: RSSFeed;
@@ -148,7 +149,7 @@ export const NewsCard = ({
       >
         {currentItem.image && !currentItem.image.startsWith("placeholder:") ? (
           <img
-            src={currentItem.image}
+            src={getOptimizedImage(currentItem.image, 512)}
             alt={currentItem.title}
             className="w-full h-full object-cover"
             loading="lazy"

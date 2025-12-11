@@ -5,6 +5,7 @@ import ShareWidget from "../components/ShareWidget";
 import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import MobileTrayMenu from "../components/MobileTrayMenu";
+import { getOptimizedImage } from "../utils/imageOptimizer";
 
 export default function Article() {
   const { slug } = useParams();
@@ -169,7 +170,7 @@ export default function Article() {
           <div className="flex justify-center mb-8">
             <div className="w-2/3 rounded-lg">
               <img
-                src={article.image}
+                src={getOptimizedImage(article.image, 1200)}
                 alt={article.title}
                 className="w-full rounded-lg h-auto"
                 loading="lazy"

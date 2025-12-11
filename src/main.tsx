@@ -4,18 +4,25 @@ import AppWithRouter from "./App";
 import "./globals.css";
 
 // Defer storage migration to avoid blocking initial render
-if (typeof requestIdleCallback !== "undefined") {
-  requestIdleCallback(
-    () => {
-      import("./utils/storageMigration");
-    },
-    { timeout: 1000 }
-  );
-} else {
-  setTimeout(() => {
-    import("./utils/storageMigration");
-  }, 1000);
-}
+// Load after page is fully interactive
+setTimeout(() => {
+  if (typeof requestIdleCallback !== "undefined") {
+    requestIdleCallback(
+      () => {
+        import("./utils/storageMigration").catch(() => {
+          // Silently fail if migration can't be loaded
+        });
+      },
+      { timeout: 2000 }
+    );
+  } else {
+    setTimeout(() => {
+      import("./utils/storageMigration").catch(() => {
+        // Silently fail if migration can't be loaded
+      });
+    }, 2000);
+  }
+}, 0);
 
 // Register service worker for caching and offline support
 if ("serviceWorker" in navigator) {
