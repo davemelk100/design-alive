@@ -72,11 +72,54 @@ window.addEventListener("pagehide", (event) => {
 
 // Add error boundary for unhandled errors
 window.addEventListener("error", (event) => {
+  // Suppress harmless Chrome extension messaging errors
+  if (
+    event.message &&
+    typeof event.message === "string" &&
+    (event.message.includes("Could not establish connection") ||
+      event.message.includes("Receiving end does not exist") ||
+      event.message.includes("runtime.lastError"))
+  ) {
+    // Silently ignore browser extension errors - they're harmless
+    return;
+  }
   console.error("Unhandled error:", event.error);
 });
 
 window.addEventListener("unhandledrejection", (event) => {
+  // Suppress harmless Chrome extension messaging errors
+  if (
+    event.reason &&
+    typeof event.reason === "string" &&
+    (event.reason.includes("Could not establish connection") ||
+      event.reason.includes("Receiving end does not exist") ||
+      event.reason.includes("runtime.lastError"))
+  ) {
+    // Silently ignore browser extension errors - they're harmless
+    return;
+  }
   console.error("Unhandled promise rejection:", event.reason);
 });
+
+// Suppress console errors from browser extensions
+if (typeof console !== "undefined" && console.error) {
+  const originalError = console.error;
+  console.error = function (...args: any[]) {
+    const message = args.join(" ");
+    // Filter out Chrome extension messaging errors
+    if (
+      typeof message === "string" &&
+      (message.includes("Could not establish connection") ||
+        message.includes("Receiving end does not exist") ||
+        message.includes("runtime.lastError") ||
+        message.includes("Unchecked runtime.lastError"))
+    ) {
+      // Silently ignore - this is from browser extensions, not our code
+      return;
+    }
+    // Log all other errors normally
+    originalError.apply(console, args as any);
+  };
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(<AppWithRouter />);
