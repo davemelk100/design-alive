@@ -22,6 +22,7 @@ const AudioTranscript = lazy(() => import("./pages/AudioTranscript"));
 const NewsAggregator = lazy(() => import("./pages/NewsAggregator"));
 const Specs = lazy(() => import("./pages/Specs"));
 const Story = lazy(() => import("./pages/Story"));
+const MusicPlayer = lazy(() => import("./pages/MusicPlayer"));
 
 // Lazy load non-critical UI components to reduce critical path
 const MobileTrayMenu = lazy(() => import("./components/MobileTrayMenu"));
@@ -1522,10 +1523,11 @@ function App() {
             <Route path="/article/:slug" element={<Article />} />
             <Route path="/archive" element={<Archive />} />
             <Route path="/json" element={<JsonAiPrompts />} />
-            <Route path="/audio-transcript" element={<AudioTranscript />} />
+            <Route path="/zaven" element={<AudioTranscript />} />
             <Route path="/news" element={<NewsAggregator />} />
             <Route path="/specs" element={<Specs />} />
             <Route path="/story" element={<Story />} />
+            <Route path="/music" element={<MusicPlayer />} />
           </Routes>
         </Suspense>
       </main>
