@@ -25,7 +25,7 @@ export default defineConfig({
     },
   },
   build: {
-    target: "esnext", // Use modern JS for better tree-shaking
+    target: "esnext", // Use modern JS for better tree-shaking and performance improvement
     rollupOptions: {
       treeshake: {
         moduleSideEffects: (id) => {
