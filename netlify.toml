@@ -4,9 +4,6 @@
 command = "npm run build"
 publish = "dist"
 
-# Environment variables can be set in Netlify dashboard:
-# Site settings > Environment variables
-
 [[redirects]]
 from = "/api/*"
 to = "/.netlify/functions/:splat"
