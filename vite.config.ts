@@ -32,12 +32,6 @@ export default defineConfig({
           // Normalize path separators for cross-platform compatibility
           const normalizedId = id.replace(/\\/g, "/");
 
-          // Preserve all node_modules - they may have side effects
-          // This prevents empty vendor chunks
-          if (normalizedId.includes("node_modules")) {
-            return true;
-          }
-
           // Preserve content.ts as it has side effects (data exports)
           // This is critical - content.ts must not be tree-shaken away
           if (
@@ -54,12 +48,31 @@ export default defineConfig({
           ) {
             return true;
           }
-          // Preserve application code - don't tree-shake it away
-          // Only tree-shake unused exports, not entire modules
-          return true;
+          // Preserve CSS imports (they have side effects)
+          if (normalizedId.endsWith(".css")) {
+            return true;
+          }
+          // Allow aggressive tree-shaking for node_modules
+          // Only preserve modules that are known to have side effects
+          if (normalizedId.includes("node_modules")) {
+            // Preserve polyfills and global side-effect modules
+            if (
+              normalizedId.includes("regenerator-runtime") ||
+              normalizedId.includes("core-js") ||
+              normalizedId.includes("@babel/runtime")
+            ) {
+              return true;
+            }
+            // Allow tree-shaking for most other node_modules
+            return false;
+          }
+          // Allow tree-shaking for application code
+          // Only preserve modules with explicit side effects
+          return false;
         },
         propertyReadSideEffects: false,
         tryCatchDeoptimization: false,
+        preset: "smallest", // Most aggressive tree-shaking preset
       },
       output: {
         entryFileNames: `assets/[name]-[hash].js`,
@@ -115,8 +128,10 @@ export default defineConfig({
           "console.info",
           "console.debug",
           "console.warn",
+          "console.trace",
+          "console.error", // Keep console.error for production debugging if needed
         ],
-        passes: 3, // More passes for better minification
+        passes: 5, // More passes for better minification (increased from 3)
         unsafe: true, // Enable unsafe optimizations
         unsafe_comps: true,
         unsafe_math: true,
@@ -124,18 +139,38 @@ export default defineConfig({
         unsafe_proto: true,
         unsafe_regexp: true,
         unsafe_undefined: true,
+        unsafe_arrows: true, // Optimize arrow functions
         collapse_vars: true,
         reduce_vars: true,
         dead_code: true,
         unused: true,
+        side_effects: false, // Assume no side effects unless marked
+        evaluate: true, // Evaluate constant expressions
+        inline: 2, // Inline functions more aggressively
+        keep_infinity: false, // Remove Infinity/NaN checks
+        loops: true, // Optimize loops
+        negate_iife: true, // Negate immediately invoked function expressions
+        properties: true, // Optimize property access
+        sequences: true, // Use comma operator
+        toplevel: true, // Remove unused top-level code
+        top_retain: [], // Don't retain any top-level variables
       },
       format: {
         comments: false, // Remove all comments
         ecma: 2020, // Use modern ECMAScript
         safari10: false, // Don't add Safari 10 workarounds
+        ascii_only: false, // Allow Unicode (smaller output)
+        beautify: false, // Don't beautify
+        preserve_annotations: false, // Don't preserve annotations
+        semicolons: true, // Use semicolons (required for some optimizations)
       },
       mangle: {
         safari10: false, // Don't add Safari 10 workarounds
+        properties: false, // Don't mangle properties (can break code)
+        toplevel: true, // Mangle top-level variable names
+        keep_classnames: false, // Mangle class names
+        keep_fnames: false, // Mangle function names
+        reserved: [], // No reserved names
       },
     },
     cssMinify: false, // Disable CSS minification - esbuild minifier has issues with Tailwind @layer/@apply
