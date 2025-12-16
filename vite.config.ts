@@ -20,7 +20,7 @@ export default defineConfig({
       "/.netlify/functions": {
         target: "http://localhost:8888",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/\.netlify\/functions/, ""),
+        rewrite: (path) => path.replace(/^\/\.netlify\/func21tions/, ""),
       },
     },
   },
@@ -52,27 +52,17 @@ export default defineConfig({
           if (normalizedId.endsWith(".css")) {
             return true;
           }
-          // Allow aggressive tree-shaking for node_modules
-          // Only preserve modules that are known to have side effects
+          // Preserve all node_modules - they may have side effects
+          // This prevents empty vendor chunks and ensures dependencies work
           if (normalizedId.includes("node_modules")) {
-            // Preserve polyfills and global side-effect modules
-            if (
-              normalizedId.includes("regenerator-runtime") ||
-              normalizedId.includes("core-js") ||
-              normalizedId.includes("@babel/runtime")
-            ) {
-              return true;
-            }
-            // Allow tree-shaking for most other node_modules
-            return false;
+            return true;
           }
-          // Allow tree-shaking for application code
-          // Only preserve modules with explicit side effects
-          return false;
+          // Preserve application code - don't tree-shake it away
+          // Only tree-shake unused exports, not entire modules
+          return true;
         },
         propertyReadSideEffects: false,
         tryCatchDeoptimization: false,
-        preset: "smallest", // Most aggressive tree-shaking preset
       },
       output: {
         entryFileNames: `assets/[name]-[hash].js`,
@@ -131,7 +121,7 @@ export default defineConfig({
           "console.trace",
           "console.error", // Keep console.error for production debugging if needed
         ],
-        passes: 5, // More passes for better minification (increased from 3)
+        passes: 3, // Balanced passes for minification (reduced from 5 to avoid breaking code)
         unsafe: true, // Enable unsafe optimizations
         unsafe_comps: true,
         unsafe_math: true,
@@ -139,21 +129,17 @@ export default defineConfig({
         unsafe_proto: true,
         unsafe_regexp: true,
         unsafe_undefined: true,
-        unsafe_arrows: true, // Optimize arrow functions
         collapse_vars: true,
         reduce_vars: true,
         dead_code: true,
         unused: true,
-        side_effects: false, // Assume no side effects unless marked
         evaluate: true, // Evaluate constant expressions
-        inline: 2, // Inline functions more aggressively
-        keep_infinity: false, // Remove Infinity/NaN checks
+        inline: 1, // Moderate inlining (reduced from 2)
         loops: true, // Optimize loops
         negate_iife: true, // Negate immediately invoked function expressions
         properties: true, // Optimize property access
         sequences: true, // Use comma operator
-        toplevel: true, // Remove unused top-level code
-        top_retain: [], // Don't retain any top-level variables
+        toplevel: false, // Don't remove top-level code (can break exports)
       },
       format: {
         comments: false, // Remove all comments
@@ -167,10 +153,9 @@ export default defineConfig({
       mangle: {
         safari10: false, // Don't add Safari 10 workarounds
         properties: false, // Don't mangle properties (can break code)
-        toplevel: true, // Mangle top-level variable names
-        keep_classnames: false, // Mangle class names
+        toplevel: false, // Don't mangle top-level (can break exports)
+        keep_classnames: true, // Keep class names (React components need them)
         keep_fnames: false, // Mangle function names
-        reserved: [], // No reserved names
       },
     },
     cssMinify: false, // Disable CSS minification - esbuild minifier has issues with Tailwind @layer/@apply
