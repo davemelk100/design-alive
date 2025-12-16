@@ -11,7 +11,6 @@ import {
   Settings,
   Shield,
   ArrowLeft,
-  ExternalLink,
 } from "lucide-react";
 import {
   techCategories,
@@ -85,47 +84,60 @@ const Specs = () => {
                 Back to Portfolio
               </Link>
 
-              {/* Title */}
+              {/* Title and Navigation Row */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.8, delay: 0.2 }}
-                className="mb-6 sm:mb-8"
+                className="mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-start lg:justify-between lg:gap-4"
               >
-                <h1 className="text-5xl font-bold mb-1 title-font leading-none relative z-10 text-left">
-                  {content.siteInfo.subtitle}
-                </h1>
-              </motion.div>
+                <div className="flex-1">
+                  <h1 className="text-5xl font-bold mb-1 title-font leading-none relative z-10 text-left">
+                    {content.siteInfo.subtitle}
+                  </h1>
+                </div>
 
-              {/* Navigation Links */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.8, delay: 0.4 }}
-                className="hidden lg:flex flex-wrap justify-start gap-2 sm:gap-3 mb-2 sm:mb-4"
-              >
-                {content.navigation.links
-                  .filter((link) => link.id !== "design-system")
-                  .map((link) => (
-                    <button
-                      key={link.id}
-                      onClick={() => {
-                        navigate("/");
-                        // Wait for navigation to complete before scrolling
-                        setTimeout(() => {
-                          const element = document.getElementById(link.id);
-                          if (element) {
-                            element.scrollIntoView({
-                              behavior: "smooth",
-                            });
-                          }
-                        }, 100);
-                      }}
-                      className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-                    >
-                      {link.text}
-                    </button>
-                  ))}
+                {/* Navigation Links */}
+                <div className="hidden lg:flex flex-wrap justify-end gap-2 sm:gap-3 mt-2 lg:mt-0">
+                  {content.navigation.links
+                    .filter((link) => link.id !== "design-system")
+                    .sort((a, b) => {
+                      // Define the desired order: Lab, Storytelling, Design, Articles, Career
+                      const order = [
+                        "current-projects",
+                        "stories",
+                        "work",
+                        "articles",
+                        "career",
+                      ];
+                      const indexA = order.indexOf(a.id);
+                      const indexB = order.indexOf(b.id);
+                      return (
+                        (indexA === -1 ? 999 : indexA) -
+                        (indexB === -1 ? 999 : indexB)
+                      );
+                    })
+                    .map((link) => (
+                      <button
+                        key={link.id}
+                        onClick={() => {
+                          navigate("/");
+                          // Wait for navigation to complete before scrolling
+                          setTimeout(() => {
+                            const element = document.getElementById(link.id);
+                            if (element) {
+                              element.scrollIntoView({
+                                behavior: "smooth",
+                              });
+                            }
+                          }, 100);
+                        }}
+                        className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
+                        {link.text}
+                      </button>
+                    ))}
+                </div>
               </motion.div>
             </div>
           </div>
@@ -183,18 +195,6 @@ const Specs = () => {
                             </p>
                             {item.example && (
                               <div className="bg-white dark:bg-gray-700 rounded-lg p-3 border border-gray-200 dark:border-gray-600">
-                                <div className="flex items-center justify-between mb-2">
-                                  <h5 className="text-sm font-semibold text-primary">
-                                    {item.example.title}
-                                  </h5>
-                                  <Link
-                                    to={item.example.link}
-                                    className="text-xs text-gray-500 hover:text-primary transition-colors flex items-center gap-1"
-                                  >
-                                    View Example
-                                    <ExternalLink className="w-3 h-3" />
-                                  </Link>
-                                </div>
                                 <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
                                   {item.example.description}
                                 </p>
