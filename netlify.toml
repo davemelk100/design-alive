@@ -3,6 +3,7 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  # Note: No base directory specified - project root is used
 
 # Environment variables can be set in Netlify dashboard:
 # Site settings > Environment variables
