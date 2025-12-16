@@ -54,8 +54,9 @@ export default defineConfig({
           ) {
             return true;
           }
-          // Aggressive tree-shaking for application code only
-          return false;
+          // Preserve application code - don't tree-shake it away
+          // Only tree-shake unused exports, not entire modules
+          return true;
         },
         propertyReadSideEffects: false,
         tryCatchDeoptimization: false,
@@ -109,15 +110,32 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: ["console.log", "console.info", "console.debug"],
-        passes: 2, // Multiple passes for better minification
+        pure_funcs: [
+          "console.log",
+          "console.info",
+          "console.debug",
+          "console.warn",
+        ],
+        passes: 3, // More passes for better minification
         unsafe: true, // Enable unsafe optimizations
         unsafe_comps: true,
         unsafe_math: true,
         unsafe_methods: true,
+        unsafe_proto: true,
+        unsafe_regexp: true,
+        unsafe_undefined: true,
+        collapse_vars: true,
+        reduce_vars: true,
+        dead_code: true,
+        unused: true,
       },
       format: {
         comments: false, // Remove all comments
+        ecma: 2020, // Use modern ECMAScript
+        safari10: false, // Don't add Safari 10 workarounds
+      },
+      mangle: {
+        safari10: false, // Don't add Safari 10 workarounds
       },
     },
     cssMinify: false, // Disable CSS minification - esbuild minifier has issues with Tailwind @layer/@apply

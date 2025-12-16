@@ -1,7 +1,23 @@
 import { motion } from "framer-motion";
-import { Suspense } from "react";
-import { Play, Pause, Volume2, Video, Headphones } from "lucide-react";
+import { Suspense, lazy } from "react";
 import { useState, useRef } from "react";
+
+// Lazy load icons to avoid blocking critical path
+const LazyPlay = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Play }))
+);
+const LazyPause = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Pause }))
+);
+const LazyVolume2 = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Volume2 }))
+);
+const LazyVideo = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Video }))
+);
+const LazyHeadphones = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Headphones }))
+);
 
 // Import Roboto Serif font
 // Font imports moved to main.tsx
@@ -325,7 +341,9 @@ const AudioTranscript = () => {
                             : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                         }`}
                       >
-                        <Headphones className="w-4 h-4" />
+                        <Suspense fallback={<span className="w-4 h-4">🎧</span>}>
+                          <LazyHeadphones className="w-4 h-4" />
+                        </Suspense>
                         <span className="text-sm font-medium">Audio</span>
                       </button>
                       <button
@@ -336,7 +354,9 @@ const AudioTranscript = () => {
                             : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                         }`}
                       >
-                        <Video className="w-4 h-4" />
+                        <Suspense fallback={<span className="w-4 h-4">🎥</span>}>
+                          <LazyVideo className="w-4 h-4" />
+                        </Suspense>
                         <span className="text-sm font-medium">Video</span>
                       </button>
                     </div>
@@ -380,9 +400,13 @@ const AudioTranscript = () => {
                           className="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-colors"
                         >
                           {playingTrack === track.id ? (
-                            <Pause className="w-5 h-5" />
+                            <Suspense fallback={<span className="w-5 h-5">⏸</span>}>
+                              <LazyPause className="w-5 h-5" />
+                            </Suspense>
                           ) : (
-                            <Play className="w-5 h-5 ml-0.5" />
+                            <Suspense fallback={<span className="w-5 h-5 ml-0.5">▶</span>}>
+                              <LazyPlay className="w-5 h-5 ml-0.5" />
+                            </Suspense>
                           )}
                         </button>
 
@@ -408,7 +432,9 @@ const AudioTranscript = () => {
 
                       {/* Volume Control */}
                       <div className="flex items-center gap-2">
-                        <Volume2 className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                        <Suspense fallback={<span className="w-4 h-4 text-gray-500 dark:text-gray-400">🔊</span>}>
+                          <LazyVolume2 className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                        </Suspense>
                         <input
                           type="range"
                           min="0"
@@ -491,9 +517,13 @@ const AudioTranscript = () => {
                           className="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center transition-colors"
                         >
                           {playingVideo === video.id ? (
-                            <Pause className="w-5 h-5" />
+                            <Suspense fallback={<span className="w-5 h-5">⏸</span>}>
+                              <LazyPause className="w-5 h-5" />
+                            </Suspense>
                           ) : (
-                            <Play className="w-5 h-5 ml-0.5" />
+                            <Suspense fallback={<span className="w-5 h-5 ml-0.5">▶</span>}>
+                              <LazyPlay className="w-5 h-5 ml-0.5" />
+                            </Suspense>
                           )}
                         </button>
 
@@ -524,7 +554,9 @@ const AudioTranscript = () => {
 
                       {/* Volume Control */}
                       <div className="flex items-center gap-2">
-                        <Volume2 className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                        <Suspense fallback={<span className="w-4 h-4 text-gray-500 dark:text-gray-400">🔊</span>}>
+                          <LazyVolume2 className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+                        </Suspense>
                         <input
                           type="range"
                           min="0"

@@ -1,11 +1,21 @@
 import { motion } from "framer-motion";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft, Copy, Check } from "lucide-react";
 import { content } from "../content";
 import MobileTrayMenu from "../components/MobileTrayMenu";
 import { useState } from "react";
 import { ADMIN_PANEL_URL } from "../config/api";
+
+// Lazy load icons to avoid blocking critical path
+const LazyArrowLeft = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.ArrowLeft }))
+);
+const LazyCopy = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Copy }))
+);
+const LazyCheck = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Check }))
+);
 
 const JsonAiPrompts = () => {
   const navigate = useNavigate();
@@ -332,7 +342,9 @@ const JsonAiPrompts = () => {
                 onClick={handleBackClick}
                 className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mb-8 relative z-50"
               >
-                <ArrowLeft className="h-4 w-4 mr-2" />
+                <Suspense fallback={<span className="h-4 w-4 mr-2">←</span>}>
+                  <LazyArrowLeft className="h-4 w-4 mr-2" />
+                </Suspense>
                 Back to Portfolio
               </Link>
 
@@ -540,9 +552,13 @@ const JsonAiPrompts = () => {
                       title={copied ? "Copied!" : "Copy JSON"}
                     >
                       {copied ? (
-                        <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
+                        <Suspense fallback={<span className="h-4 w-4 text-green-600 dark:text-green-400">✓</span>}>
+                          <LazyCheck className="h-4 w-4 text-green-600 dark:text-green-400" />
+                        </Suspense>
                       ) : (
-                        <Copy className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                        <Suspense fallback={<span className="h-4 w-4 text-gray-600 dark:text-gray-400">📋</span>}>
+                          <LazyCopy className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                        </Suspense>
                       )}
                     </button>
                     <pre className="text-xs sm:text-sm font-mono text-gray-800 dark:text-gray-200 leading-relaxed pt-8">

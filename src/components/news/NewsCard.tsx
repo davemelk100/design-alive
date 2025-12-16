@@ -1,11 +1,16 @@
-import { ExternalLink } from "lucide-react";
+import { lazy, Suspense } from "react";
 import { NewsItem, RSSFeed, ViewMode } from "../../types/news";
+
+// Lazy load icon to avoid blocking critical path
+const LazyExternalLink = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.ExternalLink }))
+);
 import {
   getCategoryIcon,
   getFeedCategory,
   truncateText,
 } from "../../utils/newsUtils";
-import { getOptimizedImage } from "../../utils/imageOptimizer";
+import { getResponsiveImage } from "../../utils/imageOptimizer";
 
 interface NewsCardProps {
   feed: RSSFeed;
@@ -122,7 +127,11 @@ export const NewsCard = ({
               className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer flex items-center gap-1"
             >
               {truncateText(currentItem.title, 90)}
-              <ExternalLink className="w-3 h-3 flex-shrink-0" />
+              <Suspense
+                fallback={<span className="w-3 h-3 flex-shrink-0">↗</span>}
+              >
+                <LazyExternalLink className="w-3 h-3 flex-shrink-0" />
+              </Suspense>
             </a>
           </h3>
         )}
@@ -149,13 +158,27 @@ export const NewsCard = ({
       >
         {currentItem.image && !currentItem.image.startsWith("placeholder:") ? (
           <img
-            src={getOptimizedImage(currentItem.image, 512)}
+            {...(() => {
+              const responsive = getResponsiveImage(
+                currentItem.image,
+                viewMode === "grid" ? [400, 600, 800] : [200, 300, 400],
+                70
+              );
+              return {
+                src: responsive.src,
+                srcSet: responsive.srcSet,
+                sizes:
+                  viewMode === "grid"
+                    ? "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    : "200px",
+              };
+            })()}
             alt={currentItem.title}
             className="w-full h-full object-cover"
             loading="lazy"
             decoding="async"
-            width={512}
-            height={384}
+            width={viewMode === "grid" ? 800 : 400}
+            height={viewMode === "grid" ? 450 : 300}
             onError={(e) => {
               const target = e.currentTarget;
               target.style.display = "none";

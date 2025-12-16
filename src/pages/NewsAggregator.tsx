@@ -1,5 +1,9 @@
-import { Suspense, useState, useEffect } from "react";
-import { ExternalLink } from "lucide-react";
+import { Suspense, useState, useEffect, lazy } from "react";
+
+// Lazy load icon to avoid blocking critical path
+const LazyExternalLink = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.ExternalLink }))
+);
 
 import { useSettingsSync } from "../hooks/useSettingsSync";
 
@@ -2431,7 +2435,15 @@ const NewsAggregator = () => {
                                           className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer break-words block flex items-center gap-1"
                                         >
                                           {feedItems[currentIndex]?.title || ""}
-                                          <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                                          <Suspense
+                                            fallback={
+                                              <span className="w-3 h-3 flex-shrink-0">
+                                                ↗
+                                              </span>
+                                            }
+                                          >
+                                            <LazyExternalLink className="w-3 h-3 flex-shrink-0" />
+                                          </Suspense>
                                         </a>
                                       </h3>
 
@@ -2992,7 +3004,15 @@ const NewsAggregator = () => {
                                           customFeedItems[0]?.title || "",
                                           90
                                         )}
-                                        <ExternalLink className="w-3 h-3 flex-shrink-0" />
+                                        <Suspense
+                                          fallback={
+                                            <span className="w-3 h-3 flex-shrink-0">
+                                              ↗
+                                            </span>
+                                          }
+                                        >
+                                          <LazyExternalLink className="w-3 h-3 flex-shrink-0" />
+                                        </Suspense>
                                       </a>
                                     </h3>
                                   )}

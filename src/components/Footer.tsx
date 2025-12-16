@@ -1,6 +1,11 @@
-import { Dribbble } from "lucide-react";
+import { lazy, Suspense } from "react";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { content } from "../content";
+
+// Lazy load icon to avoid blocking critical path
+const LazyDribbble = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Dribbble }))
+);
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -40,7 +45,9 @@ export const Footer = () => {
               className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="Dribbble"
             >
-              <Dribbble className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              <Suspense fallback={<span className="h-5 w-5">D</span>}>
+                <LazyDribbble className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              </Suspense>
             </a>
           </div>
         </div>

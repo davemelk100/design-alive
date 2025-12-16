@@ -2,10 +2,14 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { content } from "../content";
 import { slugify } from "../utils/slugify";
 import ShareWidget from "../components/ShareWidget";
-import { useEffect } from "react";
-import { ArrowLeft } from "lucide-react";
+import { useEffect, lazy, Suspense } from "react";
 import MobileTrayMenu from "../components/MobileTrayMenu";
-import { getOptimizedImage } from "../utils/imageOptimizer";
+import { getResponsiveImage } from "../utils/imageOptimizer";
+
+// Lazy load icon to avoid blocking critical path
+const LazyArrowLeft = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.ArrowLeft }))
+);
 
 export default function Article() {
   const { slug } = useParams();
@@ -41,7 +45,9 @@ export default function Article() {
             onClick={handleBackClick}
             className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mb-8 relative z-50"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <Suspense fallback={<span className="h-4 w-4 mr-2">←</span>}>
+              <LazyArrowLeft className="h-4 w-4 mr-2" />
+            </Suspense>
             Back to Articles
           </Link>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 font-card">
@@ -152,7 +158,9 @@ export default function Article() {
           onClick={handleBackClick}
           className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mb-8 relative z-50"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" />
+          <Suspense fallback={<span className="h-4 w-4 mr-2">←</span>}>
+            <LazyArrowLeft className="h-4 w-4 mr-2" />
+          </Suspense>
           Back to Articles
         </a>
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 font-card">
@@ -169,13 +177,29 @@ export default function Article() {
         {article.image && (
           <div className="flex justify-center mb-8">
             <div className="w-2/3 rounded-lg">
-              <img
-                src={getOptimizedImage(article.image, 1200)}
-                alt={article.title}
-                className="w-full rounded-lg h-auto"
-                loading="lazy"
-                decoding="async"
-              />
+              {(() => {
+                const responsive = getResponsiveImage(
+                  article.image,
+                  [600, 900, 1200],
+                  70
+                );
+                return (
+                  <img
+                    src={responsive.src}
+                    srcSet={responsive.srcSet}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 66vw, 66vw"
+                    alt={article.title}
+                    className="w-full rounded-lg h-auto"
+                    loading="eager"
+                    {...({
+                      fetchPriority: "high",
+                    } as React.ImgHTMLAttributes<HTMLImageElement>)}
+                    decoding="async"
+                    width={1200}
+                    height={675}
+                  />
+                );
+              })()}
             </div>
           </div>
         )}
@@ -188,7 +212,9 @@ export default function Article() {
             onClick={handleBackClick}
             className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <Suspense fallback={<span className="h-4 w-4 mr-2">←</span>}>
+              <LazyArrowLeft className="h-4 w-4 mr-2" />
+            </Suspense>
             Back to Site
           </Link>
         </div>

@@ -31,6 +31,7 @@ const Footer = lazy(() =>
 );
 
 import { slugify } from "./utils/slugify";
+import { getOptimizedImage } from "./utils/imageOptimizer";
 import {
   getCardImageProps,
   getThumbnailImageProps,
@@ -398,7 +399,12 @@ function App() {
                                           }
                                           alt={project.title}
                                           className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
-                                          loading="lazy"
+                                          loading={
+                                            index === 0 ? "eager" : "lazy"
+                                          }
+                                          {...(index === 0
+                                            ? { fetchPriority: "high" as const }
+                                            : {})}
                                           decoding="async"
                                           width="512"
                                           height="512"
@@ -1655,10 +1661,12 @@ function App() {
         {location.pathname !== "/specs" && (
           <div className="fixed bottom-0 left-0 z-[5] pointer-events-none">
             <img
-              src="/img/section-edge.png"
+              src={getOptimizedImage("/img/section-edge.png", 640, 65)}
               alt=""
               className="w-auto h-[640px] opacity-100 dark:opacity-100"
-              loading="lazy"
+              {...({
+                fetchPriority: "high",
+              } as React.ImgHTMLAttributes<HTMLImageElement>)}
               width={640}
               height={640}
             />

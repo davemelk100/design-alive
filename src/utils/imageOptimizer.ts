@@ -20,7 +20,7 @@ let isNetlify = false;
 export function getOptimizedImage(
   src: string,
   width?: number,
-  quality: number = 75
+  quality: number = 70 // Lower quality for better compression (70 is still high quality)
 ): string {
   // Fast path: Skip optimization for SVGs
   if (src.endsWith(".svg")) {
@@ -45,7 +45,8 @@ export function getOptimizedImage(
     const params = new URLSearchParams({
       url: src,
       q: quality.toString(),
-      fm: "webp",
+      fm: "webp", // Use WebP format for better compression
+      fit: "cover", // Ensure proper cropping
     });
 
     if (width) {
@@ -68,7 +69,7 @@ export function getOptimizedImage(
 export function getResponsiveImage(
   src: string,
   sizes: number[] = [400, 800, 1200],
-  quality: number = 75
+  quality: number = 70 // Lower quality for better compression
 ): { src: string; srcSet: string } {
   // Skip for SVGs
   if (src.endsWith(".svg")) {
@@ -105,7 +106,7 @@ export function getResponsiveImage(
  */
 export function getCardImageProps(
   src: string,
-  quality: number = 75
+  quality: number = 70 // Lower quality for better compression
 ): {
   src: string;
   srcSet: string;
@@ -133,12 +134,12 @@ export function getCardImageProps(
  * Get responsive image props for compact list images
  * Optimized for small thumbnail images (80-96px width)
  * @param src - Original image path
- * @param quality - Quality 0-100 (optional, defaults to 75)
+ * @param quality - Quality 0-100 (optional, defaults to 70)
  * @returns Object with image props including src, srcSet, sizes, width, and height
  */
 export function getThumbnailImageProps(
   src: string,
-  quality: number = 75
+  quality: number = 70 // Lower quality for better compression
 ): {
   src: string;
   srcSet: string;
@@ -156,6 +157,38 @@ export function getThumbnailImageProps(
   return {
     ...responsive,
     sizes: "96px",
+    width,
+    height,
+  };
+}
+
+/**
+ * Get responsive image props for hero/large images
+ * Optimized for full-width hero images and large article images
+ * @param src - Original image path
+ * @param quality - Quality 0-100 (optional, defaults to 70)
+ * @returns Object with image props including src, srcSet, sizes, width, and height
+ */
+export function getHeroImageProps(
+  src: string,
+  quality: number = 70 // Lower quality for better compression
+): {
+  src: string;
+  srcSet: string;
+  sizes: string;
+  width: number;
+  height: number;
+} {
+  // Hero images: responsive widths for mobile, tablet, desktop
+  const widths = [600, 900, 1200, 1600];
+  const responsive = getResponsiveImage(src, widths, quality);
+  // Standard aspect ratio for hero images (16:9)
+  const width = 1600;
+  const height = 900;
+
+  return {
+    ...responsive,
+    sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 80vw",
     width,
     height,
   };

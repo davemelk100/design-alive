@@ -1,8 +1,13 @@
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { lazy, Suspense } from "react";
 import MobileTrayMenu from "../components/MobileTrayMenu";
 import { content } from "../content";
+
+// Lazy load icon to avoid blocking critical path
+const LazyArrowLeft = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.ArrowLeft }))
+);
 
 const Story = () => {
   const navigate = useNavigate();
@@ -42,7 +47,9 @@ const Story = () => {
                 onClick={handleBackClick}
                 className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mb-8 relative z-50"
               >
-                <ArrowLeft className="h-4 w-4 mr-2" />
+                <Suspense fallback={<span className="h-4 w-4 mr-2">←</span>}>
+              <LazyArrowLeft className="h-4 w-4 mr-2" />
+            </Suspense>
                 Back to Portfolio
               </Link>
 

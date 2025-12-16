@@ -1,9 +1,19 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, lazy, Suspense } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { content } from "../content";
 import { slugify } from "../utils/slugify";
-import { ArrowLeft, Search, Calendar } from "lucide-react";
 import MobileTrayMenu from "../components/MobileTrayMenu";
+
+// Lazy load icons to avoid blocking critical path
+const LazyArrowLeft = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.ArrowLeft }))
+);
+const LazySearch = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Search }))
+);
+const LazyCalendar = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Calendar }))
+);
 
 export default function Archive() {
   const navigate = useNavigate();
@@ -43,7 +53,9 @@ export default function Archive() {
             onClick={handleBackClick}
             className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mb-8 relative z-50"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <Suspense fallback={<span className="h-4 w-4 mr-2">←</span>}>
+              <LazyArrowLeft className="h-4 w-4 mr-2" />
+            </Suspense>
             Back to Articles
           </Link>
 
@@ -59,7 +71,15 @@ export default function Archive() {
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             {/* Search */}
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Suspense
+                fallback={
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400">
+                    🔍
+                  </span>
+                }
+              >
+                <LazySearch className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              </Suspense>
               <input
                 type="text"
                 placeholder="Search articles..."
@@ -103,7 +123,9 @@ export default function Archive() {
 
                   <div className="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-400">
                     <div className="flex items-center gap-1">
-                      <Calendar className="h-4 w-4" />
+                      <Suspense fallback={<span className="h-4 w-4">📅</span>}>
+                        <LazyCalendar className="h-4 w-4" />
+                      </Suspense>
                       <span>{article.date}</span>
                     </div>
                     <span>•</span>
