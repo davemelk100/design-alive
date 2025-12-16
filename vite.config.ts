@@ -25,7 +25,13 @@ export default defineConfig({
     },
   },
   build: {
+    target: "esnext", // Use modern JS for better tree-shaking
     rollupOptions: {
+      treeshake: {
+        moduleSideEffects: false, // Enable aggressive tree-shaking
+        propertyReadSideEffects: false,
+        tryCatchDeoptimization: false,
+      },
       output: {
         entryFileNames: `assets/[name]-[hash].js`,
         chunkFileNames: `assets/[name]-[hash].js`,
@@ -76,10 +82,20 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
+        pure_funcs: ["console.log", "console.info", "console.debug"],
+        passes: 2, // Multiple passes for better minification
+        unsafe: true, // Enable unsafe optimizations
+        unsafe_comps: true,
+        unsafe_math: true,
+        unsafe_methods: true,
+      },
+      format: {
+        comments: false, // Remove all comments
       },
     },
-    cssMinify: false, // Disabled - esbuild minifier doesn't handle Tailwind @layer/@apply well
+    cssMinify: true, // Enable CSS minification with esbuild
     chunkSizeWarningLimit: 1000,
+    reportCompressedSize: false, // Disable to speed up builds
   },
   optimizeDeps: {
     include: ["react", "react-dom", "react-router-dom"],

@@ -25,12 +25,10 @@ if ("serviceWorker" in navigator) {
                     newWorker.state === "installed" &&
                     navigator.serviceWorker.controller
                   ) {
-                    // New service worker available
-                    if (
-                      confirm("A new version is available. Reload to update?")
-                    ) {
-                      window.location.reload();
-                    }
+                    // New service worker available - use non-blocking notification
+                    // Don't use confirm() as it blocks bfcache
+                    // Instead, silently update on next navigation
+                    newWorker.postMessage({ type: "SKIP_WAITING" });
                   }
                 });
               }
@@ -63,11 +61,9 @@ window.addEventListener("pageshow", (event) => {
 });
 
 // Optimize page unload for better back/forward cache
-window.addEventListener("pagehide", (event) => {
-  // Clean up any timers or listeners that might prevent bfcache
-  if (event.persisted) {
-    // Page is entering bfcache - minimal cleanup
-  }
+window.addEventListener("pagehide", () => {
+  // Don't add any blocking operations here - they prevent bfcache
+  // The pagehide event with persisted=true means page is entering bfcache
 });
 
 // Add error boundary for unhandled errors

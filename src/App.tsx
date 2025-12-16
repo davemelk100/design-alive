@@ -1652,14 +1652,16 @@ function App() {
         )}
 
         {/* Fixed background image in bottom left */}
-        <div className="fixed bottom-0 left-0 z-[5] pointer-events-none">
-          <img
-            src="/img/section-edge.png"
-            alt=""
-            className="w-auto h-[640px] opacity-100 dark:opacity-100"
-            loading="lazy"
-          />
-        </div>
+        {location.pathname !== "/specs" && (
+          <div className="fixed bottom-0 left-0 z-[5] pointer-events-none">
+            <img
+              src="/img/section-edge.png"
+              alt=""
+              className="w-auto h-[640px] opacity-100 dark:opacity-100"
+              loading="lazy"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

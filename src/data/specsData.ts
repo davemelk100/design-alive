@@ -122,8 +122,28 @@ export const techCategories: TechCategory[] = [
     icon: "Database",
     items: [
       {
+        name: "FastAPI",
+        description: "Modern Python web framework for backend API",
+        example: {
+          title: "RESTful API",
+          description: "Content management API with CRUD operations",
+          link: "/specs",
+          code: "FastAPI with SQLAlchemy ORM for database operations",
+        },
+      },
+      {
+        name: "SQLAlchemy",
+        description: "Python ORM for database operations",
+        example: {
+          title: "Database Models",
+          description: "Type-safe database models and relationships",
+          link: "/specs",
+          code: "SQLAlchemy models for content management",
+        },
+      },
+      {
         name: "Drizzle ORM",
-        description: "TypeScript ORM for database operations",
+        description: "TypeScript ORM for frontend database operations",
         example: {
           title: "Type-Safe Database",
           description: "Database schema with TypeScript types",
@@ -132,28 +152,28 @@ export const techCategories: TechCategory[] = [
         },
       },
       {
-        name: "PostgreSQL",
-        description: "Primary database via Neon",
+        name: "PostgreSQL / Neon",
+        description: "Primary database via Neon cloud",
         example: {
           title: "Cloud Database",
           description: "Serverless PostgreSQL for data persistence",
           link: "/news",
-          code: "Neon connection with Drizzle ORM",
+          code: "Neon connection with connection pooling",
         },
       },
       {
-        name: "NextAuth.js",
-        description: "Authentication framework",
+        name: "JWT Authentication",
+        description: "Token-based authentication system",
         example: {
           title: "Secure Authentication",
-          description: "OAuth and session management",
+          description: "JWT tokens for admin panel access",
           link: "/specs",
-          code: "NextAuth configuration for secure login",
+          code: "python-jose for JWT token generation and validation",
         },
       },
       {
         name: "Netlify Functions",
-        description: "Serverless functions",
+        description: "Serverless functions for RSS and API",
         example: {
           title: "Serverless API",
           description: "RSS proxy and site configuration functions",
@@ -175,6 +195,16 @@ export const techCategories: TechCategory[] = [
           description: "Git-based continuous deployment",
           link: "/",
           code: "netlify.toml for build configuration",
+        },
+      },
+      {
+        name: "Backend Hosting",
+        description: "FastAPI backend on Railway/Render/Fly.io",
+        example: {
+          title: "Cloud Backend",
+          description: "Deployed Python backend with PostgreSQL",
+          link: "/specs",
+          code: "Railway, Render, or Fly.io for backend hosting",
         },
       },
       {
@@ -261,12 +291,14 @@ export const techCategories: TechCategory[] = [
     items: [
       {
         name: "Code Splitting",
-        description: "Lazy loading with React.lazy",
+        description:
+          "Comprehensive lazy loading strategy with React.lazy and Suspense",
         example: {
-          title: "Route-Based Splitting",
-          description: "Pages loaded on demand for faster initial load",
+          title: "Route & Component Splitting",
+          description:
+            "All pages, components, and icons loaded on demand for optimal performance",
           link: "/json",
-          code: "React.lazy(() => import('./JsonAiPrompts'))",
+          code: "React.lazy(() => import('./JsonAiPrompts')) with Suspense boundaries",
         },
       },
       {
@@ -408,6 +440,36 @@ export const techCategories: TechCategory[] = [
         },
       },
       {
+        name: "Music Player",
+        description: "Audio playback with playlist management",
+        example: {
+          title: "Interactive Audio",
+          description: "Custom music player with play/pause controls",
+          link: "/music",
+          code: "HTML5 audio API with React state management",
+        },
+      },
+      {
+        name: "JSON AI Prompts",
+        description: "Structured prompt builder for AI interactions",
+        example: {
+          title: "AI Prompt Tool",
+          description: "JSON-based prompt structure for better AI results",
+          link: "/json",
+          code: "Structured JSON format for AI prompt engineering",
+        },
+      },
+      {
+        name: "Audio Transcript",
+        description: "Audio transcription and playback interface",
+        example: {
+          title: "Transcript Viewer",
+          description: "Synchronized audio and transcript display",
+          link: "/zaven",
+          code: "Audio playback with transcript highlighting",
+        },
+      },
+      {
         name: "Video Content",
         description: "Optimized video delivery",
         example: {
@@ -457,7 +519,13 @@ export const keyFeatures: string[] = [
   "Dark/Light Mode Toggle",
   "Responsive Design (Mobile-First)",
   "Smooth Animations & Transitions",
+  "Code Splitting & Lazy Loading",
   "News Aggregator with RSS Feeds",
+  "Music Player with Playlist",
+  "JSON AI Prompts Builder",
+  "Audio Transcript Viewer",
+  "FastAPI Backend with Admin Panel",
+  "JWT Authentication",
   "Interactive SVG Animations",
   "Article Modal System",
   "Grid/List View Toggle",
@@ -469,14 +537,19 @@ export const keyFeatures: string[] = [
 
 export const performanceMetrics: PerformanceMetric[] = [
   {
-    metric: "Bundle Size",
-    value: "485KB",
-    description: "Total JavaScript bundle",
+    metric: "Initial Bundle",
+    value: "< 200KB",
+    description: "Code-split chunks load on demand",
   },
   {
-    metric: "Load Time",
-    value: "< 2s",
-    description: "Fast initial load",
+    metric: "First Contentful Paint",
+    value: "< 1.5s",
+    description: "Fast initial render",
+  },
+  {
+    metric: "Largest Contentful Paint",
+    value: "< 2.5s",
+    description: "Optimized LCP",
   },
   {
     metric: "Lighthouse Score",
