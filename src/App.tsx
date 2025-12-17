@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import { content } from "./content";
 import { ThemeProvider } from "./context/ThemeContext";
+import { CartProvider } from "./context/CartContext";
+import { StoreProvider } from "./context/StoreContext";
 
 import {
   BrowserRouter as Router,
@@ -23,6 +25,10 @@ const NewsAggregator = lazy(() => import("./pages/NewsAggregator"));
 const Specs = lazy(() => import("./pages/Specs"));
 const Story = lazy(() => import("./pages/Story"));
 const MusicPlayer = lazy(() => import("./pages/MusicPlayer"));
+const Store = lazy(() => import("./pages/Store"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const CheckoutSuccess = lazy(() => import("./pages/CheckoutSuccess"));
 
 // Lazy load non-critical UI components to reduce critical path
 const MobileTrayMenu = lazy(() => import("./components/MobileTrayMenu"));
@@ -1534,6 +1540,13 @@ function App() {
             <Route path="/specs" element={<Specs />} />
             <Route path="/story" element={<Story />} />
             <Route path="/music" element={<MusicPlayer />} />
+            <Route path="/store" element={<Store />} />
+            <Route path="/store/product/:id" element={<ProductDetail />} />
+            <Route path="/store/checkout" element={<Checkout />} />
+            <Route
+              path="/store/checkout/success"
+              element={<CheckoutSuccess />}
+            />
           </Routes>
         </Suspense>
       </main>
@@ -1558,17 +1571,19 @@ function App() {
           />
         </Suspense>
       )}
-      {/* Hide MobileTrayMenu on news page */}
-      {location.pathname !== "/news" && (
+      {/* Hide MobileTrayMenu on news and store pages */}
+      {location.pathname !== "/news" && location.pathname !== "/store" && (
         <Suspense fallback={null}>
           <MobileTrayMenu />
         </Suspense>
       )}
 
-      {/* Footer */}
-      <Suspense fallback={null}>
-        <Footer />
-      </Suspense>
+      {/* Footer - Hide on store pages */}
+      {!location.pathname.startsWith("/store") && (
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
+      )}
 
       {/* Global Dark Mode Toggle and View Toggle - Visible on all pages */}
       <div className="fixed top-2 right-0 z-50 flex items-center gap-2">
@@ -1612,58 +1627,59 @@ function App() {
           </div>
         )}
 
-        {/* Dark Mode Toggle - Hide on news page */}
-        {location.pathname !== "/news" && (
-          <button
-            onClick={() => {
-              const html = document.documentElement;
-              if (html.classList.contains("dark")) {
-                html.classList.remove("dark");
-                localStorage.setItem("theme", "light");
-              } else {
-                html.classList.add("dark");
-                localStorage.setItem("theme", "dark");
-              }
-            }}
-            className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity duration-200"
-            aria-label="Toggle dark mode"
-          >
-            <svg
-              className="w-4 h-4 text-gray-700 dark:text-gray-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        {/* Dark Mode Toggle - Hide on news and store pages */}
+        {location.pathname !== "/news" &&
+          !location.pathname.startsWith("/store") && (
+            <button
+              onClick={() => {
+                const html = document.documentElement;
+                if (html.classList.contains("dark")) {
+                  html.classList.remove("dark");
+                  localStorage.setItem("theme", "light");
+                } else {
+                  html.classList.add("dark");
+                  localStorage.setItem("theme", "dark");
+                }
+              }}
+              className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity duration-200"
+              aria-label="Toggle dark mode"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 9.003 0 008.354-5.646z"
-              />
-            </svg>
-            <svg
-              className="w-4 h-4 text-gray-700 dark:text-gray-300 absolute opacity-0 dark:opacity-100 transition-opacity duration-200"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-              />
-            </svg>
-          </button>
-        )}
+              <svg
+                className="w-4 h-4 text-gray-700 dark:text-gray-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 9.003 0 008.354-5.646z"
+                />
+              </svg>
+              <svg
+                className="w-4 h-4 text-gray-700 dark:text-gray-300 absolute opacity-0 dark:opacity-100 transition-opacity duration-200"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+            </button>
+          )}
 
         {/* Fixed background image in bottom left */}
-        {location.pathname !== "/specs" && (
+        {location.pathname !== "/specs" && location.pathname !== "/store" && (
           <div className="fixed bottom-0 left-0 z-[5] pointer-events-none">
             <img
               src={getOptimizedImage("/img/section-edge.png", 640, 65)}
               alt=""
-              className="w-auto h-[640px] opacity-100 dark:opacity-100"
+              className="w-auto h-[640px] opacity-75 dark:opacity-75"
               {...({
                 fetchPriority: "high",
               } as React.ImgHTMLAttributes<HTMLImageElement>)}
@@ -1682,7 +1698,11 @@ export default function AppWithRouter() {
   return (
     <Router>
       <ThemeProvider>
-        <App />
+        <CartProvider>
+          <StoreProvider>
+            <App />
+          </StoreProvider>
+        </CartProvider>
       </ThemeProvider>
     </Router>
   );

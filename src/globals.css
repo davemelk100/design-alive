@@ -78,77 +78,84 @@
     @apply border-gray-200;
   }
 
+  /* Base body styles */
   body {
     @apply bg-background text-gray-900 dark:bg-gray-900 dark:text-white overflow-x-hidden antialiased;
-    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
     font-size: 16px;
     line-height: 1.7;
   }
 
-  /* Force Nunito Sans to load */
-  * {
+  /* Store page body font override - higher specificity */
+  body.store-page,
+  html body.store-page {
+    font-family: "Helvetica", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+  }
+
+  /* Default font for all elements except store page */
+  *:not(.store-page):not(.store-page *) {
     font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
-  /* Use Aeonik for headings */
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  /* Use Aeonik for headings (except store page) */
+  h1:not(.store-page *):not(.store-page),
+  h2:not(.store-page *):not(.store-page),
+  h3:not(.store-page *):not(.store-page),
+  h4:not(.store-page *):not(.store-page),
+  h5:not(.store-page *):not(.store-page),
+  h6:not(.store-page *):not(.store-page) {
     font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
-  /* Use Nunito Sans for body text and other elements */
-  p,
-  span,
-  div,
-  button,
-  input,
-  textarea,
-  select,
-  label,
-  a {
+  /* Use Nunito Sans for body text and other elements (except store page) */
+  p:not(.store-page *):not(.store-page),
+  span:not(.store-page *):not(.store-page),
+  div:not(.store-page *):not(.store-page),
+  button:not(.store-page *):not(.store-page),
+  input:not(.store-page *):not(.store-page),
+  textarea:not(.store-page *):not(.store-page),
+  select:not(.store-page *):not(.store-page),
+  label:not(.store-page *):not(.store-page),
+  a:not(.store-page *):not(.store-page) {
     font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
-  /* Make button text same size as body text */
+  /* Button text sizing */
   button {
-    font-size: 1.25rem !important;
-    line-height: 1.7 !important;
+    font-size: 1.25rem;
+    line-height: 1.7;
   }
 
-  /* Fix up arrow button size to prevent mobile scaling */
+  /* Fix up arrow button size to prevent mobile scaling - very specific selector */
   button[aria-label="Scroll to top"] {
-    width: 32px !important;
-    height: 32px !important;
-    min-width: 32px !important;
-    min-height: 32px !important;
-    max-width: 32px !important;
-    max-height: 32px !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    max-width: 32px;
+    max-height: 32px;
+    padding: 0;
+    margin: 0;
   }
 
   button[aria-label="Scroll to top"] svg {
-    width: 16px !important;
-    height: 16px !important;
-    min-width: 16px !important;
-    min-height: 16px !important;
-    max-width: 16px !important;
-    max-height: 16px !important;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    min-height: 16px;
+    max-width: 16px;
+    max-height: 16px;
   }
 
   /* Ensure lab card text doesn't get cut off on mobile */
   @media (max-width: 639px) {
     .group.overflow-visible {
-      min-height: 180px !important;
+      min-height: 180px;
     }
 
     .group.overflow-visible .lab-card-title {
-      padding-bottom: 0 !important;
-      margin-bottom: 0 !important;
+      padding-bottom: 0;
+      margin-bottom: 0;
     }
   }
 
@@ -158,7 +165,7 @@
   ol,
   a,
   button {
-    font-size: 1.25rem !important;
+    font-size: 1.25rem;
   }
 
   /* Set line-height and font-size for all paragraph tags */
@@ -169,22 +176,20 @@
   .article-intro p,
   .point-section p,
   .counter-point-section p {
-    line-height: 1.5 !important;
-    font-size: 1.25rem !important;
+    line-height: 1.5;
+    font-size: 1.25rem;
   }
 
   /* News page paragraph line-height */
   .news-page p,
   .news-page .news-card-excerpt {
-    line-height: 1.75rem !important;
+    line-height: 1.75rem;
   }
 
-  /* Hero intro text - allow Tailwind classes to work */
-  /* WCAG 2.1 AA requires minimum 1.5 line-height for body text */
+  /* Hero intro text - WCAG 2.1 AA requires minimum 1.5 line-height for body text */
   .hero-intro {
-    font-size: 1.25rem !important;
-    line-height: 1.75 !important;
-    /* 1.75 meets WCAG 2.1 AA (minimum 1.5) */
+    font-size: 1.25rem;
+    line-height: 1.75;
   }
 
   /* Responsive paragraph sizing for small screens */
@@ -199,32 +204,32 @@
     .article-intro p,
     .point-section p,
     .counter-point-section p {
-      font-size: 0.75rem !important;
+      font-size: 0.75rem;
     }
   }
 
-  /* Override any remaining font references */
+  /* Font utility classes */
   .font-sans,
   .font-card {
-    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
   .font-title {
-    font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+    font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
   /* Ensure Tailwind utilities use appropriate fonts */
-  h1[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
-  h2[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
-  h3[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
-  h4[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
-  h5[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *),
-  h6[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *) {
-    font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+  h1[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *),
+  h2[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *),
+  h3[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *),
+  h4[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *),
+  h5[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *),
+  h6[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *) {
+    font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
-  [class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
-    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+  [class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
+    font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
   /* Responsive improvements */
@@ -240,7 +245,7 @@
     h4,
     h5,
     h6 {
-      font-size: 0.875rem !important;
+      font-size: 0.875rem;
     }
 
     p,
@@ -254,95 +259,95 @@
     select,
     label,
     a {
-      font-size: 0.75rem !important;
+      font-size: 0.75rem;
     }
 
     /* Specific adjustments for common text classes */
     .text-xs {
-      font-size: 0.625rem !important;
+      font-size: 0.625rem;
     }
 
     .text-sm {
-      font-size: 0.6875rem !important;
+      font-size: 0.6875rem;
     }
 
     .text-base {
-      font-size: 0.75rem !important;
+      font-size: 0.75rem;
     }
 
     .text-lg {
-      font-size: 0.8125rem !important;
+      font-size: 0.8125rem;
     }
 
     .text-xl {
-      font-size: 0.875rem !important;
+      font-size: 0.875rem;
     }
 
     .text-2xl {
-      font-size: 1rem !important;
+      font-size: 1rem;
     }
 
     .text-3xl {
-      font-size: 1.125rem !important;
+      font-size: 1.125rem;
     }
 
     .text-4xl {
-      font-size: 1.25rem !important;
+      font-size: 1.25rem;
     }
 
     .text-5xl {
-      font-size: 1.5rem !important;
+      font-size: 1.5rem;
     }
 
     /* Card and component specific adjustments */
     .card-title {
-      font-size: 0.875rem !important;
+      font-size: 0.875rem;
     }
 
     .card-body {
-      font-size: 0.6875rem !important;
+      font-size: 0.6875rem;
     }
 
     .nav {
-      font-size: 0.6875rem !important;
+      font-size: 0.6875rem;
     }
 
     .caption {
-      font-size: 0.625rem !important;
+      font-size: 0.625rem;
     }
 
     /* Article content adjustments */
     .article-content h2 {
-      font-size: 1rem !important;
+      font-size: 1rem;
     }
 
     .article-content h3 {
-      font-size: 0.875rem !important;
+      font-size: 0.875rem;
     }
 
     .article-content p {
-      font-size: 0.75rem !important;
+      font-size: 0.75rem;
     }
 
     /* Point sections */
     .point-section h3,
     .counter-point-section h3 {
-      font-size: 0.8125rem !important;
+      font-size: 0.8125rem;
     }
 
     .point-section p,
     .counter-point-section p {
-      font-size: 0.75rem !important;
+      font-size: 0.75rem;
     }
 
     /* Article intro */
     .article-intro p {
-      font-size: 0.75rem !important;
+      font-size: 0.75rem;
     }
 
     /* Article date */
     .article-date {
-      font-size: 0.625rem !important;
+      font-size: 0.625rem;
     }
   }
 
@@ -540,7 +545,18 @@
   /* Roboto Serif override for Audio and Transcript page */
   .roboto-serif-page,
   .roboto-serif-page * {
-    font-family: "Roboto Serif", serif !important;
+    font-family: "Roboto Serif", serif;
+  }
+
+  /* Story Script font for Store page titles - only for title-font elements */
+  .store-page h1.title-font,
+  .store-page h2.title-font,
+  .store-page h4.title-font,
+  .store-page h5.title-font,
+  .store-page h6.title-font,
+  .store-page p.title-font,
+  .store-page .title-font {
+    font-family: "Story Script", cursive;
   }
 
   /* Custom breakpoint for 1400px */
@@ -549,5 +565,121 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
+}
 
+/* Story Script font for Store page - placed outside @layer for higher priority */
+.store-page .title-font,
+.store-page h1.title-font,
+.store-page h2.title-font,
+.store-page p.title-font,
+.store-page span.title-font {
+  font-family: "Story Script", cursive;
+}
+
+/* Store page font sizes - placed outside @layer for higher priority */
+.store-page .store-card-content h3,
+.store-page .store-card-content p,
+.store-page .store-card-content span,
+.store-page .store-card-content button,
+.store-page .group h3.store-card-text,
+.store-page .group p.store-card-text,
+.store-page .group span.store-card-text,
+.store-page .group button.store-card-button,
+.store-page [class*="group"] h3.store-card-text,
+.store-page [class*="group"] p.store-card-text,
+.store-page [class*="group"] span.store-card-text,
+.store-page [class*="group"] button.store-card-button,
+.store-page h3.store-card-text,
+.store-page p.store-card-text,
+.store-page span.store-card-text,
+.store-page button.store-card-button,
+.store-page .store-card-text,
+.store-page .store-card-button {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Store page h3 tags use Helvetica */
+.store-page h3,
+.store-page h3[class*="font-"]:not(.font-serif):not(.font-mono),
+.store-page h3.title-font,
+.store-page .group .store-card-content h3.store-card-h3,
+.store-page [class*="group"] .store-card-content h3.store-card-h3,
+.store-page .store-card-content h3.store-card-h3,
+.store-page .group h3.store-card-h3,
+.store-page [class*="group"] h3.store-card-h3,
+.store-page h3.store-card-h3,
+.store-page .group .store-card-content h3.store-card-text,
+.store-page [class*="group"] .store-card-content h3.store-card-text,
+.store-page .store-card-content h3.store-card-text,
+.store-page .group h3.store-card-text,
+.store-page [class*="group"] h3.store-card-text,
+.store-page h3.store-card-text,
+.store-page .group .store-card-content h3,
+.store-page [class*="group"] .store-card-content h3,
+.store-page .store-card-content h3 {
+  font-family: "Helvetica", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+}
+
+/* Additional font sizes for elements inside product cards */
+.store-page .group h3,
+.store-page .group p,
+.store-page .group span,
+.store-page .group button,
+.store-page [class*="group"] h3,
+.store-page [class*="group"] p,
+.store-page [class*="group"] span,
+.store-page [class*="group"] button {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Store page font override - Helvetica with DM Sans fallback - placed at end for maximum priority */
+/* Override body tag for store pages */
+body.store-page,
+html body.store-page,
+html body .store-page {
+  font-family: "Helvetica", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+}
+
+/* Override all elements in store pages except title-font elements - highest specificity at end */
+.store-page,
+.store-page *:not(.title-font),
+.store-page h1:not(.title-font),
+.store-page h2:not(.title-font),
+.store-page h3,
+.store-page h4:not(.title-font),
+.store-page h5:not(.title-font),
+.store-page h6:not(.title-font),
+.store-page p:not(.title-font),
+.store-page span:not(.title-font),
+.store-page div:not(.title-font),
+.store-page button:not(.title-font),
+.store-page input,
+.store-page textarea,
+.store-page select,
+.store-page label,
+.store-page a:not(.title-font),
+.store-page li,
+.store-page ul,
+.store-page ol,
+.store-page .store-card-content,
+.store-page .store-card-content *,
+.store-page .store-card-text,
+.store-page .store-card-button,
+.store-page .group,
+.store-page .group * {
+  font-family: "Helvetica", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+}
+
+/* Ensure avatar span doesn't appear red - very specific selector to override inline styles */
+span.flex.h-full.w-full.items-center.justify-center.rounded-full.bg-gray-200,
+span.flex.h-full.w-full.items-center.justify-center.rounded-full.bg-gray-700 {
+  color: rgb(55, 65, 81);
+  background-color: rgb(229, 231, 235);
+}
+
+.dark span.flex.h-full.w-full.items-center.justify-center.rounded-full.bg-gray-700 {
+  color: rgb(209, 213, 219);
+  background-color: rgb(55, 65, 81);
 }

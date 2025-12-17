@@ -44,6 +44,12 @@
       media="print"
       onload="this.media='all'"
     />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Story+Script&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
+    />
     <noscript>
       <link
         href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,500;0,6..12,700;1,6..12,400;1,6..12,500;1,6..12,700&display=swap"
@@ -65,6 +71,7 @@
         function loadFonts() {
           const fontLinks = [
             "https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,400;0,8..144,700;1,8..144,400;1,8..144,700&display=swap",
+            "https://fonts.googleapis.com/css2?family=Story+Script&display=swap",
           ];
 
           fontLinks.forEach(function (href) {
@@ -134,6 +141,7 @@
           document.fonts.load("400 1em 'Nunito Sans'"),
           document.fonts.load("500 1em 'Nunito Sans'"),
           document.fonts.load("700 1em 'Nunito Sans'"),
+          document.fonts.load("400 1em 'Story Script'"),
         ])
           .then(() => {
             document.documentElement.classList.add("wf-active");
