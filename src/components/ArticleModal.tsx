@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import { getResponsiveImage } from "../utils/imageOptimizer";
 
-// Lazy load icon to avoid blocking critical path
+// Lazy load icon deters blocking of the critical path
 const LazyX = lazy(() =>
   import("lucide-react").then((mod) => ({ default: mod.X }))
 );
