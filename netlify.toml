@@ -1,56 +1,39 @@
-# Netlify configuration for frontend deployment
-
 [build]
-  command = "npm run build"
-  publish = "dist"
-  # Note: No base directory specified - project root is used
-
-# Environment variables can be set in Netlify dashboard:
-# Site settings > Environment variables
-# Add: VITE_API_URL = https://your-backend-url.railway.app
+command = "npm run build"
+publish = "dist"
 
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+from = "/api/*"
+to = "/.netlify/functions/:splat"
+status = 200
 
-# SPA fallback
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+from = "/*"
+to = "/index.html"
+status = 200
 
-# Headers for caching and compression (Netlify automatically applies gzip/brotli compression)
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-    X-Content-Type-Options = "nosniff"
-    X-Frame-Options = "DENY"
-
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    X-Content-Type-Options = "nosniff"
+[[headers]] 
+for = "/*.html"
+[headers.values]
+Cache-Control = "public, max-age=0, must-revalidate"
+X-Content-Type-Options = "nosniff"
+X-Frame-Options = "DENY"
 
 [[headers]]
-  for = "/img/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+for = "/assets/*"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
+X-Content-Type-Options = "nosniff"
 
 [[headers]]
-  for = "/video/*"
-  [headers.values]
-    Content-Type = "video/mp4"
-    Accept-Ranges = "bytes"
-    Cache-Control = "public, max-age=31536000, immutable"
-    Access-Control-Allow-Origin = "*"
+for = "/img/*"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "/*.mp4"
-  [headers.values]
-    Content-Type = "video/mp4"
-    Accept-Ranges = "bytes"
-    Cache-Control = "public, max-age=31536000, immutable"
-    Access-Control-Allow-Origin = "*"
+for = "/video/*"
+[headers.values]
+Content-Type = "video/mp4"
+Accept-Ranges = "bytes"
+Cache-Control = "public, max-age=31536000, immutable"
+Access-Control-Allow-Origin = "*"

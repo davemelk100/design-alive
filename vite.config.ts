@@ -71,18 +71,15 @@ export default defineConfig({
         manualChunks: (id) => {
           // Vendor chunks - split more granularly to reduce critical path
           if (id.includes("node_modules")) {
-            // Core React - highest priority, smallest chunk
+            // Keep React together to prevent loading order issues
+            // React must load as a single chunk to ensure proper initialization
             if (
+              id.includes("/react/") ||
+              id.includes("react-dom") ||
               id.includes("react/jsx-runtime") ||
               id.includes("react/jsx-dev-runtime")
             ) {
-              return "vendor-react-runtime";
-            }
-            if (id.includes("/react/") && !id.includes("react-dom")) {
-              return "vendor-react-core";
-            }
-            if (id.includes("react-dom")) {
-              return "vendor-react-dom";
+              return "vendor-react";
             }
             // React Router - separate from React core to allow parallel loading
             if (id.includes("react-router")) {
@@ -163,7 +160,7 @@ export default defineConfig({
     reportCompressedSize: false, // Disable to speed up builds
   },
   optimizeDeps: {
-    include: ["react", "react-dom", "react-router-dom"],
+    include: ["react", "react-dom", "react/jsx-runtime", "react-router-dom"],
     // Exclude large dependencies that are only used in lazy-loaded components
     // This prevents them from being pre-bundled and blocking the critical path in dev mode
     exclude: [
