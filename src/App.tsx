@@ -4,6 +4,7 @@ import { content } from "./content";
 import { ThemeProvider } from "./context/ThemeContext";
 import { CartProvider } from "./context/CartContext";
 import { StoreProvider } from "./context/StoreContext";
+import { Toaster } from "@/components/ui/toaster";
 
 import {
   BrowserRouter as Router,
@@ -1674,21 +1675,23 @@ function App() {
           )}
 
         {/* Fixed background image in bottom left */}
-        {location.pathname !== "/specs" && location.pathname !== "/store" && (
-          <div className="fixed bottom-0 left-0 z-[5] pointer-events-none">
-            <img
-              src={getOptimizedImage("/img/section-edge.png", 640, 65)}
-              alt=""
-              className="w-auto h-[640px] opacity-75 dark:opacity-75"
-              {...({
-                fetchPriority: "high",
-              } as React.ImgHTMLAttributes<HTMLImageElement>)}
-              width={640}
-              height={640}
-            />
-          </div>
-        )}
+        {location.pathname !== "/specs" &&
+          !location.pathname.startsWith("/store") && (
+            <div className="fixed bottom-0 left-0 z-[5] pointer-events-none">
+              <img
+                src={getOptimizedImage("/img/section-edge.png", 640, 65)}
+                alt=""
+                className="w-auto h-[640px] opacity-75 dark:opacity-75"
+                {...({
+                  fetchPriority: "high",
+                } as React.ImgHTMLAttributes<HTMLImageElement>)}
+                width={640}
+                height={640}
+              />
+            </div>
+          )}
       </div>
+      <Toaster />
     </div>
   );
 }
