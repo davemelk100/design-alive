@@ -382,7 +382,7 @@ const Store = () => {
                 <h2
                   className="text-3xl font-bold"
                   style={{
-                    color: "black",
+                    color: "#dbdbdb",
                     letterSpacing: "-1.25px",
                   }}
                 >
@@ -516,7 +516,8 @@ const Store = () => {
                                   toast({
                                     title: "Added to cart",
                                     description: product.title,
-                                    duration: 3000,
+                                    duration: 5000,
+                                    variant: "default",
                                   });
                                 }}
                                 className="w-full px-2 py-3 font-semibold rounded-md transition-all hover:scale-105 store-card-button"

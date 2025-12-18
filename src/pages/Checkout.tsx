@@ -354,7 +354,7 @@ const Checkout = () => {
                   className="text-2xl font-bold mb-6 relative z-10"
                   style={{
                     letterSpacing: "-1.25px",
-                    color: "black",
+                    color: "#dbdbdb",
                   }}
                 >
                   Order Summary
@@ -441,7 +441,7 @@ const Checkout = () => {
                   className="text-xl font-bold mb-4 relative z-10"
                   style={{
                     letterSpacing: "-1.25px",
-                    color: "black",
+                    color: "#dbdbdb",
                   }}
                 >
                   Order Total

@@ -13,11 +13,6 @@ import {
 export function Toaster() {
   const { toasts } = useToast();
 
-  // Debug: log toasts
-  if (toasts.length > 0) {
-    console.log("Toaster: Rendering toasts", toasts);
-  }
-
   return (
     <ToastProvider swipeDirection="right">
       {toasts.map(function ({
@@ -35,14 +30,27 @@ export function Toaster() {
             key={id}
             open={open}
             onOpenChange={onOpenChange}
-            duration={duration}
-            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xl"
+            duration={Infinity}
+            variant="default"
+            className="bg-green-50 dark:bg-green-900/20 border-2 border-green-200 dark:border-green-800 shadow-2xl"
+            style={{
+              zIndex: 99999,
+              position: "fixed",
+              top: "1rem",
+              right: "1rem",
+              minWidth: "300px",
+              maxWidth: "420px",
+            }}
             {...props}
           >
             <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
+              {title && (
+                <ToastTitle className="font-semibold">{title}</ToastTitle>
+              )}
               {description && (
-                <ToastDescription>{description}</ToastDescription>
+                <ToastDescription className="text-sm">
+                  {description}
+                </ToastDescription>
               )}
             </div>
             {action}
