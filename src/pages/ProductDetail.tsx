@@ -309,7 +309,8 @@ const ProductDetail = () => {
           Back to Store
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        {/* Product layout: two columns on tablet and desktop, single column on mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Product Image Carousel */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -370,7 +371,7 @@ const ProductDetail = () => {
             </div>
           </motion.div>
 
-          {/* Product Info */}
+          {/* Product Information */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
