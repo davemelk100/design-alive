@@ -131,37 +131,38 @@ const CheckoutSuccess = () => {
 
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="space-y-6"
-        >
-          <div className="flex justify-center">
-            <div className="bg-green-100 dark:bg-green-900/20 rounded-full p-4">
-              <CheckCircle className="h-16 w-16 text-green-600 dark:text-green-400" />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="space-y-6"
+          >
+            <div className="flex justify-center">
+              <div className="bg-green-100 dark:bg-green-900/20 rounded-full p-4">
+                <CheckCircle className="h-16 w-16 text-green-600 dark:text-green-400" />
+              </div>
             </div>
-          </div>
 
-          <h1 className="text-4xl sm:text-5xl font-bold">Thank You!</h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400">
-            Your order has been received and is being processed.
-          </p>
-
-          {sessionId && (
-            <p className="text-sm text-gray-500 dark:text-gray-500">
-              Order ID: {sessionId}
+            <h1 className="text-4xl sm:text-5xl font-bold">Thank You!</h1>
+            <p className="text-lg text-gray-600 dark:text-gray-400">
+              Your order has been received and is being processed.
             </p>
-          )}
 
-          <div className="pt-6">
-            <button
-              onClick={() => navigate("/store")}
-              className="bg-gray-900 dark:bg-gray-700 text-white py-3 px-8 rounded-lg font-semibold hover:bg-gray-800 dark:hover:bg-gray-600 transition-all"
-            >
-              Continue Shopping
-            </button>
-          </div>
-        </motion.div>
+            {sessionId && (
+              <p className="text-sm text-gray-500 dark:text-gray-500">
+                Order ID: {sessionId}
+              </p>
+            )}
+
+            <div className="pt-6">
+              <button
+                onClick={() => navigate("/store")}
+                className="bg-gray-900 dark:bg-gray-700 text-white py-3 px-8 rounded-lg font-semibold hover:bg-gray-800 dark:hover:bg-gray-600 transition-all"
+              >
+                Continue Shopping
+              </button>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
       {/* Bottom Header - Replica of Top Header without Cart and Avatar */}
