@@ -107,6 +107,11 @@
     font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
+  /* Set normal letter spacing for all h2 tags */
+  h2 {
+    letter-spacing: normal;
+  }
+
   /* Use Nunito Sans for body text and other elements (except store page) */
   p:not(.store-page *):not(.store-page),
   span:not(.store-page *):not(.store-page),
