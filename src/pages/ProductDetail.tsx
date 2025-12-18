@@ -309,6 +309,7 @@ const ProductDetail = () => {
           Back to Store
         </button>
 
+        {/* Product layout: two columns on tablet and desktop, single column on mobile */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Product Image Carousel */}
           <motion.div
