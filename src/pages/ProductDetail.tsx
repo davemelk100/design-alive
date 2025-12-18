@@ -309,7 +309,7 @@ const ProductDetail = () => {
           Back to Store
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* Product Image Carousel */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}

@@ -87,7 +87,7 @@ export const storeProducts: Product[] = [
     title: "BALM Skin Graft Shirt",
     price: 22.0,
     image: "/img/skin-graft.png",
-    images: ["/img/skin-graft.png"],
+    images: ["/img/skin-graft.png", "/img/skin-graft-guy.png"],
     description: "",
     fullDescription:
       "Materials: 100% cotton. Fit: Regular fit. Care: Machine wash cold, tumble dry low. Do not bleach.",
