@@ -1,0 +1,83 @@
+<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .main-group {
+        transform-origin: 45px 45px;
+        animation: rotate 25s linear infinite;
+      }
+      
+      .cube-face {
+        fill-opacity: 0.9;
+        stroke: none;
+      }
+      
+      .primary-face {
+        fill: #ff6b6b;
+      }
+      
+      .secondary-face {
+        fill: #4ecdc4;
+      }
+      
+      .tertiary-face {
+        fill: #45b7d1;
+      }
+      
+      .grid-line {
+        stroke: #1a1a1a;
+        stroke-width: 0.3;
+        opacity: 0.4;
+      }
+      
+      .projection-line {
+        stroke: #ff6b6b;
+        stroke-width: 0.5;
+        opacity: 0.6;
+      }
+      
+      @keyframes rotate {
+        0% {
+          transform: rotateX(35deg) rotateY(0deg) rotateZ(0deg);
+        }
+        100% {
+          transform: rotateX(35deg) rotateY(360deg) rotateZ(0deg);
+        }
+      }
+      
+      .fade-element {
+        animation: fade 15s ease-in-out infinite;
+      }
+      
+      .fade-element:nth-child(1) {
+        animation-delay: 0s;
+      }
+      
+      .fade-element:nth-child(2) {
+        animation-delay: 5s;
+      }
+      
+      .fade-element:nth-child(3) {
+        animation-delay: 10s;
+      }
+      
+      @keyframes fade {
+        0%, 100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.8;
+        }
+      }
+    </style>
+  </defs>
+  
+  <!-- Simple Rotating Cube -->
+  <g class="main-group">
+    <!-- Base Cube -->
+    <polygon points="25,70 45,60 45,80 25,90" class="cube-face primary-face"/>
+    <polygon points="25,70 45,60 65,70 45,80" class="cube-face secondary-face"/>
+    <polygon points="45,60 65,70 65,90 45,80" class="cube-face tertiary-face"/>
+  </g>
+  
+
+</svg> 

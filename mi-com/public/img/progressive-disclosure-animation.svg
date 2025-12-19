@@ -1,0 +1,51 @@
+<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .layer-group {
+        transform-origin: 45px 45px;
+      }
+      
+      .base-layer {
+        animation: baseReveal 30s ease-in-out infinite;
+      }
+      
+      .focus-element {
+        animation: focusPulse 8s ease-in-out infinite;
+      }
+      
+      @keyframes baseReveal {
+        0%, 100% {
+          opacity: 0.3;
+          transform: scale(0.8);
+        }
+        50% {
+          opacity: 0.9;
+          transform: scale(1.1);
+        }
+      }
+      
+      @keyframes focusPulse {
+        0%, 100% {
+          opacity: 0.4;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.9;
+          transform: scale(1.15);
+        }
+      }
+    </style>
+  </defs>
+  
+  <!-- Simple Base Layer -->
+  <g class="layer-group">
+    <rect x="25" y="25" width="40" height="40" rx="4" fill="#4A5568" class="base-layer"/>
+    <rect x="30" y="30" width="30" height="30" rx="2" fill="#718096" opacity="0.8" class="base-layer"/>
+  </g>
+  
+  <!-- Simple Focus Element -->
+  <g class="layer-group">
+    <circle cx="45" cy="45" r="4" fill="#2D3748" class="focus-element"/>
+    <circle cx="45" cy="45" r="2" fill="#E2E8F0" opacity="0.9" class="focus-element"/>
+  </g>
+</svg> 

@@ -1,0 +1,52 @@
+<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .color-wheel {
+        transform-origin: 45px 45px;
+        animation: rotate 80s linear infinite;
+      }
+      
+      .secondary-color {
+        animation: pulse 16s ease-in-out infinite;
+      }
+      
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 0.6;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.9;
+          transform: scale(1.02);
+        }
+      }
+    </style>
+  </defs>
+  
+  <!-- Simplified Color Wheel -->
+  <g class="color-wheel">
+    <!-- Primary Colors - Muted Orange and Teal -->
+    <circle cx="45" cy="25" r="8" fill="#D2691E" opacity="0.8" class="secondary-color"/>
+    <circle cx="65" cy="45" r="8" fill="#20B2AA" opacity="0.8" class="secondary-color"/>
+    <circle cx="45" cy="65" r="8" fill="#CD853F" opacity="0.8" class="secondary-color"/>
+    <circle cx="25" cy="45" r="8" fill="#48D1CC" opacity="0.8" class="secondary-color"/>
+    
+    <!-- Secondary Colors - Warm Grays -->
+    <circle cx="55" cy="30" r="6" fill="#8B7355" opacity="0.6" class="secondary-color"/>
+    <circle cx="60" cy="55" r="6" fill="#A67C52" opacity="0.8" class="secondary-color"/>
+    <circle cx="35" cy="60" r="6" fill="#C4A484" opacity="0.5" class="secondary-color"/>
+    <circle cx="30" cy="35" r="6" fill="#D2B48C" opacity="0.7" class="secondary-color"/>
+  </g>
+  
+  <!-- Simple Center Element -->
+  <circle cx="45" cy="45" r="12" fill="#8B7355" opacity="0.9"/>
+</svg> 

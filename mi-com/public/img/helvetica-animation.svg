@@ -1,0 +1,92 @@
+<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .letter {
+        font-family: Arial, sans-serif;
+        font-weight: 300;
+        font-size: 16px;
+        fill: #000000;
+      }
+      
+      .letter-h {
+        animation: fadeIn 8s ease-in-out infinite;
+        animation-delay: 0s;
+      }
+      
+      .letter-e {
+        animation: fadeIn 8s ease-in-out infinite;
+        animation-delay: 1s;
+      }
+      
+      .letter-l {
+        animation: fadeIn 8s ease-in-out infinite;
+        animation-delay: 2s;
+      }
+      
+      .letter-v {
+        animation: fadeIn 8s ease-in-out infinite;
+        animation-delay: 3s;
+      }
+      
+      .letter-e2 {
+        animation: fadeIn 8s ease-in-out infinite;
+        animation-delay: 4s;
+      }
+      
+      .letter-t {
+        animation: fadeIn 8s ease-in-out infinite;
+        animation-delay: 5s;
+      }
+      
+      .letter-i {
+        animation: fadeIn 8s ease-in-out infinite;
+        animation-delay: 6s;
+      }
+      
+      .letter-c {
+        animation: fadeIn 8s ease-in-out infinite;
+        animation-delay: 7s;
+      }
+      
+      .letter-a {
+        animation: fadeIn 8s ease-in-out infinite;
+        animation-delay: 8s;
+      }
+      
+      @keyframes fadeIn {
+        0%, 100% {
+          opacity: 0.2;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      
+      .baseline {
+        stroke: #666666;
+        stroke-width: 1;
+        opacity: 0.6;
+      }
+    </style>
+  </defs>
+  
+  <!-- Simple baseline -->
+  <line x1="10" y1="70" x2="80" y2="70" class="baseline"/>
+  
+  <!-- Helvetica Letters at bottom -->
+  <text x="12" y="65" class="letter letter-h">H</text>
+  <text x="22" y="65" class="letter letter-e">e</text>
+  <text x="30" y="65" class="letter letter-l">l</text>
+  <text x="36" y="65" class="letter letter-v">v</text>
+  <text x="44" y="65" class="letter letter-e2">e</text>
+  <text x="52" y="65" class="letter letter-t">t</text>
+  <text x="58" y="65" class="letter letter-i">i</text>
+  <text x="62" y="65" class="letter letter-c">c</text>
+  <text x="70" y="65" class="letter letter-a">a</text>
+  
+  <!-- Simple bottom line -->
+  <rect x="15" y="75" width="60" height="1" fill="#333333" opacity="0.8">
+    <animate attributeName="width" values="0;60;0" dur="10s" repeatCount="indefinite"/>
+  </rect>
+</svg> 
+

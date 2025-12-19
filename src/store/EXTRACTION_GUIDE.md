@@ -14,41 +14,59 @@ This guide provides step-by-step instructions for extracting the store module in
 ## Step 1: Create New Repository Structure
 
 ```bash
+# Run from your main repository root (dm-2025)
 mkdir new-store-repo
 cd new-store-repo
 npm init -y
+cd ..  # Return to main repo root
 ```
 
 ## Step 2: Copy Store Module
 
 ```bash
-# From the main repo root
+# Run from the main repository root (dm-2025)
 cp -r src/store new-store-repo/src/
 ```
 
 ## Step 3: Copy Required Dependencies
 
+**Note: All commands in this section should be run from the main repository root (dm-2025)**
+
+**Important: Create directory structure first, then copy files**
+
+```bash
+# Create the directory structure in your new repo (replace 'mi-com' with your actual repo name)
+mkdir -p mi-com/components
+mkdir -p mi-com/src/hooks
+mkdir -p mi-com/public
+```
+
 ### UI Components
 
 ```bash
-# Copy all UI components used by store
-cp -r components/ui new-store-repo/components/
+# Run from main repo root (dm-2025)
+# Ensure mi-com/components directory exists first (see above)
+cp -r components/ui mi-com/components/
 ```
 
 ### Hooks
 
 ```bash
-# Copy toast hook
-cp hooks/use-toast.ts new-store-repo/src/hooks/
-cp hooks/use-toast.ts dependencies (check imports)
+# Run from main repo root (dm-2025)
+# Ensure mi-com/src/hooks directory exists first (see above)
+cp -r hooks/* mi-com/src/hooks/
+# Or copy specific hook:
+cp hooks/use-toast.ts mi-com/src/hooks/
 ```
 
 ### Assets
 
 ```bash
+# Run from main repo root (dm-2025)
+# Ensure mi-com/public directory exists first (see above)
 # Copy all product images
 # Check storeProducts.ts for all image paths
-cp -r public/img new-store-repo/public/
+cp -r public/img mi-com/public/
 ```
 
 ## Step 4: Update Import Paths
