@@ -1,0 +1,172 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="ragSphere1" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" /> <!-- Cyan primary -->
+      <stop offset="70%" style="stop-color:#0891b2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0e7490;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="ragSphere2" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#22d3ee;stop-opacity:1" /> <!-- Cyan Light -->
+      <stop offset="70%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="ragSphere3" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" style="stop-color:#67e8f9;stop-opacity:1" /> <!-- Cyan Lighter -->
+      <stop offset="70%" style="stop-color:#22d3ee;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+    </radialGradient>
+    <filter id="ragSphereShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Raised effect in center -->
+  <ellipse cx="100" cy="100" rx="25" ry="8" fill="#f8f9fa" opacity="0.6" class="ragBreathing"/>
+  <ellipse cx="100" cy="100" rx="20" ry="6" fill="#e9ecef" opacity="0.4" class="ragBreathing"/>
+  
+  <!-- Transparent cyan pulsing sphere in center -->
+  <circle cx="100" cy="100" r="12" fill="#06b6d4" opacity="0.3" class="ragPulseCenter"/>
+  
+  <!-- Orbit 1 Group with dashed connections (Cyan Light) -->
+  <g class="ragOrbit1">
+    <circle cx="100" cy="50" r="4" fill="url(#ragSphere2)" filter="url(#ragSphereShadow)" opacity="0.8" class="ragPathFollow1"/>
+    <circle cx="150" cy="100" r="3" fill="#22d3ee" opacity="0.7" class="ragPathFollow2"/>
+    <circle cx="100" cy="150" r="5" fill="url(#ragSphere3)" filter="url(#ragSphereShadow)" opacity="0.8" class="ragPathFollow3"/>
+    <circle cx="50" cy="100" r="3" fill="#0e7490" opacity="0.7" class="ragPathFollow4"/>
+    <!-- Dashed connections for orbit 1 -->
+    <line x1="100" y1="50" x2="150" y2="100" stroke="#22d3ee" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="150" y1="100" x2="100" y2="150" stroke="#22d3ee" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="100" y1="150" x2="50" y2="100" stroke="#22d3ee" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="50" y1="100" x2="100" y2="50" stroke="#22d3ee" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+  </g>
+  
+  <!-- Orbit 2 Group with dashed connections (Cyan Lighter) -->
+  <g class="ragOrbit2">
+    <circle cx="120" cy="80" r="3" fill="#67e8f9" opacity="0.7" class="ragPathFollow5"/>
+    <circle cx="80" cy="120" r="4" fill="url(#ragSphere1)" filter="url(#ragSphereShadow)" opacity="0.8" class="ragPathFollow6"/>
+    <circle cx="120" cy="120" r="3" fill="#22d3ee" opacity="0.7" class="ragPathFollow7"/>
+    <circle cx="80" cy="80" r="3" fill="#0e7490" opacity="0.7" class="ragPathFollow8"/>
+    <!-- Dashed connections for orbit 2 -->
+    <line x1="120" y1="80" x2="80" y2="120" stroke="#67e8f9" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="80" y1="120" x2="120" y2="120" stroke="#67e8f9" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="120" y1="120" x2="80" y2="80" stroke="#67e8f9" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="80" y1="80" x2="120" y2="80" stroke="#67e8f9" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+  </g>
+  
+  <!-- Orbit 3 Group with dashed connections (Cyan Dark) -->
+  <g class="ragOrbit3">
+    <circle cx="130" cy="70" r="3" fill="#0891b2" opacity="0.7" class="ragPathFollow9"/>
+    <circle cx="70" cy="130" r="4" fill="url(#ragSphere2)" filter="url(#ragSphereShadow)" opacity="0.8" class="ragPathFollow10"/>
+    <circle cx="130" cy="130" r="3" fill="#06b6d4" opacity="0.7" class="ragPathFollow11"/>
+    <circle cx="70" cy="70" r="3" fill="#22d3ee" opacity="0.7" class="ragPathFollow12"/>
+    <!-- Dashed connections for orbit 3 -->
+    <line x1="130" y1="70" x2="70" y2="130" stroke="#0891b2" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="70" y1="130" x2="130" y2="130" stroke="#0891b2" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="130" y1="130" x2="70" y2="70" stroke="#0891b2" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="70" y1="70" x2="130" y2="70" stroke="#0891b2" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+  </g>
+  
+  <style>
+    .ragBreathing {
+      animation: ragBreathing 12s ease-in-out infinite;
+    }
+    .ragPulseCenter {
+      animation: ragPulseCenter 18s ease-in-out infinite;
+    }
+    
+    /* Path following animations for orbit 1 (diamond shape) */
+    .ragPathFollow1 {
+      animation: ragPath1 60s linear infinite;
+      animation-delay: -30s;
+    }
+    .ragPathFollow2 {
+      animation: ragPath1 60s linear infinite;
+      animation-delay: -15s;
+    }
+    .ragPathFollow3 {
+      animation: ragPath1 60s linear infinite;
+      animation-delay: -45s;
+    }
+    .ragPathFollow4 {
+      animation: ragPath1 60s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    /* Path following animations for orbit 2 (square shape) */
+    .ragPathFollow5 {
+      animation: ragPath2 72s linear infinite;
+      animation-delay: -36s;
+    }
+    .ragPathFollow6 {
+      animation: ragPath2 72s linear infinite;
+      animation-delay: -18s;
+    }
+    .ragPathFollow7 {
+      animation: ragPath2 72s linear infinite;
+      animation-delay: -54s;
+    }
+    .ragPathFollow8 {
+      animation: ragPath2 72s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    /* Path following animations for orbit 3 (diamond shape) */
+    .ragPathFollow9 {
+      animation: ragPath3 84s linear infinite;
+      animation-delay: -42s;
+    }
+    .ragPathFollow10 {
+      animation: ragPath3 84s linear infinite;
+      animation-delay: -21s;
+    }
+    .ragPathFollow11 {
+      animation: ragPath3 84s linear infinite;
+      animation-delay: -63s;
+    }
+    .ragPathFollow12 {
+      animation: ragPath3 84s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    /* Path 1: Diamond shape - 100,50 -> 150,100 -> 100,150 -> 50,100 -> 100,50 */
+    @keyframes ragPath1 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(50px, 50px); }
+      50% { transform: translate(0px, 100px); }
+      75% { transform: translate(-50px, 50px); }
+    }
+    
+    /* Path 2: Square shape - 120,80 -> 80,120 -> 120,120 -> 80,80 -> 120,80 */
+    @keyframes ragPath2 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(-40px, 40px); }
+      50% { transform: translate(0px, 40px); }
+      75% { transform: translate(-40px, 0px); }
+    }
+    
+    /* Path 3: Diamond shape - 130,70 -> 70,130 -> 130,130 -> 70,70 -> 130,70 */
+    @keyframes ragPath3 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(-60px, 60px); }
+      50% { transform: translate(0px, 60px); }
+      75% { transform: translate(-60px, 0px); }
+    }
+    
+    @keyframes ragBreathing {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+    
+    @keyframes ragPulseCenter {
+      0%, 100% { 
+        opacity: 0.2;
+        transform: scale(0.8);
+      }
+      50% { 
+        opacity: 0.4;
+        transform: scale(1.2);
+      }
+    }
+  </style>
+</svg>
+

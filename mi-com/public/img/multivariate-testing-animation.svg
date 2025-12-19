@@ -1,0 +1,199 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sphere1" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#9333ea;stop-opacity:1" /> <!-- Purple primary -->
+      <stop offset="70%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="sphere2" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" /> <!-- Purple Light -->
+      <stop offset="70%" style="stop-color:#9333ea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="sphere3" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" style="stop-color:#c084fc;stop-opacity:1" /> <!-- Purple Lighter -->
+      <stop offset="70%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
+    </radialGradient>
+    <filter id="sphereShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Raised effect in center -->
+  <ellipse cx="100" cy="100" rx="25" ry="8" fill="#f8f9fa" opacity="0.6" class="breathing"/>
+  <ellipse cx="100" cy="100" rx="20" ry="6" fill="#e9ecef" opacity="0.4" class="breathing"/>
+  
+  <!-- Transparent purple pulsing sphere in center -->
+  <circle cx="100" cy="100" r="12" fill="#9333ea" opacity="0.3" class="pulse-center"/>
+  
+  <!-- Orbit 1 Group with dashed connections (Purple Light) -->
+  <g class="orbit-1">
+    <circle cx="100" cy="50" r="4" fill="url(#sphere2)" filter="url(#sphereShadow)" opacity="0.8" class="path-follow-1"/>
+    <circle cx="150" cy="100" r="3" fill="#a855f7" opacity="0.7" class="path-follow-2"/>
+    <circle cx="100" cy="150" r="5" fill="url(#sphere3)" filter="url(#sphereShadow)" opacity="0.8" class="path-follow-3"/>
+    <circle cx="50" cy="100" r="3" fill="#6d28d9" opacity="0.7" class="path-follow-4"/>
+    <!-- Dashed connections for orbit 1 -->
+    <line x1="100" y1="50" x2="150" y2="100" stroke="#a855f7" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="150" y1="100" x2="100" y2="150" stroke="#a855f7" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="100" y1="150" x2="50" y2="100" stroke="#a855f7" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="50" y1="100" x2="100" y2="50" stroke="#a855f7" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+  </g>
+  
+  <!-- Orbit 2 Group with dashed connections (Purple Lighter) -->
+  <g class="orbit-2">
+    <circle cx="120" cy="80" r="3" fill="#c084fc" opacity="0.7" class="path-follow-5"/>
+    <circle cx="80" cy="120" r="4" fill="url(#sphere1)" filter="url(#sphereShadow)" opacity="0.8" class="path-follow-6"/>
+    <circle cx="120" cy="120" r="3" fill="#a855f7" opacity="0.7" class="path-follow-7"/>
+    <circle cx="80" cy="80" r="3" fill="#6d28d9" opacity="0.7" class="path-follow-8"/>
+    <!-- Dashed connections for orbit 2 -->
+    <line x1="120" y1="80" x2="80" y2="120" stroke="#c084fc" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="80" y1="120" x2="120" y2="120" stroke="#c084fc" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="120" y1="120" x2="80" y2="80" stroke="#c084fc" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="80" y1="80" x2="120" y2="80" stroke="#c084fc" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+  </g>
+  
+  <!-- Orbit 3 Group with dashed connections (Fuchsia accent) -->
+  <g class="orbit-3">
+    <circle cx="130" cy="70" r="3" fill="#d946ef" opacity="0.7" class="path-follow-9"/>
+    <circle cx="70" cy="130" r="4" fill="url(#sphere2)" filter="url(#sphereShadow)" opacity="0.8" class="path-follow-10"/>
+    <circle cx="130" cy="130" r="3" fill="#c084fc" opacity="0.7" class="path-follow-11"/>
+    <circle cx="70" cy="70" r="3" fill="#a855f7" opacity="0.7" class="path-follow-12"/>
+    <!-- Dashed connections for orbit 3 -->
+    <line x1="130" y1="70" x2="70" y2="130" stroke="#d946ef" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="70" y1="130" x2="130" y2="130" stroke="#d946ef" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="130" y1="130" x2="70" y2="70" stroke="#d946ef" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="70" y1="70" x2="130" y2="70" stroke="#d946ef" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+  </g>
+  
+  <style>
+    .rotate-4d-core {
+      animation: curveFromTop 24s ease-in-out infinite;
+      animation-delay: -12s;
+    }
+    .breathing {
+      animation: breathing 12s ease-in-out infinite;
+    }
+    .pulse-center {
+      animation: pulseCenter 18s ease-in-out infinite;
+    }
+    
+    /* Path following animations for orbit 1 (diamond shape) */
+    .path-follow-1 {
+      animation: path1 60s linear infinite;
+      animation-delay: -30s;
+    }
+    .path-follow-2 {
+      animation: path1 60s linear infinite;
+      animation-delay: -15s;
+    }
+    .path-follow-3 {
+      animation: path1 60s linear infinite;
+      animation-delay: -45s;
+    }
+    .path-follow-4 {
+      animation: path1 60s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    /* Path following animations for orbit 2 (square shape) */
+    .path-follow-5 {
+      animation: path2 72s linear infinite;
+      animation-delay: -36s;
+    }
+    .path-follow-6 {
+      animation: path2 72s linear infinite;
+      animation-delay: -18s;
+    }
+    .path-follow-7 {
+      animation: path2 72s linear infinite;
+      animation-delay: -54s;
+    }
+    .path-follow-8 {
+      animation: path2 72s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    /* Path following animations for orbit 3 (diamond shape) */
+    .path-follow-9 {
+      animation: path3 84s linear infinite;
+      animation-delay: -42s;
+    }
+    .path-follow-10 {
+      animation: path3 84s linear infinite;
+      animation-delay: -21s;
+    }
+    .path-follow-11 {
+      animation: path3 84s linear infinite;
+      animation-delay: -63s;
+    }
+    .path-follow-12 {
+      animation: path3 84s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    @keyframes curveFromTop {
+      0% { 
+        transform: translateY(-60px) translateX(0px) rotateY(0deg) rotateX(0deg);
+        opacity: 0;
+      }
+      25% { 
+        transform: translateY(-30px) translateX(20px) rotateY(90deg) rotateX(90deg);
+        opacity: 0.6;
+      }
+      50% { 
+        transform: translateY(0px) translateX(0px) rotateY(180deg) rotateX(180deg);
+        opacity: 0.9;
+      }
+      75% { 
+        transform: translateY(-30px) translateX(-20px) rotateY(270deg) rotateX(270deg);
+        opacity: 0.6;
+      }
+      100% { 
+        transform: translateY(-60px) translateX(0px) rotateY(360deg) rotateX(360deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Path 1: Diamond shape - 100,50 -> 150,100 -> 100,150 -> 50,100 -> 100,50 */
+    @keyframes path1 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(50px, 50px); }
+      50% { transform: translate(0px, 100px); }
+      75% { transform: translate(-50px, 50px); }
+    }
+    
+    /* Path 2: Square shape - 120,80 -> 80,120 -> 120,120 -> 80,80 -> 120,80 */
+    @keyframes path2 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(-40px, 40px); }
+      50% { transform: translate(0px, 40px); }
+      75% { transform: translate(-40px, 0px); }
+    }
+    
+    /* Path 3: Diamond shape - 130,70 -> 70,130 -> 130,130 -> 70,70 -> 130,70 */
+    @keyframes path3 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(-60px, 60px); }
+      50% { transform: translate(0px, 60px); }
+      75% { transform: translate(-60px, 0px); }
+    }
+    
+    @keyframes breathing {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+    
+    @keyframes pulseCenter {
+      0%, 100% { 
+        opacity: 0.2;
+        transform: scale(0.8);
+      }
+      50% { 
+        opacity: 0.4;
+        transform: scale(1.2);
+      }
+    }
+  </style>
+</svg>
+

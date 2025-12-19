@@ -1,0 +1,458 @@
+<svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="designGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f97316;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#0d9488;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="designGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d9488;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#f97316;stop-opacity:0.6" />
+    </linearGradient>
+    <style>
+      .fractal-square {
+        transform-origin: 45px 45px;
+        perspective: 1000px;
+      }
+      
+      .primary-rotate {
+        animation: primaryRotate 140s linear infinite;
+      }
+      
+      .secondary-rotate {
+        animation: secondaryRotate 112s linear infinite reverse;
+      }
+      
+      .tertiary-rotate {
+        animation: tertiaryRotate 168s linear infinite reverse;
+      }
+      
+      .quaternary-rotate {
+        animation: quaternaryRotate 200s linear infinite reverse;
+      }
+      
+      .quinary-rotate {
+        animation: quinaryRotate 240s linear infinite reverse;
+      }
+      
+      .senary-rotate {
+        animation: senaryRotate 280s linear infinite reverse;
+      }
+      
+      .septenary-rotate {
+        animation: septenaryRotate 320s linear infinite reverse;
+      }
+      
+      .octonary-rotate {
+        animation: octonaryRotate 360s linear infinite reverse;
+      }
+      
+      .nonary-rotate {
+        animation: nonaryRotate 300s linear infinite reverse;
+      }
+      
+      .denary-rotate {
+        animation: denaryRotate 340s linear infinite reverse;
+      }
+      
+      .center-4d-rotate {
+        animation: center4DRotate 80s linear infinite;
+      }
+      
+      .floating {
+        animation: float 48s ease-in-out infinite;
+      }
+      
+      .floating:nth-child(2) {
+        animation-delay: 12s;
+      }
+      
+      .floating:nth-child(3) {
+        animation-delay: 24s;
+      }
+      
+      .pulse {
+        animation: pulse 40s ease-in-out infinite;
+      }
+      
+      .pulse:nth-child(2) {
+        animation-delay: 10s;
+      }
+      
+      .pulse:nth-child(3) {
+        animation-delay: 20s;
+      }
+      
+      .breathing {
+        animation: breathing 60s ease-in-out infinite;
+      }
+      
+      .glow {
+        animation: glow 32s ease-in-out infinite;
+      }
+      
+      @keyframes primaryRotate {
+        0% {
+          transform: rotateY(0deg) rotateX(0deg) scale(1);
+        }
+        25% {
+          transform: rotateY(90deg) rotateX(45deg) scale(1.1);
+        }
+        50% {
+          transform: rotateY(180deg) rotateX(0deg) scale(1);
+        }
+        75% {
+          transform: rotateY(270deg) rotateX(-45deg) scale(1.1);
+        }
+        100% {
+          transform: rotateY(360deg) rotateX(0deg) scale(1);
+        }
+      }
+      
+      @keyframes secondaryRotate {
+        0% {
+          transform: rotateY(0deg) rotateX(0deg) scale(1.1);
+        }
+        25% {
+          transform: rotateY(-90deg) rotateX(-45deg) scale(0.9);
+        }
+        50% {
+          transform: rotateY(-180deg) rotateX(0deg) scale(1.1);
+        }
+        75% {
+          transform: rotateY(-270deg) rotateX(45deg) scale(0.9);
+        }
+        100% {
+          transform: rotateY(-360deg) rotateX(0deg) scale(1.1);
+        }
+      }
+      
+      @keyframes tertiaryRotate {
+        0% {
+          transform: rotateY(0deg) rotateX(0deg) scale(0.9);
+        }
+        25% {
+          transform: rotateY(90deg) rotateX(30deg) scale(1.2);
+        }
+        50% {
+          transform: rotateY(180deg) rotateX(0deg) scale(0.9);
+        }
+        75% {
+          transform: rotateY(270deg) rotateX(-30deg) scale(1.2);
+        }
+        100% {
+          transform: rotateY(360deg) rotateX(0deg) scale(0.9);
+        }
+      }
+      
+      @keyframes quaternaryRotate {
+        0% {
+          transform: rotateY(0deg) rotateX(0deg) scale(1.2);
+        }
+        25% {
+          transform: rotateY(-90deg) rotateX(-30deg) scale(0.8);
+        }
+        50% {
+          transform: rotateY(-180deg) rotateX(0deg) scale(1.2);
+        }
+        75% {
+          transform: rotateY(-270deg) rotateX(30deg) scale(0.8);
+        }
+        100% {
+          transform: rotateY(-360deg) rotateX(0deg) scale(1.2);
+        }
+      }
+      
+      @keyframes quinaryRotate {
+        0% {
+          transform: rotateY(0deg) rotateX(0deg) scale(0.8);
+        }
+        25% {
+          transform: rotateY(90deg) rotateX(20deg) scale(1.3);
+        }
+        50% {
+          transform: rotateY(180deg) rotateX(0deg) scale(0.8);
+        }
+        75% {
+          transform: rotateY(270deg) rotateX(-20deg) scale(1.3);
+        }
+        100% {
+          transform: rotateY(360deg) rotateX(0deg) scale(0.8);
+        }
+      }
+      
+      @keyframes senaryRotate {
+        0% {
+          transform: rotateY(0deg) rotateX(0deg) scale(1.3);
+        }
+        25% {
+          transform: rotateY(-90deg) rotateX(-20deg) scale(0.7);
+        }
+        50% {
+          transform: rotateY(-180deg) rotateX(0deg) scale(1.3);
+        }
+        75% {
+          transform: rotateY(-270deg) rotateX(20deg) scale(0.7);
+        }
+        100% {
+          transform: rotateY(-360deg) rotateX(0deg) scale(1.3);
+        }
+      }
+      
+      @keyframes septenaryRotate {
+        0% {
+          transform: rotateY(0deg) rotateX(0deg) scale(0.6);
+        }
+        25% {
+          transform: rotateY(90deg) rotateX(15deg) scale(1.4);
+        }
+        50% {
+          transform: rotateY(180deg) rotateX(0deg) scale(0.6);
+        }
+        75% {
+          transform: rotateY(270deg) rotateX(-15deg) scale(1.4);
+        }
+        100% {
+          transform: rotateY(360deg) rotateX(0deg) scale(0.6);
+        }
+      }
+      
+      @keyframes octonaryRotate {
+        0% {
+          transform: rotateY(0deg) rotateX(0deg) scale(1.4);
+        }
+        25% {
+          transform: rotateY(-90deg) rotateX(-15deg) scale(0.5);
+        }
+        50% {
+          transform: rotateY(-180deg) rotateX(0deg) scale(1.4);
+        }
+        75% {
+          transform: rotateY(-270deg) rotateX(15deg) scale(0.5);
+        }
+        100% {
+          transform: rotateY(-360deg) rotateX(0deg) scale(1.4);
+        }
+      }
+      
+      @keyframes nonaryRotate {
+        0% {
+          transform: rotate(0deg) scale(0.5);
+        }
+        50% {
+          transform: rotate(-180deg) scale(1.5);
+        }
+        100% {
+          transform: rotate(-360deg) scale(0.5);
+        }
+      }
+      
+      @keyframes denaryRotate {
+        0% {
+          transform: rotate(0deg) scale(1.5);
+        }
+        50% {
+          transform: rotate(180deg) scale(0.4);
+        }
+        100% {
+          transform: rotate(360deg) scale(1.5);
+        }
+      }
+      
+      @keyframes float {
+        0%, 100% {
+          transform: translateY(0px);
+          opacity: 0.4;
+        }
+        50% {
+          transform: translateY(-6px);
+          opacity: 0.8;
+        }
+      }
+      
+      @keyframes pulse {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 0.3;
+        }
+        50% {
+          transform: scale(1.1);
+          opacity: 0.7;
+        }
+      }
+      
+      @keyframes breathing {
+        0%, 100% {
+          transform: scale(1);
+          opacity: 0.2;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 0.6;
+        }
+      }
+      
+      @keyframes glow {
+        0%, 100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.8;
+        }
+      }
+      
+      @keyframes center4DRotate {
+        0% {
+          transform: perspective(300px) rotateY(0deg) rotateX(0deg) scale(1);
+        }
+        25% {
+          transform: perspective(300px) rotateY(90deg) rotateX(45deg) scale(1.1);
+        }
+        50% {
+          transform: perspective(300px) rotateY(180deg) rotateX(90deg) scale(1);
+        }
+        75% {
+          transform: perspective(300px) rotateY(270deg) rotateX(45deg) scale(1.1);
+        }
+        100% {
+          transform: perspective(300px) rotateY(360deg) rotateX(0deg) scale(1);
+        }
+      }
+    </style>
+  </defs>
+  
+  <!-- Central Core Hexagon -->
+  <polygon points="45,42 48,43.5 48,46.5 45,48 42,46.5 42,43.5" fill="url(#designGradient1)" opacity="0.5" class="fractal-square primary-rotate"/>
+  
+  <!-- First Layer of Rotating Hexagons -->
+  <g class="fractal-square secondary-rotate">
+    <polygon points="30.5,28 32.5,29.5 32.5,31.5 30.5,33 28.5,31.5 28.5,29.5" fill="#0d9488" opacity="0.4" class="floating"/>
+    <polygon points="59.5,28 61.5,29.5 61.5,31.5 59.5,33 57.5,31.5 57.5,29.5" fill="#f97316" opacity="0.4" class="floating"/>
+    <polygon points="59.5,57 61.5,58.5 61.5,60.5 59.5,62 57.5,60.5 57.5,58.5" fill="#0d9488" opacity="0.4" class="floating"/>
+    <polygon points="30.5,57 32.5,58.5 32.5,60.5 30.5,62 28.5,60.5 28.5,58.5" fill="#f97316" opacity="0.4" class="floating"/>
+  </g>
+  
+  <!-- Second Layer of Rotating Hexagons -->
+  <g class="fractal-square tertiary-rotate">
+    <polygon points="20,18 22,19 22,21 20,22 18,21 18,19" fill="#f97316" opacity="0.3" class="pulse"/>
+    <polygon points="70,18 72,19 72,21 70,22 68,21 68,19" fill="#0d9488" opacity="0.3" class="pulse"/>
+    <polygon points="70,68 72,69 72,71 70,72 68,71 68,69" fill="#f97316" opacity="0.3" class="pulse"/>
+    <polygon points="20,68 22,69 22,71 20,72 18,71 18,69" fill="#0d9488" opacity="0.3" class="pulse"/>
+  </g>
+  
+  <!-- Third Layer of Rotating Hexagons -->
+  <g class="fractal-square quaternary-rotate">
+    <polygon points="13.5,12 15,13 15,14 13.5,15 12,14 12,13" fill="#0d9488" opacity="0.25" class="floating"/>
+    <polygon points="76.5,12 78,13 78,14 76.5,15 75,14 75,13" fill="#f97316" opacity="0.25" class="floating"/>
+    <polygon points="76.5,75 78,76 78,77 76.5,78 75,77 75,76" fill="#0d9488" opacity="0.25" class="floating"/>
+    <polygon points="13.5,75 15,76 15,77 13.5,78 12,77 12,76" fill="#f97316" opacity="0.25" class="floating"/>
+  </g>
+  
+  <!-- Fourth Layer of Rotating Hexagons -->
+  <g class="fractal-square quinary-rotate">
+    <polygon points="8,7 9,7.5 9,8.5 8,9 7,8.5 7,7.5" fill="#f97316" opacity="0.2" class="pulse"/>
+    <polygon points="82,7 83,7.5 83,8.5 82,9 81,8.5 81,7.5" fill="#0d9488" opacity="0.2" class="pulse"/>
+    <polygon points="82,81 83,81.5 83,82.5 82,83 81,82.5 81,81.5" fill="#f97316" opacity="0.2" class="pulse"/>
+    <polygon points="8,81 9,81.5 9,82.5 8,83 7,82.5 7,81.5" fill="#0d9488" opacity="0.2" class="pulse"/>
+  </g>
+  
+  <!-- Fifth Layer of Rotating Hexagons -->
+  <g class="fractal-square senary-rotate">
+    <polygon points="3.5,3 4,3.25 4,3.75 3.5,4 3,3.75 3,3.25" fill="#0d9488" opacity="0.15" class="breathing"/>
+    <polygon points="86.5,3 87,3.25 87,3.75 86.5,4 86,3.75 86,3.25" fill="#f97316" opacity="0.15" class="breathing"/>
+    <polygon points="86.5,86 87,86.25 87,86.75 86.5,87 86,86.75 86,86.25" fill="#0d9488" opacity="0.15" class="breathing"/>
+    <polygon points="3.5,86 4,86.25 4,86.75 3.5,87 3,86.75 3,86.25" fill="#f97316" opacity="0.15" class="breathing"/>
+  </g>
+  
+  <!-- Sixth Layer of Rotating Hexagons -->
+  <g class="fractal-square septenary-rotate">
+    <polygon points="1.5,1 2,1.25 2,1.75 1.5,2 1,1.75 1,1.25" fill="#f97316" opacity="0.12" class="floating"/>
+    <polygon points="88.5,1 89,1.25 89,1.75 88.5,2 88,1.75 88,1.25" fill="#0d9488" opacity="0.12" class="floating"/>
+    <polygon points="88.5,88 89,88.25 89,88.75 88.5,89 88,88.75 88,88.25" fill="#f97316" opacity="0.12" class="floating"/>
+    <polygon points="1.5,88 2,88.25 2,88.75 1.5,89 1,88.75 1,88.25" fill="#0d9488" opacity="0.12" class="floating"/>
+  </g>
+  
+  <!-- Seventh Layer of Rotating Hexagons -->
+  <g class="fractal-square octonary-rotate">
+    <polygon points="0.75,0.5 1,0.625 1,0.875 0.75,1 0.5,0.875 0.5,0.625" fill="#0d9488" opacity="0.1" class="pulse"/>
+    <polygon points="89.25,0.5 89.5,0.625 89.5,0.875 89.25,1 89,0.875 89,0.625" fill="#f97316" opacity="0.1" class="pulse"/>
+    <polygon points="89.25,89 89.5,89.125 89.5,89.375 89.25,89.5 89,89.375 89,89.125" fill="#0d9488" opacity="0.1" class="pulse"/>
+    <polygon points="0.75,89 1,89.125 1,89.375 0.75,89.5 0.5,89.375 0.5,89.125" fill="#f97316" opacity="0.1" class="pulse"/>
+  </g>
+  
+  <!-- Eighth Layer of Rotating Hexagons -->
+  <g class="fractal-square nonary-rotate">
+    <polygon points="0.375,0.25 0.5,0.3125 0.5,0.4375 0.375,0.5 0.25,0.4375 0.25,0.3125" fill="#f97316" opacity="0.08" class="breathing"/>
+    <polygon points="89.625,0.25 89.75,0.3125 89.75,0.4375 89.625,0.5 89.5,0.4375 89.5,0.3125" fill="#0d9488" opacity="0.08" class="breathing"/>
+    <polygon points="89.625,89.5 89.75,89.5625 89.75,89.6875 89.625,89.75 89.5,89.6875 89.5,89.5625" fill="#f97316" opacity="0.08" class="breathing"/>
+    <polygon points="0.375,89.5 0.5,89.5625 0.5,89.6875 0.375,89.75 0.25,89.6875 0.25,89.5625" fill="#0d9488" opacity="0.08" class="breathing"/>
+  </g>
+  
+  <!-- Ninth Layer of Rotating Hexagons -->
+  <g class="fractal-square denary-rotate">
+    <polygon points="0.1875,0.125 0.25,0.15625 0.25,0.21875 0.1875,0.25 0.125,0.21875 0.125,0.15625" fill="#0d9488" opacity="0.06" class="floating"/>
+    <polygon points="89.8125,0.125 89.875,0.15625 89.875,0.21875 89.8125,0.25 89.75,0.21875 89.75,0.15625" fill="#f97316" opacity="0.06" class="floating"/>
+    <polygon points="89.8125,89.75 89.875,89.78125 89.875,89.84375 89.8125,89.875 89.75,89.84375 89.75,89.78125" fill="#0d9488" opacity="0.06" class="floating"/>
+    <polygon points="0.1875,89.75 0.25,89.78125 0.25,89.84375 0.1875,89.875 0.125,89.84375 0.125,89.78125" fill="#f97316" opacity="0.06" class="floating"/>
+  </g>
+  
+  <!-- Tenth Layer of Rotating Hexagons -->
+  <g class="fractal-square primary-rotate">
+    <polygon points="0.09375,0.0625 0.125,0.078125 0.125,0.109375 0.09375,0.125 0.0625,0.109375 0.0625,0.078125" fill="#f97316" opacity="0.05" class="pulse"/>
+    <polygon points="89.90625,0.0625 89.9375,0.078125 89.9375,0.109375 89.90625,0.125 89.875,0.109375 89.875,0.078125" fill="#0d9488" opacity="0.05" class="pulse"/>
+    <polygon points="89.90625,89.875 89.9375,89.890625 89.9375,89.921875 89.90625,89.9375 89.875,89.921875 89.875,89.890625" fill="#f97316" opacity="0.05" class="pulse"/>
+    <polygon points="0.09375,89.875 0.125,89.890625 0.125,89.921875 0.09375,89.9375 0.0625,89.921875 0.0625,89.890625" fill="#0d9488" opacity="0.05" class="pulse"/>
+  </g>
+  
+  <!-- Additional Hexagons - Eleventh Layer -->
+  <g class="fractal-square secondary-rotate">
+    <polygon points="0.046875,0.03125 0.0625,0.0390625 0.0625,0.0546875 0.046875,0.0625 0.03125,0.0546875 0.03125,0.0390625" fill="url(#designGradient1)" opacity="0.04" class="glow"/>
+    <polygon points="89.953125,0.03125 89.96875,0.0390625 89.96875,0.0546875 89.953125,0.0625 89.9375,0.0546875 89.9375,0.0390625" fill="url(#designGradient2)" opacity="0.04" class="glow"/>
+    <polygon points="89.953125,89.9375 89.96875,89.9453125 89.96875,89.9609375 89.953125,89.96875 89.9375,89.9609375 89.9375,89.9453125" fill="url(#designGradient1)" opacity="0.04" class="glow"/>
+    <polygon points="0.046875,89.9375 0.0625,89.9453125 0.0625,89.9609375 0.046875,89.96875 0.03125,89.9609375 0.03125,89.9453125" fill="url(#designGradient2)" opacity="0.04" class="glow"/>
+  </g>
+  
+  <!-- Additional Hexagons - Twelfth Layer -->
+  <g class="fractal-square tertiary-rotate">
+    <polygon points="0.0234375,0.015625 0.03125,0.01953125 0.03125,0.02734375 0.0234375,0.03125 0.015625,0.02734375 0.015625,0.01953125" fill="#f97316" opacity="0.03" class="breathing"/>
+    <polygon points="89.9765625,0.015625 89.984375,0.01953125 89.984375,0.02734375 89.9765625,0.03125 89.96875,0.02734375 89.96875,0.01953125" fill="#0d9488" opacity="0.03" class="breathing"/>
+    <polygon points="89.9765625,89.96875 89.984375,89.97265625 89.984375,89.98046875 89.9765625,89.984375 89.96875,89.98046875 89.96875,89.97265625" fill="#f97316" opacity="0.03" class="breathing"/>
+    <polygon points="0.0234375,89.96875 0.03125,89.97265625 0.03125,89.98046875 0.0234375,89.984375 0.015625,89.98046875 0.015625,89.97265625" fill="#0d9488" opacity="0.03" class="breathing"/>
+  </g>
+  
+  <!-- Additional Connection Hexagons - Replacing X Lines -->
+  <g class="fractal-square secondary-rotate">
+    <polygon points="29,27.8 30.2,28.5 30.2,30.5 29,31.2 27.8,30.5 27.8,28.5" fill="url(#designGradient1)" opacity="0.2" class="pulse"/>
+    <polygon points="61,27.8 62.2,28.5 62.2,30.5 61,31.2 59.8,30.5 59.8,28.5" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
+    <polygon points="61,58.8 62.2,59.5 62.2,61.5 61,62.2 59.8,61.5 59.8,59.5" fill="url(#designGradient1)" opacity="0.2" class="pulse"/>
+    <polygon points="29,58.8 30.2,59.5 30.2,61.5 29,62.2 27.8,61.5 27.8,59.5" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
+  </g>
+  
+  <!-- Additional Connection Hexagons for 4D Effect -->
+  <g class="fractal-square tertiary-rotate">
+    <polygon points="17,16.2 17.8,16.5 17.8,17.5 17,17.8 16.2,17.5 16.2,16.5" fill="#f97316" opacity="0.15" class="floating"/>
+    <polygon points="73,16.2 73.8,16.5 73.8,17.5 73,17.8 72.2,17.5 72.2,16.5" fill="#0d9488" opacity="0.15" class="floating"/>
+    <polygon points="73,72.2 73.8,72.5 73.8,73.5 73,73.8 72.2,73.5 72.2,72.5" fill="#f97316" opacity="0.15" class="floating"/>
+    <polygon points="17,72.2 17.8,72.5 17.8,73.5 17,73.8 16.2,73.5 16.2,72.5" fill="#0d9488" opacity="0.15" class="floating"/>
+  </g>
+  
+  <!-- Additional Connection Hexagons -->
+  <g class="fractal-square quaternary-rotate">
+    <polygon points="10,9.4 10.6,9.5 10.6,10.5 10,10.6 9.4,10.5 9.4,9.5" fill="#0d9488" opacity="0.1" class="breathing"/>
+    <polygon points="80,9.4 80.6,9.5 80.6,10.5 80,10.6 79.4,10.5 79.4,9.5" fill="#f97316" opacity="0.1" class="breathing"/>
+    <polygon points="80,79.4 80.6,79.5 80.6,80.5 80,80.6 79.4,80.5 79.4,79.5" fill="#0d9488" opacity="0.1" class="breathing"/>
+    <polygon points="10,79.4 10.6,79.5 10.6,80.5 10,80.6 9.4,80.5 9.4,79.5" fill="#f97316" opacity="0.1" class="breathing"/>
+  </g>
+  
+  <!-- Glowing Center Point -->
+  <polygon points="45,43 47,44 47,46 45,47 43,46 43,44" fill="url(#designGradient1)" opacity="0.7" class="pulse"/>
+  <polygon points="45,41 49,43 49,47 45,49 41,47 41,43" fill="url(#designGradient2)" opacity="0.2" class="pulse"/>
+  <polygon points="45,39 51,42 51,48 45,51 39,48 39,42" fill="url(#designGradient1)" opacity="0.1" class="center-4d-rotate"/>
+  
+  <!-- Additional Glow Rings -->
+  <polygon points="45,37 53,41 53,49 45,53 37,49 37,41" fill="url(#designGradient2)" opacity="0.08" class="glow"/>
+  <polygon points="45,35 55,40 55,50 45,55 35,50 35,40" fill="url(#designGradient1)" opacity="0.05" class="breathing"/>
+  
+  <!-- Subtle Raised Effect Below Center -->
+  <ellipse cx="45" cy="52" rx="4" ry="1.5" fill="#f5f5f5" opacity="0.3" class="breathing"/>
+  <ellipse cx="45" cy="53" rx="3" ry="1" fill="#f5f5f5" opacity="0.2" class="breathing"/>
+</svg> 
