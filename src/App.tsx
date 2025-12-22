@@ -139,22 +139,20 @@ const SectionHeader = ({
             <div className="flex items-center gap-1 ml-0 sm:ml-2">
               <button
                 aria-label="Grid view"
-                className={`p-2 rounded-md border transition-colors flex items-center justify-center ${
-                  viewMode === "grid"
+                className={`p-2 rounded-md border transition-colors flex items-center justify-center ${viewMode === "grid"
                     ? "bg-gray-200 dark:bg-gray-700 border-gray-400 dark:border-gray-500"
                     : "bg-transparent border-transparent hover:bg-gray-100 dark:hover:bg-gray-800"
-                }`}
+                  }`}
                 onClick={() => toggleView("grid")}
               >
                 <IconWrapper Icon={LazyLayoutGrid} className="h-4 w-4" />
               </button>
               <button
                 aria-label="List view"
-                className={`p-2 rounded-md border transition-colors flex items-center justify-center ${
-                  viewMode === "list"
+                className={`p-2 rounded-md border transition-colors flex items-center justify-center ${viewMode === "list"
                     ? "bg-gray-200 dark:bg-gray-700 border-gray-400 dark:border-gray-500"
                     : "bg-transparent border-transparent hover:bg-gray-100 dark:hover:bg-gray-800"
-                }`}
+                  }`}
                 onClick={() => toggleView("list")}
               >
                 <IconWrapper Icon={LazyList} className="h-4 w-4" />
@@ -377,7 +375,7 @@ function App() {
                                     project.title !== "HealthAware" &&
                                     project.title !== "AI NUI" &&
                                     project.title !==
-                                      "Configurable Multivariate Testing"
+                                    "Configurable Multivariate Testing"
                                 )
                                 .map((project, index) => (
                                   <a
@@ -390,18 +388,20 @@ function App() {
                                     {/* Card Image */}
                                     <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-transparent">
                                       {project.title === "JSON AI Prompts" ||
-                                      project.title === "User Testing Config" ||
-                                      project.title === "RAG App" ? (
+                                        project.title === "User Testing Config" || project.title === "MicroLearn" ||
+                                        project.title === "RAG App" ? (
                                         <img
                                           src={
                                             project.title === "JSON AI Prompts"
                                               ? `/img/json-ai-prompts-animation.svg?v=${Date.now()}`
                                               : project.title ===
                                                 "User Testing Config"
-                                              ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
-                                              : project.title === "RAG App"
-                                              ? `/img/rag-app-animation.svg?v=${Date.now()}`
-                                              : ""
+                                                ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
+                                                : project.title === "MicroLearn"
+                                                  ? `/img/micro-learn-animation.svg?v=${Date.now()}`
+                                                  : project.title === "RAG App"
+                                                    ? `/img/rag-app-animation.svg?v=${Date.now()}`
+                                                    : ""
                                           }
                                           alt={project.title}
                                           className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
@@ -447,7 +447,7 @@ function App() {
                                     project.title !== "HealthAware" &&
                                     project.title !== "AI NUI" &&
                                     project.title !==
-                                      "Configurable Multivariate Testing"
+                                    "Configurable Multivariate Testing"
                                 )
                                 .map((project, index) => (
                                   <a
@@ -460,18 +460,20 @@ function App() {
                                     {/* Compact Image */}
                                     <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-transparent">
                                       {project.title === "JSON AI Prompts" ||
-                                      project.title === "User Testing Config" ||
-                                      project.title === "RAG App" ? (
+                                        project.title === "User Testing Config" || project.title === "MicroLearn" ||
+                                        project.title === "RAG App" ? (
                                         <img
                                           src={
                                             project.title === "JSON AI Prompts"
                                               ? `/img/json-ai-prompts-animation.svg?v=${Date.now()}`
                                               : project.title ===
                                                 "User Testing Config"
-                                              ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
-                                              : project.title === "RAG App"
-                                              ? `/img/rag-app-animation.svg?v=${Date.now()}`
-                                              : ""
+                                                ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
+                                                : project.title === "MicroLearn"
+                                                  ? `/img/micro-learn-animation.svg?v=${Date.now()}`
+                                                  : project.title === "RAG App"
+                                                    ? `/img/rag-app-animation.svg?v=${Date.now()}`
+                                                    : ""
                                           }
                                           alt={project.title}
                                           className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
@@ -583,9 +585,8 @@ function App() {
                                       });
                                     }
                                   }}
-                                  className={`group relative rounded-lg bg-white/20 backdrop-blur-lg flex flex-col shadow-xl hover:shadow-2xl transition-shadow ${
-                                    story.hasModal ? "cursor-pointer" : ""
-                                  }`}
+                                  className={`group relative rounded-lg bg-white/20 backdrop-blur-lg flex flex-col shadow-xl hover:shadow-2xl transition-shadow ${story.hasModal ? "cursor-pointer" : ""
+                                    }`}
                                 >
                                   {/* Card Image */}
                                   <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-transparent">
@@ -638,9 +639,8 @@ function App() {
                                       });
                                     }
                                   }}
-                                  className={`group flex items-center gap-4 p-3 rounded-lg bg-white/20 backdrop-blur-lg transition-all shadow-xl hover:shadow-2xl ${
-                                    story.hasModal ? "cursor-pointer" : ""
-                                  }`}
+                                  className={`group flex items-center gap-4 p-3 rounded-lg bg-white/20 backdrop-blur-lg transition-all shadow-xl hover:shadow-2xl ${story.hasModal ? "cursor-pointer" : ""
+                                    }`}
                                 >
                                   {/* Compact Image */}
                                   <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-transparent">
@@ -847,13 +847,13 @@ function App() {
                                 (article) =>
                                   article.title !== "Commit Message Fatigue" &&
                                   article.title !==
-                                    "Information Architecture Is Not Sacred" &&
+                                  "Information Architecture Is Not Sacred" &&
                                   article.title !==
-                                    "AI is hydrated with user research data" &&
+                                  "AI is hydrated with user research data" &&
                                   article.title !==
-                                    "Prompting for Heuristic Evaluations" &&
+                                  "Prompting for Heuristic Evaluations" &&
                                   article.title !==
-                                    "Vibe Coding v Vibe Engineering"
+                                  "Vibe Coding v Vibe Engineering"
                               )
                               .sort(
                                 (a, b) =>
@@ -886,7 +886,7 @@ function App() {
                                       <img
                                         {...getCardImageProps(
                                           (article as any).cardImage ||
-                                            article.image
+                                          article.image
                                         )}
                                         alt={article.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -917,13 +917,13 @@ function App() {
                                 (article) =>
                                   article.title !== "Commit Message Fatigue" &&
                                   article.title !==
-                                    "Information Architecture Is Not Sacred" &&
+                                  "Information Architecture Is Not Sacred" &&
                                   article.title !==
-                                    "AI is hydrated with user research data" &&
+                                  "AI is hydrated with user research data" &&
                                   article.title !==
-                                    "Prompting for Heuristic Evaluations" &&
+                                  "Prompting for Heuristic Evaluations" &&
                                   article.title !==
-                                    "Vibe Coding v Vibe Engineering"
+                                  "Vibe Coding v Vibe Engineering"
                               )
                               .sort(
                                 (a, b) =>
@@ -956,7 +956,7 @@ function App() {
                                       <img
                                         {...getThumbnailImageProps(
                                           (article as any).cardImage ||
-                                            article.image
+                                          article.image
                                         )}
                                         alt={article.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -1598,11 +1598,10 @@ function App() {
                   new CustomEvent("toggleViewMode", { detail: "list" })
                 );
               }}
-              className={`w-8 h-8 flex items-center justify-center rounded-md transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                currentViewMode === "list"
+              className={`w-8 h-8 flex items-center justify-center rounded-md transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${currentViewMode === "list"
                   ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
                   : "text-gray-700 dark:text-gray-300"
-              }`}
+                }`}
               aria-label="List view"
             >
               <IconWrapper Icon={LazyList} className="w-4 h-4" />
@@ -1615,11 +1614,10 @@ function App() {
                   new CustomEvent("toggleViewMode", { detail: "grid" })
                 );
               }}
-              className={`w-8 h-8 flex items-center justify-center rounded-md transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                currentViewMode === "grid"
+              className={`w-8 h-8 flex items-center justify-center rounded-md transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${currentViewMode === "grid"
                   ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
                   : "text-gray-700 dark:text-gray-300"
-              }`}
+                }`}
               aria-label="Grid view"
             >
               <IconWrapper Icon={LazyLayoutGrid} className="w-4 h-4" />

@@ -606,6 +606,14 @@ export const content = {
         image: "/img/multivariate-testing-animation.svg",
       },
       {
+        title: "MicroLearn",
+        description:
+          "Bite-sized micro-learning platform for continuous development.",
+        technologies: ["React", "TypeScript", "Tailwind", "Vite"],
+        demo: "https://small-learning.netlify.app/welcome",
+        image: "/img/micro-learn-animation.svg",
+      },
+      {
         title: "RAG App",
         description: "RAG with Python and n8n.",
         technologies: ["Python", "n8n", "RAG", "AI"],

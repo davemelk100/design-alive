@@ -1,0 +1,132 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="mlSphere1" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" /> <!-- Blue primary -->
+      <stop offset="70%" style="stop-color:#2563eb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="mlSphere2" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" /> <!-- Blue Light -->
+      <stop offset="70%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="mlSphere3" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" style="stop-color:#93c5fd;stop-opacity:1" /> <!-- Blue Lighter -->
+      <stop offset="70%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </radialGradient>
+    <filter id="mlSphereShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Raised effect in center -->
+  <ellipse cx="100" cy="100" rx="25" ry="8" fill="#f8f9fa" opacity="0.6" class="mlBreathing"/>
+  <ellipse cx="100" cy="100" rx="20" ry="6" fill="#e9ecef" opacity="0.4" class="mlBreathing"/>
+  
+  <!-- Transparent blue pulsing sphere in center -->
+  <circle cx="100" cy="100" r="12" fill="#3b82f6" opacity="0.3" class="mlPulseCenter"/>
+  
+  <!-- Orbit 1 Group with dashed connections (Blue Light) -->
+  <g class="mlOrbit1">
+    <circle cx="100" cy="50" r="4" fill="url(#mlSphere2)" filter="url(#mlSphereShadow)" opacity="0.8" class="mlPathFollow1"/>
+    <circle cx="150" cy="100" r="3" fill="#60a5fa" opacity="0.7" class="mlPathFollow2"/>
+    <circle cx="100" cy="150" r="5" fill="url(#mlSphere3)" filter="url(#mlSphereShadow)" opacity="0.8" class="mlPathFollow3"/>
+    <circle cx="50" cy="100" r="3" fill="#1d4ed8" opacity="0.7" class="mlPathFollow4"/>
+    <!-- Dashed connections for orbit 1 -->
+    <line x1="100" y1="50" x2="150" y2="100" stroke="#60a5fa" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="150" y1="100" x2="100" y2="150" stroke="#60a5fa" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="100" y1="150" x2="50" y2="100" stroke="#60a5fa" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="50" y1="100" x2="100" y2="50" stroke="#60a5fa" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+  </g>
+  
+  <!-- Orbit 2 Group with dashed connections (Blue Lighter) -->
+  <g class="mlOrbit2">
+    <circle cx="120" cy="80" r="3" fill="#93c5fd" opacity="0.7" class="mlPathFollow5"/>
+    <circle cx="80" cy="120" r="4" fill="url(#mlSphere1)" filter="url(#mlSphereShadow)" opacity="0.8" class="mlPathFollow6"/>
+    <circle cx="120" cy="120" r="3" fill="#60a5fa" opacity="0.7" class="mlPathFollow7"/>
+    <circle cx="80" cy="80" r="3" fill="#1d4ed8" opacity="0.7" class="mlPathFollow8"/>
+    <!-- Dashed connections for orbit 2 -->
+    <line x1="120" y1="80" x2="80" y2="120" stroke="#93c5fd" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="80" y1="120" x2="120" y2="120" stroke="#93c5fd" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="120" y1="120" x2="80" y2="80" stroke="#93c5fd" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+    <line x1="80" y1="80" x2="120" y2="80" stroke="#93c5fd" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>
+  </g>
+  
+  <style>
+    .mlBreathing {
+      animation: mlBreathing 12s ease-in-out infinite;
+    }
+    .mlPulseCenter {
+      animation: mlPulseCenter 18s ease-in-out infinite;
+    }
+    
+    /* Path following animations for orbit 1 (diamond shape) */
+    .mlPathFollow1 {
+      animation: mlPath1 60s linear infinite;
+      animation-delay: -30s;
+    }
+    .mlPathFollow2 {
+      animation: mlPath1 60s linear infinite;
+      animation-delay: -15s;
+    }
+    .mlPathFollow3 {
+      animation: mlPath1 60s linear infinite;
+      animation-delay: -45s;
+    }
+    .mlPathFollow4 {
+      animation: mlPath1 60s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    /* Path following animations for orbit 2 (square shape) */
+    .mlPathFollow5 {
+      animation: mlPath2 72s linear infinite;
+      animation-delay: -36s;
+    }
+    .mlPathFollow6 {
+      animation: mlPath2 72s linear infinite;
+      animation-delay: -18s;
+    }
+    .mlPathFollow7 {
+      animation: mlPath2 72s linear infinite;
+      animation-delay: -54s;
+    }
+    .mlPathFollow8 {
+      animation: mlPath2 72s linear infinite;
+      animation-delay: -0s;
+    }
+    
+    /* Path 1: Diamond shape - 100,50 -> 150,100 -> 100,150 -> 50,100 -> 100,50 */
+    @keyframes mlPath1 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(50px, 50px); }
+      50% { transform: translate(0px, 100px); }
+      75% { transform: translate(-50px, 50px); }
+    }
+    
+    /* Path 2: Square shape - 120,80 -> 80,120 -> 120,120 -> 80,80 -> 120,80 */
+    @keyframes mlPath2 {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(-40px, 40px); }
+      50% { transform: translate(0px, 40px); }
+      75% { transform: translate(-40px, 0px); }
+    }
+    
+    @keyframes mlBreathing {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+    
+    @keyframes mlPulseCenter {
+      0%, 100% { 
+        opacity: 0.2;
+        transform: scale(0.8);
+      }
+      50% { 
+        opacity: 0.4;
+        transform: scale(1.2);
+      }
+    }
+  </style>
+</svg>
