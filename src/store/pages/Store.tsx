@@ -587,13 +587,14 @@ const Store = () => {
                                       variant: "default",
                                     });
                                   }}
-                                  className="flex-1 px-2 py-2 font-semibold rounded-md transition-all hover:scale-105 store-card-button"
+                                  className="flex-1 px-2 font-semibold rounded-md transition-all hover:scale-105 store-card-button"
                                   style={{
                                     fontFamily:
                                       '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                                    fontSize: "11px",
+                                    fontSize: "14px",
                                     backgroundColor: "#f0f0f0",
                                     color: "rgb(80, 80, 80)",
+                                    height: "45px",
                                     boxShadow:
                                       "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
                                   }}
