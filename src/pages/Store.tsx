@@ -1,15 +1,6 @@
 import { motion } from "framer-motion";
-import {
-  Music,
-  Activity,
-  Palette,
-  ShoppingCart,
-  User,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Music, Activity, Palette, ShoppingCart, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useStore } from "../context/StoreContext";
 import { storeProducts } from "../data/storeProducts";
@@ -25,8 +16,13 @@ import {
 import { Avatar, AvatarFallback } from "../../components/ui/avatar";
 import { Product } from "../data/storeProducts";
 
-// Product Image Carousel Component
-const ProductImageCarousel = ({
+// Stripe Buy Button configuration
+const STRIPE_BUY_BUTTON_ID = "buy_btn_1ShP2DFCguwn0NjejNHb8fAK";
+const STRIPE_PUBLISHABLE_KEY =
+  "pk_live_51SfaUkFCguwn0Nje4OfQoB4yszo0dtOGxvcP3hCx2u8J6BBerqV3wNPTOM42iwsRPbz8o4cupfasTKY8BvYwbtIK004G7arYYe";
+
+// Product Image Row Component
+const ProductImageRow = ({
   product,
   onImageClick,
 }: {
@@ -37,100 +33,29 @@ const ProductImageCarousel = ({
     product.images && product.images.length > 0
       ? product.images
       : [product.image];
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const goToPrevious = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
-
-  const goToNext = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-  };
-
-  if (images.length === 1) {
-    return (
-      <div
-        onClick={onImageClick}
-        className="relative aspect-square overflow-hidden bg-transparent cursor-pointer rounded-t-lg"
-        style={{ padding: "10px", paddingBottom: "0" }}
-      >
-        <div className="relative w-full h-full rounded-lg overflow-hidden">
-          <img
-            src={images[0]}
-            alt={product.title}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div
       onClick={onImageClick}
-      className="relative aspect-square overflow-hidden bg-transparent cursor-pointer group rounded-t-lg"
+      className="relative overflow-hidden bg-transparent cursor-pointer rounded-t-lg"
       style={{ padding: "10px", paddingBottom: "0" }}
     >
-      {/* Images */}
-      <div className="relative w-full h-full rounded-lg overflow-hidden">
+      <div className="flex gap-2 rounded-lg overflow-hidden">
         {images.map((image, index) => (
-          <img
+          <div
             key={index}
-            src={image}
-            alt={`${product.title} - Image ${index + 1}`}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
-              index === currentIndex ? "opacity-100" : "opacity-0"
-            }`}
-            loading={index === 0 ? "eager" : "lazy"}
-          />
+            className="flex-1 relative aspect-square overflow-hidden rounded-lg group"
+          >
+            <img
+              src={image}
+              alt={`${product.title} - Image ${index + 1}`}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
         ))}
       </div>
-
-      {/* Navigation Buttons */}
-      {images.length > 1 && (
-        <>
-          <button
-            onClick={goToPrevious}
-            className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/40 dark:bg-white/20 backdrop-blur-xl hover:bg-white/60 dark:hover:bg-white/30 border border-white/50 dark:border-white/30 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all shadow-lg z-10"
-            aria-label="Previous image"
-          >
-            <ChevronLeft className="h-4 w-4 text-gray-900 dark:text-white" />
-          </button>
-          <button
-            onClick={goToNext}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/40 dark:bg-white/20 backdrop-blur-xl hover:bg-white/60 dark:hover:bg-white/30 border border-white/50 dark:border-white/30 rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all shadow-lg z-10"
-            aria-label="Next image"
-          >
-            <ChevronRight className="h-4 w-4 text-gray-900 dark:text-white" />
-          </button>
-
-          {/* Dots Indicator */}
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-            {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCurrentIndex(index);
-                }}
-                className={`h-1.5 rounded-full transition-all ${
-                  index === currentIndex
-                    ? "w-6 bg-white dark:bg-gray-200"
-                    : "w-1.5 bg-white/50 dark:bg-gray-200/50"
-                }`}
-                aria-label={`Go to image ${index + 1}`}
-              />
-            ))}
-          </div>
-        </>
-      )}
-
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
     </div>
   );
 };
@@ -406,7 +331,7 @@ const Store = () => {
                       key={product.id}
                       variants={fadeInUp}
                       whileHover={{ y: -4, scale: 1.02 }}
-                      className="group relative overflow-hidden rounded-lg flex flex-col cursor-pointer w-full max-w-md"
+                      className="group relative overflow-hidden rounded-lg flex flex-col cursor-pointer w-full"
                       onClick={() => navigate(`/store/product/${product.id}`)}
                     >
                       {/* Clear Liquid Glass Background Blobs */}
@@ -449,8 +374,8 @@ const Store = () => {
 
                         {/* Content */}
                         <div className="relative z-10 flex flex-col">
-                          {/* Product Image Carousel - Clickable */}
-                          <ProductImageCarousel
+                          {/* Product Image Row - Clickable */}
+                          <ProductImageRow
                             product={product}
                             onImageClick={() =>
                               navigate(`/store/product/${product.id}`)
@@ -506,36 +431,48 @@ const Store = () => {
                               style={{ marginBottom: "10px" }}
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  addItem({
-                                    id: product.id,
-                                    title: product.title,
-                                    price: product.price,
-                                    image: product.image,
-                                    description: product.description,
-                                  });
-                                  toast({
-                                    title: "Added to cart",
-                                    description: product.title,
-                                    duration: 5000,
-                                    variant: "default",
-                                  });
-                                }}
-                                className="w-full px-2 py-3 font-semibold rounded-md transition-all hover:scale-105 store-card-button"
-                                style={{
-                                  fontFamily:
-                                    '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                                  fontSize: "14px",
-                                  backgroundColor: "#f0f0f0",
-                                  color: "rgb(80, 80, 80)",
-                                  boxShadow:
-                                    "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
-                                }}
-                              >
-                                Add to Cart
-                              </button>
+                              <div className="flex gap-2">
+                                <div
+                                  className="flex-1"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {/* @ts-ignore - Stripe Buy Button web component */}
+                                  <stripe-buy-button
+                                    buy-button-id={STRIPE_BUY_BUTTON_ID}
+                                    publishable-key={STRIPE_PUBLISHABLE_KEY}
+                                  />
+                                </div>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    addItem({
+                                      id: product.id,
+                                      title: product.title,
+                                      price: product.price,
+                                      image: product.image,
+                                      description: product.description,
+                                    });
+                                    toast({
+                                      title: "Added to cart",
+                                      description: product.title,
+                                      duration: 5000,
+                                      variant: "default",
+                                    });
+                                  }}
+                                  className="flex-1 px-2 py-3 font-semibold rounded-md transition-all hover:scale-105 store-card-button"
+                                  style={{
+                                    fontFamily:
+                                      '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
+                                    fontSize: "14px",
+                                    backgroundColor: "#f0f0f0",
+                                    color: "rgb(80, 80, 80)",
+                                    boxShadow:
+                                      "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
+                                  }}
+                                >
+                                  Add to Cart
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>

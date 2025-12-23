@@ -21,6 +21,11 @@ import {
 } from "../../../components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../../../components/ui/avatar";
 
+// Stripe Buy Button configuration
+const STRIPE_BUY_BUTTON_ID = "buy_btn_1ShP2DFCguwn0NjejNHb8fAK";
+const STRIPE_PUBLISHABLE_KEY =
+  "pk_live_51SfaUkFCguwn0Nje4OfQoB4yszo0dtOGxvcP3hCx2u8J6BBerqV3wNPTOM42iwsRPbz8o4cupfasTKY8BvYwbtIK004G7arYYe";
+
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -325,8 +330,9 @@ const ProductDetail = () => {
                     key={index}
                     src={image}
                     alt={`${product.title} - Image ${index + 1}`}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${index === currentImageIndex ? "opacity-100" : "opacity-0"
-                      }`}
+                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                      index === currentImageIndex ? "opacity-100" : "opacity-0"
+                    }`}
                     loading={index === 0 ? "eager" : "lazy"}
                   />
                 ))}
@@ -356,10 +362,11 @@ const ProductDetail = () => {
                       <button
                         key={index}
                         onClick={() => setCurrentImageIndex(index)}
-                        className={`h-2 rounded-full transition-all ${index === currentImageIndex
+                        className={`h-2 rounded-full transition-all ${
+                          index === currentImageIndex
                             ? "w-8 bg-white dark:bg-gray-200"
                             : "w-2 bg-white/50 dark:bg-gray-200/50"
-                          }`}
+                        }`}
                         aria-label={`Go to image ${index + 1}`}
                       />
                     ))}
@@ -472,8 +479,9 @@ const ProductDetail = () => {
                         <button
                           key={size}
                           onClick={() => setSelectedSize(size)}
-                          className={`px-6 py-3 font-semibold rounded-md transition-all hover:scale-105 ${selectedSize === size ? "" : ""
-                            }`}
+                          className={`px-6 py-3 font-semibold rounded-md transition-all hover:scale-105 ${
+                            selectedSize === size ? "" : ""
+                          }`}
                           style={{
                             fontFamily:
                               '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
@@ -493,35 +501,44 @@ const ProductDetail = () => {
                   </div>
                 )}
 
-                {/* Add to Cart Button */}
-                <button
-                  onClick={() => {
-                    addItem({
-                      id: product.id,
-                      title: product.title,
-                      price: product.price,
-                      image: product.image,
-                      description: product.description,
-                    });
-                    toast({
-                      title: "Added to cart",
-                      description: product.title,
-                      duration: 3000,
-                    });
-                  }}
-                  className="w-full px-2 py-3 font-semibold rounded-md transition-all hover:scale-105"
-                  style={{
-                    fontFamily:
-                      '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                    fontSize: "14px",
-                    backgroundColor: "#f0f0f0",
-                    color: "rgb(80, 80, 80)",
-                    boxShadow:
-                      "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
-                  }}
-                >
-                  Add to Cart
-                </button>
+                {/* Buy Now and Add to Cart Buttons */}
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    {/* @ts-ignore - Stripe Buy Button web component */}
+                    <stripe-buy-button
+                      buy-button-id={STRIPE_BUY_BUTTON_ID}
+                      publishable-key={STRIPE_PUBLISHABLE_KEY}
+                    />
+                  </div>
+                  <button
+                    onClick={() => {
+                      addItem({
+                        id: product.id,
+                        title: product.title,
+                        price: product.price,
+                        image: product.image,
+                        description: product.description,
+                      });
+                      toast({
+                        title: "Added to cart",
+                        description: product.title,
+                        duration: 3000,
+                      });
+                    }}
+                    className="flex-1 px-2 py-3 font-semibold rounded-md transition-all hover:scale-105"
+                    style={{
+                      fontFamily:
+                        '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
+                      fontSize: "14px",
+                      backgroundColor: "#f0f0f0",
+                      color: "rgb(80, 80, 80)",
+                      boxShadow:
+                        "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
+                    }}
+                  >
+                    Add to Cart
+                  </button>
+                </div>
 
                 {/* Product Details */}
                 <div className="pt-6 border-t border-white/20">
