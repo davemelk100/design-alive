@@ -176,22 +176,9 @@ function toast({ ...props }: Toast) {
       id,
       open: true,
       onOpenChange: (open) => {
-        // If Radix is trying to close the toast but we have a timeout scheduled,
-        // prevent it from closing by ignoring the close call
-        if (!open && toastTimeouts.has(id)) {
-          // Radix is trying to auto-dismiss, but we control that - ignore it
-          // Force the toast to stay open by dispatching an update
-          dispatch({
-            type: "UPDATE_TOAST",
-            toast: { id, open: true },
-          });
-          return;
-        }
-
-        // Only handle manual closes (user clicked X or swiped)
-        // when we don't have a timeout scheduled
-        if (!open && !toastTimeouts.has(id)) {
-          // This is a manual close, so dismiss immediately
+        if (!open) {
+          // Always allow manual dismiss (user clicked X or swiped)
+          // Clear the timeout and dismiss
           dismiss();
         }
       },

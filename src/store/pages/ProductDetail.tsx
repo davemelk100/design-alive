@@ -330,7 +330,7 @@ const ProductDetail = () => {
                     key={index}
                     src={image}
                     alt={`${product.title} - Image ${index + 1}`}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${
+                    className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-300 ${
                       index === currentImageIndex ? "opacity-100" : "opacity-0"
                     }`}
                     loading={index === 0 ? "eager" : "lazy"}
@@ -541,33 +541,101 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Product Details */}
-                <div className="pt-6 border-t border-white/20">
-                  <h3
-                    className="font-semibold mb-3"
-                    style={{
-                      fontFamily:
-                        '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                      fontSize: "14px",
-                      color: "black",
-                    }}
-                  >
-                    Product Details
-                  </h3>
-                  <ul
-                    className="space-y-2"
-                    style={{
-                      fontFamily:
-                        '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                      fontSize: "14px",
-                      color: "black",
-                    }}
-                  >
-                    <li>• Premium quality materials</li>
-                    <li>• Comfortable fit</li>
-                    <li>• Machine washable</li>
-                    <li>• Fast shipping available</li>
-                  </ul>
-                </div>
+                {product.details && (
+                  <div className="pt-6 border-t border-white/20">
+                    <h3
+                      className="font-semibold mb-3"
+                      style={{
+                        fontFamily:
+                          '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
+                        fontSize: "14px",
+                        color: "black",
+                      }}
+                    >
+                      DETAILS
+                    </h3>
+                    <div
+                      className="space-y-2 whitespace-pre-line"
+                      style={{
+                        fontFamily:
+                          '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
+                        fontSize: "14px",
+                        color: "black",
+                      }}
+                    >
+                      {product.details.split("\n").map((line, index) => (
+                        <div key={index}>{line}</div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Size Chart */}
+                {product.sizeChart && (
+                  <div className="pt-6 border-t border-white/20">
+                    <h3
+                      className="font-semibold mb-3"
+                      style={{
+                        fontFamily:
+                          '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
+                        fontSize: "14px",
+                        color: "black",
+                      }}
+                    >
+                      SIZE CHART
+                    </h3>
+                    <div className="overflow-x-auto">
+                      <table
+                        className="w-full border-collapse"
+                        style={{
+                          fontFamily:
+                            '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
+                          fontSize: "12px",
+                          color: "black",
+                        }}
+                      >
+                        <thead>
+                          <tr>
+                            <th className="border border-white/20 px-2 py-2 text-left font-semibold">
+                              Size
+                            </th>
+                            <th className="border border-white/20 px-2 py-2 text-left font-semibold">
+                              Body Length
+                            </th>
+                            <th className="border border-white/20 px-2 py-2 text-left font-semibold">
+                              Chest Width (Laid Flat)
+                            </th>
+                            <th className="border border-white/20 px-2 py-2 text-left font-semibold">
+                              Sleeve Length
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {product.sizeChart.sizes.map((size) => {
+                            const measurement =
+                              product.sizeChart!.measurements[size];
+                            return (
+                              <tr key={size}>
+                                <td className="border border-white/20 px-2 py-2 font-semibold">
+                                  {size}
+                                </td>
+                                <td className="border border-white/20 px-2 py-2">
+                                  {measurement.bodyLength}
+                                </td>
+                                <td className="border border-white/20 px-2 py-2">
+                                  {measurement.chestWidth}
+                                </td>
+                                <td className="border border-white/20 px-2 py-2">
+                                  {measurement.sleeveLength}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

@@ -1,6 +1,15 @@
 import { motion } from "framer-motion";
-import { Music, Activity, Palette, ShoppingCart, User } from "lucide-react";
+import {
+  Music,
+  Activity,
+  Palette,
+  ShoppingCart,
+  User,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useStore } from "../context/StoreContext";
 import { storeProducts } from "../data/storeProducts";
@@ -33,28 +42,78 @@ const ProductImageRow = ({
     product.images && product.images.length > 0
       ? product.images
       : [product.image];
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const goToPrevious = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const goToNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
 
   return (
     <div
       onClick={onImageClick}
-      className="relative overflow-hidden bg-transparent cursor-pointer rounded-t-lg"
-      style={{ padding: "10px", paddingBottom: "0" }}
+      className="relative overflow-hidden bg-transparent cursor-pointer rounded-t-lg group"
+      style={{ padding: "6px", paddingBottom: "0" }}
     >
-      <div className="flex gap-2 rounded-lg overflow-hidden">
-        {images.map((image, index) => (
-          <div
-            key={index}
-            className="flex-1 relative aspect-square overflow-hidden rounded-lg group"
-          >
+      <div className="relative aspect-square overflow-hidden rounded-lg bg-transparent">
+        {/* Images */}
+        <div className="relative w-full h-full">
+          {images.map((image, index) => (
             <img
+              key={index}
               src={image}
               alt={`${product.title} - Image ${index + 1}`}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-300 ${
+                index === currentImageIndex ? "opacity-100" : "opacity-0"
+              }`}
               loading={index === 0 ? "eager" : "lazy"}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* Navigation Buttons */}
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={goToPrevious}
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-10"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="h-4 w-4 text-gray-900" />
+            </button>
+            <button
+              onClick={goToNext}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg z-10"
+              aria-label="Next image"
+            >
+              <ChevronRight className="h-4 w-4 text-gray-900" />
+            </button>
+
+            {/* Dots Indicator */}
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentImageIndex(index);
+                  }}
+                  className={`h-1.5 rounded-full transition-all ${
+                    index === currentImageIndex
+                      ? "w-4 bg-white"
+                      : "w-1.5 bg-white/50"
+                  }`}
+                  aria-label={`Go to image ${index + 1}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
@@ -106,6 +165,58 @@ const Store = () => {
     ? products.filter((product) => product.mainCategory === activeCategory)
     : products;
 
+  // Style Stripe buy buttons to match Add to Cart button
+  useEffect(() => {
+    const styleStripeButtons = () => {
+      const stripeButtons = document.querySelectorAll("stripe-buy-button");
+      stripeButtons.forEach((button) => {
+        const shadowRoot = button.shadowRoot;
+        if (
+          shadowRoot &&
+          !shadowRoot.querySelector("style[data-stripe-button-style]")
+        ) {
+          const style = document.createElement("style");
+          style.setAttribute("data-stripe-button-style", "true");
+          style.textContent = `
+            button {
+              width: 100% !important;
+              font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+              font-size: 11px !important;
+              border-radius: 0.375rem !important;
+              padding: 0.5rem 0.5rem !important;
+              min-height: 32px !important;
+              font-weight: 600 !important;
+            }
+          `;
+          shadowRoot.appendChild(style);
+        }
+      });
+    };
+
+    // Try to style immediately
+    styleStripeButtons();
+
+    // Also try after a short delay in case buttons load asynchronously
+    const timeoutId = setTimeout(styleStripeButtons, 500);
+    const timeoutId2 = setTimeout(styleStripeButtons, 1000);
+
+    // Use MutationObserver to watch for new buttons being added
+    const observer = new MutationObserver(() => {
+      styleStripeButtons();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearTimeout(timeoutId2);
+      observer.disconnect();
+    };
+  }, [filteredProducts]);
+
   return (
     <div
       className="min-h-screen text-gray-900 dark:text-white store-page pb-16 relative"
@@ -131,6 +242,23 @@ const Store = () => {
           0%, 100% { transform: translate(0, 0) scale(1); }
           33% { transform: translate(-30px, 30px) scale(0.9); }
           66% { transform: translate(20px, -20px) scale(1.1); }
+        }
+        .stripe-buy-button-wrapper {
+          width: 100%;
+          display: flex;
+        }
+        .stripe-buy-button-wrapper stripe-buy-button {
+          width: 100%;
+          display: block;
+        }
+        .stripe-buy-button-wrapper stripe-buy-button::part(button) {
+          width: 100% !important;
+          font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+          font-size: 11px !important;
+          border-radius: 0.375rem !important;
+          padding: 0.5rem 0.5rem !important;
+          min-height: 32px !important;
+          font-weight: 600 !important;
         }
       `}</style>
 
@@ -331,7 +459,7 @@ const Store = () => {
                       key={product.id}
                       variants={fadeInUp}
                       whileHover={{ y: -4, scale: 1.02 }}
-                      className="group relative overflow-hidden rounded-lg flex flex-col cursor-pointer w-full"
+                      className="group relative overflow-hidden rounded-lg flex flex-col cursor-pointer w-full max-w-[480px]"
                       onClick={() => navigate(`/store/product/${product.id}`)}
                     >
                       {/* Clear Liquid Glass Background Blobs */}
@@ -388,7 +516,7 @@ const Store = () => {
                             style={{
                               fontFamily:
                                 '"Helvetica", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                              padding: "10px",
+                              padding: "8px",
                             }}
                           >
                             <h3
@@ -396,7 +524,7 @@ const Store = () => {
                               style={{
                                 fontFamily:
                                   '"Helvetica", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important',
-                                fontSize: "14px",
+                                fontSize: "12px",
                                 color: "black",
                               }}
                             >
@@ -407,7 +535,7 @@ const Store = () => {
                               style={{
                                 fontFamily:
                                   '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                                fontSize: "14px",
+                                fontSize: "11px",
                                 color: "black",
                               }}
                             >
@@ -419,7 +547,7 @@ const Store = () => {
                                 style={{
                                   fontFamily:
                                     '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                                  fontSize: "14px",
+                                  fontSize: "12px",
                                   color: "black",
                                 }}
                               >
@@ -428,12 +556,12 @@ const Store = () => {
                             </div>
                             <div
                               className="mt-auto"
-                              style={{ marginBottom: "10px" }}
+                              style={{ marginBottom: "6px" }}
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <div className="flex gap-2">
+                              <div className="flex gap-1.5">
                                 <div
-                                  className="flex-1"
+                                  className="flex-1 stripe-buy-button-wrapper"
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   {/* @ts-ignore - Stripe Buy Button web component */}
@@ -459,11 +587,11 @@ const Store = () => {
                                       variant: "default",
                                     });
                                   }}
-                                  className="flex-1 px-2 py-3 font-semibold rounded-md transition-all hover:scale-105 store-card-button"
+                                  className="flex-1 px-2 py-2 font-semibold rounded-md transition-all hover:scale-105 store-card-button"
                                   style={{
                                     fontFamily:
                                       '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                                    fontSize: "14px",
+                                    fontSize: "11px",
                                     backgroundColor: "#f0f0f0",
                                     color: "rgb(80, 80, 80)",
                                     boxShadow:

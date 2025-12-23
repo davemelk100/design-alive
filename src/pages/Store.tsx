@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Music, Activity, Palette, ShoppingCart, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useStore } from "../context/StoreContext";
 import { storeProducts } from "../data/storeProducts";
@@ -106,6 +107,58 @@ const Store = () => {
     ? products.filter((product) => product.mainCategory === activeCategory)
     : products;
 
+  // Style Stripe buy buttons to match Add to Cart button
+  useEffect(() => {
+    const styleStripeButtons = () => {
+      const stripeButtons = document.querySelectorAll("stripe-buy-button");
+      stripeButtons.forEach((button) => {
+        const shadowRoot = button.shadowRoot;
+        if (
+          shadowRoot &&
+          !shadowRoot.querySelector("style[data-stripe-button-style]")
+        ) {
+          const style = document.createElement("style");
+          style.setAttribute("data-stripe-button-style", "true");
+          style.textContent = `
+            button {
+              width: 100% !important;
+              font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+              font-size: 14px !important;
+              border-radius: 0.375rem !important;
+              padding: 0.875rem 0.5rem !important;
+              min-height: 44px !important;
+              font-weight: 600 !important;
+            }
+          `;
+          shadowRoot.appendChild(style);
+        }
+      });
+    };
+
+    // Try to style immediately
+    styleStripeButtons();
+
+    // Also try after a short delay in case buttons load asynchronously
+    const timeoutId = setTimeout(styleStripeButtons, 500);
+    const timeoutId2 = setTimeout(styleStripeButtons, 1000);
+
+    // Use MutationObserver to watch for new buttons being added
+    const observer = new MutationObserver(() => {
+      styleStripeButtons();
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      clearTimeout(timeoutId);
+      clearTimeout(timeoutId2);
+      observer.disconnect();
+    };
+  }, [filteredProducts]);
+
   return (
     <div
       className="min-h-screen text-gray-900 dark:text-white store-page pb-16 relative"
@@ -131,6 +184,23 @@ const Store = () => {
           0%, 100% { transform: translate(0, 0) scale(1); }
           33% { transform: translate(-30px, 30px) scale(0.9); }
           66% { transform: translate(20px, -20px) scale(1.1); }
+        }
+        .stripe-buy-button-wrapper {
+          width: 100%;
+          display: flex;
+        }
+        .stripe-buy-button-wrapper stripe-buy-button {
+          width: 100%;
+          display: block;
+        }
+        .stripe-buy-button-wrapper stripe-buy-button::part(button) {
+          width: 100% !important;
+          font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
+          font-size: 14px !important;
+          border-radius: 0.375rem !important;
+          padding: 0.875rem 0.5rem !important;
+          min-height: 44px !important;
+          font-weight: 600 !important;
         }
       `}</style>
 
@@ -433,7 +503,7 @@ const Store = () => {
                             >
                               <div className="flex gap-2">
                                 <div
-                                  className="flex-1"
+                                  className="flex-1 stripe-buy-button-wrapper"
                                   onClick={(e) => e.stopPropagation()}
                                 >
                                   {/* @ts-ignore - Stripe Buy Button web component */}

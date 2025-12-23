@@ -296,10 +296,10 @@ const Checkout = () => {
         >
           {/* Header */}
           <div>
-            <h1 className="text-4xl sm:text-5xl font-bold mb-2 text-white">
+            <h1 className="text-4xl sm:text-5xl font-bold mb-2 text-black">
               Checkout
             </h1>
-            <p className="text-white">
+            <p className="text-black">
               Review your order and complete your purchase
             </p>
           </div>
@@ -354,7 +354,7 @@ const Checkout = () => {
                   className="text-2xl font-bold mb-6 relative z-10"
                   style={{
                     letterSpacing: "-1.25px",
-                    color: "#dbdbdb",
+                    color: "black",
                   }}
                 >
                   Order Summary
