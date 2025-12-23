@@ -10,7 +10,8 @@ export const storeProducts: Product[] = [
     images: [
       "/img/balm-scrawls.png",
       "/img/standing.png",
-      "/img/skater-40.png",
+      "/img/balm-scrawl-band.png",
+      "/img/balm-scrawl-hoodie.png",
     ],
     description: "",
     fullDescription:
@@ -28,7 +29,7 @@ export const storeProducts: Product[] = [
       "/img/balm-cursive.png",
       "/img/balm-cursive-band.png",
       "/img/balm-cursive-skate.png",
-      "/img/balm-hike.png",
+      "/img/balm-cursive-club.png",
     ],
     description: "",
     fullDescription:
