@@ -292,7 +292,7 @@ const ProductDetail = () => {
           style={{
             fontFamily:
               '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-            fontSize: "14px",
+            fontSize: "20px",
             backgroundColor: "#f0f0f0",
             color: "rgb(80, 80, 80)",
             boxShadow:
@@ -474,7 +474,7 @@ const ProductDetail = () => {
                           style={{
                             fontFamily:
                               '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                            fontSize: "14px",
+                            fontSize: "20px",
                             backgroundColor:
                               selectedSize === size ? "#f0f0f0" : "#f0f0f0",
                             color: "rgb(80, 80, 80)",
@@ -518,7 +518,7 @@ const ProductDetail = () => {
                     style={{
                       fontFamily:
                         '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                      fontSize: "14px",
+                      fontSize: "20px",
                       backgroundColor: "#f0f0f0",
                       color: "rgb(80, 80, 80)",
                       boxShadow:
@@ -528,106 +528,150 @@ const ProductDetail = () => {
                     Add to Cart
                   </button>
                 </div>
-
-                {/* Product Details */}
-                {product.details && (
-                  <div className="pt-6 border-t border-white/20">
-                    <h3
-                      className="font-semibold mb-3"
-                      style={{
-                        fontFamily:
-                          '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                        fontSize: "14px",
-                        color: "black",
-                      }}
-                    >
-                      DETAILS
-                    </h3>
-                    <div
-                      className="space-y-2 whitespace-pre-line"
-                      style={{
-                        fontFamily:
-                          '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                        fontSize: "14px",
-                        color: "black",
-                      }}
-                    >
-                      {product.details.split("\n").map((line, index) => (
-                        <div key={index}>{line}</div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Size Chart */}
-                {product.sizeChart && (
-                  <div className="pt-6 border-t border-white/20">
-                    <h3
-                      className="font-semibold mb-3"
-                      style={{
-                        fontFamily:
-                          '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                        fontSize: "14px",
-                        color: "black",
-                      }}
-                    >
-                      SIZE CHART
-                    </h3>
-                    <div className="overflow-x-auto">
-                      <table
-                        className="w-full border-collapse"
-                        style={{
-                          fontFamily:
-                            '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                          fontSize: "12px",
-                          color: "black",
-                        }}
-                      >
-                        <thead>
-                          <tr>
-                            <th className="border border-white/20 px-2 py-2 text-left font-semibold">
-                              Size
-                            </th>
-                            <th className="border border-white/20 px-2 py-2 text-left font-semibold">
-                              Body Length
-                            </th>
-                            <th className="border border-white/20 px-2 py-2 text-left font-semibold">
-                              Chest Width (Laid Flat)
-                            </th>
-                            <th className="border border-white/20 px-2 py-2 text-left font-semibold">
-                              Sleeve Length
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {product.sizeChart.sizes.map((size) => {
-                            const measurement =
-                              product.sizeChart!.measurements[size];
-                            return (
-                              <tr key={size}>
-                                <td className="border border-white/20 px-2 py-2 font-semibold">
-                                  {size}
-                                </td>
-                                <td className="border border-white/20 px-2 py-2">
-                                  {measurement.bodyLength}
-                                </td>
-                                <td className="border border-white/20 px-2 py-2">
-                                  {measurement.chestWidth}
-                                </td>
-                                <td className="border border-white/20 px-2 py-2">
-                                  {measurement.sleeveLength}
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </motion.div>
+        </div>
+
+        {/* Product Details and Size Chart - Full Width Row */}
+        <div className="mt-12 w-full">
+          {/* Clear Liquid Glass Background Blobs */}
+          <div className="absolute inset-0 overflow-hidden rounded-lg -z-10">
+            <div className="absolute -top-24 -left-24 w-80 h-80 bg-white/20 rounded-full blur-3xl opacity-40"></div>
+            <div className="absolute -bottom-28 -right-28 w-96 h-96 bg-white/15 rounded-full blur-3xl opacity-35"></div>
+          </div>
+
+          {/* Clear Liquid Glass Card */}
+          <div
+            className="relative rounded-lg backdrop-blur-2xl border border-white/40 shadow-[0_8px_32px_0_rgba(255,255,255,0.2)]"
+            style={{ padding: "10px" }}
+          >
+            {/* Fluid gradient overlays - muted colors */}
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-gray-400/8 via-transparent to-gray-300/5"></div>
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-tl from-transparent via-gray-500/6 to-gray-400/8"></div>
+            <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gray-300/4 via-transparent to-gray-400/6"></div>
+
+            {/* Flowing animated gradient */}
+            <div
+              className="absolute inset-0 rounded-lg opacity-20 pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 30% 20%, rgba(100, 100, 100, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(120, 120, 120, 0.12) 0%, transparent 50%)",
+                backgroundSize: "200% 200%",
+                animation: "gradient 20s ease infinite",
+              }}
+            ></div>
+
+            {/* Reflective highlights - multiple angles */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent"></div>
+            <div className="absolute top-0 left-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/60 to-transparent"></div>
+            <div className="absolute top-0 right-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/40 to-transparent"></div>
+
+            {/* Inner glow effect - muted */}
+            <div className="absolute inset-[1px] rounded-lg bg-gradient-to-br from-gray-300/8 via-transparent to-transparent pointer-events-none"></div>
+
+            {/* Subtle inner shadow for depth */}
+            <div className="absolute inset-0 rounded-lg shadow-[inset_0_1px_2px_0_rgba(255,255,255,0.2)] pointer-events-none"></div>
+
+            <div className="relative z-10 space-y-6">
+              {/* Product Details */}
+              {product.details && (
+                <div className="pt-6 border-t border-white/20">
+                  <h3
+                    className="font-semibold mb-3"
+                    style={{
+                      fontFamily:
+                        '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
+                      fontSize: "20px",
+                      color: "black",
+                    }}
+                  >
+                    DETAILS
+                  </h3>
+                  <div
+                    className="space-y-2 whitespace-pre-line"
+                    style={{
+                      fontFamily:
+                        '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
+                      fontSize: "20px",
+                      color: "black",
+                    }}
+                  >
+                    {product.details.split("\n").map((line, index) => (
+                      <div key={index}>{line}</div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Size Chart */}
+              {product.sizeChart && (
+                <div className="pt-6 border-t border-white/20">
+                  <h3
+                    className="font-semibold mb-3"
+                    style={{
+                      fontFamily:
+                        '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
+                      fontSize: "20px",
+                      color: "black",
+                    }}
+                  >
+                    SIZE CHART
+                  </h3>
+                  <div className="overflow-x-auto">
+                    <table
+                      className="w-full border-collapse"
+                      style={{
+                        fontFamily:
+                          '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
+                        fontSize: "20px",
+                        color: "black",
+                      }}
+                    >
+                      <thead>
+                        <tr>
+                          <th className="border border-white/20 px-2 py-2 text-left font-semibold">
+                            Size
+                          </th>
+                          <th className="border border-white/20 px-2 py-2 text-left font-semibold">
+                            Body Length
+                          </th>
+                          <th className="border border-white/20 px-2 py-2 text-left font-semibold">
+                            Chest Width (Laid Flat)
+                          </th>
+                          <th className="border border-white/20 px-2 py-2 text-left font-semibold">
+                            Sleeve Length
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {product.sizeChart.sizes.map((size) => {
+                          const measurement =
+                            product.sizeChart!.measurements[size];
+                          return (
+                            <tr key={size}>
+                              <td className="border border-white/20 px-2 py-2 font-semibold">
+                                {size}
+                              </td>
+                              <td className="border border-white/20 px-2 py-2">
+                                {measurement.bodyLength}
+                              </td>
+                              <td className="border border-white/20 px-2 py-2">
+                                {measurement.chestWidth}
+                              </td>
+                              <td className="border border-white/20 px-2 py-2">
+                                {measurement.sleeveLength}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -224,7 +224,7 @@ const CheckoutSuccess = () => {
                 style={{
                   fontFamily:
                     '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                  fontSize: "14px",
+                  fontSize: "20px",
                   backgroundColor: "#f0f0f0",
                   color: "rgb(80, 80, 80)",
                   boxShadow:

@@ -181,7 +181,7 @@ const Store = () => {
             button {
               width: 100% !important;
               font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
-              font-size: 14px !important;
+              font-size: 20px !important;
               border-radius: 0.375rem !important;
               padding: 0.5rem 0.5rem !important;
               height: 45px !important;
@@ -254,7 +254,7 @@ const Store = () => {
         .stripe-buy-button-wrapper stripe-buy-button::part(button) {
           width: 100% !important;
           font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif !important;
-          font-size: 14px !important;
+          font-size: 20px !important;
           border-radius: 0.375rem !important;
           padding: 0.5rem 0.5rem !important;
           height: 45px !important;
@@ -581,7 +581,7 @@ const Store = () => {
                                   style={{
                                     fontFamily:
                                       '"Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif',
-                                    fontSize: "14px",
+                                    fontSize: "20px",
                                     backgroundColor: "#f0f0f0",
                                     color: "rgb(80, 80, 80)",
                                     height: "45px",
