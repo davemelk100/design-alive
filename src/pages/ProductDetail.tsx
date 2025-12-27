@@ -524,7 +524,7 @@ const ProductDetail = () => {
                 </button>
 
                 {/* Product Details */}
-                <div className="pt-6 border-t border-white/20">
+                <div className="pt-6">
                   <h3
                     className="font-semibold mb-3"
                     style={{
