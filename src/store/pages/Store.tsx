@@ -220,26 +220,6 @@ const Store = () => {
 
   return (
     <div className="min-h-screen text-gray-900 dark:text-white store-page pb-16 relative bg-[#f0f0f0]">
-      <style>{`
-        .stripe-buy-button-wrapper {
-          flex: 1;
-          display: flex;
-        }
-        .stripe-buy-button-wrapper stripe-buy-button {
-          width: 100%;
-          display: block;
-        }
-        .stripe-buy-button-wrapper stripe-buy-button::part(button) {
-          width: 100% !important;
-          font-family: "Geist Mono", monospace !important;
-          font-size: 20px !important;
-          border-radius: 0.375rem !important;
-          padding: 0.5rem 0.5rem !important;
-          height: 45px !important;
-          font-weight: 600 !important;
-        }
-      `}</style>
-
       {/* Top Header with DM, Nav, Cart, and Profile */}
       <StoreHeader sticky={true} />
 
@@ -406,21 +386,20 @@ const Store = () => {
       {/* Sticky Footer with BALM */}
       <footer className="fixed bottom-0 left-0 right-0 z-50 bg-[rgba(240,240,240,1)] py-0.5">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col">
             <span className="font-bold tracking-tight balm-logo text-[#d0d0d0] text-2xl [text-shadow:rgba(255,255,255,0.9)_-1px_-1px_1px,rgba(0,0,0,0.2)_1px_1px_2px,rgba(255,255,255,0.5)_0px_0px_1px]">
               BALM
             </span>
-            <div className="flex items-center gap-3">
+            <div className="flex">
               <button
                 onClick={() => openLegalModal("privacy")}
-                className="text-xs text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
+                className="flex text-xs text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
               >
                 Privacy Policy
               </button>
-              <span className="text-xs text-gray-400">•</span>
               <button
                 onClick={() => openLegalModal("terms")}
-                className="text-xs text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
+                className="flex text-xs text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
               >
                 Terms of Service
               </button>

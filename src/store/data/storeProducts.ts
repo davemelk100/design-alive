@@ -2,7 +2,7 @@ import { Product } from "../types";
 
 export const storeProducts: Product[] = [
   // {
-  //   id: "art-tshirt-1",
+  //   id: "balm-shirt-1",
   //   mainCategory: "art",
   //   title: "BALM Chest Print Button-Up Scrawl",
   //   price: 22.0,
@@ -20,7 +20,7 @@ export const storeProducts: Product[] = [
   //   colors: ["Black", "White", "Navy"],
   // },
   {
-    id: "art-tshirt-5",
+    id: "balm-shirt-2",
     mainCategory: "art",
     title: "BALM Chest Print Button-Up Cursive",
     price: 25.0,

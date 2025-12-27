@@ -53,28 +53,27 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex items-center justify-center relative"
-          style={{ minHeight: "100px" }}
+          className="flex flex-col items-center justify-center"
         >
-          {/* Balm Varsity Logo - Left Side */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2">
+          {/* Balm Varsity Logo - Centered at Top */}
+          <div className="mb-4">
             <Link to="/store" className="hover:opacity-80 transition-opacity">
               <img
                 src="/img/balm-varsity.svg"
                 alt="BALM Varsity"
-                className="h-[100px] w-auto"
+                className="w-[40px] h-auto md:w-auto md:h-[100px]"
               />
             </Link>
           </div>
 
-          {/* Cart and Profile - Right Side (unless minimal) */}
+          {/* Cart and Profile - Centered Below Logo (unless minimal) */}
           {!minimal && (
-            <div className="flex items-center gap-4 absolute right-0">
-              {/* Cart Icon */}
-              {!hideCart && (
+            <div className="flex items-center gap-4">
+              {/* Cart Icon - show when there are items */}
+              {!hideCart && getTotalItems() > 0 && (
                 <button
                   onClick={() => navigate("/store/checkout")}
-                  className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors"
+                  className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors cursor-pointer"
                   style={{
                     backgroundColor: "#f0f0f0",
                     boxShadow:
@@ -93,11 +92,12 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
                 </button>
               )}
 
-              {/* User Profile Dropdown */}
+              {/* User Profile Dropdown - only show when authenticated */}
+              {isAuthenticated && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors"
+                    className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors cursor-pointer"
                     style={{
                       backgroundColor: "#f0f0f0",
                       boxShadow:
@@ -132,12 +132,32 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
                     </Avatar>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56"
+                  style={{ fontFamily: '"Geist Mono", monospace' }}
+                >
+                  <DropdownMenuLabel
+                    style={{ fontFamily: '"Geist Mono", monospace' }}
+                  >
                     {isAuthenticated && user ? (
                       <div>
-                        <p className="font-medium">{user.name || "User"}</p>
-                        <p className="text-xs text-gray-500">{user.email}</p>
+                        <p
+                          className="font-medium text-sm"
+                          style={{ fontFamily: '"Geist Mono", monospace' }}
+                        >
+                          {user.name || "User"}
+                        </p>
+                        <p
+                          className="text-gray-500"
+                          style={{
+                            fontFamily: '"Geist Mono", monospace',
+                            fontSize: "14px",
+                            fontWeight: 300,
+                          }}
+                        >
+                          {user.email}
+                        </p>
                       </div>
                     ) : (
                       "My Account"
@@ -145,21 +165,31 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {isAuthenticated ? (
-                    <DropdownMenuItem onClick={handleLogout}>
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      style={{ fontFamily: '"Geist Mono", monospace' }}
+                    >
                       Sign Out
                     </DropdownMenuItem>
                   ) : (
                     <>
-                      <DropdownMenuItem onClick={() => navigate("/store/login")}>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/store/login")}
+                        style={{ fontFamily: '"Geist Mono", monospace' }}
+                      >
                         Sign In
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate("/store/signup")}>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/store/signup")}
+                        style={{ fontFamily: '"Geist Mono", monospace' }}
+                      >
                         Sign Up
                       </DropdownMenuItem>
                     </>
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
+              )}
             </div>
           )}
         </motion.div>
@@ -169,4 +199,3 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
 };
 
 export default StoreHeader;
-

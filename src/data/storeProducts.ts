@@ -1,6 +1,6 @@
 export interface Product {
   id: string;
-  mainCategory: "art" | "music" | "sports";
+  mainCategory: "buttonup" | "music" | "sports";
   title: string;
   price: number;
   image: string;
@@ -13,8 +13,8 @@ export interface Product {
 
 export const storeProducts: Product[] = [
   // {
-  //   id: "art-tshirt-1",
-  //   mainCategory: "art",
+  //   id: "balm-shirt-1",
+  //   mainCategory: "buttonup",
   //   title: "BALM Chest Print Button-Up Scrawl",
   //   price: 22.0,
   //   image: "/img/balm-scrawls.png",
@@ -31,8 +31,8 @@ export const storeProducts: Product[] = [
   //   colors: ["Black", "White", "Navy"],
   // },
   {
-    id: "art-tshirt-5",
-    mainCategory: "art",
+    id: "balm-shirt-2",
+    mainCategory: "buttonup",
     title: "BALM Chest Print Button-Up Cursive",
     price: 22.0,
     image: "/img/balm-cursive.png",

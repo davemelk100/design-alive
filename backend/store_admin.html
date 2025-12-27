@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Store Admin - Inventory & Orders</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: #f0f0f0;
+        color: #333;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .header-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logout-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+
+      .logout-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-card h3 {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .stat-card .value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #667eea;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #e0e0e0;
+      }
+
+      .tab {
+        padding: 0.75rem 1.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        color: #666;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s;
+        font-family: "Roboto", sans-serif;
+      }
+
+      .tab:hover {
+        color: #667eea;
+      }
+
+      .tab.active {
+        color: #667eea;
+        border-bottom-color: #667eea;
+        font-weight: 600;
+      }
+
+      .content-section {
+        display: none;
+      }
+
+      .content-section.active {
+        display: block;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.2s;
+        font-family: "Roboto", sans-serif;
+      }
+
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #5568d3;
+      }
+
+      .btn-danger {
+        background: #ef4444;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #dc2626;
+      }
+
+      .btn-secondary {
+        background: #6b7280;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #4b5563;
+      }
+
+      .btn-small {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-small svg {
+        display: block;
+      }
+
+      .table-container {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+      }
+
+      th {
+        background: #f9fafb;
+        font-weight: 600;
+        color: #374151;
+      }
+
+      tr:hover {
+        background: #f9fafb;
+      }
+
+      .actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        overflow-y: auto;
+      }
+
+      .modal.active {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 8px;
+        padding: 2rem;
+        max-width: 600px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-header h2 {
+        font-size: 1.5rem;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #666;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #374151;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-family: "Roboto", sans-serif;
+      }
+
+      .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+      }
+
+      .badge-success {
+        background: #d1fae5;
+        color: #065f46;
+      }
+
+      .badge-warning {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      .badge-danger {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .badge-info {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      .alert {
+        padding: 1rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+      }
+
+      .alert-success {
+        background: #d1fae5;
+        color: #065f46;
+        border: 1px solid #6ee7b7;
+      }
+
+      .alert-error {
+        background: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fca5a5;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #6b7280;
+      }
+
+      .product-image {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+
+      .low-stock {
+        background-color: #fef3c7;
+      }
+
+      .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .checkbox-group input[type="checkbox"] {
+        width: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-actions">
+        <div>
+          <h1>BALM Store Admin</h1>
+          <p style="opacity: 0.9; font-size: 0.9rem">
+            Inventory & Order Management
+          </p>
+        </div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Stats Dashboard -->
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card">
+          <h3>Total Products</h3>
+          <div class="value" id="stat-total-products">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Low Stock Items</h3>
+          <div class="value" id="stat-low-stock">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Total Orders</h3>
+          <div class="value" id="stat-total-orders">0</div>
+        </div>
+        <div class="stat-card">
+          <h3>Total Revenue</h3>
+          <div class="value" id="stat-revenue">$0.00</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('products')">
+          Products
+        </button>
+        <button class="tab" onclick="switchTab('inventory')">Inventory</button>
+        <button class="tab" onclick="switchTab('orders')">Orders</button>
+      </div>
+
+      <!-- Content Sections -->
+      <div id="content-sections">
+        <div class="content-section active" id="section-products"></div>
+        <div class="content-section" id="section-inventory"></div>
+        <div class="content-section" id="section-orders"></div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-title">Modal</h2>
+          <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = window.location.origin;
+      let authToken = localStorage.getItem("admin_token");
+
+      // Check authentication
+      if (!authToken) {
+        window.location.href = "/login";
+      }
+
+      // Initialize
+      init();
+
+      async function init() {
+        await loadStats();
+        await loadProducts();
+      }
+
+      function switchTab(tab) {
+        // Update tab buttons
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        event.target.classList.add("active");
+
+        // Update sections
+        document
+          .querySelectorAll(".content-section")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById(`section-${tab}`).classList.add("active");
+
+        // Load content
+        if (tab === "products") loadProducts();
+        else if (tab === "inventory") loadLowStock();
+        else if (tab === "orders") loadOrders();
+      }
+
+      async function loadStats() {
+        try {
+          const [productsRes, lowStockRes, statsRes] = await Promise.all([
+            fetch(`${API_BASE}/api/products?visible_only=false`, {
+              headers: { Authorization: `Bearer ${authToken}` },
+            }),
+            fetch(`${API_BASE}/api/inventory/low-stock`, {
+              headers: { Authorization: `Bearer ${authToken}` },
+            }),
+            fetch(`${API_BASE}/api/orders/stats/summary`, {
+              headers: { Authorization: `Bearer ${authToken}` },
+            }),
+          ]);
+
+          const products = await productsRes.json();
+          const lowStock = await lowStockRes.json();
+          const stats = await statsRes.json();
+
+          document.getElementById("stat-total-products").textContent =
+            products.length;
+          document.getElementById("stat-low-stock").textContent =
+            lowStock.length;
+          document.getElementById("stat-total-orders").textContent =
+            stats.total_orders;
+          document.getElementById(
+            "stat-revenue"
+          ).textContent = `$${stats.total_revenue.toFixed(2)}`;
+        } catch (error) {
+          console.error("Error loading stats:", error);
+        }
+      }
+
+      async function loadProducts() {
+        const section = document.getElementById("section-products");
+        section.innerHTML = "<p>Loading...</p>";
+
+        try {
+          const response = await fetch(
+            `${API_BASE}/api/products?visible_only=false`,
+            {
+              headers: { Authorization: `Bearer ${authToken}` },
+            }
+          );
+
+          if (response.status === 401) {
+            logout();
+            return;
+          }
+
+          const products = await response.json();
+          renderProducts(products, section);
+        } catch (error) {
+          section.innerHTML = `<div class="alert alert-error">Error: ${error.message}</div>`;
+        }
+      }
+
+      function renderProducts(products, container) {
+        // Store products globally for edit access
+        window.currentProducts = products;
+
+        let html = `
+                <div class="section-header">
+                    <h2>Products</h2>
+                    <button class="btn btn-primary" onclick="openProductModal()">+ Add Product</button>
+                </div>
+            `;
+
+        if (products.length === 0) {
+          html +=
+            '<div class="empty-state">No products found. Add your first product!</div>';
+        } else {
+          html += '<div class="table-container"><table><thead><tr>';
+          html +=
+            "<th>Image</th><th>ID</th><th>Title</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th>";
+          html += "</tr></thead><tbody>";
+
+          products.forEach((product, index) => {
+            const isLowStock =
+              product.stock_quantity <= product.low_stock_threshold;
+            const rowClass = isLowStock ? "low-stock" : "";
+            html += `<tr class="${rowClass}">
+                        <td><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 50 50'%3E%3Crect fill='%23e5e7eb' width='50' height='50'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='10' fill='%239ca3af'%3EImage%3C/text%3E%3C/svg%3E" class="product-image" alt="${
+                          product.title
+                        }" title="${product.image}"></td>
+                        <td>${product.id}</td>
+                        <td>${product.title}</td>
+                        <td>${product.main_category}</td>
+                        <td>$${product.price.toFixed(2)}</td>
+                        <td>${product.stock_quantity} ${
+              isLowStock ? '<span class="badge badge-warning">Low</span>' : ""
+            }</td>
+                        <td>${
+                          product.visible
+                            ? '<span class="badge badge-success">Visible</span>'
+                            : '<span class="badge badge-danger">Hidden</span>'
+                        }</td>
+                        <td class="actions">
+                            <button class="btn btn-secondary btn-small" onclick="editProductByIndex(${index})" title="Edit">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                              </svg>
+                            </button>
+                            <button class="btn btn-danger btn-small" onclick="deleteProduct('${
+                              product.id
+                            }')" title="Delete">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                              </svg>
+                            </button>
+                        </td>
+                    </tr>`;
+          });
+
+          html += "</tbody></table></div>";
+        }
+
+        container.innerHTML = html;
+      }
+
+      async function loadLowStock() {
+        const section = document.getElementById("section-inventory");
+        section.innerHTML = "<p>Loading...</p>";
+
+        try {
+          const response = await fetch(`${API_BASE}/api/inventory/low-stock`, {
+            headers: { Authorization: `Bearer ${authToken}` },
+          });
+
+          const products = await response.json();
+          renderLowStock(products, section);
+        } catch (error) {
+          section.innerHTML = `<div class="alert alert-error">Error: ${error.message}</div>`;
+        }
+      }
+
+      function renderLowStock(products, container) {
+        let html = '<div class="section-header"><h2>Low Stock Items</h2></div>';
+
+        if (products.length === 0) {
+          html +=
+            '<div class="empty-state">All products are well stocked! 🎉</div>';
+        } else {
+          html += '<div class="table-container"><table><thead><tr>';
+          html +=
+            "<th>Product</th><th>Current Stock</th><th>Threshold</th><th>Actions</th>";
+          html += "</tr></thead><tbody>";
+
+          products.forEach((product) => {
+            html += `<tr>
+                        <td>${product.title}</td>
+                        <td><span class="badge badge-warning">${product.stock_quantity}</span></td>
+                        <td>${product.low_stock_threshold}</td>
+                        <td><button class="btn btn-primary btn-small" onclick="adjustInventory('${product.id}', '${product.title}', ${product.stock_quantity})">Restock</button></td>
+                    </tr>`;
+          });
+
+          html += "</tbody></table></div>";
+        }
+
+        container.innerHTML = html;
+      }
+
+      async function loadOrders() {
+        const section = document.getElementById("section-orders");
+        section.innerHTML = "<p>Loading...</p>";
+
+        try {
+          const response = await fetch(`${API_BASE}/api/orders`, {
+            headers: { Authorization: `Bearer ${authToken}` },
+          });
+
+          const orders = await response.json();
+          renderOrders(orders, section);
+        } catch (error) {
+          section.innerHTML = `<div class="alert alert-error">Error: ${error.message}</div>`;
+        }
+      }
+
+      function renderOrders(orders, container) {
+        let html = '<div class="section-header"><h2>Orders</h2></div>';
+
+        if (orders.length === 0) {
+          html += '<div class="empty-state">No orders yet</div>';
+        } else {
+          html += '<div class="table-container"><table><thead><tr>';
+          html +=
+            "<th>Order #</th><th>Email</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th><th>Actions</th>";
+          html += "</tr></thead><tbody>";
+
+          orders.forEach((order) => {
+            const date = new Date(order.created_at).toLocaleDateString();
+            const statusBadge =
+              order.status === "delivered"
+                ? "success"
+                : order.status === "shipped"
+                ? "info"
+                : "warning";
+            const paymentBadge =
+              order.payment_status === "paid" ? "success" : "warning";
+
+            html += `<tr>
+                        <td>${order.order_number}</td>
+                        <td>${order.email}</td>
+                        <td>$${order.total.toFixed(2)}</td>
+                        <td><span class="badge badge-${statusBadge}">${
+              order.status
+            }</span></td>
+                        <td><span class="badge badge-${paymentBadge}">${
+              order.payment_status
+            }</span></td>
+                        <td>${date}</td>
+                        <td class="actions">
+                            <button class="btn btn-secondary btn-small" onclick='viewOrder(${JSON.stringify(
+                              order
+                            ).replace(/'/g, "&#39;")})'>View</button>
+                        </td>
+                    </tr>`;
+          });
+
+          html += "</tbody></table></div>";
+        }
+
+        container.innerHTML = html;
+      }
+
+      function openProductModal(product = null) {
+        const modal = document.getElementById("modal");
+        const modalTitle = document.getElementById("modal-title");
+        const modalBody = document.getElementById("modal-body");
+
+        modalTitle.textContent = product ? "Edit Product" : "Add Product";
+
+        const formData = product || {
+          id: "",
+          title: "",
+          main_category: "art",
+          price: 0,
+          image: "",
+          description: "",
+          full_description: "",
+          stock_quantity: 0,
+          low_stock_threshold: 5,
+          sku: "",
+          visible: true,
+          featured: false,
+          order: 0,
+        };
+
+        modalBody.innerHTML = `
+                <form id="product-form">
+                    <div class="form-group">
+                        <label>Product ID *</label>
+                        <input type="text" name="id" value="${
+                          formData.id
+                        }" required>
+                        ${
+                          product
+                            ? '<small style="color: #666; font-size: 0.85rem;">Changing the ID will create a new product and delete the old one.</small>'
+                            : ""
+                        }
+                    </div>
+                    <div class="form-group">
+                        <label>Title *</label>
+                        <input type="text" name="title" value="${
+                          formData.title
+                        }" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select name="main_category" required>
+                            <option value="buttonup" ${
+                              formData.main_category === "buttonup"
+                                ? "selected"
+                                : ""
+                            }>Button-Up</option>
+                            <option value="music" ${
+                              formData.main_category === "music"
+                                ? "selected"
+                                : ""
+                            }>Music</option>
+                            <option value="sports" ${
+                              formData.main_category === "sports"
+                                ? "selected"
+                                : ""
+                            }>Sports</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price *</label>
+                        <input type="number" step="0.01" name="price" value="${
+                          formData.price
+                        }" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="text" name="image" value="${
+                          formData.image
+                        }" placeholder="https://example.com/image.jpg or /img/product.png">
+                        <small style="color: #666; font-size: 0.85rem;">Use full URLs (https://...) for images to display in admin panel. Frontend paths like /img/... will work on store but not here.</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="description">${
+                          formData.description
+                        }</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Full Description</label>
+                        <textarea name="full_description">${
+                          formData.full_description
+                        }</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Stock Quantity *</label>
+                        <input type="number" name="stock_quantity" value="${
+                          formData.stock_quantity
+                        }" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Low Stock Threshold</label>
+                        <input type="number" name="low_stock_threshold" value="${
+                          formData.low_stock_threshold
+                        }">
+                    </div>
+                    <div class="form-group">
+                        <label>SKU</label>
+                        <input type="text" name="sku" value="${formData.sku}">
+                    </div>
+                    <div class="form-group">
+                        <label>Sizes</label>
+                        <select name="sizes" multiple style="height: 100px;">
+                            <option value="XS" ${
+                              formData.sizes && formData.sizes.includes("XS")
+                                ? "selected"
+                                : ""
+                            }>XS</option>
+                            <option value="S" ${
+                              formData.sizes && formData.sizes.includes("S")
+                                ? "selected"
+                                : ""
+                            }>S</option>
+                            <option value="M" ${
+                              formData.sizes && formData.sizes.includes("M")
+                                ? "selected"
+                                : ""
+                            }>M</option>
+                            <option value="L" ${
+                              formData.sizes && formData.sizes.includes("L")
+                                ? "selected"
+                                : ""
+                            }>L</option>
+                            <option value="XL" ${
+                              formData.sizes && formData.sizes.includes("XL")
+                                ? "selected"
+                                : ""
+                            }>XL</option>
+                            <option value="2XL" ${
+                              formData.sizes && formData.sizes.includes("2XL")
+                                ? "selected"
+                                : ""
+                            }>2XL</option>
+                            <option value="3XL" ${
+                              formData.sizes && formData.sizes.includes("3XL")
+                                ? "selected"
+                                : ""
+                            }>3XL</option>
+                        </select>
+                        <small style="color: #666; font-size: 0.85rem;">Hold Ctrl/Cmd to select multiple sizes</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Colors</label>
+                        <select name="colors" multiple style="height: 100px;">
+                            <option value="Black" ${
+                              formData.colors &&
+                              formData.colors.includes("Black")
+                                ? "selected"
+                                : ""
+                            }>Black</option>
+                            <option value="White" ${
+                              formData.colors &&
+                              formData.colors.includes("White")
+                                ? "selected"
+                                : ""
+                            }>White</option>
+                            <option value="Navy" ${
+                              formData.colors &&
+                              formData.colors.includes("Navy")
+                                ? "selected"
+                                : ""
+                            }>Navy</option>
+                            <option value="Gray" ${
+                              formData.colors &&
+                              formData.colors.includes("Gray")
+                                ? "selected"
+                                : ""
+                            }>Gray</option>
+                            <option value="Red" ${
+                              formData.colors && formData.colors.includes("Red")
+                                ? "selected"
+                                : ""
+                            }>Red</option>
+                            <option value="Blue" ${
+                              formData.colors &&
+                              formData.colors.includes("Blue")
+                                ? "selected"
+                                : ""
+                            }>Blue</option>
+                            <option value="Green" ${
+                              formData.colors &&
+                              formData.colors.includes("Green")
+                                ? "selected"
+                                : ""
+                            }>Green</option>
+                        </select>
+                        <small style="color: #666; font-size: 0.85rem;">Hold Ctrl/Cmd to select multiple colors</small>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" name="visible" ${
+                              formData.visible ? "checked" : ""
+                            }>
+                            <label>Visible on store</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" name="featured" ${
+                              formData.featured ? "checked" : ""
+                            }>
+                            <label>Featured product</label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">${
+                          product ? "Update" : "Create"
+                        }</button>
+                    </div>
+                </form>
+            `;
+
+        modal.classList.add("active");
+
+        document.getElementById("product-form").onsubmit = (e) => {
+          e.preventDefault();
+          if (product) {
+            updateProduct(formData.id);
+          } else {
+            createProduct();
+          }
+        };
+      }
+
+      async function createProduct() {
+        const form = document.getElementById("product-form");
+        const formData = new FormData(form);
+
+        // Get multi-select values
+        const sizesSelect = form.querySelector('select[name="sizes"]');
+        const colorsSelect = form.querySelector('select[name="colors"]');
+        const sizes = Array.from(sizesSelect.selectedOptions).map(
+          (opt) => opt.value
+        );
+        const colors = Array.from(colorsSelect.selectedOptions).map(
+          (opt) => opt.value
+        );
+
+        const data = {
+          id: formData.get("id"),
+          title: formData.get("title"),
+          main_category: formData.get("main_category"),
+          price: parseFloat(formData.get("price")),
+          image: formData.get("image"),
+          description: formData.get("description"),
+          full_description: formData.get("full_description"),
+          stock_quantity: parseInt(formData.get("stock_quantity")),
+          low_stock_threshold: parseInt(formData.get("low_stock_threshold")),
+          sku: formData.get("sku"),
+          sizes: sizes,
+          colors: colors,
+          visible: formData.get("visible") === "on",
+          featured: formData.get("featured") === "on",
+          order: 0,
+        };
+
+        try {
+          const response = await fetch(`${API_BASE}/api/products`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify(data),
+          });
+
+          if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.detail || "Failed to create product");
+          }
+
+          closeModal();
+          await loadProducts();
+          await loadStats();
+          showAlert("Product created successfully!", "success");
+        } catch (error) {
+          showAlert(error.message, "error");
+        }
+      }
+
+      function editProductByIndex(index) {
+        const product = window.currentProducts[index];
+        openProductModal(product);
+      }
+
+      function editProduct(product) {
+        openProductModal(product);
+      }
+
+      async function updateProduct(productId) {
+        const form = document.getElementById("product-form");
+        const formData = new FormData(form);
+
+        // Get multi-select values
+        const sizesSelect = form.querySelector('select[name="sizes"]');
+        const colorsSelect = form.querySelector('select[name="colors"]');
+        const sizes = Array.from(sizesSelect.selectedOptions).map(
+          (opt) => opt.value
+        );
+        const colors = Array.from(colorsSelect.selectedOptions).map(
+          (opt) => opt.value
+        );
+
+        const newId = formData.get("id");
+        const idChanged = newId !== productId;
+
+        const data = {
+          id: newId,
+          title: formData.get("title"),
+          main_category: formData.get("main_category"),
+          price: parseFloat(formData.get("price")),
+          image: formData.get("image"),
+          description: formData.get("description"),
+          full_description: formData.get("full_description"),
+          stock_quantity: parseInt(formData.get("stock_quantity")),
+          low_stock_threshold: parseInt(formData.get("low_stock_threshold")),
+          sku: formData.get("sku"),
+          sizes: sizes,
+          colors: colors,
+          visible: formData.get("visible") === "on",
+          featured: formData.get("featured") === "on",
+          order: 0,
+        };
+
+        try {
+          if (idChanged) {
+            // ID changed: create new product and delete old one
+            // First, create the new product
+            const createResponse = await fetch(`${API_BASE}/api/products`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authToken}`,
+              },
+              body: JSON.stringify(data),
+            });
+
+            if (!createResponse.ok) {
+              const error = await createResponse.json();
+              throw new Error(
+                error.detail || "Failed to create product with new ID"
+              );
+            }
+
+            // Then delete the old product
+            const deleteResponse = await fetch(
+              `${API_BASE}/api/products/${productId}`,
+              {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${authToken}` },
+              }
+            );
+
+            if (!deleteResponse.ok) {
+              throw new Error("Failed to delete old product");
+            }
+
+            closeModal();
+            await loadProducts();
+            await loadStats();
+            showAlert(
+              "Product ID updated successfully (created new, deleted old)!",
+              "success"
+            );
+          } else {
+            // ID unchanged: normal update
+            const response = await fetch(
+              `${API_BASE}/api/products/${productId}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify(data),
+              }
+            );
+
+            if (!response.ok) {
+              const error = await response.json();
+              throw new Error(error.detail || "Failed to update product");
+            }
+
+            closeModal();
+            await loadProducts();
+            await loadStats();
+            showAlert("Product updated successfully!", "success");
+          }
+        } catch (error) {
+          showAlert(error.message, "error");
+        }
+      }
+
+      async function deleteProduct(productId) {
+        if (!confirm("Are you sure you want to delete this product?")) return;
+
+        try {
+          const response = await fetch(
+            `${API_BASE}/api/products/${productId}`,
+            {
+              method: "DELETE",
+              headers: { Authorization: `Bearer ${authToken}` },
+            }
+          );
+
+          if (!response.ok) throw new Error("Failed to delete product");
+
+          await loadProducts();
+          await loadStats();
+          showAlert("Product deleted successfully!", "success");
+        } catch (error) {
+          showAlert(error.message, "error");
+        }
+      }
+
+      function adjustInventory(productId, productTitle, currentStock) {
+        const modal = document.getElementById("modal");
+        const modalTitle = document.getElementById("modal-title");
+        const modalBody = document.getElementById("modal-body");
+
+        modalTitle.textContent = `Adjust Inventory - ${productTitle}`;
+
+        modalBody.innerHTML = `
+                <form id="inventory-form">
+                    <div class="form-group">
+                        <label>Current Stock: ${currentStock}</label>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity Change</label>
+                        <input type="number" name="quantity_change" value="0" required>
+                        <small>Use positive numbers to add stock, negative to remove</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea name="notes" placeholder="Reason for adjustment..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Adjust</button>
+                    </div>
+                </form>
+            `;
+
+        modal.classList.add("active");
+
+        document.getElementById("inventory-form").onsubmit = async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+
+          try {
+            const response = await fetch(
+              `${API_BASE}/api/products/${productId}/inventory/adjust`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify({
+                  quantity_change: parseInt(formData.get("quantity_change")),
+                  notes: formData.get("notes"),
+                }),
+              }
+            );
+
+            if (!response.ok) throw new Error("Failed to adjust inventory");
+
+            closeModal();
+            await loadProducts();
+            await loadLowStock();
+            await loadStats();
+            showAlert("Inventory adjusted successfully!", "success");
+          } catch (error) {
+            showAlert(error.message, "error");
+          }
+        };
+      }
+
+      function viewOrder(order) {
+        const modal = document.getElementById("modal");
+        const modalTitle = document.getElementById("modal-title");
+        const modalBody = document.getElementById("modal-body");
+
+        modalTitle.textContent = `Order ${order.order_number}`;
+
+        let itemsHtml = "";
+        order.items.forEach((item) => {
+          itemsHtml += `<tr>
+                    <td>${item.title}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>$${(item.quantity * item.price).toFixed(2)}</td>
+                </tr>`;
+        });
+
+        modalBody.innerHTML = `
+                <div style="margin-bottom: 1rem;">
+                    <strong>Email:</strong> ${order.email}<br>
+                    <strong>Order Date:</strong> ${new Date(
+                      order.created_at
+                    ).toLocaleString()}<br>
+                    <strong>Status:</strong> <span class="badge badge-info">${
+                      order.status
+                    }</span><br>
+                    <strong>Payment:</strong> <span class="badge badge-${
+                      order.payment_status === "paid" ? "success" : "warning"
+                    }">${order.payment_status}</span>
+                </div>
+                
+                <h3 style="margin-bottom: 0.5rem;">Items</h3>
+                <table style="width: 100%; margin-bottom: 1rem;">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>${itemsHtml}</tbody>
+                </table>
+                
+                <div style="text-align: right; font-size: 1.1rem;">
+                    <strong>Total: $${order.total.toFixed(2)}</strong>
+                </div>
+                
+                <div class="form-actions">
+                    <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+                </div>
+            `;
+
+        modal.classList.add("active");
+      }
+
+      function closeModal() {
+        document.getElementById("modal").classList.remove("active");
+      }
+
+      function showAlert(message, type) {
+        const alert = document.createElement("div");
+        alert.className = `alert alert-${type}`;
+        alert.textContent = message;
+        document
+          .querySelector(".container")
+          .insertBefore(alert, document.querySelector(".stats-grid"));
+
+        setTimeout(() => alert.remove(), 3000);
+      }
+
+      function logout() {
+        localStorage.removeItem("admin_token");
+        localStorage.removeItem("token_type");
+        window.location.href = "/login";
+      }
+
+      // Close modal on outside click
+      document.getElementById("modal").addEventListener("click", (e) => {
+        if (e.target.id === "modal") closeModal();
+      });
+    </script>
+  </body>
+</html>
