@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from app.db.database import SessionLocal, engine, Base
 from app.models.user import User
 from app.models.content import SiteInfo
+from app.models.product import Product, Order, InventoryLog
 from app.core.security import get_password_hash
 from app.core.config import settings
 
@@ -53,11 +54,46 @@ def init_site_info(db: Session):
         print("Site info already exists")
 
 
+def init_sample_products(db: Session):
+    """Create sample products if none exist"""
+    product_count = db.query(Product).count()
+    if product_count == 0:
+        sample_product = Product(
+            id="art-tshirt-5",
+            title="BALM Chest Print Button-Up Cursive",
+            main_category="art",
+            price=22.00,
+            image="/img/balm-cursive.png",
+            images=[
+                "/img/balm-cursive.png",
+                "/img/balm-cluh-hooded-dude.png",
+                "/img/balm-skater-long-hair.png",
+                "/img/balm-cursive-club.png"
+            ],
+            description="",
+            full_description="Materials: 100% cotton. Fit: Regular fit. Care: Machine wash cold, tumble dry low. Do not bleach.",
+            sizes=["L", "XL"],
+            colors=["Black", "White", "Navy"],
+            stock_quantity=50,
+            low_stock_threshold=5,
+            sku="BALM-ART-001",
+            visible=True,
+            featured=True,
+            order=0
+        )
+        db.add(sample_product)
+        db.commit()
+        print("Created sample product")
+    else:
+        print(f"Products already exist: {product_count} products found")
+
+
 if __name__ == "__main__":
     db = SessionLocal()
     try:
         init_admin_user(db)
         init_site_info(db)
+        init_sample_products(db)
         print("Database initialization complete!")
     finally:
         db.close()

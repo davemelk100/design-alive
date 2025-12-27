@@ -62,7 +62,7 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
               <img
                 src="/img/balm-varsity.svg"
                 alt="BALM Varsity"
-                className="h-[100px] w-auto"
+                className="w-[40px] h-auto md:w-auto md:h-[100px]"
               />
             </Link>
           </div>
@@ -74,7 +74,7 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
               {!hideCart && (
                 <button
                   onClick={() => navigate("/store/checkout")}
-                  className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors"
+                  className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors cursor-pointer"
                   style={{
                     backgroundColor: "#f0f0f0",
                     boxShadow:
@@ -97,7 +97,7 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors"
+                    className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors cursor-pointer"
                     style={{
                       backgroundColor: "#f0f0f0",
                       boxShadow:
@@ -132,12 +132,32 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
                     </Avatar>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56"
+                  style={{ fontFamily: '"Geist Mono", monospace' }}
+                >
+                  <DropdownMenuLabel
+                    style={{ fontFamily: '"Geist Mono", monospace' }}
+                  >
                     {isAuthenticated && user ? (
                       <div>
-                        <p className="font-medium">{user.name || "User"}</p>
-                        <p className="text-xs text-gray-500">{user.email}</p>
+                        <p
+                          className="font-medium text-sm"
+                          style={{ fontFamily: '"Geist Mono", monospace' }}
+                        >
+                          {user.name || "User"}
+                        </p>
+                        <p
+                          className="text-gray-500"
+                          style={{
+                            fontFamily: '"Geist Mono", monospace',
+                            fontSize: "14px",
+                            fontWeight: 300,
+                          }}
+                        >
+                          {user.email}
+                        </p>
                       </div>
                     ) : (
                       "My Account"
@@ -145,15 +165,24 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   {isAuthenticated ? (
-                    <DropdownMenuItem onClick={handleLogout}>
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      style={{ fontFamily: '"Geist Mono", monospace' }}
+                    >
                       Sign Out
                     </DropdownMenuItem>
                   ) : (
                     <>
-                      <DropdownMenuItem onClick={() => navigate("/store/login")}>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/store/login")}
+                        style={{ fontFamily: '"Geist Mono", monospace' }}
+                      >
                         Sign In
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => navigate("/store/signup")}>
+                      <DropdownMenuItem
+                        onClick={() => navigate("/store/signup")}
+                        style={{ fontFamily: '"Geist Mono", monospace' }}
+                      >
                         Sign Up
                       </DropdownMenuItem>
                     </>
@@ -169,4 +198,3 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
 };
 
 export default StoreHeader;
-
