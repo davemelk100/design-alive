@@ -249,7 +249,7 @@ const products = await response.json();
 const artProducts = await fetch('http://localhost:8000/api/products?category=art');
 
 // Get single product
-const product = await fetch('http://localhost:8000/api/products/art-tshirt-5');
+const product = await fetch('http://localhost:8000/api/products/balm-shirt-1');
 ```
 
 ### Creating Orders
@@ -260,7 +260,7 @@ const orderData = {
   email: "customer@example.com",
   items: [
     {
-      product_id: "art-tshirt-5",
+      product_id: "balm-shirt-1",
       title: "BALM Chest Print",
       quantity: 2,
       price: 22.00

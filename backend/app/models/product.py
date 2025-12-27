@@ -6,7 +6,7 @@ from app.db.database import Base
 class Product(Base):
     __tablename__ = "products"
     
-    id = Column(String, primary_key=True, index=True)  # e.g., "art-tshirt-1"
+    id = Column(String, primary_key=True, index=True)  # e.g., "balm-shirt-1"
     title = Column(String, nullable=False)
     main_category = Column(String, nullable=False)  # art, music, sports
     price = Column(Float, nullable=False)

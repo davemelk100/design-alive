@@ -727,9 +727,14 @@
                 <form id="product-form">
                     <div class="form-group">
                         <label>Product ID *</label>
-                        <input type="text" name="id" value="${formData.id}" ${
-          product ? "readonly" : ""
-        } required>
+                        <input type="text" name="id" value="${
+                          formData.id
+                        }" required>
+                        ${
+                          product
+                            ? '<small style="color: #666; font-size: 0.85rem;">Changing the ID will create a new product and delete the old one.</small>'
+                            : ""
+                        }
                     </div>
                     <div class="form-group">
                         <label>Title *</label>
@@ -799,6 +804,94 @@
                         <input type="text" name="sku" value="${formData.sku}">
                     </div>
                     <div class="form-group">
+                        <label>Sizes</label>
+                        <select name="sizes" multiple style="height: 100px;">
+                            <option value="XS" ${
+                              formData.sizes && formData.sizes.includes("XS")
+                                ? "selected"
+                                : ""
+                            }>XS</option>
+                            <option value="S" ${
+                              formData.sizes && formData.sizes.includes("S")
+                                ? "selected"
+                                : ""
+                            }>S</option>
+                            <option value="M" ${
+                              formData.sizes && formData.sizes.includes("M")
+                                ? "selected"
+                                : ""
+                            }>M</option>
+                            <option value="L" ${
+                              formData.sizes && formData.sizes.includes("L")
+                                ? "selected"
+                                : ""
+                            }>L</option>
+                            <option value="XL" ${
+                              formData.sizes && formData.sizes.includes("XL")
+                                ? "selected"
+                                : ""
+                            }>XL</option>
+                            <option value="2XL" ${
+                              formData.sizes && formData.sizes.includes("2XL")
+                                ? "selected"
+                                : ""
+                            }>2XL</option>
+                            <option value="3XL" ${
+                              formData.sizes && formData.sizes.includes("3XL")
+                                ? "selected"
+                                : ""
+                            }>3XL</option>
+                        </select>
+                        <small style="color: #666; font-size: 0.85rem;">Hold Ctrl/Cmd to select multiple sizes</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Colors</label>
+                        <select name="colors" multiple style="height: 100px;">
+                            <option value="Black" ${
+                              formData.colors &&
+                              formData.colors.includes("Black")
+                                ? "selected"
+                                : ""
+                            }>Black</option>
+                            <option value="White" ${
+                              formData.colors &&
+                              formData.colors.includes("White")
+                                ? "selected"
+                                : ""
+                            }>White</option>
+                            <option value="Navy" ${
+                              formData.colors &&
+                              formData.colors.includes("Navy")
+                                ? "selected"
+                                : ""
+                            }>Navy</option>
+                            <option value="Gray" ${
+                              formData.colors &&
+                              formData.colors.includes("Gray")
+                                ? "selected"
+                                : ""
+                            }>Gray</option>
+                            <option value="Red" ${
+                              formData.colors && formData.colors.includes("Red")
+                                ? "selected"
+                                : ""
+                            }>Red</option>
+                            <option value="Blue" ${
+                              formData.colors &&
+                              formData.colors.includes("Blue")
+                                ? "selected"
+                                : ""
+                            }>Blue</option>
+                            <option value="Green" ${
+                              formData.colors &&
+                              formData.colors.includes("Green")
+                                ? "selected"
+                                : ""
+                            }>Green</option>
+                        </select>
+                        <small style="color: #666; font-size: 0.85rem;">Hold Ctrl/Cmd to select multiple colors</small>
+                    </div>
+                    <div class="form-group">
                         <div class="checkbox-group">
                             <input type="checkbox" name="visible" ${
                               formData.visible ? "checked" : ""
@@ -839,6 +932,16 @@
         const form = document.getElementById("product-form");
         const formData = new FormData(form);
 
+        // Get multi-select values
+        const sizesSelect = form.querySelector('select[name="sizes"]');
+        const colorsSelect = form.querySelector('select[name="colors"]');
+        const sizes = Array.from(sizesSelect.selectedOptions).map(
+          (opt) => opt.value
+        );
+        const colors = Array.from(colorsSelect.selectedOptions).map(
+          (opt) => opt.value
+        );
+
         const data = {
           id: formData.get("id"),
           title: formData.get("title"),
@@ -850,6 +953,8 @@
           stock_quantity: parseInt(formData.get("stock_quantity")),
           low_stock_threshold: parseInt(formData.get("low_stock_threshold")),
           sku: formData.get("sku"),
+          sizes: sizes,
+          colors: colors,
           visible: formData.get("visible") === "on",
           featured: formData.get("featured") === "on",
           order: 0,
@@ -892,7 +997,21 @@
         const form = document.getElementById("product-form");
         const formData = new FormData(form);
 
+        // Get multi-select values
+        const sizesSelect = form.querySelector('select[name="sizes"]');
+        const colorsSelect = form.querySelector('select[name="colors"]');
+        const sizes = Array.from(sizesSelect.selectedOptions).map(
+          (opt) => opt.value
+        );
+        const colors = Array.from(colorsSelect.selectedOptions).map(
+          (opt) => opt.value
+        );
+
+        const newId = formData.get("id");
+        const idChanged = newId !== productId;
+
         const data = {
+          id: newId,
           title: formData.get("title"),
           main_category: formData.get("main_category"),
           price: parseFloat(formData.get("price")),
@@ -902,32 +1021,77 @@
           stock_quantity: parseInt(formData.get("stock_quantity")),
           low_stock_threshold: parseInt(formData.get("low_stock_threshold")),
           sku: formData.get("sku"),
+          sizes: sizes,
+          colors: colors,
           visible: formData.get("visible") === "on",
           featured: formData.get("featured") === "on",
+          order: 0,
         };
 
         try {
-          const response = await fetch(
-            `${API_BASE}/api/products/${productId}`,
-            {
-              method: "PUT",
+          if (idChanged) {
+            // ID changed: create new product and delete old one
+            // First, create the new product
+            const createResponse = await fetch(`${API_BASE}/api/products`, {
+              method: "POST",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${authToken}`,
               },
               body: JSON.stringify(data),
+            });
+
+            if (!createResponse.ok) {
+              const error = await createResponse.json();
+              throw new Error(
+                error.detail || "Failed to create product with new ID"
+              );
             }
-          );
 
-          if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail || "Failed to update product");
+            // Then delete the old product
+            const deleteResponse = await fetch(
+              `${API_BASE}/api/products/${productId}`,
+              {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${authToken}` },
+              }
+            );
+
+            if (!deleteResponse.ok) {
+              throw new Error("Failed to delete old product");
+            }
+
+            closeModal();
+            await loadProducts();
+            await loadStats();
+            showAlert(
+              "Product ID updated successfully (created new, deleted old)!",
+              "success"
+            );
+          } else {
+            // ID unchanged: normal update
+            const response = await fetch(
+              `${API_BASE}/api/products/${productId}`,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${authToken}`,
+                },
+                body: JSON.stringify(data),
+              }
+            );
+
+            if (!response.ok) {
+              const error = await response.json();
+              throw new Error(error.detail || "Failed to update product");
+            }
+
+            closeModal();
+            await loadProducts();
+            await loadStats();
+            showAlert("Product updated successfully!", "success");
           }
-
-          closeModal();
-          await loadProducts();
-          await loadStats();
-          showAlert("Product updated successfully!", "success");
         } catch (error) {
           showAlert(error.message, "error");
         }
