@@ -1,39 +1,27 @@
 import { motion } from "framer-motion";
-import {
-  ShoppingCart,
-  User,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useStore } from "../context/StoreContext";
 import { storeProducts } from "../data/storeProducts";
 import { toast } from "@/hooks/use-toast";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "../../../components/ui/avatar";
 import { Product } from "../types";
-
-// Stripe Buy Button configuration
-const STRIPE_BUY_BUTTON_ID = "buy_btn_1ShP2DFCguwn0NjejNHb8fAK";
-const STRIPE_PUBLISHABLE_KEY =
-  "pk_live_51SfaUkFCguwn0Nje4OfQoB4yszo0dtOGxvcP3hCx2u8J6BBerqV3wNPTOM42iwsRPbz8o4cupfasTKY8BvYwbtIK004G7arYYe";
+import { ImageModal } from "../components/ImageModal";
+import { LegalModal } from "../components/LegalModal";
+import { PrivacyPolicyContent } from "../../components/PrivacyPolicyContent";
+import { TermsOfServiceContent } from "../../components/TermsOfServiceContent";
+import StoreHeader from "../components/StoreHeader";
 
 // Product Image Row Component
 const ProductImageRow = ({
   product,
   onImageClick,
+  onImageModalClick,
 }: {
   product: Product;
   onImageClick: () => void;
+  onImageModalClick?: (images: string[], currentIndex: number) => void;
 }) => {
   const images =
     product.images && product.images.length > 0
@@ -51,9 +39,18 @@ const ProductImageRow = ({
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
   };
 
+  const handleImageClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onImageModalClick) {
+      onImageModalClick(images, currentImageIndex);
+    } else {
+      onImageClick();
+    }
+  };
+
   return (
     <div
-      onClick={onImageClick}
+      onClick={handleImageClick}
       className="relative overflow-hidden bg-transparent cursor-pointer rounded-t-lg group"
       style={{ padding: "6px", paddingBottom: "0" }}
     >
@@ -120,7 +117,23 @@ const ProductImageRow = ({
 const Store = () => {
   const { activeCategory } = useStore();
   const navigate = useNavigate();
-  const { addItem, getTotalItems } = useCart();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { addItem } = useCart();
+  const [modalImage, setModalImage] = useState<{
+    images: string[];
+    currentIndex: number;
+    productTitle: string;
+  } | null>(null);
+
+  // Legal modal management
+  const legalModal = searchParams.get("legal");
+  const openLegalModal = (type: "privacy" | "terms") => {
+    setSearchParams({ legal: type });
+  };
+  const closeLegalModal = () => {
+    searchParams.delete("legal");
+    setSearchParams(searchParams);
+  };
 
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
@@ -211,28 +224,10 @@ const Store = () => {
     <div
       className="min-h-screen text-gray-900 dark:text-white store-page pb-16 relative"
       style={{
-        background:
-          "linear-gradient(135deg, #d0d0d0 0%, #e0e0e0 20%, #c8c8c8 40%, #e5e5e5 60%, #d5d5d5 80%, #dddddd 100%)",
-        backgroundSize: "400% 400%",
-        animation: "gradient 15s ease infinite",
+        backgroundColor: "#f0f0f0",
       }}
     >
       <style>{`
-        @keyframes gradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        @keyframes float {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -30px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        @keyframes floatReverse {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(-30px, 30px) scale(0.9); }
-          66% { transform: translate(20px, -20px) scale(1.1); }
-        }
         .stripe-buy-button-wrapper {
           flex: 1;
           display: flex;
@@ -252,152 +247,8 @@ const Store = () => {
         }
       `}</style>
 
-      {/* Animated Background Blobs for Glass Effect */}
-      <div
-        className="absolute inset-0 pointer-events-none overflow-hidden"
-        style={{ zIndex: 0 }}
-      >
-        {/* Large animated blobs - darker for visibility */}
-        <div
-          className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-gray-600/40 to-gray-500/30 rounded-full blur-3xl"
-          style={{ animation: "float 20s ease-in-out infinite" }}
-        ></div>
-        <div
-          className="absolute top-1/4 right-0 w-80 h-80 bg-gradient-to-bl from-gray-700/35 to-gray-600/25 rounded-full blur-3xl"
-          style={{ animation: "floatReverse 25s ease-in-out infinite" }}
-        ></div>
-        <div
-          className="absolute bottom-0 left-1/3 w-[500px] h-[500px] bg-gradient-to-tr from-gray-500/30 to-gray-600/35 rounded-full blur-3xl"
-          style={{ animation: "float 30s ease-in-out infinite" }}
-        ></div>
-        <div
-          className="absolute top-1/2 right-1/4 w-72 h-72 bg-gradient-to-r from-gray-600/30 to-gray-700/25 rounded-full blur-3xl"
-          style={{ animation: "floatReverse 22s ease-in-out infinite" }}
-        ></div>
-
-        {/* Medium blobs */}
-        <div
-          className="absolute top-1/3 left-1/4 w-64 h-64 bg-gradient-to-br from-gray-700/25 to-transparent rounded-full blur-2xl"
-          style={{ animation: "float 18s ease-in-out infinite" }}
-        ></div>
-        <div
-          className="absolute bottom-1/4 right-1/3 w-56 h-56 bg-gradient-to-tl from-gray-500/30 to-transparent rounded-full blur-2xl"
-          style={{ animation: "floatReverse 24s ease-in-out infinite" }}
-        ></div>
-
-        {/* Additional smaller blobs for more depth */}
-        <div
-          className="absolute top-2/3 left-1/2 w-48 h-48 bg-gradient-to-r from-gray-600/20 to-gray-500/15 rounded-full blur-2xl"
-          style={{ animation: "float 16s ease-in-out infinite" }}
-        ></div>
-        <div
-          className="absolute bottom-1/3 right-1/2 w-52 h-52 bg-gradient-to-l from-gray-700/20 to-gray-600/15 rounded-full blur-2xl"
-          style={{ animation: "floatReverse 19s ease-in-out infinite" }}
-        ></div>
-
-        {/* Subtle pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-10"
-          style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(0,0,0,0.2) 1px, transparent 0)`,
-            backgroundSize: "40px 40px",
-          }}
-        ></div>
-      </div>
       {/* Top Header with DM, Nav, Cart, and Profile */}
-      <section
-        className="sticky top-0 z-50 py-1"
-        style={{ backgroundColor: "rgba(240, 240, 240, 0.75)" }}
-      >
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center justify-between"
-          >
-            {/* BALM - Left Side */}
-            <button
-              onClick={() => navigate("/store")}
-              className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
-            >
-              <span
-                className="font-bold tracking-tight balm-logo"
-                style={{
-                  color: "#d0d0d0",
-                  fontSize: "48px",
-                  textShadow:
-                    "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
-                }}
-              >
-                BALM
-              </span>
-            </button>
-
-            {/* Cart and Profile - Right Side */}
-            <div className="flex items-center gap-4">
-              {/* Cart Icon */}
-              <button
-                onClick={() => navigate("/store/checkout")}
-                className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors"
-                style={{
-                  backgroundColor: "#f0f0f0",
-                  boxShadow:
-                    "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
-                }}
-              >
-                <ShoppingCart
-                  className="h-5 w-5"
-                  style={{ color: "rgb(168, 168, 168)" }}
-                />
-                {getTotalItems() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                    {getTotalItems()}
-                  </span>
-                )}
-              </button>
-
-              {/* User Profile Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors"
-                    style={{
-                      backgroundColor: "#f0f0f0",
-                      boxShadow:
-                        "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
-                    }}
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarFallback
-                        style={{
-                          backgroundColor: "#f0f0f0",
-                          boxShadow:
-                            "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
-                        }}
-                      >
-                        <User
-                          className="h-5 w-5"
-                          style={{ color: "rgb(168, 168, 168)" }}
-                        />
-                      </AvatarFallback>
-                    </Avatar>
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Orders</DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Sign out</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <StoreHeader sticky={true} />
 
       {/* Store Content */}
       <section
@@ -430,7 +281,7 @@ const Store = () => {
                   {filteredProducts.length === 1 ? "item" : "items"}
                 </p>
               </div> */}
-              <div className="flex justify-center gap-4">
+              <div className="flex gap-4">
                 {filteredProducts.map((product) => {
                   return (
                     <motion.div
@@ -486,6 +337,13 @@ const Store = () => {
                             onImageClick={() =>
                               navigate(`/store/product/${product.id}`)
                             }
+                            onImageModalClick={(images, currentIndex) => {
+                              setModalImage({
+                                images,
+                                currentIndex,
+                                productTitle: product.title,
+                              });
+                            }}
                           />
 
                           {/* Product Info */}
@@ -495,6 +353,7 @@ const Store = () => {
                               fontFamily: '"Geist Mono", monospace',
                               padding: "8px",
                               minWidth: 0,
+                              textAlign: "center",
                             }}
                           >
                             <h3
@@ -536,16 +395,17 @@ const Store = () => {
                               onClick={(e) => e.stopPropagation()}
                             >
                               <div className="flex gap-1.5">
+                                {/* Buy Button - Hidden
                                 <div
                                   className="flex-1 stripe-buy-button-wrapper"
                                   onClick={(e) => e.stopPropagation()}
                                 >
-                                  {/* @ts-ignore - Stripe Buy Button web component */}
                                   <stripe-buy-button
                                     buy-button-id={STRIPE_BUY_BUTTON_ID}
                                     publishable-key={STRIPE_PUBLISHABLE_KEY}
                                   />
                                 </div>
+                                */}
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
@@ -589,6 +449,75 @@ const Store = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Image Modal */}
+      {modalImage && (
+        <ImageModal
+          images={modalImage.images}
+          currentIndex={modalImage.currentIndex}
+          isOpen={!!modalImage}
+          onClose={() => setModalImage(null)}
+          productTitle={modalImage.productTitle}
+        />
+      )}
+
+      {/* Legal Modals */}
+      <LegalModal
+        isOpen={legalModal === "privacy"}
+        onClose={closeLegalModal}
+        title="Privacy Policy"
+      >
+        <PrivacyPolicyContent />
+      </LegalModal>
+
+      <LegalModal
+        isOpen={legalModal === "terms"}
+        onClose={closeLegalModal}
+        title="Terms of Service"
+      >
+        <TermsOfServiceContent />
+      </LegalModal>
+
+      {/* Sticky Footer with BALM */}
+      <footer
+        className="fixed bottom-0 left-0 right-0 z-50"
+        style={{
+          backgroundColor: "rgba(240, 240, 240, 1)",
+          paddingTop: "2px",
+          paddingBottom: "2px",
+        }}
+      >
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <span
+              className="font-bold tracking-tight balm-logo"
+              style={{
+                color: "#d0d0d0",
+                fontSize: "24px",
+                textShadow:
+                  "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
+              }}
+            >
+              BALM
+            </span>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => openLegalModal("privacy")}
+                className="text-xs text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
+              >
+                Privacy Policy
+              </button>
+              <span className="text-xs text-gray-400">•</span>
+              <button
+                onClick={() => openLegalModal("terms")}
+                className="text-xs text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
+              >
+                Terms of Service
+              </button>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

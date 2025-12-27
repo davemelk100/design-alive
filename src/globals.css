@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tubi Stans Black Font */
+@font-face {
+  font-family: "Tubi Stans Black";
+  src: url("https://db.onlinewebfonts.com/t/70f5d1064d603143e0c71fbce7eee5b0.eot");
+  src: url("https://db.onlinewebfonts.com/t/70f5d1064d603143e0c71fbce7eee5b0.eot?#iefix") format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/70f5d1064d603143e0c71fbce7eee5b0.woff2") format("woff2"),
+    url("https://db.onlinewebfonts.com/t/70f5d1064d603143e0c71fbce7eee5b0.woff") format("woff"),
+    url("https://db.onlinewebfonts.com/t/70f5d1064d603143e0c71fbce7eee5b0.ttf") format("truetype"),
+    url("https://db.onlinewebfonts.com/t/70f5d1064d603143e0c71fbce7eee5b0.svg#Tubi Stans Black") format("svg");
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -97,19 +108,22 @@
     font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
-  /* Use Aeonik for headings (except store page) */
+  /* Use Tubi Stans Black for headings (except store page) */
   h1:not(.store-page *):not(.store-page),
   h2:not(.store-page *):not(.store-page),
   h3:not(.store-page *):not(.store-page),
   h4:not(.store-page *):not(.store-page),
   h5:not(.store-page *):not(.store-page),
   h6:not(.store-page *):not(.store-page) {
-    font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+    font-family: "Tubi Stans Black", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
-  /* Set normal letter spacing for all h2 tags */
-  h2 {
-    letter-spacing: normal;
+  /* Set letter spacing for h1 and h2 tags */
+  h1,
+  h1:not(.store-page *):not(.store-page),
+  h2,
+  h2:not(.store-page *):not(.store-page) {
+    letter-spacing: 0 !important;
   }
 
   /* Use Nunito Sans for body text and other elements (except store page) */
@@ -220,7 +234,7 @@
   }
 
   .font-title {
-    font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+    font-family: "Tubi Stans Black", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
   /* Ensure Tailwind utilities use appropriate fonts */
@@ -230,7 +244,7 @@
   h4[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *),
   h5[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *),
   h6[class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *) {
-    font-family: "Aeonik", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+    font-family: "Tubi Stans Black", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
   [class*="font-"]:not(.font-serif):not(.font-mono):not(.roboto-serif-page *):not(.store-page *):not(h1):not(h2):not(h3):not(h4):not(h5):not(h6) {
@@ -414,7 +428,7 @@
 
 @layer components {
   .title-font {
-    font-family: "Google Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
+    font-family: "Tubi Stans Black", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }
 
   .article-intro {
@@ -711,12 +725,35 @@ span.flex.h-full.w-full.items-center.justify-center.rounded-full.bg-gray-700 {
 /* Stripe Buy Button styling to match Add to Cart button */
 .store-page .stripe-buy-button-wrapper {
   width: 100%;
-  display: flex;
+  display: block;
 }
 
 .store-page .stripe-buy-button-wrapper stripe-buy-button {
   width: 100%;
   display: block;
+}
+
+/* Ensure stripe-buy-button is always block-level on product detail page */
+.store-page stripe-buy-button {
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Product detail page button layout - ensure buttons are on separate rows */
+.store-page .product-buy-button-wrapper {
+  display: block !important;
+  width: 100% !important;
+  margin-bottom: 1rem;
+}
+
+.store-page .product-buy-button-wrapper stripe-buy-button {
+  display: block !important;
+  width: 100% !important;
+}
+
+.store-page .product-add-to-cart-wrapper {
+  display: block !important;
+  width: 100% !important;
 }
 
 /* Target button inside shadow DOM - these selectors may not work due to Shadow DOM isolation */

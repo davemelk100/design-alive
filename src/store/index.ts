@@ -7,6 +7,7 @@ export * from "./types";
 // Contexts
 export { CartProvider, useCart } from "./context/CartContext";
 export { StoreProvider, useStore } from "./context/StoreContext";
+export { AuthProvider, useAuth } from "./context/AuthContext";
 
 // Data
 export { storeProducts } from "./data/storeProducts";

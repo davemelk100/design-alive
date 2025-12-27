@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import { content } from "./content";
 import { ThemeProvider } from "./context/ThemeContext";
-import { CartProvider, StoreProvider } from "./store";
+import { CartProvider, StoreProvider, AuthProvider } from "./store";
+import { ProtectedRoute } from "./store/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/toaster";
 
 import {
@@ -29,6 +30,11 @@ const Store = lazy(() => import("./store/pages/Store"));
 const ProductDetail = lazy(() => import("./store/pages/ProductDetail"));
 const Checkout = lazy(() => import("./store/pages/Checkout"));
 const CheckoutSuccess = lazy(() => import("./store/pages/CheckoutSuccess"));
+const Login = lazy(() => import("./store/pages/Login"));
+const Signup = lazy(() => import("./store/pages/Signup"));
+const AuthCallback = lazy(() => import("./store/pages/AuthCallback"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 
 // Lazy load non-critical UI components to reduce critical path
 const MobileTrayMenu = lazy(() => import("./components/MobileTrayMenu"));
@@ -1546,12 +1552,28 @@ function App() {
             <Route path="/specs" element={<Specs />} />
             <Route path="/story" element={<Story />} />
             <Route path="/music" element={<MusicPlayer />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/store/login" element={<Login />} />
+            <Route path="/store/signup" element={<Signup />} />
+            <Route path="/store/auth/callback" element={<AuthCallback />} />
             <Route path="/store" element={<Store />} />
             <Route path="/store/product/:id" element={<ProductDetail />} />
-            <Route path="/store/checkout" element={<Checkout />} />
+            <Route
+              path="/store/checkout"
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/store/checkout/success"
-              element={<CheckoutSuccess />}
+              element={
+                <ProtectedRoute>
+                  <CheckoutSuccess />
+                </ProtectedRoute>
+              }
             />
           </Routes>
         </Suspense>
@@ -1585,7 +1607,7 @@ function App() {
           </Suspense>
         )}
 
-      {/* Footer - Hide on all store pages */}
+      {/* Footer - Hide on all store pages (they have their own BALM footer) */}
       {!location.pathname.startsWith("/store") ? (
         <Suspense fallback={null} key={location.pathname}>
           <Footer />
@@ -1707,11 +1729,13 @@ export default function AppWithRouter() {
   return (
     <Router>
       <ThemeProvider>
-        <CartProvider>
-          <StoreProvider>
-            <App />
-          </StoreProvider>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <StoreProvider>
+              <App />
+            </StoreProvider>
+          </CartProvider>
+        </AuthProvider>
       </ThemeProvider>
     </Router>
   );
