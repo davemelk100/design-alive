@@ -46,13 +46,20 @@ async def health_check():
 
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_panel():
-    """Serve the admin panel page"""
+    """Redirect to store admin panel"""
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/admin/store")
+
+
+@app.get("/admin/content", response_class=HTMLResponse)
+async def content_admin_panel():
+    """Serve the content admin panel page"""
     from pathlib import Path
     admin_file = Path(__file__).parent.parent / "admin_panel.html"
     if admin_file.exists():
         with open(admin_file, 'r', encoding='utf-8') as f:
             return f.read()
-    return "<h1>Admin panel not found</h1>"
+    return "<h1>Content admin panel not found</h1>"
 
 
 @app.get("/admin/store", response_class=HTMLResponse)

@@ -53,11 +53,10 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="flex items-center justify-center relative"
-          style={{ minHeight: "100px" }}
+          className="flex flex-col items-center justify-center"
         >
-          {/* Balm Varsity Logo - Left Side */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2">
+          {/* Balm Varsity Logo - Centered at Top */}
+          <div className="mb-4">
             <Link to="/store" className="hover:opacity-80 transition-opacity">
               <img
                 src="/img/balm-varsity.svg"
@@ -67,11 +66,11 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
             </Link>
           </div>
 
-          {/* Cart and Profile - Right Side (unless minimal) */}
+          {/* Cart and Profile - Centered Below Logo (unless minimal) */}
           {!minimal && (
-            <div className="flex items-center gap-4 absolute right-0">
-              {/* Cart Icon */}
-              {!hideCart && (
+            <div className="flex items-center gap-4">
+              {/* Cart Icon - show when there are items */}
+              {!hideCart && getTotalItems() > 0 && (
                 <button
                   onClick={() => navigate("/store/checkout")}
                   className="relative flex items-center justify-center w-10 h-10 rounded-full transition-colors cursor-pointer"
@@ -93,7 +92,8 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
                 </button>
               )}
 
-              {/* User Profile Dropdown */}
+              {/* User Profile Dropdown - only show when authenticated */}
+              {isAuthenticated && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
@@ -189,6 +189,7 @@ const StoreHeader: React.FC<StoreHeaderProps> = ({
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
+              )}
             </div>
           )}
         </motion.div>

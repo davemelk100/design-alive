@@ -168,7 +168,7 @@ const Checkout = () => {
       }}
     >
       {/* Top Header with DM, Nav, Cart, and Profile */}
-      <StoreHeader sticky={false} hideCart={true} />
+      <StoreHeader sticky={false} hideCart={false} />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <motion.div
@@ -177,7 +177,7 @@ const Checkout = () => {
           className="space-y-8"
         >
           {/* Header */}
-          <div>
+          <div className="text-center">
             <h1 className="text-4xl sm:text-5xl font-bold mb-2 text-black">
               CHECKOUT
             </h1>
@@ -196,7 +196,7 @@ const Checkout = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Order Summary */}
             <div className="lg:col-span-2 flex justify-center">
-              <div className="w-full max-w-md space-y-6">
+              <div className="w-full lg:max-w-md space-y-6">
                 {/* <h2
                 className="text-2xl mb-6"
                 style={{
@@ -540,14 +540,13 @@ const Checkout = () => {
             >
               BALM
             </span>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col items-end gap-1">
               <button
                 onClick={() => openLegalModal("privacy")}
                 className="text-xs text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
               >
                 Privacy Policy
               </button>
-              <span className="text-xs text-gray-400">•</span>
               <button
                 onClick={() => openLegalModal("terms")}
                 className="text-xs text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"

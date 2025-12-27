@@ -59,9 +59,9 @@ def init_sample_products(db: Session):
     product_count = db.query(Product).count()
     if product_count == 0:
         sample_product = Product(
-            id="art-tshirt-5",
+            id="balm-shirt-1",
             title="BALM Chest Print Button-Up Cursive",
-            main_category="art",
+            main_category="buttonup",
             price=22.00,
             image="/img/balm-cursive.png",
             images=[
@@ -76,7 +76,7 @@ def init_sample_products(db: Session):
             colors=["Black", "White", "Navy"],
             stock_quantity=50,
             low_stock_threshold=5,
-            sku="BALM-ART-001",
+            sku="BALM-SHIRT-001",
             visible=True,
             featured=True,
             order=0
