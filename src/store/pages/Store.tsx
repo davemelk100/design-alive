@@ -51,8 +51,7 @@ const ProductImageRow = ({
   return (
     <div
       onClick={handleImageClick}
-      className="relative overflow-hidden bg-transparent cursor-pointer rounded-t-lg group"
-      style={{ padding: "6px", paddingBottom: "0" }}
+      className="relative overflow-hidden bg-transparent cursor-pointer rounded-t-lg group p-1.5 pb-0"
     >
       <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-transparent max-h-[300px] mx-auto">
         {/* Images */}
@@ -62,11 +61,10 @@ const ProductImageRow = ({
               key={index}
               src={image}
               alt={`${product.title} - Image ${index + 1}`}
-              className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-300 ${
+              className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-300 max-h-full ${
                 index === currentImageIndex ? "opacity-100" : "opacity-0"
               }`}
               loading={index === 0 ? "eager" : "lazy"}
-              style={{ maxHeight: "100%", objectPosition: "center" }}
             />
           ))}
         </div>
@@ -221,12 +219,7 @@ const Store = () => {
   }, [filteredProducts]);
 
   return (
-    <div
-      className="min-h-screen text-gray-900 dark:text-white store-page pb-16 relative"
-      style={{
-        backgroundColor: "#f0f0f0",
-      }}
-    >
+    <div className="min-h-screen text-gray-900 dark:text-white store-page pb-16 relative bg-[#f0f0f0]">
       <style>{`
         .stripe-buy-button-wrapper {
           flex: 1;
@@ -251,10 +244,7 @@ const Store = () => {
       <StoreHeader sticky={true} />
 
       {/* Store Content */}
-      <section
-        className="py-2 sm:py-3 lg:py-4 xl:py-6 relative"
-        style={{ zIndex: 10, position: "relative" }}
-      >
+      <section className="py-2 sm:py-3 lg:py-4 xl:py-6 relative z-10">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="initial"
@@ -264,24 +254,7 @@ const Store = () => {
           >
             {/* Products Grid */}
             <motion.section variants={fadeInUp} className="space-y-6">
-              {/* <div className="flex items-center justify-between mb-6">
-                <h2
-                  className="text-3xl font-bold"
-                  style={{
-                    color: "black"
-                  }}
-                >
-                  {activeCategory === null
-                    ? "All Products"
-                    : mainCategories.find((cat) => cat.id === activeCategory)
-                        ?.title || "Products"}
-                </h2>
-                <p className="text-sm" style={{ color: "black" }}>
-                  {filteredProducts.length}{" "}
-                  {filteredProducts.length === 1 ? "item" : "items"}
-                </p>
-              </div> */}
-              <div className="flex gap-4">
+              <div className="flex justify-center">
                 {filteredProducts.map((product) => {
                   return (
                     <motion.div
@@ -308,15 +281,7 @@ const Store = () => {
                         <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gray-300/4 via-transparent to-gray-400/6"></div>
 
                         {/* Flowing animated gradient */}
-                        <div
-                          className="absolute inset-0 rounded-lg opacity-20 pointer-events-none"
-                          style={{
-                            background:
-                              "radial-gradient(ellipse at 30% 20%, rgba(100, 100, 100, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(120, 120, 120, 0.12) 0%, transparent 50%)",
-                            backgroundSize: "200% 200%",
-                            animation: "gradient 20s ease infinite",
-                          }}
-                        ></div>
+                        <div className="absolute inset-0 rounded-lg opacity-20 pointer-events-none bg-[radial-gradient(ellipse_at_30%_20%,rgba(100,100,100,0.15)_0%,transparent_50%),radial-gradient(ellipse_at_70%_80%,rgba(120,120,120,0.12)_0%,transparent_50%)] bg-[length:200%_200%] animate-[gradient_20s_ease_infinite]"></div>
 
                         {/* Reflective highlights - multiple angles */}
                         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
@@ -347,51 +312,20 @@ const Store = () => {
                           />
 
                           {/* Product Info */}
-                          <div
-                            className="store-card-content flex flex-col flex-grow"
-                            style={{
-                              fontFamily: '"Geist Mono", monospace',
-                              padding: "8px",
-                              minWidth: 0,
-                              textAlign: "center",
-                            }}
-                          >
-                            <h3
-                              className="mb-1 line-clamp-1 cursor-pointer hover:underline store-card-text store-card-h3"
-                              style={{
-                                fontFamily: '"Geist Mono", monospace',
-                                fontSize: "20px",
-                                color: "black",
-                                fontWeight: 400,
-                              }}
-                            >
+                          <div className="store-card-content flex flex-col flex-grow font-['Geist_Mono',monospace] p-2 text-center">
+                            <h3 className="mb-1 line-clamp-1 cursor-pointer hover:underline store-card-text store-card-h3 font-['Geist_Mono',monospace] text-xl text-black font-normal">
                               {product.title}
                             </h3>
-                            <p
-                              className="mb-2 line-clamp-2 store-card-text"
-                              style={{
-                                fontFamily: '"Geist Mono", monospace',
-                                fontSize: "11px",
-                                color: "black",
-                              }}
-                            >
+                            <p className="mb-2 line-clamp-2 store-card-text font-['Geist_Mono',monospace] text-[11px] text-black">
                               {product.description}
                             </p>
                             <div className="mb-2">
-                              <span
-                                className="font-bold store-card-text"
-                                style={{
-                                  fontFamily: '"Geist Mono", monospace',
-                                  fontSize: "18px",
-                                  color: "black",
-                                }}
-                              >
+                              <span className="font-bold store-card-text font-['Geist_Mono',monospace] text-lg text-black">
                                 ${product.price}
                               </span>
                             </div>
                             <div
-                              className="mt-auto"
-                              style={{ marginBottom: "6px" }}
+                              className="mt-auto mb-1.5"
                               onClick={(e) => e.stopPropagation()}
                             >
                               <div className="flex gap-1.5">
@@ -423,16 +357,7 @@ const Store = () => {
                                       variant: "default",
                                     });
                                   }}
-                                  className="flex-1 px-2 font-semibold rounded-md transition-all hover:scale-105 store-card-button"
-                                  style={{
-                                    fontFamily: '"Geist Mono", monospace',
-                                    fontSize: "16px",
-                                    backgroundColor: "#f0f0f0",
-                                    color: "rgb(80, 80, 80)",
-                                    height: "45px",
-                                    boxShadow:
-                                      "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
-                                  }}
+                                  className="flex-1 px-2 font-semibold rounded-md transition-all hover:scale-105 store-card-button font-['Geist_Mono',monospace] text-base bg-[#f0f0f0] text-[rgb(80,80,80)] h-[45px] shadow-[rgba(255,255,255,0.9)_-1px_-1px_1px,rgba(0,0,0,0.2)_1px_1px_2px,rgba(255,255,255,0.5)_0px_0px_1px]"
                                 >
                                   Add to Cart
                                 </button>
@@ -479,25 +404,10 @@ const Store = () => {
       </LegalModal>
 
       {/* Sticky Footer with BALM */}
-      <footer
-        className="fixed bottom-0 left-0 right-0 z-50"
-        style={{
-          backgroundColor: "rgba(240, 240, 240, 1)",
-          paddingTop: "2px",
-          paddingBottom: "2px",
-        }}
-      >
+      <footer className="fixed bottom-0 left-0 right-0 z-50 bg-[rgba(240,240,240,1)] py-0.5">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <span
-              className="font-bold tracking-tight balm-logo"
-              style={{
-                color: "#d0d0d0",
-                fontSize: "24px",
-                textShadow:
-                  "rgba(255, 255, 255, 0.9) -1px -1px 1px, rgba(0, 0, 0, 0.2) 1px 1px 2px, rgba(255, 255, 255, 0.5) 0px 0px 1px",
-              }}
-            >
+            <span className="font-bold tracking-tight balm-logo text-[#d0d0d0] text-2xl [text-shadow:rgba(255,255,255,0.9)_-1px_-1px_1px,rgba(0,0,0,0.2)_1px_1px_2px,rgba(255,255,255,0.5)_0px_0px_1px]">
               BALM
             </span>
             <div className="flex items-center gap-3">
