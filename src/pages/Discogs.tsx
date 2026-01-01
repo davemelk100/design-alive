@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
@@ -10,10 +10,10 @@ interface UploadedFile {
 
 const Discogs: React.FC = () => {
     const [files, setFiles] = useState<UploadedFile[]>([]);
-    const [isUploading, setIsUploading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    // const [isUploading, setIsUploading] = useState(false);
+    // const [error, setError] = useState<string | null>(null);
     const [selectedFile, setSelectedFile] = useState<UploadedFile | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    // const fileInputRef = useRef<HTMLInputElement>(null);
 
     const fetchFiles = async () => {
         try {
@@ -40,33 +40,35 @@ const Discogs: React.FC = () => {
         return () => window.removeEventListener("keydown", handleEsc);
     }, []);
 
+    /* 
     const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (!file) return;
-
-        setIsUploading(true);
-        setError(null);
-
-        const formData = new FormData();
-        formData.append("file", file);
-
-        try {
-            const response = await fetch("http://localhost:8888/upload-discogs", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (!response.ok) throw new Error("Upload failed");
-
-            await fetchFiles();
-            if (fileInputRef.current) fileInputRef.current.value = "";
-        } catch (err) {
-            setError("Failed to upload file. Please try again.");
-            console.error(err);
-        } finally {
-            setIsUploading(false);
-        }
+      const file = event.target.files?.[0];
+      if (!file) return;
+  
+      setIsUploading(true);
+      setError(null);
+  
+      const formData = new FormData();
+      formData.append("file", file);
+  
+      try {
+        const response = await fetch("http://localhost:8888/upload-discogs", {
+          method: "POST",
+          body: formData,
+        });
+  
+        if (!response.ok) throw new Error("Upload failed");
+  
+        await fetchFiles();
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      } catch (err) {
+        setError("Failed to upload file. Please try again.");
+        console.error(err);
+      } finally {
+        setIsUploading(false);
+      }
     };
+    */
 
     return (
         <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white p-8 font-serif leading-relaxed">
@@ -92,7 +94,7 @@ const Discogs: React.FC = () => {
           </div> */}
                 </div>
 
-                {error && <div className="text-red-500 text-sm font-sans">{error}</div>}
+                {/* {error && <div className="text-red-500 text-sm font-sans">{error}</div>} */}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {files.map((file, index) => (
@@ -123,7 +125,7 @@ const Discogs: React.FC = () => {
                     ))}
                 </div>
 
-                {files.length === 0 && !isUploading && (
+                {files.length === 0 && (
                     <div className="text-center py-20 border-2 border-dashed border-gray-200 dark:border-gray-800 rounded-xl">
                         <p className="text-gray-500 dark:text-gray-400 font-sans">No media yet. Upload some records to get started.</p>
                     </div>
