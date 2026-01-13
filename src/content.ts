@@ -66,6 +66,22 @@ export const content = {
       // },
 
       {
+        title: "MajorLeagueNumbers.com Logo",
+        description: "Logo design for baseball analytics platform",
+        categories: "Logo Design, Branding, Sports",
+        image: "/img/mln-patches.svg",
+        alt: "MajorLeagueNumbers.com Logo",
+        url: "https://dribbble.com/shots/26980187-MajorLeagueNumbers-com-logo",
+      },
+      {
+        title: "ChatMLB Bot",
+        description: "AI chatbot design for baseball statistics",
+        categories: "AI, Chatbot Design, Sports",
+        image: "/img/chatmlb-port.png",
+        alt: "ChatMLB Bot",
+        url: "https://dribbble.com/shots/26980175-ChatMLB-bot",
+      },
+      {
         title: "Figma Prototypes",
         description: "Figma samples",
         categories: "Prototyping, Design Systems, UX",
