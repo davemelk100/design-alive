@@ -14,8 +14,10 @@ import {
 import {
   AudioTrack,
   TrackVersion,
+  BandType,
+  bandInfo,
   getTrackUrl,
-  getTracksByType,
+  getTracksByBandAndType,
 } from "../data/audioUrls";
 import MobileTrayMenu from "../components/MobileTrayMenu";
 
@@ -30,15 +32,20 @@ const MusicPlayer: React.FC = () => {
   const [audioError, setAudioError] = useState<string | null>(null);
   const [trackVersion, setTrackVersion] = useState<TrackVersion>("regular");
   const [showInstrumentals, setShowInstrumentals] = useState(false);
+  const [currentBand, setCurrentBand] = useState<BandType>("full-time-bionic");
 
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  // Get tracks based on current view
-  const tracks: AudioTrack[] = showInstrumentals
-    ? getTracksByType(true)
-    : getTracksByType(false);
+  // Get tracks based on current band and view
+  const tracks: AudioTrack[] = getTracksByBandAndType(
+    currentBand,
+    showInstrumentals
+  );
 
-  // Reset current track when switching views
+  // Get current band info
+  const currentBandInfo = bandInfo[currentBand];
+
+  // Reset current track when switching views or bands
   useEffect(() => {
     setCurrentTrack(0);
     if (audioRef.current && tracks.length > 0) {
@@ -49,7 +56,7 @@ const MusicPlayer: React.FC = () => {
       audioRef.current.load();
       audioRef.current.volume = volume;
     }
-  }, [showInstrumentals, trackVersion]);
+  }, [showInstrumentals, trackVersion, currentBand]);
 
   // Update volume when volume state changes
   useEffect(() => {
@@ -200,25 +207,53 @@ const MusicPlayer: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8"
         >
+          {/* Band Navigation Tabs */}
+          <div className="flex justify-center mb-8 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex gap-1">
+              <button
+                onClick={() => setCurrentBand("balm")}
+                className={`px-6 py-3 text-lg font-semibold transition-colors border-b-2 ${
+                  currentBand === "balm"
+                    ? "border-purple-600 text-purple-600 dark:text-purple-400"
+                    : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                }`}
+              >
+                BALM
+              </button>
+              <button
+                onClick={() => setCurrentBand("full-time-bionic")}
+                className={`px-6 py-3 text-lg font-semibold transition-colors border-b-2 ${
+                  currentBand === "full-time-bionic"
+                    ? "border-purple-600 text-purple-600 dark:text-purple-400"
+                    : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                }`}
+              >
+                Full Time Bionic
+              </button>
+            </div>
+          </div>
+
           {/* Header */}
           <div className="text-left mb-8">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-              BALM
+              {currentBandInfo.name}
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-400 mb-4">
-              Music and Composition: Dave Melkonian
+              Music and Composition: {currentBandInfo.composer}
             </p>
             <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
-              <p className="mb-4">
-                <span className="font-medium">Contributors:</span> Bryan
-                Caspers, Chris Olson, Michael O'Reilly
-              </p>
-              <p>
-                <span className="font-medium">Samples:</span> Fiend, Waka Flocka
-                Flame, Motorhead, Knocked Loose, Youth of Today, Alice In
-                Chains, Pink Floyd, Notorious B.I.G., Eagles, Big Tuck, Tommy
-                LaSorda, Slayer, Method Man
-              </p>
+              {currentBandInfo.contributors && (
+                <p className="mb-4">
+                  <span className="font-medium">Contributors:</span>{" "}
+                  {currentBandInfo.contributors}
+                </p>
+              )}
+              {currentBandInfo.samples && (
+                <p>
+                  <span className="font-medium">Samples:</span>{" "}
+                  {currentBandInfo.samples}
+                </p>
+              )}
             </div>
           </div>
 
