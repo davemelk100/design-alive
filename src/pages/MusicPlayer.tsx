@@ -257,31 +257,33 @@ const MusicPlayer: React.FC = () => {
             </div>
           </div>
 
-          {/* View Toggle */}
-          <div className="flex justify-center mb-6">
-            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-              <button
-                onClick={() => setShowInstrumentals(false)}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  !showInstrumentals
-                    ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                }`}
-              >
-                Regular Tracks
-              </button>
-              <button
-                onClick={() => setShowInstrumentals(true)}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  showInstrumentals
-                    ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                }`}
-              >
-                Instrumental Tracks
-              </button>
+          {/* View Toggle - Only show for BALM */}
+          {currentBand === "balm" && (
+            <div className="flex justify-center mb-6">
+              <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+                <button
+                  onClick={() => setShowInstrumentals(false)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    !showInstrumentals
+                      ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  Regular Tracks
+                </button>
+                <button
+                  onClick={() => setShowInstrumentals(true)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                    showInstrumentals
+                      ? "bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                  }`}
+                >
+                  Instrumental Tracks
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Current Track Info */}
           <div className="text-left mb-8">
