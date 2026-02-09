@@ -9,6 +9,24 @@
   font-family: "League Gothic", sans-serif !important;
 }
 
+.portfolio-page,
+.portfolio-page * {
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.portfolio-page h1 {
+  font-size: 32px;
+}
+
+.portfolio-page h2 {
+  font-size: 24px;
+}
+
+.portfolio-page h3 {
+  font-size: 20px;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -180,7 +198,8 @@
   ol,
   a,
   button {
-    font-size: 1.25rem;
+    line-height: 1.5;
+    font-size: 16x;
   }
 
   /* Set line-height and font-size for all paragraph tags */
@@ -192,7 +211,7 @@
   .point-section p,
   .counter-point-section p {
     line-height: 1.5;
-    font-size: 1.25rem;
+    font-size: 16px;
   }
 
   /* News page paragraph line-height */
@@ -259,10 +278,7 @@
     h3,
     h4,
     h5,
-    h6 {
-      font-size: 0.875rem;
-    }
-
+    h6,
     p,
     ul,
     ol,
@@ -274,7 +290,7 @@
     select,
     label,
     a {
-      font-size: 0.75rem;
+      font-size: 14px;
     }
 
     /* Specific adjustments for common text classes */

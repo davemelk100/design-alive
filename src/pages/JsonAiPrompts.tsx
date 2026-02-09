@@ -8,13 +8,13 @@ import { ADMIN_PANEL_URL } from "../config/api";
 
 // Lazy load icons to avoid blocking critical path
 const LazyArrowLeft = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.ArrowLeft }))
+  import("lucide-react").then((mod) => ({ default: mod.ArrowLeft })),
 );
 const LazyCopy = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Copy }))
+  import("lucide-react").then((mod) => ({ default: mod.Copy })),
 );
 const LazyCheck = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Check }))
+  import("lucide-react").then((mod) => ({ default: mod.Check })),
 );
 
 const JsonAiPrompts = () => {
@@ -175,7 +175,7 @@ const JsonAiPrompts = () => {
           careerPositions: content.career.positions.length,
           testimonials: content.testimonials.items.length,
           navigationLinks: content.navigation.links.filter(
-            (link) => link.id !== "design-system"
+            (link) => link.id !== "design-system",
           ).length,
           socialLinks: Object.keys(content.navigation.social).length,
         },
@@ -316,7 +316,7 @@ const JsonAiPrompts = () => {
         },
       },
       null,
-      2
+      2,
     );
 
     try {
@@ -384,7 +384,7 @@ const JsonAiPrompts = () => {
                           }
                         }, 100);
                       }}
-                      className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                      className="text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       {link.text}
                     </button>
@@ -552,11 +552,23 @@ const JsonAiPrompts = () => {
                       title={copied ? "Copied!" : "Copy JSON"}
                     >
                       {copied ? (
-                        <Suspense fallback={<span className="h-4 w-4 text-green-600 dark:text-green-400">✓</span>}>
+                        <Suspense
+                          fallback={
+                            <span className="h-4 w-4 text-green-600 dark:text-green-400">
+                              ✓
+                            </span>
+                          }
+                        >
                           <LazyCheck className="h-4 w-4 text-green-600 dark:text-green-400" />
                         </Suspense>
                       ) : (
-                        <Suspense fallback={<span className="h-4 w-4 text-gray-600 dark:text-gray-400">📋</span>}>
+                        <Suspense
+                          fallback={
+                            <span className="h-4 w-4 text-gray-600 dark:text-gray-400">
+                              📋
+                            </span>
+                          }
+                        >
                           <LazyCopy className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                         </Suspense>
                       )}
@@ -706,7 +718,7 @@ const JsonAiPrompts = () => {
                             careerPositions: content.career.positions.length,
                             testimonials: content.testimonials.items.length,
                             navigationLinks: content.navigation.links.filter(
-                              (link) => link.id !== "design-system"
+                              (link) => link.id !== "design-system",
                             ).length,
                             socialLinks: Object.keys(content.navigation.social)
                               .length,
@@ -847,7 +859,7 @@ const JsonAiPrompts = () => {
                           },
                         },
                         null,
-                        2
+                        2,
                       )}
                     </pre>
                   </motion.div>

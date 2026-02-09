@@ -573,7 +573,7 @@ export const content = {
       {
         title: "Major League Numbers and ChatMLB",
         description:
-          "A comprehensive analytics platform for baseball statistics and player performance tracking.",
+          "A comprehensive analytics platform for MLB, NHL, NBA, NFL statistics and a chatbot for sports data.",
         technologies: ["React", "TypeScript", "Data Visualization"],
         demo: "https://majorleaguenumbers.com",
         image: "/img/mln-patches.svg",

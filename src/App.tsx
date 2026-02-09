@@ -40,7 +40,7 @@ const Discogs = lazy(() => import("./pages/Discogs"));
 // Lazy load non-critical UI components to reduce critical path
 const MobileTrayMenu = lazy(() => import("./components/MobileTrayMenu"));
 const Footer = lazy(() =>
-  import("./components/Footer").then((module) => ({ default: module.Footer }))
+  import("./components/Footer").then((module) => ({ default: module.Footer })),
 );
 
 import { slugify } from "./utils/slugify";
@@ -52,24 +52,24 @@ import {
 
 // Lazy load icons to reduce initial bundle size
 const LazyArrowUp = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.ArrowUp }))
+  import("lucide-react").then((mod) => ({ default: mod.ArrowUp })),
 );
 const LazyLayoutGrid = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.LayoutGrid }))
+  import("lucide-react").then((mod) => ({ default: mod.LayoutGrid })),
 );
 const LazyList = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.List }))
+  import("lucide-react").then((mod) => ({ default: mod.List })),
 );
 const LazyExternalLink = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.ExternalLink }))
+  import("lucide-react").then((mod) => ({ default: mod.ExternalLink })),
 );
 const LazyDribbble = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Dribbble }))
+  import("lucide-react").then((mod) => ({ default: mod.Dribbble })),
 );
 const LazyLinkedInLogoIcon = React.lazy(() =>
   import("@radix-ui/react-icons").then((mod) => ({
     default: mod.LinkedInLogoIcon,
-  }))
+  })),
 );
 
 // Lazy load ArticleModal
@@ -114,7 +114,7 @@ const SectionHeader = ({
     <div className={`${className}`}>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2 sm:gap-3">
         <div className="flex items-center gap-2 sm:gap-3">
-          <h2 className="text-4xl font-bold title-font leading-tight text-gray-900 dark:text-white">
+          <h2 className="font-bold title-font leading-tight text-gray-900 dark:text-white">
             {title}
           </h2>
           {icon && <div className="flex items-center gap-2">{icon}</div>}
@@ -161,7 +161,7 @@ const SectionHeader = ({
           {showArchiveLink && (
             <Link
               to="/archive"
-              className="text-nav text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline text-sm sm:text-base"
+              className="text-nav text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline sm:text-base"
             >
               View Archive
             </Link>
@@ -169,7 +169,7 @@ const SectionHeader = ({
         </div>
       </div>
       {subtitle && (
-        <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 lg:mb-10">
+        <p className="sm:text-base text-muted-foreground mb-6 sm:mb-8 lg:mb-10">
           {subtitle}
         </p>
       )}
@@ -193,15 +193,15 @@ function App() {
   } | null>(null);
 
   const [currentViewMode, setCurrentViewMode] = useState<"list" | "grid">(
-    "grid"
+    "grid",
   );
   const [designViewMode, setDesignViewMode] = useState<"list" | "grid">("grid");
   const [labViewMode, setLabViewMode] = useState<"list" | "grid">("grid");
   const [storiesViewMode, setStoriesViewMode] = useState<"list" | "grid">(
-    "grid"
+    "grid",
   );
   const [articlesViewMode, setArticlesViewMode] = useState<"list" | "grid">(
-    "grid"
+    "grid",
   );
 
   // Scroll to top on route change (but not for internal navigation)
@@ -228,18 +228,18 @@ function App() {
           setCurrentViewMode(savedViewMode);
         }
       },
-      { timeout: 100 }
+      { timeout: 100 },
     );
 
     window.addEventListener(
       "viewModeChanged",
-      handleViewModeChange as EventListener
+      handleViewModeChange as EventListener,
     );
 
     return () => {
       window.removeEventListener(
         "viewModeChanged",
-        handleViewModeChange as EventListener
+        handleViewModeChange as EventListener,
       );
     };
   }, []);
@@ -254,7 +254,13 @@ function App() {
             <Route
               path="/"
               element={
-                <div className="min-h-screen flex flex-col items-center justify-center px-4">
+                <div
+                  className="min-h-screen flex flex-col items-center justify-center px-4 font-helvetica"
+                  style={{ color: "#1d77af" }}
+                >
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-center uppercase">
+                    Melkonian Industries
+                  </h1>
                   <img
                     src="/img/melkonian-industries-logo.svg"
                     alt="Melkonian Industries"
@@ -282,7 +288,7 @@ function App() {
             <Route
               path="/portfolio"
               element={
-                <>
+                <div className="portfolio-page">
                   {/* Hero Section */}
                   <section className="py-4 sm:py-4xl:py-4 relative">
                     <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -290,9 +296,9 @@ function App() {
                         {/* Hero Content */}
                         <div className="pt-4 rounded-lg">
                           {/* Title and Navigation Row */}
-                          <div className="mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-start lg:justify-between lg:gap-4">
+                          <div className="mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-4">
                             <div className="flex-1">
-                              <h1 className="tracking-tighter text-5xl font-bold mb-1 title-font leading-none relative z-10 text-left">
+                              <h1 className="tracking-tighter mb-1 title-font leading-none relative z-10 text-left">
                                 {content.siteInfo.subtitle}
                               </h1>
                             </div>
@@ -322,7 +328,7 @@ function App() {
                                     key={link.id}
                                     onClick={() => {
                                       const element = document.getElementById(
-                                        link.id
+                                        link.id,
                                       );
                                       if (element) {
                                         element.scrollIntoView({
@@ -330,7 +336,7 @@ function App() {
                                         });
                                       }
                                     }}
-                                    className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                                    className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
                                   >
                                     {link.text}
                                   </button>
@@ -340,7 +346,7 @@ function App() {
 
                           {/* Summary Text */}
                           <div className="mt-4 sm:mt-6">
-                            <p className="text-sm text-muted-foreground text-left">
+                            <p className="text-muted-foreground text-left">
                               I'm David Melkonian, a technical product and
                               experience leader with over a decade of work at
                               the intersection of UX, front-end engineering, and
@@ -400,12 +406,10 @@ function App() {
                                 >
                                   {/* Card Content */}
                                   <div className="p-6 sm:p-8 flex flex-col gap-2 text-center items-center">
-                                    <h3
-                                      className="text-sm font-league-gothic text-gray-900 dark:text-white group-hover:text-primary transition-colors uppercase tracking-wide"
-                                    >
+                                    <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors uppercase tracking-wide">
                                       {project.title}
                                     </h3>
-                                    <p className="text-sm text-gray-600 dark:text-white">
+                                    <p className="text-gray-600 dark:text-white">
                                       {project.description}
                                     </p>
                                   </div>
@@ -433,7 +437,7 @@ function App() {
                                     )}
                                   </div>
                                 </a>
-                              )
+                              ),
                             )}
                           </div>
                         </div>
@@ -468,7 +472,7 @@ function App() {
                                     project.title !== "HealthAware" &&
                                     project.title !== "AI NUI" &&
                                     project.title !==
-                                      "Configurable Multivariate Testing"
+                                      "Configurable Multivariate Testing",
                                 )
                                 .map((project, index) => (
                                   <a
@@ -490,10 +494,10 @@ function App() {
                                             "User Testing Config"
                                               ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
                                               : project.title === "MicroLearn"
-                                              ? `/img/micro-learn-animation.svg?v=${Date.now()}`
-                                              : project.title === "RAG App"
-                                              ? `/img/rag-app-animation.svg?v=${Date.now()}`
-                                              : ""
+                                                ? `/img/micro-learn-animation.svg?v=${Date.now()}`
+                                                : project.title === "RAG App"
+                                                  ? `/img/rag-app-animation.svg?v=${Date.now()}`
+                                                  : ""
                                           }
                                           alt={project.title}
                                           className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
@@ -509,7 +513,7 @@ function App() {
                                         />
                                       ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
-                                          <span className="text-gray-400 dark:text-gray-500 text-sm">
+                                          <span className="text-gray-400 dark:text-gray-500">
                                             {(project as any).title ||
                                               "Project"}
                                           </span>
@@ -519,10 +523,10 @@ function App() {
 
                                     {/* Card Content */}
                                     <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                                      <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors">
                                         {project.title}
                                       </h3>
-                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-2">
+                                      <p className="text-gray-600 dark:text-white line-clamp-2">
                                         {project.description}
                                       </p>
                                     </div>
@@ -539,7 +543,7 @@ function App() {
                                     project.title !== "HealthAware" &&
                                     project.title !== "AI NUI" &&
                                     project.title !==
-                                      "Configurable Multivariate Testing"
+                                      "Configurable Multivariate Testing",
                                 )
                                 .map((project, index) => (
                                   <a
@@ -561,10 +565,10 @@ function App() {
                                             "User Testing Config"
                                               ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
                                               : project.title === "MicroLearn"
-                                              ? `/img/micro-learn-animation.svg?v=${Date.now()}`
-                                              : project.title === "RAG App"
-                                              ? `/img/rag-app-animation.svg?v=${Date.now()}`
-                                              : ""
+                                                ? `/img/micro-learn-animation.svg?v=${Date.now()}`
+                                                : project.title === "RAG App"
+                                                  ? `/img/rag-app-animation.svg?v=${Date.now()}`
+                                                  : ""
                                           }
                                           alt={project.title}
                                           className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
@@ -575,7 +579,7 @@ function App() {
                                         />
                                       ) : (
                                         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
-                                          <span className="text-gray-400 dark:text-gray-500 text-xs">
+                                          <span className="text-gray-400 dark:text-gray-500">
                                             {(project as any).title ||
                                               "Project"}
                                           </span>
@@ -585,10 +589,10 @@ function App() {
 
                                     {/* Compact Content */}
                                     <div className="flex-1 min-w-0">
-                                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
+                                      <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
                                         {project.title}
                                       </h3>
-                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-1 mt-1">
+                                      <p className="text-gray-600 dark:text-white line-clamp-1 mt-1">
                                         {project.description}
                                       </p>
                                     </div>
@@ -624,12 +628,12 @@ function App() {
                         >
                           <div className="flex flex-col h-full">
                             <div className="flex-1">
-                              <p className="text-sm text-gray-700 dark:text-gray-700 leading-relaxed mb-4 italic">
+                              <p className="text-gray-700 dark:text-gray-700 leading-relaxed mb-4 italic">
                                 "{testimonial.quote}"
                               </p>
                             </div>
                             <div className="mt-auto">
-                              <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                              <p className="font-semibold text-gray-900 dark:text-white">
                                 {testimonial.author}
                               </p>
                               <p className="text-xs text-gray-600 dark:text-gray-300">
@@ -662,7 +666,7 @@ function App() {
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                             {content.stories.items
                               .filter(
-                                (story) => story.title !== "Design Management"
+                                (story) => story.title !== "Design Management",
                               )
                               .map((story) => (
                                 <div
@@ -692,7 +696,7 @@ function App() {
                                       />
                                     ) : (
                                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
-                                        <span className="text-gray-400 dark:text-gray-500 text-sm">
+                                        <span className="text-gray-400 dark:text-gray-500">
                                           No image
                                         </span>
                                       </div>
@@ -701,11 +705,11 @@ function App() {
 
                                   {/* Card Content */}
                                   <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                                    <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors">
                                       {story.title}
                                     </h3>
                                     {story.subtitle && (
-                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-2">
+                                      <p className="text-gray-600 dark:text-white line-clamp-2">
                                         {story.subtitle}
                                       </p>
                                     )}
@@ -717,7 +721,7 @@ function App() {
                           <div className="space-y-3">
                             {content.stories.items
                               .filter(
-                                (story) => story.title !== "Design Management"
+                                (story) => story.title !== "Design Management",
                               )
                               .map((story) => (
                                 <div
@@ -747,7 +751,7 @@ function App() {
                                       />
                                     ) : (
                                       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
-                                        <span className="text-gray-400 dark:text-gray-500 text-xs">
+                                        <span className="text-gray-400 dark:text-gray-500">
                                           No image
                                         </span>
                                       </div>
@@ -756,11 +760,11 @@ function App() {
 
                                   {/* Compact Content */}
                                   <div className="flex-1 min-w-0">
-                                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
+                                    <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
                                       {story.title}
                                     </h3>
                                     {story.subtitle && (
-                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-1 mt-1">
+                                      <p className="text-gray-600 dark:text-white line-clamp-1 mt-1">
                                         {story.subtitle}
                                       </p>
                                     )}
@@ -815,7 +819,7 @@ function App() {
                             {content.work.projects
                               .filter(
                                 (project: any) =>
-                                  project.title !== "3D Conversion UX Plan"
+                                  project.title !== "3D Conversion UX Plan",
                               )
                               .map((project: any, index) => (
                                 <a
@@ -838,11 +842,11 @@ function App() {
 
                                   {/* Card Content */}
                                   <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                                    <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors">
                                       {project.title}
                                     </h3>
                                     {project.description && (
-                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-2">
+                                      <p className="text-gray-600 dark:text-white line-clamp-2">
                                         {project.description}
                                       </p>
                                     )}
@@ -855,7 +859,7 @@ function App() {
                             {content.work.projects
                               .filter(
                                 (project: any) =>
-                                  project.title !== "3D Conversion UX Plan"
+                                  project.title !== "3D Conversion UX Plan",
                               )
                               .map((project: any, index) => (
                                 <a
@@ -878,11 +882,11 @@ function App() {
 
                                   {/* Compact Content */}
                                   <div className="flex-1 min-w-0">
-                                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
+                                    <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
                                       {project.title}
                                     </h3>
                                     {project.description && (
-                                      <p className="text-sm text-gray-600 dark:text-white line-clamp-1 mt-1">
+                                      <p className="text-gray-600 dark:text-white line-clamp-1 mt-1">
                                         {project.description}
                                       </p>
                                     )}
@@ -946,12 +950,12 @@ function App() {
                                   article.title !==
                                     "Prompting for Heuristic Evaluations" &&
                                   article.title !==
-                                    "Vibe Coding v Vibe Engineering"
+                                    "Vibe Coding v Vibe Engineering",
                               )
                               .sort(
                                 (a, b) =>
                                   new Date(b.date).getTime() -
-                                  new Date(a.date).getTime()
+                                  new Date(a.date).getTime(),
                               )
                               .map((article, index) => {
                                 const handleClick = () => {
@@ -959,11 +963,11 @@ function App() {
                                     window.open(
                                       article.url,
                                       "_blank",
-                                      "noopener,noreferrer"
+                                      "noopener,noreferrer",
                                     );
                                   } else {
                                     navigate(
-                                      `/article/${slugify(article.title)}`
+                                      `/article/${slugify(article.title)}`,
                                     );
                                   }
                                 };
@@ -979,7 +983,7 @@ function App() {
                                       <img
                                         {...getCardImageProps(
                                           (article as any).cardImage ||
-                                            article.image
+                                            article.image,
                                         )}
                                         alt={article.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -990,11 +994,11 @@ function App() {
 
                                     {/* Card Content */}
                                     <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                                      <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors">
                                         {article.title}
                                       </h3>
                                       {article.description && (
-                                        <p className="text-sm text-gray-600 dark:text-white line-clamp-2">
+                                        <p className="text-gray-600 dark:text-white line-clamp-2">
                                           {article.description}
                                         </p>
                                       )}
@@ -1016,12 +1020,12 @@ function App() {
                                   article.title !==
                                     "Prompting for Heuristic Evaluations" &&
                                   article.title !==
-                                    "Vibe Coding v Vibe Engineering"
+                                    "Vibe Coding v Vibe Engineering",
                               )
                               .sort(
                                 (a, b) =>
                                   new Date(b.date).getTime() -
-                                  new Date(a.date).getTime()
+                                  new Date(a.date).getTime(),
                               )
                               .map((article, index) => {
                                 const handleClick = () => {
@@ -1029,11 +1033,11 @@ function App() {
                                     window.open(
                                       article.url,
                                       "_blank",
-                                      "noopener,noreferrer"
+                                      "noopener,noreferrer",
                                     );
                                   } else {
                                     navigate(
-                                      `/article/${slugify(article.title)}`
+                                      `/article/${slugify(article.title)}`,
                                     );
                                   }
                                 };
@@ -1049,7 +1053,7 @@ function App() {
                                       <img
                                         {...getThumbnailImageProps(
                                           (article as any).cardImage ||
-                                            article.image
+                                            article.image,
                                         )}
                                         alt={article.title}
                                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -1060,11 +1064,11 @@ function App() {
 
                                     {/* Compact Content */}
                                     <div className="flex-1 min-w-0">
-                                      <h3 className="text-sm font-semibold text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
+                                      <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
                                         {article.title}
                                       </h3>
                                       {article.description && (
-                                        <p className="text-sm text-gray-600 dark:text-white line-clamp-1 mt-1">
+                                        <p className="text-gray-600 dark:text-white line-clamp-1 mt-1">
                                           {article.description}
                                         </p>
                                       )}
@@ -1115,23 +1119,23 @@ function App() {
                             key={position.title + position.period}
                             className=""
                           >
-                            <h3 className="text-sm font-semibold mb-1 dark:text-white title-font">
+                            <h3 className="mb-1 dark:text-white title-font">
                               {position.title}
                             </h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-300 mb-1 font-medium">
+                            <p className="text-gray-600 dark:text-gray-300 mb-1">
                               {position.company}
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                            <p className="text-gray-500 dark:text-gray-400 mb-2">
                               {position.period}
                             </p>
                             {Array.isArray(position.description) ? (
-                              <ul className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
+                              <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
                                 {position.description.map((item, index) => (
                                   <li key={index}>{item}</li>
                                 ))}
                               </ul>
                             ) : (
-                              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                                 {position.description}
                               </p>
                             )}
@@ -1140,10 +1144,10 @@ function App() {
                       </div>
                       {/* Certifications & Education */}
                       <div className="mt-4 pt-2 max-w-3xl">
-                        <h3 className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
+                        <h3 className="mb-2 text-gray-800 dark:text-gray-200">
                           Certifications
                         </h3>
-                        <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 mb-4">
+                        <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 leading-relaxed space-y-1 mb-4">
                           <li>Certified ScrumMaster (Scrum Alliance)</li>
                           <li>
                             Certified Usability Analyst (Human Factors
@@ -1151,10 +1155,10 @@ function App() {
                           </li>
                           <li>ITIL Foundation Certificate (Axelos)</li>
                         </ul>
-                        <h3 className="mb-2 font-semibold text-gray-800 dark:text-gray-200">
+                        <h3 className="mb-2 text-gray-800 dark:text-gray-200">
                           Education
                         </h3>
-                        <ul className="list-disc list-inside text-gray-700 dark:text-gray-300">
+                        <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 leading-relaxed space-y-1">
                           <li>Oakland University | Rochester MI</li>
                           <li>Bachelor of Arts in English</li>
                           <li>Minor in Public Relations</li>
@@ -1346,7 +1350,7 @@ function App() {
                                 Whereas disregard and contempt for human rights
                                 have
                               </h1>
-                              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                              <p className="text-xs sm:text-gray-600 dark:text-gray-300">
                                 Component library and design tokens
                               </p>
                             </div>
@@ -1355,7 +1359,7 @@ function App() {
                                 Whereas disregard and contempt for human rights
                                 have
                               </h2>
-                              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                              <p className="text-xs sm:text-gray-600 dark:text-gray-300">
                                 Component library and design tokens
                               </p>
                             </div>
@@ -1364,7 +1368,7 @@ function App() {
                                 Whereas disregard and contempt for human rights
                                 have
                               </h3>
-                              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                              <p className="text-xs sm:text-gray-600 dark:text-gray-300">
                                 Component library and design tokens
                               </p>
                             </div>
@@ -1373,28 +1377,28 @@ function App() {
                                 Whereas disregard and contempt for human rights
                                 have
                               </h4>
-                              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                              <p className="text-xs sm:text-gray-600 dark:text-gray-400">
                                 Component library and design tokens
                               </p>
                             </div>
                             <div>
-                              <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 mb-2">
+                              <p className="sm:text-base text-gray-700 dark:text-gray-300 mb-2">
                                 Whereas disregard and contempt for human rights
                                 have resulted in barbarous acts which have
                                 outraged the conscience of mankind.
                               </p>
-                              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                              <p className="text-xs sm:text-gray-600 dark:text-gray-400">
                                 Body text - This is a paragraph with regular
                                 body text styling.
                               </p>
                             </div>
                             <div>
-                              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2">
+                              <p className="text-xs sm:text-gray-600 dark:text-gray-400 mb-2">
                                 Whereas disregard and contempt for human rights
                                 have resulted in barbarous acts which have
                                 outraged the conscience of mankind.
                               </p>
-                              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                              <p className="text-xs sm:text-gray-600 dark:text-gray-400">
                                 Small text - This is smaller text for captions
                                 and secondary information.
                               </p>
@@ -1408,19 +1412,19 @@ function App() {
                             Buttons
                           </h2>
                           <div className="flex flex-wrap gap-2 sm:gap-4">
-                            <button className="px-3 sm:px-4 py-2 bg-primary text-black dark:text-white rounded-lg hover:bg-primary/90 transition-colors text-sm sm:text-base">
+                            <button className="px-3 sm:px-4 py-2 bg-primary text-black dark:text-white rounded-lg hover:bg-primary/90 transition-colors sm:text-base">
                               Primary Button
                             </button>
-                            <button className="px-3 sm:px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors text-sm sm:text-base">
+                            <button className="px-3 sm:px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary/90 transition-colors sm:text-base">
                               Secondary Button
                             </button>
-                            <button className="px-3 sm:px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm sm:text-base">
+                            <button className="px-3 sm:px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors sm:text-base">
                               Tertiary Button
                             </button>
-                            <button className="px-3 sm:px-4 py-2 border border-primary text-black dark:text-white rounded-lg hover:bg-primary hover:text-white dark:hover:text-black transition-colors text-sm sm:text-base">
+                            <button className="px-3 sm:px-4 py-2 border border-primary text-black dark:text-white rounded-lg hover:bg-primary hover:text-white dark:hover:text-black transition-colors sm:text-base">
                               Outline Primary
                             </button>
-                            <button className="px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-sm sm:text-base">
+                            <button className="px-3 sm:px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors sm:text-base">
                               Outline Secondary
                             </button>
                           </div>
@@ -1437,7 +1441,7 @@ function App() {
                                 <h3 className="text-base sm:text-lg font-semibold text-black dark:text-white mb-2">
                                   Background Card
                                 </h3>
-                                <p className="text-sm sm:text-base text-black dark:text-gray-300">
+                                <p className="sm:text-base text-black dark:text-gray-300">
                                   Background Card
                                 </p>
                               </div>
@@ -1516,7 +1520,7 @@ function App() {
                                   </div>
                                 </div>
                                 <div className="flex-1 flex flex-col">
-                                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 flex-1"></p>
+                                  <p className="text-gray-600 dark:text-gray-300 mb-2 flex-1"></p>
                                 </div>
                               </div>
                             </div>
@@ -1534,19 +1538,19 @@ function App() {
                                 Default Chips
                               </h3>
                               <div className="flex flex-wrap gap-2">
-                                <span className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm font-medium dark:bg-blue-500">
+                                <span className="px-3 py-1 bg-blue-600 text-white rounded-full font-medium dark:bg-blue-500">
                                   Primary
                                 </span>
-                                <span className="px-3 py-1 bg-gray-700 text-white rounded-full text-sm font-medium dark:bg-gray-600">
+                                <span className="px-3 py-1 bg-gray-700 text-white rounded-full font-medium dark:bg-gray-600">
                                   Secondary
                                 </span>
-                                <span className="px-3 py-1 bg-gray-100 text-gray-900 rounded-full text-sm font-medium dark:bg-gray-800 dark:text-gray-100">
+                                <span className="px-3 py-1 bg-gray-100 text-gray-900 rounded-full font-medium dark:bg-gray-800 dark:text-gray-100">
                                   Neutral
                                 </span>
-                                <span className="px-3 py-1 bg-orange-700 text-white rounded-full text-sm font-medium dark:bg-orange-600">
+                                <span className="px-3 py-1 bg-orange-700 text-white rounded-full font-medium dark:bg-orange-600">
                                   Orange
                                 </span>
-                                <span className="px-3 py-1 bg-teal-700 text-white rounded-full text-sm font-medium dark:bg-teal-600">
+                                <span className="px-3 py-1 bg-teal-700 text-white rounded-full font-medium dark:bg-teal-600">
                                   Teal
                                 </span>
                               </div>
@@ -1557,19 +1561,19 @@ function App() {
                                 Outline Chips
                               </h3>
                               <div className="flex flex-wrap gap-2">
-                                <span className="px-3 py-1 border border-blue-600 text-blue-600 rounded-full text-sm font-medium dark:border-blue-400 dark:text-blue-400">
+                                <span className="px-3 py-1 border border-blue-600 text-blue-600 rounded-full font-medium dark:border-blue-400 dark:text-blue-400">
                                   Primary
                                 </span>
-                                <span className="px-3 py-1 border border-gray-700 text-gray-700 rounded-full text-sm font-medium dark:border-gray-400 dark:text-gray-300">
+                                <span className="px-3 py-1 border border-gray-700 text-gray-700 rounded-full font-medium dark:border-gray-400 dark:text-gray-300">
                                   Secondary
                                 </span>
-                                <span className="px-3 py-1 border border-gray-400 text-gray-700 rounded-full text-sm font-medium dark:border-gray-500 dark:text-gray-300">
+                                <span className="px-3 py-1 border border-gray-400 text-gray-700 rounded-full font-medium dark:border-gray-500 dark:text-gray-300">
                                   Neutral
                                 </span>
-                                <span className="px-3 py-1 border border-orange-700 text-orange-700 rounded-full text-sm font-medium dark:border-orange-500 dark:text-orange-500">
+                                <span className="px-3 py-1 border border-orange-700 text-orange-700 rounded-full font-medium dark:border-orange-500 dark:text-orange-500">
                                   Orange
                                 </span>
-                                <span className="px-3 py-1 border border-teal-700 text-teal-700 rounded-full text-sm font-medium dark:border-teal-500 dark:text-teal-500">
+                                <span className="px-3 py-1 border border-teal-700 text-teal-700 rounded-full font-medium dark:border-teal-500 dark:text-teal-500">
                                   Teal
                                 </span>
                               </div>
@@ -1603,16 +1607,16 @@ function App() {
                                 Interactive Chips
                               </h3>
                               <div className="flex flex-wrap gap-2">
-                                <button className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm font-medium hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600">
+                                <button className="px-3 py-1 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600">
                                   Clickable
                                 </button>
-                                <button className="px-3 py-1 bg-gray-700 text-white rounded-full text-sm font-medium hover:bg-gray-800 transition-colors dark:bg-gray-600 dark:hover:bg-gray-700">
+                                <button className="px-3 py-1 bg-gray-700 text-white rounded-full font-medium hover:bg-gray-800 transition-colors dark:bg-gray-600 dark:hover:bg-gray-700">
                                   Interactive
                                 </button>
-                                <button className="px-3 py-1 bg-gray-100 text-gray-900 rounded-full text-sm font-medium hover:bg-gray-200 transition-colors dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
+                                <button className="px-3 py-1 bg-gray-100 text-gray-900 rounded-full font-medium hover:bg-gray-200 transition-colors dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700">
                                   Button
                                 </button>
-                                <button className="px-3 py-1 border border-blue-600 text-blue-600 rounded-full text-sm font-medium hover:bg-blue-600 hover:text-white transition-colors dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-500">
+                                <button className="px-3 py-1 border border-blue-600 text-blue-600 rounded-full font-medium hover:bg-blue-600 hover:text-white transition-colors dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-500">
                                   Outline
                                 </button>
                               </div>
@@ -1622,7 +1626,7 @@ function App() {
                       </div>
                     </section>
                   )}
-                </>
+                </div>
               }
             />
             <Route path="/article/:slug" element={<Article />} />
@@ -1708,7 +1712,7 @@ function App() {
                 // This will be handled by the NewsAggregator component
                 // We'll use a custom event to communicate
                 window.dispatchEvent(
-                  new CustomEvent("toggleViewMode", { detail: "list" })
+                  new CustomEvent("toggleViewMode", { detail: "list" }),
                 );
               }}
               className={`w-8 h-8 flex items-center justify-center rounded-md transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${
@@ -1725,7 +1729,7 @@ function App() {
                 // This will be handled by the NewsAggregator component
                 // We'll use a custom event to communicate
                 window.dispatchEvent(
-                  new CustomEvent("toggleViewMode", { detail: "grid" })
+                  new CustomEvent("toggleViewMode", { detail: "grid" }),
                 );
               }}
               className={`w-8 h-8 flex items-center justify-center rounded-md transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 ${

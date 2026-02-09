@@ -6,7 +6,7 @@ import { content } from "../content";
 
 // Lazy load icon to avoid blocking critical path
 const LazyArrowLeft = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.ArrowLeft }))
+  import("lucide-react").then((mod) => ({ default: mod.ArrowLeft })),
 );
 
 const Story = () => {
@@ -48,8 +48,8 @@ const Story = () => {
                 className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mb-8 relative z-50"
               >
                 <Suspense fallback={<span className="h-4 w-4 mr-2">←</span>}>
-              <LazyArrowLeft className="h-4 w-4 mr-2" />
-            </Suspense>
+                  <LazyArrowLeft className="h-4 w-4 mr-2" />
+                </Suspense>
                 Back to Portfolio
               </Link>
 
@@ -91,7 +91,7 @@ const Story = () => {
                           }
                         }, 100);
                       }}
-                      className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+                      className="text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       {link.text}
                     </button>
