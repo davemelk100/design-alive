@@ -457,7 +457,7 @@ function App() {
                                 >
                                   {/* Card Content */}
                                   <div className="p-6 sm:p-8 flex flex-col gap-2 text-center items-center">
-                                    <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors uppercase tracking-wide">
+                                    <h3 className="text-gray-900 dark:text-white group-hover:font-bold transition-all uppercase tracking-wide">
                                       {project.title}
                                     </h3>
                                     <p className="text-gray-600 dark:text-white">
@@ -574,7 +574,7 @@ function App() {
 
                                     {/* Card Content */}
                                     <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                                      <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                                      <h3 className="text-gray-900 dark:text-white group-hover:font-bold transition-all">
                                         {project.title}
                                       </h3>
                                       <p className="text-gray-600 dark:text-white line-clamp-2">
@@ -640,7 +640,7 @@ function App() {
 
                                     {/* Compact Content */}
                                     <div className="flex-1 min-w-0">
-                                      <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
+                                      <h3 className="text-gray-900 dark:text-white group-hover:font-bold transition-all truncate">
                                         {project.title}
                                       </h3>
                                       <p className="text-gray-600 dark:text-white line-clamp-1 mt-1">
@@ -756,7 +756,7 @@ function App() {
 
                                   {/* Card Content */}
                                   <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                                    <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                                    <h3 className="text-gray-900 dark:text-white group-hover:font-bold transition-all">
                                       {story.title}
                                     </h3>
                                     {story.subtitle && (
@@ -811,7 +811,7 @@ function App() {
 
                                   {/* Compact Content */}
                                   <div className="flex-1 min-w-0">
-                                    <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
+                                    <h3 className="text-gray-900 dark:text-white group-hover:font-bold transition-all truncate">
                                       {story.title}
                                     </h3>
                                     {story.subtitle && (
@@ -893,7 +893,7 @@ function App() {
 
                                   {/* Card Content */}
                                   <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                                    <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                                    <h3 className="text-gray-900 dark:text-white group-hover:font-bold transition-all">
                                       {project.title}
                                     </h3>
                                     {project.description && (
@@ -933,7 +933,7 @@ function App() {
 
                                   {/* Compact Content */}
                                   <div className="flex-1 min-w-0">
-                                    <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
+                                    <h3 className="text-gray-900 dark:text-white group-hover:font-bold transition-all truncate">
                                       {project.title}
                                     </h3>
                                     {project.description && (
@@ -1045,7 +1045,7 @@ function App() {
 
                                     {/* Card Content */}
                                     <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                                      <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+                                      <h3 className="text-gray-900 dark:text-white group-hover:font-bold transition-all">
                                         {article.title}
                                       </h3>
                                       {article.description && (
@@ -1115,7 +1115,7 @@ function App() {
 
                                     {/* Compact Content */}
                                     <div className="flex-1 min-w-0">
-                                      <h3 className="text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">
+                                      <h3 className="text-gray-900 dark:text-white group-hover:font-bold transition-all truncate">
                                         {article.title}
                                       </h3>
                                       {article.description && (
