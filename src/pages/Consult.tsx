@@ -10,12 +10,18 @@ bannerStyle.textContent = `
 .animate-scroll-banner {
   animation: scroll-banner 30s linear infinite;
 }
-.animate-scroll-banner.paused {
+.animate-scroll-banner-slow {
+  animation: scroll-banner 45s linear infinite;
+}
+.animate-scroll-banner.paused,
+.animate-scroll-banner-slow.paused {
   animation-play-state: paused;
 }
 `;
 document.head.appendChild(bannerStyle);
 
+// Carousel swipeable hook (commented out for now)
+// @ts-ignore
 function useSwipeable(ref: React.RefObject<HTMLDivElement | null>) {
   const [isDragging, setIsDragging] = useState(false);
   const startX = useRef(0);
@@ -148,8 +154,9 @@ const ServiceSection = ({
 );
 
 export default function Consult() {
-  const bannerRef = useRef<HTMLDivElement>(null);
-  const isDragging = useSwipeable(bannerRef);
+  // Carousel refs (commented out for now)
+  // const bannerRef = useRef<HTMLDivElement>(null);
+  // useSwipeable(bannerRef);
   const contactFormRef = useRef<HTMLFormElement>(null);
   const [contactStatus, setContactStatus] = useState<
     "idle" | "sending" | "success" | "error"
@@ -179,6 +186,9 @@ export default function Consult() {
 
   return (
     <div className="portfolio-page">
+      <div className="flex max-w-[1200px] mx-auto gap-0">
+        {/* Main Content */}
+        <div className="flex-1 min-w-0">
       {/* Hero Section */}
       <section className="py-4 sm:py-4 xl:py-4 relative">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -188,7 +198,7 @@ export default function Consult() {
                 <img
                   src="/img/melkonian-industries-logo.svg"
                   alt="Melkonian Industries"
-                  className="w-12 sm:w-16 lg:w-20 h-12 sm:h-16 lg:h-20"
+                  className="w-16 sm:w-20 lg:w-28 h-16 sm:h-20 lg:h-28"
                 />
                 <h1 className="tracking-tighter title-font leading-none text-left text-gray-900 dark:text-white uppercase font-black">
                   Melkonian Industries
@@ -200,20 +210,26 @@ export default function Consult() {
                 </h2>
               </div>
 
-              {/* Auto-scrolling client logo banner */}
+              {/* Auto-scrolling client logo banner - commented out
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-2 font-medium">Former and Current Clients</p>
-              <div ref={bannerRef} className="mb-8 overflow-hidden relative bg-gray-300 dark:bg-gray-700 rounded-lg py-6 px-4 cursor-grab active:cursor-grabbing select-none">
+              <div ref={bannerRef} className="mb-8 overflow-hidden relative bg-gray-300 dark:bg-gray-700 rounded-lg py-6 px-4 cursor-grab active:cursor-grabbing select-none space-y-4">
                 <div className="flex animate-scroll-banner items-center gap-8 sm:gap-12 w-max">
                   {[...Array(2)].map((_, setIndex) => (
                     <div key={setIndex} className="flex items-center gap-8 sm:gap-12 shrink-0">
                       <img src="/img/carousel/healthcare-dot-gov-carousel.svg" alt="Healthcare.gov" className="h-6 sm:h-8 w-auto object-contain" />
-                      <img src="/img/carousel/cygnet-carousel.svg" alt="Cygnet" className="h-16 sm:h-18 w-auto object-contain" />
+                      <img src="/img/carousel/cygnet-carousel.svg" alt="Cygnet" className="h-20 sm:h-24 w-auto object-contain" />
                       <img src="/img/carousel/dark-slide-carousel.png" alt="Dark Slide" className="h-12 sm:h-14 w-auto object-contain" />
                       <img src="/img/carousel/nextier-carousel.png" alt="Nextier" className="h-10 sm:h-12 w-auto object-contain" />
                       <img src="/img/carousel/logo-propio.svg" alt="Propio" className="h-6 sm:h-8 w-auto object-contain" />
                       <img src="/img/carousel/dewpoint-carousel.svg" alt="Dewpoint" className="h-10 sm:h-12 w-auto object-contain" />
                       <img src="/img/carousel/optum-carousel.svg" alt="Optum" className="h-6 sm:h-8 w-auto object-contain" />
                       <img src="/img/carousel/logo-ddpa-green.png" alt="Delta Dental" className="h-4 sm:h-6 w-auto object-contain" />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex animate-scroll-banner-slow items-center gap-8 sm:gap-12 w-max">
+                  {[...Array(2)].map((_, setIndex) => (
+                    <div key={setIndex} className="flex items-center gap-8 sm:gap-12 shrink-0">
                       <img src="/img/carousel/meridian-carousel.png" alt="Meridian" className="h-10 sm:h-12 w-auto object-contain" />
                       <img src="/img/carousel/neogen-carousel.png" alt="Neogen Corporation" className="h-10 sm:h-12 w-auto object-contain" />
                       <img src="/img/carousel/dcal-carousel.svg" alt="DCAL" className="h-10 sm:h-12 w-auto object-contain" />
@@ -225,6 +241,7 @@ export default function Consult() {
                   ))}
                 </div>
               </div>
+              */}
 
               <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
                 Strategy, SEO, Advertising, and Technical Execution - Aligned to
@@ -408,7 +425,7 @@ export default function Consult() {
                 type="text"
                 name="user_name"
                 required
-                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1d77af]"
+                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#1d77af]"
               />
             </div>
             <div>
@@ -423,7 +440,7 @@ export default function Consult() {
                 type="email"
                 name="user_email"
                 required
-                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1d77af]"
+                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#1d77af]"
               />
             </div>
             <div>
@@ -438,7 +455,7 @@ export default function Consult() {
                 name="message"
                 required
                 rows={5}
-                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1d77af] resize-vertical"
+                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#1d77af] resize-vertical"
               />
             </div>
             <button
@@ -471,6 +488,27 @@ export default function Consult() {
           </p>
         </div>
       </section>
+        </div>
+
+        {/* Client logos column - right side */}
+        <div className="hidden xl:flex flex-col items-center gap-16 py-6 px-4 w-48 shrink-0 bg-[#d5e0ea] dark:bg-gray-700 rounded-lg mt-40 mr-4 self-start">
+          <img src="/img/carousel/optum-carousel.svg" alt="Optum" className="w-36 object-contain" />
+          <img src="/img/carousel/healthcare-dot-gov-carousel.svg" alt="Healthcare.gov" className="w-44 object-contain" />
+          <img src="/img/carousel/customgpt-carousel.png" alt="CustomGPT.ai" className="w-44 object-contain" />
+          <img src="/img/carousel/dcal-carousel.svg" alt="DCAL" className="w-32 object-contain" />
+          <img src="/img/carousel/logo-ddpa-green.png" alt="Delta Dental" className="w-44 object-contain" />
+          <img src="/img/carousel/bsbsm-carousel.png" alt="BCBSM" className="w-36 object-contain" />
+          <img src="/img/carousel/meridian-carousel.png" alt="Meridian" className="w-44 object-contain" />
+          <img src="/img/carousel/data-foundation-carousel.png" alt="Data Foundation" className="w-36 object-contain" />
+          <img src="/img/carousel/nextier-carousel.png" alt="Nextier" className="w-32 object-contain" />
+          <img src="/img/carousel/logo-propio.svg" alt="Propio" className="w-36 object-contain" />
+          <img src="/img/carousel/dewpoint-carousel.svg" alt="Dewpoint" className="w-40 object-contain" />
+          <img src="/img/carousel/neogen-carousel.png" alt="Neogen Corporation" className="w-32 object-contain" />
+          <img src="/img/carousel/fictionforge-carousel.png" alt="FictionForge" className="w-40 object-contain" />
+          <img src="/img/carousel/cygnet-carousel.svg" alt="Cygnet" className="w-24 object-contain" />
+          <img src="/img/carousel/dark-slide-carousel.png" alt="Dark Slide" className="w-36 object-contain" />
+        </div>
+      </div>
     </div>
   );
 }

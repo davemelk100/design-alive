@@ -1797,8 +1797,9 @@ function App() {
           </Suspense>
         )}
 
-      {/* Footer - Hide on all store pages and discogs page */}
-      {!location.pathname.startsWith("/store") &&
+      {/* Footer - Hide on home, store, and discogs pages */}
+      {location.pathname !== "/" &&
+      !location.pathname.startsWith("/store") &&
       location.pathname !== "/discogs" ? (
         <Suspense fallback={null} key={location.pathname}>
           <Footer />
