@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
+import ThemeToggle from "../components/ThemeToggle";
 
 const bannerStyle = document.createElement("style");
 bannerStyle.textContent = `
@@ -8,7 +9,7 @@ bannerStyle.textContent = `
   100% { transform: translateX(-50%); }
 }
 .animate-scroll-banner {
-  animation: scroll-banner 30s linear infinite;
+  animation: scroll-banner 80s linear infinite;
 }
 .animate-scroll-banner-slow {
   animation: scroll-banner 45s linear infinite;
@@ -190,9 +191,41 @@ export default function Consult() {
 
   return (
     <div className="portfolio-page">
-      <div className="flex max-w-[1200px] mx-auto gap-0">
+      {/* Auto-scrolling client logo banner - full viewport width */}
+      <div
+        ref={bannerRef}
+        className="w-screen relative left-1/2 -translate-x-1/2 overflow-hidden bg-[#d5e0ea] dark:bg-gray-700 py-2 select-none"
+      >
+        <p className="banner-label leading-none text-gray-500 dark:text-gray-400 text-left mb-2 pl-4 uppercase tracking-wide">Clients and Partners, Past and Present</p>
+        <div className="flex animate-scroll-banner items-center gap-[60px] w-max">
+          {[...Array(2)].map((_, setIndex) => (
+            <div
+              key={setIndex}
+              className="flex items-center gap-[60px] shrink-0"
+            >
+              <img src="/img/carousel/optum-carousel.svg" alt="Optum" className="h-6 w-auto object-contain" />
+              <img src="/img/carousel/healthcare-dot-gov-carousel.svg" alt="Healthcare.gov" className="h-6 w-auto object-contain" />
+              <img src="/img/carousel/customgpt-carousel.png" alt="CustomGPT.ai" className="h-6 w-auto object-contain" />
+              <img src="/img/carousel/dcal-carousel.svg" alt="DCAL" className="h-10 w-auto object-contain" />
+              <img src="/img/carousel/logo-ddpa-green.png" alt="Delta Dental" className="h-4 w-auto object-contain" />
+              <img src="/img/carousel/bsbsm-carousel.png" alt="BCBSM" className="h-10 w-auto object-contain" />
+              <img src="/img/carousel/meridian-carousel.png" alt="Meridian" className="h-8 w-auto object-contain" />
+              <img src="/img/carousel/data-foundation-carousel.png" alt="Data Foundation" className="h-10 w-auto object-contain" />
+              <img src="/img/carousel/nextier-carousel.png" alt="Nextier" className="h-8 w-auto object-contain" />
+              <img src="/img/carousel/logo-propio.svg" alt="Propio" className="h-6 w-auto object-contain" />
+              <img src="/img/carousel/dewpoint-carousel.svg" alt="Dewpoint" className="h-8 w-auto object-contain" />
+              <img src="/img/carousel/neogen-carousel.png" alt="Neogen Corporation" className="h-8 w-auto object-contain" />
+              <img src="/img/carousel/fictionforge-carousel.png" alt="FictionForge" className="h-14 w-auto object-contain" />
+              <img src="/img/carousel/cygnet-carousel.svg" alt="Cygnet" className="h-14 w-auto object-contain" />
+              <img src="/img/carousel/dark-slide-carousel.png" alt="Dark Slide" className="h-10 w-auto object-contain" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="max-w-[1200px] mx-auto">
         {/* Main Content */}
-        <div className="flex-1 min-w-0">
+        <div>
           {/* Hero Section */}
           <section className="py-4 sm:py-4 xl:py-4 relative">
             <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -208,106 +241,6 @@ export default function Consult() {
                       Melkonian Industries
                     </h1>
                   </div>
-                  {/* Auto-scrolling client logo banner - mobile only */}
-                  <div
-                    ref={bannerRef}
-                    className="md:hidden mb-8 overflow-hidden relative bg-[#d5e0ea] dark:bg-gray-700 rounded-lg py-6 px-4 select-none space-y-4"
-                  >
-                    <div className="flex animate-scroll-banner items-center gap-8 w-max">
-                      {[...Array(2)].map((_, setIndex) => (
-                        <div
-                          key={setIndex}
-                          className="flex items-center gap-8 shrink-0"
-                        >
-                          <img
-                            src="/img/carousel/optum-carousel.svg"
-                            alt="Optum"
-                            className="h-6 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/healthcare-dot-gov-carousel.svg"
-                            alt="Healthcare.gov"
-                            className="h-6 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/customgpt-carousel.png"
-                            alt="CustomGPT.ai"
-                            className="h-6 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/dcal-carousel.svg"
-                            alt="DCAL"
-                            className="h-10 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/logo-ddpa-green.png"
-                            alt="Delta Dental"
-                            className="h-4 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/bsbsm-carousel.png"
-                            alt="BCBSM"
-                            className="h-14 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/meridian-carousel.png"
-                            alt="Meridian"
-                            className="h-10 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/data-foundation-carousel.png"
-                            alt="Data Foundation"
-                            className="h-14 w-auto object-contain"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex animate-scroll-banner-slow items-center gap-8 w-max">
-                      {[...Array(2)].map((_, setIndex) => (
-                        <div
-                          key={setIndex}
-                          className="flex items-center gap-8 shrink-0"
-                        >
-                          <img
-                            src="/img/carousel/nextier-carousel.png"
-                            alt="Nextier"
-                            className="h-10 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/logo-propio.svg"
-                            alt="Propio"
-                            className="h-6 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/dewpoint-carousel.svg"
-                            alt="Dewpoint"
-                            className="h-10 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/neogen-carousel.png"
-                            alt="Neogen Corporation"
-                            className="h-10 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/fictionforge-carousel.png"
-                            alt="FictionForge"
-                            className="h-20 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/cygnet-carousel.svg"
-                            alt="Cygnet"
-                            className="h-20 w-auto object-contain"
-                          />
-                          <img
-                            src="/img/carousel/dark-slide-carousel.png"
-                            alt="Dark Slide"
-                            className="h-12 w-auto object-contain"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
                   <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
                     Technical Execution, Strategy, and Digital Growth
                   </h2>
@@ -424,6 +357,22 @@ export default function Consult() {
               "Support for nonprofits and grant-based ad programs",
             ]}
             closing="Paid acquisition only works when it's tightly integrated with landing pages, analytics, and technical performance - that's where I focus."
+          />
+
+          <ServiceSection
+            title="AI Prompts & Tooling"
+            intro="I provide custom AI prompts built from hands-on experience scaffolding and architecting full-stack applications. These aren't generic templates - they're tested, proven prompts refined across dozens of real projects."
+            bulletLabel="Available prompts and tooling include:"
+            bullets={[
+              "Full-stack application scaffolding prompts (React, TypeScript, Python, Node.js)",
+              "Architecture and system design prompts for greenfield and legacy modernization projects",
+              "Code review and refactoring prompts tuned for production-quality output",
+              "RAG, chatbot, and AI feature integration prompts",
+              "Prompt structures for UI/UX audits, accessibility checks, and heuristic evaluations",
+              "Workflow automation and DevOps prompts for CI/CD, Docker, and deployment pipelines",
+              "Custom prompt development tailored to your team's stack and workflows",
+            ]}
+            closing="Whether you need a single prompt to jumpstart a project or an entire library to level up your team's AI-assisted development, I can help you get more consistent, higher-quality results from the tools you're already using."
           />
 
           {/* Who I Work With */}
@@ -559,95 +508,18 @@ export default function Consult() {
 
           {/* SEO Footer */}
           <section className="py-4 sm:py-6 relative">
-            <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
               <p className="text-xs text-gray-400 dark:text-gray-500">
                 Technical and business consulting services specializing in
                 front-end development, application architecture, analytics
                 strategy, SEO, Google Ads, and performance-driven digital
                 solutions.
               </p>
+              <ThemeToggle className="text-gray-400 dark:text-gray-500 ml-4 shrink-0" />
             </div>
           </section>
         </div>
 
-        {/* Client logos column - right side */}
-        <div className="hidden md:flex flex-col items-center gap-24 py-6 px-4 w-48 shrink-0 bg-[#d5e0ea] dark:bg-gray-700 rounded-lg mt-40 mr-4 self-start">
-          <img
-            src="/img/carousel/optum-carousel.svg"
-            alt="Optum"
-            className="w-36 object-contain"
-          />
-          <img
-            src="/img/carousel/healthcare-dot-gov-carousel.svg"
-            alt="Healthcare.gov"
-            className="w-44 object-contain"
-          />
-          <img
-            src="/img/carousel/customgpt-carousel.png"
-            alt="CustomGPT.ai"
-            className="w-44 object-contain"
-          />
-          <img
-            src="/img/carousel/dcal-carousel.svg"
-            alt="DCAL"
-            className="w-32 object-contain"
-          />
-          <img
-            src="/img/carousel/logo-ddpa-green.png"
-            alt="Delta Dental"
-            className="w-44 object-contain"
-          />
-          <img
-            src="/img/carousel/bsbsm-carousel.png"
-            alt="BCBSM"
-            className="w-36 object-contain"
-          />
-          <img
-            src="/img/carousel/meridian-carousel.png"
-            alt="Meridian"
-            className="w-44 object-contain"
-          />
-          <img
-            src="/img/carousel/data-foundation-carousel.png"
-            alt="Data Foundation"
-            className="w-36 object-contain"
-          />
-          <img
-            src="/img/carousel/nextier-carousel.png"
-            alt="Nextier"
-            className="w-32 object-contain"
-          />
-          <img
-            src="/img/carousel/logo-propio.svg"
-            alt="Propio"
-            className="w-36 object-contain"
-          />
-          <img
-            src="/img/carousel/dewpoint-carousel.svg"
-            alt="Dewpoint"
-            className="w-40 object-contain"
-          />
-          <img
-            src="/img/carousel/neogen-carousel.png"
-            alt="Neogen Corporation"
-            className="w-32 object-contain"
-          />
-          <img
-            src="/img/carousel/fictionforge-carousel.png"
-            alt="FictionForge"
-            className="w-40 object-contain"
-          />
-          <img
-            src="/img/carousel/cygnet-carousel.svg"
-            alt="Cygnet"
-            className="w-24 object-contain"
-          />
-          <img
-            src="/img/carousel/dark-slide-carousel.png"
-            alt="Dark Slide"
-            className="w-36 object-contain"
-          />
-        </div>
       </div>
     </div>
   );

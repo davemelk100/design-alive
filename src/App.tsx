@@ -269,13 +269,13 @@ function App() {
                   className="min-h-screen flex flex-col items-center justify-center px-4 font-helvetica"
                   style={{ color: "#1d77af" }}
                 >
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-center uppercase">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-center uppercase tracking-tighter">
                     Melkonian Industries
                   </h1>
                   <img
                     src="/img/melkonian-industries-logo.svg"
                     alt="Melkonian Industries"
-                    className="w-64 sm:w-80 lg:w-96 mb-12"
+                    className="w-20 sm:w-24 lg:w-32 mb-12"
                   />
                   <div className="flex flex-col sm:flex-row gap-6">
                     <Link
@@ -306,6 +306,32 @@ function App() {
               path="/portfolio"
               element={
                 <div className="portfolio-page">
+                  {/* Auto-scrolling client logo banner - full viewport width */}
+                  <div className="w-screen relative left-1/2 -translate-x-1/2 overflow-hidden bg-[#d5e0ea] dark:bg-gray-700 py-2 select-none">
+                    <p className="banner-label leading-none text-gray-500 dark:text-gray-400 text-left mb-2 pl-4 uppercase tracking-wide">Clients and Partners, Past and Present</p>
+                    <div className="flex animate-scroll-banner items-center gap-[60px] w-max">
+                      {[...Array(2)].map((_, setIndex) => (
+                        <div key={setIndex} className="flex items-center gap-[60px] shrink-0">
+                          <img src="/img/carousel/optum-carousel.svg" alt="Optum" className="h-6 w-auto object-contain" />
+                          <img src="/img/carousel/healthcare-dot-gov-carousel.svg" alt="Healthcare.gov" className="h-6 w-auto object-contain" />
+                          <img src="/img/carousel/customgpt-carousel.png" alt="CustomGPT.ai" className="h-6 w-auto object-contain" />
+                          <img src="/img/carousel/dcal-carousel.svg" alt="DCAL" className="h-10 w-auto object-contain" />
+                          <img src="/img/carousel/logo-ddpa-green.png" alt="Delta Dental" className="h-4 w-auto object-contain" />
+                          <img src="/img/carousel/bsbsm-carousel.png" alt="BCBSM" className="h-10 w-auto object-contain" />
+                          <img src="/img/carousel/meridian-carousel.png" alt="Meridian" className="h-8 w-auto object-contain" />
+                          <img src="/img/carousel/data-foundation-carousel.png" alt="Data Foundation" className="h-10 w-auto object-contain" />
+                          <img src="/img/carousel/nextier-carousel.png" alt="Nextier" className="h-8 w-auto object-contain" />
+                          <img src="/img/carousel/logo-propio.svg" alt="Propio" className="h-6 w-auto object-contain" />
+                          <img src="/img/carousel/dewpoint-carousel.svg" alt="Dewpoint" className="h-8 w-auto object-contain" />
+                          <img src="/img/carousel/neogen-carousel.png" alt="Neogen Corporation" className="h-8 w-auto object-contain" />
+                          <img src="/img/carousel/fictionforge-carousel.png" alt="FictionForge" className="h-14 w-auto object-contain" />
+                          <img src="/img/carousel/cygnet-carousel.svg" alt="Cygnet" className="h-14 w-auto object-contain" />
+                          <img src="/img/carousel/dark-slide-carousel.png" alt="Dark Slide" className="h-10 w-auto object-contain" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* Hero Section */}
                   <section className="py-4 sm:py-4xl:py-4 relative">
                     <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -1810,6 +1836,7 @@ function App() {
       <div className="fixed top-2 right-0 z-50 flex items-center gap-2">
         {/* Dark Mode Toggle - Hide on store and discogs pages */}
         {location.pathname !== "/discogs" &&
+          location.pathname !== "/consult" &&
           !location.pathname.startsWith("/store") && (
             <button
               onClick={() => {
