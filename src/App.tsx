@@ -418,7 +418,7 @@ function App() {
                             <p className="text-muted-foreground text-left">
                               I'm David Melkonian, a technical product and
                               experience leader with over a decade of work at
-                              the intersection of UX, front-end engineering, and
+                              the intersection of UX, software engineering, and
                               digital accessibility. I specialize in designing
                               and shipping full-stack web and mobile products
                               using Vue, React, Next.js, Python, and FastAPI,
