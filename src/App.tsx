@@ -277,7 +277,7 @@ function App() {
                   <img
                     src="/img/melkonian-industries-logo.svg"
                     alt="Melkonian Industries"
-                    className="w-20 sm:w-24 lg:w-32 mb-12"
+                    className="w-20 sm:w-24 lg:w-32 mb-12 brightness-0 invert"
                   />
                   <div className="flex flex-col sm:flex-row gap-6">
                     <Link
