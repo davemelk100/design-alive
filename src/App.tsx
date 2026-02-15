@@ -300,6 +300,12 @@ function App() {
                     >
                       Consulting Services
                     </Link>
+                    <Link
+                      to="/cygnet"
+                      className="text-lg font-medium text-white hover:text-white/80 transition-colors px-6 py-3 rounded-md hover:bg-white/10 border border-white text-center"
+                    >
+                      Cygnet Institute
+                    </Link>
                   </div>
                   </div>
                 </div>

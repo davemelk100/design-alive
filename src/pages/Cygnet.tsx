@@ -1,8 +1,6 @@
 import { useState } from "react";
 
-const PASSCODE_HASH = "a]b\\cd";
-const hash = (s: string) =>
-  s.split("").map((c) => String.fromCharCode(c.charCodeAt(0) + 48)).join("");
+const PASSCODE = "10623";
 
 export default function Cygnet() {
   const [authenticated, setAuthenticated] = useState(
@@ -13,7 +11,7 @@ export default function Cygnet() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (hash(input) === PASSCODE_HASH) {
+    if (input === PASSCODE) {
       sessionStorage.setItem("cygnet-auth", "true");
       setAuthenticated(true);
     } else {
@@ -354,6 +352,7 @@ export default function Cygnet() {
               <div className="explain">
                 <h3>Individual Participant Scores</h3>
                 <p>Pre and post scores for each participant, with net change:</p>
+                <p style={{ marginTop: 14 }}><span style={{ fontWeight: 700, color: "#2E8B8B" }}>Green</span> = score improved &nbsp;&middot;&nbsp; <span style={{ fontWeight: 700, color: "#c0392b" }}>Red</span> = score declined &nbsp;&middot;&nbsp; <span style={{ fontWeight: 700, color: "#999" }}>Gray</span> = no change</p>
               </div>
 
               <div className="participants">
@@ -410,7 +409,7 @@ export default function Cygnet() {
               </div>
 
               <div className="explain">
-                <p><span className="font-bold text-[#2E8B8B]">Green</span> = score improved. <span className="font-bold text-[#c0392b]">Red</span> = score declined. <span className="font-bold text-[#999]">Gray</span> = no change. Notable: the two largest gains (+18 and +15) came from participants who started in the mid-range, suggesting the program has the strongest impact on those with moderate baseline financial literacy.</p>
+                <p>Notable: the two largest gains (+18 and +15) came from participants who started in the mid-range, suggesting the program has the strongest impact on those with moderate baseline financial literacy.</p>
               </div>
 
               {/* Strategic Value */}
