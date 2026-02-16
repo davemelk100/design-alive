@@ -123,14 +123,14 @@ export default defineConfig({
           "console.trace",
           "console.error", // Keep console.error for production debugging if needed
         ],
-        passes: 3, // Balanced passes for minification (reduced from 5 to avoid breaking code)
-        unsafe: true, // Enable unsafe optimizations
-        unsafe_comps: true,
-        unsafe_math: true,
-        unsafe_methods: true,
-        unsafe_proto: true,
-        unsafe_regexp: true,
-        unsafe_undefined: true,
+        passes: 2,
+        unsafe: false,
+        unsafe_comps: false,
+        unsafe_math: false,
+        unsafe_methods: false,
+        unsafe_proto: false,
+        unsafe_regexp: false,
+        unsafe_undefined: false,
         collapse_vars: true,
         reduce_vars: true,
         dead_code: true,
