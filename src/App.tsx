@@ -47,7 +47,6 @@ const Footer = lazy(() =>
 );
 
 import { slugify } from "./utils/slugify";
-import { getOptimizedImage } from "./utils/imageOptimizer";
 import {
   getCardImageProps,
   getThumbnailImageProps,
@@ -1826,8 +1825,9 @@ function App() {
           />
         </Suspense>
       )}
-      {/* Hide MobileTrayMenu on store and discogs pages */}
+      {/* Hide MobileTrayMenu on store, discogs, and cygnet pages */}
       {location.pathname !== "/discogs" &&
+        location.pathname !== "/cygnet" &&
         !location.pathname.startsWith("/store") && (
           <Suspense fallback={null}>
             <MobileTrayMenu />
@@ -1896,26 +1896,6 @@ function App() {
             </button>
           )}
 
-        {/* Fixed background image in bottom left */}
-        {location.pathname !== "/" &&
-          location.pathname !== "/portfolio" &&
-          location.pathname !== "/consult" &&
-          location.pathname !== "/specs" &&
-          location.pathname !== "/discogs" &&
-          !location.pathname.startsWith("/store") && (
-            <div className="fixed bottom-0 left-0 z-[5] pointer-events-none">
-              <img
-                src={getOptimizedImage("/img/section-edge.png", 640, 65)}
-                alt=""
-                className="w-auto h-[640px] opacity-75 dark:opacity-75"
-                {...({
-                  fetchPriority: "high",
-                } as React.ImgHTMLAttributes<HTMLImageElement>)}
-                width={640}
-                height={640}
-              />
-            </div>
-          )}
       </div>
       <Toaster />
     </div>
