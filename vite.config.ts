@@ -78,17 +78,19 @@ export default defineConfig({
         manualChunks: (id) => {
           // Vendor chunks - split more granularly to reduce critical path
           if (id.includes("node_modules")) {
-            // DO NOT split React - keep it in main bundle to ensure it loads first
-            // This prevents useLayoutEffect errors from React not being initialized
+            // React core must be in its own named chunk so other chunks
+            // can properly declare it as a dependency
             if (
               id.includes("/react/") ||
               id.includes("react-dom") ||
               id.includes("react/jsx-runtime") ||
               id.includes("react/jsx-dev-runtime") ||
-              id.includes("react-router")
+              id.includes("scheduler")
             ) {
-              // Return undefined to keep React in the main bundle
-              return undefined;
+              return "vendor-react";
+            }
+            if (id.includes("react-router")) {
+              return "vendor-react-router";
             }
             // Framer Motion - large, defer loading
             if (id.includes("framer-motion")) {
