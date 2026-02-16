@@ -85,38 +85,38 @@ export default function Cygnet() {
 
         .cygnet-page .hero { background: #1B3A5C; padding: 48px 24px 44px; text-align: center; position: relative; overflow: hidden; }
         .cygnet-page .hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #2E8B8B, #3AAFAF, #E8A838); }
-        .cygnet-page .hero h1 { font-family: 'DM Serif Display', serif !important; font-size: 30px; color: white; margin-bottom: 8px; font-weight: 400; }
-        .cygnet-page .hero p { font-size: 14px; color: #a3c0d6; max-width: 560px; margin: 0 auto; }
+        .cygnet-page .hero h1 { font-family: 'DM Serif Display', serif !important; font-size: 38px; color: white; margin-bottom: 8px; font-weight: 400; }
+        .cygnet-page .hero p { font-size: 17px; color: #a3c0d6; max-width: 600px; margin: 0 auto; }
         .cygnet-page .hero .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 16px; }
-        .cygnet-page .hero .tag { display: inline-block; padding: 5px 14px; background: rgba(46,139,139,0.2); border: 1px solid rgba(46,139,139,0.35); border-radius: 20px; font-size: 11px; font-weight: 600; color: #7dd4d4; letter-spacing: 0.4px; text-transform: uppercase; }
+        .cygnet-page .hero .tag { display: inline-block; padding: 6px 16px; background: rgba(46,139,139,0.2); border: 1px solid rgba(46,139,139,0.35); border-radius: 20px; font-size: 13px; font-weight: 600; color: #7dd4d4; letter-spacing: 0.4px; text-transform: uppercase; }
 
-        .cygnet-page .wrap { max-width: 720px; margin: 0 auto; padding: 36px 20px 64px; }
+        .cygnet-page .wrap { max-width: 800px; margin: 0 auto; padding: 36px 20px 64px; }
 
-        .cygnet-page .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #2E8B8B; margin: 36px 0 12px; display: flex; align-items: center; gap: 10px; }
+        .cygnet-page .section-label { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #2E8B8B; margin: 36px 0 12px; display: flex; align-items: center; gap: 10px; }
         .cygnet-page .section-label .line { flex: 1; height: 1px; background: #ddd; }
 
         .cygnet-page .part-divider { margin: 52px 0 8px; padding: 20px 24px; text-align: center; background: #1B3A5C; border-radius: 12px; position: relative; overflow: hidden; }
         .cygnet-page .part-divider::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #E8A838, #2E8B8B); }
-        .cygnet-page .part-divider h2 { font-family: 'DM Serif Display', serif !important; font-size: 22px; color: white; font-weight: 400; }
-        .cygnet-page .part-divider p { font-size: 13px; color: #93b8d4; margin-top: 4px; }
+        .cygnet-page .part-divider h2 { font-family: 'DM Serif Display', serif !important; font-size: 26px; color: white; font-weight: 400; }
+        .cygnet-page .part-divider p { font-size: 15px; color: #93b8d4; margin-top: 4px; }
 
         .cygnet-page .card { background: white; border-radius: 12px; padding: 24px; margin-bottom: 14px; border: 1px solid #e8e4df; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
-        .cygnet-page .card h3 { font-size: 15px; font-weight: 700; color: #1B3A5C; margin-bottom: 6px; }
-        .cygnet-page .card p { font-size: 14px; color: #555; }
+        .cygnet-page .card h3 { font-size: 19px; font-weight: 700; color: #1B3A5C; margin-bottom: 6px; }
+        .cygnet-page .card p { font-size: 16px; color: #555; }
         .cygnet-page .card p + p { margin-top: 8px; }
-        .cygnet-page .card .meta { font-size: 12px; color: #888; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .cygnet-page .card .meta { font-size: 14px; color: #888; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .cygnet-page .context { background: white; border-radius: 12px; padding: 24px; margin-bottom: 14px; border: 1px solid #e8e4df; border-left: 4px solid #2E8B8B; box-shadow: 0 1px 6px rgba(0,0,0,0.04); }
-        .cygnet-page .context h2 { font-family: 'DM Serif Display', serif !important; font-size: 18px; color: #1B3A5C; margin-bottom: 8px; font-weight: 400; }
-        .cygnet-page .context p { font-size: 14px; color: #555; }
+        .cygnet-page .context h2 { font-family: 'DM Serif Display', serif !important; font-size: 22px; color: #1B3A5C; margin-bottom: 8px; font-weight: 400; }
+        .cygnet-page .context p { font-size: 16px; color: #555; }
         .cygnet-page .context p + p { margin-top: 8px; }
 
         .cygnet-page .pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0 24px; }
         @media (max-width: 540px) { .cygnet-page .pillars { grid-template-columns: 1fr; } }
         .cygnet-page .pillar { background: white; border-radius: 10px; padding: 18px; border: 1px solid #e8e4df; text-align: center; }
         .cygnet-page .pillar .icon { font-size: 24px; margin-bottom: 6px; }
-        .cygnet-page .pillar h4 { font-size: 13px; font-weight: 700; color: #1B3A5C; margin-bottom: 4px; }
-        .cygnet-page .pillar p { font-size: 12.5px; color: #666; }
+        .cygnet-page .pillar h4 { font-size: 16px; font-weight: 700; color: #1B3A5C; margin-bottom: 4px; }
+        .cygnet-page .pillar p { font-size: 15px; color: #666; }
 
         .cygnet-page .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 16px 0 24px; }
         .cygnet-page .stat { background: white; border-radius: 10px; padding: 16px 12px; text-align: center; border: 1px solid #e8e4df; position: relative; overflow: hidden; }
@@ -124,53 +124,53 @@ export default function Cygnet() {
         .cygnet-page .stat.teal::before { background: #2E8B8B; }
         .cygnet-page .stat.gold::before { background: #E8A838; }
         .cygnet-page .stat.navy::before { background: #1B3A5C; }
-        .cygnet-page .stat .num { font-family: 'DM Serif Display', serif !important; font-size: 26px; line-height: 1.1; margin-bottom: 3px; }
+        .cygnet-page .stat .num { font-family: 'DM Serif Display', serif !important; font-size: 32px; line-height: 1.1; margin-bottom: 3px; }
         .cygnet-page .num-teal { color: #2E8B8B; } .cygnet-page .num-gold { color: #D4922A; } .cygnet-page .num-navy { color: #1B3A5C; }
-        .cygnet-page .stat .label { font-size: 11px; color: #888; font-weight: 500; }
+        .cygnet-page .stat .label { font-size: 13px; color: #888; font-weight: 500; }
 
         .cygnet-page .process { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 16px 0 24px; }
         @media (max-width: 600px) { .cygnet-page .process { grid-template-columns: 1fr 1fr; } }
         .cygnet-page .step { background: #1B3A5C; border-radius: 10px; padding: 16px 12px; text-align: center; }
-        .cygnet-page .step .step-num { display: inline-block; width: 28px; height: 28px; border-radius: 50%; background: #2E8B8B; color: white; font-weight: 700; font-size: 13px; line-height: 28px; margin-bottom: 8px; }
-        .cygnet-page .step h4 { font-size: 12px; font-weight: 700; color: #E8A838; margin-bottom: 4px; }
-        .cygnet-page .step p { font-size: 11px; color: #b8cfe0; line-height: 1.5; }
+        .cygnet-page .step .step-num { display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: #2E8B8B; color: white; font-weight: 700; font-size: 15px; line-height: 32px; margin-bottom: 8px; }
+        .cygnet-page .step h4 { font-size: 14px; font-weight: 700; color: #E8A838; margin-bottom: 4px; }
+        .cygnet-page .step p { font-size: 13px; color: #b8cfe0; line-height: 1.5; }
 
         .cygnet-page .accred { background: linear-gradient(135deg, #1B3A5C, #244b6e); border-radius: 12px; padding: 24px; margin-top: 16px; position: relative; overflow: hidden; }
         .cygnet-page .accred::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #E8A838, #2E8B8B); }
-        .cygnet-page .accred h3 { font-family: 'DM Serif Display', serif !important; font-size: 17px; color: #E8A838; margin-bottom: 10px; font-weight: 400; }
-        .cygnet-page .accred p { font-size: 13.5px; color: #b8cfe0; }
+        .cygnet-page .accred h3 { font-family: 'DM Serif Display', serif !important; font-size: 21px; color: #E8A838; margin-bottom: 10px; font-weight: 400; }
+        .cygnet-page .accred p { font-size: 16px; color: #b8cfe0; }
         .cygnet-page .accred p + p { margin-top: 8px; }
         .cygnet-page .accred strong { color: #fff; }
 
         .cygnet-page .bar-section { margin: 20px 0 28px; }
         .cygnet-page .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-        .cygnet-page .bar-label { width: 130px; font-size: 13px; color: #666; text-align: right; flex-shrink: 0; }
+        .cygnet-page .bar-label { width: 140px; font-size: 15px; color: #666; text-align: right; flex-shrink: 0; }
         .cygnet-page .bar-track { flex: 1; height: 18px; background: #eee; border-radius: 4px; }
         .cygnet-page .bar-fill { height: 100%; border-radius: 4px; background: #2E8B8B; }
-        .cygnet-page .bar-val { width: 40px; font-size: 13px; font-weight: 700; color: #1B3A5C; }
+        .cygnet-page .bar-val { width: 44px; font-size: 15px; font-weight: 700; color: #1B3A5C; }
 
         .cygnet-page .quotes { display: grid; grid-template-columns: 1fr; gap: 10px; margin: 20px 0 28px; }
         .cygnet-page .quote-card { background: #1B3A5C; border-radius: 10px; padding: 16px 20px; }
-        .cygnet-page .quote-card p { font-size: 14px; color: #c8dae8; font-style: italic; line-height: 1.6; }
-        .cygnet-page .quote-card .attr { font-size: 11px; color: #7fa8c4; font-style: normal; margin-top: 4px; font-weight: 600; }
+        .cygnet-page .quote-card p { font-size: 16px; color: #c8dae8; font-style: italic; line-height: 1.6; }
+        .cygnet-page .quote-card .attr { font-size: 13px; color: #7fa8c4; font-style: normal; margin-top: 4px; font-weight: 600; }
 
         .cygnet-page .participants { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0 28px; }
         @media (max-width: 560px) { .cygnet-page .participants { grid-template-columns: repeat(2, 1fr); } }
         .cygnet-page .p-card { background: white; border-radius: 10px; padding: 14px 10px; text-align: center; border: 1px solid #e8e4df; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-        .cygnet-page .p-card .p-id { font-size: 11px; font-weight: 700; color: #999; margin-bottom: 6px; text-transform: uppercase; }
-        .cygnet-page .p-card .p-scores { font-size: 13px; color: #555; margin-bottom: 4px; }
-        .cygnet-page .p-card .p-change { font-family: 'DM Serif Display', serif !important; font-size: 22px; line-height: 1; }
+        .cygnet-page .p-card .p-id { font-size: 13px; font-weight: 700; color: #999; margin-bottom: 6px; text-transform: uppercase; }
+        .cygnet-page .p-card .p-scores { font-size: 15px; color: #555; margin-bottom: 4px; }
+        .cygnet-page .p-card .p-change { font-family: 'DM Serif Display', serif !important; font-size: 26px; line-height: 1; }
         .cygnet-page .change-up { color: #2E8B8B; } .cygnet-page .change-down { color: #c0392b; } .cygnet-page .change-flat { color: #999; }
 
         .cygnet-page .bottom-note { background: linear-gradient(135deg, #1B3A5C, #244b6e); border-radius: 12px; padding: 28px; margin-top: 36px; position: relative; overflow: hidden; }
         .cygnet-page .bottom-note::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #E8A838, #2E8B8B); }
-        .cygnet-page .bottom-note h3 { font-family: 'DM Serif Display', serif !important; font-size: 18px; color: #E8A838; margin-bottom: 10px; font-weight: 400; }
-        .cygnet-page .bottom-note p { font-size: 14px; color: #b8cfe0; }
+        .cygnet-page .bottom-note h3 { font-family: 'DM Serif Display', serif !important; font-size: 22px; color: #E8A838; margin-bottom: 10px; font-weight: 400; }
+        .cygnet-page .bottom-note p { font-size: 16px; color: #b8cfe0; }
         .cygnet-page .bottom-note p + p { margin-top: 10px; }
         .cygnet-page .bottom-note strong { color: #fff; }
 
         .cygnet-page .footer-bar { background: #1B3A5C; padding: 20px 24px; text-align: center; }
-        .cygnet-page .footer-bar p { font-size: 12px; color: #7fa8c4; }
+        .cygnet-page .footer-bar p { font-size: 14px; color: #7fa8c4; }
         .cygnet-page .footer-bar a { color: #3AAFAF; text-decoration: none; }
       `}</style>
 
