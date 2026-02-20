@@ -1,9 +1,53 @@
+import { useState } from "react";
 import PortfolioLayout from "../components/PortfolioLayout";
 
+const caseStudies = [
+  {
+    id: "accessibility",
+    label: "Accessibility",
+    title: "Operationalizing Accessibility Across an Enterprise Healthcare Organization",
+  },
+  {
+    id: "ai-interpretation",
+    label: "AI Interpretation",
+    title: "Designing AI Powered Interpretation for Real Time Enterprise Communication",
+  },
+  {
+    id: "user-testing",
+    label: "User Testing Platform",
+    title: "Designing a Cross Product User Testing Platform with Unified Data and Theming Architecture",
+  },
+];
+
 export default function CaseStudies() {
+  const [activeStudy, setActiveStudy] = useState(caseStudies[0].id);
+
   return (
     <PortfolioLayout currentPage="case-studies">
-      {/* Case Study Content */}
+      {/* Sub-menu */}
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap gap-2 pt-2 pb-4 border-b border-gray-200 dark:border-gray-700">
+          {caseStudies.map((study) => (
+            <button
+              key={study.id}
+              onClick={() => {
+                setActiveStudy(study.id);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                activeStudy === study.id
+                  ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              }`}
+            >
+              {study.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Case Study 1: Accessibility */}
+      {activeStudy === "accessibility" && (
       <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
@@ -330,8 +374,10 @@ export default function CaseStudies() {
           </div>
         </div>
       </section>
+      )}
 
-      {/* Case Study 2 */}
+      {/* Case Study 2: AI Interpretation */}
+      {activeStudy === "ai-interpretation" && (
       <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
@@ -698,6 +744,357 @@ export default function CaseStudies() {
           </div>
         </div>
       </section>
+      )}
+
+      {/* Case Study 3: User Testing Platform */}
+      {activeStudy === "user-testing" && (
+      <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
+        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
+            <h2 className="font-bold title-font leading-tight text-gray-900 dark:text-white mb-2">
+              Designing a Cross Product User Testing Platform with Unified Data and Theming Architecture
+            </h2>
+            <p className="text-muted-foreground mb-8">
+              UX Architect and Software Engineer — Melkonian Industries
+            </p>
+
+            <div className="space-y-8">
+
+              {/* Executive Context */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Executive Context</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  Across multiple software products, I encountered a recurring operational problem.
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">Each product required structured user testing. However:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Testing frameworks were inconsistent</li>
+                  <li>Reporting formats varied by product</li>
+                  <li>Layout patterns changed between tools</li>
+                  <li>Themes and branding created fragmentation</li>
+                  <li>Data structures were not normalized</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  Teams were solving the same user testing problem repeatedly, but with slightly different implementations.
+                </p>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                  <p className="text-gray-900 dark:text-white font-medium">
+                    The inefficiency was not in research itself. It was in the lack of a shared testing architecture.
+                  </p>
+                </div>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  I designed and built a platform that unified testing inputs, normalized reporting outputs, and allowed fluid theme transitions without disrupting structure or layout predictability.
+                </p>
+              </div>
+
+              {/* The Core Problem */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">The Core Problem</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">Multiple software products required:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Structured user testing flows</li>
+                  <li>Survey input collection</li>
+                  <li>Usability scoring</li>
+                  <li>Qualitative feedback capture</li>
+                  <li>Standardized reporting</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">However, each product team:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Designed its own layout patterns</li>
+                  <li>Structured data differently</li>
+                  <li>Generated inconsistent reports</li>
+                  <li>Rebuilt the same UX infrastructure</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">This created:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Redundant engineering effort</li>
+                  <li>Inconsistent analytics</li>
+                  <li>Fragmented reporting formats</li>
+                  <li>Increased cognitive load for stakeholders</li>
+                  <li>Difficult cross product comparisons</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  The real opportunity was to <strong className="text-gray-900 dark:text-white">separate theme from structure</strong> and <strong className="text-gray-900 dark:text-white">standardize the data model</strong> across contexts.
+                </p>
+              </div>
+
+              {/* My Objective */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">My Objective</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">Design and build a reusable user testing platform that would:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Normalize key data points across products</li>
+                  <li>Maintain fluid and predictable layouts</li>
+                  <li>Allow clean theme switching without structural disruption</li>
+                  <li>Generate standardized cross product reports</li>
+                  <li>Scale across use cases</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  The goal was not just visual consistency. It was <strong className="text-gray-900 dark:text-white">structural consistency</strong>.
+                </p>
+              </div>
+
+              {/* Phase 1 */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Phase 1: Data Model Normalization</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  Before designing UI, I defined the data layer. I mapped:
+                </p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Common testing objectives</li>
+                  <li>Shared usability metrics</li>
+                  <li>Scoring systems</li>
+                  <li>Open text qualitative feedback</li>
+                  <li>Task completion tracking</li>
+                  <li>Severity tagging</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">From this analysis, I created a normalized data schema that abstracted:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Test metadata</li>
+                  <li>Participant input</li>
+                  <li>Quantitative scoring</li>
+                  <li>Qualitative commentary</li>
+                  <li>Aggregated reporting outputs</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  This ensured that regardless of product theme or purpose, the underlying data model remained consistent.
+                </p>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                  <p className="text-gray-900 dark:text-white font-medium">
+                    The UI adapts. The data structure remains stable.
+                  </p>
+                </div>
+              </div>
+
+              {/* Phase 2 */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Phase 2: Layout Architecture and Predictability</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  User testing tools must feel stable and predictable. I designed a layout system with:
+                </p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Fixed structural regions</li>
+                  <li>Predictable navigation patterns</li>
+                  <li>Modular component slots</li>
+                  <li>Consistent spacing logic</li>
+                  <li>Responsive behavior across viewports</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">The architecture emphasized:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Clear hierarchy</li>
+                  <li>Minimal cognitive overhead</li>
+                  <li>Logical task progression</li>
+                  <li>Structured input zones</li>
+                  <li>Consistent reporting layout</li>
+                </ul>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                  <p className="text-gray-900 dark:text-white font-medium">
+                    Predictability was treated as a design principle. Users should not relearn layout behavior when themes change.
+                  </p>
+                </div>
+              </div>
+
+              {/* Phase 3 */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Phase 3: Theming Without Structural Drift</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  One of the key differentiators of this platform is the ability to perform clean theme transitions. Instead of allowing themes to alter layout logic, I:
+                </p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Separated design tokens from structural components</li>
+                  <li>Defined color systems independently of layout</li>
+                  <li>Isolated typography variables</li>
+                  <li>Abstracted spacing values</li>
+                  <li>Maintained consistent grid logic</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">Theme switching affects:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Color palette</li>
+                  <li>Surface treatments</li>
+                  <li>Typography styling</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">It does not affect:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Information hierarchy</li>
+                  <li>Layout regions</li>
+                  <li>Interaction patterns</li>
+                  <li>Reporting structure</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  This separation ensures that theme variation does not introduce layout instability. <strong className="text-gray-900 dark:text-white">The experience remains fluid and predictable regardless of visual treatment.</strong>
+                </p>
+              </div>
+
+              {/* Phase 4 */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Phase 4: Commonized Reporting System</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  A major pain point across products was inconsistent reporting. I designed a standardized reporting model that:
+                </p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Aggregates quantitative scores</li>
+                  <li>Visualizes usability metrics</li>
+                  <li>Groups qualitative insights</li>
+                  <li>Tags severity levels</li>
+                  <li>Highlights recurring friction points</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">Reports follow a consistent structural format across themes. This allows:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Cross product comparison</li>
+                  <li>Easier stakeholder review</li>
+                  <li>Reduced interpretation effort</li>
+                  <li>Standardized executive summaries</li>
+                </ul>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                  <p className="text-gray-900 dark:text-white font-medium">
+                    The reporting system becomes a shared language between teams.
+                  </p>
+                </div>
+              </div>
+
+              {/* Phase 5 */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Phase 5: Front End Implementation</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  I built the application with a modular front end architecture focused on reusability and clarity. Key architectural principles included:
+                </p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Component driven design</li>
+                  <li>Centralized state management</li>
+                  <li>Data abstraction layer</li>
+                  <li>Token driven theming</li>
+                  <li>Responsive grid system</li>
+                  <li>Reusable reporting modules</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  The application maintains smooth theme transitions, predictable layout rendering, consistent spacing and rhythm, and logical state handling. Theme changeover is immediate and clean because <strong className="text-gray-900 dark:text-white">structure and presentation are decoupled</strong>.
+                </p>
+              </div>
+
+              {/* Interaction Design Principles */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Interaction Design Principles</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">The platform emphasizes:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Clarity over ornamentation</li>
+                  <li>Structured input flows</li>
+                  <li>Immediate feedback</li>
+                  <li>Consistent interaction states</li>
+                  <li>Reduced cognitive friction</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Transitions are fluid but restrained. Animations support continuity rather than distraction. This reinforces trust and usability.
+                </p>
+              </div>
+
+              {/* Technical Design Decisions */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Technical Design Decisions</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">To ensure scalability and flexibility, I implemented:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>A normalized JSON data structure</li>
+                  <li>Config driven form rendering</li>
+                  <li>Component level theming variables</li>
+                  <li>Reusable reporting generators</li>
+                  <li>Predictable state transitions</li>
+                  <li>Controlled re-render logic</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  This ensures new product themes can be added without rewriting core logic, new testing scenarios can plug into the existing schema, reports remain structurally consistent, and layout remains stable. <strong className="text-gray-900 dark:text-white">The system is extensible without fragmentation.</strong>
+                </p>
+              </div>
+
+              {/* Accessibility Considerations */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Accessibility Considerations</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">The platform adheres to accessibility best practices including:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Semantic markup</li>
+                  <li>Logical tab order</li>
+                  <li>Clear focus states</li>
+                  <li>Sufficient color contrast across themes</li>
+                  <li>Accessible form labeling</li>
+                  <li>Screen reader compatibility</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Theme variation does not compromise accessibility standards. <strong className="text-gray-900 dark:text-white">Accessibility is embedded in the structural layer, not dependent on theme styling.</strong>
+                </p>
+              </div>
+
+              {/* Impact */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Impact</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4">
+                  <div className="bg-white/20 backdrop-blur-lg rounded-lg p-4 sm:p-6 shadow-xl">
+                    <h4 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">Before</h4>
+                    <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
+                      <li>Fragmented testing tools</li>
+                      <li>Redundant UX infrastructure</li>
+                      <li>Inconsistent reporting</li>
+                      <li>Theme driven layout instability</li>
+                      <li>Difficult cross product comparisons</li>
+                    </ul>
+                  </div>
+                  <div className="bg-white/20 backdrop-blur-lg rounded-lg p-4 sm:p-6 shadow-xl">
+                    <h4 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">After</h4>
+                    <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
+                      <li>Unified testing architecture</li>
+                      <li>Normalized data model</li>
+                      <li>Clean theme switching</li>
+                      <li>Predictable layouts</li>
+                      <li>Commonized reporting format</li>
+                      <li>Reduced engineering redundancy</li>
+                      <li>Improved stakeholder clarity</li>
+                    </ul>
+                  </div>
+                </div>
+                <p className="text-gray-900 dark:text-white font-semibold text-center">
+                  The platform creates a reusable foundation for structured testing across multiple products.
+                </p>
+              </div>
+
+              {/* Strategic Value */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Strategic Value</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">This initiative demonstrates my ability to:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Abstract patterns across product ecosystems</li>
+                  <li>Separate structure from presentation</li>
+                  <li>Normalize data across contexts</li>
+                  <li>Design scalable reporting systems</li>
+                  <li>Build modular front end architecture</li>
+                  <li>Align UX, data, and theming systems</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Rather than solving a single product problem, this platform <strong className="text-gray-900 dark:text-white">solves a category problem</strong>. It creates a reusable testing infrastructure that can scale across teams and products without sacrificing clarity or cohesion.
+                </p>
+              </div>
+
+              {/* Why This Work Matters */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Why This Work Matters</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  Organizations often duplicate UX infrastructure across products. This project shows how thoughtful architecture can:
+                </p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Reduce redundancy</li>
+                  <li>Improve data comparability</li>
+                  <li>Simplify stakeholder reporting</li>
+                  <li>Maintain brand flexibility</li>
+                  <li>Preserve layout predictability</li>
+                </ul>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                  <p className="text-gray-900 dark:text-white font-medium">
+                    It reflects systems thinking at both UX and engineering levels.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+      )}
     </PortfolioLayout>
   );
 }
