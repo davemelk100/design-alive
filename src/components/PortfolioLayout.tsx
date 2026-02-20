@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import LogoBanner from "./LogoBanner";
+// import LogoBanner from "./LogoBanner";
 import PortfolioNav from "./PortfolioNav";
 
 const PortfolioLayout = ({

@@ -636,6 +636,13 @@ export const content = {
         image: "/img/health-aware-animation.svg",
       },
       {
+        title: "Major League Numbers",
+        description: "Baseball analytics platform with AI-powered stats and insights.",
+        technologies: ["React", "TypeScript", "Python", "AI"],
+        demo: "https://majorleaguenumbers.com/",
+        image: "/img/major-league-numbers-animation.svg",
+      },
+      {
         title: "User Testing Config",
         description: "Configurable user testing.",
         technologies: ["React", "TypeScript", "Tailwind", "Testing APIs"],

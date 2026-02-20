@@ -45,22 +45,9 @@ export default function LabPage() {
                       className="group relative rounded-lg bg-white/20 backdrop-blur-lg flex flex-col cursor-pointer shadow-xl"
                     >
                       <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-transparent">
-                        {project.title === "User Testing Config" ||
-                        project.title === "MicroLearn" ||
-                        project.title === "RAG App" ||
-                        project.title === "Translate & Interpret" ? (
+                        {project.image?.endsWith(".svg") ? (
                           <img
-                            src={
-                              project.title === "User Testing Config"
-                                ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
-                                : project.title === "MicroLearn"
-                                  ? `/img/micro-learn-animation.svg?v=${Date.now()}`
-                                  : project.title === "RAG App"
-                                    ? `/img/rag-app-animation.svg?v=${Date.now()}`
-                                    : project.title === "Translate & Interpret"
-                                      ? `/img/translate-interpret-animation.svg?v=${Date.now()}`
-                                      : ""
-                            }
+                            src={`${project.image}?v=${Date.now()}`}
                             alt={project.title}
                             className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
                             loading={index === 0 ? "eager" : "lazy"}
@@ -99,22 +86,9 @@ export default function LabPage() {
                       className="group flex items-center gap-4 p-3 rounded-lg bg-white/20 backdrop-blur-lg transition-all cursor-pointer shadow-xl"
                     >
                       <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-transparent">
-                        {project.title === "User Testing Config" ||
-                        project.title === "MicroLearn" ||
-                        project.title === "RAG App" ||
-                        project.title === "Translate & Interpret" ? (
+                        {project.image?.endsWith(".svg") ? (
                           <img
-                            src={
-                              project.title === "User Testing Config"
-                                ? `/img/user-testing-config-animation.svg?v=${Date.now()}`
-                                : project.title === "MicroLearn"
-                                  ? `/img/micro-learn-animation.svg?v=${Date.now()}`
-                                  : project.title === "RAG App"
-                                    ? `/img/rag-app-animation.svg?v=${Date.now()}`
-                                    : project.title === "Translate & Interpret"
-                                      ? `/img/translate-interpret-animation.svg?v=${Date.now()}`
-                                      : ""
-                            }
+                            src={`${project.image}?v=${Date.now()}`}
                             alt={project.title}
                             className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-300"
                             loading="lazy"
