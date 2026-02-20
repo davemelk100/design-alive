@@ -14,7 +14,7 @@ const LazyExternalLink = React.lazy(() =>
 const ArticleModal = lazy(() => import("../../components/ArticleModal"));
 
 export default function StoriesPage() {
-  const [storiesViewMode, setStoriesViewMode] = useState<"list" | "grid">("grid");
+  const [storiesViewMode, setStoriesViewMode] = useState<"list" | "grid">("list");
   const [selectedStory, setSelectedStory] = useState<{
     title: string;
     content: string;

@@ -45,9 +45,6 @@
     <line x1="100" y1="116" x2="100" y2="122" stroke="#06b6d4" stroke-width="1" opacity="0.5"/>
     <line x1="103" y1="116" x2="103" y2="122" stroke="#06b6d4" stroke-width="1" opacity="0.5"/>
   </g>
-
-  <!-- Subtle glow behind robot -->
-  <circle cx="100" cy="100" r="22" fill="#06b6d4" opacity="0.08" class="ragPulseCenter"/>
   
   <!-- Orbit 1 Group with dashed connections (Cyan Light) -->
   <g class="ragOrbit1">

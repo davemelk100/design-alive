@@ -39,6 +39,10 @@ export const content = {
         text: "Design System",
       },
       {
+        id: "testimonials",
+        text: "Testimonials",
+      },
+      {
         id: "contact",
         text: "Contact",
       },
@@ -188,51 +192,93 @@ export const content = {
     items: [
       {
         quote:
-          "I highly recommend David for his exceptional expertise in UX/UI design. With experience as a User Experience Manager, Senior Designer, and Interface Developer, he has consistently delivered user-centered, innovative, and seamless digital experiences. David excels at aligning user needs with business goals, fostering collaboration, and solving complex challenges with creative, effective solutions. His technical proficiency and ability to implement clean, efficient designs make him a invaluable asset to any team.",
-        author: "Keerthi Baliga",
-        role: "Product Owner at Propio Language Services",
+          "I had the opportunity to work with Dave when he was my UX Manager at Meridian Health Plan. Dave is a thoughtful and inspiring leader who brings a strong vision to UX while empowering his team to grow and succeed. He provided clear direction, constructive feedback, and created a collaborative environment that allowed great design to thrive. I truly appreciated his mentorship and leadership, and I'd highly recommend him to any organization looking for a strong UX leader.",
+        author: "Priya Duraikannu",
+        role: "Product Design & UX Leader",
       },
       {
         quote:
-          "It was a privilege to work alongside David at several companies, including Meridian. David consistently displayed exceptional dedication, a strong work ethic, and remarkable attention to detail. His talent for analyzing challenges and devising innovative solutions was very influential to our team. David's commitment to excellence and his adaptability in dynamic situations also stood out. His strong communication skills enabled seamless collaboration with cross-functional team, along with stakeholders and business leaders. David is a natural team player and brought a collaborative spirit and a positive attitude to every project. He actively participated in discussions, offered valuable insights, and went above and beyond to ensure success. His expertise in research, design and development played a pivotal role in helping our team communicate our vision effectively.",
+          "Dave is one of the best design and user experience professionals I have worked with. He takes a pragmatic and user focused approach to design, ensuring the linkage between an idea and the resulting experience are complementary and consistent. He is approachable and mature, while also being very creative. While we were both at Dewpoint we worked on multiple shared client engagements, and I always looked forward to having Dave on the team.",
+        author: "Christopher Weiss",
+        role: "Chief Technology Officer at Powerley",
+      },
+      {
+        quote:
+          "I highly recommend David for his exceptional expertise in UX/UI design. With experience as a User Experience Manager, Senior Designer, and Interface Developer, he has consistently delivered user-centered, innovative, and seamless digital experiences. David excels at aligning user needs with business goals, fostering collaboration, and solving complex challenges with creative, effective solutions. His technical proficiency and ability to implement clean, efficient designs make him an invaluable asset to any team. David is a skilled professional whose contributions drive impactful results, and I have no doubt he will excel in any role he undertakes.",
+        author: "Keerthi Baliga",
+        role: "CSPO certified | Product Owner at Propio Language Services",
+      },
+      {
+        quote:
+          "Dave, a seasoned UI/UX specialist, hired me into the Web Developer role at Optum. He mentored me and other developers, helping us become strong front-end developers. His practical experience is invaluable during strategic discussions and decision-making processes. Dave would be an asset to any team, bringing years of industry and management experience.",
+        author: "Rajashri Bharathan, CSM",
+        role: "Engineering Delivery Manager at Airspace Link",
+      },
+      {
+        quote:
+          "As is clear from the other recommendations here, Dave is a wizard at all things UI/UX and Front End, and a passionate, opinionated, inspiring, entertaining, and widely experienced one at that! Dave and I worked on several projects together during our time at Propio, and in every case Dave produced creative, high quality, and well thought out prototypes and solutions to the UI/UX problems at hand, regularly surprising and impressing the teams and users with whom he was working. In addition, he was enthusiastically willing to consider and incorporate feedback from all involved parties, and to engage in well-informed and productive discussions around his (and the industry's) reasoning behind his approaches and the inevitable alternatives, choices, and concerns that arose along the way. In short, I highly recommend Dave as a highly skilled, self-motivated UI/UX/Front End expert who can be relied on to deliver above and beyond expectations. He is a pleasure to work with, and I look forward to the chance to work with him again.",
+        author: "Jud Cole",
+        role: "Experienced Technology Leader, Innovator, Strategist, and Mentor",
+      },
+      {
+        quote:
+          "Dave is a senior leader, who is able to be \"hands on\" writing code as easily as contributing to strategic discussions and decisions. He's easy to work with, and strong in all things UI and UX.",
+        author: "Brent Knop, CSM, PMPO, ITIL",
+        role: "Leading Healthcare Software Engineering Teams",
+      },
+      {
+        quote:
+          "I worked alongside Dave on several large, complex web projects, and we quickly became aligned on the type and quality of work we both strived to deliver. David is one of the brightest minds out there doing UI. He is not one you put in a box; his talents are diverse, he is creative as well as analytical, and he has a curious mindset. He has the knack for identifying a design problem clearly and solving it quickly and effectively. His work is always on point. He is a great colleague and leader. I would be thrilled to work with him again.",
+        author: "Brian Carroll",
+        role: "User Experience Consultant",
+      },
+      {
+        quote:
+          "I had the pleasure of working with Dave at Propio on several exciting and challenging projects, including a complete overhaul of an existing enterprise application and the design of new, AI-driven initiatives. These projects were greenfield, requiring a lot of active prototyping, collaboration, and creative problem-solving—and Dave excelled in all of these areas. Dave quickly became a go-to resource for brainstorming and refining ideas. His ability to balance user needs with business goals made him an invaluable partner in the design process. One of the qualities I most admired was his steadfast advocacy for accessibility. For example, he championed the use of skip links to enhance the experience for screen reader users—a small but impactful addition that showed his commitment to inclusive design. If you're looking for a UX designer who is innovative, collaborative, and deeply user-focused, I recommend Dave. He's a true asset to any team.",
+        author: "Chris Baker",
+        role: "15+ Years of Software Dev Experience",
+      },
+      {
+        quote:
+          "It was a privilege to work alongside David at several companies, including Meridian. David consistently displayed exceptional dedication, a strong work ethic, and remarkable attention to detail. His talent for analyzing challenges and devising innovative solutions was very influential to our team. David's commitment to excellence and his adaptability in dynamic situations also stood out. His strong communication skills enabled seamless collaboration with cross-functional team, along with stakeholders and business leaders. David is a natural team player and brought a collaborative spirit and a positive attitude to every project. He actively participated in discussions, offered valuable insights, and went above and beyond to ensure success. His expertise in research, design and development played a pivotal role in helping our team communicate our vision effectively. I would absolutely recommend David Melkonian for any role requiring a motivated, detail-oriented professional. His passion for continuous learning and growth will undoubtedly make him a valuable asset to any organization.",
         author: "Matthew Petoskey",
         role: "Customer Experience (CX) Strategist & UX Leader",
       },
       {
         quote:
-          "I had the privilege of working alongside Dave at two different companies, where I had the opportunity to lead him on multiple projects. Dave possesses a unique ability to not only lead and mentor junior staff but also to collaborate effectively with peers on complex tasks. His passion for development is evident in his work, coupled with a remarkable attention to detail that ensures high-quality outcomes. He demonstrates a genuine interest in enhancing user experience, which makes him an exceptional asset to any team.",
-        author: "Chris Bellinger",
-        role: "Director at Delta Dental of Michigan",
+          "David is a consummate professional whose skills and experience extend beyond excellence in UX/UI development. He is an empathetic and insightful partner in software development who knows how to support the development team while driving the value-based initiatives of product management. I wholeheartedly recommend him to any organization in need of a talented UX pro who can deliver the goods!",
+        author: "T. S. Jensen",
+        role: "Writer",
       },
       {
         quote:
-          "Dave has a rare combination of artistic ability and technical competency that make him an amazing UX designer. I worked with Dave for about a year at Propio and during that time he revamped multiple old web and mobile applications with slick modern interfaces, pushing our user experience beyond what our competitors were doing. He's a wizard with Figma, CSS/HTML, various design paradigms, graphics and sound, and is always a pleasure to work with. He has a great eye for usability and accessibility, and has many times shocked me with a clever design for something I thought would be difficult. He heartily recommend Dave for any UX position.",
-        author: "Mike Slavik",
-        role: "Platform Engineer at Propio",
-      },
-      {
-        quote:
-          "Dave's expertise spans usability, accessibility, and Agile methodologies, making him a seamless and proactive contributor within cross-functional teams and an effective collaborator with leadership. His unique blend of design and technical skills allows him to create visually engaging, user-friendly experiences that meet and often exceed client expectations.",
-        author: "Brian Singer",
-        role: "CTO/CIO, Angels of Care Pediatric Home Health",
-      },
-      {
-        quote:
-          "Dave and I worked on several projects together during our time at Propio, and in every case Dave produced creative, high quality, and well thought out prototypes and solutions to the UI/UX problems at hand, regularly surprising and impressing the teams and users with whom he was working...",
-        author: "Jud Cole",
-        role: "Vice President and Executive Technology Professional",
-      },
-      {
-        quote:
-          "Dave is one of the best design and user experience professionals I have worked with. He takes a pragmatic and user focused approach to design, ensuring the linkage between an idea and the resulting experience are complementary and consistent. He is approachable and mature, while also being very creative. While at we were both at Dewpoint we worked on multiple shared client engagements, and I always looked forward to having Dave on the team.",
-        author: "Christopher Weiss",
-        role: "Chief Technology Officer at Powerley",
+          "I had the pleasure of working with Dave at Optum, and I can confidently say he is one of the most talented developer/delivery managers that I've encountered. Dave combines deep front-end expertise with an exceptional ability to lead and inspire his team, making him invaluable to any project. Dave has a remarkable eye for detail and a strong commitment to creating seamless, user-friendly applications. He not only ensures that code quality and best practices are upheld but also actively mentors his team, helping each member to grow and excel. His technical acumen, especially in front-end architecture, design patterns and scalable solutions, consistently elevates projects. I highly recommend Dave to any organization looking for a strong technical leader who delivers outstanding results.",
+        author: "Timothy Hellebuyck",
+        role: "Technology Executive | Director, Technology and Software Development",
       },
       {
         quote:
           "Dave and I teamed up on a 3D imaging software project, and he really brought his A-game. He pulled together an awesome plan with everything from user research and detailed workflows to testing plans, wireframes, and full graphic comps. He was extremely efficient, detail oriented, and made sure we had every design artifact ready for the dev team. Working with him was a pleasure, start to finish!",
         author: "Sam Sesti",
         role: "CEO at Cloudlab",
+      },
+      {
+        quote:
+          "Dave has a rare combination of artistic ability and technical competency that make him an amazing UX designer. I worked with Dave for about a year at Propio and during that time he revamped multiple old web and mobile applications with slick modern interfaces, pushing our user experience beyond what our competitors were doing. He's a wizard with Figma, CSS/HTML, various design paradigms, graphics and sound, and is always a pleasure to work with. He has a great eye for usability and accessibility, and has many times shocked me with a clever design for something I thought would be difficult. I heartily recommend Dave for any UX position.",
+        author: "Mike Slavik",
+        role: "Staff Software Engineer at Propio Language Services",
+      },
+      {
+        quote:
+          "I had the privilege of working alongside Dave at two different companies, where I had the opportunity to lead him on multiple projects. Dave possesses a unique ability to not only lead and mentor junior staff but also to collaborate effectively with peers on complex tasks. His passion for development is evident in his work, coupled with a remarkable attention to detail that ensures high-quality outcomes. He demonstrates a genuine interest in enhancing user experience, which makes him an exceptional asset to any team. I wholeheartedly recommend Dave for any opportunity that allows him to showcase his skills and dedication.",
+        author: "Chris Bellinger",
+        role: "Digital Transformation Leader",
+      },
+      {
+        quote:
+          "It is my pleasure to recommend Dave as an exceptional leader in software design, UX/UI, and front-end development. I've had the privilege of overseeing his work on high-impact projects for major clients such as Optum, HealthCare.gov, Delta Dental, and Propio Language Services, and I've consistently observed his ability to deliver substantial value with professionalism and enthusiasm. Dave's expertise spans usability, accessibility, and Agile methodologies, making him a seamless and proactive contributor within cross-functional teams and an effective collaborator with leadership. His unique blend of design and technical skills allows him to create visually engaging, user-friendly experiences that meet and often exceed client expectations. Beyond his technical acumen, Dave demonstrates strong leadership and mentoring abilities, fostering growth within his teams while driving projects toward excellence. In every project, Dave brings an invaluable combination of experience, adaptability, and a positive, solutions-oriented mindset. His contributions to our team and his dedication to quality make him an asset to any organization fortunate enough to work with him.",
+        author: "Brian Singer",
+        role: "Technology and Product Innovator | CTO | CIO",
       },
     ],
   },

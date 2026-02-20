@@ -7,6 +7,7 @@ const navOrder = [
   "work",
   "articles",
   // "career",
+  "testimonials",
   "contact",
 ];
 
@@ -16,6 +17,7 @@ const idToRoute: Record<string, string> = {
   work: "/portfolio/design",
   articles: "/portfolio/articles",
   // career: "/portfolio/career",
+  testimonials: "/portfolio/testimonials",
   contact: "/portfolio/contact",
 };
 
@@ -30,7 +32,7 @@ const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
                 <img
                   src="/img/melkonian-industries-logo.svg"
                   alt="Melkonian Industries"
-                  className="w-20 h-20 sm:w-28 sm:h-28 brightness-0 dark:invert"
+                  className="w-14 h-14 sm:w-20 sm:h-20 brightness-0 dark:invert"
                 />
                 <h1 className="tracking-tighter mb-0 title-font leading-none relative z-10 text-left">
                   {content.siteInfo.subtitle}

@@ -9,7 +9,7 @@ const LazyExternalLink = React.lazy(() =>
 );
 
 export default function LabPage() {
-  const [labViewMode, setLabViewMode] = useState<"list" | "grid">("grid");
+  const [labViewMode, setLabViewMode] = useState<"list" | "grid">("list");
 
   const projects = content.currentProjects.projects.filter(
     (project) =>
@@ -85,7 +85,7 @@ export default function LabPage() {
                       rel="noopener noreferrer"
                       className="group flex items-center gap-4 p-3 rounded-lg bg-white/20 backdrop-blur-lg transition-all cursor-pointer shadow-xl"
                     >
-                      <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 overflow-hidden rounded bg-transparent">
+                      <div className="relative w-32 h-32 sm:w-40 sm:h-40 flex-shrink-0 overflow-hidden rounded bg-transparent">
                         {project.image?.endsWith(".svg") ? (
                           <img
                             src={`${project.image}?v=${Date.now()}`}

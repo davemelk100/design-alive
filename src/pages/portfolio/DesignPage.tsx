@@ -16,7 +16,7 @@ const LazyDribbble = React.lazy(() =>
 );
 
 export default function DesignPage() {
-  const [designViewMode, setDesignViewMode] = useState<"list" | "grid">("grid");
+  const [designViewMode, setDesignViewMode] = useState<"list" | "grid">("list");
 
   const projects = content.work.projects.filter(
     (project: any) => project.title !== "3D Conversion UX Plan",

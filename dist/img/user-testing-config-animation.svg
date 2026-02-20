@@ -41,9 +41,6 @@
     <!-- Pencil metal band -->
     <line x1="103" y1="116" x2="104" y2="114" stroke="#b8a095" stroke-width="3.5" stroke-linecap="butt" opacity="0.6"/>
   </g>
-
-  <!-- Subtle glow behind icon -->
-  <circle cx="100" cy="100" r="22" fill="#a67c52" opacity="0.08" class="pulse-center"/>
   
   <!-- Orbit 1 Group with dashed connections (Brighter Brown Gray) -->
   <g class="orbit-1">

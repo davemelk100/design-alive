@@ -17,7 +17,7 @@ const ArticleModal = lazy(() => import("../../components/ArticleModal"));
 
 export default function ArticlesPage() {
   const navigate = useNavigate();
-  const [articlesViewMode, setArticlesViewMode] = useState<"list" | "grid">("grid");
+  const [articlesViewMode, setArticlesViewMode] = useState<"list" | "grid">("list");
   const [selectedArticle, setSelectedArticle] = useState<{
     title: string;
     content: string;

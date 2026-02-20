@@ -39,9 +39,6 @@
     <!-- Brain stem -->
     <path d="M97 119 L97 124 M103 119 L103 124 M97 124 Q100 127 103 124" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
   </g>
-
-  <!-- Subtle glow behind brain -->
-  <circle cx="100" cy="102" r="22" fill="#3b82f6" opacity="0.08" class="mlPulseCenter"/>
   
   <!-- Orbit 1 Group with dashed connections (Blue Light) -->
   <g class="mlOrbit1">

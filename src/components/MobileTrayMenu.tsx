@@ -24,6 +24,9 @@ const LazyBriefcase = lazy(() =>
 const LazyMail = lazy(() =>
   import("lucide-react").then((mod) => ({ default: mod.Mail }))
 );
+const LazyQuote = lazy(() =>
+  import("lucide-react").then((mod) => ({ default: mod.Quote }))
+);
 
 const idToRoute: Record<string, string> = {
   "current-projects": "/portfolio/lab",
@@ -31,6 +34,7 @@ const idToRoute: Record<string, string> = {
   work: "/portfolio/design",
   articles: "/portfolio/articles",
   // career: "/portfolio/career",
+  testimonials: "/portfolio/testimonials",
   contact: "/portfolio/contact",
 };
 
@@ -73,6 +77,12 @@ const MobileTrayMenu: React.FC = () => {
             <LazyBriefcase {...iconProps} />
           </Suspense>
         );
+      case "testimonials":
+        return (
+          <Suspense fallback={fallback}>
+            <LazyQuote {...iconProps} />
+          </Suspense>
+        );
       case "contact":
         return (
           <Suspense fallback={fallback}>
@@ -108,6 +118,7 @@ const MobileTrayMenu: React.FC = () => {
                 "work",
                 "articles",
                 // "career",
+                "testimonials",
                 "contact",
               ];
               const indexA = order.indexOf(a.id);
@@ -203,6 +214,13 @@ const MobileTrayMenu: React.FC = () => {
                 >
                   Storytelling
                 </Link> */}
+                <Link
+                  to="/portfolio/testimonials"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
+                >
+                  Testimonials
+                </Link>
                 <Link
                   to="/portfolio/contact"
                   onClick={() => setIsMobileMenuOpen(false)}
