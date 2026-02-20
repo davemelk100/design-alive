@@ -6,7 +6,7 @@ const navOrder = [
   // "stories",
   "work",
   "articles",
-  "career",
+  // "career",
   "contact",
 ];
 
@@ -15,7 +15,7 @@ const idToRoute: Record<string, string> = {
   stories: "/portfolio/stories",
   work: "/portfolio/design",
   articles: "/portfolio/articles",
-  career: "/portfolio/career",
+  // career: "/portfolio/career",
   contact: "/portfolio/contact",
 };
 
@@ -26,8 +26,13 @@ const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
         <div className="pt-4 rounded-lg">
           <div className="mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-4">
             <div className="flex-1">
-              <Link to="/portfolio" className="no-underline">
-                <h1 className="tracking-tighter mb-1 title-font leading-none relative z-10 text-left">
+              <Link to="/portfolio" className="no-underline flex items-center gap-3">
+                <img
+                  src="/img/melkonian-industries-logo.svg"
+                  alt="Melkonian Industries"
+                  className="w-20 h-20 sm:w-28 sm:h-28 brightness-0 dark:invert"
+                />
+                <h1 className="tracking-tighter mb-0 title-font leading-none relative z-10 text-left">
                   {content.siteInfo.subtitle}
                 </h1>
               </Link>
@@ -35,7 +40,7 @@ const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
 
             <div className="hidden lg:flex flex-wrap justify-end gap-2 sm:gap-3 mt-2 lg:mt-0">
               {content.navigation.links
-                .filter((link) => link.id !== "design-system")
+                .filter((link) => link.id !== "design-system" && link.id !== "career")
                 .sort((a, b) => {
                   const indexA = navOrder.indexOf(a.id);
                   const indexB = navOrder.indexOf(b.id);

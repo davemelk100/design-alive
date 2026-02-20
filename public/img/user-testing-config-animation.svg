@@ -20,12 +20,30 @@
     </filter>
   </defs>
   
-  <!-- Raised effect in center -->
-  <ellipse cx="100" cy="100" rx="25" ry="8" fill="#f8f9fa" opacity="0.6" class="breathing"/>
-  <ellipse cx="100" cy="100" rx="20" ry="6" fill="#e9ecef" opacity="0.4" class="breathing"/>
-  
-  <!-- Transparent brighter warm brown pulsing sphere in center -->
-  <circle cx="100" cy="100" r="12" fill="#a67c52" opacity="0.3" class="pulse-center"/>
+  <!-- Paper and pencil icon in center -->
+  <g class="utcCenterPulse" filter="url(#sphereShadow)">
+    <!-- Paper sheet -->
+    <rect x="86" y="82" width="24" height="32" rx="2" fill="#f8f9fa" stroke="#8b6b4f" stroke-width="1.8" opacity="0.9"/>
+    <!-- Dog-ear fold on paper -->
+    <path d="M104 82 L110 82 L110 88 Z" fill="#e9ecef" stroke="#8b6b4f" stroke-width="1" stroke-linejoin="round" opacity="0.8"/>
+    <path d="M104 82 L104 88 L110 88" fill="none" stroke="#8b6b4f" stroke-width="1" stroke-linejoin="round" opacity="0.6"/>
+    <!-- Lines on paper -->
+    <line x1="90" y1="92" x2="104" y2="92" stroke="#a67c52" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+    <line x1="90" y1="97" x2="106" y2="97" stroke="#a67c52" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+    <line x1="90" y1="102" x2="102" y2="102" stroke="#a67c52" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+    <line x1="90" y1="107" x2="105" y2="107" stroke="#a67c52" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+    <!-- Pencil (angled, resting on paper) -->
+    <line x1="103" y1="116" x2="118" y2="88" stroke="#a67c52" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <!-- Pencil tip -->
+    <line x1="118" y1="88" x2="120" y2="84" stroke="#7a5a45" stroke-width="1.5" stroke-linecap="round" opacity="0.8"/>
+    <!-- Pencil eraser -->
+    <line x1="103" y1="116" x2="101" y2="119" stroke="#d4c0ba" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+    <!-- Pencil metal band -->
+    <line x1="103" y1="116" x2="104" y2="114" stroke="#b8a095" stroke-width="3.5" stroke-linecap="butt" opacity="0.6"/>
+  </g>
+
+  <!-- Subtle glow behind icon -->
+  <circle cx="100" cy="100" r="22" fill="#a67c52" opacity="0.08" class="pulse-center"/>
   
   <!-- Orbit 1 Group with dashed connections (Brighter Brown Gray) -->
   <g class="orbit-1">
@@ -71,8 +89,9 @@
       animation: curveFromTop 24s ease-in-out infinite;
       animation-delay: -12s;
     }
-    .breathing {
-      animation: breathing 12s ease-in-out infinite;
+    .utcCenterPulse {
+      transform-origin: 100px 100px;
+      animation: utcCenterPulse 8s ease-in-out infinite;
     }
     .pulse-center {
       animation: pulseCenter 18s ease-in-out infinite;
@@ -179,9 +198,9 @@
       75% { transform: translate(-60px, 0px); }
     }
     
-    @keyframes breathing {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 0.8; }
+    @keyframes utcCenterPulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.06); opacity: 1; }
     }
     
     @keyframes pulseCenter {

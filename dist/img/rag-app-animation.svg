@@ -20,12 +20,34 @@
     </filter>
   </defs>
   
-  <!-- Raised effect in center -->
-  <ellipse cx="100" cy="100" rx="25" ry="8" fill="#f8f9fa" opacity="0.6" class="ragBreathing"/>
-  <ellipse cx="100" cy="100" rx="20" ry="6" fill="#e9ecef" opacity="0.4" class="ragBreathing"/>
-  
-  <!-- Transparent cyan pulsing sphere in center -->
-  <circle cx="100" cy="100" r="12" fill="#06b6d4" opacity="0.3" class="ragPulseCenter"/>
+  <!-- Robot icon in center -->
+  <g class="ragCenterPulse" filter="url(#ragSphereShadow)">
+    <!-- Robot head -->
+    <rect x="86" y="90" width="28" height="22" rx="4" fill="none" stroke="#0891b2" stroke-width="2" opacity="0.85"/>
+    <!-- Robot eyes -->
+    <circle cx="94" cy="99" r="3" fill="#06b6d4" opacity="0.8"/>
+    <circle cx="106" cy="99" r="3" fill="#06b6d4" opacity="0.8"/>
+    <!-- Robot eye shine -->
+    <circle cx="93" cy="98" r="1" fill="#67e8f9" opacity="0.9"/>
+    <circle cx="105" cy="98" r="1" fill="#67e8f9" opacity="0.9"/>
+    <!-- Robot mouth -->
+    <line x1="94" y1="106" x2="106" y2="106" stroke="#0891b2" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+    <!-- Robot antenna -->
+    <line x1="100" y1="90" x2="100" y2="83" stroke="#0891b2" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+    <circle cx="100" cy="81" r="2.5" fill="#22d3ee" opacity="0.8"/>
+    <!-- Robot ears -->
+    <rect x="80" y="95" width="5" height="8" rx="2" fill="none" stroke="#0891b2" stroke-width="1.5" opacity="0.6"/>
+    <rect x="115" y="95" width="5" height="8" rx="2" fill="none" stroke="#0891b2" stroke-width="1.5" opacity="0.6"/>
+    <!-- Robot body -->
+    <rect x="90" y="113" width="20" height="12" rx="3" fill="none" stroke="#0891b2" stroke-width="1.5" opacity="0.6"/>
+    <!-- Robot body detail -->
+    <line x1="97" y1="116" x2="97" y2="122" stroke="#06b6d4" stroke-width="1" opacity="0.5"/>
+    <line x1="100" y1="116" x2="100" y2="122" stroke="#06b6d4" stroke-width="1" opacity="0.5"/>
+    <line x1="103" y1="116" x2="103" y2="122" stroke="#06b6d4" stroke-width="1" opacity="0.5"/>
+  </g>
+
+  <!-- Subtle glow behind robot -->
+  <circle cx="100" cy="100" r="22" fill="#06b6d4" opacity="0.08" class="ragPulseCenter"/>
   
   <!-- Orbit 1 Group with dashed connections (Cyan Light) -->
   <g class="ragOrbit1">
@@ -67,8 +89,9 @@
   </g>
   
   <style>
-    .ragBreathing {
-      animation: ragBreathing 12s ease-in-out infinite;
+    .ragCenterPulse {
+      transform-origin: 100px 100px;
+      animation: ragCenterPulse 8s ease-in-out infinite;
     }
     .ragPulseCenter {
       animation: ragPulseCenter 18s ease-in-out infinite;
@@ -152,9 +175,9 @@
       75% { transform: translate(-60px, 0px); }
     }
     
-    @keyframes ragBreathing {
-      0%, 100% { opacity: 0.4; }
-      50% { opacity: 0.8; }
+    @keyframes ragCenterPulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.06); opacity: 1; }
     }
     
     @keyframes ragPulseCenter {
