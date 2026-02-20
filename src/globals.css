@@ -29,7 +29,7 @@
   100% { transform: translateX(-50%); }
 }
 .animate-scroll-banner {
-  animation: scroll-banner 80s linear infinite;
+  animation: scroll-banner 160s linear infinite;
 }
 
 .portfolio-page h1 {
