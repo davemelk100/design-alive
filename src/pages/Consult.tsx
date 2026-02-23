@@ -234,7 +234,7 @@ export default function Consult() {
                     <img
                       src="/img/melkonian-industries-logo.svg"
                       alt="Melkonian Industries"
-                      className="w-16 sm:w-20 lg:w-28 h-16 sm:h-20 lg:h-28 invert dark:invert-0"
+                      className="w-16 sm:w-20 lg:w-28 h-16 sm:h-20 lg:h-28 brightness-0 dark:invert"
                     />
                     <h1 className="tracking-tighter title-font leading-none text-left text-gray-900 dark:text-white uppercase font-black">
                       Melkonian Industries

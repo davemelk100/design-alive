@@ -3,42 +3,13 @@
     {
       "name": "Brand Blue",
       "value": "#1d77af",
-      "description": "Primary brand color, used on homepage"
+      "cssVar": "--brand",
+      "description": "Homepage background, nav, contact form accents"
     },
     {
-      "name": "Primary",
-      "value": "#3b82f6",
-      "description": "Primary action color (--primary)"
-    },
-    {
-      "name": "Primary Light",
-      "value": "#6da9fd",
-      "description": "Lighter primary, used in legacy config"
-    },
-    {
-      "name": "Destructive",
-      "value": "#ef4444",
-      "description": "Error and destructive actions (--destructive)"
-    },
-    {
-      "name": "Secondary Red",
-      "value": "#C03221",
-      "description": "Secondary red accent"
-    },
-    {
-      "name": "Accent Yellow",
-      "value": "#F9C22E",
-      "description": "Accent highlight color"
-    },
-    {
-      "name": "Success",
-      "value": "#4CAF50",
-      "description": "Success state color"
-    },
-    {
-      "name": "Neutral",
-      "value": "#828E82",
-      "description": "Neutral gray-green"
+      "name": "Background",
+      "value": "#ffffff",
+      "description": "Page background (--background)"
     },
     {
       "name": "Foreground",
@@ -46,9 +17,39 @@
       "description": "Default text color (--foreground)"
     },
     {
-      "name": "Muted",
+      "name": "Primary",
+      "value": "#2563eb",
+      "description": "Actions, links, focus rings (--primary)"
+    },
+    {
+      "name": "Primary FG",
+      "value": "#f8fafc",
+      "description": "Text on primary surfaces (--primary-foreground)"
+    },
+    {
+      "name": "Secondary",
       "value": "#f1f5f9",
-      "description": "Muted background and surfaces (--muted)"
+      "description": "Subtle surfaces (--secondary, --muted, --accent)"
+    },
+    {
+      "name": "Secondary FG",
+      "value": "#0f172a",
+      "description": "Text on secondary surfaces (--secondary-foreground)"
+    },
+    {
+      "name": "Muted FG",
+      "value": "#5e6d82",
+      "description": "Subdued text, labels, captions (--muted-foreground)"
+    },
+    {
+      "name": "Destructive",
+      "value": "#e11313",
+      "description": "Error and destructive actions (--destructive)"
+    },
+    {
+      "name": "Border",
+      "value": "#e2e8f0",
+      "description": "Borders, dividers, inputs (--border)"
     }
   ],
 

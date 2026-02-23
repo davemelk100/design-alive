@@ -71,7 +71,7 @@ export default function StoriesPage() {
                       )}
                     </div>
                     <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                      <h3 className="font-semibold text-gray-900 dark:text-white group-hover:font-bold transition-all">
+                      <h3 className="font-semibold text-brand-dynamic dark:text-white group-hover:font-bold transition-all">
                         {story.title}
                       </h3>
                       {story.subtitle && (
@@ -117,7 +117,7 @@ export default function StoriesPage() {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 dark:text-white group-hover:font-bold transition-all truncate">
+                      <h3 className="font-semibold text-brand-dynamic dark:text-white group-hover:font-bold transition-all truncate">
                         {story.title}
                       </h3>
                       {story.subtitle && (
@@ -129,7 +129,7 @@ export default function StoriesPage() {
                     {story.hasModal && (
                       <IconWrapper
                         Icon={LazyExternalLink}
-                        className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors flex-shrink-0"
+                        className="h-4 w-4 text-brand-dynamic dark:text-gray-400 group-hover:text-brand-dynamic/80 transition-colors flex-shrink-0"
                       />
                     )}
                   </div>

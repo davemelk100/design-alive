@@ -22,7 +22,7 @@ export default function ShareWidget({ url }: ShareWidgetProps) {
   return (
     <button
       onClick={handleCopy}
-      className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+      className="inline-flex items-center gap-2 text-brand-dynamic hover:text-brand-dynamic/80 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
       aria-label="Copy link"
     >
       <Suspense fallback={<span className="h-5 w-5">🔗</span>}>

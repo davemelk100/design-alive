@@ -58,7 +58,7 @@ export default function ContactPage() {
                 type="text"
                 name="user_name"
                 required
-                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1d77af]"
+                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-dynamic"
               />
             </div>
             <div>
@@ -73,7 +73,7 @@ export default function ContactPage() {
                 type="email"
                 name="user_email"
                 required
-                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1d77af]"
+                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-dynamic"
               />
             </div>
             <div>
@@ -88,13 +88,13 @@ export default function ContactPage() {
                 name="message"
                 required
                 rows={5}
-                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1d77af] resize-vertical"
+                className="w-full px-4 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-dynamic resize-vertical"
               />
             </div>
             <button
               type="submit"
               disabled={contactStatus === "sending"}
-              className="px-6 py-3 rounded-md bg-[#1d77af] text-white font-medium hover:bg-[#155d8a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3 rounded-md bg-brand-dynamic text-white font-medium hover:brightness-[0.85] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {contactStatus === "sending"
                 ? "Sending..."

@@ -36,7 +36,7 @@ export const techCategories: TechCategory[] = [
           title: "Interactive Components",
           description: "Component state management and hooks",
           link: "/",
-          code: "useState, useEffect, useRef hooks for interactive controls",
+          code: "useState, useEffect, useCallback hooks for interactive controls",
         },
       },
       {
@@ -60,13 +60,13 @@ export const techCategories: TechCategory[] = [
         },
       },
       {
-        name: "React Router DOM",
-        description: "Client-side routing",
+        name: "React Router DOM v7",
+        description: "Client-side routing with lazy loading",
         example: {
           title: "SPA Navigation",
           description: "Smooth page transitions without reloads",
           link: "/archive",
-          code: "Link, useNavigate for seamless routing",
+          code: "Link, useNavigate, useLocation for seamless routing",
         },
       },
     ],
@@ -77,7 +77,7 @@ export const techCategories: TechCategory[] = [
     items: [
       {
         name: "Tailwind CSS",
-        description: "Utility-first CSS framework",
+        description: "Utility-first CSS framework with custom theme",
         example: {
           title: "Responsive Design",
           description: "Mobile-first responsive layouts throughout",
@@ -96,20 +96,20 @@ export const techCategories: TechCategory[] = [
         },
       },
       {
-        name: "Radix UI",
-        description: "Headless UI components",
+        name: "shadcn/ui + Radix UI",
+        description: "Accessible component library built on Radix primitives",
         example: {
           title: "Accessible Components",
-          description: "Custom components built on Radix primitives",
+          description: "Dialog, Toast, Accordion, Tabs, and more",
           link: "/",
-          code: "Dialog, DropdownMenu, Tooltip components",
+          code: "class-variance-authority + Radix primitives",
         },
       },
       {
         name: "Lucide React",
-        description: "Beautiful icon library",
+        description: "Consistent icon library",
         example: {
-          title: "Consistent Icons",
+          title: "Scalable Icons",
           description: "Scalable vector icons throughout the site",
           link: "/",
           code: "ArrowLeft, Copy, Check, Music icons",
@@ -122,63 +122,99 @@ export const techCategories: TechCategory[] = [
     icon: "Database",
     items: [
       {
-        name: "FastAPI",
-        description: "Modern Python web framework for backend API",
+        name: "Netlify Functions",
+        description: "Serverless API endpoints for auth, checkout, and config",
         example: {
-          title: "RESTful API",
-          description: "Content management API with CRUD operations",
-          link: "/specs",
-          code: "FastAPI with SQLAlchemy ORM for database operations",
+          title: "Serverless API",
+          description: "Auth, Stripe checkout, and site config endpoints",
+          link: "/",
+          code: "netlify/functions/ with TypeScript handlers",
         },
       },
       {
-        name: "SQLAlchemy",
-        description: "Python ORM for database operations",
-        example: {
-          title: "Database Models",
-          description: "Type-safe database models and relationships",
-          link: "/specs",
-          code: "SQLAlchemy models for content management",
-        },
-      },
-      {
-        name: "Drizzle ORM",
-        description: "TypeScript ORM for frontend database operations",
+        name: "Drizzle ORM + Drizzle Kit",
+        description: "TypeScript ORM with schema migrations",
         example: {
           title: "Type-Safe Database",
-          description: "Database schema with TypeScript types",
+          description: "Database schema with TypeScript types and migration tooling",
           link: "/specs",
-          code: "schema.ts with Drizzle table definitions",
+          code: "drizzle-kit generate, migrate, push for schema management",
         },
       },
       {
         name: "PostgreSQL / Neon",
-        description: "Primary database via Neon cloud",
+        description: "Serverless PostgreSQL via Neon cloud",
         example: {
           title: "Cloud Database",
-          description: "Serverless PostgreSQL for data persistence",
+          description: "Serverless PostgreSQL with connection pooling",
           link: "/",
-          code: "Neon connection with connection pooling",
+          code: "@neondatabase/serverless for edge-compatible connections",
+        },
+      },
+      {
+        name: "FastAPI (Python)",
+        description: "Backend API with SQLAlchemy ORM and Alembic migrations",
+        example: {
+          title: "RESTful API",
+          description: "Content management and admin API with JWT auth",
+          link: "/specs",
+          code: "FastAPI + SQLAlchemy + python-jose for backend operations",
         },
       },
       {
         name: "JWT Authentication",
-        description: "Token-based authentication system",
+        description: "Token-based auth with bcrypt password hashing",
         example: {
           title: "Secure Authentication",
-          description: "JWT tokens for admin panel access",
+          description: "JWT tokens for store and admin access",
           link: "/specs",
-          code: "python-jose for JWT token generation and validation",
+          code: "jsonwebtoken + bcryptjs for auth flow",
+        },
+      },
+    ],
+  },
+  {
+    title: "Payments & Services",
+    icon: "Zap",
+    items: [
+      {
+        name: "Stripe",
+        description: "Payment processing for the store",
+        example: {
+          title: "Checkout Integration",
+          description: "Stripe Buy Button and serverless checkout sessions",
+          link: "/store",
+          code: "@stripe/stripe-js + Netlify function for session creation",
         },
       },
       {
-        name: "Netlify Functions",
-        description: "Serverless functions for API",
+        name: "EmailJS",
+        description: "Client-side email delivery for contact forms",
         example: {
-          title: "Serverless API",
-          description: "Site configuration and authentication functions",
-          link: "/",
-          code: "netlify/functions/ for API endpoints",
+          title: "Contact Forms",
+          description: "Email delivery from Contact and Consulting pages",
+          link: "/portfolio/contact",
+          code: "@emailjs/browser for form submissions without a mail server",
+        },
+      },
+      {
+        name: "Zod",
+        description: "Runtime schema validation",
+        example: {
+          title: "Form Validation",
+          description: "Type-safe validation with React Hook Form integration",
+          link: "/store",
+          code: "@hookform/resolvers + zod for validated forms",
+        },
+      },
+      {
+        name: "React Hook Form",
+        description: "Performant form state management",
+        example: {
+          title: "Efficient Forms",
+          description: "Minimal re-renders with schema-driven validation",
+          link: "/portfolio/contact",
+          code: "useForm with zodResolver for type-safe forms",
         },
       },
     ],
@@ -189,52 +225,42 @@ export const techCategories: TechCategory[] = [
     items: [
       {
         name: "Netlify",
-        description: "Static site hosting and deployment",
+        description: "Static hosting, serverless functions, and CI/CD",
         example: {
           title: "Automated Deployment",
-          description: "Git-based continuous deployment",
+          description: "Git-based continuous deployment with build pipeline",
           link: "/",
-          code: "netlify.toml for build configuration",
-        },
-      },
-      {
-        name: "Backend Hosting",
-        description: "FastAPI backend on Railway/Render/Fly.io",
-        example: {
-          title: "Cloud Backend",
-          description: "Deployed Python backend with PostgreSQL",
-          link: "/specs",
-          code: "Railway, Render, or Fly.io for backend hosting",
-        },
-      },
-      {
-        name: "Service Worker",
-        description: "Offline functionality and caching",
-        example: {
-          title: "Offline Support",
-          description: "Cached resources for offline browsing",
-          link: "/",
-          code: "sw.js for service worker implementation",
+          code: "netlify.toml for build config and SPA redirects",
         },
       },
       {
         name: "CDN",
-        description: "Global content delivery",
+        description: "Global content delivery via Netlify Edge",
         example: {
           title: "Fast Global Delivery",
-          description: "Edge-cached static assets",
+          description: "Edge-cached static assets worldwide",
           link: "/",
-          code: "Netlify CDN for optimal performance",
+          code: "Automatic CDN distribution for all static files",
+        },
+      },
+      {
+        name: "Service Worker",
+        description: "Offline functionality and asset caching",
+        example: {
+          title: "Offline Support",
+          description: "Cached resources for offline browsing",
+          link: "/",
+          code: "sw.js with cache-first strategy",
         },
       },
       {
         name: "SSL/TLS",
-        description: "Secure HTTPS connections",
+        description: "Automatic HTTPS with Let's Encrypt",
         example: {
           title: "Secure Connections",
-          description: "Automatic HTTPS with Let's Encrypt",
+          description: "Automatic SSL certificate provisioning",
           link: "/",
-          code: "Automatic SSL certificate management",
+          code: "Managed SSL via Netlify",
         },
       },
     ],
@@ -245,7 +271,7 @@ export const techCategories: TechCategory[] = [
     items: [
       {
         name: "Mobile-First Design",
-        description: "Responsive design approach",
+        description: "Responsive layouts starting from mobile",
         example: {
           title: "Responsive Grid",
           description: "Adaptive layouts for all screen sizes",
@@ -255,7 +281,7 @@ export const techCategories: TechCategory[] = [
       },
       {
         name: "Touch Interactions",
-        description: "Mobile-optimized interactions",
+        description: "Mobile-optimized touch targets and gestures",
         example: {
           title: "Touch-Friendly UI",
           description: "44px minimum touch targets",
@@ -265,12 +291,12 @@ export const techCategories: TechCategory[] = [
       },
       {
         name: "Progressive Web App",
-        description: "App-like experience",
+        description: "Installable app with offline support",
         example: {
           title: "PWA Features",
-          description: "Installable app with offline support",
+          description: "Standalone display with app manifest",
           link: "/",
-          code: "manifest.json and service worker",
+          code: "manifest.json + service worker registration",
         },
       },
       {
@@ -287,38 +313,38 @@ export const techCategories: TechCategory[] = [
   },
   {
     title: "Performance & Optimization",
-    icon: "Zap",
+    icon: "Settings",
     items: [
       {
         name: "Code Splitting",
         description:
-          "Comprehensive lazy loading strategy with React.lazy and Suspense",
+          "Lazy loading with React.lazy and Suspense for all routes",
         example: {
           title: "Route & Component Splitting",
           description:
-            "All pages, components, and icons loaded on demand for optimal performance",
+            "All pages and heavy components loaded on demand",
           link: "/json",
-          code: "React.lazy(() => import('./JsonAiPrompts')) with Suspense boundaries",
+          code: "React.lazy(() => import('./JsonAiPrompts')) with Suspense",
         },
       },
       {
         name: "Image Optimization",
-        description: "WebP format with fallbacks",
+        description: "SVG animations and optimized assets",
         example: {
           title: "Optimized Assets",
-          description: "SVG animations and optimized images",
+          description: "SVG graphics and lazy-loaded images",
           link: "/",
           code: "SVG animations for lightweight graphics",
         },
       },
       {
         name: "Bundle Optimization",
-        description: "Tree shaking and minification",
+        description: "Tree shaking, minification with Terser, manual chunks",
         example: {
           title: "Optimized Bundles",
           description: "Separate vendor and utility chunks",
           link: "/specs",
-          code: "manualChunks configuration in Vite",
+          code: "manualChunks + Terser minification in Vite config",
         },
       },
       {
@@ -334,93 +360,47 @@ export const techCategories: TechCategory[] = [
     ],
   },
   {
-    title: "Development Tools",
-    icon: "Settings",
+    title: "Testing & Dev Tools",
+    icon: "Shield",
     items: [
       {
-        name: "ESLint",
-        description: "Code linting and quality",
+        name: "Vitest",
+        description: "Fast unit testing framework with jsdom",
         example: {
-          title: "Code Quality",
-          description: "Consistent code style and error prevention",
+          title: "Unit Tests",
+          description: "Component and utility testing with Testing Library",
           link: "/specs",
-          code: ".eslintrc configuration for React/TypeScript",
+          code: "vitest + @testing-library/react + @testing-library/user-event",
         },
       },
       {
-        name: "Prettier",
-        description: "Code formatting",
-        example: {
-          title: "Auto-Formatting",
-          description: "Consistent code formatting across the project",
-          link: "/specs",
-          code: ".prettierrc for consistent styling",
-        },
-      },
-      {
-        name: "TypeScript",
-        description: "Static type checking",
+        name: "TypeScript Strict Mode",
+        description: "Compile-time type checking and error prevention",
         example: {
           title: "Type Safety",
-          description: "Compile-time error detection",
+          description: "Strict tsconfig for maximum type coverage",
           link: "/specs",
-          code: "tsconfig.json for strict type checking",
+          code: "tsconfig.json with strict type checking enabled",
         },
       },
       {
         name: "Vite Dev Server",
-        description: "Fast development with HMR",
+        description: "Fast development with instant HMR",
         example: {
           title: "Fast Development",
           description: "Instant hot module replacement",
           link: "/specs",
-          code: "Vite HMR for instant updates",
-        },
-      },
-    ],
-  },
-  {
-    title: "Security & Accessibility",
-    icon: "Shield",
-    items: [
-      {
-        name: "WCAG 2.1 AA",
-        description: "Accessibility compliance",
-        example: {
-          title: "Accessible Design",
-          description: "High contrast ratios and readable fonts",
-          link: "/",
-          code: "color: rgb(17 24 39 / var(--tw-text-opacity))",
+          code: "Vite HMR for sub-second updates",
         },
       },
       {
-        name: "ARIA Labels",
-        description: "Screen reader support",
+        name: "Drizzle Studio",
+        description: "Visual database browser for development",
         example: {
-          title: "Screen Reader Support",
-          description: "Descriptive labels for all interactive elements",
-          link: "/",
-          code: "aria-label and role attributes",
-        },
-      },
-      {
-        name: "Keyboard Navigation",
-        description: "Full keyboard accessibility",
-        example: {
-          title: "Keyboard Accessible",
-          description: "Tab navigation and keyboard shortcuts",
-          link: "/",
-          code: "onKeyDown handlers for keyboard events",
-        },
-      },
-      {
-        name: "Security Headers",
-        description: "Content Security Policy",
-        example: {
-          title: "Secure Headers",
-          description: "CSP and security headers for protection",
-          link: "/",
-          code: "_headers file with security policies",
+          title: "DB Explorer",
+          description: "Browse and edit data during development",
+          link: "/specs",
+          code: "drizzle-kit studio for local database inspection",
         },
       },
     ],
@@ -440,18 +420,18 @@ export const techCategories: TechCategory[] = [
         },
       },
       {
-        name: "JSON AI Prompts",
-        description: "Structured prompt builder for AI interactions",
+        name: "Markdown Rendering",
+        description: "Rich content rendering from markdown sources",
         example: {
-          title: "AI Prompt Tool",
-          description: "JSON-based prompt structure for better AI results",
-          link: "/json",
-          code: "Structured JSON format for AI prompt engineering",
+          title: "Article Content",
+          description: "Articles rendered from markdown with react-markdown",
+          link: "/article/test",
+          code: "react-markdown for rich article content",
         },
       },
       {
         name: "Audio Transcript",
-        description: "Audio transcription and playback interface",
+        description: "Audio transcription and synchronized playback",
         example: {
           title: "Transcript Viewer",
           description: "Synchronized audio and transcript display",
@@ -460,23 +440,23 @@ export const techCategories: TechCategory[] = [
         },
       },
       {
-        name: "Video Content",
-        description: "Optimized video delivery",
+        name: "Design System",
+        description: "Live editable theme with CSS custom properties",
         example: {
-          title: "Lazy Video Loading",
-          description: "Optimized video components with lazy loading",
-          link: "/",
-          code: "LazyVideo component with intersection observer",
+          title: "Theme Editor",
+          description: "Real-time color editing with site-wide preview",
+          link: "/portfolio/design-system",
+          code: "CSS custom properties with localStorage persistence",
         },
       },
       {
         name: "SVG Animations",
-        description: "Lightweight vector animations",
+        description: "Lightweight vector animations with Framer Motion",
         example: {
           title: "Smooth Animations",
-          description: "Custom SVG animations with Framer Motion",
+          description: "Custom SVG animations and transitions",
           link: "/",
-          code: "SVG path animations and transitions",
+          code: "SVG path animations with motion components",
         },
       },
     ],
@@ -510,17 +490,16 @@ export const keyFeatures: string[] = [
   "Responsive Design (Mobile-First)",
   "Smooth Animations & Transitions",
   "Code Splitting & Lazy Loading",
-  "News Aggregator with RSS Feeds",
+  "E-Commerce Store with Stripe Payments",
   "Music Player with Playlist",
   "JSON AI Prompts Builder",
   "Audio Transcript Viewer",
-  "FastAPI Backend with Admin Panel",
-  "JWT Authentication",
+  "Live Theme Editor with Site-Wide Preview",
+  "JWT Authentication & Protected Routes",
+  "Contact Forms with EmailJS",
   "Interactive SVG Animations",
-  "Article Modal System",
-  "Grid/List View Toggle",
+  "Markdown Article Rendering",
   "Service Worker (Offline Support)",
-  "SEO Optimized",
   "Accessibility Compliant",
   "Performance Optimized",
 ];

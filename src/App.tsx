@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { ThemeProvider } from "./context/ThemeContext";
 import { applyStoredThemeColors } from "./pages/portfolio/DesignSystemPage";
+import ThemePreviewBar from "./components/ThemePreviewBar";
 import { CartProvider, StoreProvider, AuthProvider } from "./store";
 import { ProtectedRoute } from "./store/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/toaster";
@@ -261,6 +262,7 @@ function App() {
             </button>
           )}
       </div>
+      <ThemePreviewBar />
       <Toaster />
     </div>
   );

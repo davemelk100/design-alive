@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { content } from "../content";
+import MelkonianLogo from "./MelkonianLogo";
 
 const navOrder = [
   "current-projects",
@@ -23,6 +24,9 @@ const idToRoute: Record<string, string> = {
   "design-system": "/portfolio/design-system",
 };
 
+const activeClass = "text-brand-dynamic dark:text-white px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800";
+const inactiveClass = "text-gray-600 dark:text-gray-300 hover:text-brand-dynamic dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800";
+
 const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
   <section className="py-4 sm:py-4xl:py-4 relative">
     <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
@@ -31,12 +35,10 @@ const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
           <div className="mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-4">
             <div className="flex-1">
               <Link to="/portfolio" className="no-underline flex items-center gap-3">
-                <img
-                  src="/img/melkonian-industries-logo.svg"
-                  alt="Melkonian Industries"
-                  className="w-14 h-14 sm:w-20 sm:h-20 brightness-0 dark:invert"
+                <MelkonianLogo
+                  className="w-14 h-14 sm:w-20 sm:h-20 text-brand-dynamic dark:text-white"
                 />
-                <h1 className="tracking-tighter mb-0 title-font leading-none relative z-10 text-left">
+                <h1 className="tracking-tighter mb-0 title-font leading-none relative z-10 text-left text-brand-dynamic dark:text-white">
                   {content.siteInfo.subtitle}
                 </h1>
               </Link>
@@ -60,11 +62,8 @@ const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
                     <Link
                       key={link.id}
                       to={route}
-                      className={
-                        isActive
-                          ? "text-gray-900 dark:text-white px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800 font-medium"
-                          : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-                      }
+                      className={isActive ? activeClass : inactiveClass}
+                      style={isActive ? { fontWeight: 700 } : undefined}
                     >
                       {link.text}
                     </Link>
@@ -72,22 +71,16 @@ const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
                 })}
               <Link
                 to="/case-studies"
-                className={
-                  currentPage === "case-studies"
-                    ? "text-gray-900 dark:text-white px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800 font-medium"
-                    : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-                }
+                className={currentPage === "case-studies" ? activeClass : inactiveClass}
+                style={currentPage === "case-studies" ? { fontWeight: 700 } : undefined}
               >
                 Case Studies
               </Link>
               <div className="ml-auto" />
               <Link
                 to="/portfolio/contact"
-                className={
-                  currentPage === "contact"
-                    ? "text-gray-900 dark:text-white px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800 font-medium"
-                    : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-                }
+                className={currentPage === "contact" ? activeClass : inactiveClass}
+                style={currentPage === "contact" ? { fontWeight: 700 } : undefined}
               >
                 Contact
               </Link>

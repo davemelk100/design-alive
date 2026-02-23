@@ -686,7 +686,7 @@ export const content = {
         description: "Baseball analytics platform with AI-powered stats and insights.",
         technologies: ["React", "TypeScript", "Python", "AI"],
         demo: "https://majorleaguenumbers.com/",
-        image: "/img/major-league-numbers-animation.svg",
+        image: "/img/mln-logo.svg",
       },
       {
         title: "User Testing Config",

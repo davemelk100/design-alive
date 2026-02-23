@@ -43,7 +43,7 @@ const MobileTrayMenu: React.FC = () => {
   const location = useLocation();
 
   const getNavIcon = (id: string) => {
-    const iconProps = { className: "w-6 h-6" };
+    const iconProps = { className: "w-6 h-6 text-brand-dynamic dark:text-gray-300" };
     const fallback = <span className="w-6 h-6">·</span>;
 
     switch (id) {
@@ -136,7 +136,7 @@ const MobileTrayMenu: React.FC = () => {
                   to={route}
                   className={`flex flex-col items-center gap-1 px-2 py-2 transition-colors ${
                     isActive
-                      ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+                      ? "text-brand-dynamic dark:text-white bg-brand-dynamic/10 dark:bg-gray-800 rounded-lg"
                       : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
                   }`}
                   aria-label={`Navigate to ${link.text}`}
@@ -150,12 +150,12 @@ const MobileTrayMenu: React.FC = () => {
             to="/case-studies"
             className={`flex flex-col items-center gap-1 px-2 py-2 transition-colors ${
               location.pathname === "/case-studies"
-                ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg"
+                ? "text-brand-dynamic dark:text-white bg-brand-dynamic/10 dark:bg-gray-800 rounded-lg"
                 : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
             }`}
             aria-label="Navigate to Case Studies"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <svg className="w-6 h-6 text-brand-dynamic dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
               <rect x="9" y="3" width="6" height="4" rx="1" />
             </svg>
@@ -178,7 +178,7 @@ const MobileTrayMenu: React.FC = () => {
                 aria-label="Close mobile navigation menu"
               >
                 <Suspense fallback={<span className="h-5 w-5">×</span>}>
-                  <LazyX className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                  <LazyX className="h-5 w-5 text-brand-dynamic dark:text-gray-400" />
                 </Suspense>
               </button>
             </div>

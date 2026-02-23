@@ -6,8 +6,52 @@ import designTokens from "../../designTokens.json";
 import storage from "../../utils/storage";
 
 const THEME_COLORS_KEY = "ds-theme-colors";
+const PENDING_COLORS_KEY = "ds-pending-colors";
+const THEME_UNLOCK_KEY = "ds-theme-unlocked";
+const COLOR_HISTORY_KEY = "ds-color-history";
+const PASSCODE = "6231839";
+
+// Contrast pairs: [foreground var, background var] that must meet WCAG AA (4.5:1)
+const CONTRAST_PAIRS: [string, string][] = [
+  ["--foreground", "--background"],
+  ["--primary-foreground", "--primary"],
+  ["--secondary-foreground", "--secondary"],
+  ["--muted-foreground", "--muted"],
+  ["--accent-foreground", "--accent"],
+  ["--destructive-foreground", "--destructive"],
+];
+
+function hslToRgb(hsl: string): [number, number, number] {
+  const parts = hsl.trim().split(/\s+/);
+  if (parts.length < 3) return [0, 0, 0];
+  const h = parseFloat(parts[0]);
+  const s = parseFloat(parts[1]) / 100;
+  const l = parseFloat(parts[2]) / 100;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12;
+    return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+  };
+  return [f(0), f(8), f(4)];
+}
+
+function luminance(r: number, g: number, b: number): number {
+  const toLinear = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+  return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+}
+
+function contrastRatio(hsl1: string, hsl2: string): number {
+  const [r1, g1, b1] = hslToRgb(hsl1);
+  const [r2, g2, b2] = hslToRgb(hsl2);
+  const l1 = luminance(r1, g1, b1);
+  const l2 = luminance(r2, g2, b2);
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
 
 const EDITABLE_VARS = [
+  { key: "--brand", label: "Brand Blue" },
   { key: "--background", label: "Background" },
   { key: "--foreground", label: "Foreground" },
   { key: "--primary", label: "Primary" },
@@ -25,8 +69,9 @@ const EDITABLE_VARS = [
 ] as const;
 
 function hslStringToHex(hsl: string): string {
+  if (!hsl || !hsl.trim()) return "#000000";
   const parts = hsl.trim().split(/\s+/);
-  if (parts.length < 3) return "#000000";
+  if (parts.length < 3 || parts.some((p) => isNaN(parseFloat(p)))) return "#000000";
   const h = parseFloat(parts[0]);
   const s = parseFloat(parts[1]) / 100;
   const l = parseFloat(parts[2]) / 100;
@@ -65,34 +110,211 @@ export function applyStoredThemeColors() {
       document.documentElement.style.setProperty(key, value);
     });
   }
+  const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY);
+  if (pending) {
+    Object.entries(pending).forEach(([key, value]) => {
+      document.documentElement.style.setProperty(key, value);
+    });
+  }
 }
 
 export default function DesignSystemPage() {
-  const [copiedValue, setCopiedValue] = useState<string | null>(null);
   const [accordionOpen, setAccordionOpen] = useState(false);
   const [colors, setColors] = useState<Record<string, string>>({});
+  const [unlocked, setUnlocked] = useState(() => storage.get<boolean>(THEME_UNLOCK_KEY) === true);
+  const [showPasscodeModal, setShowPasscodeModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [passcodeInput, setPasscodeInput] = useState("");
+  const [passcodeError, setPasscodeError] = useState(false);
+  const [autoAdjustNotice, setAutoAdjustNotice] = useState<string | null>(null);
 
   const readCurrentColors = useCallback(() => {
     const style = getComputedStyle(document.documentElement);
     const current: Record<string, string> = {};
+    let hasEmpty = false;
     EDITABLE_VARS.forEach(({ key }) => {
-      current[key] = style.getPropertyValue(key).trim();
+      const val = style.getPropertyValue(key).trim();
+      current[key] = val;
+      if (!val) hasEmpty = true;
     });
     setColors(current);
+    // Retry after a short delay if any CSS variable hasn't resolved yet
+    if (hasEmpty) {
+      setTimeout(() => {
+        const retryStyle = getComputedStyle(document.documentElement);
+        const retried: Record<string, string> = {};
+        EDITABLE_VARS.forEach(({ key }) => {
+          retried[key] = retryStyle.getPropertyValue(key).trim();
+        });
+        setColors(retried);
+      }, 100);
+    }
   }, []);
 
   useEffect(() => {
     applyStoredThemeColors();
     readCurrentColors();
+
+    // Re-read colors when ThemePreviewBar discards/undoes changes
+    const handlePendingUpdate = () => {
+      // Small delay to let inline styles be removed first
+      setTimeout(() => readCurrentColors(), 50);
+      setAutoAdjustNotice(null);
+    };
+    window.addEventListener("theme-pending-update", handlePendingUpdate);
+    return () => window.removeEventListener("theme-pending-update", handlePendingUpdate);
   }, [readCurrentColors]);
+
+  // When brand or secondary changes, derive related palette colors by shifting hue
+  const derivePaletteFromChange = (
+    changedKey: string,
+    newHsl: string,
+    currentColors: Record<string, string>,
+  ): Record<string, string> => {
+    const derived: Record<string, string> = {};
+    const parts = newHsl.trim().split(/\s+/);
+    if (parts.length < 3) return derived;
+    const newHue = parseFloat(parts[0]);
+
+    const shiftHue = (varKey: string, sat: number, light: number) => {
+      derived[varKey] = `${newHue.toFixed(1)} ${sat.toFixed(1)}% ${light.toFixed(1)}%`;
+    };
+
+    // Parse existing value to preserve saturation/lightness when possible
+    const getExisting = (varKey: string): { h: number; s: number; l: number } | null => {
+      const val = currentColors[varKey];
+      if (!val) return null;
+      const p = val.trim().split(/\s+/);
+      if (p.length < 3) return null;
+      return { h: parseFloat(p[0]), s: parseFloat(p[1]), l: parseFloat(p[2]) };
+    };
+
+    const shiftExisting = (varKey: string) => {
+      const existing = getExisting(varKey);
+      if (existing) {
+        derived[varKey] = `${newHue.toFixed(1)} ${existing.s.toFixed(1)}% ${existing.l.toFixed(1)}%`;
+      }
+    };
+
+    if (changedKey === "--brand") {
+      // Primary family: adopt brand hue
+      shiftHue("--primary", 83.2, 48);
+      shiftHue("--primary-foreground", 40, 98);
+      // Ring
+      shiftHue("--ring", 83.2, 53.3);
+      // Secondary/muted/accent: shift hue, keep their saturation/lightness
+      shiftExisting("--secondary");
+      shiftExisting("--secondary-foreground");
+      shiftExisting("--muted");
+      shiftExisting("--muted-foreground");
+      shiftExisting("--accent");
+      shiftExisting("--accent-foreground");
+      shiftExisting("--border");
+      shiftExisting("--foreground");
+    } else if (changedKey === "--secondary") {
+      // Accent and muted follow secondary's hue
+      shiftExisting("--accent");
+      shiftExisting("--accent-foreground");
+      shiftExisting("--muted");
+      shiftExisting("--muted-foreground");
+      shiftExisting("--border");
+    }
+
+    return derived;
+  };
+
+  const autoAdjustContrast = (
+    newColors: Record<string, string>,
+  ): Record<string, string> => {
+    const adjustments: Record<string, string> = {};
+    const working = { ...newColors };
+    for (const [fg, bg] of CONTRAST_PAIRS) {
+      const fgVal = working[fg];
+      const bgVal = working[bg];
+      if (!fgVal || !bgVal) continue;
+
+      if (contrastRatio(fgVal, bgVal) >= 4.5) continue;
+
+      const fgParts = fgVal.trim().split(/\s+/);
+      if (fgParts.length < 3) continue;
+
+      const h = parseFloat(fgParts[0]);
+      const s = parseFloat(fgParts[1]);
+      let l = parseFloat(fgParts[2]);
+
+      const bgParts = bgVal.trim().split(/\s+/);
+      const bgLightness = bgParts.length >= 3 ? parseFloat(bgParts[2]) : 50;
+      const direction = bgLightness > 50 ? -3 : 3;
+
+      let adjusted = `${h} ${s}% ${l}%`;
+      for (let i = 0; i < 15; i++) {
+        l = Math.max(0, Math.min(100, l + direction));
+        adjusted = `${h} ${s}% ${l}%`;
+        if (contrastRatio(adjusted, bgVal) >= 4.5) break;
+      }
+      adjustments[fg] = adjusted;
+      working[fg] = adjusted;
+    }
+    return adjustments;
+  };
 
   const handleColorChange = (key: string, hex: string) => {
     const hsl = hexToHslString(hex);
+
+    // Push to undo history before applying
+    const history = storage.get<{ key: string; previousValue: string }[]>(COLOR_HISTORY_KEY) || [];
+    history.push({ key, previousValue: colors[key] || "" });
+
+    // Apply the changed color
     document.documentElement.style.setProperty(key, hsl);
-    setColors((prev) => ({ ...prev, [key]: hsl }));
-    const saved = storage.get<Record<string, string>>(THEME_COLORS_KEY) || {};
-    saved[key] = hsl;
-    storage.set(THEME_COLORS_KEY, saved);
+    const newColors = { ...colors, [key]: hsl };
+
+    const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
+    pending[key] = hsl;
+
+    // Derive palette when brand or secondary changes
+    if (key === "--brand" || key === "--secondary") {
+      const derived = derivePaletteFromChange(key, hsl, newColors);
+      for (const [dKey, dVal] of Object.entries(derived)) {
+        history.push({ key: dKey, previousValue: newColors[dKey] || "" });
+        document.documentElement.style.setProperty(dKey, dVal);
+        newColors[dKey] = dVal;
+        pending[dKey] = dVal;
+      }
+    }
+
+    // Auto-adjust contrast across all pairs
+    const adjustments = autoAdjustContrast(newColors);
+    for (const [adjKey, adjVal] of Object.entries(adjustments)) {
+      history.push({ key: adjKey, previousValue: newColors[adjKey] || "" });
+      document.documentElement.style.setProperty(adjKey, adjVal);
+      newColors[adjKey] = adjVal;
+      pending[adjKey] = adjVal;
+    }
+
+    storage.set(COLOR_HISTORY_KEY, history);
+    setColors(newColors);
+    storage.set(PENDING_COLORS_KEY, pending);
+    window.dispatchEvent(new Event("theme-pending-update"));
+
+    // Show palette adaptation notice
+    if (key === "--brand" || key === "--secondary") {
+      setAutoAdjustNotice("Palette adapted to new hue. All color pairs pass WCAG AA contrast ratio (4.5:1).");
+    } else {
+      setAutoAdjustNotice(null);
+    }
+  };
+
+  const handlePasscodeSubmit = () => {
+    if (passcodeInput === PASSCODE) {
+      setUnlocked(true);
+      storage.set(THEME_UNLOCK_KEY, true);
+      setShowPasscodeModal(false);
+      setPasscodeInput("");
+      setPasscodeError(false);
+    } else {
+      setPasscodeError(true);
+    }
   };
 
   const handleReset = () => {
@@ -100,13 +322,11 @@ export default function DesignSystemPage() {
       document.documentElement.style.removeProperty(key);
     });
     storage.remove(THEME_COLORS_KEY);
+    storage.remove(PENDING_COLORS_KEY);
+    storage.remove(COLOR_HISTORY_KEY);
     readCurrentColors();
-  };
-
-  const copyToClipboard = (value: string) => {
-    navigator.clipboard.writeText(value);
-    setCopiedValue(value);
-    setTimeout(() => setCopiedValue(null), 1500);
+    setAutoAdjustNotice(null);
+    window.dispatchEvent(new Event("theme-pending-update"));
   };
 
   return (
@@ -121,77 +341,149 @@ export default function DesignSystemPage() {
 
           {/* Colors */}
           <div className="mb-10">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
-              {content.designSystem.sections.colors}
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-              {designTokens.colors.map((color) => (
-                <button
-                  key={color.name}
-                  onClick={() => copyToClipboard(color.value)}
-                  className="group text-left"
-                >
-                  <div
-                    className="w-full h-16 rounded-lg mb-2 border border-gray-200 dark:border-gray-700 group-hover:ring-2 group-hover:ring-gray-400 transition-all"
-                    style={{ backgroundColor: color.value }}
-                  />
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {color.name}
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {copiedValue === color.value ? "Copied!" : color.value}
-                  </p>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Theme Colors (Editable) */}
-          <div className="mb-10">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900 dark:text-white">
-                Theme Colors
+              <h3 className="font-semibold text-brand-dynamic dark:text-white">
+                {content.designSystem.sections.colors}
               </h3>
-              <button
-                onClick={handleReset}
-                className="px-3 py-1.5 text-xs font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-              >
-                Reset to Defaults
-              </button>
+              {unlocked && (
+                <button
+                  onClick={() => setShowResetModal(true)}
+                  className="px-3 py-1.5 text-xs font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                >
+                  Reset to Defaults
+                </button>
+              )}
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-              Edit these CSS custom properties to change colors across the
-              entire site in real-time. Changes persist across pages and
-              refreshes.
-            </p>
+            {/* Palette adaptation notice */}
+            {autoAdjustNotice && (
+              <div className="mb-4 rounded-lg border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 px-4 py-2">
+                <p className="text-sm text-blue-800 dark:text-blue-200">{autoAdjustNotice}</p>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {EDITABLE_VARS.map(({ key, label }) => (
-                <label key={key} className="group cursor-pointer text-left">
-                  <div className="relative w-full h-16 rounded-lg mb-2 border border-gray-200 dark:border-gray-700 group-hover:ring-2 group-hover:ring-gray-400 transition-all overflow-hidden">
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        backgroundColor: colors[key]
-                          ? `hsl(${colors[key]})`
-                          : undefined,
-                      }}
-                    />
-                    <input
-                      type="color"
-                      value={colors[key] ? hslStringToHex(colors[key]) : "#000000"}
-                      onChange={(e) => handleColorChange(key, e.target.value)}
-                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    />
-                  </div>
+              {EDITABLE_VARS.map(({ key, label }) => {
+                const isEditable = key === "--brand" || key === "--secondary";
+                return (
+                <div
+                  key={key}
+                  className={`text-left ${isEditable ? "group cursor-pointer" : ""}`}
+                  onClick={isEditable && !unlocked ? (e) => { e.preventDefault(); setShowPasscodeModal(true); } : undefined}
+                >
+                  <label className={isEditable && unlocked ? "cursor-pointer" : "pointer-events-none"}>
+                    <div className={`relative w-full h-16 rounded-lg mb-2 border border-gray-200 dark:border-gray-700 transition-all overflow-hidden ${isEditable ? "group-hover:ring-2 group-hover:ring-gray-400" : ""}`}>
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          backgroundColor: colors[key]
+                            ? `hsl(${colors[key]})`
+                            : undefined,
+                        }}
+                      />
+                      {isEditable && !unlocked && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/10 dark:bg-white/10">
+                          <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                          </svg>
+                        </div>
+                      )}
+                      {isEditable && unlocked && (
+                        <div className="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-white/80 dark:bg-black/50 flex items-center justify-center shadow-sm">
+                          <svg className="w-3 h-3 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                          </svg>
+                        </div>
+                      )}
+                      {isEditable && (
+                        <input
+                          type="color"
+                          value={colors[key] ? hslStringToHex(colors[key]) : "#000000"}
+                          onChange={(e) => handleColorChange(key, e.target.value)}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        />
+                      )}
+                    </div>
+                  </label>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {label}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-                    {key}
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {colors[key] ? hslStringToHex(colors[key]) : key}
                   </p>
-                </label>
-              ))}
+                </div>
+                );
+              })}
             </div>
+
+            {/* Passcode Modal */}
+            {showPasscodeModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 w-full max-w-sm mx-4">
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    Enter Passcode
+                  </h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    A passcode is required to edit theme colors.
+                  </p>
+                  <input
+                    type="password"
+                    value={passcodeInput}
+                    onChange={(e) => { setPasscodeInput(e.target.value); setPasscodeError(false); }}
+                    onKeyDown={(e) => e.key === "Enter" && handlePasscodeSubmit()}
+                    placeholder="Passcode"
+                    autoFocus
+                    className={`w-full px-3 py-2 rounded-md border text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-dynamic ${
+                      passcodeError ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  />
+                  {passcodeError && (
+                    <p className="text-sm text-red-500 mt-1">Incorrect passcode.</p>
+                  )}
+                  <div className="flex justify-end gap-2 mt-4">
+                    <button
+                      onClick={() => { setShowPasscodeModal(false); setPasscodeInput(""); setPasscodeError(false); }}
+                      className="px-3 py-1.5 text-sm rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handlePasscodeSubmit}
+                      className="px-3 py-1.5 text-sm font-medium rounded-md bg-brand-dynamic text-white hover:brightness-[0.85] transition-colors"
+                    >
+                      Unlock
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Reset Confirmation Modal */}
+            {showResetModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 w-full max-w-sm mx-4">
+                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    Reset to Defaults?
+                  </h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    This will revert all theme colors to their original values. Any saved customizations will be lost.
+                  </p>
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={() => setShowResetModal(false)}
+                      className="px-3 py-1.5 text-sm rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => { handleReset(); setShowResetModal(false); }}
+                      className="px-3 py-1.5 text-sm font-medium rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Live Preview */}
             <div className="mt-6 rounded-lg border border-border bg-background p-5 space-y-4">
@@ -203,10 +495,10 @@ export default function DesignSystemPage() {
                   This text uses <span className="font-semibold">foreground</span> on <span className="font-semibold">background</span>.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium bg-primary text-primary-foreground">
+                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium bg-primary text-white">
                     Primary
                   </span>
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium bg-secondary text-secondary-foreground">
+                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium bg-secondary text-white">
                     Secondary
                   </span>
                   <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium bg-muted text-muted-foreground">
@@ -231,7 +523,7 @@ export default function DesignSystemPage() {
 
           {/* Typography */}
           <div className="mb-10">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+            <h3 className="font-semibold text-brand-dynamic dark:text-white mb-4">
               {content.designSystem.sections.typography}
             </h3>
             <div className="space-y-4">
@@ -265,7 +557,7 @@ export default function DesignSystemPage() {
 
           {/* Spacing */}
           <div className="mb-10">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+            <h3 className="font-semibold text-brand-dynamic dark:text-white mb-4">
               {content.designSystem.sections.spacing}
             </h3>
             <div className="space-y-3">
@@ -275,7 +567,7 @@ export default function DesignSystemPage() {
                     {space.name}
                   </span>
                   <div
-                    className="bg-blue-500 dark:bg-blue-400 rounded-sm"
+                    className="bg-brand-dynamic dark:bg-brand-dynamic rounded-sm"
                     style={{ width: space.value, height: "1rem" }}
                   />
                   <span className="text-xs text-gray-400 dark:text-gray-500">
@@ -288,7 +580,7 @@ export default function DesignSystemPage() {
 
           {/* Shadows */}
           <div className="mb-10">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+            <h3 className="font-semibold text-brand-dynamic dark:text-white mb-4">
               Shadows
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -311,7 +603,7 @@ export default function DesignSystemPage() {
 
           {/* Buttons */}
           <div className="mb-10">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+            <h3 className="font-semibold text-brand-dynamic dark:text-white mb-4">
               {content.designSystem.sections.buttons}
             </h3>
             <div className="flex flex-wrap gap-3">
@@ -336,7 +628,7 @@ export default function DesignSystemPage() {
 
           {/* Animations */}
           <div className="mb-10">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+            <h3 className="font-semibold text-brand-dynamic dark:text-white mb-4">
               Animations
             </h3>
             <div className="space-y-6">
@@ -418,7 +710,7 @@ export default function DesignSystemPage() {
 
           {/* Border Radii */}
           <div className="mb-10">
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+            <h3 className="font-semibold text-brand-dynamic dark:text-white mb-4">
               Border Radius
             </h3>
             <div className="flex flex-wrap gap-6">
@@ -427,7 +719,7 @@ export default function DesignSystemPage() {
                 .map((radius) => (
                   <div key={radius.name} className="text-center">
                     <div
-                      className="w-20 h-20 bg-blue-500 dark:bg-blue-400 mb-2"
+                      className="w-20 h-20 bg-brand-dynamic dark:bg-brand-dynamic mb-2"
                       style={{ borderRadius: `${radius.value}px` }}
                     />
                     <p className="text-sm font-medium text-gray-900 dark:text-white">

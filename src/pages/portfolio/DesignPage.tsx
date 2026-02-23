@@ -44,7 +44,7 @@ export default function DesignPage() {
                 >
                   <IconWrapper
                     Icon={LazyDribbble}
-                    className="h-5 w-5 text-black dark:text-white"
+                    className="h-5 w-5 text-brand-dynamic dark:text-gray-300"
                   />
                 </a>
               }
@@ -69,7 +69,7 @@ export default function DesignPage() {
                       />
                     </div>
                     <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                      <h3 className="font-semibold text-gray-900 dark:text-white group-hover:font-bold transition-all">
+                      <h3 className="font-semibold text-brand-dynamic dark:text-white group-hover:font-bold transition-all">
                         {project.title}
                       </h3>
                       {project.description && (
@@ -101,7 +101,7 @@ export default function DesignPage() {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 dark:text-white group-hover:font-bold transition-all truncate">
+                      <h3 className="font-semibold text-brand-dynamic dark:text-white group-hover:font-bold transition-all truncate">
                         {project.title}
                       </h3>
                       {project.description && (
@@ -112,7 +112,7 @@ export default function DesignPage() {
                     </div>
                     <IconWrapper
                       Icon={LazyExternalLink}
-                      className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors flex-shrink-0"
+                      className="h-4 w-4 text-brand-dynamic dark:text-gray-400 group-hover:text-brand-dynamic/80 transition-colors flex-shrink-0"
                     />
                   </a>
                 ))}

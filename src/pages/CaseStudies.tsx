@@ -17,6 +17,16 @@ const caseStudies = [
     label: "User Testing Platform",
     title: "Designing a Cross Product User Testing Platform with Unified Data and Theming Architecture",
   },
+  {
+    id: "inventory-crm",
+    label: "Inventory & CRM",
+    title: "AI-Augmented Inventory System & CRM Integration",
+  },
+  {
+    id: "delivery-discipline",
+    label: "Delivery Discipline",
+    title: "Establishing Delivery Discipline Across Distributed, Regulated Environments",
+  },
 ];
 
 export default function CaseStudies() {
@@ -1086,6 +1096,497 @@ export default function CaseStudies() {
                 <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
                   <p className="text-gray-900 dark:text-white font-medium">
                     It reflects systems thinking at both UX and engineering levels.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+      )}
+
+      {/* Case Study 4: AI-Augmented Inventory & CRM */}
+      {activeStudy === "inventory-crm" && (
+      <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
+        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
+            <h2 className="font-bold title-font leading-tight text-gray-900 dark:text-white mb-2">
+              AI-Augmented Inventory System & CRM Integration
+            </h2>
+            <p className="text-muted-foreground mb-8">
+              Full-Stack Product, AI, & Systems Design for Nextier
+            </p>
+
+            <div className="space-y-8">
+
+              {/* Executive Context */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Executive Context</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  A small yet growing tech business needed to unify its inventory processes, eliminate manual workflows, and leverage intelligent insights without disrupting day-to-day operations.
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  I led the design and development of an AI-augmented inventory management system tightly integrated with their existing Customer Relationship Management (CRM), transforming disconnected tools into a cohesive, scalable operational backbone.
+                </p>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                  <p className="text-gray-900 dark:text-white font-medium italic">
+                    How do you unify siloed systems, automate manual processes, and introduce AI-powered insights without disrupting active operations?
+                  </p>
+                  <p className="text-gray-700 dark:text-gray-300 mt-2">
+                    <strong className="text-gray-900 dark:text-white">I designed and built the system that answered that question.</strong>
+                  </p>
+                </div>
+              </div>
+
+              {/* The Problem */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">The Problem</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">The business operated with siloed systems:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Inventory records were manually maintained</li>
+                  <li>CRM updates were not communicating with point-of-sale processes</li>
+                  <li>Forecasting was guesswork</li>
+                  <li>Teams lacked reliable, real-time visibility into stock status, sales momentum, and replenishment needs</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">This undermined growth efforts and caused avoidable inefficiencies across operations. As a Business & Technical Consultant via Nextier, I was brought in to solve for:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Disconnected data across systems</li>
+                  <li>Lack of automation</li>
+                  <li>Limited forecasting and reporting</li>
+                  <li>High operational drag from manual tasks</li>
+                  <li>No AI-enabled insights</li>
+                </ul>
+              </div>
+
+              {/* Role & Responsibilities */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Role & Responsibilities</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  <strong className="text-gray-900 dark:text-white">Lead Product & Systems Architect</strong>
+                </p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Full product design: UX, data flows, interaction models</li>
+                  <li>Technical architecture and implementation</li>
+                  <li>AI and semantic search integration</li>
+                  <li>CRM & backend integration</li>
+                  <li>Cloud deployment and CI/CD</li>
+                  <li>Requirements definition & stakeholder collaboration</li>
+                </ul>
+              </div>
+
+              {/* Tools & Technologies */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Tools & Technologies</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  React, TypeScript, Next.js, Tailwind CSS, FastAPI (Python), PostgreSQL (Supabase), JWT Authentication, Supabase Row Level Security, Supabase Realtime, Edge Functions (Deno), Docker, Railway, OpenAI GPT-4o-mini, Groq API, Sentence Transformers, pgvector.
+                </p>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                  <p className="text-gray-900 dark:text-white font-medium">
+                    AI tooling & development workflow included Cursor IDE with the Cursor Co-pilot for accelerated coding, prototyping, and iterative refinement.
+                  </p>
+                </div>
+              </div>
+
+              {/* The Challenge */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">The Challenge</h3>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Disconnected Workflow</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  The client's CRM and inventory systems did not talk to one another; data was duplicated and manually reconciled. Users had no real-time inventory view or alerts, and forecasting was manual.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Operational Friction</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Business users spent hours reconciling systems, correcting errors, and updating stock counts. Meanwhile, product leads lacked predictive insights into demand trends.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">AI Integration Constraints</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Incorporating AI had to improve outcomes without drastically increasing complexity or cost. Semantic search needed to feel intuitive, actionable, and embedded into everyday workflows, not "AI for AI's sake."
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Security & Scale Requirements</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Authentication, access control, and real-time collaboration needed to be robust, secure, and scalable without requiring enterprise-grade infrastructure.
+                </p>
+              </div>
+
+              {/* Solution Overview */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Solution Overview</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  At its core, the product is an AI-augmented inventory platform tightly integrated with the existing CRM, where users can:
+                </p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>See real-time inventory status synchronized with CRM and point of sale</li>
+                  <li>Search inventory semantically (not just keyword)</li>
+                  <li>Receive automated demand forecasts</li>
+                  <li>Leverage AI-powered categorization and tagging</li>
+                  <li>Access secure, role-based dashboards and insights</li>
+                </ul>
+              </div>
+
+              {/* Key Features */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Key Features</h3>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Real-Time Data Synchronization</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Using Supabase Realtime and Edge Functions, changes to inventory and customer records propagate instantly, eliminating stale data and manual reconciliation.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Two-Way CRM Integration</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Custom middleware and RESTful APIs connect CRM systems bidirectionally, ensuring stock movements and customer interactions stay in sync with inventory status.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">AI-Assisted Categorization</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  GPT-4o-mini and Groq APIs intelligently categorize inventory items and automate tagging, reducing manual workload and improving data quality. This also enabled rich semantic search via vector embeddings (Sentence Transformers + pgvector), allowing users to query inventory with natural language.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Demand Forecasting</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  AI-driven demand insights predict future inventory needs based on historical trends, sales volume, and category dynamics, helping the business plan ahead and optimize stock.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Security & Governance</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  JWT authentication, Supabase Row Level Security, and scalable backend controls ensured access was secure by default and aligned with least-privilege principles.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">CI/CD & Deployment</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Containerized with Docker and deployed with Railway and Netlify, both frontend and backend now benefit from automated build pipelines and predictable releases.
+                </p>
+              </div>
+
+              {/* Design & UX Strategy */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Design & UX Strategy</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  Rather than introducing complexity with new workflows, the design focused on:
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Minimal UI Friction</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Interfaces that felt familiar to users, with concise data views and clear action affordances.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Progressive Reveal of AI Insights</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  AI recommendations appear contextually, not as standalone "AI features," increasing adoption and reducing cognitive load.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Real-Time Feedback Loops</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Realtime updates and notifications ensure users never work with outdated information.
+                </p>
+              </div>
+
+              {/* Impact */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Impact</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4">
+                  <div className="bg-white/20 backdrop-blur-lg rounded-lg p-4 sm:p-6 shadow-xl">
+                    <h4 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">Before</h4>
+                    <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
+                      <li>Siloed inventory and CRM systems</li>
+                      <li>Manual data reconciliation</li>
+                      <li>No forecasting capability</li>
+                      <li>Keyword-only inventory search</li>
+                      <li>No AI-enabled insights</li>
+                      <li>High operational drag</li>
+                    </ul>
+                  </div>
+                  <div className="bg-white/20 backdrop-blur-lg rounded-lg p-4 sm:p-6 shadow-xl">
+                    <h4 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">After</h4>
+                    <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
+                      <li>Unified real-time inventory and CRM</li>
+                      <li>AI-powered categorization and tagging</li>
+                      <li>Semantic natural language search</li>
+                      <li>Automated demand forecasting</li>
+                      <li>Role-based secure dashboards</li>
+                      <li>Automated CI/CD deployment</li>
+                      <li>Rapid iteration via AI-assisted development</li>
+                    </ul>
+                  </div>
+                </div>
+                <p className="text-gray-900 dark:text-white font-semibold text-center">
+                  Disconnected tools became a cohesive, intelligent operational backbone.
+                </p>
+              </div>
+
+              {/* Learnings & Takeaways */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Learnings & Takeaways</h3>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>AI is most valuable when embedded into workflows rather than standalone tools</li>
+                  <li>Semantic search transformed user expectation of inventory lookup from exact match to intent understanding</li>
+                  <li>Real-time sync across systems reduced operational drag more than any single dashboard feature</li>
+                  <li>Secure defaults (JWT + RLS) prevent costly data exposure while enabling fine-grained control</li>
+                </ul>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    The project is not publicly accessible due to client privacy.
+                  </p>
+                  <p className="text-gray-900 dark:text-white font-medium mt-2">
+                    Portfolio and technical demos available upon request.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+      )}
+      {/* Case Study 5: Delivery Discipline */}
+      {activeStudy === "delivery-discipline" && (
+      <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
+        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
+            <h2 className="font-bold title-font leading-tight text-gray-900 dark:text-white mb-2">
+              Establishing Delivery Discipline Across Distributed, Regulated Environments
+            </h2>
+            <p className="text-muted-foreground mb-8">
+              Organization-Wide Operational Transformation -- Agile, Process, & Delivery Excellence
+            </p>
+
+            <div className="space-y-8">
+
+              {/* Context */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Context</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  Multiple enterprise engagements across regulated industries uncovered a recurring strategic opportunity: teams were delivering work, but delivery discipline, predictability, and cross-functional alignment were inconsistent. I led organizational transformation efforts spanning teams working across continents, in complex regulated environments, to embed disciplined delivery practices, improve predictability, and reduce inefficiencies.
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  Across three major engagements -- Meridian Health Plan, Optum/UnitedHealthcare Group, and Dewpoint Inc. -- organizations were struggling with variation in delivery outcomes, lack of shared process frameworks, and limited visibility into work at scale.
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">Challenges cut across:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Distributed teams across 3 continents</li>
+                  <li>Healthcare and regulated data environments</li>
+                  <li>Siloed engineering and product practices limiting reproducibility of delivery outcomes</li>
+                  <li>Leadership seeking better predictability</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  These were real business problems impacting time-to-market, cross-team collaboration, operational costs, and strategic alignment.
+                </p>
+              </div>
+
+              {/* Role & Responsibilities */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Role & Responsibilities</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  <strong className="text-gray-900 dark:text-white">Enterprise Delivery & Process Transformation Lead</strong>
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">Spanning multiple engagements, my responsibilities included:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Assessing existing delivery practices & tooling</li>
+                  <li>Designing enterprise-scale delivery frameworks</li>
+                  <li>Implementing Agile and process discipline</li>
+                  <li>Establishing reporting, metrics, and transparency</li>
+                  <li>Mentoring and coaching distributed teams</li>
+                  <li>Aligning engineering, product, and business leadership</li>
+                  <li>Partnering with senior stakeholders for enterprise outcomes</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3"><strong className="text-gray-900 dark:text-white">Industries:</strong> Healthcare (regulated environments), Enterprise product teams, Digital service delivery</p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <strong className="text-gray-900 dark:text-white">Team Scale:</strong> 20-30+ developers, product owners, QA, and delivery leads, spanning North America, Europe, and Asia.
+                </p>
+              </div>
+
+              {/* The Challenge */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">The Challenge</h3>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Fragmented Delivery Practices</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Different teams operated with different rituals, tools, and levels of Agile maturity, leading to inconsistent delivery outcomes.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Lack of Predictability</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Leadership lacked reliable forecasting, visibility into impediments, and agreed-upon metrics to assess progress.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Distributed Team Complexity</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Teams spanned time zones and cultures, which amplified misalignment and reduced collaboration velocity.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Regulated Data & Compliance</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  In healthcare environments, delivery needed to mesh with compliance requirements, adding procedural overhead without clear frameworks.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Poor Cross-Functional Alignment</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Product, UX, QA, and engineering teams weren't consistently coordinated on priorities or execution.
+                </p>
+              </div>
+
+              {/* Solution Overview */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Solution Overview</h3>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                  The transformation was not about introducing buzzwords. It was about establishing sustainable delivery discipline that removed friction, enabled predictability, and created a framework for continuous improvement.
+                </p>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">The approach involved:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Unified Delivery Frameworks</li>
+                  <li>Consistent Metrics & Reporting</li>
+                  <li>Best-Practice Agile Rituals</li>
+                  <li>Coaching and Mentoring</li>
+                  <li>Tooling & Process Enhancements</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  This work spanned onboarding, training, team structures, metrics, cross-team planning, and leadership alignment.
+                </p>
+              </div>
+
+              {/* Key Actions & Features */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Key Actions & Features</h3>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Enterprise Delivery Framework</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">I designed and operationalized a scalable delivery framework that included:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Shared backlog practices</li>
+                  <li>Definition of done</li>
+                  <li>Sprint ceremonies standardized across teams</li>
+                  <li>Clear acceptance criteria and quality gates</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                  This reduced ambiguity and created common language across distributed teams.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Metrics, Reporting & Forecasting</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">Together with leadership, I established:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Sprint velocity tracking</li>
+                  <li>Burndown/backlog health reporting</li>
+                  <li>Cross-team dependency visualization</li>
+                  <li>Release forecasting models</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                  These enabled leadership to make data-informed decisions.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Agile Rituals That Stick</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">Rather than superficial ceremonies, we implemented:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Daily standups with shared accountability</li>
+                  <li>Structured refinement sessions</li>
+                  <li>Alignment sessions across time zones</li>
+                  <li>Monthly leadership reviews tied to business outcomes</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                  The result: predictable, repeatable delivery cadences.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Distributed Collaboration Practices</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">To support teams across three continents:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Co-located sprints with overlapping collaboration windows</li>
+                  <li>Clear documentation expectations</li>
+                  <li>Team charters emphasizing shared norms</li>
+                  <li>Feedback loops built into retrospectives</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+                  This minimized friction from geographic and cultural differences.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Coaching & Capabilities Building</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-3">I coached individual team leads, scrum masters, and directors to:</p>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Understand Agile values vs dogma</li>
+                  <li>Apply continuous improvement practices</li>
+                  <li>Align on outcomes, not outputs</li>
+                  <li>Communicate effectively across organizational layers</li>
+                </ul>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  This helped sustain transformation beyond my involvement.
+                </p>
+              </div>
+
+              {/* Design & Strategy Highlights */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Design & Strategy Highlights</h3>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Process First, Tools Second</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Rather than layering tools on top of shallow practices, we built frameworks that tools could support, not the other way around.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Metrics Aligned with Business Outcomes</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Velocity was never an end. It drove predictability in forecasting which informed leadership decisions.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Empowering Teams with Structure</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  Structure enabled autonomy: teams knew what success looked like, and how to measure it.
+                </p>
+
+                <h4 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">Continuous Feedback Built Into Workflows</h4>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  Retrospectives weren't forced rituals. They were mechanisms for constant refinement.
+                </p>
+              </div>
+
+              {/* Impact */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Impact</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4">
+                  <div className="bg-white/20 backdrop-blur-lg rounded-lg p-4 sm:p-6 shadow-xl">
+                    <h4 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">Before</h4>
+                    <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
+                      <li>Fragmented delivery practices</li>
+                      <li>Inconsistent Agile maturity</li>
+                      <li>No reliable forecasting</li>
+                      <li>Distributed team misalignment</li>
+                      <li>Limited cross-functional coordination</li>
+                      <li>Compliance overhead without clear frameworks</li>
+                    </ul>
+                  </div>
+                  <div className="bg-white/20 backdrop-blur-lg rounded-lg p-4 sm:p-6 shadow-xl">
+                    <h4 className="font-semibold mb-3 text-gray-800 dark:text-gray-200">After</h4>
+                    <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
+                      <li>Predictable delivery cadence</li>
+                      <li>Reduced delivery risk</li>
+                      <li>Improved transparency for leadership</li>
+                      <li>Distributed collaboration aligned on norms</li>
+                      <li>Sustainable practice adoption</li>
+                      <li>Teams carrying practices forward independently</li>
+                    </ul>
+                  </div>
+                </div>
+                <p className="text-gray-900 dark:text-white font-semibold text-center">
+                  Delivery discipline became operational across organizations.
+                </p>
+              </div>
+
+              {/* Learnings & Takeaways */}
+              <div>
+                <h3 className="font-semibold mb-3 dark:text-white title-font">Learnings & Takeaways</h3>
+                <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1 mb-4">
+                  <li>Structure enables autonomy. Without common frameworks, teams drift into localized silos.</li>
+                  <li>Predictability fuels decision-making. Leadership needs clarity more than velocity.</li>
+                  <li>Distributed teams require intentional collaboration design. Time zones and cultures matter.</li>
+                  <li>Tools don't fix process problems. Frameworks and habits do.</li>
+                  <li>Continuous improvement isn't optional. It's what makes delivery discipline sustainable.</li>
+                </ul>
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    This case study synthesizes work from multiple enterprise engagements (Meridian Health Plan, Optum/UnitedHealthcare, Dewpoint Inc.). Specific artifacts and internal dashboards are proprietary to each organization.
+                  </p>
+                  <p className="text-gray-900 dark:text-white font-medium mt-2">
+                    Methodologies and frameworks can be shared upon request for professional conversations or workshops.
                   </p>
                 </div>
               </div>

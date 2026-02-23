@@ -35,7 +35,7 @@ const SectionHeader = ({
     <div className={`${className}`}>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2 sm:gap-3">
         <div className="flex items-center gap-2 sm:gap-3">
-          <h2 className="font-bold title-font leading-tight text-gray-900 dark:text-white">
+          <h2 className="font-bold title-font leading-tight text-brand-dynamic dark:text-white">
             {title}
           </h2>
           {icon && <div className="flex items-center gap-2">{icon}</div>}
@@ -64,7 +64,7 @@ const SectionHeader = ({
                 }`}
                 onClick={() => toggleView("grid")}
               >
-                <IconWrapper Icon={LazyLayoutGrid} className="h-4 w-4" />
+                <IconWrapper Icon={LazyLayoutGrid} className="h-4 w-4 text-brand-dynamic dark:text-gray-300" />
               </button>
               <button
                 aria-label="List view"
@@ -75,14 +75,14 @@ const SectionHeader = ({
                 }`}
                 onClick={() => toggleView("list")}
               >
-                <IconWrapper Icon={LazyList} className="h-4 w-4" />
+                <IconWrapper Icon={LazyList} className="h-4 w-4 text-brand-dynamic dark:text-gray-300" />
               </button>
             </div>
           )}
           {showArchiveLink && (
             <Link
               to="/archive"
-              className="text-nav text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline sm:text-base"
+              className="text-nav text-brand-dynamic hover:text-brand-dynamic/80 dark:text-white dark:hover:text-gray-300 underline sm:text-base"
             >
               View Archive
             </Link>

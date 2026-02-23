@@ -44,7 +44,7 @@ export const Footer = () => {
               aria-label="Toggle dark mode"
             >
               <svg
-                className="w-5 h-5 text-gray-700 dark:text-gray-300 dark:hidden"
+                className="w-5 h-5 text-brand-dynamic dark:text-gray-300 dark:hidden"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -57,7 +57,7 @@ export const Footer = () => {
                 />
               </svg>
               <svg
-                className="w-5 h-5 text-gray-700 dark:text-gray-300 hidden dark:block"
+                className="w-5 h-5 text-brand-dynamic dark:text-gray-300 hidden dark:block"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -77,7 +77,7 @@ export const Footer = () => {
               className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="LinkedIn"
             >
-              <LinkedInLogoIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              <LinkedInLogoIcon className="h-5 w-5 text-brand-dynamic dark:text-gray-300" />
             </a>
             <a
               href="https://github.com/davemelk100"
@@ -86,7 +86,7 @@ export const Footer = () => {
               className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="GitHub"
             >
-              <GitHubLogoIcon className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+              <GitHubLogoIcon className="h-5 w-5 text-brand-dynamic dark:text-gray-300" />
             </a>
             <a
               href={content.navigation.social.dribbble.url}
@@ -96,7 +96,7 @@ export const Footer = () => {
               aria-label="Dribbble"
             >
               <Suspense fallback={<span className="h-5 w-5">D</span>}>
-                <LazyDribbble className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                <LazyDribbble className="h-5 w-5 text-brand-dynamic dark:text-gray-300" />
               </Suspense>
             </a>
           </div>
