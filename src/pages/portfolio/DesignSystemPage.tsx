@@ -7,9 +7,7 @@ import storage from "../../utils/storage";
 
 const THEME_COLORS_KEY = "ds-theme-colors";
 const PENDING_COLORS_KEY = "ds-pending-colors";
-const THEME_UNLOCK_KEY = "ds-theme-unlocked";
 const COLOR_HISTORY_KEY = "ds-color-history";
-const PASSCODE = "6231839";
 
 // Contrast pairs: [foreground var, background var] that must meet WCAG AA (4.5:1)
 const CONTRAST_PAIRS: [string, string][] = [
@@ -121,11 +119,8 @@ export function applyStoredThemeColors() {
 export default function DesignSystemPage() {
   const [accordionOpen, setAccordionOpen] = useState(false);
   const [colors, setColors] = useState<Record<string, string>>({});
-  const [unlocked, setUnlocked] = useState(() => storage.get<boolean>(THEME_UNLOCK_KEY) === true);
-  const [showPasscodeModal, setShowPasscodeModal] = useState(false);
+  const unlocked = true;
   const [showResetModal, setShowResetModal] = useState(false);
-  const [passcodeInput, setPasscodeInput] = useState("");
-  const [passcodeError, setPasscodeError] = useState(false);
   const [autoAdjustNotice, setAutoAdjustNotice] = useState<string | null>(null);
 
   const readCurrentColors = useCallback(() => {
@@ -305,17 +300,6 @@ export default function DesignSystemPage() {
     }
   };
 
-  const handlePasscodeSubmit = () => {
-    if (passcodeInput === PASSCODE) {
-      setUnlocked(true);
-      storage.set(THEME_UNLOCK_KEY, true);
-      setShowPasscodeModal(false);
-      setPasscodeInput("");
-      setPasscodeError(false);
-    } else {
-      setPasscodeError(true);
-    }
-  };
 
   const handleReset = () => {
     EDITABLE_VARS.forEach(({ key }) => {
@@ -359,8 +343,7 @@ export default function DesignSystemPage() {
             <div className="mb-6 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 px-4 py-3">
               <p className="text-sm font-medium text-gray-900 dark:text-white mb-2">How to use the color editor</p>
               <ol className="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-decimal list-inside">
-                <li>Click a swatch marked with a lock icon to enter the passcode and unlock editing</li>
-                <li>Once unlocked, click the <strong className="text-gray-900 dark:text-white">Brand Blue</strong> or <strong className="text-gray-900 dark:text-white">Secondary</strong> swatch (marked with a pencil icon) to open the color picker</li>
+                <li>Click the <strong className="text-gray-900 dark:text-white">Brand Blue</strong> or <strong className="text-gray-900 dark:text-white">Secondary</strong> swatch (marked with a pencil icon) to open the color picker</li>
                 <li>Choose a new color. The rest of the palette will automatically adapt to maintain WCAG AA contrast ratios (4.5:1)</li>
                 <li>Use the preview bar at the bottom to navigate affected pages, then <strong className="text-gray-900 dark:text-white">Save</strong>, <strong className="text-gray-900 dark:text-white">Discard</strong>, or <strong className="text-gray-900 dark:text-white">Undo</strong> your changes</li>
               </ol>
@@ -380,7 +363,7 @@ export default function DesignSystemPage() {
                 <div
                   key={key}
                   className={`text-left ${isEditable ? "group cursor-pointer" : ""}`}
-                  onClick={isEditable && !unlocked ? (e) => { e.preventDefault(); setShowPasscodeModal(true); } : undefined}
+                  onClick={undefined}
                 >
                   <label className={isEditable && unlocked ? "cursor-pointer" : "pointer-events-none"}>
                     <div className={`relative w-full h-16 rounded-lg mb-2 border border-gray-200 dark:border-gray-700 transition-all overflow-hidden ${isEditable ? "group-hover:ring-2 group-hover:ring-gray-400" : ""}`}>
@@ -426,48 +409,6 @@ export default function DesignSystemPage() {
                 );
               })}
             </div>
-
-            {/* Passcode Modal */}
-            {showPasscodeModal && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 w-full max-w-sm mx-4">
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    Enter Passcode
-                  </h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                    A passcode is required to edit theme colors.
-                  </p>
-                  <input
-                    type="password"
-                    value={passcodeInput}
-                    onChange={(e) => { setPasscodeInput(e.target.value); setPasscodeError(false); }}
-                    onKeyDown={(e) => e.key === "Enter" && handlePasscodeSubmit()}
-                    placeholder="Passcode"
-                    autoFocus
-                    className={`w-full px-3 py-2 rounded-md border text-gray-900 dark:text-white bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-brand-dynamic ${
-                      passcodeError ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-                    }`}
-                  />
-                  {passcodeError && (
-                    <p className="text-sm text-red-500 mt-1">Incorrect passcode.</p>
-                  )}
-                  <div className="flex justify-end gap-2 mt-4">
-                    <button
-                      onClick={() => { setShowPasscodeModal(false); setPasscodeInput(""); setPasscodeError(false); }}
-                      className="px-3 py-1.5 text-sm rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handlePasscodeSubmit}
-                      className="px-3 py-1.5 text-sm font-medium rounded-md bg-brand-dynamic text-white hover:brightness-[0.85] transition-colors"
-                    >
-                      Unlock
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
 
             {/* Reset Confirmation Modal */}
             {showResetModal && (

@@ -60,10 +60,17 @@ const Footer = lazy(() =>
 function App() {
   const location = useLocation();
 
-  // Restore saved theme colors on app mount
+  // Apply saved theme colors only on portfolio and case-studies pages
+  const isThemePath = location.pathname === "/portfolio" || location.pathname.startsWith("/portfolio/") || location.pathname === "/case-studies";
   useEffect(() => {
-    applyStoredThemeColors();
-  }, []);
+    if (isThemePath) {
+      applyStoredThemeColors();
+    } else {
+      // Remove custom theme colors on non-portfolio pages
+      const vars = ["--brand", "--background", "--foreground", "--primary", "--primary-foreground", "--secondary", "--secondary-foreground", "--muted", "--muted-foreground", "--accent", "--accent-foreground", "--destructive", "--destructive-foreground", "--border", "--ring"];
+      vars.forEach((key) => document.documentElement.style.removeProperty(key));
+    }
+  }, [isThemePath]);
 
   // Scroll to top on route change (but not for internal navigation)
   useEffect(() => {
