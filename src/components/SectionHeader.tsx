@@ -42,7 +42,7 @@ const SectionHeader = ({
           {showUpArrow && (
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="bg-black text-white dark:bg-white/10 dark:text-white p-2 rounded-full shadow-lg hover:opacity-80 transition-opacity"
+              className="bg-brand-dynamic text-white p-2 rounded-full shadow-lg hover:opacity-80 transition-opacity"
               aria-label="Scroll to top"
             >
               <IconWrapper

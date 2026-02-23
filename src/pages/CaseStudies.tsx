@@ -46,7 +46,7 @@ export default function CaseStudies() {
               }}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 activeStudy === study.id
-                  ? "bg-gray-900 text-white dark:bg-white dark:text-gray-900"
+                  ? "bg-brand-dynamic text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
               }`}
             >

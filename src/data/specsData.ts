@@ -35,13 +35,13 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Interactive Components",
           description: "Component state management and hooks",
-          link: "/",
+          link: "/portfolio/design-system",
           code: "useState, useEffect, useCallback hooks for interactive controls",
         },
       },
       {
-        name: "TypeScript",
-        description: "Type-safe JavaScript development",
+        name: "TypeScript 5",
+        description: "Type-safe JavaScript development with strict mode",
         example: {
           title: "Type Safety",
           description: "Strongly typed components and interfaces",
@@ -50,13 +50,13 @@ export const techCategories: TechCategory[] = [
         },
       },
       {
-        name: "Vite",
-        description: "Fast build tool and development server",
+        name: "Vite 5",
+        description: "Fast build tool with HMR and Terser minification",
         example: {
-          title: "Hot Module Replacement",
-          description: "Instant updates during development",
-          link: "/json",
-          code: "Fast refresh with TypeScript support",
+          title: "Optimized Builds",
+          description: "Tree shaking, code splitting, and manual chunks",
+          link: "/specs",
+          code: "manualChunks + Terser minification in Vite config",
         },
       },
       {
@@ -65,7 +65,7 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "SPA Navigation",
           description: "Smooth page transitions without reloads",
-          link: "/archive",
+          link: "/portfolio",
           code: "Link, useNavigate, useLocation for seamless routing",
         },
       },
@@ -76,12 +76,12 @@ export const techCategories: TechCategory[] = [
     icon: "Palette",
     items: [
       {
-        name: "Tailwind CSS",
-        description: "Utility-first CSS framework with custom theme",
+        name: "Tailwind CSS 3",
+        description: "Utility-first CSS with custom theme and design tokens",
         example: {
           title: "Responsive Design",
           description: "Mobile-first responsive layouts throughout",
-          link: "/",
+          link: "/portfolio",
           code: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
         },
       },
@@ -91,7 +91,7 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Smooth Animations",
           description: "Page transitions and micro-interactions",
-          link: "/",
+          link: "/portfolio/design-system",
           code: "motion.div with stagger animations",
         },
       },
@@ -101,18 +101,28 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Accessible Components",
           description: "Dialog, Toast, Accordion, Tabs, and more",
-          link: "/",
+          link: "/portfolio/design-system",
           code: "class-variance-authority + Radix primitives",
         },
       },
       {
         name: "Lucide React",
-        description: "Consistent icon library",
+        description: "Consistent icon library with lazy loading",
         example: {
           title: "Scalable Icons",
-          description: "Scalable vector icons throughout the site",
-          link: "/",
-          code: "ArrowLeft, Copy, Check, Music icons",
+          description: "Tree-shakeable vector icons throughout the site",
+          link: "/portfolio",
+          code: "React.lazy(() => import('lucide-react'))",
+        },
+      },
+      {
+        name: "CSS Custom Properties",
+        description: "Dynamic theming with HSL-based CSS variables",
+        example: {
+          title: "Live Theme Editor",
+          description: "Real-time color editing with site-wide preview",
+          link: "/portfolio/design-system",
+          code: "--brand, --primary, --secondary CSS variables with localStorage persistence",
         },
       },
     ],
@@ -127,7 +137,7 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Serverless API",
           description: "Auth, Stripe checkout, and site config endpoints",
-          link: "/",
+          link: "/specs",
           code: "netlify/functions/ with TypeScript handlers",
         },
       },
@@ -147,18 +157,8 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Cloud Database",
           description: "Serverless PostgreSQL with connection pooling",
-          link: "/",
-          code: "@neondatabase/serverless for edge-compatible connections",
-        },
-      },
-      {
-        name: "FastAPI (Python)",
-        description: "Backend API with SQLAlchemy ORM and Alembic migrations",
-        example: {
-          title: "RESTful API",
-          description: "Content management and admin API with JWT auth",
           link: "/specs",
-          code: "FastAPI + SQLAlchemy + python-jose for backend operations",
+          code: "@neondatabase/serverless for edge-compatible connections",
         },
       },
       {
@@ -182,7 +182,7 @@ export const techCategories: TechCategory[] = [
         description: "Payment processing for the store",
         example: {
           title: "Checkout Integration",
-          description: "Stripe Buy Button and serverless checkout sessions",
+          description: "Stripe checkout sessions via serverless functions",
           link: "/store",
           code: "@stripe/stripe-js + Netlify function for session creation",
         },
@@ -228,9 +228,9 @@ export const techCategories: TechCategory[] = [
         description: "Static hosting, serverless functions, and CI/CD",
         example: {
           title: "Automated Deployment",
-          description: "Git-based continuous deployment with build pipeline",
-          link: "/",
-          code: "netlify.toml for build config and SPA redirects",
+          description: "Git-based continuous deployment with branch deploys for staging",
+          link: "/specs",
+          code: "netlify.toml for build config, SPA redirects, and branch deploy context",
         },
       },
       {
@@ -239,7 +239,7 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Fast Global Delivery",
           description: "Edge-cached static assets worldwide",
-          link: "/",
+          link: "/specs",
           code: "Automatic CDN distribution for all static files",
         },
       },
@@ -249,7 +249,7 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Offline Support",
           description: "Cached resources for offline browsing",
-          link: "/",
+          link: "/specs",
           code: "sw.js with cache-first strategy",
         },
       },
@@ -259,8 +259,54 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Secure Connections",
           description: "Automatic SSL certificate provisioning",
-          link: "/",
+          link: "/specs",
           code: "Managed SSL via Netlify",
+        },
+      },
+    ],
+  },
+  {
+    title: "Design System & Theming",
+    icon: "Palette",
+    items: [
+      {
+        name: "Live Color Editor",
+        description: "Interactive color picker for brand and secondary palette colors",
+        example: {
+          title: "Theme Customization",
+          description: "Click a swatch to change the site palette in real time",
+          link: "/portfolio/design-system",
+          code: "Color picker with HSL conversion and localStorage persistence",
+        },
+      },
+      {
+        name: "WCAG AA Auto-Contrast",
+        description: "Automatic palette adjustment to maintain 4.5:1 contrast ratio",
+        example: {
+          title: "Accessibility Compliance",
+          description: "Foreground colors auto-adjust when background changes",
+          link: "/portfolio/design-system",
+          code: "contrastRatio() + iterative lightness adjustment across CONTRAST_PAIRS",
+        },
+      },
+      {
+        name: "Brand-Dynamic Utilities",
+        description: "Custom CSS utility classes that reference CSS variables for brand color",
+        example: {
+          title: "Dynamic Brand Color",
+          description: "Icons, titles, and links update when brand color changes",
+          link: "/portfolio",
+          code: "text-brand-dynamic, bg-brand-dynamic via @layer utilities in globals.css",
+        },
+      },
+      {
+        name: "Theme Preview Bar",
+        description: "Persistent toast bar for previewing, saving, and discarding color changes",
+        example: {
+          title: "Change Management",
+          description: "Navigate affected pages, undo, discard, or save changes",
+          link: "/portfolio/design-system",
+          code: "ThemePreviewBar component with localStorage history stack",
         },
       },
     ],
@@ -275,7 +321,7 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Responsive Grid",
           description: "Adaptive layouts for all screen sizes",
-          link: "/",
+          link: "/portfolio",
           code: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
         },
       },
@@ -285,7 +331,7 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "Touch-Friendly UI",
           description: "44px minimum touch targets",
-          link: "/",
+          link: "/portfolio",
           code: "min-h-[44px] min-w-[44px] for buttons",
         },
       },
@@ -295,18 +341,18 @@ export const techCategories: TechCategory[] = [
         example: {
           title: "PWA Features",
           description: "Standalone display with app manifest",
-          link: "/",
+          link: "/specs",
           code: "manifest.json + service worker registration",
         },
       },
       {
-        name: "Viewport Optimization",
-        description: "Adaptive layouts for all devices",
+        name: "Dark Mode",
+        description: "System-aware dark/light theme toggle",
         example: {
-          title: "Flexible Typography",
-          description: "Scalable text with clamp() functions",
-          link: "/",
-          code: "font-size: clamp(1rem, 4vw, 2rem)",
+          title: "Theme Switching",
+          description: "Class-based dark mode with localStorage persistence",
+          link: "/portfolio",
+          code: "darkMode: ['class'] in Tailwind config + localStorage",
         },
       },
     ],
@@ -323,23 +369,23 @@ export const techCategories: TechCategory[] = [
           title: "Route & Component Splitting",
           description:
             "All pages and heavy components loaded on demand",
-          link: "/json",
-          code: "React.lazy(() => import('./JsonAiPrompts')) with Suspense",
+          link: "/specs",
+          code: "React.lazy(() => import('./pages/...')) with Suspense fallback",
         },
       },
       {
         name: "Image Optimization",
-        description: "SVG animations and optimized assets",
+        description: "Responsive images with srcset, lazy loading, and SVG graphics",
         example: {
           title: "Optimized Assets",
-          description: "SVG graphics and lazy-loaded images",
-          link: "/",
-          code: "SVG animations for lightweight graphics",
+          description: "getCardImageProps and getThumbnailImageProps utilities",
+          link: "/portfolio/design",
+          code: "imageOptimizer.ts with responsive srcset generation",
         },
       },
       {
         name: "Bundle Optimization",
-        description: "Tree shaking, minification with Terser, manual chunks",
+        description: "Tree shaking, Terser minification, and manual chunks",
         example: {
           title: "Optimized Bundles",
           description: "Separate vendor and utility chunks",
@@ -348,13 +394,13 @@ export const techCategories: TechCategory[] = [
         },
       },
       {
-        name: "Caching Strategy",
-        description: "Service worker and browser caching",
+        name: "Font Loading Strategy",
+        description: "Deferred font loading with system font fallbacks",
         example: {
-          title: "Smart Caching",
-          description: "Long-term caching for static assets",
-          link: "/",
-          code: "Cache-first strategy for images and fonts",
+          title: "Non-Blocking Fonts",
+          description: "requestIdleCallback for font loading after initial paint",
+          link: "/specs",
+          code: "Deferred Google Fonts with wf-active/wf-loading classes",
         },
       },
     ],
@@ -380,17 +426,7 @@ export const techCategories: TechCategory[] = [
           title: "Type Safety",
           description: "Strict tsconfig for maximum type coverage",
           link: "/specs",
-          code: "tsconfig.json with strict type checking enabled",
-        },
-      },
-      {
-        name: "Vite Dev Server",
-        description: "Fast development with instant HMR",
-        example: {
-          title: "Fast Development",
-          description: "Instant hot module replacement",
-          link: "/specs",
-          code: "Vite HMR for sub-second updates",
+          code: "tsc && vite build ensures type safety before deploy",
         },
       },
       {
@@ -401,6 +437,16 @@ export const techCategories: TechCategory[] = [
           description: "Browse and edit data during development",
           link: "/specs",
           code: "drizzle-kit studio for local database inspection",
+        },
+      },
+      {
+        name: "Netlify CLI",
+        description: "Local development and manual deploys",
+        example: {
+          title: "Local Dev & Staging",
+          description: "Build and deploy to staging aliases from CLI",
+          link: "/specs",
+          code: "netlify deploy --build --alias staging",
         },
       },
     ],
@@ -424,8 +470,8 @@ export const techCategories: TechCategory[] = [
         description: "Rich content rendering from markdown sources",
         example: {
           title: "Article Content",
-          description: "Articles rendered from markdown with react-markdown",
-          link: "/article/test",
+          description: "Articles rendered with react-markdown",
+          link: "/archive",
           code: "react-markdown for rich article content",
         },
       },
@@ -440,23 +486,13 @@ export const techCategories: TechCategory[] = [
         },
       },
       {
-        name: "Design System",
-        description: "Live editable theme with CSS custom properties",
+        name: "Case Studies",
+        description: "Tabbed case study pages with structured content sections",
         example: {
-          title: "Theme Editor",
-          description: "Real-time color editing with site-wide preview",
-          link: "/portfolio/design-system",
-          code: "CSS custom properties with localStorage persistence",
-        },
-      },
-      {
-        name: "SVG Animations",
-        description: "Lightweight vector animations with Framer Motion",
-        example: {
-          title: "Smooth Animations",
-          description: "Custom SVG animations and transitions",
-          link: "/",
-          code: "SVG path animations with motion components",
+          title: "Portfolio Case Studies",
+          description: "5 detailed case studies with before/after impact sections",
+          link: "/case-studies",
+          code: "Tab-based navigation with conditional rendering",
         },
       },
     ],
@@ -467,7 +503,7 @@ export const methodologies: Methodology[] = [
   {
     title: "Design System",
     description:
-      "Component-based design system with consistent typography, colors, and spacing",
+      "Live editable design system with CSS custom properties, WCAG AA auto-contrast, and brand color propagation",
   },
   {
     title: "Mobile-First Development",
@@ -481,7 +517,7 @@ export const methodologies: Methodology[] = [
   },
   {
     title: "Performance Budget",
-    description: "Optimized for fast loading times and smooth user experience",
+    description: "Optimized for fast loading times with code splitting, lazy loading, and deferred font loading",
   },
 ];
 
@@ -492,16 +528,17 @@ export const keyFeatures: string[] = [
   "Code Splitting & Lazy Loading",
   "E-Commerce Store with Stripe Payments",
   "Music Player with Playlist",
-  "JSON AI Prompts Builder",
   "Audio Transcript Viewer",
-  "Live Theme Editor with Site-Wide Preview",
+  "Live Theme Editor with WCAG AA Auto-Contrast",
+  "Brand Color Propagation Across Portfolio",
   "JWT Authentication & Protected Routes",
   "Contact Forms with EmailJS",
-  "Interactive SVG Animations",
   "Markdown Article Rendering",
+  "Tabbed Case Studies",
   "Service Worker (Offline Support)",
-  "Accessibility Compliant",
+  "Accessibility Compliant (WCAG 2.1 AA)",
   "Performance Optimized",
+  "Staging Environment via Netlify Branch Deploys",
 ];
 
 export const performanceMetrics: PerformanceMetric[] = [

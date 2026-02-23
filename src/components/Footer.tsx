@@ -40,7 +40,7 @@ export const Footer = () => {
                   localStorage.setItem("theme", "dark");
                 }
               }}
-              className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+              className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="Toggle dark mode"
             >
               <svg
@@ -74,7 +74,7 @@ export const Footer = () => {
               href={content.navigation.social.linkedin.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+              className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="LinkedIn"
             >
               <LinkedInLogoIcon className="h-5 w-5 text-brand-dynamic dark:text-gray-300" />
@@ -83,7 +83,7 @@ export const Footer = () => {
               href="https://github.com/davemelk100"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+              className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="GitHub"
             >
               <GitHubLogoIcon className="h-5 w-5 text-brand-dynamic dark:text-gray-300" />
@@ -92,7 +92,7 @@ export const Footer = () => {
               href={content.navigation.social.dribbble.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+              className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="Dribbble"
             >
               <Suspense fallback={<span className="h-5 w-5">D</span>}>
