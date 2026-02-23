@@ -223,12 +223,38 @@ export default function DesignSystemPage() {
   ): Record<string, string> => {
     const adjustments: Record<string, string> = {};
     const working = { ...newColors };
+
+    // Check brand against background — adjust background if brand is inaccessible
+    const brandVal = working["--brand"];
+    const bgVal = working["--background"];
+    if (brandVal && bgVal && contrastRatio(brandVal, bgVal) < 4.5) {
+      const bgParts = bgVal.trim().split(/\s+/);
+      if (bgParts.length >= 3) {
+        const bh = parseFloat(bgParts[0]);
+        const bs = parseFloat(bgParts[1]);
+        let bl = parseFloat(bgParts[2]);
+        const brandParts = brandVal.trim().split(/\s+/);
+        const brandLightness = brandParts.length >= 3 ? parseFloat(brandParts[2]) : 50;
+        // If brand is light, darken background; if brand is dark, lighten background
+        const dir = brandLightness > 50 ? -3 : 3;
+        let adjBg = `${bh} ${bs}% ${bl}%`;
+        for (let i = 0; i < 15; i++) {
+          bl = Math.max(0, Math.min(100, bl + dir));
+          adjBg = `${bh} ${bs}% ${bl}%`;
+          if (contrastRatio(brandVal, adjBg) >= 4.5) break;
+        }
+        adjustments["--background"] = adjBg;
+        working["--background"] = adjBg;
+      }
+    }
+
+    // Check all foreground/background contrast pairs — adjust foreground
     for (const [fg, bg] of CONTRAST_PAIRS) {
       const fgVal = working[fg];
-      const bgVal = working[bg];
-      if (!fgVal || !bgVal) continue;
+      const bgv = working[bg];
+      if (!fgVal || !bgv) continue;
 
-      if (contrastRatio(fgVal, bgVal) >= 4.5) continue;
+      if (contrastRatio(fgVal, bgv) >= 4.5) continue;
 
       const fgParts = fgVal.trim().split(/\s+/);
       if (fgParts.length < 3) continue;
@@ -237,7 +263,7 @@ export default function DesignSystemPage() {
       const s = parseFloat(fgParts[1]);
       let l = parseFloat(fgParts[2]);
 
-      const bgParts = bgVal.trim().split(/\s+/);
+      const bgParts = bgv.trim().split(/\s+/);
       const bgLightness = bgParts.length >= 3 ? parseFloat(bgParts[2]) : 50;
       const direction = bgLightness > 50 ? -3 : 3;
 
@@ -245,7 +271,7 @@ export default function DesignSystemPage() {
       for (let i = 0; i < 15; i++) {
         l = Math.max(0, Math.min(100, l + direction));
         adjusted = `${h} ${s}% ${l}%`;
-        if (contrastRatio(adjusted, bgVal) >= 4.5) break;
+        if (contrastRatio(adjusted, bgv) >= 4.5) break;
       }
       adjustments[fg] = adjusted;
       working[fg] = adjusted;
