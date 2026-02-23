@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import PortfolioLayout from "../../components/PortfolioLayout";
 import SectionHeader from "../../components/SectionHeader";
 import { content } from "../../content";
@@ -7,7 +7,6 @@ import designTokens from "../../designTokens.json";
 export default function DesignSystemPage() {
   const [copiedValue, setCopiedValue] = useState<string | null>(null);
   const [accordionOpen, setAccordionOpen] = useState(false);
-  const accordionRef = useRef<HTMLDivElement>(null);
 
   const copyToClipboard = (value: string) => {
     navigator.clipboard.writeText(value);
@@ -175,25 +174,24 @@ export default function DesignSystemPage() {
                     </p>
                   </div>
                   <button
-                    onClick={() => setAccordionOpen(!accordionOpen)}
+                    onClick={() => setAccordionOpen((prev) => !prev)}
                     className="px-3 py-1.5 text-xs font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                   >
                     {accordionOpen ? "Collapse" : "Expand"}
                   </button>
                 </div>
                 <div
-                  ref={accordionRef}
-                  className="overflow-hidden transition-all duration-200 ease-out"
+                  className="grid transition-all duration-200 ease-out"
                   style={{
-                    height: accordionOpen
-                      ? accordionRef.current?.scrollHeight
-                      : 0,
+                    gridTemplateRows: accordionOpen ? "1fr" : "0fr",
                   }}
                 >
-                  <div className="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
-                    This content expands and collapses using the accordion
-                    animation. Used by the Radix UI Accordion component to
-                    smoothly reveal and hide content sections.
+                  <div className="overflow-hidden">
+                    <div className="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
+                      This content expands and collapses using the accordion
+                      animation. Used by the Radix UI Accordion component to
+                      smoothly reveal and hide content sections.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -205,11 +203,16 @@ export default function DesignSystemPage() {
                     scroll-banner
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    25s linear infinite
+                    linear infinite
                   </p>
                 </div>
                 <div className="px-4 py-3 overflow-hidden">
-                  <div className="flex animate-scroll-banner w-max">
+                  <div
+                    className="flex w-max"
+                    style={{
+                      animation: "scroll-banner 30s linear infinite",
+                    }}
+                  >
                     {[...Array(2)].map((_, i) => (
                       <div key={i} className="flex gap-8 mr-8">
                         {[
