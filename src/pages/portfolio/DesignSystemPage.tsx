@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import PortfolioLayout from "../../components/PortfolioLayout";
 import SectionHeader from "../../components/SectionHeader";
 import { content } from "../../content";
@@ -6,6 +6,8 @@ import designTokens from "../../designTokens.json";
 
 export default function DesignSystemPage() {
   const [copiedValue, setCopiedValue] = useState<string | null>(null);
+  const [accordionOpen, setAccordionOpen] = useState(false);
+  const accordionRef = useRef<HTMLDivElement>(null);
 
   const copyToClipboard = (value: string) => {
     navigator.clipboard.writeText(value);
@@ -152,6 +154,84 @@ export default function DesignSystemPage() {
                   {btn.name}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Animations */}
+          <div className="mb-10">
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+              Animations
+            </h3>
+            <div className="space-y-6">
+              {/* Accordion */}
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3 bg-gray-50 dark:bg-gray-800/50">
+                  <div>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      accordion-down / accordion-up
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      0.2s ease-out
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setAccordionOpen(!accordionOpen)}
+                    className="px-3 py-1.5 text-xs font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                  >
+                    {accordionOpen ? "Collapse" : "Expand"}
+                  </button>
+                </div>
+                <div
+                  ref={accordionRef}
+                  className="overflow-hidden transition-all duration-200 ease-out"
+                  style={{
+                    height: accordionOpen
+                      ? accordionRef.current?.scrollHeight
+                      : 0,
+                  }}
+                >
+                  <div className="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
+                    This content expands and collapses using the accordion
+                    animation. Used by the Radix UI Accordion component to
+                    smoothly reveal and hide content sections.
+                  </div>
+                </div>
+              </div>
+
+              {/* Scroll Banner */}
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                <div className="px-4 py-3 bg-gray-50 dark:bg-gray-800/50">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    scroll-banner
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    25s linear infinite
+                  </p>
+                </div>
+                <div className="px-4 py-3 overflow-hidden">
+                  <div className="flex animate-scroll-banner w-max">
+                    {[...Array(2)].map((_, i) => (
+                      <div key={i} className="flex gap-8 mr-8">
+                        {[
+                          "Design Systems",
+                          "Typography",
+                          "Color Tokens",
+                          "Spacing",
+                          "Components",
+                          "Accessibility",
+                        ].map((word) => (
+                          <span
+                            key={`${i}-${word}`}
+                            className="text-sm font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap"
+                          >
+                            {word}
+                          </span>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
