@@ -354,6 +354,18 @@ export default function DesignSystemPage() {
                 </button>
               )}
             </div>
+
+            {/* Instructions */}
+            <div className="mb-6 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 px-4 py-3">
+              <p className="text-sm font-medium text-gray-900 dark:text-white mb-2">How to use the color editor</p>
+              <ol className="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-decimal list-inside">
+                <li>Click a swatch marked with a lock icon to enter the passcode and unlock editing</li>
+                <li>Once unlocked, click the <strong className="text-gray-900 dark:text-white">Brand Blue</strong> or <strong className="text-gray-900 dark:text-white">Secondary</strong> swatch (marked with a pencil icon) to open the color picker</li>
+                <li>Choose a new color. The rest of the palette will automatically adapt to maintain WCAG AA contrast ratios (4.5:1)</li>
+                <li>Use the preview bar at the bottom to navigate affected pages, then <strong className="text-gray-900 dark:text-white">Save</strong>, <strong className="text-gray-900 dark:text-white">Discard</strong>, or <strong className="text-gray-900 dark:text-white">Undo</strong> your changes</li>
+              </ol>
+            </div>
+
             {/* Palette adaptation notice */}
             {autoAdjustNotice && (
               <div className="mb-4 rounded-lg border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 px-4 py-2">
