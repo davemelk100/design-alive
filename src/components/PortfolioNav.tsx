@@ -25,7 +25,7 @@ const idToRoute: Record<string, string> = {
 
 const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
   <section className="py-4 sm:py-4xl:py-4 relative">
-    <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-1 gap-6 sm:gap-8">
         <div className="pt-4 rounded-lg">
           <div className="mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-4">
