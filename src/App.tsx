@@ -117,7 +117,7 @@ function App() {
                       >
                         Portfolio
                       </Link>
-                      <a
+                      {/* <a
                         href="https://www.majorleaguenumbers.com/"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -136,7 +136,7 @@ function App() {
                         className="text-lg font-medium text-white hover:text-white/80 transition-colors px-6 py-3 rounded-md hover:bg-white/10 border border-white text-center"
                       >
                         Cygnet Institute
-                      </Link>
+                      </Link> */}
                     </div>
                   </div>
                 </div>
