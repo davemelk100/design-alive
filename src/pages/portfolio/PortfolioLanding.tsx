@@ -16,8 +16,8 @@ export default function PortfolioLanding() {
       {/* Intro + Live Design System row */}
       <section className="relative">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="mt-4 sm:mt-6 flex flex-col lg:flex-row gap-4">
-            <div className="lg:flex-1">
+          <div className="mt-4 sm:mt-6 flex flex-col lg:flex-row lg:items-center gap-4">
+            <div className="lg:w-1/2">
               <p className="text-muted-foreground text-left">
                 I'm David Melkonian, a technical product and
                 experience leader with over a decade of work at
@@ -31,9 +31,9 @@ export default function PortfolioLanding() {
                 for digital experience delivery.
               </p>
             </div>
-            <div className="lg:w-[340px] shrink-0 rounded-lg border border-border bg-white dark:bg-gray-800 p-4 shadow-lg flex flex-col gap-3">
+            <div className="lg:w-1/2 rounded-lg border border-border bg-white dark:bg-gray-800 p-4 shadow-lg flex flex-col gap-3">
               <div>
-                <h3 className="font-semibold text-brand-dynamic dark:text-white mb-1 title-font">Live Design System</h3>
+                <h3 className="font-bold text-brand-dynamic dark:text-white mb-1 title-font">NEW - Live Design System!</h3>
                 <p className="text-muted-foreground text-sm">
                   Explore the interactive design system powering this site. Pick a brand color and watch every token, including primary, secondary, accent, and more, transform in real time with automatic WCAG AA contrast correction.
                 </p>

@@ -894,14 +894,27 @@ export default function DesignSystemPage() {
     <PortfolioLayout currentPage="design-system">
       <section className="pt-0 pb-2 sm:pb-3 lg:pb-4 xl:pb-6 relative">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Title row with buttons and WCAG indicator */}
-          <div className="flex flex-wrap items-center gap-3 mb-4">
+          {/* Title row */}
+          <div className="mb-4">
             <SectionHeader
               title={content.designSystem.title}
               subtitle={content.designSystem.subtitle}
               className=""
             />
-            <div className="flex items-center gap-2 ml-auto">
+          </div>
+          <div className="flex flex-col lg:flex-row lg:items-start gap-4 mb-4">
+            <div className="lg:w-[20%]">
+              <div className="text-xs text-muted-foreground leading-relaxed space-y-2">
+                <p>Pick any brand color and watch the entire palette transform. Every token — primary, secondary, accent, muted, border, and foreground — shifts automatically to stay in harmony.</p>
+                <p>Behind the scenes, each color pair is validated against WCAG AA contrast standards in real time. If anything falls short of the 4.5:1 minimum, the system corrects it instantly — adjusting lightness until every ratio passes.</p>
+                <p>Your brand color stays protected too: if it's too light for the background, it darkens just enough to remain accessible. The result is a fully legible interface, no matter what color you choose.</p>
+              </div>
+            </div>
+            {/* Colors + Preview side by side */}
+            <div id="colors" className="lg:flex-1 min-w-0 scroll-mt-24">
+
+            {/* WCAG badge, Reset, Generate CSS */}
+            <div className="flex flex-wrap items-center gap-2 mb-4">
               <div aria-live="assertive" aria-atomic="true" className="flex items-center">
                 {auditStatus === 'running' && (
                   <span data-axe-exclude className="flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-300">
@@ -961,17 +974,6 @@ export default function DesignSystemPage() {
                 Generate CSS
               </button>
             </div>
-          </div>
-          <div className="flex flex-col lg:flex-row lg:items-start gap-4 mb-4">
-            <div className="lg:w-[20%]">
-              <div className="text-xs text-muted-foreground leading-relaxed space-y-2">
-                <p>Pick any brand color and watch the entire palette transform. Every token — primary, secondary, accent, muted, border, and foreground — shifts automatically to stay in harmony.</p>
-                <p>Behind the scenes, each color pair is validated against WCAG AA contrast standards in real time. If anything falls short of the 4.5:1 minimum, the system corrects it instantly — adjusting lightness until every ratio passes.</p>
-                <p>Your brand color stays protected too: if it's too light for the background, it darkens just enough to remain accessible. The result is a fully legible interface, no matter what color you choose.</p>
-              </div>
-            </div>
-            {/* Colors + Preview side by side */}
-            <div id="colors" className="lg:flex-1 min-w-0 scroll-mt-24">
 
             {/* Generated code output — above hero swatches */}
             {generatedCode && (

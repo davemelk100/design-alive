@@ -26,11 +26,11 @@ const activeClass = "text-brand-dynamic dark:text-white px-3 py-2 rounded-md";
 const inactiveClass = "text-gray-600 dark:text-gray-300 hover:text-brand-dynamic dark:hover:text-white transition-colors px-3 py-2 rounded-md";
 
 const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
-  <nav aria-label="Site navigation" className="py-4 sm:py-4 xl:py-4 relative">
+  <nav aria-label="Site navigation" className="pt-4 pb-0 relative">
     <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-1 gap-6 sm:gap-8">
         <div className="pt-4 rounded-lg">
-          <div className="mb-6 sm:mb-8 flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-4">
+          <div className="mb-0 flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-4">
             <div>
               <Link to="/portfolio" className="no-underline inline-flex items-center gap-3">
                 <MelkonianLogo
