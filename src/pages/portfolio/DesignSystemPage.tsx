@@ -50,11 +50,11 @@ function contrastRatio(hsl1: string, hsl2: string): number {
 
 const EDITABLE_VARS = [
   { key: "--brand", label: "Brand Blue" },
+  { key: "--secondary", label: "Secondary" },
   { key: "--background", label: "Background" },
   { key: "--foreground", label: "Foreground" },
   { key: "--primary", label: "Primary" },
   { key: "--primary-foreground", label: "Primary FG" },
-  { key: "--secondary", label: "Secondary" },
   { key: "--secondary-foreground", label: "Secondary FG" },
   { key: "--muted", label: "Muted" },
   { key: "--muted-foreground", label: "Muted FG" },
@@ -240,24 +240,39 @@ export default function DesignSystemPage() {
     const toHsl = (h: number, s: number, l: number) =>
       `${h} ${s}% ${l}%`;
 
-    // Check brand against background — adjust background if brand is inaccessible
-    const brandVal = working["--brand"];
+    // Check brand against background — first try adjusting brand lightness, then background
+    let brandVal = working["--brand"];
     const bgVal = working["--background"];
     if (brandVal && bgVal && contrastRatio(brandVal, bgVal) < 4.5) {
       const bg = parseHsl(bgVal);
       const brand = parseHsl(brandVal);
       if (bg && brand) {
-        // If brand is light, darken background; if brand is dark, lighten background
-        const dir = brand.l > 50 ? -3 : 3;
-        let bl = bg.l;
-        let adjBg = toHsl(bg.h, bg.s, bl);
+        // Try adjusting brand lightness first (darken if bg is light, lighten if bg is dark)
+        const brandDir = bg.l > 50 ? -3 : 3;
+        let bl = brand.l;
+        let adjBrand = toHsl(brand.h, brand.s, bl);
         for (let i = 0; i < 34; i++) {
-          bl = Math.max(0, Math.min(100, bl + dir));
-          adjBg = toHsl(bg.h, bg.s, bl);
-          if (contrastRatio(brandVal, adjBg) >= 4.5) break;
+          bl = Math.max(0, Math.min(100, bl + brandDir));
+          adjBrand = toHsl(brand.h, brand.s, bl);
+          if (contrastRatio(adjBrand, bgVal) >= 4.5) break;
         }
-        adjustments["--background"] = adjBg;
-        working["--background"] = adjBg;
+        if (contrastRatio(adjBrand, bgVal) >= 4.5) {
+          adjustments["--brand"] = adjBrand;
+          working["--brand"] = adjBrand;
+          brandVal = adjBrand;
+        } else {
+          // Fallback: adjust background if brand adjustment wasn't enough
+          const bgDir = brand.l > 50 ? -3 : 3;
+          let bgL = bg.l;
+          let adjBg = toHsl(bg.h, bg.s, bgL);
+          for (let i = 0; i < 34; i++) {
+            bgL = Math.max(0, Math.min(100, bgL + bgDir));
+            adjBg = toHsl(bg.h, bg.s, bgL);
+            if (contrastRatio(brandVal, adjBg) >= 4.5) break;
+          }
+          adjustments["--background"] = adjBg;
+          working["--background"] = adjBg;
+        }
       }
     }
 
@@ -383,50 +398,47 @@ export default function DesignSystemPage() {
 
   return (
     <PortfolioLayout currentPage="design-system">
-      <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
+      <section className="py-2 sm:py-3 lg:py-4 xl:py-6 relative">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            title={content.designSystem.title}
-            subtitle={content.designSystem.subtitle}
-            className="mb-4 sm:mb-4"
-          />
+          <div className="flex items-center justify-between mb-4 sm:mb-4">
+            <SectionHeader
+              title={content.designSystem.title}
+              subtitle={content.designSystem.subtitle}
+              className=""
+            />
+            {unlocked && (
+              <button
+                onClick={() => setShowResetModal(true)}
+                className="px-3 py-1.5 text-xs font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+              >
+                Reset to Defaults
+              </button>
+            )}
+          </div>
 
           {/* Instructions */}
-          <div className="mb-6 rounded-lg border border-border bg-gray-50 dark:bg-gray-800/50 px-4 py-3">
-            <p className="text-sm font-medium text-gray-900 dark:text-white mb-2">How to use the color editor</p>
-            <ol className="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-decimal list-inside">
-              <li>Click the <strong className="text-gray-900 dark:text-white">Brand Blue</strong> or <strong className="text-gray-900 dark:text-white">Secondary</strong> swatch (marked with a pencil icon) to open the color picker</li>
-              <li>Choose a new color. The rest of the palette will automatically adapt to maintain WCAG AA contrast ratios (4.5:1)</li>
-              <li>Use the preview bar at the bottom to navigate affected pages, then <strong className="text-gray-900 dark:text-white">Save</strong>, <strong className="text-gray-900 dark:text-white">Discard</strong>, or <strong className="text-gray-900 dark:text-white">Undo</strong> your changes</li>
-            </ol>
+          <div className="mb-6 flex flex-col md:flex-row gap-4">
+            <div className="md:w-1/2 rounded-lg border border-border bg-gray-50 dark:bg-gray-800/50 px-4 py-3">
+              <p className="text-sm font-medium text-gray-900 dark:text-white mb-2">How to use the color editor</p>
+              <ol className="text-sm text-gray-600 dark:text-gray-400 space-y-1 list-decimal list-inside">
+                <li>Click the <strong className="text-gray-900 dark:text-white">Brand Blue</strong> or <strong className="text-gray-900 dark:text-white">Secondary</strong> swatch (marked with a pencil icon) to open the color picker</li>
+                <li>Choose a new color. The rest of the palette will automatically adapt to maintain WCAG AA contrast ratios (4.5:1)</li>
+                <li>Use the preview bar at the bottom to navigate affected pages, then <strong className="text-gray-900 dark:text-white">Save</strong>, <strong className="text-gray-900 dark:text-white">Discard</strong>, or <strong className="text-gray-900 dark:text-white">Undo</strong> your changes</li>
+              </ol>
+            </div>
+            <div className="md:w-1/2 rounded-lg border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 px-4 py-3 flex items-center">
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                {autoAdjustNotice || "Palette adapted to new hue. All color pairs pass WCAG AA (4.5:1). Auto-adjusted primary-foreground for contrast."}
+              </p>
+            </div>
           </div>
 
           {/* Colors + Preview side by side */}
           <div id="colors" className="mb-10 scroll-mt-24">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-brand-dynamic dark:text-white">
-                {content.designSystem.sections.colors}
-              </h3>
-              {unlocked && (
-                <button
-                  onClick={() => setShowResetModal(true)}
-                  className="px-3 py-1.5 text-xs font-medium rounded-md bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                >
-                  Reset to Defaults
-                </button>
-              )}
-            </div>
-
-            {/* Palette adaptation notice */}
-            {autoAdjustNotice && (
-              <div className="mb-4 rounded-lg border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 px-4 py-2">
-                <p className="text-sm text-blue-800 dark:text-blue-200">{autoAdjustNotice}</p>
-              </div>
-            )}
 
             <div className="flex flex-col xl:flex-row gap-6">
               {/* Color swatches */}
-              <div className="xl:w-1/3 xl:flex-shrink-0 min-w-0 rounded-lg border border-border bg-background p-4">
+              <div className="xl:flex-1 min-w-0 rounded-lg border border-border bg-background p-4">
                 <div className="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-3 gap-2">
                   {EDITABLE_VARS.map(({ key, label }) => {
                     const isEditable = key === "--brand" || key === "--secondary";
@@ -483,7 +495,7 @@ export default function DesignSystemPage() {
               </div>
 
               {/* Preview panel */}
-              <div className="xl:w-1/3 xl:flex-shrink-0 rounded-lg border border-border bg-background p-4 space-y-4">
+              <div className="xl:flex-1 rounded-lg border border-border bg-background p-4 space-y-4">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Chips</p>
                 <div className="flex flex-wrap gap-2">
                   <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>
@@ -556,14 +568,19 @@ export default function DesignSystemPage() {
               </div>
 
               {/* Shadows column */}
-              <div id="shadows" className="xl:w-1/3 xl:flex-shrink-0 min-w-0 scroll-mt-24 rounded-lg border border-border bg-background p-4">
+              <div id="shadows" className="xl:flex-1 min-w-0 scroll-mt-24 rounded-lg border border-border p-4 flex flex-col" style={{ background: "linear-gradient(135deg, hsl(var(--secondary) / 0.08), hsl(var(--brand) / 0.06))" }}>
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-3">Shadows</p>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3 flex-1">
                   {designTokens.shadows.map((shadow) => (
-                    <div key={shadow.name} className="text-center">
+                    <div key={shadow.name} className="text-center flex flex-col">
                       <div
-                        className="w-full h-20 rounded-lg bg-white dark:bg-gray-800 mb-2"
-                        style={{ boxShadow: shadow.value }}
+                        className="w-full flex-1 min-h-[5rem] rounded-2xl mb-2 border border-white/30 dark:border-white/10"
+                        style={{
+                          boxShadow: shadow.value,
+                          background: "rgba(255,255,255,0.45)",
+                          backdropFilter: "blur(12px) saturate(1.4)",
+                          WebkitBackdropFilter: "blur(12px) saturate(1.4)",
+                        }}
                       />
                       <p className="text-xs font-medium text-gray-900 dark:text-white">
                         {shadow.name}

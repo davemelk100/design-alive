@@ -27,8 +27,8 @@ const idToRoute: Record<string, string> = {
 const activeClass = "text-brand-dynamic dark:text-white px-3 py-2 rounded-md bg-gray-100 dark:bg-gray-800";
 const inactiveClass = "text-gray-600 dark:text-gray-300 hover:text-brand-dynamic dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800";
 
-const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
-  <section className="py-4 sm:py-4 xl:py-4 relative bg-brand-dynamic/5 dark:bg-brand-dynamic/10 border-b border-border">
+const PortfolioNav = ({ currentPage, hideBorder }: { currentPage?: string; hideBorder?: boolean }) => (
+  <section className={`py-4 sm:py-4 xl:py-4 relative bg-brand-dynamic/5 dark:bg-brand-dynamic/10${hideBorder ? "" : " border-b border-border"}`}>
     <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-1 gap-6 sm:gap-8">
         <div className="pt-4 rounded-lg">
