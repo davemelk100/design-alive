@@ -553,7 +553,10 @@ export default function DesignSystemPage() {
     setGeneratedCode(css + tw);
   };
 
-  const runAudit = () => axe.run(document, { runOnly: { type: 'rule', values: ['color-contrast'] } });
+  const runAudit = () => axe.run(
+    { exclude: ['[data-axe-exclude]'] },
+    { runOnly: { type: 'rule', values: ['color-contrast'] } },
+  );
 
   const setAuditFromResults = (results: AxeResults) => {
     if (results.violations.length === 0) {
@@ -679,14 +682,13 @@ export default function DesignSystemPage() {
   const fixContrastIssues = async () => {
     setAuditStatus('running');
     try {
-      // Get current CSS variable values
+      // 1. Aggressively fix CSS variable pairs
       const style = getComputedStyle(document.documentElement);
       const liveColors: Record<string, string> = {};
       EDITABLE_VARS.forEach(({ key }) => {
         liveColors[key] = style.getPropertyValue(key).trim();
       });
 
-      // Run aggressive auto-adjust with wider steps
       const parseHsl = (val: string) => {
         const p = val.trim().split(/\s+/);
         if (p.length < 3) return null;
@@ -696,70 +698,132 @@ export default function DesignSystemPage() {
       const working = { ...liveColors };
       const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
 
-      // Aggressively fix all contrast pairs — try both directions, 1% steps, 100 iterations
-      for (const [fgKey, bgKey] of CONTRAST_PAIRS) {
+      const fixPair = (fgKey: string, bgKey: string) => {
         const fgVal = working[fgKey];
         const bgv = working[bgKey];
-        if (!fgVal || !bgv) continue;
-        if (contrastRatio(fgVal, bgv) >= 4.5) continue;
-
+        if (!fgVal || !bgv || contrastRatio(fgVal, bgv) >= 4.5) return;
         const fg = parseHsl(fgVal);
         const bg = parseHsl(bgv);
-        if (!fg || !bg) continue;
+        if (!fg || !bg) return;
 
-        // Try adjusting foreground with 1% steps
-        const direction = bg.l > 50 ? -1 : 1;
-        let l = fg.l;
-        let adjusted = toHsl(fg.h, fg.s, l);
-        for (let i = 0; i < 100; i++) {
-          l = Math.max(0, Math.min(100, l + direction));
-          adjusted = toHsl(fg.h, fg.s, l);
-          if (contrastRatio(adjusted, bgv) >= 4.5) break;
-        }
-        if (contrastRatio(adjusted, bgv) < 4.5) {
-          // Try opposite direction
-          l = fg.l;
+        // Try foreground adjustment first, 1% steps, both directions
+        for (const dir of [bg.l > 50 ? -1 : 1, bg.l > 50 ? 1 : -1]) {
+          let l = fg.l;
+          let adjusted = fgVal;
           for (let i = 0; i < 100; i++) {
-            l = Math.max(0, Math.min(100, l - direction));
+            l = Math.max(0, Math.min(100, l + dir));
             adjusted = toHsl(fg.h, fg.s, l);
             if (contrastRatio(adjusted, bgv) >= 4.5) break;
           }
+          if (contrastRatio(adjusted, bgv) >= 4.5) {
+            document.documentElement.style.setProperty(fgKey, adjusted);
+            working[fgKey] = adjusted;
+            pending[fgKey] = adjusted;
+            return;
+          }
         }
-        if (contrastRatio(adjusted, bgv) >= 4.5) {
-          document.documentElement.style.setProperty(fgKey, adjusted);
-          working[fgKey] = adjusted;
-          pending[fgKey] = adjusted;
-        }
-      }
 
-      // Also fix brand vs background
-      const brandVal = working["--brand"];
-      const bgVal = working["--background"];
-      if (brandVal && bgVal && contrastRatio(brandVal, bgVal) < 4.5) {
-        const brand = parseHsl(brandVal);
-        const bg = parseHsl(bgVal);
-        if (brand && bg) {
-          const dir = bg.l > 50 ? -1 : 1;
-          let l = brand.l;
-          let adj = toHsl(brand.h, brand.s, l);
+        // If foreground alone can't fix it, also adjust background
+        for (const dir of [fg.l > 50 ? -1 : 1, fg.l > 50 ? 1 : -1]) {
+          let l = bg.l;
+          let adjBg = bgv;
           for (let i = 0; i < 100; i++) {
             l = Math.max(0, Math.min(100, l + dir));
-            adj = toHsl(brand.h, brand.s, l);
-            if (contrastRatio(adj, bgVal) >= 4.5) break;
+            adjBg = toHsl(bg.h, bg.s, l);
+            if (contrastRatio(working[fgKey], adjBg) >= 4.5) break;
           }
-          if (contrastRatio(adj, bgVal) >= 4.5) {
-            document.documentElement.style.setProperty("--brand", adj);
-            working["--brand"] = adj;
-            pending["--brand"] = adj;
+          if (contrastRatio(working[fgKey], adjBg) >= 4.5) {
+            document.documentElement.style.setProperty(bgKey, adjBg);
+            working[bgKey] = adjBg;
+            pending[bgKey] = adjBg;
+            return;
           }
         }
+      };
+
+      // Fix brand vs background
+      fixPair("--brand", "--background");
+      // Fix all contrast pairs
+      for (const [fgKey, bgKey] of CONTRAST_PAIRS) {
+        fixPair(fgKey, bgKey);
       }
 
       storage.set(PENDING_COLORS_KEY, pending);
       setColors(working);
       window.dispatchEvent(new Event("theme-pending-update"));
 
-      // Re-audit after aggressive fix
+      // 2. Fresh audit — then fix remaining per-element violations
+      const midResults = await runAudit();
+      const contrastViolation = midResults.violations.find((v) => v.id === 'color-contrast');
+      if (contrastViolation) {
+        const parseRgb = (rgb: string): [number, number, number] | null => {
+          const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+          if (!m) return null;
+          return [parseInt(m[1]) / 255, parseInt(m[2]) / 255, parseInt(m[3]) / 255];
+        };
+        const lum = (r: number, g: number, b: number) => {
+          const toL = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+          return 0.2126 * toL(r) + 0.7152 * toL(g) + 0.0722 * toL(b);
+        };
+        const rgbToHsl = (r: number, g: number, b: number) => {
+          const max = Math.max(r, g, b), min = Math.min(r, g, b);
+          const li = (max + min) / 2;
+          if (max === min) return { h: 0, s: 0, l: li };
+          const d = max - min;
+          const s = li > 0.5 ? d / (2 - max - min) : d / (max + min);
+          let h = 0;
+          if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+          else if (max === g) h = ((b - r) / d + 2) / 6;
+          else h = ((r - g) / d + 4) / 6;
+          return { h, s, l: li };
+        };
+        const hslToRgbStr = (h: number, s: number, l: number) => {
+          const a = s * Math.min(l, 1 - l);
+          const f = (n: number) => {
+            const k = (n + h * 12) % 12;
+            return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+          };
+          return `rgb(${Math.round(f(0) * 255)}, ${Math.round(f(8) * 255)}, ${Math.round(f(4) * 255)})`;
+        };
+
+        for (const node of contrastViolation.nodes) {
+          const el = document.querySelector(node.target[0] as string) as HTMLElement | null;
+          if (!el) continue;
+          const computed = getComputedStyle(el);
+          const fg = parseRgb(computed.color);
+          const bg = parseRgb(computed.backgroundColor);
+          if (!fg || !bg) continue;
+          const bgLum = lum(...bg);
+          const fgLum = lum(...fg);
+          const ratio = (Math.max(fgLum, bgLum) + 0.05) / (Math.min(fgLum, bgLum) + 0.05);
+          if (ratio >= 4.5) continue;
+          const fgHsl = rgbToHsl(...fg);
+          // Try both directions for per-element fix
+          let fixed = false;
+          for (const dir of [bgLum > 0.5 ? -0.01 : 0.01, bgLum > 0.5 ? 0.01 : -0.01]) {
+            const tryHsl = { ...fgHsl };
+            for (let i = 0; i < 100; i++) {
+              tryHsl.l = Math.max(0, Math.min(1, tryHsl.l + dir));
+              const a = tryHsl.s * Math.min(tryHsl.l, 1 - tryHsl.l);
+              const newFg = [0, 0, 0] as [number, number, number];
+              for (let ci = 0; ci < 3; ci++) {
+                const n = [0, 8, 4][ci];
+                const k = (n + tryHsl.h * 12) % 12;
+                newFg[ci] = tryHsl.l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+              }
+              const newRatio = (Math.max(lum(...newFg), bgLum) + 0.05) / (Math.min(lum(...newFg), bgLum) + 0.05);
+              if (newRatio >= 4.5) {
+                el.style.color = hslToRgbStr(tryHsl.h, tryHsl.s, tryHsl.l);
+                fixed = true;
+                break;
+              }
+            }
+            if (fixed) break;
+          }
+        }
+      }
+
+      // 3. Final audit
       setAuditFromResults(await runAudit());
     } catch {
       setAuditStatus('idle');
@@ -836,17 +900,17 @@ export default function DesignSystemPage() {
             <div className="flex items-center gap-2 ml-auto">
               <div aria-live="assertive" aria-atomic="true" className="flex items-center">
                 {auditStatus === 'running' && (
-                  <span className="flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-300">
+                  <span data-axe-exclude className="flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-300">
                     Running audit&hellip;
                   </span>
                 )}
                 {auditStatus === 'passed' && (
-                  <span className="flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 py-2 text-xs font-medium text-green-700 dark:text-green-300">
+                  <span data-axe-exclude className="flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 py-2 text-xs font-medium text-green-700 dark:text-green-300">
                     <span className="text-green-600 dark:text-green-400">&#10003;</span> Passed WCAG AA
                   </span>
                 )}
                 {auditStatus === 'failed' && (
-                  <div className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 py-2 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                  <div data-axe-exclude className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 py-2 flex flex-wrap items-center gap-x-3 gap-y-0.5">
                     <p className="text-xs font-medium text-red-700 dark:text-red-300">
                       &#10007; {auditViolations.length} contrast issue{auditViolations.length !== 1 ? 's' : ''}:
                     </p>
