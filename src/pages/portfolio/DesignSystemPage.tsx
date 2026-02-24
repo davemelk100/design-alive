@@ -290,6 +290,8 @@ export default function DesignSystemPage() {
   const [auditViolations, setAuditViolations] = useState<{ selector: string; text: string }[]>([]);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [codeCopied, setCodeCopied] = useState(false);
+  const [prStatus, setPrStatus] = useState<'idle' | 'creating' | 'created' | 'error'>('idle');
+  const [prUrl, setPrUrl] = useState<string | null>(null);
 
   const readCurrentColors = useCallback(() => {
     const style = getComputedStyle(document.documentElement);
@@ -883,6 +885,8 @@ export default function DesignSystemPage() {
     setAuditStatus('idle');
     setAuditViolations([]);
     setGeneratedCode(null);
+    setPrStatus('idle');
+    setPrUrl(null);
     window.dispatchEvent(new Event("theme-pending-update"));
   };
 
@@ -985,6 +989,47 @@ export default function DesignSystemPage() {
                     >
                       {codeCopied ? "Copied!" : "Copy"}
                     </button>
+                    {prStatus === 'created' && prUrl ? (
+                      <a
+                        href={prUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2 py-0.5 text-[10px] font-medium rounded border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors"
+                      >
+                        PR Created!
+                      </a>
+                    ) : (
+                      <button
+                        disabled={prStatus === 'creating'}
+                        onClick={async () => {
+                          setPrStatus('creating');
+                          setPrUrl(null);
+                          try {
+                            // Extract only the :root { ... } CSS portion
+                            const rootMatch = generatedCode.match(/:root\s*\{[\s\S]*?\}/);
+                            const css = rootMatch ? rootMatch[0] : generatedCode;
+                            const res = await fetch('/.netlify/functions/create-design-pr', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ css }),
+                            });
+                            const data = await res.json();
+                            if (!res.ok) throw new Error(data.error || 'Failed to create PR');
+                            setPrStatus('created');
+                            setPrUrl(data.url);
+                          } catch {
+                            setPrStatus('error');
+                          }
+                        }}
+                        className={`px-2 py-0.5 text-[10px] font-medium rounded border transition-colors ${
+                          prStatus === 'error'
+                            ? 'border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50'
+                            : 'border-border bg-white dark:bg-gray-800 text-muted-foreground hover:bg-gray-100 dark:hover:bg-gray-700'
+                        } disabled:opacity-50`}
+                      >
+                        {prStatus === 'creating' ? 'Creating PR...' : prStatus === 'error' ? 'Retry PR' : 'Open PR'}
+                      </button>
+                    )}
                     <button
                       onClick={() => setGeneratedCode(null)}
                       className="px-2 py-0.5 text-[10px] font-medium rounded border border-border bg-white dark:bg-gray-800 text-muted-foreground hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -1076,7 +1121,7 @@ export default function DesignSystemPage() {
                     {content.designSystem.sections.colors}
                   </p>
                 </div>
-                <div className="grid grid-cols-6 gap-1.5">
+                <div className="grid grid-cols-5 gap-1.5">
                   {EDITABLE_VARS
                     .filter(v => v.key !== "--brand" && v.key !== "--secondary" && v.key !== "--accent")
                     .map(({ key, label }) => (
