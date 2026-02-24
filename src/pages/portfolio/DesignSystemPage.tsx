@@ -127,7 +127,6 @@ export default function DesignSystemPage() {
   const unlocked = true;
   const [showResetModal, setShowResetModal] = useState(false);
   const [autoAdjustNotice, setAutoAdjustNotice] = useState<string | null>(null);
-  const [showInfoPopover, setShowInfoPopover] = useState(false);
 
   const readCurrentColors = useCallback(() => {
     const style = getComputedStyle(document.documentElement);
@@ -434,20 +433,40 @@ export default function DesignSystemPage() {
     <PortfolioLayout currentPage="design-system">
       <section className="py-2 sm:py-3 lg:py-4 xl:py-6 relative">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-2">
-            <SectionHeader
-              title={content.designSystem.title}
-              subtitle={content.designSystem.subtitle}
-              className=""
-            />
-            {unlocked && (
-              <button
-                onClick={() => setShowResetModal(true)}
-                className="px-2 py-1 text-[10px] font-medium rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-              >
-                Reset
-              </button>
-            )}
+          <div className="flex flex-col lg:flex-row lg:items-start gap-4 mb-4">
+            <div className="lg:w-[20%]">
+              <SectionHeader
+                title={content.designSystem.title}
+                subtitle={content.designSystem.subtitle}
+                className=""
+              />
+              {unlocked && (
+                <button
+                  onClick={() => setShowResetModal(true)}
+                  className="mt-1 px-3 py-1 text-[10px] font-medium rounded-full border border-border bg-gray-100 dark:bg-gray-800 text-muted-foreground hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                >
+                  Reset to Defaults
+                </button>
+              )}
+            </div>
+            <ul className="text-xs text-muted-foreground space-y-0.5 list-disc list-inside lg:w-[50%] leading-relaxed">
+              <li>Driven by CSS custom properties. Pick a <strong className="text-foreground">Brand</strong> or <strong className="text-foreground">Secondary</strong> color and the entire palette auto-adjusts.</li>
+              <li>Primary, accent, muted, border, and foreground tokens all shift to harmonize with your selection.</li>
+              <li>Every color pair is checked against WCAG AA contrast requirements (4.5:1 minimum) in real time.</li>
+              <li>If a pair fails, lightness values are automatically adjusted until the ratio passes.</li>
+              <li>The brand color is protected: if too light for the background, the system darkens it until it meets 4.5:1.</li>
+              <li>Headings, links, and navigation text remain legible no matter what color you choose.</li>
+            </ul>
+            <div className="lg:w-[30%] flex lg:justify-end">
+              <div>
+                <p className="text-xs font-medium text-foreground mb-1">How to use</p>
+                <ol className="text-xs text-muted-foreground space-y-0.5 list-decimal list-inside leading-relaxed">
+                <li>Click <strong className="text-foreground">Brand</strong> or <strong className="text-foreground">Secondary</strong> swatch to pick a color</li>
+                <li>Palette auto-adapts for WCAG AA contrast (4.5:1)</li>
+                <li><strong className="text-foreground">Save</strong>, <strong className="text-foreground">Discard</strong>, or <strong className="text-foreground">Undo</strong> via the preview bar</li>
+              </ol>
+              </div>
+            </div>
           </div>
           {/* Colors + Preview side by side */}
           <div id="colors" className="mb-10 scroll-mt-24">
@@ -465,31 +484,32 @@ export default function DesignSystemPage() {
                         <span className="text-green-600 dark:text-green-400">&#10003;</span> Passed WCAG AA
                       </span>
                     )}
-                    <div className="relative">
-                    <button
-                      onClick={() => setShowInfoPopover(!showInfoPopover)}
-                      className="flex items-center gap-1 rounded-full border border-border bg-gray-100 dark:bg-gray-800 px-2 py-0.5 text-[10px] font-medium text-muted-foreground hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                      aria-label="How to use"
-                    >
-                      <span className="w-4 h-4 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-[9px] font-semibold">i</span>
-                      How to use
-                    </button>
-                    {showInfoPopover && (
-                      <div className="absolute right-0 top-7 z-50 w-64 rounded-lg border border-border bg-white dark:bg-gray-900 shadow-lg p-3">
-                        <p className="text-xs font-medium text-gray-900 dark:text-white mb-1">How to use</p>
-                        <ol className="text-[11px] text-gray-500 dark:text-gray-400 space-y-1 list-decimal list-inside leading-snug">
-                          <li>Click <strong className="text-gray-700 dark:text-gray-200">Brand</strong> or <strong className="text-gray-700 dark:text-gray-200">Secondary</strong> swatch to pick a color</li>
-                          <li>Palette auto-adapts for WCAG AA contrast (4.5:1)</li>
-                          <li><strong className="text-gray-700 dark:text-gray-200">Save</strong>, <strong className="text-gray-700 dark:text-gray-200">Discard</strong>, or <strong className="text-gray-700 dark:text-gray-200">Undo</strong> via the preview bar</li>
-                        </ol>
-                      </div>
-                    )}
-                  </div>
                   </div>
                 </div>
                 <div className="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-3 gap-2">
                   {EDITABLE_VARS.map(({ key, label }) => {
                     const isEditable = key === "--brand" || key === "--secondary";
+                    // Dynamic label based on current hue for editable swatches
+                    const getColorName = (hsl: string) => {
+                      const parts = hsl.trim().split(/\s+/);
+                      if (parts.length < 3) return label;
+                      const h = parseFloat(parts[0]);
+                      if (h <= 15 || h > 345) return "Red";
+                      if (h <= 40) return "Orange";
+                      if (h <= 65) return "Yellow";
+                      if (h <= 80) return "Lime";
+                      if (h <= 160) return "Green";
+                      if (h <= 180) return "Teal";
+                      if (h <= 200) return "Cyan";
+                      if (h <= 230) return "Blue";
+                      if (h <= 260) return "Indigo";
+                      if (h <= 290) return "Purple";
+                      if (h <= 320) return "Magenta";
+                      return "Pink";
+                    };
+                    const displayLabel = isEditable && colors[key]
+                      ? (key === "--brand" ? "Brand " : "Secondary ") + getColorName(colors[key])
+                      : label;
                     return (
                     <div
                       key={key}
@@ -531,7 +551,7 @@ export default function DesignSystemPage() {
                         </div>
                       </label>
                       <p className="text-xs font-medium text-gray-900 dark:text-white truncate">
-                        {label}
+                        {displayLabel}
                       </p>
                       <p className="text-[10px] text-gray-500 dark:text-gray-400 truncate">
                         {colors[key] ? hslStringToHex(colors[key]) : key}
