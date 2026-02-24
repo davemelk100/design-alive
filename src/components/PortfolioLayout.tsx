@@ -21,7 +21,7 @@ const PortfolioLayout = ({
     <div className="portfolio-page">
       {/* <LogoBanner /> */}
       <PortfolioNav currentPage={currentPage} hideBorder={currentPage === "design-system"} />
-      {children}
+      <main>{children}</main>
 
       {showScrollTop && (
         <button

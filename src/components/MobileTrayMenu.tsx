@@ -110,7 +110,7 @@ const MobileTrayMenu: React.FC = () => {
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between max-w-[1000px] mx-auto px-2 py-2">
           {content.navigation.links
-            .filter((link) => link.id !== "design-system" && link.id !== "career")
+            .filter((link) => link.id !== "design-system" && link.id !== "career" && link.id !== "contact")
             .sort((a, b) => {
               const order = [
                 "current-projects",
@@ -201,11 +201,11 @@ const MobileTrayMenu: React.FC = () => {
                   Articles
                 </Link>
                 <Link
-                  to="/portfolio/design"
+                  to="/portfolio/graphics"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="block w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
                 >
-                  Designs
+                  Graphics
                 </Link>
                 {/* <Link
                   to="/portfolio/stories"
@@ -220,13 +220,6 @@ const MobileTrayMenu: React.FC = () => {
                   className="block w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
                 >
                   Testimonials
-                </Link>
-                <Link
-                  to="/portfolio/contact"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block w-full text-left px-4 py-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
-                >
-                  Contact
                 </Link>
               </div>
 

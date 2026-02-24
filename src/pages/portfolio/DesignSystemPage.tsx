@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import axe from "axe-core";
 import PortfolioLayout from "../../components/PortfolioLayout";
 import SectionHeader from "../../components/SectionHeader";
-import IconWrapper from "../../components/IconWrapper";
 import { content } from "../../content";
 import designTokens from "../../designTokens.json";
 import storage from "../../utils/storage";
@@ -289,7 +288,7 @@ export default function DesignSystemPage() {
   const [colors, setColors] = useState<Record<string, string>>({});
   const [showResetModal, setShowResetModal] = useState(false);
   const [auditStatus, setAuditStatus] = useState<'idle' | 'running' | 'passed' | 'failed'>('idle');
-  const [auditViolations, setAuditViolations] = useState<string[]>([]);
+  const [auditViolations, setAuditViolations] = useState<{ id: string; description: string; nodes: number }[]>([]);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [codeCopied, setCodeCopied] = useState(false);
 
@@ -555,8 +554,9 @@ export default function DesignSystemPage() {
     tw += "}";
 
     setGeneratedCode(css + tw);
+  };
 
-    // Run axe-core WCAG audit, auto-fix contrast violations, then re-audit
+  const runAccessibilityAudit = async () => {
     setAuditStatus('running');
     setAuditViolations([]);
     try {
@@ -584,15 +584,6 @@ export default function DesignSystemPage() {
           setColors(updatedColors);
           window.dispatchEvent(new Event("theme-pending-update"));
 
-          // Re-generate code with fixed values
-          let fixedCss = ":root {\n";
-          EDITABLE_VARS.forEach(({ key }) => {
-            const val = updatedColors[key];
-            if (val) fixedCss += `  ${key}: ${val};\n`;
-          });
-          fixedCss += "}\n";
-          setGeneratedCode(fixedCss + tw);
-
           // Re-audit after fix
           results = await runAudit();
         }
@@ -602,7 +593,11 @@ export default function DesignSystemPage() {
         setAuditStatus('passed');
       } else {
         setAuditStatus('failed');
-        setAuditViolations(results.violations.map((v) => v.description));
+        setAuditViolations(results.violations.map((v) => ({
+          id: v.id,
+          description: v.description,
+          nodes: v.nodes.length,
+        })));
       }
     } catch {
       setAuditStatus('idle');
@@ -670,7 +665,7 @@ export default function DesignSystemPage() {
       <section className="py-2 sm:py-3 lg:py-4 xl:py-6 relative">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row lg:items-start gap-4 mb-4">
-            <div className="lg:w-[30%]">
+            <div className="lg:w-[20%]">
               <SectionHeader
                 title={content.designSystem.title}
                 subtitle={content.designSystem.subtitle}
@@ -692,33 +687,41 @@ export default function DesignSystemPage() {
                   </button>
                 )}
               </div>
-              {auditStatus === 'running' && (
-                <span className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-300">
-                  Running audit&hellip;
-                </span>
-              )}
-              {auditStatus === 'passed' && (
-                <span className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 py-2 text-xs font-medium text-green-700 dark:text-green-300">
-                  <span className="text-green-600 dark:text-green-400">&#10003;</span> Passed WCAG AA
-                </span>
-              )}
-              {auditStatus === 'failed' && (
-                <span className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 py-2 text-xs font-medium text-red-700 dark:text-red-300">
-                  &#10007; {auditViolations.length} WCAG violation{auditViolations.length !== 1 ? 's' : ''}
-                </span>
-              )}
+              <div aria-live="assertive" aria-atomic="true">
+                {auditStatus === 'running' && (
+                  <span className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 py-2 text-xs font-medium text-gray-600 dark:text-gray-300">
+                    Running audit&hellip;
+                  </span>
+                )}
+                {auditStatus === 'passed' && (
+                  <span className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 py-2 text-xs font-medium text-green-700 dark:text-green-300">
+                    <span className="text-green-600 dark:text-green-400">&#10003;</span> Passed WCAG AA
+                  </span>
+                )}
+                {auditStatus === 'failed' && (
+                  <div className="mt-2 w-full rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 py-2">
+                    <p className="text-xs font-medium text-red-700 dark:text-red-300 mb-1">
+                      &#10007; {auditViolations.length} WCAG violation{auditViolations.length !== 1 ? 's' : ''} found
+                    </p>
+                    <ul className="text-[10px] text-red-600 dark:text-red-400 space-y-0.5">
+                      {auditViolations.map((v) => (
+                        <li key={v.id}>{v.description} ({v.nodes} element{v.nodes !== 1 ? 's' : ''})</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+              <ul className="mt-4 text-xs text-muted-foreground space-y-0.5 list-disc list-inside leading-relaxed">
+                <li>Driven by CSS custom properties. Pick a <strong className="text-foreground">Brand</strong> color and the entire palette auto-adjusts.</li>
+                <li>Secondary, primary, accent, muted, border, and foreground tokens all shift to harmonize with your selection.</li>
+                <li>Every color pair is checked against WCAG AA contrast requirements (4.5:1 minimum) in real time.</li>
+                <li>If a pair fails, lightness values are automatically adjusted until the ratio passes.</li>
+                <li>The brand color is protected: if too light for the background, the system darkens it until it meets 4.5:1.</li>
+                <li>Headings, links, and navigation text remain legible no matter what color you choose.</li>
+              </ul>
             </div>
-            <ul className="text-xs text-muted-foreground space-y-0.5 list-disc list-inside lg:flex-1 leading-relaxed">
-              <li>Driven by CSS custom properties. Pick a <strong className="text-foreground">Brand</strong> color and the entire palette auto-adjusts.</li>
-              <li>Secondary, primary, accent, muted, border, and foreground tokens all shift to harmonize with your selection.</li>
-              <li>Every color pair is checked against WCAG AA contrast requirements (4.5:1 minimum) in real time.</li>
-              <li>If a pair fails, lightness values are automatically adjusted until the ratio passes.</li>
-              <li>The brand color is protected: if too light for the background, the system darkens it until it meets 4.5:1.</li>
-              <li>Headings, links, and navigation text remain legible no matter what color you choose.</li>
-            </ul>
-          </div>
-          {/* Colors + Preview side by side */}
-          <div id="colors" className="mb-10 scroll-mt-24">
+            {/* Colors + Preview side by side */}
+            <div id="colors" className="lg:flex-1 min-w-0 scroll-mt-24">
 
             {/* Generated code output — above hero swatches */}
             {generatedCode && (
@@ -786,8 +789,10 @@ export default function DesignSystemPage() {
                         <input
                           id={inputId}
                           type="color"
+                          aria-label={`Select ${displayLabel} color`}
                           value={colors[key] ? hslStringToHex(colors[key]) : "#000000"}
                           onChange={(e) => handleColorChange(key, e.target.value)}
+                          onBlur={() => runAccessibilityAudit()}
                           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         />
                       )}
@@ -903,42 +908,6 @@ export default function DesignSystemPage() {
                   <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))" }}>
                     Warning
                   </button>
-                </div>
-                <div className="flex gap-6">
-                  <div className="flex-1">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Spacing</p>
-                    <div className="flex flex-wrap gap-3">
-                      {designTokens.spacing.map((space) => (
-                        <div key={space.name} className="flex flex-col items-center gap-1">
-                          <div
-                            className="bg-brand-dynamic rounded-sm"
-                            style={{ width: space.value, height: space.value, minWidth: "1rem", minHeight: "1rem" }}
-                          />
-                          <span className="text-[10px] text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                            {space.name}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Border Radius</p>
-                    <div className="flex flex-wrap gap-3">
-                      {designTokens.numbers
-                        .filter((n) => n.name.startsWith("border-radius"))
-                        .map((radius) => (
-                          <div key={radius.name} className="flex flex-col items-center gap-1">
-                            <div
-                              className="w-10 h-10 bg-brand-dynamic"
-                              style={{ borderRadius: `${radius.value}px` }}
-                            />
-                            <span className="text-[10px] text-gray-500 dark:text-gray-400">
-                              {radius.value}px
-                            </span>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -1104,9 +1073,9 @@ export default function DesignSystemPage() {
 
             {/* Reset Confirmation Modal */}
             {showResetModal && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title">
                 <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 w-full max-w-sm mx-4">
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  <h4 id="reset-modal-title" className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                     Reset to Defaults?
                   </h4>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
@@ -1129,59 +1098,6 @@ export default function DesignSystemPage() {
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Design Projects */}
-          <div id="design-projects" className="mb-10 mt-16 scroll-mt-24">
-            <div className="flex items-center gap-3 mb-4">
-              <h3 className="font-semibold text-brand-dynamic dark:text-white">
-                Design
-              </h3>
-              <a
-                href={content.navigation.social.dribbble.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
-                aria-label="Dribbble"
-              >
-                <IconWrapper
-                  Icon={LazyDribbble}
-                  className="h-4 w-4 text-brand-dynamic dark:text-gray-300"
-                />
-              </a>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {content.work.projects
-                .filter((project: any) => project.title !== "3D Conversion UX Plan")
-                .map((project: any, index: number) => (
-                  <a
-                    key={index}
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group relative rounded-lg bg-white/20 backdrop-blur-lg flex flex-col shadow-xl hover:shadow-2xl transition-shadow cursor-pointer"
-                  >
-                    <div className="relative w-full overflow-hidden bg-transparent">
-                      <img
-                        src={project.image}
-                        alt={project.alt || project.title}
-                        className="w-full h-auto group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </div>
-                    <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
-                      <h3 className="font-semibold text-brand-dynamic dark:text-white group-hover:font-bold transition-all">
-                        {project.title}
-                      </h3>
-                      {project.description && (
-                        <p className="text-gray-600 dark:text-white line-clamp-2">
-                          {project.description}
-                        </p>
-                      )}
-                    </div>
-                  </a>
-                ))}
             </div>
           </div>
 

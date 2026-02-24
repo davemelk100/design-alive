@@ -9,7 +9,6 @@ const navOrder = [
   "articles",
   // "career",
   "testimonials",
-  "contact",
   "design-system",
 ];
 
@@ -20,7 +19,6 @@ const idToRoute: Record<string, string> = {
   articles: "/portfolio/articles",
   // career: "/portfolio/career",
   testimonials: "/portfolio/testimonials",
-  contact: "/portfolio/contact",
   "design-system": "/portfolio/design-system",
 };
 
@@ -28,7 +26,7 @@ const activeClass = "text-brand-dynamic dark:text-white px-3 py-2 rounded-md";
 const inactiveClass = "text-gray-600 dark:text-gray-300 hover:text-brand-dynamic dark:hover:text-white transition-colors px-3 py-2 rounded-md";
 
 const PortfolioNav = ({ currentPage, hideBorder }: { currentPage?: string; hideBorder?: boolean }) => (
-  <section className={`py-4 sm:py-4 xl:py-4 relative${hideBorder ? "" : " border-b border-border"}`}>
+  <nav aria-label="Site navigation" className={`py-4 sm:py-4 xl:py-4 relative${hideBorder ? "" : " border-b border-border"}`}>
     <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-1 gap-6 sm:gap-8">
         <div className="pt-4 rounded-lg">
@@ -90,6 +88,13 @@ const PortfolioNav = ({ currentPage, hideBorder }: { currentPage?: string; hideB
                     </Link>
                   );
                 })}
+              <Link
+                to="/portfolio/graphics"
+                className={currentPage === "graphics" ? activeClass : inactiveClass}
+                style={currentPage === "graphics" ? { fontWeight: 700 } : undefined}
+              >
+                Graphics
+              </Link>
               <div className="ml-auto" />
               <Link
                 to="/portfolio/lab"
@@ -98,19 +103,12 @@ const PortfolioNav = ({ currentPage, hideBorder }: { currentPage?: string; hideB
               >
                 Lab
               </Link>
-              <Link
-                to="/portfolio/contact"
-                className={currentPage === "contact" ? activeClass : inactiveClass}
-                style={currentPage === "contact" ? { fontWeight: 700 } : undefined}
-              >
-                Contact
-              </Link>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </nav>
 );
 
 export default PortfolioNav;
