@@ -636,17 +636,17 @@ export default function DesignSystemPage() {
                 subtitle={content.designSystem.subtitle}
                 className=""
               />
-              <div className="flex items-center gap-2 mt-1">
+              <div className="flex flex-col gap-2 mt-3">
                 <button
                   onClick={() => setShowResetModal(true)}
-                  className="px-3 py-1 text-[10px] font-medium rounded-full border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  className="px-4 py-2 text-xs font-medium rounded-lg border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors w-full"
                 >
                   Reset to Defaults
                 </button>
                 {hasPendingChanges && (
                   <button
                     onClick={() => generateCode()}
-                    className="px-3 py-1 text-[10px] font-medium rounded-full border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    className="px-4 py-2 text-xs font-medium rounded-lg border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors w-full"
                   >
                     Generate CSS?
                   </button>

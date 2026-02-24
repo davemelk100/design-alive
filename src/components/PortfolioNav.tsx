@@ -25,7 +25,7 @@ const idToRoute: Record<string, string> = {
 };
 
 const activeClass = "text-brand-dynamic dark:text-white px-3 py-2 rounded-md";
-const inactiveClass = "text-gray-600 dark:text-gray-300 hover:text-brand-dynamic dark:hover:text-white transition-colors px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800";
+const inactiveClass = "text-gray-600 dark:text-gray-300 hover:text-brand-dynamic dark:hover:text-white transition-colors px-3 py-2 rounded-md";
 
 const PortfolioNav = ({ currentPage, hideBorder }: { currentPage?: string; hideBorder?: boolean }) => (
   <section className={`py-4 sm:py-4 xl:py-4 relative${hideBorder ? "" : " border-b border-border"}`}>
