@@ -448,6 +448,11 @@ export default function DesignSystemPage() {
                   Reset to Defaults
                 </button>
               )}
+              {autoAdjustNotice && (
+                <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-2 py-0.5 text-[10px] font-medium text-green-700 dark:text-green-300">
+                  <span className="text-green-600 dark:text-green-400">&#10003;</span> Passed WCAG AA
+                </span>
+              )}
             </div>
             <ul className="text-xs text-muted-foreground space-y-0.5 list-disc list-inside lg:w-[50%] leading-relaxed">
               <li>Driven by CSS custom properties. Pick a <strong className="text-foreground">Brand</strong> or <strong className="text-foreground">Secondary</strong> color and the entire palette auto-adjusts.</li>
@@ -478,13 +483,6 @@ export default function DesignSystemPage() {
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {content.designSystem.sections.colors}
                   </p>
-                  <div className="flex items-center gap-1.5">
-                    {autoAdjustNotice && (
-                      <span className="flex items-center gap-1 rounded-full border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-2 py-0.5 text-[10px] font-medium text-green-700 dark:text-green-300">
-                        <span className="text-green-600 dark:text-green-400">&#10003;</span> Passed WCAG AA
-                      </span>
-                    )}
-                  </div>
                 </div>
                 <div className="grid grid-cols-3 sm:grid-cols-4 xl:grid-cols-3 gap-2">
                   {EDITABLE_VARS.map(({ key, label }) => {
@@ -513,6 +511,7 @@ export default function DesignSystemPage() {
                     return (
                     <div
                       key={key}
+                      data-color-key={key}
                       className={`text-left ${isEditable ? "group cursor-pointer" : ""}`}
                       onClick={undefined}
                     >
@@ -654,7 +653,7 @@ export default function DesignSystemPage() {
                   {designTokens.shadows.map((shadow) => (
                     <div key={shadow.name} className="text-center flex flex-col">
                       <div
-                        className="w-full flex-1 min-h-[5rem] rounded-2xl mb-2"
+                        className="w-full flex-1 min-h-[2.5rem] rounded-xl mb-1"
                         style={{
                           boxShadow: `${shadow.value}, inset 0 1px 1px rgba(255,255,255,0.6), inset 0 -1px 1px rgba(0,0,0,0.04)`,
                           background: "linear-gradient(145deg, rgba(255,255,255,0.7), rgba(255,255,255,0.35))",

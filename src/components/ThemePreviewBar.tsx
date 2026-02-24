@@ -118,17 +118,37 @@ function highlightElements(varName: string) {
   }
 
   try {
-    // Match elements by class patterns
-    const classSelector = patterns ? patterns.map((p) => `[class*='${p}']`).join(", ") : "";
-    // Also match elements using inline styles referencing the CSS variable
-    const inlineStyleSelector = `[style*='var(${varName})']`;
-    const selector = [classSelector, inlineStyleSelector].filter(Boolean).join(", ");
+    const allMatched: Element[] = [];
 
-    const elements = document.querySelectorAll(selector);
-    if (elements.length === 0) return;
+    // Match elements by class patterns
+    if (patterns) {
+      const classSelector = patterns.map((p) => `[class*='${p}']`).join(", ");
+      allMatched.push(...Array.from(document.querySelectorAll(classSelector)));
+    }
+
+    // Match elements using inline styles referencing the CSS variable
+    // Use multiple selector forms since browsers serialize styles differently
+    const styleSelectors = [
+      `[style*='var(${varName})']`,
+      `[style*='var(${varName} ']`,
+      `[style*='${varName}']`,
+    ];
+    for (const sel of styleSelectors) {
+      try {
+        allMatched.push(...Array.from(document.querySelectorAll(sel)));
+      } catch { /* skip invalid selectors */ }
+    }
+
+    // Also find swatch elements on the design system page by data attribute or color key
+    const swatchEl = document.querySelector(`[data-color-key="${varName}"]`);
+    if (swatchEl) allMatched.push(swatchEl);
+
+    // Deduplicate
+    const unique = Array.from(new Set(allMatched));
+    if (unique.length === 0) return;
 
     // Find the first visible element only
-    const firstVisible = Array.from(elements).find((el) => {
+    const firstVisible = unique.find((el) => {
       const rect = el.getBoundingClientRect();
       return rect.width > 0 && rect.height > 0;
     });
