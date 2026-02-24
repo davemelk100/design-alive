@@ -1021,12 +1021,12 @@ export default function DesignSystemPage() {
                 {prStatus === 'creating' ? 'Preparing PR...' : prStatus === 'error' ? 'Retry PR' : prStatus === 'rate-limited' ? 'Retry PR' : 'Open PR'}
               </button>
               {prStatus === 'rate-limited' && prError && (
-                <span className="px-4 py-2 text-xs font-medium rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">
+                <span className="inline-flex items-center px-4 py-2 text-xs font-medium rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">
                   {prError}
                 </span>
               )}
               {prStatus === 'created' && prUrl && (
-                <span className="px-4 py-2 text-xs font-medium rounded-lg border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 inline-flex items-center gap-2">
+                <span className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-lg border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
                   PR Created!
                   <a
                     href={prUrl}
@@ -1036,6 +1036,13 @@ export default function DesignSystemPage() {
                   >
                     View PR
                   </a>
+                  <button
+                    onClick={() => { setPrStatus('idle'); setPrUrl(null); }}
+                    className="ml-1 text-green-500 hover:text-green-800 dark:hover:text-green-100 transition-colors"
+                    aria-label="Dismiss PR notification"
+                  >
+                    &#10005;
+                  </button>
                 </span>
               )}
             </div>
@@ -1180,13 +1187,13 @@ export default function DesignSystemPage() {
               <div className="xl:w-auto rounded-lg border border-border bg-background p-4 space-y-3">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Chips</p>
                 <div className="flex flex-col gap-2 items-start">
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Brand</span>
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</span>
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium" style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}>Muted</span>
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium" style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}>Accent</span>
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Destructive</span>
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))" }}>Success</span>
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))" }}>Warning</span>
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Brand</span>
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</span>
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium" style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}>Muted</span>
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium" style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}>Accent</span>
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Destructive</span>
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))" }}>Success</span>
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))" }}>Warning</span>
                 </div>
               </div>
 
