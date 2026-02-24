@@ -13,22 +13,38 @@ const LazyLinkedInLogoIcon = React.lazy(() =>
 export default function PortfolioLanding() {
   return (
     <PortfolioLayout currentPage="home">
-      {/* Summary Text */}
+      {/* Intro + Live Design System row */}
       <section className="relative">
-        <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="mt-4 sm:mt-6">
-            <p className="text-muted-foreground text-left">
-              I'm David Melkonian, a technical product and
-              experience leader with over a decade of work at
-              the intersection of UX, software engineering, and
-              digital accessibility. I specialize in designing
-              and shipping full-stack web and mobile products
-              using Vue, React, Next.js, Python, and FastAPI,
-              with a focus on scalable design systems,
-              performance, and usability. I've led teams
-              of 30+ and established enterprise-wide standards
-              for digital experience delivery.
-            </p>
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="mt-4 sm:mt-6 flex flex-col lg:flex-row gap-4">
+            <div className="lg:flex-1">
+              <p className="text-muted-foreground text-left">
+                I'm David Melkonian, a technical product and
+                experience leader with over a decade of work at
+                the intersection of UX, software engineering, and
+                digital accessibility. I specialize in designing
+                and shipping full-stack web and mobile products
+                using Vue, React, Next.js, Python, and FastAPI,
+                with a focus on scalable design systems,
+                performance, and usability. I've led teams
+                of 30+ and established enterprise-wide standards
+                for digital experience delivery.
+              </p>
+            </div>
+            <div className="lg:w-[340px] shrink-0 rounded-lg border border-border bg-white dark:bg-gray-800 p-4 shadow-lg flex flex-col gap-3">
+              <div>
+                <h3 className="font-semibold text-brand-dynamic dark:text-white mb-1 title-font">Live Design System</h3>
+                <p className="text-muted-foreground text-sm">
+                  Explore the interactive design system powering this site. Pick a brand color and watch every token, including primary, secondary, accent, and more, transform in real time with automatic WCAG AA contrast correction.
+                </p>
+              </div>
+              <a
+                href="/portfolio/design-system"
+                className="px-4 py-2 text-sm font-medium rounded-lg bg-brand-dynamic text-white hover:opacity-90 transition-opacity text-center"
+              >
+                Try It
+              </a>
+            </div>
           </div>
         </div>
       </section>
