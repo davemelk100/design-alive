@@ -1150,7 +1150,7 @@ export default function DesignSystemPage() {
                     {content.designSystem.sections.colors}
                   </p>
                 </div>
-                <div className="grid grid-cols-5 gap-1.5">
+                <div className="grid grid-cols-4 gap-1.5">
                   {EDITABLE_VARS
                     .filter(v => v.key !== "--brand" && v.key !== "--secondary" && v.key !== "--accent")
                     .map(({ key, label }) => (
@@ -1223,7 +1223,7 @@ export default function DesignSystemPage() {
               {/* Icons column */}
               <div className="xl:flex-1 min-w-0 rounded-lg border border-border bg-background p-4 space-y-4">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Icons</p>
-                <div className="grid grid-cols-5 sm:grid-cols-7 gap-2">
+                <div className="grid grid-cols-6 gap-2">
                   <Suspense fallback={null}>
                     {SITE_ICONS.map(({ name, icon: Icon }) => (
                       <div key={name} className="flex items-center justify-center p-2 rounded-lg hover:bg-muted/50 transition-colors" title={name}>
