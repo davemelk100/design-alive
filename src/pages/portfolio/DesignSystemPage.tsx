@@ -286,8 +286,6 @@ export function applyStoredThemeColors() {
 
 export default function DesignSystemPage() {
   const [colors, setColors] = useState<Record<string, string>>({});
-  // When brand color is changed, secondary and tertiary lock until explicitly unlocked
-  const [brandLocked, setBrandLocked] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
   const [autoAdjustNotice, setAutoAdjustNotice] = useState<string | null>(null);
 
@@ -542,9 +540,8 @@ export default function DesignSystemPage() {
     const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
     pending[key] = hsl;
 
-    // Derive palette when brand or secondary changes; lock the other swatch
+    // Derive palette when brand or secondary changes
     if (key === "--brand" || key === "--secondary" || key === "--accent") {
-      if (key === "--brand") setBrandLocked(true);
       const derived = derivePaletteFromChange(key, hsl, newColors);
       for (const [dKey, dVal] of Object.entries(derived)) {
         history.push({ key: dKey, previousValue: newColors[dKey] || "" });
@@ -592,7 +589,6 @@ export default function DesignSystemPage() {
     storage.remove(COLOR_HISTORY_KEY);
     readCurrentColors();
     setAutoAdjustNotice(null);
-    setBrandLocked(false);
     window.dispatchEvent(new Event("theme-pending-update"));
   };
 
@@ -620,8 +616,8 @@ export default function DesignSystemPage() {
               )}
             </div>
             <ul className="text-xs text-muted-foreground space-y-0.5 list-disc list-inside lg:w-[50%] leading-relaxed">
-              <li>Driven by CSS custom properties. Pick a <strong className="text-foreground">Brand</strong> or <strong className="text-foreground">Secondary</strong> color and the entire palette auto-adjusts.</li>
-              <li>Primary, accent, muted, border, and foreground tokens all shift to harmonize with your selection.</li>
+              <li>Driven by CSS custom properties. Pick a <strong className="text-foreground">Brand</strong> color and the entire palette auto-adjusts.</li>
+              <li>Secondary, primary, accent, muted, border, and foreground tokens all shift to harmonize with your selection.</li>
               <li>Every color pair is checked against WCAG AA contrast requirements (4.5:1 minimum) in real time.</li>
               <li>If a pair fails, lightness values are automatically adjusted until the ratio passes.</li>
               <li>The brand color is protected: if too light for the background, the system darkens it until it meets 4.5:1.</li>
@@ -631,7 +627,7 @@ export default function DesignSystemPage() {
               <div>
                 <p className="text-xs font-medium text-foreground mb-1">How to use</p>
                 <ol className="text-xs text-muted-foreground space-y-0.5 list-decimal list-inside leading-relaxed">
-                <li>Click <strong className="text-foreground">Brand</strong> or <strong className="text-foreground">Secondary</strong> swatch to pick a color</li>
+                <li>Click the <strong className="text-foreground">Brand</strong> swatch to pick a color</li>
                 <li>Palette auto-adapts for WCAG AA contrast (4.5:1)</li>
                 <li><strong className="text-foreground">Save</strong>, <strong className="text-foreground">Discard</strong>, or <strong className="text-foreground">Undo</strong> via the preview bar</li>
               </ol>
@@ -661,9 +657,7 @@ export default function DesignSystemPage() {
                 return "Pink";
               };
               const renderHeroSwatch = ({ key, label }: { key: string; label: string }) => {
-                // Secondary and tertiary are locked when brand has been changed
-                const isLocked = brandLocked && key !== "--brand";
-                const isEditable = !isLocked;
+                const isEditable = key === "--brand";
                 const heroPrefix = key === "--brand" ? "Brand " : key === "--secondary" ? "Secondary " : "Tertiary ";
                 const displayLabel = colors[key]
                   ? heroPrefix + getColorName(colors[key], label)
@@ -673,11 +667,11 @@ export default function DesignSystemPage() {
                   <div
                     key={key}
                     data-color-key={key}
-                    className={`text-left flex-1 ${isEditable ? "group cursor-pointer" : "group"}`}
-                    onClick={isLocked ? () => setBrandLocked(false) : () => {
+                    className={`text-left flex-1 ${isEditable ? "group cursor-pointer" : ""}`}
+                    onClick={isEditable ? () => {
                       const input = document.getElementById(inputId) as HTMLInputElement | null;
                       input?.click();
-                    }}
+                    } : undefined}
                   >
                     <div className={`relative w-full h-20 rounded-lg mb-1 border border-border transition-all overflow-hidden ${isEditable ? "group-hover:ring-2 group-hover:ring-gray-400" : ""}`}>
                       <div
@@ -688,13 +682,6 @@ export default function DesignSystemPage() {
                             : undefined,
                         }}
                       />
-                      {isLocked && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/10 dark:bg-white/10 cursor-pointer" title="Click to unlock">
-                          <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                          </svg>
-                        </div>
-                      )}
                       {isEditable && (
                         <div className="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-white/80 dark:bg-black/50 flex items-center justify-center shadow-sm">
                           <svg className="w-3 h-3 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -702,14 +689,15 @@ export default function DesignSystemPage() {
                           </svg>
                         </div>
                       )}
-                      <input
-                        id={inputId}
-                        type="color"
-                        value={colors[key] ? hslStringToHex(colors[key]) : "#000000"}
-                        onChange={(e) => handleColorChange(key, e.target.value)}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                        disabled={isLocked}
-                      />
+                      {isEditable && (
+                        <input
+                          id={inputId}
+                          type="color"
+                          value={colors[key] ? hslStringToHex(colors[key]) : "#000000"}
+                          onChange={(e) => handleColorChange(key, e.target.value)}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        />
+                      )}
                     </div>
                     <p className="text-xs font-medium text-gray-900 dark:text-white truncate">
                       {displayLabel}
