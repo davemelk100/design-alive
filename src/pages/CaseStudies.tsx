@@ -36,7 +36,7 @@ export default function CaseStudies() {
   return (
     <PortfolioLayout currentPage="case-studies">
       {/* Page title */}
-      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+      <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 pt-0">
         <SectionHeader
           title="Case Studies"
           subtitle="In-depth explorations of complex design and engineering challenges"
