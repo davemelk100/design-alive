@@ -125,21 +125,13 @@ export const handler = async (event: any) => {
       }),
     });
 
-    // 6. Create PR
-    const pr = await ghFetch(`/repos/${REPO}/pulls`, token, {
-      method: "POST",
-      body: JSON.stringify({
-        title: "Update design system color tokens",
-        body: "Automated PR from the live Design System color picker.\n\nUpdates light-mode CSS custom properties in `globals.css`.",
-        head: branchName,
-        base: "main",
-      }),
-    });
+    // 6. Return GitHub compare URL so the user can review and submit the PR
+    const compareUrl = `https://github.com/${REPO}/compare/main...${branchName}?expand=1&title=${encodeURIComponent("Update design system color tokens")}&body=${encodeURIComponent("Updates light-mode CSS custom properties in `globals.css` from the live Design System color picker.")}`;
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ url: pr.html_url }),
+      body: JSON.stringify({ url: compareUrl }),
     };
   } catch (error) {
     console.error("create-design-pr error:", error);

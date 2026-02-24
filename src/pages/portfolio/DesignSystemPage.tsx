@@ -973,51 +973,43 @@ export default function DesignSystemPage() {
               >
                 Generate CSS
               </button>
-              {prStatus === 'created' && prUrl ? (
-                <a
-                  href={prUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-4 py-2 text-xs font-medium rounded-lg border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors"
-                >
-                  PR Created!
-                </a>
-              ) : (
-                <button
-                  disabled={prStatus === 'creating'}
-                  onClick={async () => {
-                    setPrStatus('creating');
-                    setPrUrl(null);
-                    try {
-                      // Build CSS from current colors
-                      let css = ":root {\n";
-                      EDITABLE_VARS.forEach(({ key }) => {
-                        const val = colors[key];
-                        if (val) css += `  ${key}: ${val};\n`;
-                      });
-                      css += "}";
-                      const res = await fetch('/.netlify/functions/create-design-pr', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ css }),
-                      });
-                      const data = await res.json();
-                      if (!res.ok) throw new Error(data.error || 'Failed to create PR');
-                      setPrStatus('created');
-                      setPrUrl(data.url);
-                    } catch {
-                      setPrStatus('error');
-                    }
-                  }}
-                  className={`px-4 py-2 text-xs font-medium rounded-lg border transition-colors ${
-                    prStatus === 'error'
-                      ? 'border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50'
+              <button
+                disabled={prStatus === 'creating'}
+                onClick={async () => {
+                  setPrStatus('creating');
+                  setPrUrl(null);
+                  try {
+                    // Build CSS from current colors
+                    let css = ":root {\n";
+                    EDITABLE_VARS.forEach(({ key }) => {
+                      const val = colors[key];
+                      if (val) css += `  ${key}: ${val};\n`;
+                    });
+                    css += "}";
+                    const res = await fetch('/.netlify/functions/create-design-pr', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ css }),
+                    });
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || 'Failed to create PR');
+                    setPrStatus('created');
+                    setPrUrl(data.url);
+                    window.open(data.url, '_blank');
+                  } catch {
+                    setPrStatus('error');
+                  }
+                }}
+                className={`px-4 py-2 text-xs font-medium rounded-lg border transition-colors ${
+                  prStatus === 'error'
+                    ? 'border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50'
+                    : prStatus === 'created'
+                      ? 'border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50'
                       : 'border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700'
-                  } disabled:opacity-50`}
-                >
-                  {prStatus === 'creating' ? 'Creating PR...' : prStatus === 'error' ? 'Retry PR' : 'Open PR'}
-                </button>
-              )}
+                } disabled:opacity-50`}
+              >
+                {prStatus === 'creating' ? 'Preparing PR...' : prStatus === 'error' ? 'Retry PR' : prStatus === 'created' ? 'Open PR on GitHub' : 'Open PR'}
+              </button>
             </div>
 
             {/* Generated code output — above hero swatches */}
