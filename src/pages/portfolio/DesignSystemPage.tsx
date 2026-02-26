@@ -174,6 +174,8 @@ export const COLOR_HISTORY_KEY = "ds-color-history";
 // Contrast pairs: [foreground var, background var] that must meet WCAG AA (4.5:1)
 export const CONTRAST_PAIRS: [string, string][] = [
   ["--foreground", "--background"],
+  ["--brand", "--background"],
+  ["--muted-foreground", "--background"],
   ["--primary-foreground", "--primary"],
   ["--secondary-foreground", "--secondary"],
   ["--muted-foreground", "--muted"],
@@ -1224,7 +1226,7 @@ export default function DesignSystemPage() {
               {/* Icons column */}
               <div className="xl:flex-1 min-w-0 rounded-lg border border-border bg-background p-4 space-y-4">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Icons</p>
-                <div className="grid grid-cols-6 gap-2">
+                <div className="grid grid-cols-3 gap-0.5">
                   <Suspense fallback={null}>
                     {SITE_ICONS.map(({ name, icon: Icon }) => (
                       <div key={name} className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center" title={name}>

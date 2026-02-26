@@ -248,6 +248,12 @@ export default function PortfolioLanding() {
     return () => window.removeEventListener("theme-pending-update", handlePendingUpdate);
   }, [readCurrentColors]);
 
+  useEffect(() => {
+    if (auditStatus !== 'passed') return;
+    const timer = setTimeout(() => setAuditStatus('idle'), 4000);
+    return () => clearTimeout(timer);
+  }, [auditStatus]);
+
   const handleColorChange = (key: string, hex: string) => {
     const hsl = hexToHslString(hex);
 
@@ -453,44 +459,43 @@ export default function PortfolioLanding() {
       setColors(working);
       window.dispatchEvent(new Event("theme-pending-update"));
 
-      // 2. Fresh audit — then fix remaining per-element violations
+      // 2. Fresh audit — then fix remaining per-element violations (up to 3 passes)
       const runAudit = () => axe.run(
         { exclude: ['[data-axe-exclude]'] },
         { runOnly: { type: 'rule', values: ['color-contrast'] } },
       );
-      const midResults = await runAudit();
-      const contrastViolation = midResults.violations.find((v) => v.id === 'color-contrast');
-      if (contrastViolation) {
-        const parseRgb = (rgb: string): [number, number, number] | null => {
-          const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-          if (!m) return null;
-          return [parseInt(m[1]) / 255, parseInt(m[2]) / 255, parseInt(m[3]) / 255];
-        };
-        const lum = (r: number, g: number, b: number) => {
-          const toL = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
-          return 0.2126 * toL(r) + 0.7152 * toL(g) + 0.0722 * toL(b);
-        };
-        const rgbToHsl = (r: number, g: number, b: number) => {
-          const max = Math.max(r, g, b), min = Math.min(r, g, b);
-          const li = (max + min) / 2;
-          if (max === min) return { h: 0, s: 0, l: li };
-          const d = max - min;
-          const s = li > 0.5 ? d / (2 - max - min) : d / (max + min);
-          let h = 0;
-          if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
-          else if (max === g) h = ((b - r) / d + 2) / 6;
-          else h = ((r - g) / d + 4) / 6;
-          return { h, s, l: li };
-        };
-        const hslToRgbStr = (h: number, s: number, l: number) => {
-          const a = s * Math.min(l, 1 - l);
-          const f = (n: number) => {
-            const k = (n + h * 12) % 12;
-            return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-          };
-          return `rgb(${Math.round(f(0) * 255)}, ${Math.round(f(8) * 255)}, ${Math.round(f(4) * 255)})`;
-        };
 
+      const parseRgb = (rgb: string): [number, number, number] | null => {
+        const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (!m) return null;
+        return [parseInt(m[1]) / 255, parseInt(m[2]) / 255, parseInt(m[3]) / 255];
+      };
+      const lum = (r: number, g: number, b: number) => {
+        const toL = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+        return 0.2126 * toL(r) + 0.7152 * toL(g) + 0.0722 * toL(b);
+      };
+      const rgbToHsl = (r: number, g: number, b: number) => {
+        const max = Math.max(r, g, b), min = Math.min(r, g, b);
+        const li = (max + min) / 2;
+        if (max === min) return { h: 0, s: 0, l: li };
+        const d = max - min;
+        const s = li > 0.5 ? d / (2 - max - min) : d / (max + min);
+        let h = 0;
+        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+        else if (max === g) h = ((b - r) / d + 2) / 6;
+        else h = ((r - g) / d + 4) / 6;
+        return { h, s, l: li };
+      };
+      const hslToRgbStr = (h: number, s: number, l: number) => {
+        const a = s * Math.min(l, 1 - l);
+        const f = (n: number) => {
+          const k = (n + h * 12) % 12;
+          return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+        };
+        return `rgb(${Math.round(f(0) * 255)}, ${Math.round(f(8) * 255)}, ${Math.round(f(4) * 255)})`;
+      };
+
+      const fixElements = (contrastViolation: { nodes: any[] }) => {
         for (const node of contrastViolation.nodes) {
           const el = document.querySelector(node.target[0] as string) as HTMLElement | null;
           if (!el) continue;
@@ -525,6 +530,15 @@ export default function PortfolioLanding() {
             if (fixed) break;
           }
         }
+      };
+
+      // Run up to 3 passes of per-element fixing
+      for (let pass = 0; pass < 3; pass++) {
+        await new Promise((r) => setTimeout(r, 300));
+        const midResults = await runAudit();
+        const contrastViolation = midResults.violations.find((v) => v.id === 'color-contrast');
+        if (!contrastViolation) break;
+        fixElements(contrastViolation);
       }
 
       // 3. Wait for DOM to settle, then final audit
@@ -936,7 +950,7 @@ export default function PortfolioLanding() {
               {/* Icons */}
               <div className="w-1/3 md:flex-1 xl:w-[25%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-2 md:p-4 space-y-2 md:space-y-4">
                 <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">Icons</p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-0.5">
                   <Suspense fallback={null}>
                     {SITE_ICONS.map(({ name, icon: Icon }) => (
                       <div key={name} className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center" title={name}>
