@@ -326,7 +326,7 @@ export const derivePaletteFromChange = (
       const destSat = Math.min(100, newSat * 1.1); // slightly more vivid than brand
       const destLight = Math.max(35, Math.min(55, newLight * 0.85));
       derived["--destructive"] = `0 ${destSat.toFixed(1)}% ${destLight.toFixed(1)}%`;
-      derived["--destructive-foreground"] = `0 0% ${destLight > 50 ? 10 : 98}%`;
+      derived["--destructive-foreground"] = `0 0% 100%`;
 
       // Success (green family): hue 142, saturation follows brand
       const succSat = Math.min(100, newSat * 0.9);
@@ -338,7 +338,7 @@ export const derivePaletteFromChange = (
       const warnSat = Math.min(100, newSat * 1.05);
       const warnLight = Math.max(40, Math.min(60, newLight * 0.9));
       derived["--warning"] = `45 ${warnSat.toFixed(1)}% ${warnLight.toFixed(1)}%`;
-      derived["--warning-foreground"] = `45 ${(warnSat * 0.4).toFixed(1)}% ${warnLight > 55 ? 15 : 95}%`;
+      derived["--warning-foreground"] = `0 0% 0%`;
     };
 
     if (changedKey === "--brand") {

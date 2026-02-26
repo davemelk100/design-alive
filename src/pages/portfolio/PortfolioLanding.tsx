@@ -853,18 +853,18 @@ export default function PortfolioLanding() {
               );
             })()}
 
-            <div className="flex flex-col md:flex-row md:items-stretch gap-6">
+            <div className="flex flex-row md:items-stretch gap-3 md:gap-6">
               {/* Color swatches (non-hero) */}
-              <div className="md:flex-1 xl:w-[25%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <div className="w-1/3 md:flex-1 xl:w-[25%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-2 md:p-4">
+                <div className="flex items-center justify-between mb-2 md:mb-3">
+                  <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {content.designSystem.sections.colors}
                   </p>
                 </div>
-                <div className="grid grid-cols-3 gap-1.5">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5">
                   {COLOR_SWATCHES.filter(v => v.key !== "--brand" && v.key !== "--secondary" && v.key !== "--accent").map(({ key, label }) => (
                     <div key={key} data-color-key={key} className="text-left">
-                      <div className="relative w-full h-12 rounded-md mb-1 border border-border overflow-hidden">
+                      <div className="relative w-full h-8 md:h-12 rounded-md mb-1 border border-border overflow-hidden">
                         <div
                           className="absolute inset-0"
                           style={{
@@ -874,10 +874,10 @@ export default function PortfolioLanding() {
                           }}
                         />
                       </div>
-                      <p className="text-xs font-medium text-gray-900 dark:text-white truncate">
+                      <p className="text-[9px] md:text-xs font-medium text-gray-900 dark:text-white truncate">
                         {label}
                       </p>
-                      <p className="text-[10px] text-gray-500 dark:text-gray-400 truncate">
+                      <p className="text-[8px] md:text-[10px] text-gray-500 dark:text-gray-400 truncate">
                         {colors[key] ? hslStringToHex(colors[key]) : key}
                       </p>
                     </div>
@@ -886,11 +886,12 @@ export default function PortfolioLanding() {
               </div>
 
               {/* Chips, Buttons, Badges in one card */}
-              <div className="md:flex-1 xl:w-[50%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-4 space-y-4">
-                <div className="flex flex-row gap-6">
+              <div className="w-1/3 md:flex-1 xl:w-[50%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-2 md:p-4 space-y-3 md:space-y-4">
+                {/* Mobile: single column; Tablet+: chips & badges side by side */}
+                <div className="flex flex-col md:flex-row gap-3 md:gap-6">
                   {/* Chips */}
-                  <div className="flex-1 min-w-0 space-y-3">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Chips</p>
+                  <div className="flex-1 min-w-0 space-y-2 md:space-y-3">
+                    <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">Chips</p>
                     <div className="flex flex-col gap-3 items-start">
                       <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Brand</span>
                       <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</span>
@@ -902,9 +903,20 @@ export default function PortfolioLanding() {
                     </div>
                   </div>
 
-                  {/* Badges */}
-                  <div className="flex-1 min-w-0 space-y-3">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Badges</p>
+                  {/* Buttons - below chips on mobile, side by side on tablet+ */}
+                  <div className="flex-1 min-w-0 space-y-2 md:space-y-3 md:hidden border-t border-border pt-2">
+                    <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Buttons</p>
+                    <div className="flex flex-col gap-1.5 items-start">
+                      <button className="px-2 py-1 rounded-md font-semibold text-[10px] transition-colors truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Primary</button>
+                      <button className="px-2 py-1 rounded-md font-semibold text-[10px] transition-colors truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</button>
+                      <button className="px-2 py-1 rounded-md font-semibold text-[10px] transition-colors truncate" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Destructive</button>
+                      <button className="px-2 py-1 rounded-md font-semibold text-[10px] transition-colors truncate" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))" }}>Success</button>
+                    </div>
+                  </div>
+
+                  {/* Badges - below buttons on mobile, side by side on tablet+ */}
+                  <div className="flex-1 min-w-0 space-y-2 md:space-y-3 border-t md:border-t-0 border-border pt-2 md:pt-0">
+                    <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">Badges</p>
                     <div className="flex flex-col gap-3 items-start">
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Brand</span>
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</span>
@@ -918,8 +930,8 @@ export default function PortfolioLanding() {
                   </div>
                 </div>
 
-                {/* Buttons */}
-                <div className="space-y-3 border-t border-border pt-4">
+                {/* Buttons - tablet+ only, horizontal wrap */}
+                <div className="hidden md:block space-y-3 border-t border-border pt-4">
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Buttons</p>
                   <div className="flex flex-wrap gap-2">
                     <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Primary</button>
@@ -935,9 +947,9 @@ export default function PortfolioLanding() {
               </div>
 
               {/* Icons */}
-              <div className="md:flex-1 xl:w-[25%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-4 space-y-4">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Icons</p>
-                <div className="grid grid-cols-3 gap-2">
+              <div className="w-1/3 md:flex-1 xl:w-[25%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-2 md:p-4 space-y-2 md:space-y-4">
+                <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">Icons</p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   <Suspense fallback={null}>
                     {SITE_ICONS.map(({ name, icon: Icon }) => (
                       <div key={name} className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center" title={name}>

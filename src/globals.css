@@ -16,6 +16,8 @@
   .border-brand-dynamic { border-color: hsl(var(--brand)); }
   .bg-brand-dynamic\/20 { background-color: hsl(var(--brand) / 0.2); }
   .hover\:text-brand-dynamic\/80:hover { color: hsl(var(--brand) / 0.8); }
+  .hover\:bg-brand-dynamic\/20:hover { background-color: hsl(var(--brand) / 0.2); }
+  .hover\:bg-brand-dynamic\/30:hover { background-color: hsl(var(--brand) / 0.3); }
 }
 
 .font-league-gothic {
