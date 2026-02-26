@@ -578,141 +578,140 @@ export default function PortfolioLanding() {
       {/* Live Design System Preview */}
       <section className="pt-4 sm:pt-6 lg:pt-8 pb-2 sm:pb-3 lg:pb-4 xl:pb-6 relative">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-6">
+          {/* Title and description */}
+          <div className="w-full mb-4">
             <h2 className="font-bold text-brand-dynamic dark:text-white mb-1 title-font">NEW - Live Design System!</h2>
             <p className="text-muted-foreground text-sm">
-              Explore the interactive design system powering this site. Pick a brand color and watch every token, including primary, secondary, accent, and more, transform in real time with automatic WCAG AA contrast correction.
+              Explore the interactive design system powering this site. Pick a brand color and watch every token transform in real time. Automatic WCAG AA contrast correction. Generate a CSS snapshot of your custom theme. Open a pull request to propose changes directly to the repo.
             </p>
           </div>
 
-          {/* Action buttons */}
-          <div className="flex flex-wrap items-stretch gap-2 mb-4">
-            <div aria-live="assertive" aria-atomic="true" className="flex items-stretch">
-              {auditStatus === 'running' && (
-                <span data-axe-exclude className="flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 text-xs font-medium text-gray-600 dark:text-gray-300">
-                  Running audit&hellip;
-                </span>
-              )}
-              {auditStatus === 'passed' && (
-                <span data-axe-exclude className="flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 text-xs font-medium text-green-700 dark:text-green-300">
-                  <span className="text-green-600 dark:text-green-400">&#10003;</span> <span className="hidden sm:inline">Passed WCAG AA</span><span className="sm:hidden">WCAG</span>
-                </span>
-              )}
-              {auditStatus === 'failed' && (
-                <div data-axe-exclude className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 py-2 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-                  <p className="text-xs font-medium text-red-700 dark:text-red-300">
-                    &#10007; {auditViolations.length} contrast issue{auditViolations.length !== 1 ? 's' : ''}:
-                  </p>
-                  <ul className="text-[10px] text-red-600 dark:text-red-400 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-                    {auditViolations.map((v, i) => (
-                      <li
-                        key={i}
-                        className="cursor-pointer hover:underline"
-                        onClick={() => {
-                          const el = document.querySelector(v.selector) as HTMLElement | null;
-                          if (!el) return;
-                          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                          el.style.outline = '3px solid hsl(0 84% 60%)';
-                          el.style.outlineOffset = '2px';
-                          setTimeout(() => {
-                            el.style.outline = '';
-                            el.style.outlineOffset = '';
-                          }, 3000);
-                        }}
-                      >
-                        <span className="font-medium">Item {i + 1}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <button
-                    onClick={() => fixContrastIssues()}
-                    className="ml-auto px-3 py-1 text-[10px] font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors whitespace-nowrap"
-                  >
-                    Fix Contrast
-                  </button>
-                </div>
-              )}
-            </div>
-            <button
-              onClick={() => setShowResetModal(true)}
-              className="px-4 h-9 text-xs font-medium rounded-lg border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            >
-              <span className="hidden sm:inline">Reset to Defaults</span><span className="sm:hidden">Reset</span>
-            </button>
-            <button
-              onClick={() => generateCode()}
-              className="px-4 h-9 text-xs font-medium rounded-lg border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            >
-              <span className="hidden sm:inline">Generate CSS</span><span className="sm:hidden">CSS</span>
-            </button>
-            <button
-              disabled={prStatus === 'creating'}
-              onClick={async () => {
-                setPrStatus('creating');
-                setPrUrl(null);
-                try {
-                  let css = ":root {\n";
-                  EDITABLE_VARS.forEach(({ key }) => {
-                    const val = colors[key];
-                    if (val) css += `  ${key}: ${val};\n`;
-                  });
-                  css += "}";
-                  const res = await fetch('/.netlify/functions/create-design-pr', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ css }),
-                  });
-                  const data = await res.json();
-                  if (!res.ok) {
-                    if (res.status === 429) {
-                      setPrStatus('rate-limited');
-                      setPrError(data.error);
-                      return;
-                    }
-                    throw new Error(data.error || 'Failed to create PR');
-                  }
-                  setPrStatus('created');
-                  setPrUrl(data.url);
-                  setPrError(null);
-                  window.open(data.url, '_blank');
-                } catch {
-                  setPrStatus('error');
-                }
-              }}
-              className={`px-4 h-9 text-xs font-medium rounded-lg border transition-colors ${
-                prStatus === 'error' || prStatus === 'rate-limited'
-                  ? 'border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50'
-                  : prStatus === 'created'
-                    ? 'border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50'
-                    : 'border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700'
-              } disabled:opacity-50`}
-            >
-              {prStatus === 'creating' ? 'Preparing PR...' : prStatus === 'error' ? 'Retry PR' : prStatus === 'rate-limited' ? 'Retry PR' : 'Open PR'}
-            </button>
-            {prStatus === 'rate-limited' && prError && (
-              <span className="inline-flex items-center px-4 h-9 text-xs font-medium rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">
-                {prError}
+          {/* Buttons and audit status row */}
+          <div className="flex flex-row flex-wrap items-center gap-2 mb-6">
+            {auditStatus === 'running' && (
+              <span aria-live="assertive" data-axe-exclude className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 h-9 text-xs font-medium text-gray-600 dark:text-gray-300">
+                Running audit&hellip;
               </span>
             )}
-            {prStatus === 'created' && prUrl && (
-              <span className="inline-flex items-center gap-2 px-4 h-9 text-xs font-medium rounded-lg border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
-                PR Created!
-                <a
-                  href={prUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline font-semibold hover:text-green-900 dark:hover:text-green-100 transition-colors"
-                >
-                  View PR
-                </a>
-                <button
-                  onClick={() => { setPrStatus('idle'); setPrUrl(null); }}
-                  className="ml-1 text-green-500 hover:text-green-800 dark:hover:text-green-100 transition-colors"
-                  aria-label="Dismiss PR notification"
-                >
-                  &#10005;
-                </button>
+            {auditStatus === 'passed' && (
+              <span aria-live="assertive" data-axe-exclude className="inline-flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 h-9 text-xs font-medium text-green-700 dark:text-green-300">
+                <span className="text-green-600 dark:text-green-400">&#10003;</span> <span className="hidden sm:inline">Passed WCAG AA</span><span className="sm:hidden">WCAG</span>
               </span>
+            )}
+            {auditStatus === 'failed' && (
+              <div aria-live="assertive" data-axe-exclude className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 min-h-9 py-1.5 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                <p className="text-xs font-medium text-red-700 dark:text-red-300">
+                  &#10007; {auditViolations.length} contrast issue{auditViolations.length !== 1 ? 's' : ''}:
+                </p>
+                <ul className="text-[10px] text-red-600 dark:text-red-400 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                  {auditViolations.map((v, i) => (
+                    <li
+                      key={i}
+                      className="cursor-pointer hover:underline"
+                      onClick={() => {
+                        const el = document.querySelector(v.selector) as HTMLElement | null;
+                        if (!el) return;
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        el.style.outline = '3px solid hsl(0 84% 60%)';
+                        el.style.outlineOffset = '2px';
+                        setTimeout(() => {
+                          el.style.outline = '';
+                          el.style.outlineOffset = '';
+                        }, 3000);
+                      }}
+                    >
+                      <span className="font-medium">Item {i + 1}</span>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => fixContrastIssues()}
+                  className="ml-auto px-3 py-1 text-[10px] font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors whitespace-nowrap"
+                >
+                  Fix Contrast
+                </button>
+              </div>
+            )}
+            <button
+                  onClick={() => setShowResetModal(true)}
+                  className="px-4 h-9 text-xs font-medium rounded-lg border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <span className="hidden sm:inline">Reset to Defaults</span><span className="sm:hidden">Reset</span>
+                </button>
+                <button
+                  onClick={() => generateCode()}
+                  className="px-4 h-9 text-xs font-medium rounded-lg border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <span className="hidden sm:inline">Generate CSS</span><span className="sm:hidden">CSS</span>
+                </button>
+              <button
+                disabled={prStatus === 'creating'}
+                onClick={async () => {
+                  setPrStatus('creating');
+                  setPrUrl(null);
+                  try {
+                    let css = ":root {\n";
+                    EDITABLE_VARS.forEach(({ key }) => {
+                      const val = colors[key];
+                      if (val) css += `  ${key}: ${val};\n`;
+                    });
+                    css += "}";
+                    const res = await fetch('/.netlify/functions/create-design-pr', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ css }),
+                    });
+                    const data = await res.json();
+                    if (!res.ok) {
+                      if (res.status === 429) {
+                        setPrStatus('rate-limited');
+                        setPrError(data.error);
+                        return;
+                      }
+                      throw new Error(data.error || 'Failed to create PR');
+                    }
+                    setPrStatus('created');
+                    setPrUrl(data.url);
+                    setPrError(null);
+                    window.open(data.url, '_blank');
+                  } catch {
+                    setPrStatus('error');
+                  }
+                }}
+                className={`px-4 h-9 text-xs font-medium rounded-lg border transition-colors ${
+                  prStatus === 'error' || prStatus === 'rate-limited'
+                    ? 'border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50'
+                    : prStatus === 'created'
+                      ? 'border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50'
+                      : 'border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700'
+                } disabled:opacity-50`}
+              >
+                {prStatus === 'creating' ? 'Preparing PR...' : prStatus === 'error' ? 'Retry PR' : prStatus === 'rate-limited' ? 'Retry PR' : 'Open PR'}
+              </button>
+              {prStatus === 'rate-limited' && prError && (
+                <span className="inline-flex items-center px-4 h-9 text-xs font-medium rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 whitespace-nowrap">
+                  {prError}
+                </span>
+              )}
+              {prStatus === 'created' && prUrl && (
+                <span className="inline-flex items-center gap-2 px-4 h-9 text-xs font-medium rounded-lg border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                  PR Created!
+                  <a
+                    href={prUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline font-semibold hover:text-green-900 dark:hover:text-green-100 transition-colors"
+                  >
+                    View PR
+                  </a>
+                  <button
+                    onClick={() => { setPrStatus('idle'); setPrUrl(null); }}
+                    className="ml-1 text-green-500 hover:text-green-800 dark:hover:text-green-100 transition-colors"
+                    aria-label="Dismiss PR notification"
+                  >
+                    &#10005;
+                  </button>
+                </span>
             )}
           </div>
 
@@ -886,8 +885,7 @@ export default function PortfolioLanding() {
               </div>
 
               {/* Chips, Buttons, Badges in one card */}
-              <div className="w-1/3 md:flex-1 xl:w-[50%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-2 md:p-4 space-y-3 md:space-y-4">
-                {/* Mobile: single column; Tablet+: chips & badges side by side */}
+              <div className="w-1/3 md:flex-1 xl:w-[50%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-2 md:p-4">
                 <div className="flex flex-col md:flex-row gap-3 md:gap-6">
                   {/* Chips */}
                   <div className="flex-1 min-w-0 space-y-2 md:space-y-3">
@@ -903,18 +901,7 @@ export default function PortfolioLanding() {
                     </div>
                   </div>
 
-                  {/* Buttons - below chips on mobile, side by side on tablet+ */}
-                  <div className="flex-1 min-w-0 space-y-2 md:space-y-3 md:hidden border-t border-border pt-2">
-                    <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider">Buttons</p>
-                    <div className="flex flex-col gap-1.5 items-start">
-                      <button className="px-2 py-1 rounded-md font-semibold text-[10px] transition-colors truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Primary</button>
-                      <button className="px-2 py-1 rounded-md font-semibold text-[10px] transition-colors truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</button>
-                      <button className="px-2 py-1 rounded-md font-semibold text-[10px] transition-colors truncate" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Destructive</button>
-                      <button className="px-2 py-1 rounded-md font-semibold text-[10px] transition-colors truncate" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))" }}>Success</button>
-                    </div>
-                  </div>
-
-                  {/* Badges - below buttons on mobile, side by side on tablet+ */}
+                  {/* Badges */}
                   <div className="flex-1 min-w-0 space-y-2 md:space-y-3 border-t md:border-t-0 border-border pt-2 md:pt-0">
                     <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">Badges</p>
                     <div className="flex flex-col gap-3 items-start">
@@ -928,20 +915,20 @@ export default function PortfolioLanding() {
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border border-border text-muted-foreground max-w-full truncate">Outlined</span>
                     </div>
                   </div>
-                </div>
 
-                {/* Buttons - tablet+ only, horizontal wrap */}
-                <div className="hidden md:block space-y-3 border-t border-border pt-4">
-                  <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Buttons</p>
-                  <div className="flex flex-wrap gap-2">
-                    <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Primary</button>
-                    <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</button>
-                    <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}>Outlined</button>
-                    <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))" }}>Ghost</button>
-                    <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors truncate" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Destructive</button>
-                    <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors truncate" style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}>Muted</button>
-                    <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors truncate" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))" }}>Success</button>
-                    <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors truncate" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))" }}>Warning</button>
+                  {/* Buttons - stacked on mobile, column on desktop */}
+                  <div className="flex-1 min-w-0 space-y-2 md:space-y-3 border-t md:border-t-0 border-border pt-2 md:pt-0">
+                    <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">Buttons</p>
+                    <div className="flex flex-col gap-3 items-start">
+                      <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Primary</button>
+                      <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</button>
+                      <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}>Outlined</button>
+                      <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))" }}>Ghost</button>
+                      <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Destructive</button>
+                      <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}>Muted</button>
+                      <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))" }}>Success</button>
+                      <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))" }}>Warning</button>
+                    </div>
                   </div>
                 </div>
               </div>

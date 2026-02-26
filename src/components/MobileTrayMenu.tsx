@@ -101,8 +101,8 @@ const MobileTrayMenu: React.FC = () => {
         <div className="flex items-center justify-between w-full px-2 py-2">
           {[
             { id: "home", label: "Home", route: "/portfolio" },
-            { id: "work", label: "Design System", route: "/portfolio/design-system" },
-            { id: "case-studies", label: "Case Studies", route: "/case-studies" },
+            { id: "work", label: "Design", route: "/portfolio/design-system" },
+            { id: "case-studies", label: "Studies", route: "/case-studies" },
             { id: "articles", label: "Articles", route: "/portfolio/articles" },
             { id: "graphics", label: "UX/UI", route: "/portfolio/graphics" },
             { id: "current-projects", label: "Lab", route: "/portfolio/lab" },
