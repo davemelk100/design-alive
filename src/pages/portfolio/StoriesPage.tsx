@@ -60,7 +60,7 @@ export default function StoriesPage() {
                         </div>
                       )}
                     </div>
-                    <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1">
+                    <div className="p-4 sm:p-6 flex flex-col gap-2 flex-1 card-hover-secondary">
                       <h3 className="font-semibold text-brand-dynamic dark:text-white group-hover:font-bold transition-all">
                         {story.title}
                       </h3>

@@ -118,7 +118,7 @@ const MobileTrayMenu: React.FC = () => {
                 to={item.route}
                 className={`flex flex-col items-center gap-1 px-2 py-2 transition-colors rounded-lg ${
                   isActive
-                    ? "border-2 border-brand-dynamic text-brand-dynamic"
+                    ? "border-2 border-accent-dynamic text-brand-dynamic bg-accent-dynamic/10"
                     : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 border-2 border-transparent"
                 }`}
                 aria-label={`Navigate to ${item.label}`}

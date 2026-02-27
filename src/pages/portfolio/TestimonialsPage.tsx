@@ -16,7 +16,7 @@ export default function TestimonialsPage() {
             {content.testimonials.items.map((testimonial, index) => (
               <div
                 key={index}
-                className="border-l-2 border-border pl-4"
+                className="border-l-2 border-accent-dynamic/60 pl-4"
               >
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed italic">
                   "{testimonial.quote}"

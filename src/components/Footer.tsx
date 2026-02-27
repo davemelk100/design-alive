@@ -61,7 +61,7 @@ export const Footer = () => {
               type="text"
               name="user_name"
               required
-              className="w-full px-4 py-2 rounded-md border border-border bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-dynamic"
+              className="w-full px-4 py-2 rounded-md border border-border bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-accent-dynamic"
             />
           </div>
           <div>
@@ -76,7 +76,7 @@ export const Footer = () => {
               type="email"
               name="user_email"
               required
-              className="w-full px-4 py-2 rounded-md border border-border bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-dynamic"
+              className="w-full px-4 py-2 rounded-md border border-border bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-accent-dynamic"
             />
           </div>
           <div>
@@ -91,13 +91,14 @@ export const Footer = () => {
               name="message"
               required
               rows={5}
-              className="w-full px-4 py-2 rounded-md border border-border bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand-dynamic resize-vertical"
+              className="w-full px-4 py-2 rounded-md border border-border bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-accent-dynamic resize-vertical"
             />
           </div>
           <button
             type="submit"
             disabled={contactStatus === "sending"}
-            className="px-6 py-3 rounded-md bg-brand-dynamic text-white font-medium hover:brightness-[0.85] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 rounded-md font-medium hover:brightness-[0.85] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}
           >
             {contactStatus === "sending"
               ? "Sending..."
@@ -117,7 +118,7 @@ export const Footer = () => {
       </div>
 
       {/* Footer info */}
-      <div className="border-t border-border">
+      <div className="border-t border-secondary-dynamic/30">
       <div className="w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
           {/* Left side - Email and Copyright */}
@@ -146,7 +147,7 @@ export const Footer = () => {
                   localStorage.setItem("theme", "dark");
                 }
               }}
-              className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+              className="bg-secondary-dynamic/10 dark:bg-secondary-dynamic/20 hover:bg-secondary-dynamic/20 dark:hover:bg-secondary-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="Toggle dark mode"
             >
               <svg
@@ -180,7 +181,7 @@ export const Footer = () => {
               href={content.navigation.social.linkedin.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+              className="bg-secondary-dynamic/10 dark:bg-secondary-dynamic/20 hover:bg-secondary-dynamic/20 dark:hover:bg-secondary-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="LinkedIn"
             >
               <LinkedInLogoIcon className="h-5 w-5 text-brand-dynamic dark:text-brand-dynamic" />
@@ -189,7 +190,7 @@ export const Footer = () => {
               href="https://github.com/davemelk100"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+              className="bg-secondary-dynamic/10 dark:bg-secondary-dynamic/20 hover:bg-secondary-dynamic/20 dark:hover:bg-secondary-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="GitHub"
             >
               <GitHubLogoIcon className="h-5 w-5 text-brand-dynamic dark:text-brand-dynamic" />
@@ -198,7 +199,7 @@ export const Footer = () => {
               href={content.navigation.social.dribbble.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+              className="bg-secondary-dynamic/10 dark:bg-secondary-dynamic/20 hover:bg-secondary-dynamic/20 dark:hover:bg-secondary-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="Dribbble"
             >
               <Suspense fallback={<span className="h-5 w-5">D</span>}>

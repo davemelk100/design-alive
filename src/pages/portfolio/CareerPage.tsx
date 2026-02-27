@@ -38,7 +38,7 @@ export default function CareerPage() {
             {content.career.positions.map((position) => (
               <div
                 key={position.title + position.period}
-                className=""
+                className="pl-4 border-l-2 border-secondary-dynamic/50"
               >
                 <h3 className="font-semibold mb-1 dark:text-white title-font">
                   {position.title}

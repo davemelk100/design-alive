@@ -628,52 +628,6 @@ export default function PortfolioLanding() {
 
           {/* Audit badges + action buttons */}
           <div className="flex flex-wrap items-center gap-2 mb-6">
-            {auditStatus === 'running' && (
-              <span aria-live="assertive" data-axe-exclude className="ml-auto inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 h-9 box-border text-xs font-medium text-gray-600 dark:text-gray-300">
-                Running audit&hellip;
-              </span>
-            )}
-            {auditStatus === 'passed' && (
-              <span aria-live="assertive" data-axe-exclude className="ml-auto inline-flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 h-9 box-border text-xs font-medium text-green-700 dark:text-green-300">
-                <span className="text-green-600 dark:text-green-400">&#10003;</span> <span className="hidden sm:inline">Passed WCAG AA</span><span className="sm:hidden">WCAG</span>
-              </span>
-            )}
-            {auditStatus === 'failed' && (
-              <div aria-live="assertive" data-axe-exclude className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 h-9 box-border flex flex-wrap items-center gap-x-3 gap-y-0.5">
-                <p className="text-xs font-medium text-red-700 dark:text-red-300">
-                  &#10007; {auditViolations.length} contrast issue{auditViolations.length !== 1 ? 's' : ''}:
-                </p>
-                <ul className="text-[10px] text-red-600 dark:text-red-400 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-                  {auditViolations.map((v, i) => (
-                    <li
-                      key={i}
-                      className="cursor-pointer hover:underline"
-                      onClick={() => {
-                        const el = document.querySelector(v.selector) as HTMLElement | null;
-                        if (!el) return;
-                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        el.style.outline = '3px solid hsl(0 84% 60%)';
-                        el.style.outlineOffset = '2px';
-                        setTimeout(() => {
-                          el.style.outline = '';
-                          el.style.outlineOffset = '';
-                        }, 3000);
-                      }}
-                    >
-                      <span className="font-medium">Item {i + 1}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  onClick={() => fixContrastIssues()}
-                  className="ml-auto px-3 py-1 text-[10px] font-semibold rounded-lg transition-colors hover:opacity-80 whitespace-nowrap"
-                  style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
-                >
-                  Fix Contrast
-                </button>
-              </div>
-            )}
-            <div className="basis-full h-0" />
             <div className="relative">
               <button
                 onClick={() => setShuffleOpen(!shuffleOpen)}
@@ -789,6 +743,47 @@ export default function PortfolioLanding() {
                   </button>
                 </span>
             )}
+            {auditStatus === 'running' && (
+              <span aria-live="assertive" data-axe-exclude className="ml-auto inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 h-9 box-border text-xs font-medium text-gray-600 dark:text-gray-300">
+                Running audit&hellip;
+              </span>
+            )}
+            {auditStatus === 'passed' && (
+              <span aria-live="assertive" data-axe-exclude className="ml-auto inline-flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 h-9 box-border text-xs font-medium text-green-700 dark:text-green-300">
+                <span className="text-green-600 dark:text-green-400">&#10003;</span> <span className="hidden sm:inline">Passed WCAG AA</span><span className="sm:hidden">WCAG</span>
+              </span>
+            )}
+            {auditStatus === 'failed' && (
+              <span aria-live="assertive" data-axe-exclude className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-3 h-9 box-border text-xs font-medium text-red-700 dark:text-red-300">
+                <span>&#10007; {auditViolations.length} contrast issue{auditViolations.length !== 1 ? 's' : ''}</span>
+                {auditViolations.map((v, i) => (
+                  <span
+                    key={i}
+                    className="cursor-pointer hover:underline text-[10px] text-red-600 dark:text-red-400"
+                    onClick={() => {
+                      const el = document.querySelector(v.selector) as HTMLElement | null;
+                      if (!el) return;
+                      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      el.style.outline = '3px solid hsl(0 84% 60%)';
+                      el.style.outlineOffset = '2px';
+                      setTimeout(() => {
+                        el.style.outline = '';
+                        el.style.outlineOffset = '';
+                      }, 3000);
+                    }}
+                  >
+                    Item {i + 1}
+                  </span>
+                ))}
+                <button
+                  onClick={() => fixContrastIssues()}
+                  className="ml-1 px-2 py-0.5 text-[10px] font-semibold rounded transition-colors hover:opacity-80 whitespace-nowrap"
+                  style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
+                >
+                  Fix Contrast
+                </button>
+              </span>
+            )}
           </div>
 
           {/* Generated code output */}
@@ -881,19 +876,23 @@ export default function PortfolioLanding() {
                       <div className="absolute inset-0 flex items-center justify-between px-3">
                         {(() => {
                           const hsl = colors[key];
-                          // Use actual contrast ratio to pick text color
+                          // Pick white or black text — prefer whichever passes 4.5:1, else pick higher contrast
                           const bgHsl = hsl || "0 0% 50%";
                           const whiteContrast = contrastRatio("0 0% 100%", bgHsl);
                           const blackContrast = contrastRatio("0 0% 0%", bgHsl);
-                          const useWhite = whiteContrast >= blackContrast;
+                          const useWhite = whiteContrast >= 4.5 && blackContrast < 4.5
+                            ? true
+                            : blackContrast >= 4.5 && whiteContrast < 4.5
+                              ? false
+                              : whiteContrast >= blackContrast;
                           const textColor = useWhite ? "#ffffff" : "#000000";
-                          const subColor = useWhite ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.7)";
+                          const subColor = useWhite ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.9)";
                           return (
                             <div className="min-w-0">
                               <p className="text-xs font-semibold truncate" style={{ color: textColor }}>
                                 {displayLabel}
                               </p>
-                              <p data-axe-exclude className="text-[10px] truncate" style={{ color: subColor }}>
+                              <p className="text-[10px] truncate" style={{ color: subColor }}>
                                 {colors[key] ? hslStringToHex(colors[key]) : key}
                               </p>
                             </div>
@@ -926,7 +925,7 @@ export default function PortfolioLanding() {
                 { key: "--accent", label: "Tertiary" },
               ];
               return (
-                <div className="flex gap-4 mb-4">
+                <div className="flex gap-4 mb-4" data-axe-exclude>
                   {heroKeys.map((v) => renderHeroSwatch(v))}
                 </div>
               );
@@ -1117,7 +1116,7 @@ export default function PortfolioLanding() {
             {content.testimonials.items.map((testimonial, index) => (
               <div
                 key={index}
-                className="border-l-2 border-border pl-4"
+                className="border-l-2 border-accent-dynamic/60 pl-4"
               >
                 <p className="text-gray-700 dark:text-gray-300 leading-relaxed italic">
                   "{testimonial.quote}"

@@ -20,7 +20,7 @@ const idToRoute: Record<string, string> = {
   "design-system": "/portfolio/design-system",
 };
 
-const activeClass = "text-brand-dynamic dark:text-white px-3 py-2 rounded-md";
+const activeClass = "text-brand-dynamic dark:text-white px-3 py-2 rounded-md bg-accent-dynamic/10";
 const inactiveClass = "text-gray-600 dark:text-gray-300 hover:text-brand-dynamic dark:hover:text-white transition-colors px-3 py-2 rounded-md";
 
 const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (

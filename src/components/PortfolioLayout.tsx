@@ -26,7 +26,8 @@ const PortfolioLayout = ({
       {showScrollTop && (
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 z-40 bg-black text-white dark:bg-white dark:text-black w-10 h-10 rounded-full shadow-lg hover:opacity-80 transition-opacity flex items-center justify-center"
+          className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 z-40 w-10 h-10 rounded-full shadow-lg hover:opacity-80 transition-opacity flex items-center justify-center"
+          style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}
           aria-label="Scroll to top"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">

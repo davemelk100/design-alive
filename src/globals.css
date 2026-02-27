@@ -18,6 +18,23 @@
   .hover\:text-brand-dynamic\/80:hover { color: hsl(var(--brand) / 0.8); }
   .hover\:bg-brand-dynamic\/20:hover { background-color: hsl(var(--brand) / 0.2); }
   .hover\:bg-brand-dynamic\/30:hover { background-color: hsl(var(--brand) / 0.3); }
+
+  /* Secondary-dynamic utilities */
+  .bg-secondary-dynamic\/10 { background-color: hsl(var(--secondary) / 0.1); }
+  .bg-secondary-dynamic\/20 { background-color: hsl(var(--secondary) / 0.2); }
+  .bg-secondary-dynamic\/30 { background-color: hsl(var(--secondary) / 0.3); }
+  .border-secondary-dynamic { border-color: hsl(var(--secondary)); }
+  .border-secondary-dynamic\/30 { border-color: hsl(var(--secondary) / 0.3); }
+  .border-secondary-dynamic\/50 { border-color: hsl(var(--secondary) / 0.5); }
+  .hover\:bg-secondary-dynamic\/10:hover { background-color: hsl(var(--secondary) / 0.1); }
+  .hover\:bg-secondary-dynamic\/20:hover { background-color: hsl(var(--secondary) / 0.2); }
+
+  /* Accent-dynamic utilities */
+  .bg-accent-dynamic\/10 { background-color: hsl(var(--accent) / 0.1); }
+  .bg-accent-dynamic\/15 { background-color: hsl(var(--accent) / 0.15); }
+  .border-accent-dynamic { border-color: hsl(var(--accent)); }
+  .border-accent-dynamic\/60 { border-color: hsl(var(--accent) / 0.6); }
+  .focus\:ring-accent-dynamic:focus { --tw-ring-color: hsl(var(--accent)); }
 }
 
 .font-league-gothic {
@@ -481,6 +498,9 @@
 }
 
 @layer components {
+  .card-hover-secondary { border-bottom: 2px solid transparent; transition: border-color 200ms; }
+  .group:hover .card-hover-secondary { border-color: hsl(var(--secondary) / 0.5); }
+
   .title-font {
     font-family: "Nunito Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Arial", sans-serif;
   }

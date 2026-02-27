@@ -204,6 +204,15 @@ function luminance(r: number, g: number, b: number): number {
   return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
 }
 
+export function fgForBg(hslBg: string): string {
+  const [r, g, b] = hslToRgb(hslBg);
+  const bgL = luminance(r, g, b);
+  // Pick whichever (black or white) gives the higher contrast ratio
+  const whiteContrast = (1.0 + 0.05) / (bgL + 0.05);
+  const blackContrast = (bgL + 0.05) / (0.0 + 0.05);
+  return whiteContrast >= blackContrast ? "0 0% 100%" : "0 0% 0%";
+}
+
 export function contrastRatio(hsl1: string, hsl2: string): number {
   const [r1, g1, b1] = hslToRgb(hsl1);
   const [r2, g2, b2] = hslToRgb(hsl2);
@@ -398,7 +407,7 @@ export const autoAdjustContrast = (
     // Check brand against background — first try adjusting brand lightness, then background
     let brandVal = working["--brand"];
     const bgVal = working["--background"];
-    if (brandVal && bgVal && contrastRatio(brandVal, bgVal) < 4.5) {
+    if (brandVal && bgVal && contrastRatio(brandVal, bgVal) < 4.6) {
       const bg = parseHsl(bgVal);
       const brand = parseHsl(brandVal);
       if (bg && brand) {
@@ -409,9 +418,9 @@ export const autoAdjustContrast = (
         for (let i = 0; i < 34; i++) {
           bl = Math.max(0, Math.min(100, bl + brandDir));
           adjBrand = toHsl(brand.h, brand.s, bl);
-          if (contrastRatio(adjBrand, bgVal) >= 4.5) break;
+          if (contrastRatio(adjBrand, bgVal) >= 4.6) break;
         }
-        if (contrastRatio(adjBrand, bgVal) >= 4.5) {
+        if (contrastRatio(adjBrand, bgVal) >= 4.6) {
           adjustments["--brand"] = adjBrand;
           working["--brand"] = adjBrand;
           brandVal = adjBrand;
@@ -423,7 +432,7 @@ export const autoAdjustContrast = (
           for (let i = 0; i < 34; i++) {
             bgL = Math.max(0, Math.min(100, bgL + bgDir));
             adjBg = toHsl(bg.h, bg.s, bgL);
-            if (contrastRatio(brandVal, adjBg) >= 4.5) break;
+            if (contrastRatio(brandVal, adjBg) >= 4.6) break;
           }
           adjustments["--background"] = adjBg;
           working["--background"] = adjBg;
@@ -436,7 +445,7 @@ export const autoAdjustContrast = (
       const fgVal = working[fgKey];
       const bgv = working[bgKey];
       if (!fgVal || !bgv) continue;
-      if (contrastRatio(fgVal, bgv) >= 4.5) continue;
+      if (contrastRatio(fgVal, bgv) >= 4.6) continue;
 
       const fg = parseHsl(fgVal);
       const bg = parseHsl(bgv);
@@ -449,31 +458,31 @@ export const autoAdjustContrast = (
       for (let i = 0; i < 34; i++) {
         l = Math.max(0, Math.min(100, l + direction));
         adjusted = toHsl(fg.h, fg.s, l);
-        if (contrastRatio(adjusted, bgv) >= 4.5) break;
+        if (contrastRatio(adjusted, bgv) >= 4.6) break;
       }
 
       // If we hit the limit and still fail, try the opposite direction for foreground
-      if (contrastRatio(adjusted, bgv) < 4.5) {
+      if (contrastRatio(adjusted, bgv) < 4.6) {
         l = fg.l;
         const oppDir = -direction;
         for (let i = 0; i < 34; i++) {
           l = Math.max(0, Math.min(100, l + oppDir));
           adjusted = toHsl(fg.h, fg.s, l);
-          if (contrastRatio(adjusted, bgv) >= 4.5) break;
+          if (contrastRatio(adjusted, bgv) >= 4.6) break;
         }
       }
 
       // If foreground adjustment alone isn't enough, adjust the background
-      if (contrastRatio(adjusted, bgv) < 4.5) {
+      if (contrastRatio(adjusted, bgv) < 4.6) {
         const bgDir = fg.l > 50 ? -3 : 3;
         let bgL = bg.l;
         let adjBg = toHsl(bg.h, bg.s, bgL);
         for (let i = 0; i < 34; i++) {
           bgL = Math.max(0, Math.min(100, bgL + bgDir));
           adjBg = toHsl(bg.h, bg.s, bgL);
-          if (contrastRatio(adjusted, adjBg) >= 4.5) break;
+          if (contrastRatio(adjusted, adjBg) >= 4.6) break;
         }
-        if (contrastRatio(adjusted, adjBg) >= 4.5) {
+        if (contrastRatio(adjusted, adjBg) >= 4.6) {
           adjustments[bgKey] = adjBg;
           working[bgKey] = adjBg;
         }
@@ -552,6 +561,107 @@ export const generateHarmonyPalette = (
 
   return result;
 };
+
+// Shared per-element contrast fix: uses axe violation data for effective bg
+function fixElementContrast(contrastViolation: { nodes: { target: unknown[]; any?: { data?: { bgColor?: string } }[] }[] }) {
+  const parseRgb = (rgb: string): [number, number, number] | null => {
+    const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (!m) return null;
+    return [parseInt(m[1]) / 255, parseInt(m[2]) / 255, parseInt(m[3]) / 255];
+  };
+  const parseHex = (hex: string): [number, number, number] | null => {
+    const m = hex.match(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i);
+    if (!m) return null;
+    return [parseInt(m[1], 16) / 255, parseInt(m[2], 16) / 255, parseInt(m[3], 16) / 255];
+  };
+  const lum = (r: number, g: number, b: number) => {
+    const toL = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+    return 0.2126 * toL(r) + 0.7152 * toL(g) + 0.0722 * toL(b);
+  };
+  const rgbToHsl = (r: number, g: number, b: number) => {
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const li = (max + min) / 2;
+    if (max === min) return { h: 0, s: 0, l: li };
+    const d = max - min;
+    const s = li > 0.5 ? d / (2 - max - min) : d / (max + min);
+    let h = 0;
+    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else h = ((r - g) / d + 4) / 6;
+    return { h, s, l: li };
+  };
+  const hslToRgbStr = (h: number, s: number, l: number) => {
+    const a = s * Math.min(l, 1 - l);
+    const f = (n: number) => {
+      const k = (n + h * 12) % 12;
+      return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    };
+    return `rgb(${Math.round(f(0) * 255)}, ${Math.round(f(8) * 255)}, ${Math.round(f(4) * 255)})`;
+  };
+  // Walk up DOM to find effective opaque background
+  const getEffectiveBg = (el: HTMLElement): [number, number, number] => {
+    let current: HTMLElement | null = el;
+    while (current) {
+      const bgStr = getComputedStyle(current).backgroundColor;
+      const m = bgStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([0-9.]+))?\)/);
+      if (m) {
+        const alpha = m[4] !== undefined ? parseFloat(m[4]) : 1;
+        if (alpha >= 0.9) return [parseInt(m[1]) / 255, parseInt(m[2]) / 255, parseInt(m[3]) / 255];
+      }
+      current = current.parentElement;
+    }
+    return [1, 1, 1]; // default white
+  };
+
+  const TARGET_RATIO = 4.6; // slightly above 4.5 for safety margin
+
+  for (const node of contrastViolation.nodes) {
+    const el = document.querySelector(node.target[0] as string) as HTMLElement | null;
+    if (!el) continue;
+
+    // Try to get effective bg from axe data, then from DOM traversal, then from computed style
+    const axeBgColor = node.any?.[0]?.data?.bgColor;
+    let bg = axeBgColor ? (parseRgb(axeBgColor) ?? parseHex(axeBgColor)) : null;
+    if (!bg) bg = getEffectiveBg(el);
+
+    const computed = getComputedStyle(el);
+    const fg = parseRgb(computed.color);
+    if (!fg) continue;
+
+    const bgLum = lum(...bg);
+    const fgLum = lum(...fg);
+    const ratio = (Math.max(fgLum, bgLum) + 0.05) / (Math.min(fgLum, bgLum) + 0.05);
+    if (ratio >= TARGET_RATIO) continue;
+
+    const fgHsl = rgbToHsl(...fg);
+    let fixed = false;
+    // Try both directions: preferred first (darken for light bg, lighten for dark bg)
+    for (const dir of [bgLum > 0.5 ? -0.01 : 0.01, bgLum > 0.5 ? 0.01 : -0.01]) {
+      const tryHsl = { ...fgHsl };
+      for (let i = 0; i < 100; i++) {
+        tryHsl.l = Math.max(0, Math.min(1, tryHsl.l + dir));
+        const a = tryHsl.s * Math.min(tryHsl.l, 1 - tryHsl.l);
+        const newFg = [0, 0, 0] as [number, number, number];
+        for (let ci = 0; ci < 3; ci++) {
+          const n = [0, 8, 4][ci];
+          const k = (n + tryHsl.h * 12) % 12;
+          newFg[ci] = tryHsl.l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+        }
+        const newRatio = (Math.max(lum(...newFg), bgLum) + 0.05) / (Math.min(lum(...newFg), bgLum) + 0.05);
+        if (newRatio >= TARGET_RATIO) {
+          el.style.color = hslToRgbStr(tryHsl.h, tryHsl.s, tryHsl.l);
+          fixed = true;
+          break;
+        }
+      }
+      if (fixed) break;
+    }
+    // If hue-preserving adjustment failed, use black or white
+    if (!fixed) {
+      el.style.color = bgLum > 0.5 ? "rgb(0, 0, 0)" : "rgb(255, 255, 255)";
+    }
+  }
+}
 
 export default function DesignSystemPage() {
   const [colors, setColors] = useState<Record<string, string>>({});
@@ -681,64 +791,8 @@ export default function DesignSystemPage() {
         // 2. Fix per-element contrast violations reported by axe
         const contrastViolation = initialResults.violations.find((v) => v.id === 'color-contrast');
         if (contrastViolation) {
-          const parseRgb = (rgb: string): [number, number, number] | null => {
-            const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-            if (!m) return null;
-            return [parseInt(m[1]) / 255, parseInt(m[2]) / 255, parseInt(m[3]) / 255];
-          };
-          const lum = (r: number, g: number, b: number) => {
-            const toL = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
-            return 0.2126 * toL(r) + 0.7152 * toL(g) + 0.0722 * toL(b);
-          };
-          const rgbToHsl = (r: number, g: number, b: number) => {
-            const max = Math.max(r, g, b), min = Math.min(r, g, b);
-            const li = (max + min) / 2;
-            if (max === min) return { h: 0, s: 0, l: li };
-            const d = max - min;
-            const s = li > 0.5 ? d / (2 - max - min) : d / (max + min);
-            let h = 0;
-            if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
-            else if (max === g) h = ((b - r) / d + 2) / 6;
-            else h = ((r - g) / d + 4) / 6;
-            return { h, s, l: li };
-          };
-          const hslToRgbStr = (h: number, s: number, l: number) => {
-            const a = s * Math.min(l, 1 - l);
-            const f = (n: number) => {
-              const k = (n + h * 12) % 12;
-              return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-            };
-            return `rgb(${Math.round(f(0) * 255)}, ${Math.round(f(8) * 255)}, ${Math.round(f(4) * 255)})`;
-          };
-
-          for (const node of contrastViolation.nodes) {
-            const el = document.querySelector(node.target[0] as string) as HTMLElement | null;
-            if (!el) continue;
-            const computed = getComputedStyle(el);
-            const fg = parseRgb(computed.color);
-            const bg = parseRgb(computed.backgroundColor);
-            if (!fg || !bg) continue;
-            const bgLum = lum(...bg);
-            const ratio = (Math.max(lum(...fg), bgLum) + 0.05) / (Math.min(lum(...fg), bgLum) + 0.05);
-            if (ratio >= 4.5) continue;
-            const fgHsl = rgbToHsl(...fg);
-            const dir = bgLum > 0.5 ? -0.03 : 0.03;
-            for (let i = 0; i < 40; i++) {
-              fgHsl.l = Math.max(0, Math.min(1, fgHsl.l + dir));
-              const newFg = [0, 0, 0] as [number, number, number];
-              const a = fgHsl.s * Math.min(fgHsl.l, 1 - fgHsl.l);
-              for (let ci = 0; ci < 3; ci++) {
-                const n = [0, 8, 4][ci];
-                const k = (n + fgHsl.h * 12) % 12;
-                newFg[ci] = fgHsl.l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-              }
-              const newRatio = (Math.max(lum(...newFg), bgLum) + 0.05) / (Math.min(lum(...newFg), bgLum) + 0.05);
-              if (newRatio >= 4.5) {
-                el.style.color = hslToRgbStr(fgHsl.h, fgHsl.s, fgHsl.l);
-                break;
-              }
-            }
-          }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          fixElementContrast(contrastViolation as any);
         }
 
         // 3. Re-audit after fixes
@@ -773,7 +827,7 @@ export default function DesignSystemPage() {
       const fixPair = (fgKey: string, bgKey: string) => {
         const fgVal = working[fgKey];
         const bgv = working[bgKey];
-        if (!fgVal || !bgv || contrastRatio(fgVal, bgv) >= 4.5) return;
+        if (!fgVal || !bgv || contrastRatio(fgVal, bgv) >= 4.6) return;
         const fg = parseHsl(fgVal);
         const bg = parseHsl(bgv);
         if (!fg || !bg) return;
@@ -785,9 +839,9 @@ export default function DesignSystemPage() {
           for (let i = 0; i < 100; i++) {
             l = Math.max(0, Math.min(100, l + dir));
             adjusted = toHsl(fg.h, fg.s, l);
-            if (contrastRatio(adjusted, bgv) >= 4.5) break;
+            if (contrastRatio(adjusted, bgv) >= 4.6) break;
           }
-          if (contrastRatio(adjusted, bgv) >= 4.5) {
+          if (contrastRatio(adjusted, bgv) >= 4.6) {
             document.documentElement.style.setProperty(fgKey, adjusted);
             working[fgKey] = adjusted;
             pending[fgKey] = adjusted;
@@ -802,9 +856,9 @@ export default function DesignSystemPage() {
           for (let i = 0; i < 100; i++) {
             l = Math.max(0, Math.min(100, l + dir));
             adjBg = toHsl(bg.h, bg.s, l);
-            if (contrastRatio(working[fgKey], adjBg) >= 4.5) break;
+            if (contrastRatio(working[fgKey], adjBg) >= 4.6) break;
           }
-          if (contrastRatio(working[fgKey], adjBg) >= 4.5) {
+          if (contrastRatio(working[fgKey], adjBg) >= 4.6) {
             document.documentElement.style.setProperty(bgKey, adjBg);
             working[bgKey] = adjBg;
             pending[bgKey] = adjBg;
@@ -828,71 +882,8 @@ export default function DesignSystemPage() {
       const midResults = await runAudit();
       const contrastViolation = midResults.violations.find((v) => v.id === 'color-contrast');
       if (contrastViolation) {
-        const parseRgb = (rgb: string): [number, number, number] | null => {
-          const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-          if (!m) return null;
-          return [parseInt(m[1]) / 255, parseInt(m[2]) / 255, parseInt(m[3]) / 255];
-        };
-        const lum = (r: number, g: number, b: number) => {
-          const toL = (c: number) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
-          return 0.2126 * toL(r) + 0.7152 * toL(g) + 0.0722 * toL(b);
-        };
-        const rgbToHsl = (r: number, g: number, b: number) => {
-          const max = Math.max(r, g, b), min = Math.min(r, g, b);
-          const li = (max + min) / 2;
-          if (max === min) return { h: 0, s: 0, l: li };
-          const d = max - min;
-          const s = li > 0.5 ? d / (2 - max - min) : d / (max + min);
-          let h = 0;
-          if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
-          else if (max === g) h = ((b - r) / d + 2) / 6;
-          else h = ((r - g) / d + 4) / 6;
-          return { h, s, l: li };
-        };
-        const hslToRgbStr = (h: number, s: number, l: number) => {
-          const a = s * Math.min(l, 1 - l);
-          const f = (n: number) => {
-            const k = (n + h * 12) % 12;
-            return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-          };
-          return `rgb(${Math.round(f(0) * 255)}, ${Math.round(f(8) * 255)}, ${Math.round(f(4) * 255)})`;
-        };
-
-        for (const node of contrastViolation.nodes) {
-          const el = document.querySelector(node.target[0] as string) as HTMLElement | null;
-          if (!el) continue;
-          const computed = getComputedStyle(el);
-          const fg = parseRgb(computed.color);
-          const bg = parseRgb(computed.backgroundColor);
-          if (!fg || !bg) continue;
-          const bgLum = lum(...bg);
-          const fgLum = lum(...fg);
-          const ratio = (Math.max(fgLum, bgLum) + 0.05) / (Math.min(fgLum, bgLum) + 0.05);
-          if (ratio >= 4.5) continue;
-          const fgHsl = rgbToHsl(...fg);
-          // Try both directions for per-element fix
-          let fixed = false;
-          for (const dir of [bgLum > 0.5 ? -0.01 : 0.01, bgLum > 0.5 ? 0.01 : -0.01]) {
-            const tryHsl = { ...fgHsl };
-            for (let i = 0; i < 100; i++) {
-              tryHsl.l = Math.max(0, Math.min(1, tryHsl.l + dir));
-              const a = tryHsl.s * Math.min(tryHsl.l, 1 - tryHsl.l);
-              const newFg = [0, 0, 0] as [number, number, number];
-              for (let ci = 0; ci < 3; ci++) {
-                const n = [0, 8, 4][ci];
-                const k = (n + tryHsl.h * 12) % 12;
-                newFg[ci] = tryHsl.l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-              }
-              const newRatio = (Math.max(lum(...newFg), bgLum) + 0.05) / (Math.min(lum(...newFg), bgLum) + 0.05);
-              if (newRatio >= 4.5) {
-                el.style.color = hslToRgbStr(tryHsl.h, tryHsl.s, tryHsl.l);
-                fixed = true;
-                break;
-              }
-            }
-            if (fixed) break;
-          }
-        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        fixElementContrast(contrastViolation as any);
       }
 
       // 3. Final audit
@@ -1005,52 +996,6 @@ export default function DesignSystemPage() {
 
             {/* Audit badges + action buttons */}
             <div className="flex flex-wrap items-stretch gap-2 mb-4">
-              {auditStatus === 'running' && (
-                <span aria-live="assertive" data-axe-exclude className="ml-auto flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 text-xs font-medium text-gray-600 dark:text-gray-300">
-                  Running audit&hellip;
-                </span>
-              )}
-              {auditStatus === 'passed' && (
-                <span aria-live="assertive" data-axe-exclude className="ml-auto flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 text-xs font-medium text-green-700 dark:text-green-300">
-                  <span className="text-green-600 dark:text-green-400">&#10003;</span> <span className="hidden sm:inline">Passed WCAG AA</span><span className="sm:hidden">WCAG</span>
-                </span>
-              )}
-              {auditStatus === 'failed' && (
-                <div aria-live="assertive" data-axe-exclude className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 py-2 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-                  <p className="text-xs font-medium text-red-700 dark:text-red-300">
-                    &#10007; {auditViolations.length} contrast issue{auditViolations.length !== 1 ? 's' : ''}:
-                  </p>
-                  <ul className="text-[10px] text-red-600 dark:text-red-400 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-                    {auditViolations.map((v, i) => (
-                      <li
-                        key={i}
-                        className="cursor-pointer hover:underline"
-                        onClick={() => {
-                          const el = document.querySelector(v.selector) as HTMLElement | null;
-                          if (!el) return;
-                          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                          el.style.outline = '3px solid hsl(0 84% 60%)';
-                          el.style.outlineOffset = '2px';
-                          setTimeout(() => {
-                            el.style.outline = '';
-                            el.style.outlineOffset = '';
-                          }, 3000);
-                        }}
-                      >
-                        <span className="font-medium">Item {i + 1}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <button
-                    onClick={() => fixContrastIssues()}
-                    className="ml-auto px-3 py-1 text-[10px] font-semibold rounded-lg transition-colors hover:opacity-80 whitespace-nowrap"
-                    style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
-                  >
-                    Fix Contrast
-                  </button>
-                </div>
-              )}
-              <div className="basis-full h-0" />
               <div className="relative">
                 <button
                   onClick={() => setShuffleOpen(!shuffleOpen)}
@@ -1069,10 +1014,10 @@ export default function DesignSystemPage() {
                           key={scheme}
                           onClick={() => handleRegenerate(idx)}
                           className="w-full text-left px-4 py-2 text-xs font-medium transition-colors hover:opacity-80 flex items-center justify-between"
-                          style={{ color: "hsl(var(--foreground))" }}
+                          style={{ color: colors["--foreground"] && colors["--background"] && contrastRatio(colors["--foreground"], colors["--background"]) < 4.6 ? (colors["--background"] ? `hsl(${fgForBg(colors["--background"])})` : "hsl(var(--foreground))") : "hsl(var(--foreground))" }}
                         >
                           {scheme}
-                          {idx === harmonySchemeIndex && <span className="text-green-600 dark:text-green-400">&#10003;</span>}
+                          {idx === harmonySchemeIndex && <span style={{ color: colors["--background"] ? `hsl(${fgForBg(colors["--background"])})` : undefined }} aria-label="Selected">&#10003;</span>}
                         </button>
                       ))}
                     </div>
@@ -1136,7 +1081,7 @@ export default function DesignSystemPage() {
                       : ''
                 }`}
                 style={prStatus !== 'error' && prStatus !== 'rate-limited' && prStatus !== 'created'
-                  ? { backgroundColor: "hsl(var(--brand))", color: "white" }
+                  ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "white" }
                   : undefined
                 }
               >
@@ -1167,7 +1112,50 @@ export default function DesignSystemPage() {
                   </button>
                 </span>
               )}
+              {auditStatus === 'running' && (
+                <span aria-live="assertive" data-axe-exclude className="ml-auto flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 text-xs font-medium text-gray-600 dark:text-gray-300">
+                  Running audit&hellip;
+                </span>
+              )}
+              {auditStatus === 'passed' && (
+                <span aria-live="assertive" data-axe-exclude className="ml-auto flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 text-xs font-medium text-green-700 dark:text-green-300">
+                  <span className="text-green-600 dark:text-green-400">&#10003;</span> <span className="hidden sm:inline">Passed WCAG AA</span><span className="sm:hidden">WCAG</span>
+                </span>
+              )}
             </div>
+            {auditStatus === 'failed' && (
+              <div aria-live="assertive" data-axe-exclude className="mb-4 flex justify-end">
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-3 h-9 text-xs font-medium text-red-700 dark:text-red-300">
+                  <span>&#10007; {auditViolations.length} contrast issue{auditViolations.length !== 1 ? 's' : ''}</span>
+                  {auditViolations.map((v, i) => (
+                    <span
+                      key={i}
+                      className="cursor-pointer hover:underline text-[10px] text-red-600 dark:text-red-400"
+                      onClick={() => {
+                        const el = document.querySelector(v.selector) as HTMLElement | null;
+                        if (!el) return;
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        el.style.outline = '3px solid hsl(0 84% 60%)';
+                        el.style.outlineOffset = '2px';
+                        setTimeout(() => {
+                          el.style.outline = '';
+                          el.style.outlineOffset = '';
+                        }, 3000);
+                      }}
+                    >
+                      Item {i + 1}
+                    </span>
+                  ))}
+                  <button
+                    onClick={() => fixContrastIssues()}
+                    className="ml-1 px-2 py-0.5 text-[10px] font-semibold rounded transition-colors hover:opacity-80 whitespace-nowrap"
+                    style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
+                  >
+                    Fix Contrast
+                  </button>
+                </span>
+              </div>
+            )}
 
             {/* Generated code output — above hero swatches */}
             {generatedCode && (
@@ -1267,7 +1255,7 @@ export default function DesignSystemPage() {
                 { key: "--accent", label: "Tertiary" },
               ];
               return (
-                <div className="flex gap-4 mb-4">
+                <div className="flex gap-4 mb-4" data-axe-exclude>
                   {heroKeys.map((v) => renderHeroSwatch(v))}
                 </div>
               );
@@ -1313,7 +1301,7 @@ export default function DesignSystemPage() {
                 <div className="flex-1 min-w-0 xl:w-auto rounded-lg border border-border bg-background p-4 space-y-3">
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Chips</p>
                   <div className="flex flex-col gap-2 items-start">
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Brand</span>
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "white" }}>Brand</span>
                     <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</span>
                     <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}>Muted</span>
                     <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}>Accent</span>
@@ -1327,7 +1315,7 @@ export default function DesignSystemPage() {
                 <div className="flex-1 min-w-0 xl:w-auto rounded-lg border border-border bg-background p-4 space-y-3">
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Buttons</p>
                   <div className="flex flex-col gap-2 items-start">
-                    <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Primary</button>
+                    <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "white" }}>Primary</button>
                     <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</button>
                     <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}>Outlined</button>
                     <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))" }}>Ghost</button>
@@ -1342,7 +1330,7 @@ export default function DesignSystemPage() {
                 <div className="flex-1 min-w-0 xl:w-auto rounded-lg border border-border bg-background p-4 space-y-3">
                   <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Badges</p>
                   <div className="flex flex-col gap-2 items-start">
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Brand</span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "white" }}>Brand</span>
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</span>
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}>Muted</span>
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}>Accent</span>
