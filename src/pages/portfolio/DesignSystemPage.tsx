@@ -1345,7 +1345,7 @@ export default function DesignSystemPage() {
               {/* Icons column */}
               <div className="xl:flex-1 min-w-0 rounded-lg border border-border bg-background p-4 space-y-4">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Icons</p>
-                <div className="grid grid-cols-3 gap-0.5">
+                <div className="grid grid-cols-3 gap-2 place-items-center">
                   <Suspense fallback={null}>
                     {SITE_ICONS.map(({ name, icon: Icon }) => (
                       <div key={name} className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center" title={name}>

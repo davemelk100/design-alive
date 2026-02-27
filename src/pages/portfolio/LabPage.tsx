@@ -41,7 +41,7 @@ export default function LabPage() {
                             alt={project.title}
                             className={`w-full h-full group-hover:scale-105 transition-transform duration-300 ${project.image.endsWith(".svg") ? "object-contain object-center" : "object-cover object-top"}`}
                             loading={index === 0 ? "eager" : "lazy"}
-                            {...(index === 0 ? { fetchPriority: "high" as const } : {})}
+                            {...(index === 0 ? { fetchpriority: "high" } : {})}
                             decoding="async"
                             width="512"
                             height="512"
