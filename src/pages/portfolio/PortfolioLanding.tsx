@@ -17,6 +17,8 @@ import {
   hexToHslString,
   derivePaletteFromChange,
   autoAdjustContrast,
+  generateHarmonyPalette,
+  HARMONY_SCHEMES,
 } from "./DesignSystemPage";
 
 const LazyLinkedInLogoIcon = React.lazy(() =>
@@ -214,6 +216,8 @@ export default function PortfolioLanding() {
   const [auditStatus, setAuditStatus] = useState<'idle' | 'running' | 'passed' | 'failed'>('idle');
   const auditTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [auditViolations, setAuditViolations] = useState<{ selector: string; text: string }[]>([]);
+  const [harmonySchemeIndex, setHarmonySchemeIndex] = useState(0);
+  const [shuffleOpen, setShuffleOpen] = useState(false);
 
   const readCurrentColors = useCallback(() => {
     const style = getComputedStyle(document.documentElement);
@@ -316,6 +320,32 @@ export default function PortfolioLanding() {
     tw += "}";
 
     setGeneratedCode(css + tw);
+  };
+
+  const handleRegenerate = (schemeIdx: number) => {
+    const scheme = HARMONY_SCHEMES[schemeIdx];
+    const brandHsl = colors['--brand'];
+    if (!brandHsl) return;
+
+    const result = generateHarmonyPalette(brandHsl, scheme, colors);
+    const history = storage.get<{ key: string; previousValue: string }[]>(COLOR_HISTORY_KEY) || [];
+    const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
+    const newColors = { ...colors };
+
+    for (const [key, val] of Object.entries(result)) {
+      history.push({ key, previousValue: newColors[key] || '' });
+      document.documentElement.style.setProperty(key, val);
+      newColors[key] = val;
+      pending[key] = val;
+    }
+
+    storage.set(COLOR_HISTORY_KEY, history);
+    setColors(newColors);
+    storage.set(PENDING_COLORS_KEY, pending);
+    window.dispatchEvent(new Event('theme-pending-update'));
+    setHarmonySchemeIndex(schemeIdx);
+    setShuffleOpen(false);
+    runAccessibilityAudit();
   };
 
   const handleReset = () => {
@@ -596,15 +626,15 @@ export default function PortfolioLanding() {
             </p>
           </div>
 
-          {/* Buttons and audit status row */}
-          <div className="flex flex-row flex-wrap items-center gap-2 mb-6">
+          {/* Audit badges + action buttons */}
+          <div className="flex flex-wrap items-center gap-2 mb-6">
             {auditStatus === 'running' && (
-              <span aria-live="assertive" data-axe-exclude className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 h-9 box-border text-xs font-medium text-gray-600 dark:text-gray-300">
+              <span aria-live="assertive" data-axe-exclude className="ml-auto inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 h-9 box-border text-xs font-medium text-gray-600 dark:text-gray-300">
                 Running audit&hellip;
               </span>
             )}
             {auditStatus === 'passed' && (
-              <span aria-live="assertive" data-axe-exclude className="inline-flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 h-9 box-border text-xs font-medium text-green-700 dark:text-green-300">
+              <span aria-live="assertive" data-axe-exclude className="ml-auto inline-flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 h-9 box-border text-xs font-medium text-green-700 dark:text-green-300">
                 <span className="text-green-600 dark:text-green-400">&#10003;</span> <span className="hidden sm:inline">Passed WCAG AA</span><span className="sm:hidden">WCAG</span>
               </span>
             )}
@@ -636,21 +666,53 @@ export default function PortfolioLanding() {
                 </ul>
                 <button
                   onClick={() => fixContrastIssues()}
-                  className="ml-auto px-3 py-1 text-[10px] font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors whitespace-nowrap"
+                  className="ml-auto px-3 py-1 text-[10px] font-semibold rounded-lg transition-colors hover:opacity-80 whitespace-nowrap"
+                  style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
                 >
                   Fix Contrast
                 </button>
               </div>
             )}
+            <div className="basis-full h-0" />
+            <div className="relative">
+              <button
+                onClick={() => setShuffleOpen(!shuffleOpen)}
+                className="px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center gap-1.5"
+                style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}
+              >
+                <span className="hidden sm:inline">Shuffle</span><span className="sm:hidden">Shuffle</span>
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path d="M6 9l6 6 6-6" /></svg>
+              </button>
+              {shuffleOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setShuffleOpen(false)} />
+                  <div className="absolute left-0 top-full mt-1 z-50 min-w-[180px] rounded-lg shadow-lg py-1 border" style={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}>
+                    {HARMONY_SCHEMES.map((scheme, idx) => (
+                      <button
+                        key={scheme}
+                        onClick={() => handleRegenerate(idx)}
+                        className="w-full text-left px-4 py-2 text-xs font-medium transition-colors hover:opacity-80 flex items-center justify-between"
+                        style={{ color: "hsl(var(--foreground))" }}
+                      >
+                        {scheme}
+                        {idx === harmonySchemeIndex && <span className="text-green-600 dark:text-green-400">&#10003;</span>}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
             <button
                   onClick={() => setShowResetModal(true)}
-                  className="px-4 h-9 text-xs font-medium rounded-lg border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  className="px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80"
+                  style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
                 >
                   <span className="hidden sm:inline">Reset to Defaults</span><span className="sm:hidden">Reset</span>
                 </button>
                 <button
                   onClick={() => generateCode()}
-                  className="px-4 h-9 text-xs font-medium rounded-lg border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  className="px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80"
+                  style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
                 >
                   <span className="hidden sm:inline">Generate CSS</span><span className="sm:hidden">CSS</span>
                 </button>
@@ -688,13 +750,17 @@ export default function PortfolioLanding() {
                     setPrStatus('error');
                   }
                 }}
-                className={`px-4 h-9 text-xs font-medium rounded-lg border transition-colors ${
+                className={`px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 disabled:opacity-50 ${
                   prStatus === 'error' || prStatus === 'rate-limited'
-                    ? 'border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50'
+                    ? 'border border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
                     : prStatus === 'created'
-                      ? 'border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50'
-                      : 'border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700'
-                } disabled:opacity-50`}
+                      ? 'border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                      : ''
+                }`}
+                style={prStatus !== 'error' && prStatus !== 'rate-limited' && prStatus !== 'created'
+                  ? { backgroundColor: "hsl(var(--brand))", color: "white" }
+                  : undefined
+                }
               >
                 {prStatus === 'creating' ? 'Preparing PR...' : prStatus === 'error' ? 'Retry PR' : prStatus === 'rate-limited' ? 'Retry PR' : 'Open PR'}
               </button>
@@ -737,13 +803,15 @@ export default function PortfolioLanding() {
                       setCodeCopied(true);
                       setTimeout(() => setCodeCopied(false), 2000);
                     }}
-                    className="px-2 py-0.5 text-[10px] font-medium rounded border border-border bg-white dark:bg-gray-800 text-muted-foreground hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="px-2 py-0.5 text-[10px] font-semibold rounded-lg transition-colors hover:opacity-80"
+                    style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}
                   >
                     {codeCopied ? "Copied!" : "Copy"}
                   </button>
                   <button
                     onClick={() => setGeneratedCode(null)}
-                    className="px-2 py-0.5 text-[10px] font-medium rounded border border-border bg-white dark:bg-gray-800 text-muted-foreground hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="px-2 py-0.5 text-[10px] font-semibold rounded-lg transition-colors hover:opacity-80"
+                    style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}
                   >
                     Close
                   </button>
@@ -768,13 +836,15 @@ export default function PortfolioLanding() {
                 <div className="flex justify-end gap-2">
                   <button
                     onClick={() => setShowResetModal(false)}
-                    className="px-3 py-1.5 text-sm rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                    className="px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors hover:opacity-80"
+                    style={{ backgroundColor: "transparent", color: "hsl(var(--brand))" }}
                   >
                     Cancel
                   </button>
                   <button
                     onClick={() => { handleReset(); setShowResetModal(false); }}
-                    className="px-3 py-1.5 text-sm font-medium rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors"
+                    className="px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors hover:opacity-80"
+                    style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
                   >
                     Reset
                   </button>

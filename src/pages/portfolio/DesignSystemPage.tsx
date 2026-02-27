@@ -485,6 +485,74 @@ export const autoAdjustContrast = (
     return adjustments;
 };
 
+export const HARMONY_SCHEMES = ['complementary', 'analogous', 'triadic', 'split-complementary'] as const;
+export type HarmonyScheme = typeof HARMONY_SCHEMES[number];
+
+export const generateHarmonyPalette = (
+  brandHsl: string,
+  scheme: HarmonyScheme,
+  currentColors: Record<string, string>,
+): Record<string, string> => {
+  const parts = brandHsl.trim().split(/\s+/);
+  if (parts.length < 3) return {};
+
+  const hue = parseFloat(parts[0]);
+  const sat = parseFloat(parts[1]);
+  const light = parseFloat(parts[2]);
+
+  let secHueOffset: number;
+  let accHueOffset: number;
+
+  switch (scheme) {
+    case 'complementary':
+      secHueOffset = 180;
+      accHueOffset = 150;
+      break;
+    case 'analogous':
+      secHueOffset = 30;
+      accHueOffset = -30;
+      break;
+    case 'triadic':
+      secHueOffset = 120;
+      accHueOffset = 240;
+      break;
+    case 'split-complementary':
+      secHueOffset = 150;
+      accHueOffset = 210;
+      break;
+  }
+
+  const wrap = (h: number) => ((h % 360) + 360) % 360;
+  const secHue = wrap(hue + secHueOffset);
+  const accHue = wrap(hue + accHueOffset);
+
+  // Build secondary and accent with slight sat/light variation from brand
+  const secSat = Math.min(100, sat * 0.85);
+  const secLight = Math.min(95, Math.max(5, light * 1.05));
+  const accSat = Math.min(100, sat * 0.9);
+  const accLight = Math.min(95, Math.max(5, light * 0.95));
+
+  const secondaryHsl = `${secHue.toFixed(1)} ${secSat.toFixed(1)}% ${secLight.toFixed(1)}%`;
+  const accentHsl = `${accHue.toFixed(1)} ${accSat.toFixed(1)}% ${accLight.toFixed(1)}%`;
+
+  // Start with current colors, apply secondary then accent derivations
+  let merged: Record<string, string> = { ...currentColors, '--secondary': secondaryHsl };
+  const secDerived = derivePaletteFromChange('--secondary', secondaryHsl, merged);
+  merged = { ...merged, ...secDerived, '--accent': accentHsl };
+  const accDerived = derivePaletteFromChange('--accent', accentHsl, merged);
+  merged = { ...merged, ...accDerived };
+
+  // Collect only the changed keys
+  const result: Record<string, string> = { '--secondary': secondaryHsl, '--accent': accentHsl, ...secDerived, ...accDerived };
+
+  // Auto-adjust contrast
+  const fullColors = { ...currentColors, ...result };
+  const adjustments = autoAdjustContrast(fullColors);
+  Object.assign(result, adjustments);
+
+  return result;
+};
+
 export default function DesignSystemPage() {
   const [colors, setColors] = useState<Record<string, string>>({});
   const [showResetModal, setShowResetModal] = useState(false);
@@ -495,6 +563,8 @@ export default function DesignSystemPage() {
   const [prStatus, setPrStatus] = useState<'idle' | 'creating' | 'created' | 'error' | 'rate-limited'>('idle');
   const [prUrl, setPrUrl] = useState<string | null>(null);
   const [prError, setPrError] = useState<string | null>(null);
+  const [harmonySchemeIndex, setHarmonySchemeIndex] = useState(0);
+  const [shuffleOpen, setShuffleOpen] = useState(false);
 
   const readCurrentColors = useCallback(() => {
     const style = getComputedStyle(document.documentElement);
@@ -873,6 +943,31 @@ export default function DesignSystemPage() {
 
   };
 
+  const handleRegenerate = (schemeIdx: number) => {
+    const scheme = HARMONY_SCHEMES[schemeIdx];
+    const brandHsl = colors['--brand'];
+    if (!brandHsl) return;
+
+    const result = generateHarmonyPalette(brandHsl, scheme, colors);
+    const history = storage.get<{ key: string; previousValue: string }[]>(COLOR_HISTORY_KEY) || [];
+    const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
+    const newColors = { ...colors };
+
+    for (const [key, val] of Object.entries(result)) {
+      history.push({ key, previousValue: newColors[key] || '' });
+      document.documentElement.style.setProperty(key, val);
+      newColors[key] = val;
+      pending[key] = val;
+    }
+
+    storage.set(COLOR_HISTORY_KEY, history);
+    setColors(newColors);
+    storage.set(PENDING_COLORS_KEY, pending);
+    window.dispatchEvent(new Event('theme-pending-update'));
+    setHarmonySchemeIndex(schemeIdx);
+    setShuffleOpen(false);
+    runAccessibilityAudit();
+  };
 
   const handleReset = () => {
     EDITABLE_VARS.forEach(({ key }) => {
@@ -908,63 +1003,93 @@ export default function DesignSystemPage() {
           </div>
           <div id="colors" className="scroll-mt-24">
 
-            {/* WCAG badge, Reset, Generate CSS */}
+            {/* Audit badges + action buttons */}
             <div className="flex flex-wrap items-stretch gap-2 mb-4">
-              <div aria-live="assertive" aria-atomic="true" className="flex items-stretch">
-                {auditStatus === 'running' && (
-                  <span data-axe-exclude className="flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 text-xs font-medium text-gray-600 dark:text-gray-300">
-                    Running audit&hellip;
-                  </span>
-                )}
-                {auditStatus === 'passed' && (
-                  <span data-axe-exclude className="flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 text-xs font-medium text-green-700 dark:text-green-300">
-                    <span className="text-green-600 dark:text-green-400">&#10003;</span> <span className="hidden sm:inline">Passed WCAG AA</span><span className="sm:hidden">WCAG</span>
-                  </span>
-                )}
-                {auditStatus === 'failed' && (
-                  <div data-axe-exclude className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 py-2 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-                    <p className="text-xs font-medium text-red-700 dark:text-red-300">
-                      &#10007; {auditViolations.length} contrast issue{auditViolations.length !== 1 ? 's' : ''}:
-                    </p>
-                    <ul className="text-[10px] text-red-600 dark:text-red-400 flex flex-wrap items-center gap-x-3 gap-y-0.5">
-                      {auditViolations.map((v, i) => (
-                        <li
-                          key={i}
-                          className="cursor-pointer hover:underline"
-                          onClick={() => {
-                            const el = document.querySelector(v.selector) as HTMLElement | null;
-                            if (!el) return;
-                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            el.style.outline = '3px solid hsl(0 84% 60%)';
-                            el.style.outlineOffset = '2px';
-                            setTimeout(() => {
-                              el.style.outline = '';
-                              el.style.outlineOffset = '';
-                            }, 3000);
-                          }}
+              {auditStatus === 'running' && (
+                <span aria-live="assertive" data-axe-exclude className="ml-auto flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 text-xs font-medium text-gray-600 dark:text-gray-300">
+                  Running audit&hellip;
+                </span>
+              )}
+              {auditStatus === 'passed' && (
+                <span aria-live="assertive" data-axe-exclude className="ml-auto flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 text-xs font-medium text-green-700 dark:text-green-300">
+                  <span className="text-green-600 dark:text-green-400">&#10003;</span> <span className="hidden sm:inline">Passed WCAG AA</span><span className="sm:hidden">WCAG</span>
+                </span>
+              )}
+              {auditStatus === 'failed' && (
+                <div aria-live="assertive" data-axe-exclude className="rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-4 py-2 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                  <p className="text-xs font-medium text-red-700 dark:text-red-300">
+                    &#10007; {auditViolations.length} contrast issue{auditViolations.length !== 1 ? 's' : ''}:
+                  </p>
+                  <ul className="text-[10px] text-red-600 dark:text-red-400 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                    {auditViolations.map((v, i) => (
+                      <li
+                        key={i}
+                        className="cursor-pointer hover:underline"
+                        onClick={() => {
+                          const el = document.querySelector(v.selector) as HTMLElement | null;
+                          if (!el) return;
+                          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          el.style.outline = '3px solid hsl(0 84% 60%)';
+                          el.style.outlineOffset = '2px';
+                          setTimeout(() => {
+                            el.style.outline = '';
+                            el.style.outlineOffset = '';
+                          }, 3000);
+                        }}
+                      >
+                        <span className="font-medium">Item {i + 1}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button
+                    onClick={() => fixContrastIssues()}
+                    className="ml-auto px-3 py-1 text-[10px] font-semibold rounded-lg transition-colors hover:opacity-80 whitespace-nowrap"
+                    style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
+                  >
+                    Fix Contrast
+                  </button>
+                </div>
+              )}
+              <div className="basis-full h-0" />
+              <div className="relative">
+                <button
+                  onClick={() => setShuffleOpen(!shuffleOpen)}
+                  className="px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center gap-1.5"
+                  style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}
+                >
+                  <span className="hidden sm:inline">Shuffle</span><span className="sm:hidden">Shuffle</span>
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path d="M6 9l6 6 6-6" /></svg>
+                </button>
+                {shuffleOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setShuffleOpen(false)} />
+                    <div className="absolute left-0 top-full mt-1 z-50 min-w-[180px] rounded-lg shadow-lg py-1 border" style={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}>
+                      {HARMONY_SCHEMES.map((scheme, idx) => (
+                        <button
+                          key={scheme}
+                          onClick={() => handleRegenerate(idx)}
+                          className="w-full text-left px-4 py-2 text-xs font-medium transition-colors hover:opacity-80 flex items-center justify-between"
+                          style={{ color: "hsl(var(--foreground))" }}
                         >
-                          <span className="font-medium">Item {i + 1}</span>
-                        </li>
+                          {scheme}
+                          {idx === harmonySchemeIndex && <span className="text-green-600 dark:text-green-400">&#10003;</span>}
+                        </button>
                       ))}
-                    </ul>
-                    <button
-                      onClick={() => fixContrastIssues()}
-                      className="ml-auto px-3 py-1 text-[10px] font-semibold rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors whitespace-nowrap"
-                    >
-                      Fix Contrast
-                    </button>
-                  </div>
+                    </div>
+                  </>
                 )}
               </div>
               <button
                 onClick={() => setShowResetModal(true)}
-                className="px-4 h-9 text-xs font-medium rounded-lg border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                className="px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80"
+                style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
               >
                 <span className="hidden sm:inline">Reset to Defaults</span><span className="sm:hidden">Reset</span>
               </button>
               <button
                 onClick={() => generateCode()}
-                className="px-4 h-9 text-xs font-medium rounded-lg border border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                className="px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80"
+                style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
               >
                 <span className="hidden sm:inline">Generate CSS</span><span className="sm:hidden">CSS</span>
               </button>
@@ -1003,13 +1128,17 @@ export default function DesignSystemPage() {
                     setPrStatus('error');
                   }
                 }}
-                className={`px-4 h-9 text-xs font-medium rounded-lg border transition-colors ${
+                className={`px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 disabled:opacity-50 ${
                   prStatus === 'error' || prStatus === 'rate-limited'
-                    ? 'border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/50'
+                    ? 'border border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
                     : prStatus === 'created'
-                      ? 'border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/50'
-                      : 'border-border bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-200 dark:hover:bg-gray-700'
-                } disabled:opacity-50`}
+                      ? 'border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                      : ''
+                }`}
+                style={prStatus !== 'error' && prStatus !== 'rate-limited' && prStatus !== 'created'
+                  ? { backgroundColor: "hsl(var(--brand))", color: "white" }
+                  : undefined
+                }
               >
                 {prStatus === 'creating' ? 'Preparing PR...' : prStatus === 'error' ? 'Retry PR' : prStatus === 'rate-limited' ? 'Retry PR' : 'Open PR'}
               </button>
@@ -1052,13 +1181,15 @@ export default function DesignSystemPage() {
                         setCodeCopied(true);
                         setTimeout(() => setCodeCopied(false), 2000);
                       }}
-                      className="px-2 py-0.5 text-[10px] font-medium rounded border border-border bg-white dark:bg-gray-800 text-muted-foreground hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-2 py-0.5 text-[10px] font-semibold rounded-lg transition-colors hover:opacity-80"
+                      style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}
                     >
                       {codeCopied ? "Copied!" : "Copy"}
                     </button>
                     <button
                       onClick={() => setGeneratedCode(null)}
-                      className="px-2 py-0.5 text-[10px] font-medium rounded border border-border bg-white dark:bg-gray-800 text-muted-foreground hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      className="px-2 py-0.5 text-[10px] font-semibold rounded-lg transition-colors hover:opacity-80"
+                      style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}
                     >
                       Close
                     </button>
@@ -1253,13 +1384,15 @@ export default function DesignSystemPage() {
                   <div className="flex justify-end gap-2">
                     <button
                       onClick={() => setShowResetModal(false)}
-                      className="px-3 py-1.5 text-sm rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                      className="px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors hover:opacity-80"
+                      style={{ backgroundColor: "transparent", color: "hsl(var(--brand))" }}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={() => { handleReset(); setShowResetModal(false); }}
-                      className="px-3 py-1.5 text-sm font-medium rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors"
+                      className="px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors hover:opacity-80"
+                      style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
                     >
                       Reset
                     </button>

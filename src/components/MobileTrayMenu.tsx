@@ -116,29 +116,33 @@ const MobileTrayMenu: React.FC = () => {
               <Link
                 key={item.id}
                 to={item.route}
-                className={`flex flex-col items-center gap-1 px-2 py-2 transition-colors ${
+                className={`flex flex-col items-center gap-1 px-2 py-2 transition-colors rounded-lg ${
                   isActive
-                    ? "text-brand-dynamic dark:text-white bg-gray-100 dark:bg-gray-800 rounded-lg"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+                    ? "border-2 border-brand-dynamic text-brand-dynamic"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 border-2 border-transparent"
                 }`}
                 aria-label={`Navigate to ${item.label}`}
               >
-                {item.id === "case-studies" ? (
-                  <svg className="w-6 h-6 text-brand-dynamic dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
-                    <rect x="9" y="3" width="6" height="4" rx="1" />
-                  </svg>
-                ) : item.id === "graphics" ? (
-                  <Suspense fallback={<span className="w-6 h-6">·</span>}>
-                    <LazyPalette className="w-6 h-6 text-brand-dynamic dark:text-gray-300" />
-                  </Suspense>
-                ) : item.id === "home" ? (
-                  <Suspense fallback={<span className="w-6 h-6">·</span>}>
-                    <LazyHome className="w-6 h-6 text-brand-dynamic dark:text-gray-300" />
-                  </Suspense>
-                ) : (
-                  getNavIcon(item.id)
-                )}
+                {(() => {
+                  const iconClass = "w-6 h-6 text-brand-dynamic dark:text-gray-300";
+                  if (item.id === "case-studies") return (
+                    <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
+                      <rect x="9" y="3" width="6" height="4" rx="1" />
+                    </svg>
+                  );
+                  if (item.id === "graphics") return (
+                    <Suspense fallback={<span className="w-6 h-6">·</span>}>
+                      <LazyPalette className={iconClass} />
+                    </Suspense>
+                  );
+                  if (item.id === "home") return (
+                    <Suspense fallback={<span className="w-6 h-6">·</span>}>
+                      <LazyHome className={iconClass} />
+                    </Suspense>
+                  );
+                  return getNavIcon(item.id);
+                })()}
                 <span className="text-xs font-medium">{item.label}</span>
               </Link>
             );
