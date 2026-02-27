@@ -664,11 +664,11 @@ export default function PortfolioLanding() {
                   Reset
                 </button>
                 <button
-                  onClick={() => generateCode()}
+                  onClick={() => generatedCode ? setGeneratedCode(null) : generateCode()}
                   className="px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80"
                   style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
                 >
-                  Show CSS
+                  {generatedCode ? "Hide CSS" : "Show CSS"}
                 </button>
               <button
                 disabled={prStatus === 'creating'}
