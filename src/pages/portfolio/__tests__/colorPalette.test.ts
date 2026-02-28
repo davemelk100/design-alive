@@ -10,7 +10,7 @@ import {
   CONTRAST_PAIRS,
   EDITABLE_VARS,
   HARMONY_SCHEMES,
-} from "../DesignSystemPage";
+} from "../themeUtils";
 
 // ---------------------------------------------------------------------------
 // Helpers

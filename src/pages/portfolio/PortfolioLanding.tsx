@@ -22,7 +22,7 @@ import {
   fgForBg,
   useContrastEnforcement,
   persistContrastFixes,
-} from "./DesignSystemPage";
+} from "./themeUtils";
 
 const LazyLinkedInLogoIcon = React.lazy(() =>
   import("@radix-ui/react-icons").then((mod) => ({

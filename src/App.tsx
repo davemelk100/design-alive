@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import { ThemeProvider } from "./context/ThemeContext";
-import { applyStoredThemeColors } from "./pages/portfolio/DesignSystemPage";
+import { applyStoredThemeColors } from "./pages/portfolio/themeUtils";
 // import ThemePreviewBar from "./components/ThemePreviewBar";
 import { CartProvider, StoreProvider, AuthProvider } from "./store";
 import { ProtectedRoute } from "./store/components/ProtectedRoute";
