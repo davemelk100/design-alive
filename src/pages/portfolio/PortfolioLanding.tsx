@@ -876,7 +876,6 @@ export default function PortfolioLanding() {
               ];
               const renderHeroSwatch = ({ key, label: displayLabel }: { key: string; label: string }) => {
                 const inputId = `home-color-input-${key}`;
-                const isLocked = lockedKeys.has(key);
                 return (
                   <div
                     key={key}
@@ -935,35 +934,36 @@ export default function PortfolioLanding() {
                         </span>
                       </div>
                     </div>
-                    {/* Lock toggle on corner */}
-                    <button
-                      type="button"
-                      aria-label={isLocked ? `Unlock ${displayLabel}` : `Lock ${displayLabel}`}
-                      className="absolute z-20 flex items-center justify-center cursor-pointer"
-                      style={{ top: "-6px", left: "-6px", width: "32px", height: "32px", minWidth: "32px", minHeight: "32px", padding: 0 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        setLockedKeys(prev => {
-                          const next = new Set(prev);
-                          if (next.has(key)) next.delete(key);
-                          else next.add(key);
-                          return next;
-                        });
-                      }}
-                    >
-                      {isLocked ? (
-                        <svg style={{ width: "18px", height: "18px", color: colors[key] ? `hsl(${fgForBg(colors[key])})` : undefined }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                        </svg>
-                      ) : (
-                        <svg className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ width: "18px", height: "18px", color: colors[key] ? `hsl(${fgForBg(colors[key])})` : undefined }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                          <path d="M7 11V7a5 5 0 0 1 9.9-1" />
-                        </svg>
-                      )}
-                    </button>
+                    {key === "--brand" && (
+                      <button
+                        type="button"
+                        aria-label={lockedKeys.has(key) ? `Unlock ${displayLabel}` : `Lock ${displayLabel}`}
+                        className="absolute z-20 flex items-center justify-center cursor-pointer"
+                        style={{ top: "-6px", left: "-6px", width: "32px", height: "32px", minWidth: "32px", minHeight: "32px", padding: 0 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          setLockedKeys(prev => {
+                            const next = new Set(prev);
+                            if (next.has(key)) next.delete(key);
+                            else next.add(key);
+                            return next;
+                          });
+                        }}
+                      >
+                        {lockedKeys.has(key) ? (
+                          <svg style={{ width: "18px", height: "18px", color: colors[key] ? `hsl(${fgForBg(colors[key])})` : undefined }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                          </svg>
+                        ) : (
+                          <svg className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ width: "18px", height: "18px", color: colors[key] ? `hsl(${fgForBg(colors[key])})` : undefined }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+                          </svg>
+                        )}
+                      </button>
+                    )}
                     <p className="text-[10px] sm:text-xs font-medium text-[color:hsl(var(--foreground))] truncate mt-1">
                       {displayLabel}
                     </p>
