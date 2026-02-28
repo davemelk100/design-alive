@@ -995,7 +995,7 @@ export default function PortfolioLanding() {
                     const hexCode = hsl ? hslStringToHex(hsl) : "";
                     return (
                     <div key={key} data-color-key={key} className="text-left">
-                      <div className="relative w-full h-12 md:h-16 rounded-md mb-1 overflow-hidden flex items-center justify-center">
+                      <div className="relative w-full aspect-square rounded-md mb-1 overflow-hidden flex items-center justify-center">
                         <div
                           className="absolute inset-0"
                           style={{

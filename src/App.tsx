@@ -98,7 +98,7 @@ function App() {
   const isPortfolioPath = location.pathname === "/portfolio" || location.pathname.startsWith("/portfolio/");
 
   return (
-    <div className="min-h-screen text-gray-900 transition-colors duration-300 dark:text-white pb-20 sm:pb-0 flex flex-col relative">
+    <div className="min-h-screen text-gray-900 transition-colors duration-300 dark:text-white pb-20 lg:pb-0 flex flex-col relative">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:rounded-md focus:bg-white focus:text-gray-900 focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-dynamic dark:focus:bg-gray-900 dark:focus:text-white"
