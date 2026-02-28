@@ -37,6 +37,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         document.documentElement.classList.remove("dark");
         localStorage.setItem("theme", "light");
       }
+      window.dispatchEvent(new CustomEvent("theme-mode-changed"));
       return newMode;
     });
   };

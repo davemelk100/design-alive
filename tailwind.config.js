@@ -10,7 +10,7 @@ export default {
         accent: "#F9C22E",
         success: "#4CAF50",
         neutral: "#828E82",
-        background: "#ffffff",
+        background: "hsl(var(--background))",
       },
     },
   },

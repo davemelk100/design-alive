@@ -39,7 +39,7 @@ const MobileTrayMenu: React.FC = () => {
   const location = useLocation();
 
   const getNavIcon = (id: string) => {
-    const iconProps = { className: "w-6 h-6 text-brand-dynamic dark:text-gray-300" };
+    const iconProps = { className: "w-6 h-6" };
     const fallback = <span className="w-6 h-6">·</span>;
 
     switch (id) {
@@ -97,7 +97,7 @@ const MobileTrayMenu: React.FC = () => {
   return (
     <>
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 border-t" style={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}>
         <div className="flex items-center justify-between w-full px-2 py-2">
           {[
             { id: "home", label: "Home", route: "/portfolio" },
@@ -118,13 +118,14 @@ const MobileTrayMenu: React.FC = () => {
                 to={item.route}
                 className={`flex flex-col items-center gap-1 px-2 py-2 transition-colors rounded-lg ${
                   isActive
-                    ? "border-2 border-accent-dynamic text-brand-dynamic bg-accent-dynamic/10"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 border-2 border-transparent"
+                    ? "border-2 border-accent-dynamic text-brand-dynamic"
+                    : "border-2 border-transparent"
                 }`}
+                style={!isActive ? { color: "hsl(var(--foreground))" } : undefined}
                 aria-label={`Navigate to ${item.label}`}
               >
                 {(() => {
-                  const iconClass = "w-6 h-6 text-brand-dynamic dark:text-gray-300";
+                  const iconClass = isActive ? "w-6 h-6 text-brand-dynamic" : "w-6 h-6";
                   if (item.id === "case-studies") return (
                     <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />

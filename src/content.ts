@@ -281,7 +281,6 @@ export const content = {
 
   career: {
     title: "Career Journey",
-    subtitle: "Organizations that have supported my career",
     positions: [
       {
         title: "Technical and Business Consultant",

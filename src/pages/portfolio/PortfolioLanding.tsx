@@ -8,7 +8,6 @@ import storage from "../../utils/storage";
 import {
   applyStoredThemeColors,
   EDITABLE_VARS,
-  CONTRAST_PAIRS,
   contrastRatio,
   THEME_COLORS_KEY,
   PENDING_COLORS_KEY,
@@ -18,7 +17,11 @@ import {
   derivePaletteFromChange,
   autoAdjustContrast,
   generateHarmonyPalette,
+  generateRandomPalette,
   HARMONY_SCHEMES,
+  fgForBg,
+  useContrastEnforcement,
+  persistContrastFixes,
 } from "./DesignSystemPage";
 
 const LazyLinkedInLogoIcon = React.lazy(() =>
@@ -216,8 +219,10 @@ export default function PortfolioLanding() {
   const [auditStatus, setAuditStatus] = useState<'idle' | 'running' | 'passed' | 'failed'>('idle');
   const auditTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [auditViolations, setAuditViolations] = useState<{ selector: string; text: string }[]>([]);
-  const [harmonySchemeIndex, setHarmonySchemeIndex] = useState(0);
+  const [violationIndex, setViolationIndex] = useState(0);
+  const [harmonySchemeIndex, setHarmonySchemeIndex] = useState(-1);
   const [shuffleOpen, setShuffleOpen] = useState(false);
+  const [lockedKeys, setLockedKeys] = useState<Set<string>>(new Set());
 
   const readCurrentColors = useCallback(() => {
     const style = getComputedStyle(document.documentElement);
@@ -240,6 +245,8 @@ export default function PortfolioLanding() {
       }, 100);
     }
   }, []);
+
+  useContrastEnforcement(colors, setColors, lockedKeys);
 
   useEffect(() => {
     applyStoredThemeColors();
@@ -270,8 +277,9 @@ export default function PortfolioLanding() {
     const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
     pending[key] = hsl;
 
-    if (key === "--brand" || key === "--secondary" || key === "--accent") {
-      const derived = derivePaletteFromChange(key, hsl, newColors);
+    const DERIVATION_TRIGGERS = ["--brand", "--secondary", "--accent", "--background", "--foreground", "--primary"];
+    if (DERIVATION_TRIGGERS.includes(key)) {
+      const derived = derivePaletteFromChange(key, hsl, newColors, lockedKeys);
       for (const [dKey, dVal] of Object.entries(derived)) {
         history.push({ key: dKey, previousValue: newColors[dKey] || "" });
         document.documentElement.style.setProperty(dKey, dVal);
@@ -280,7 +288,11 @@ export default function PortfolioLanding() {
       }
     }
 
-    const adjustments = autoAdjustContrast(newColors);
+    // Treat the key user just picked as locked so contrast adjustment doesn't overwrite it
+    // Exception: Brand should always be constrained to accessible ranges
+    const contrastLocks = new Set(lockedKeys);
+    if (key !== "--brand") contrastLocks.add(key);
+    const adjustments = autoAdjustContrast(newColors, contrastLocks);
     for (const [adjKey, adjVal] of Object.entries(adjustments)) {
       history.push({ key: adjKey, previousValue: newColors[adjKey] || "" });
       document.documentElement.style.setProperty(adjKey, adjVal);
@@ -291,6 +303,7 @@ export default function PortfolioLanding() {
     storage.set(COLOR_HISTORY_KEY, history);
     setColors(newColors);
     storage.set(PENDING_COLORS_KEY, pending);
+    persistContrastFixes(adjustments);
     window.dispatchEvent(new Event("theme-pending-update"));
 
     // Debounced audit after color change settles
@@ -327,7 +340,7 @@ export default function PortfolioLanding() {
     const brandHsl = colors['--brand'];
     if (!brandHsl) return;
 
-    const result = generateHarmonyPalette(brandHsl, scheme, colors);
+    const result = generateHarmonyPalette(brandHsl, scheme, colors, lockedKeys);
     const history = storage.get<{ key: string; previousValue: string }[]>(COLOR_HISTORY_KEY) || [];
     const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
     const newColors = { ...colors };
@@ -348,6 +361,27 @@ export default function PortfolioLanding() {
     runAccessibilityAudit();
   };
 
+  const handleGenerate = () => {
+    const result = generateRandomPalette(colors, lockedKeys);
+    const history = storage.get<{ key: string; previousValue: string }[]>(COLOR_HISTORY_KEY) || [];
+    const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
+    const newColors = { ...colors };
+
+    for (const [key, val] of Object.entries(result)) {
+      history.push({ key, previousValue: newColors[key] || '' });
+      document.documentElement.style.setProperty(key, val);
+      newColors[key] = val;
+      pending[key] = val;
+    }
+
+    storage.set(COLOR_HISTORY_KEY, history);
+    setColors(newColors);
+    storage.set(PENDING_COLORS_KEY, pending);
+    window.dispatchEvent(new Event('theme-pending-update'));
+    setHarmonySchemeIndex(-1);
+    runAccessibilityAudit();
+  };
+
   const handleReset = () => {
     EDITABLE_VARS.forEach(({ key }) => {
       document.documentElement.style.removeProperty(key);
@@ -363,9 +397,19 @@ export default function PortfolioLanding() {
     window.dispatchEvent(new Event("theme-pending-update"));
   };
 
+  const scrollToViolation = (v: { selector: string }) => {
+    const el = document.querySelector(v.selector) as HTMLElement | null;
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.style.outline = '3px solid hsl(0 84% 60%)';
+    el.style.outlineOffset = '2px';
+    setTimeout(() => { el.style.outline = ''; el.style.outlineOffset = ''; }, 3000);
+  };
+
   const runAccessibilityAudit = async () => {
     setAuditStatus('running');
     setAuditViolations([]);
+    setViolationIndex(0);
     try {
       const results: AxeResults = await axe.run(
         { exclude: ['[data-axe-exclude]'] },
@@ -374,6 +418,7 @@ export default function PortfolioLanding() {
       if (results.violations.length === 0) {
         setAuditStatus('passed');
         setAuditViolations([]);
+        setViolationIndex(0);
       } else {
         // Auto-fix contrast on CSS variable pairs
         const style = getComputedStyle(document.documentElement);
@@ -381,16 +426,14 @@ export default function PortfolioLanding() {
         EDITABLE_VARS.forEach(({ key }) => {
           liveColors[key] = style.getPropertyValue(key).trim();
         });
-        const fixes = autoAdjustContrast(liveColors);
+        const fixes = autoAdjustContrast(liveColors, lockedKeys);
         if (Object.keys(fixes).length > 0) {
-          const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
           const updatedColors = { ...liveColors };
           for (const [fixKey, fixVal] of Object.entries(fixes)) {
             document.documentElement.style.setProperty(fixKey, fixVal);
             updatedColors[fixKey] = fixVal;
-            pending[fixKey] = fixVal;
           }
-          storage.set(PENDING_COLORS_KEY, pending);
+          persistContrastFixes(fixes);
           setColors(updatedColors);
           window.dispatchEvent(new Event("theme-pending-update"));
         }
@@ -402,6 +445,7 @@ export default function PortfolioLanding() {
         if (reResults.violations.length === 0) {
           setAuditStatus('passed');
           setAuditViolations([]);
+          setViolationIndex(0);
         } else {
           setAuditStatus('failed');
           const elements: { selector: string; text: string }[] = [];
@@ -414,6 +458,7 @@ export default function PortfolioLanding() {
             }
           }
           setAuditViolations(elements);
+          setViolationIndex(0);
         }
       }
     } catch {
@@ -424,68 +469,50 @@ export default function PortfolioLanding() {
   const fixContrastIssues = async () => {
     setAuditStatus('running');
     try {
+      // 1. Read current CSS variable values from the DOM
       const style = getComputedStyle(document.documentElement);
       const liveColors: Record<string, string> = {};
       EDITABLE_VARS.forEach(({ key }) => {
         liveColors[key] = style.getPropertyValue(key).trim();
       });
 
-      const parseHsl = (val: string) => {
-        const p = val.trim().split(/\s+/);
-        if (p.length < 3) return null;
-        return { h: parseFloat(p[0]), s: parseFloat(p[1]), l: parseFloat(p[2]) };
-      };
-      const toHsl = (h: number, s: number, l: number) => `${h} ${s}% ${l}%`;
-      const working = { ...liveColors };
-      const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
+      // 2. Run autoAdjustContrast (which includes the safety net for foreground/muted)
+      const fixes = autoAdjustContrast(liveColors, lockedKeys);
+      const working = { ...liveColors, ...fixes };
 
-      const fixPair = (fgKey: string, bgKey: string) => {
-        const fgVal = working[fgKey];
-        const bgv = working[bgKey];
-        if (!fgVal || !bgv || contrastRatio(fgVal, bgv) >= 4.5) return;
-        const fg = parseHsl(fgVal);
-        const bg = parseHsl(bgv);
-        if (!fg || !bg) return;
-
-        for (const dir of [bg.l > 50 ? -1 : 1, bg.l > 50 ? 1 : -1]) {
-          let l = fg.l;
-          let adjusted = fgVal;
-          for (let i = 0; i < 100; i++) {
-            l = Math.max(0, Math.min(100, l + dir));
-            adjusted = toHsl(fg.h, fg.s, l);
-            if (contrastRatio(adjusted, bgv) >= 4.5) break;
-          }
-          if (contrastRatio(adjusted, bgv) >= 4.5) {
-            document.documentElement.style.setProperty(fgKey, adjusted);
-            working[fgKey] = adjusted;
-            pending[fgKey] = adjusted;
-            return;
-          }
-        }
-
-        for (const dir of [fg.l > 50 ? -1 : 1, fg.l > 50 ? 1 : -1]) {
-          let l = bg.l;
-          let adjBg = bgv;
-          for (let i = 0; i < 100; i++) {
-            l = Math.max(0, Math.min(100, l + dir));
-            adjBg = toHsl(bg.h, bg.s, l);
-            if (contrastRatio(working[fgKey], adjBg) >= 4.5) break;
-          }
-          if (contrastRatio(working[fgKey], adjBg) >= 4.5) {
-            document.documentElement.style.setProperty(bgKey, adjBg);
-            working[bgKey] = adjBg;
-            pending[bgKey] = adjBg;
-            return;
-          }
-        }
-      };
-
-      fixPair("--brand", "--background");
-      for (const [fgKey, bgKey] of CONTRAST_PAIRS) {
-        fixPair(fgKey, bgKey);
+      // 3. Apply all fixes to the DOM
+      for (const [fixKey, fixVal] of Object.entries(fixes)) {
+        document.documentElement.style.setProperty(fixKey, fixVal);
       }
 
-      storage.set(PENDING_COLORS_KEY, pending);
+      // 4. Also force --foreground to pure black/white if still failing
+      const bg = working["--background"];
+      const fg = working["--foreground"];
+      if (bg && fg && contrastRatio(fg, bg) < 4.5) {
+        const bestFg = fgForBg(bg);
+        working["--foreground"] = bestFg;
+        document.documentElement.style.setProperty("--foreground", bestFg);
+        // Also fix card/popover foregrounds
+        for (const k of ["--card-foreground", "--popover-foreground"]) {
+          if (!lockedKeys.has(k)) {
+            working[k] = bestFg;
+            document.documentElement.style.setProperty(k, bestFg);
+          }
+        }
+      }
+      // Fix muted-foreground if still failing
+      const mutedFg = working["--muted-foreground"];
+      if (bg && mutedFg && contrastRatio(mutedFg, bg) < 4.5 && !lockedKeys.has("--muted-foreground")) {
+        const bestMuted = fgForBg(bg);
+        working["--muted-foreground"] = bestMuted;
+        document.documentElement.style.setProperty("--muted-foreground", bestMuted);
+      }
+
+      const contrastFixes: Record<string, string> = {};
+      for (const [k, v] of Object.entries(working)) {
+        if (v !== liveColors[k]) contrastFixes[k] = v;
+      }
+      persistContrastFixes(contrastFixes);
       setColors(working);
       window.dispatchEvent(new Event("theme-pending-update"));
 
@@ -577,6 +604,7 @@ export default function PortfolioLanding() {
       if (finalResults.violations.length === 0) {
         setAuditStatus('passed');
         setAuditViolations([]);
+        setViolationIndex(0);
       } else {
         setAuditStatus('failed');
         const elements: { selector: string; text: string }[] = [];
@@ -589,53 +617,44 @@ export default function PortfolioLanding() {
           }
         }
         setAuditViolations(elements);
+        setViolationIndex(0);
       }
     } catch {
       setAuditStatus('idle');
     }
   };
 
+  // Auto-audit on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const timer = setTimeout(() => runAccessibilityAudit(), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <PortfolioLayout currentPage="home">
-      {/* Intro */}
-      <section className="relative">
-        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mt-4 sm:mt-6">
-            <div>
-              <p className="text-muted-foreground text-left">
-                I'm David Melkonian, a technical product and
-                experience leader with over a decade of work at
-                the intersection of UX, software engineering, and
-                digital accessibility. I've led teams across multiple
-                continents and established enterprise-wide standards
-                for digital experience delivery.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Live Design System Preview */}
       <section className="pt-4 sm:pt-6 lg:pt-8 pb-2 sm:pb-3 lg:pb-4 xl:pb-6 relative">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Title and description */}
           <div className="w-full mb-4">
-            <h2 className="font-bold text-brand-dynamic dark:text-white mb-1 title-font">NEW - Live Design System!</h2>
-            <p className="text-muted-foreground text-sm">
+            <h2 className="font-bold text-brand-dynamic mb-1 title-font">NEW - Live Design System!</h2>
+            <p className="text-sm" style={{ color: "hsl(var(--muted-foreground))" }}>
               Explore the interactive design system powering this site. Pick a brand color and watch every token transform in real time. Automatic WCAG AA contrast correction. Generate a CSS snapshot of your custom theme. Open a pull request to propose changes directly to the repo.
             </p>
           </div>
 
-          {/* Audit badges + action buttons */}
-          <div className="flex flex-wrap items-center gap-2 mb-6">
-            <div className="relative">
+          {/* Action buttons + alerts row */}
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-4 mb-4">
+            <div className="relative flex-1 min-w-0">
               <button
                 onClick={() => setShuffleOpen(!shuffleOpen)}
-                className="px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center gap-1.5"
+                className="w-full h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
                 style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}
               >
-                <span className="hidden sm:inline">Shuffle</span><span className="sm:hidden">Shuffle</span>
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path d="M6 9l6 6 6-6" /></svg>
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
+                <span className="hidden sm:inline truncate">{harmonySchemeIndex >= 0 ? HARMONY_SCHEMES[harmonySchemeIndex] : "Harmony"}</span>
+                <svg className="hidden sm:block w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path d="M6 9l6 6 6-6" /></svg>
               </button>
               {shuffleOpen && (
                 <>
@@ -657,134 +676,131 @@ export default function PortfolioLanding() {
               )}
             </div>
             <button
-                  onClick={() => setShowResetModal(true)}
-                  className="px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80"
-                  style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
-                >
-                  Reset
-                </button>
-                <button
-                  onClick={() => generatedCode ? setGeneratedCode(null) : generateCode()}
-                  className="px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80"
-                  style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
-                >
-                  {generatedCode ? "Hide CSS" : "Show CSS"}
-                </button>
-              <button
-                disabled={prStatus === 'creating'}
-                onClick={async () => {
-                  setPrStatus('creating');
-                  setPrUrl(null);
-                  try {
-                    let css = ":root {\n";
-                    EDITABLE_VARS.forEach(({ key }) => {
-                      const val = colors[key];
-                      if (val) css += `  ${key}: ${val};\n`;
-                    });
-                    css += "}";
-                    const res = await fetch('/.netlify/functions/create-design-pr', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ css }),
-                    });
-                    const data = await res.json();
-                    if (!res.ok) {
-                      if (res.status === 429) {
-                        setPrStatus('rate-limited');
-                        setPrError(data.error);
-                        return;
-                      }
-                      throw new Error(data.error || 'Failed to create PR');
+              onClick={handleGenerate}
+              className="flex-1 min-w-0 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+              style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+              <span className="hidden sm:inline truncate">Generate New</span>
+            </button>
+            <button
+              onClick={() => setShowResetModal(true)}
+              className="flex-1 min-w-0 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+              style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
+              <span className="hidden sm:inline truncate">Reset Theme</span>
+            </button>
+            <button
+              onClick={() => generatedCode ? setGeneratedCode(null) : generateCode()}
+              className="flex-1 min-w-0 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+              style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+              <span className="hidden sm:inline truncate">{generatedCode ? "Hide CSS" : "Show CSS"}</span>
+            </button>
+            <button
+              disabled={prStatus === 'creating'}
+              onClick={async () => {
+                setPrStatus('creating');
+                setPrUrl(null);
+                try {
+                  let css = ":root {\n";
+                  EDITABLE_VARS.forEach(({ key }) => {
+                    const val = colors[key];
+                    if (val) css += `  ${key}: ${val};\n`;
+                  });
+                  css += "}";
+                  const res = await fetch('/.netlify/functions/create-design-pr', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ css }),
+                  });
+                  const data = await res.json();
+                  if (!res.ok) {
+                    if (res.status === 429) {
+                      setPrStatus('rate-limited');
+                      setPrError(data.error);
+                      return;
                     }
-                    setPrStatus('created');
-                    setPrUrl(data.url);
-                    setPrError(null);
-                    window.open(data.url, '_blank');
-                  } catch {
-                    setPrStatus('error');
+                    throw new Error(data.error || 'Failed to create PR');
                   }
-                }}
-                className={`px-4 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 disabled:opacity-50 ${
-                  prStatus === 'error' || prStatus === 'rate-limited'
-                    ? 'border border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
-                    : prStatus === 'created'
-                      ? 'border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
-                      : ''
-                }`}
-                style={prStatus !== 'error' && prStatus !== 'rate-limited' && prStatus !== 'created'
-                  ? { backgroundColor: "hsl(var(--brand))", color: "white" }
-                  : undefined
+                  setPrStatus('created');
+                  setPrUrl(data.url);
+                  setPrError(null);
+                  window.open(data.url, '_blank');
+                } catch {
+                  setPrStatus('error');
                 }
-              >
-                {prStatus === 'creating' ? 'Preparing PR...' : prStatus === 'error' ? 'Retry PR' : prStatus === 'rate-limited' ? 'Retry PR' : 'Open PR'}
-              </button>
-              {prStatus === 'rate-limited' && prError && (
-                <span className="inline-flex items-center px-4 h-9 text-xs font-medium rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 whitespace-nowrap">
-                  {prError}
-                </span>
-              )}
-              {prStatus === 'created' && prUrl && (
-                <span className="inline-flex items-center gap-2 px-4 h-9 text-xs font-medium rounded-lg border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
-                  PR Created!
-                  <a
-                    href={prUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline font-semibold hover:text-green-900 dark:hover:text-green-100 transition-colors"
-                  >
-                    View PR
-                  </a>
-                  <button
-                    onClick={() => { setPrStatus('idle'); setPrUrl(null); }}
-                    className="ml-1 text-green-500 hover:text-green-800 dark:hover:text-green-100 transition-colors"
-                    aria-label="Dismiss PR notification"
-                  >
-                    &#10005;
-                  </button>
-                </span>
-            )}
-            {auditStatus === 'running' && (
-              <span aria-live="assertive" data-axe-exclude className="ml-auto inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-4 h-9 box-border text-xs font-medium text-gray-600 dark:text-gray-300">
-                Running audit&hellip;
-              </span>
-            )}
-            {auditStatus === 'passed' && (
-              <span aria-live="assertive" data-axe-exclude className="ml-auto inline-flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-4 h-9 box-border text-xs font-medium text-green-700 dark:text-green-300">
-                <span className="text-green-600 dark:text-green-400">&#10003;</span> <span className="hidden sm:inline">Passed WCAG AA</span><span className="sm:hidden">WCAG</span>
-              </span>
-            )}
-            {auditStatus === 'failed' && (
-              <span aria-live="assertive" data-axe-exclude className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-3 h-9 box-border text-xs font-medium text-red-700 dark:text-red-300">
-                <span>&#10007; {auditViolations.length} contrast issue{auditViolations.length !== 1 ? 's' : ''}</span>
-                {auditViolations.map((v, i) => (
-                  <span
-                    key={i}
-                    className="cursor-pointer hover:underline text-[10px] text-red-600 dark:text-red-400"
-                    onClick={() => {
-                      const el = document.querySelector(v.selector) as HTMLElement | null;
-                      if (!el) return;
-                      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      el.style.outline = '3px solid hsl(0 84% 60%)';
-                      el.style.outlineOffset = '2px';
-                      setTimeout(() => {
-                        el.style.outline = '';
-                        el.style.outlineOffset = '';
-                      }, 3000);
-                    }}
-                  >
-                    Item {i + 1}
+              }}
+              className={`flex-1 min-w-0 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 disabled:opacity-50 flex items-center justify-center gap-1 ${
+                prStatus === 'error' || prStatus === 'rate-limited'
+                  ? 'border border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                  : prStatus === 'created'
+                    ? 'border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                    : ''
+              }`}
+              style={prStatus !== 'error' && prStatus !== 'rate-limited' && prStatus !== 'created'
+                ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "white" }
+                : undefined
+              }
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>
+              <span className="hidden sm:inline truncate">{prStatus === 'creating' ? 'Preparing...' : prStatus === 'error' ? 'Retry PR' : prStatus === 'rate-limited' ? 'Retry PR' : 'Open PR'}</span>
+            </button>
+            {/* Alerts: full-width row on mobile (order -1), inline on sm+ — always rendered to reserve space */}
+            <div className="w-full sm:w-auto order-first sm:order-last sm:ml-auto flex-shrink-0 min-h-[36px]" data-axe-exclude>
+                {prStatus === 'rate-limited' && prError && (
+                  <span className="inline-flex items-center px-3 h-9 text-xs font-medium rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">
+                    {prError}
                   </span>
-                ))}
-                <button
-                  onClick={() => fixContrastIssues()}
-                  className="ml-1 px-2 py-0.5 text-[10px] font-semibold rounded transition-colors hover:opacity-80 whitespace-nowrap"
-                  style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
-                >
-                  Fix Contrast
-                </button>
-              </span>
-            )}
+                )}
+                {prStatus === 'created' && prUrl && (
+                  <span className="inline-flex items-center gap-2 px-3 h-9 text-xs font-medium rounded-lg border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                    PR Created!
+                    <a href={prUrl} target="_blank" rel="noopener noreferrer" className="underline font-semibold hover:text-green-900 dark:hover:text-green-100 transition-colors">View</a>
+                    <button onClick={() => { setPrStatus('idle'); setPrUrl(null); }} className="text-green-500 hover:text-green-800 dark:hover:text-green-100 transition-colors" aria-label="Dismiss PR notification">&#10005;</button>
+                  </span>
+                )}
+                {auditStatus === 'running' && (
+                  <span aria-live="assertive" className="inline-flex items-center gap-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-3 h-9 text-xs font-medium text-[color:hsl(var(--muted-foreground))]">
+                    Running audit&hellip;
+                  </span>
+                )}
+                {auditStatus === 'passed' && (
+                  <span aria-live="assertive" className="inline-flex items-center gap-1 rounded-lg border border-green-300 dark:border-green-700 bg-green-50 dark:bg-green-900/30 px-3 h-9 text-xs font-medium text-green-700 dark:text-green-300">
+                    <span className="text-green-600 dark:text-green-400">&#10003;</span> Passed WCAG AA
+                  </span>
+                )}
+                {auditStatus === 'failed' && (
+                  <span aria-live="assertive" className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-1.5 rounded-lg border border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/30 px-3 h-9 text-xs font-medium text-red-700 dark:text-red-300 shadow-lg">
+                    <span>&#10007; {auditViolations.length} issue{auditViolations.length !== 1 ? 's' : ''}</span>
+                    <button
+                      onClick={() => {
+                        const idx = (violationIndex - 1 + auditViolations.length) % auditViolations.length;
+                        setViolationIndex(idx);
+                        scrollToViolation(auditViolations[idx]);
+                      }}
+                      className="text-red-600 dark:text-red-400 hover:opacity-70 disabled:opacity-30"
+                      disabled={auditViolations.length <= 1}
+                    >&#9664;</button>
+                    <span className="text-[10px] tabular-nums">{violationIndex + 1}/{auditViolations.length}</span>
+                    <button
+                      onClick={() => {
+                        const idx = (violationIndex + 1) % auditViolations.length;
+                        setViolationIndex(idx);
+                        scrollToViolation(auditViolations[idx]);
+                      }}
+                      className="text-red-600 dark:text-red-400 hover:opacity-70 disabled:opacity-30"
+                      disabled={auditViolations.length <= 1}
+                    >&#9654;</button>
+                    <button onClick={() => fixContrastIssues()} className="ml-1 px-2 py-0.5 text-[10px] font-semibold rounded transition-colors hover:opacity-80 whitespace-nowrap" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Fix</button>
+                  </span>
+                )}
+            </div>
           </div>
+
+          <hr className="border-border my-6" />
 
           {/* Generated code output */}
           {generatedCode && (
@@ -822,10 +838,10 @@ export default function PortfolioLanding() {
           {showResetModal && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" role="dialog" aria-modal="true" aria-labelledby="home-reset-modal-title">
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 w-full max-w-sm mx-4">
-                <h4 id="home-reset-modal-title" className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                <h4 id="home-reset-modal-title" className="text-lg font-semibold text-[color:hsl(var(--foreground))] mb-2">
                   Reset to Defaults?
                 </h4>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                <p className="text-sm text-[color:hsl(var(--muted-foreground))] mb-4">
                   This will revert all theme colors to their original values. Any saved customizations will be lost.
                 </p>
                 <div className="flex justify-end gap-2">
@@ -848,23 +864,32 @@ export default function PortfolioLanding() {
             </div>
           )}
 
-            {/* Hero colors row: Brand, Secondary, Tertiary */}
+            {/* Hero colors row */}
             {(() => {
-              const renderHeroSwatch = ({ key }: { key: string; label: string }) => {
-                const isEditable = key === "--brand";
-                const displayLabel = key === "--brand" ? "Brand" : key === "--secondary" ? "Secondary" : "Tertiary";
+              const heroKeys = [
+                { key: "--brand", label: "Brand" },
+                { key: "--secondary", label: "Secondary" },
+                { key: "--accent", label: "Tertiary" },
+                { key: "--background", label: "Background" },
+                { key: "--foreground", label: "Foreground" },
+                { key: "--primary", label: "Primary" },
+              ];
+              const renderHeroSwatch = ({ key, label: displayLabel }: { key: string; label: string }) => {
                 const inputId = `home-color-input-${key}`;
+                const isLocked = lockedKeys.has(key);
                 return (
                   <div
                     key={key}
                     data-color-key={key}
-                    className={`text-left flex-1 ${isEditable ? "group cursor-pointer" : ""}`}
-                    onClick={isEditable ? () => {
-                      const input = document.getElementById(inputId) as HTMLInputElement | null;
-                      input?.click();
-                    } : undefined}
+                    className="relative text-left group cursor-pointer"
                   >
-                    <div className={`relative w-full h-14 rounded-lg transition-all overflow-hidden ${isEditable ? "ring-2 ring-brand-dynamic shadow-md group-hover:ring-4 group-hover:shadow-lg border-2 border-white dark:border-gray-900" : "border border-border"}`}>
+                    <div
+                      className="relative w-full aspect-square rounded-lg transition-all overflow-hidden shadow-md group-hover:shadow-lg"
+                      onClick={() => {
+                        const input = document.getElementById(inputId) as HTMLInputElement | null;
+                        input?.click();
+                      }}
+                    >
                       <div
                         className="absolute inset-0"
                         style={{
@@ -873,10 +898,9 @@ export default function PortfolioLanding() {
                             : undefined,
                         }}
                       />
-                      <div className="absolute inset-0 flex items-center justify-between px-3">
+                      <div className="absolute inset-0">
                         {(() => {
                           const hsl = colors[key];
-                          // Pick white or black text — prefer whichever passes 4.5:1, else pick higher contrast
                           const bgHsl = hsl || "0 0% 50%";
                           const whiteContrast = contrastRatio("0 0% 100%", bgHsl);
                           const blackContrast = contrastRatio("0 0% 0%", bgHsl);
@@ -886,46 +910,68 @@ export default function PortfolioLanding() {
                               ? false
                               : whiteContrast >= blackContrast;
                           const textColor = useWhite ? "#ffffff" : "#000000";
-                          const subColor = useWhite ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.9)";
+                          const hexCode = colors[key] ? hslStringToHex(colors[key]) : "#000000";
                           return (
-                            <div className="min-w-0">
-                              <p className="text-xs font-semibold truncate" style={{ color: textColor }}>
-                                {displayLabel}
-                              </p>
-                              <p className="text-[10px] truncate" style={{ color: subColor }}>
-                                {colors[key] ? hslStringToHex(colors[key]) : key}
+                            <div className="absolute bottom-1 left-1 min-w-0">
+                              <p className="text-[8px] sm:text-xs font-semibold truncate" style={{ color: textColor }}>
+                                {hexCode}
                               </p>
                             </div>
                           );
                         })()}
 
-                        {isEditable && (
-                          <span className="relative bg-white/90 dark:bg-black/70 text-gray-700 dark:text-gray-200 w-7 h-7 rounded-full shadow flex items-center justify-center flex-shrink-0">
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                            </svg>
-                            <input
-                              id={inputId}
-                              type="color"
-                              aria-label={`Select ${displayLabel} color`}
-                              value={colors[key] ? hslStringToHex(colors[key]) : "#000000"}
-                              onChange={(e) => handleColorChange(key, e.target.value)}
-                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            />
-                          </span>
-                        )}
+                        <span className="absolute top-1 right-1 bg-white/90 dark:bg-black/70 text-gray-700 dark:text-gray-200 w-6 h-6 rounded-full shadow flex items-center justify-center flex-shrink-0">
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                          </svg>
+                          <input
+                            id={inputId}
+                            type="color"
+                            aria-label={`Select ${displayLabel} color`}
+                            value={colors[key] ? hslStringToHex(colors[key]) : "#000000"}
+                            onChange={(e) => handleColorChange(key, e.target.value)}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          />
+                        </span>
                       </div>
                     </div>
+                    {/* Lock toggle on corner */}
+                    <button
+                      type="button"
+                      aria-label={isLocked ? `Unlock ${displayLabel}` : `Lock ${displayLabel}`}
+                      className="absolute z-20 flex items-center justify-center cursor-pointer"
+                      style={{ top: "-6px", left: "-6px", width: "32px", height: "32px", minWidth: "32px", minHeight: "32px", padding: 0 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setLockedKeys(prev => {
+                          const next = new Set(prev);
+                          if (next.has(key)) next.delete(key);
+                          else next.add(key);
+                          return next;
+                        });
+                      }}
+                    >
+                      {isLocked ? (
+                        <svg style={{ width: "18px", height: "18px", color: colors[key] ? `hsl(${fgForBg(colors[key])})` : undefined }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                      ) : (
+                        <svg className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ width: "18px", height: "18px", color: colors[key] ? `hsl(${fgForBg(colors[key])})` : undefined }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                          <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+                        </svg>
+                      )}
+                    </button>
+                    <p className="text-[10px] sm:text-xs font-medium text-[color:hsl(var(--foreground))] truncate mt-1">
+                      {displayLabel}
+                    </p>
                   </div>
                 );
               };
-              const heroKeys = [
-                { key: "--brand", label: "Brand Blue" },
-                { key: "--secondary", label: "Secondary" },
-                { key: "--accent", label: "Tertiary" },
-              ];
               return (
-                <div className="flex gap-4 mb-4" data-axe-exclude>
+                <div className="grid grid-cols-6 gap-2 sm:gap-4 mb-4" data-axe-exclude>
                   {heroKeys.map((v) => renderHeroSwatch(v))}
                 </div>
               );
@@ -933,42 +979,48 @@ export default function PortfolioLanding() {
 
             <div className="flex flex-row md:items-stretch gap-3 md:gap-6">
               {/* Color swatches (non-hero) */}
-              <div className="w-1/3 md:flex-1 xl:w-[25%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-2 md:p-4">
+              <div className="flex-[2] min-w-0 rounded-lg border border-white/20 dark:border-white/10 backdrop-blur-xl p-2 md:p-4" style={{ background: "linear-gradient(135deg, hsl(var(--background) / 0.6), hsl(var(--background) / 0.3))", boxShadow: "0 4px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15)" }}>
                 <div className="flex items-center justify-between mb-2 md:mb-3">
-                  <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <p className="text-[10px] md:text-xs font-medium uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>
                     {content.designSystem.sections.colors}
                   </p>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5">
-                  {COLOR_SWATCHES.filter(v => v.key !== "--brand" && v.key !== "--secondary" && v.key !== "--accent").map(({ key, label }) => (
+                  {COLOR_SWATCHES.filter(v => !["--brand", "--secondary", "--accent", "--background", "--foreground", "--primary"].includes(v.key)).map(({ key, label }) => {
+                    const hsl = colors[key];
+                    const bgHsl = hsl || "0 0% 50%";
+                    const wc = contrastRatio("0 0% 100%", bgHsl);
+                    const bc = contrastRatio("0 0% 0%", bgHsl);
+                    const swatchTextColor = (wc >= bc) ? "#ffffff" : "#000000";
+                    const hexCode = hsl ? hslStringToHex(hsl) : "";
+                    return (
                     <div key={key} data-color-key={key} className="text-left">
-                      <div className="relative w-full h-8 md:h-12 rounded-md mb-1 border border-border overflow-hidden">
+                      <div className="relative w-full h-12 md:h-16 rounded-md mb-1 overflow-hidden flex items-center justify-center">
                         <div
                           className="absolute inset-0"
                           style={{
-                            backgroundColor: colors[key]
-                              ? `hsl(${colors[key]})`
+                            backgroundColor: hsl
+                              ? `hsl(${hsl})`
                               : undefined,
                           }}
                         />
+                        <span className="absolute bottom-1 left-1 text-xs font-semibold truncate" style={{ color: swatchTextColor }}>{hexCode}</span>
                       </div>
-                      <p className="text-[9px] md:text-xs font-medium text-gray-900 dark:text-white truncate">
+                      <p className="hidden md:block text-xs font-medium text-[color:hsl(var(--foreground))] truncate">
                         {label}
                       </p>
-                      <p className="text-[8px] md:text-[10px] text-gray-500 dark:text-gray-400 truncate">
-                        {colors[key] ? hslStringToHex(colors[key]) : key}
-                      </p>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
               {/* Chips, Buttons, Badges in one card */}
-              <div className="w-1/3 md:w-auto md:flex-none xl:w-[50%] min-w-0 rounded-lg border border-border bg-background p-2 md:p-4 overflow-hidden">
-                <div className="flex flex-col xl:flex-row gap-3 xl:gap-6">
+              <div className="flex-shrink-0 min-w-0 rounded-lg border border-white/20 dark:border-white/10 backdrop-blur-xl p-2 md:p-4 overflow-hidden" style={{ background: "linear-gradient(135deg, hsl(var(--background) / 0.6), hsl(var(--background) / 0.3))", boxShadow: "0 4px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15)" }}>
+                <div className="flex flex-col gap-3">
                   {/* Chips */}
-                  <div className="flex-1 min-w-0 space-y-2 xl:space-y-3">
-                    <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">Chips</p>
+                  <div className="min-w-0 space-y-2">
+                    <p className="text-[10px] md:text-xs font-medium uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Chips</p>
                     <div className="flex flex-col gap-3 items-start">
                       <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Brand</span>
                       <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</span>
@@ -981,8 +1033,8 @@ export default function PortfolioLanding() {
                   </div>
 
                   {/* Badges */}
-                  <div className="flex-1 min-w-0 space-y-2 xl:space-y-3 border-t xl:border-t-0 border-border pt-2 xl:pt-0">
-                    <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">Badges</p>
+                  <div className="min-w-0 space-y-2 border-t border-border pt-2">
+                    <p className="text-[10px] md:text-xs font-medium uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Badges</p>
                     <div className="flex flex-col gap-3 items-start">
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Brand</span>
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</span>
@@ -991,13 +1043,13 @@ export default function PortfolioLanding() {
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Destructive</span>
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))" }}>Success</span>
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium max-w-full truncate" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))" }}>Warning</span>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border border-border text-muted-foreground max-w-full truncate">Outlined</span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border border-border max-w-full truncate" style={{ color: "hsl(var(--muted-foreground))" }}>Outlined</span>
                     </div>
                   </div>
 
-                  {/* Buttons - stacked on mobile, column on desktop */}
-                  <div className="flex-1 min-w-0 space-y-2 xl:space-y-3 border-t xl:border-t-0 border-border pt-2 xl:pt-0">
-                    <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">Buttons</p>
+                  {/* Buttons */}
+                  <div className="min-w-0 space-y-2 border-t border-border pt-2">
+                    <p className="text-[10px] md:text-xs font-medium uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Buttons</p>
                     <div className="flex flex-col gap-3 items-start">
                       <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: "white" }}>Primary</button>
                       <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</button>
@@ -1013,9 +1065,9 @@ export default function PortfolioLanding() {
               </div>
 
               {/* Icons */}
-              <div className="w-1/3 md:flex-1 xl:w-[25%] xl:flex-none min-w-0 rounded-lg border border-border bg-background p-2 md:p-4 space-y-2 md:space-y-4">
-                <p className="text-[10px] md:text-xs font-medium text-muted-foreground uppercase tracking-wider">Icons</p>
-                <div className="grid grid-cols-4 xl:grid-cols-3 gap-2 place-items-center">
+              <div className="flex-1 min-w-0 rounded-lg border border-white/20 dark:border-white/10 backdrop-blur-xl p-2 md:p-4 space-y-2 md:space-y-4" style={{ background: "linear-gradient(135deg, hsl(var(--background) / 0.6), hsl(var(--background) / 0.3))", boxShadow: "0 4px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.15)" }}>
+                <p className="text-[10px] md:text-xs font-medium uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Icons</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-3 gap-2 place-items-center">
                   <Suspense fallback={null}>
                     {SITE_ICONS.map(({ name, icon: Icon }) => (
                       <div key={name} className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center" title={name}>
@@ -1057,23 +1109,23 @@ export default function PortfolioLanding() {
                 key={position.title + position.period}
                 className=""
               >
-                <h3 className="font-semibold mb-1 dark:text-white title-font">
+                <h3 className="font-semibold mb-1 title-font">
                   {position.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-1">
+                <p className="text-[color:hsl(var(--muted-foreground))] mb-1">
                   {position.company}
                 </p>
-                <p className="text-gray-500 dark:text-gray-400 mb-2">
+                <p className="text-[color:hsl(var(--muted-foreground))] mb-2">
                   {position.period}
                 </p>
                 {Array.isArray(position.description) ? (
-                  <ul className="text-gray-700 dark:text-gray-300 leading-relaxed list-disc list-inside space-y-1">
+                  <ul className="text-[color:hsl(var(--muted-foreground))] leading-relaxed list-disc list-inside space-y-1">
                     {position.description.map((item, index) => (
                       <li key={index}>{item}</li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  <p className="text-[color:hsl(var(--muted-foreground))] leading-relaxed">
                     {position.description}
                   </p>
                 )}
@@ -1081,10 +1133,10 @@ export default function PortfolioLanding() {
             ))}
           </div>
           <div className="mt-4 pt-2">
-            <h3 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            <h3 className="font-semibold mb-2 text-[color:hsl(var(--foreground))]">
               Certifications
             </h3>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 leading-relaxed space-y-1 mb-4">
+            <ul className="list-disc list-inside text-[color:hsl(var(--muted-foreground))] leading-relaxed space-y-1 mb-4">
               <li>Certified ScrumMaster (Scrum Alliance)</li>
               <li>
                 Certified Usability Analyst (Human Factors
@@ -1092,10 +1144,10 @@ export default function PortfolioLanding() {
               </li>
               <li>ITIL Foundation Certificate (Axelos)</li>
             </ul>
-            <h3 className="font-semibold mb-2 text-gray-800 dark:text-gray-200">
+            <h3 className="font-semibold mb-2 text-[color:hsl(var(--foreground))]">
               Education
             </h3>
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 leading-relaxed space-y-1">
+            <ul className="list-disc list-inside text-[color:hsl(var(--muted-foreground))] leading-relaxed space-y-1">
               <li>Oakland University | Rochester MI</li>
               <li>Bachelor of Arts in English</li>
               <li>Minor in Public Relations</li>
@@ -1118,13 +1170,13 @@ export default function PortfolioLanding() {
                 key={index}
                 className="border-l-2 border-accent-dynamic/60 pl-4"
               >
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed italic">
+                <p className="text-[color:hsl(var(--muted-foreground))] leading-relaxed italic">
                   "{testimonial.quote}"
                 </p>
-                <p className="mt-2 font-semibold text-gray-900 dark:text-white">
+                <p className="mt-2 font-semibold text-[color:hsl(var(--foreground))]">
                   {testimonial.author}
                 </p>
-                <p className="text-gray-500 dark:text-gray-400 text-sm">
+                <p className="text-[color:hsl(var(--muted-foreground))] text-sm">
                   {testimonial.role}
                 </p>
               </div>

@@ -23,7 +23,7 @@ const SectionHeader = ({
 }) => {
   return (
     <div className={`${className}`}>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2 sm:gap-3 pb-2 border-b border-secondary-dynamic/30">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2 sm:gap-3">
         <div className="flex items-center gap-2 sm:gap-3">
           <h2 className="font-bold title-font leading-tight text-brand-dynamic dark:text-white">
             {title}
