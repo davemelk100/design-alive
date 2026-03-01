@@ -2,14 +2,11 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { content } from "../content";
 import { slugify } from "../utils/slugify";
 import ShareWidget from "../components/ShareWidget";
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect } from "react";
 import MobileTrayMenu from "../components/MobileTrayMenu";
 import { getResponsiveImage } from "../utils/imageOptimizer";
-
-// Lazy load icon to avoid blocking critical path
-const LazyArrowLeft = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.ArrowLeft }))
-);
+import { LazyIcon } from "../utils/lazyIcons";
+import SEO from "../components/SEO";
 
 export default function Article() {
   const { slug } = useParams();
@@ -45,9 +42,7 @@ export default function Article() {
             onClick={handleBackClick}
             className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mb-8 relative z-50"
           >
-            <Suspense fallback={<span className="h-4 w-4 mr-2">←</span>}>
-              <LazyArrowLeft className="h-4 w-4 mr-2" />
-            </Suspense>
+            <LazyIcon name="ArrowLeft" className="h-4 w-4 mr-2" fallback="←" />
             Back to Articles
           </Link>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 font-card">
@@ -152,15 +147,35 @@ export default function Article() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 p-8 pb-32">
-      <div className="max-w-4xl mx-auto">
+      <SEO
+        title={article.title}
+        description={article.description}
+        image={article.image}
+        url={`/article/${slug}`}
+        type="article"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: article.title,
+          description: article.description,
+          image: article.image?.startsWith("http")
+            ? article.image
+            : `https://davemelkonian.com${article.image}`,
+          datePublished: article.date,
+          author: {
+            "@type": "Person",
+            name: "Dave Melkonian",
+            url: "https://davemelkonian.com/portfolio",
+          },
+        }}
+      />
+      <article className="max-w-4xl mx-auto">
         <a
           href="#screen-1"
           onClick={handleBackClick}
           className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 mb-8 relative z-50"
         >
-          <Suspense fallback={<span className="h-4 w-4 mr-2">←</span>}>
-            <LazyArrowLeft className="h-4 w-4 mr-2" />
-          </Suspense>
+          <LazyIcon name="ArrowLeft" className="h-4 w-4 mr-2" fallback="←" />
           Back to Articles
         </a>
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground mb-6 font-card">
@@ -212,13 +227,11 @@ export default function Article() {
             onClick={handleBackClick}
             className="inline-flex items-center text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
           >
-            <Suspense fallback={<span className="h-4 w-4 mr-2">←</span>}>
-              <LazyArrowLeft className="h-4 w-4 mr-2" />
-            </Suspense>
+            <LazyIcon name="ArrowLeft" className="h-4 w-4 mr-2" fallback="←" />
             Back to Site
           </Link>
         </div>
-      </div>
+      </article>
       <MobileTrayMenu />
     </div>
   );

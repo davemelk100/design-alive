@@ -1,10 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import IconWrapper from "./IconWrapper";
-
-const LazyArrowUp = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.ArrowUp })),
-);
+import { LazyIcon } from "../utils/lazyIcons";
 
 const SectionHeader = ({
   title,
@@ -35,10 +31,7 @@ const SectionHeader = ({
               className="bg-brand-dynamic text-white p-2 rounded-full shadow-lg hover:opacity-80 transition-opacity"
               aria-label="Scroll to top"
             >
-              <IconWrapper
-                Icon={LazyArrowUp}
-                className="h-4 w-4 text-white"
-              />
+              <LazyIcon name="ArrowUp" className="h-4 w-4 text-white" />
             </button>
           )}
         </div>

@@ -2,26 +2,8 @@ import { Link } from "react-router-dom";
 import { content } from "../content";
 import MelkonianLogo from "./MelkonianLogo";
 
-const navOrder = [
-  "current-projects",
-  // "stories",
-  "work",
-  "articles",
-  // "career",
-  // "design-system",
-];
-
-const idToRoute: Record<string, string> = {
-  "current-projects": "/portfolio/lab",
-  stories: "/portfolio/stories",
-  work: "/portfolio/design-system",
-  articles: "/portfolio/articles",
-  // career: "/portfolio/career",
-  "design-system": "/portfolio/design-system",
-};
-
 const activeClass =
-  "text-brand-dynamic px-3 py-2 rounded-md bg-accent-dynamic/10";
+  "px-3 py-2 rounded-md bg-accent-dynamic/10";
 const inactiveClass =
   "hover:text-brand-dynamic transition-colors px-3 py-2 rounded-md";
 
@@ -57,60 +39,27 @@ const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
               className={currentPage === "home" ? activeClass : inactiveClass}
               style={
                 currentPage === "home"
-                  ? { fontWeight: 700 }
+                  ? { fontWeight: 700, color: "hsl(var(--foreground))" }
                   : { color: "hsl(var(--foreground))" }
               }
+              {...(currentPage === "home" ? { "aria-current": "page" as const } : {})}
             >
               Home
             </Link>
             <Link
               to="/case-studies"
               className={
-                currentPage === "case-studies" ? activeClass : inactiveClass
+                currentPage === "writing" ? activeClass : inactiveClass
               }
               style={
-                currentPage === "case-studies"
-                  ? { fontWeight: 700 }
+                currentPage === "writing"
+                  ? { fontWeight: 700, color: "hsl(var(--foreground))" }
                   : { color: "hsl(var(--foreground))" }
               }
+              {...(currentPage === "writing" ? { "aria-current": "page" as const } : {})}
             >
-              Case Studies
+              Case Studies & Articles
             </Link>
-            {content.navigation.links
-              .filter(
-                (link) =>
-                  link.id !== "career" &&
-                  link.id !== "contact" &&
-                  link.id !== "current-projects" &&
-                  link.id !== "work" &&
-                  link.id !== "design-system",
-              )
-              .sort((a, b) => {
-                const indexA = navOrder.indexOf(a.id);
-                const indexB = navOrder.indexOf(b.id);
-                return (
-                  (indexA === -1 ? 999 : indexA) -
-                  (indexB === -1 ? 999 : indexB)
-                );
-              })
-              .map((link) => {
-                const route = idToRoute[link.id] || "/portfolio";
-                const isActive = currentPage === link.id;
-                return (
-                  <Link
-                    key={link.id}
-                    to={route}
-                    className={isActive ? activeClass : inactiveClass}
-                    style={
-                      isActive
-                        ? { fontWeight: 700 }
-                        : { color: "hsl(var(--foreground))" }
-                    }
-                  >
-                    {link.text}
-                  </Link>
-                );
-              })}
             <Link
               to="/portfolio/lab"
               className={
@@ -118,9 +67,10 @@ const PortfolioNav = ({ currentPage }: { currentPage?: string }) => (
               }
               style={
                 currentPage === "design-dev"
-                  ? { fontWeight: 700 }
+                  ? { fontWeight: 700, color: "hsl(var(--foreground))" }
                   : { color: "hsl(var(--foreground))" }
               }
+              {...(currentPage === "design-dev" ? { "aria-current": "page" as const } : {})}
             >
               Design & Dev
             </Link>

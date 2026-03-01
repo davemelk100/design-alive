@@ -1,13 +1,10 @@
-import { lazy } from "react";
 import { Link } from "react-router-dom";
 import PortfolioLayout from "../../components/PortfolioLayout";
 import SectionHeader from "../../components/SectionHeader";
-import IconWrapper from "../../components/IconWrapper";
+import { LazyIcon } from "../../utils/lazyIcons";
 import { content } from "../../content";
-
-const LazyDribbble = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Dribbble }))
-);
+import { getCardImageProps } from "../../utils/imageOptimizer";
+import SEO from "../../components/SEO";
 
 export default function LabPage() {
 
@@ -26,6 +23,12 @@ export default function LabPage() {
 
   return (
     <PortfolioLayout currentPage="design-dev">
+      <SEO
+        title="Design & Dev"
+        description="Design work, visual explorations, and development projects"
+        url="/portfolio/lab"
+        preloadImage={designProjects[0]?.image}
+      />
       {/* UX/UI Section */}
       <section className="py-2 sm:py-3 lg:py-4 xl:py-6 relative">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -39,13 +42,10 @@ export default function LabPage() {
               href={content.navigation.social.dribbble.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-700 backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-8 h-8 flex items-center justify-center"
+              className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
               aria-label="Dribbble"
             >
-              <IconWrapper
-                Icon={LazyDribbble}
-                className="h-4 w-4 text-brand-dynamic dark:text-gray-300"
-              />
+              <LazyIcon name="Dribbble" className="h-5 w-5 text-brand-dynamic" />
             </a>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
@@ -56,10 +56,11 @@ export default function LabPage() {
                   <>
                     <div className="relative w-full max-h-64 overflow-hidden bg-transparent">
                       <img
-                        src={project.image}
+                        {...getCardImageProps(project.image)}
                         alt={project.alt || project.title}
                         className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
+                        loading={index === 0 ? "eager" : "lazy"}
+                        {...(index === 0 ? { fetchPriority: "high" } : {})}
                         decoding="async"
                       />
                     </div>
@@ -68,7 +69,7 @@ export default function LabPage() {
                         {project.title}
                       </h3>
                       {project.description && (
-                        <p className="text-foreground/70 line-clamp-2">
+                        <p className="text-foreground/80 line-clamp-2">
                           {project.description}
                         </p>
                       )}
@@ -112,14 +113,12 @@ export default function LabPage() {
                       <div className="relative w-full h-48 sm:h-64 overflow-hidden bg-transparent">
                         {project.image ? (
                           <img
-                            src={project.image.endsWith(".svg") ? `${project.image}?v=${Date.now()}` : project.image}
+                            {...(project.image.endsWith(".svg") ? { src: `${project.image}?v=${Date.now()}`, width: 512, height: 512 } : getCardImageProps(project.image))}
                             alt={project.title}
                             className={`w-full h-full group-hover:scale-105 transition-transform duration-300 ${project.image.endsWith(".svg") ? "object-contain object-center" : "object-cover object-top"}`}
                             loading={index === 0 ? "eager" : "lazy"}
-                            {...(index === 0 ? { fetchpriority: "high" } : {})}
+                            {...(index === 0 ? { fetchPriority: "high" } : {})}
                             decoding="async"
-                            width="512"
-                            height="512"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800">
@@ -133,7 +132,7 @@ export default function LabPage() {
                         <h3 className="font-semibold text-brand-dynamic group-hover:font-bold transition-all">
                           {project.title}
                         </h3>
-                        <p className="text-foreground/70 line-clamp-2">
+                        <p className="text-foreground/80 line-clamp-2">
                           {project.description}
                         </p>
                       </div>

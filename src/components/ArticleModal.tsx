@@ -1,12 +1,7 @@
-import { lazy, Suspense } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { getResponsiveImage } from "../utils/imageOptimizer";
-
-// Lazy load icon deters blocking of the critical path
-const LazyX = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.X }))
-);
+import { LazyIcon } from "../utils/lazyIcons";
 
 interface ArticleModalProps {
   title: string;
@@ -124,11 +119,7 @@ export default function ArticleModal({
                 className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-dynamic focus:ring-offset-2"
                 aria-label="Close modal"
               >
-                <Suspense
-                  fallback={<span className="h-4 w-4 sm:h-5 sm:w-5">×</span>}
-                >
-                  <LazyX className="h-4 w-4 sm:h-5 sm:w-5" />
-                </Suspense>
+                <LazyIcon name="X" className="h-4 w-4 sm:h-5 sm:w-5" fallback="×" />
               </button>
             </div>
             {image && (

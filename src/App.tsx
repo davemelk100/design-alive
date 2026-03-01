@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
+import { HelmetProvider } from "react-helmet-async";
 
 import { ThemeProvider } from "./context/ThemeContext";
 import { applyStoredThemeColors } from "./pages/portfolio/themeUtils";
-// import ThemePreviewBar from "./components/ThemePreviewBar";
 import { CartProvider, StoreProvider, AuthProvider } from "./store";
 import { ProtectedRoute } from "./store/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/toaster";
+import ThemeToggle from "./components/ThemeToggle";
 
 import {
   BrowserRouter as Router,
@@ -15,7 +16,6 @@ import {
   Link,
   useLocation,
 } from "react-router-dom";
-import { lazy, Suspense } from "react";
 
 // Lazy load components
 const Article = lazy(() => import("./pages/Article"));
@@ -39,20 +39,11 @@ const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const Discogs = lazy(() => import("./pages/Discogs"));
 const Consult = lazy(() => import("./pages/Consult"));
 const Cygnet = lazy(() => import("./pages/Cygnet"));
-const CaseStudies = lazy(() => import("./pages/CaseStudies"));
-
 // Lazy load portfolio pages
 const PortfolioLanding = lazy(() => import("./pages/portfolio/PortfolioLanding"));
 const LabPage = lazy(() => import("./pages/portfolio/LabPage"));
-// const StoriesPage = lazy(() => import("./pages/portfolio/StoriesPage"));
-// const DesignPage = lazy(() => import("./pages/portfolio/DesignPage"));
-const ArticlesPage = lazy(() => import("./pages/portfolio/ArticlesPage"));
-// const CareerPage = lazy(() => import("./pages/portfolio/CareerPage"));
-// const ContactPage = lazy(() => import("./pages/portfolio/ContactPage"));
-// const TestimonialsPage = lazy(() => import("./pages/portfolio/TestimonialsPage"));
-// const DesignSystemPage = lazy(() => import("./pages/portfolio/DesignSystemPage"));
+const WritingPage = lazy(() => import("./pages/portfolio/WritingPage"));
 const DesignSystemAbout = lazy(() => import("./pages/portfolio/DesignSystemAbout"));
-// const GraphicsPage = lazy(() => import("./pages/portfolio/GraphicsPage"));
 
 // Lazy load non-critical UI components to reduce critical path
 const MobileTrayMenu = lazy(() => import("./components/MobileTrayMenu"));
@@ -160,12 +151,7 @@ function App() {
             />
             <Route path="/portfolio" element={<PortfolioLanding />} />
             <Route path="/portfolio/lab" element={<LabPage />} />
-            {/* <Route path="/portfolio/stories" element={<StoriesPage />} /> */}
-            {/* <Route path="/portfolio/design" element={<DesignPage />} /> */}
-            <Route path="/portfolio/articles" element={<ArticlesPage />} />
-            {/* <Route path="/portfolio/career" element={<CareerPage />} /> */}
-            {/* <Route path="/portfolio/testimonials" element={<TestimonialsPage />} /> */}
-            {/* <Route path="/portfolio/contact" element={<ContactPage />} /> */}
+            <Route path="/portfolio/articles" element={<WritingPage />} />
             <Route path="/portfolio/design-system/about" element={<DesignSystemAbout />} />
             <Route path="/portfolio/design-system" element={<Navigate to="/portfolio" replace />} />
             <Route path="/portfolio/graphics" element={<Navigate to="/portfolio/lab" replace />} />
@@ -182,7 +168,7 @@ function App() {
             <Route path="/discogs" element={<Discogs />} />
             <Route path="/consult" element={<Consult />} />
             <Route path="/cygnet" element={<Cygnet />} />
-            <Route path="/case-studies" element={<CaseStudies />} />
+            <Route path="/case-studies" element={<WritingPage />} />
             <Route path="/store/login" element={<Login />} />
             <Route path="/store/signup" element={<Signup />} />
             <Route path="/store/auth/callback" element={<AuthCallback />} />
@@ -227,9 +213,8 @@ function App() {
         </Suspense>
       ) : null}
 
-      {/* Global Dark Mode Toggle - Visible on all pages */}
+      {/* Global Dark Mode Toggle */}
       <div className="fixed top-2 right-0 z-50 flex items-center gap-2">
-        {/* Dark Mode Toggle - Hide on store, discogs, portfolio, and related pages */}
         {location.pathname !== "/" &&
           !isPortfolioPath &&
           location.pathname !== "/case-studies" &&
@@ -237,50 +222,9 @@ function App() {
           location.pathname !== "/consult" &&
           location.pathname !== "/cygnet" &&
           !location.pathname.startsWith("/store") && (
-            <button
-              onClick={() => {
-                const html = document.documentElement;
-                if (html.classList.contains("dark")) {
-                  html.classList.remove("dark");
-                  localStorage.setItem("theme", "light");
-                } else {
-                  html.classList.add("dark");
-                  localStorage.setItem("theme", "dark");
-                }
-              }}
-              className="w-10 h-10 flex items-center justify-center hover:opacity-80 transition-opacity duration-200"
-              aria-label="Toggle dark mode"
-            >
-              <svg
-                className="w-4 h-4 text-foreground/80"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 9.003 0 008.354-5.646z"
-                />
-              </svg>
-              <svg
-                className="w-4 h-4 text-foreground/80 absolute opacity-0 dark:opacity-100 transition-opacity duration-200"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                />
-              </svg>
-            </button>
+            <ThemeToggle className="text-foreground/80" />
           )}
       </div>
-      {/* <ThemePreviewBar /> */}
       <Toaster />
     </div>
   );
@@ -289,16 +233,18 @@ function App() {
 // Wrap the App with Router at the root level
 export default function AppWithRouter() {
   return (
-    <Router>
-      <ThemeProvider>
-        <AuthProvider>
-          <CartProvider>
-            <StoreProvider>
-              <App />
-            </StoreProvider>
-          </CartProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <ThemeProvider>
+          <AuthProvider>
+            <CartProvider>
+              <StoreProvider>
+                <App />
+              </StoreProvider>
+            </CartProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </Router>
+    </HelmetProvider>
   );
 }

@@ -7,9 +7,10 @@ import { slugify } from "../../utils/slugify";
 import {
   getCardImageProps,
 } from "../../utils/imageOptimizer";
+import SEO from "../../components/SEO";
 const ArticleModal = lazy(() => import("../../components/ArticleModal"));
 
-export default function ArticlesPage() {
+export function ArticlesContent() {
   const navigate = useNavigate();
   const [selectedArticle, setSelectedArticle] = useState<{
     title: string;
@@ -41,7 +42,7 @@ export default function ArticlesPage() {
   };
 
   return (
-    <PortfolioLayout currentPage="articles">
+    <>
       <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
@@ -55,11 +56,11 @@ export default function ArticlesPage() {
                   href="https://davemelk.substack.com/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                  className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
                   aria-label="Substack"
                 >
                   <svg
-                    className="h-5 w-5 text-brand-dynamic dark:text-gray-300"
+                    className="h-5 w-5 text-brand-dynamic"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -82,7 +83,8 @@ export default function ArticlesPage() {
                         )}
                         alt={article.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
+                        loading={index === 0 ? "eager" : "lazy"}
+                        {...(index === 0 ? { fetchPriority: "high" } : {})}
                         decoding="async"
                       />
                     </div>
@@ -91,7 +93,7 @@ export default function ArticlesPage() {
                         {article.title}
                       </h3>
                       {article.description && (
-                        <p className="text-foreground/70 line-clamp-2">
+                        <p className="text-foreground/80 line-clamp-2">
                           {article.description}
                         </p>
                       )}
@@ -113,6 +115,19 @@ export default function ArticlesPage() {
           />
         </Suspense>
       )}
+    </>
+  );
+}
+
+export default function ArticlesPage() {
+  return (
+    <PortfolioLayout currentPage="articles">
+      <SEO
+        title="Articles"
+        description="Articles on design, development, and digital experience"
+        url="/portfolio/articles"
+      />
+      <ArticlesContent />
     </PortfolioLayout>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PortfolioLayout from "../components/PortfolioLayout";
 import SectionHeader from "../components/SectionHeader";
+import SEO from "../components/SEO";
 
 const caseStudies = [
   {
@@ -30,11 +31,11 @@ const caseStudies = [
   },
 ];
 
-export default function CaseStudies() {
+export function CaseStudiesContent() {
   const [activeStudy, setActiveStudy] = useState(caseStudies[0].id);
 
   return (
-    <PortfolioLayout currentPage="case-studies">
+    <>
       {/* Page title */}
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 pt-4">
         <SectionHeader
@@ -56,10 +57,10 @@ export default function CaseStudies() {
               }}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 activeStudy === study.id
-                  ? "bg-brand-dynamic"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                  ? "bg-accent-dynamic/10"
+                  : "hover:text-brand-dynamic"
               }`}
-              style={activeStudy === study.id ? { color: "hsl(var(--foreground))" } : undefined}
+              style={activeStudy === study.id ? { fontWeight: 700, color: "hsl(var(--foreground))" } : { color: "hsl(var(--foreground))" }}
             >
               {study.label}
             </button>
@@ -96,7 +97,7 @@ export default function CaseStudies() {
                   <li>A formal response model for compliance questionnaires</li>
                 </ul>
                 <p className="text-foreground/80 leading-relaxed mb-3">The business problem was immediate and concrete.</p>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="rounded-lg p-4 sm:p-6 my-4">
                   <p className="text-foreground font-medium italic">
                     How do you confidently respond to enterprise bid requirements that mandate W3C and Section 508 compliance when you do not yet have a structured accessibility practice?
                   </p>
@@ -1607,6 +1608,19 @@ export default function CaseStudies() {
         </div>
       </section>
       )}
+    </>
+  );
+}
+
+export default function CaseStudies() {
+  return (
+    <PortfolioLayout currentPage="case-studies">
+      <SEO
+        title="Case Studies"
+        description="In-depth explorations of complex design and engineering challenges"
+        url="/case-studies"
+      />
+      <CaseStudiesContent />
     </PortfolioLayout>
   );
 }

@@ -11,6 +11,7 @@ import {
 
 import { LinkedInLogoIcon } from "../../components/SocialIcons";
 const LazyLinkedInLogoIcon = LinkedInLogoIcon;
+import SEO from "../../components/SEO";
 
 const PortfolioLandingDesignSystem = React.lazy(() => import('./PortfolioLandingDesignSystem'));
 
@@ -56,6 +57,23 @@ export default function PortfolioLanding() {
 
   return (
     <PortfolioLayout currentPage="home">
+      <SEO
+        title="Portfolio"
+        description="Digital Experience Designer with over 15 years of experience creating user-centered solutions"
+        url="/portfolio"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Dave Melkonian",
+          url: "https://davemelkonian.com/portfolio",
+          jobTitle: "Digital Experience Designer",
+          sameAs: [
+            "https://www.linkedin.com/in/davemelk/",
+            "https://dribbble.com/davemelk100",
+            "https://github.com/davemelk100",
+          ],
+        }}
+      />
       {/* Live Design System Preview */}
       <Suspense fallback={null}>
         <PortfolioLandingDesignSystem
@@ -81,7 +99,7 @@ export default function PortfolioLanding() {
                 href={content.navigation.social.linkedin.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white/80 hover:bg-white backdrop-blur-sm rounded-full p-2 shadow-md hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
                 aria-label="LinkedIn"
               >
                 <IconWrapper

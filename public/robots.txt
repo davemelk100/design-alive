@@ -8,8 +8,7 @@ Disallow: /writing-gallery
 # Allow crawling of main content
 Allow: /article/
 Allow: /archive
-Allow: /design-archive
-Allow: /music-player
+Allow: /portfolio/
+Allow: /case-studies
 
-# Sitemap (if you have one)
-# Sitemap: https://yourdomain.com/sitemap.xml 
+Sitemap: https://davemelkonian.com/sitemap.xml

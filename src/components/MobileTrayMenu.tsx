@@ -1,91 +1,25 @@
-import React, { useState, Suspense, lazy } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { content } from "../content";
-
-// Lazy load all icons to avoid blocking critical path
-const LazyX = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.X }))
-);
-const LazyHome = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Home }))
-);
-const LazyFileText = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.FileText }))
-);
-const LazyPalette = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Palette }))
-);
-const LazyBookOpen = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.BookOpen }))
-);
-const LazyBriefcase = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Briefcase }))
-);
-const LazyMail = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Mail }))
-);
-
-const idToRoute: Record<string, string> = {
-  "current-projects": "/portfolio/lab",
-  stories: "/portfolio/stories",
-  work: "/portfolio/design-system",
-  articles: "/portfolio/articles",
-  // career: "/portfolio/career",
-  contact: "/portfolio/contact",
-};
+import { LazyIcon } from "../utils/lazyIcons";
+import { idToRoute } from "../config/navigation";
 
 const MobileTrayMenu: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
   const getNavIcon = (id: string) => {
-    const iconProps = { className: "w-6 h-6" };
-    const fallback = <span className="w-6 h-6">·</span>;
-
-    switch (id) {
-      case "current-projects":
-        return (
-          <Suspense fallback={fallback}>
-            <LazyHome {...iconProps} />
-          </Suspense>
-        );
-      case "articles":
-        return (
-          <Suspense fallback={fallback}>
-            <LazyFileText {...iconProps} />
-          </Suspense>
-        );
-      case "work":
-        return (
-          <Suspense fallback={fallback}>
-            <LazyPalette {...iconProps} />
-          </Suspense>
-        );
-      case "stories":
-        return (
-          <Suspense fallback={fallback}>
-            <LazyBookOpen {...iconProps} />
-          </Suspense>
-        );
-      case "career":
-        return (
-          <Suspense fallback={fallback}>
-            <LazyBriefcase {...iconProps} />
-          </Suspense>
-        );
-      case "contact":
-        return (
-          <Suspense fallback={fallback}>
-            <LazyMail {...iconProps} />
-          </Suspense>
-        );
-      default:
-        return (
-          <Suspense fallback={fallback}>
-            <LazyHome {...iconProps} />
-          </Suspense>
-        );
-    }
+    const iconClass = "w-6 h-6";
+    const iconMap: Record<string, string> = {
+      "current-projects": "Home",
+      articles: "FileText",
+      work: "Palette",
+      stories: "BookOpen",
+      career: "Briefcase",
+      contact: "Mail",
+    };
+    const iconName = iconMap[id] || "Home";
+    return <LazyIcon name={iconName} className={iconClass} fallback="·" />;
   };
 
   const isActiveRoute = (id: string) => {
@@ -101,14 +35,13 @@ const MobileTrayMenu: React.FC = () => {
         <div className="flex items-center justify-between w-full px-2 py-2">
           {[
             { id: "home", label: "Home", route: "/portfolio" },
-            { id: "case-studies", label: "Studies", route: "/case-studies" },
-            { id: "articles", label: "Articles", route: "/portfolio/articles" },
+            { id: "writing", label: "Studies & Articles", route: "/case-studies" },
             { id: "design-dev", label: "Design & Dev", route: "/portfolio/lab" },
           ].map((item) => {
             const isActive = item.id === "home"
               ? location.pathname === "/portfolio"
-              : item.route === "/case-studies"
-              ? location.pathname === item.route
+              : item.id === "writing"
+              ? location.pathname === "/case-studies" || location.pathname === "/portfolio/articles"
               : item.id === "design-dev"
               ? location.pathname === "/portfolio/lab" || location.pathname === "/portfolio/graphics"
               : isActiveRoute(item.id);
@@ -126,21 +59,17 @@ const MobileTrayMenu: React.FC = () => {
               >
                 {(() => {
                   const iconClass = isActive ? "w-6 h-6 text-brand-dynamic" : "w-6 h-6";
-                  if (item.id === "case-studies") return (
+                  if (item.id === "writing") return (
                     <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
                       <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" />
                       <rect x="9" y="3" width="6" height="4" rx="1" />
                     </svg>
                   );
                   if (item.id === "design-dev") return (
-                    <Suspense fallback={<span className="w-6 h-6">·</span>}>
-                      <LazyPalette className={iconClass} />
-                    </Suspense>
+                    <LazyIcon name="Palette" className={iconClass} fallback="·" />
                   );
                   if (item.id === "home") return (
-                    <Suspense fallback={<span className="w-6 h-6">·</span>}>
-                      <LazyHome className={iconClass} />
-                    </Suspense>
+                    <LazyIcon name="Home" className={iconClass} fallback="·" />
                   );
                   return getNavIcon(item.id);
                 })()}
@@ -164,9 +93,7 @@ const MobileTrayMenu: React.FC = () => {
                 className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                 aria-label="Close mobile navigation menu"
               >
-                <Suspense fallback={<span className="h-5 w-5">×</span>}>
-                  <LazyX className="h-5 w-5 text-brand-dynamic dark:text-gray-400" />
-                </Suspense>
+                <LazyIcon name="X" className="h-5 w-5 text-brand-dynamic dark:text-gray-400" fallback="×" />
               </button>
             </div>
 
@@ -181,11 +108,11 @@ const MobileTrayMenu: React.FC = () => {
                   Design & Dev
                 </Link>
                 <Link
-                  to="/portfolio/articles"
+                  to="/case-studies"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="block w-full text-left px-4 py-3 rounded-lg text-foreground/80 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
                 >
-                  Articles
+                  Case Studies & Articles
                 </Link>
                 {/* <Link
                   to="/portfolio/stories"
@@ -204,13 +131,6 @@ const MobileTrayMenu: React.FC = () => {
                   className="block px-4 py-3 rounded-lg text-foreground/80 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
                 >
                   Home
-                </Link>
-                <Link
-                  to="/case-studies"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block px-4 py-3 rounded-lg text-foreground/80 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors font-medium"
-                >
-                  Case Studies
                 </Link>
               </div>
 

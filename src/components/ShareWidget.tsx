@@ -1,10 +1,5 @@
-import { lazy, Suspense } from "react";
 import { useState } from "react";
-
-// Lazy load icon to avoid blocking critical path
-const LazyLink2 = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Link2 }))
-);
+import { LazyIcon } from "../utils/lazyIcons";
 
 interface ShareWidgetProps {
   url: string;
@@ -25,9 +20,7 @@ export default function ShareWidget({ url }: ShareWidgetProps) {
       className="inline-flex items-center gap-2 text-brand-dynamic hover:text-brand-dynamic/80 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
       aria-label="Copy link"
     >
-      <Suspense fallback={<span className="h-5 w-5">🔗</span>}>
-        <LazyLink2 className="h-5 w-5" />
-      </Suspense>
+      <LazyIcon name="Link2" className="h-5 w-5" fallback="🔗" />
       <span>{showCopied ? "Copied!" : "Copy Link"}</span>
     </button>
   );
