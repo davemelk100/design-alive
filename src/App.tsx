@@ -52,7 +52,7 @@ const ArticlesPage = lazy(() => import("./pages/portfolio/ArticlesPage"));
 // const TestimonialsPage = lazy(() => import("./pages/portfolio/TestimonialsPage"));
 // const DesignSystemPage = lazy(() => import("./pages/portfolio/DesignSystemPage"));
 const DesignSystemAbout = lazy(() => import("./pages/portfolio/DesignSystemAbout"));
-const GraphicsPage = lazy(() => import("./pages/portfolio/GraphicsPage"));
+// const GraphicsPage = lazy(() => import("./pages/portfolio/GraphicsPage"));
 
 // Lazy load non-critical UI components to reduce critical path
 const MobileTrayMenu = lazy(() => import("./components/MobileTrayMenu"));
