@@ -1,38 +1,76 @@
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import PortfolioLayout from "../components/PortfolioLayout";
 import SectionHeader from "../components/SectionHeader";
 import SEO from "../components/SEO";
+import { fgForBg } from "./portfolio/themeUtils";
 
 const caseStudies = [
   {
     id: "accessibility",
     label: "Accessibility",
     title: "Operationalizing Accessibility Across an Enterprise Healthcare Organization",
+    role: "Senior UX Developer and Accessibility Strategist, Delta Dental of Michigan",
   },
   {
     id: "ai-interpretation",
     label: "AI Interpretation",
     title: "Designing AI Powered Interpretation for Real Time Enterprise Communication",
+    role: "UX Lead and Front End Architect, Propio Language Services",
   },
   {
     id: "user-testing",
     label: "User Testing Platform",
     title: "Designing a Cross Product User Testing Platform with Unified Data and Theming Architecture",
+    role: "UX Architect and Software Engineer, Melkonian Industries",
   },
   {
     id: "inventory-crm",
     label: "Inventory & CRM",
     title: "AI-Augmented Inventory System & CRM Integration",
+    role: "Full-Stack Product, AI, & Systems Design for Nextier",
   },
   {
     id: "delivery-discipline",
     label: "Delivery Discipline",
     title: "Establishing Delivery Discipline Across Distributed, Regulated Environments",
+    role: "Organization-Wide Operational Transformation -- Agile, Process, & Delivery Excellence",
   },
 ];
 
 export function CaseStudiesContent() {
   const [activeStudy, setActiveStudy] = useState(caseStudies[0].id);
+
+  const brand = getComputedStyle(document.documentElement).getPropertyValue("--brand").trim();
+  const brandFg = brand ? `hsl(${fgForBg(brand)})` : "#fff";
+
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [notchStyle, setNotchStyle] = useState<{ left: number; width: number } | null>(null);
+
+  const updateNotch = useCallback(() => {
+    const container = tabsRef.current;
+    if (!container) return;
+    const idx = caseStudies.findIndex((s) => s.id === activeStudy);
+    const btn = buttonRefs.current[idx];
+    if (!btn) return;
+    const cRect = container.getBoundingClientRect();
+    const bRect = btn.getBoundingClientRect();
+    setNotchStyle({
+      left: bRect.left - cRect.left + bRect.width / 2,
+      width: bRect.width,
+    });
+  }, [activeStudy]);
+
+  useEffect(() => {
+    updateNotch();
+    window.addEventListener("resize", updateNotch);
+    return () => window.removeEventListener("resize", updateNotch);
+  }, [updateNotch]);
+
+  const r = 18; // concave radius
+  const notchW = 6; // notch stem half-width
+  const gap = 8; // space between tabs and rail top
+  const activeStudyData = caseStudies.find((s) => s.id === activeStudy);
 
   return (
     <>
@@ -45,41 +83,103 @@ export function CaseStudiesContent() {
         />
       </div>
 
-      {/* Sub-menu */}
+      {/* Sub-menu with notched rail */}
       <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap gap-2 pt-2 pb-4 border-b border-border">
-          {caseStudies.map((study) => (
-            <button
-              key={study.id}
-              onClick={() => {
-                setActiveStudy(study.id);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                activeStudy === study.id
-                  ? "bg-accent-dynamic/10"
-                  : "hover:text-brand-dynamic"
-              }`}
-              style={activeStudy === study.id ? { fontWeight: 700, color: "hsl(var(--foreground))" } : { color: "hsl(var(--foreground))" }}
+        <div className="relative">
+          {/* Tab buttons */}
+          <div ref={tabsRef} className="flex flex-wrap gap-2 pt-2 pb-0">
+            {caseStudies.map((study, i) => (
+              <button
+                key={study.id}
+                ref={(el) => { buttonRefs.current[i] = el; }}
+                onClick={() => {
+                  setActiveStudy(study.id);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className={`px-5 py-3 rounded-xl text-sm transition-all duration-200 ${
+                  activeStudy === study.id
+                    ? "bg-brand-dynamic font-semibold shadow-lg"
+                    : "font-medium hover:bg-brand-dynamic/10"
+                }`}
+                style={activeStudy === study.id
+                  ? { color: brandFg }
+                  : { color: "hsl(var(--foreground))" }
+                }
+              >
+                {study.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Notch connector + title panel */}
+          {notchStyle && (() => {
+            const cx = notchStyle.left;
+            const arcLeft = cx - notchW - r;
+            const arcRight = cx + notchW + r;
+            return (
+              <>
+                <svg
+                  className="w-full block"
+                  style={{ height: gap, marginTop: 2 }}
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <linearGradient id="notch-grad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor={`hsl(${brand || '0 0% 50%'})`} />
+                      <stop offset="100%" stopColor={`hsl(${brand || '0 0% 50%'} / 0.15)`} />
+                    </linearGradient>
+                  </defs>
+                  {/* Full-width bar with concave notch */}
+                  <path
+                    d={[
+                      `M 0,${gap}`,
+                      `L ${arcLeft},${gap}`,
+                      `A ${r},${r} 0 0,0 ${cx - notchW},${gap - r}`,
+                      `L ${cx - notchW},0`,
+                      `L ${cx + notchW},0`,
+                      `L ${cx + notchW},${gap - r}`,
+                      `A ${r},${r} 0 0,0 ${arcRight},${gap}`,
+                      `L 9999,${gap}`,
+                      `L 9999,${gap}`,
+                      `L 0,${gap}`,
+                      `Z`,
+                    ].join(' ')}
+                    fill="hsl(var(--border))"
+                  />
+                  {/* Notch stem gradient */}
+                  <rect
+                    x={cx - notchW + 2}
+                    y={0}
+                    width={notchW * 2 - 4}
+                    height={gap}
+                    fill="url(#notch-grad)"
+                  />
+                </svg>
+              </>
+            );
+          })()}
+          {/* Title panel connected to rail */}
+          {activeStudyData && (
+            <div
+              className="rounded-xl px-6 py-4"
+              style={{ backgroundColor: "hsl(var(--border))" }}
             >
-              {study.label}
-            </button>
-          ))}
+              <h2 className="font-bold title-font leading-tight text-foreground mb-1">
+                {activeStudyData.title}
+              </h2>
+              <p className="text-foreground/70 text-sm">
+                {activeStudyData.role}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Case Study 1: Accessibility */}
       {activeStudy === "accessibility" && (
-      <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
+      <section className="pb-4 sm:pb-6 lg:pb-8 xl:pb-12 relative">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
-            <h2 className="font-bold title-font leading-tight text-foreground mb-2">
-              Operationalizing Accessibility Across an Enterprise Healthcare Organization
-            </h2>
-            <p className="text-foreground/80 mb-8">
-              Senior UX Developer and Accessibility Strategist, Delta Dental of Michigan
-            </p>
-
             <div className="space-y-8">
 
               {/* Executive Context */}
@@ -400,16 +500,9 @@ export function CaseStudiesContent() {
 
       {/* Case Study 2: AI Interpretation */}
       {activeStudy === "ai-interpretation" && (
-      <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
+      <section className="pb-4 sm:pb-6 lg:pb-8 xl:pb-12 relative">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
-            <h2 className="font-bold title-font leading-tight text-foreground mb-2">
-              Designing AI Powered Interpretation for Real Time Enterprise Communication
-            </h2>
-            <p className="text-foreground/80 mb-8">
-              UX Lead and Front End Architect, Propio Language Services
-            </p>
-
             <div className="space-y-8">
 
               {/* Executive Context */}
@@ -770,16 +863,9 @@ export function CaseStudiesContent() {
 
       {/* Case Study 3: User Testing Platform */}
       {activeStudy === "user-testing" && (
-      <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
+      <section className="pb-4 sm:pb-6 lg:pb-8 xl:pb-12 relative">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
-            <h2 className="font-bold title-font leading-tight text-foreground mb-2">
-              Designing a Cross Product User Testing Platform with Unified Data and Theming Architecture
-            </h2>
-            <p className="text-foreground/80 mb-8">
-              UX Architect and Software Engineer, Melkonian Industries
-            </p>
-
             <div className="space-y-8">
 
               {/* Executive Context */}
@@ -1120,16 +1206,9 @@ export function CaseStudiesContent() {
 
       {/* Case Study 4: AI-Augmented Inventory & CRM */}
       {activeStudy === "inventory-crm" && (
-      <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
+      <section className="pb-4 sm:pb-6 lg:pb-8 xl:pb-12 relative">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
-            <h2 className="font-bold title-font leading-tight text-foreground mb-2">
-              AI-Augmented Inventory System & CRM Integration
-            </h2>
-            <p className="text-foreground/80 mb-8">
-              Full-Stack Product, AI, & Systems Design for Nextier
-            </p>
-
             <div className="space-y-8">
 
               {/* Executive Context */}
@@ -1357,16 +1436,9 @@ export function CaseStudiesContent() {
       )}
       {/* Case Study 5: Delivery Discipline */}
       {activeStudy === "delivery-discipline" && (
-      <section className="py-4 sm:py-6 lg:py-8 xl:py-12 relative">
+      <section className="pb-4 sm:pb-6 lg:pb-8 xl:pb-12 relative">
         <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="pt-4 px-4 sm:pt-6 sm:px-6 relative bg-transparent">
-            <h2 className="font-bold title-font leading-tight text-foreground mb-2">
-              Establishing Delivery Discipline Across Distributed, Regulated Environments
-            </h2>
-            <p className="text-foreground/80 mb-8">
-              Organization-Wide Operational Transformation -- Agile, Process, & Delivery Excellence
-            </p>
-
             <div className="space-y-8">
 
               {/* Context */}
