@@ -36,9 +36,6 @@ const LazyDribbble = lazy(() =>
 const LazyHome = lazy(() =>
   import("lucide-react").then((mod) => ({ default: mod.Home }))
 );
-const LazyMail = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Mail }))
-);
 const LazyPalette = lazy(() =>
   import("lucide-react").then((mod) => ({ default: mod.Palette }))
 );
@@ -50,9 +47,6 @@ const LazyFileText = lazy(() =>
 );
 const LazyBriefcase = lazy(() =>
   import("lucide-react").then((mod) => ({ default: mod.Briefcase }))
-);
-const LazyQuote = lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Quote }))
 );
 const LazySearch = lazy(() =>
   import("lucide-react").then((mod) => ({ default: mod.Search }))
@@ -148,12 +142,10 @@ const SITE_ICONS: { name: string; icon: React.LazyExoticComponent<any> | React.C
   { name: "GitHub", icon: LazyGitHubLogoIcon },
   { name: "Dribbble", icon: LazyDribbble },
   { name: "Home", icon: LazyHome },
-  { name: "Mail", icon: LazyMail },
   { name: "Palette", icon: LazyPalette },
   { name: "BookOpen", icon: LazyBookOpen },
   { name: "FileText", icon: LazyFileText },
   { name: "Briefcase", icon: LazyBriefcase },
-  { name: "Quote", icon: LazyQuote },
   { name: "Search", icon: LazySearch },
   { name: "Calendar", icon: LazyCalendar },
   { name: "Sun", icon: LazySun },
@@ -563,8 +555,9 @@ export default function DesignSystemPage() {
       // 5. Final audit
       await delay(400);
       setAuditFromResults(await runAudit());
-    } catch {
-      setAuditStatus('idle');
+    } catch (err) {
+      console.error("fixContrastIssues failed:", err);
+      setAuditStatus('failed');
     }
   };
 
@@ -717,10 +710,10 @@ export default function DesignSystemPage() {
 
             {/* Action buttons + alerts row */}
             <div className="flex flex-wrap md:flex-nowrap items-center gap-2 sm:gap-4 mb-4">
-              <div className="relative w-full sm:w-auto md:flex-1 min-w-0">
+              <div className="relative w-full md:w-auto md:flex-1 min-w-0">
                 <button
                   onClick={() => setShuffleOpen(!shuffleOpen)}
-                  className="w-full h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                  className="w-full h-12 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
                   style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}
                 >
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
@@ -747,7 +740,7 @@ export default function DesignSystemPage() {
                 )}
               </div>
               <div className="flex w-full sm:w-auto sm:contents gap-2">
-                <div className="flex-1 min-w-0 h-9 flex rounded-lg overflow-hidden" style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}>
+                <div className="flex-1 min-w-0 h-12 flex rounded-lg overflow-hidden" style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}>
                   <button
                     onClick={handleGenerate}
                     className="h-full px-3 text-xs font-semibold transition-colors hover:opacity-80 flex items-center justify-center gap-1 whitespace-nowrap"
@@ -767,7 +760,7 @@ export default function DesignSystemPage() {
                 </div>
                 <button
                   onClick={() => setShowResetModal(true)}
-                  className="flex-1 min-w-0 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                  className="flex-1 min-w-0 h-12 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
                   style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
                 >
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
@@ -776,7 +769,7 @@ export default function DesignSystemPage() {
               </div>
               <button
                 onClick={() => generatedCode ? setGeneratedCode(null) : generateCode()}
-                className="flex-1 min-w-0 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                className="flex-1 min-w-0 h-12 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
                 style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}
               >
                 <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
@@ -816,7 +809,7 @@ export default function DesignSystemPage() {
                     setPrStatus('error');
                   }
                 }}
-                className={`flex-1 min-w-0 h-9 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 disabled:opacity-50 flex items-center justify-center gap-1 ${
+                className={`flex-1 min-w-0 h-12 text-xs font-semibold rounded-lg transition-colors hover:opacity-80 disabled:opacity-50 flex items-center justify-center gap-1 ${
                   prStatus === 'error' || prStatus === 'rate-limited'
                     ? 'border border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
                     : prStatus === 'created'
@@ -834,12 +827,12 @@ export default function DesignSystemPage() {
               {/* Alerts: full-width row on mobile, inline on sm+ */}
               <div className="w-full sm:w-auto order-first sm:order-last sm:ml-auto flex-shrink-0 min-h-[36px]" data-axe-exclude>
                 {prStatus === 'rate-limited' && prError && (
-                  <span className="inline-flex items-center px-3 h-9 text-xs font-medium rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">
+                  <span className="inline-flex items-center px-3 h-12 text-xs font-medium rounded-lg border border-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300">
                     {prError}
                   </span>
                 )}
                 {prStatus === 'created' && prUrl && (
-                  <span className="inline-flex items-center gap-2 px-3 h-9 text-xs font-medium rounded-lg border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                  <span className="inline-flex items-center gap-2 px-3 h-12 text-xs font-medium rounded-lg border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
                     PR Created!
                     <a href={prUrl} target="_blank" rel="noopener noreferrer" className="underline font-semibold hover:text-green-900 dark:hover:text-green-100 transition-colors">View</a>
                     <button onClick={() => { setPrStatus('idle'); setPrUrl(null); }} className="text-green-500 hover:text-green-800 dark:hover:text-green-100 transition-colors" aria-label="Dismiss PR notification">&#10005;</button>
@@ -877,7 +870,7 @@ export default function DesignSystemPage() {
             {generatedCode && (
               <div className="mb-4 rounded-lg border" style={{ borderColor: "hsl(var(--border))", backgroundColor: "hsl(var(--card))" }}>
                 <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
-                  <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))", opacity: 0.7 }}>Generated Theme</span>
+                  <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Generated Theme</span>
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => {
@@ -1092,7 +1085,7 @@ export default function DesignSystemPage() {
                   <div className="min-w-0 space-y-2 md:border-t md:border-border md:pt-2">
                     <p className="text-[10px] md:text-xs font-medium uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Buttons</p>
                     <div className="flex flex-row flex-wrap gap-1.5 md:grid md:grid-cols-2 md:gap-2 items-start">
-                      <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "white" }}>Primary</button>
+                      <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--primary))", color: colors["--primary"] ? `hsl(${fgForBg(colors["--primary"])})` : "hsl(var(--primary-foreground))" }}>Primary</button>
                       <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</button>
                       <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}>Outlined</button>
                       <button className="px-4 py-2 rounded-lg font-semibold text-sm transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))" }}>Ghost</button>

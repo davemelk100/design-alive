@@ -32,7 +32,7 @@ const MobileTrayMenu: React.FC = () => {
     <>
       {/* Mobile Bottom Navigation */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t" style={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}>
-        <div className="flex items-center justify-between w-full px-2 py-2">
+        <div className="flex items-center justify-evenly w-full px-2 py-2">
           {[
             { id: "home", label: "Home", route: "/portfolio" },
             { id: "writing", label: "Studies & Articles", route: "/case-studies" },
@@ -73,7 +73,7 @@ const MobileTrayMenu: React.FC = () => {
                   );
                   return getNavIcon(item.id);
                 })()}
-                <span className="text-xs font-medium">{item.label}</span>
+                <span className="text-xs font-medium text-center">{item.label}</span>
               </Link>
             );
           })}

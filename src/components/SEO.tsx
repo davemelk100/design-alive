@@ -13,6 +13,7 @@ interface SEOProps {
   url?: string;
   type?: string;
   jsonLd?: Record<string, unknown>;
+  preloadImage?: string;
 }
 
 export default function SEO({
@@ -22,6 +23,7 @@ export default function SEO({
   url,
   type = "website",
   jsonLd,
+  preloadImage,
 }: SEOProps) {
   const fullTitle = title ? `${title} | Dave Melkonian` : DEFAULT_TITLE;
   const fullUrl = url ? `${SITE_URL}${url}` : SITE_URL;
@@ -45,6 +47,10 @@ export default function SEO({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImage} />
+
+      {preloadImage && (
+        <link rel="preload" as="image" href={preloadImage} />
+      )}
 
       {jsonLd && (
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>

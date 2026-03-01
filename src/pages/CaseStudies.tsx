@@ -119,7 +119,7 @@ export function CaseStudiesContent() {
             return (
               <>
                 <svg
-                  className="w-full block"
+                  className="w-full hidden md:block"
                   style={{ height: gap, marginTop: 2 }}
                   aria-hidden="true"
                 >
@@ -144,7 +144,7 @@ export function CaseStudiesContent() {
                       `L 0,${gap}`,
                       `Z`,
                     ].join(' ')}
-                    fill="hsl(var(--border))"
+                    fill="hsl(var(--brand) / 0.1)"
                   />
                   {/* Notch stem gradient */}
                   <rect
@@ -160,11 +160,8 @@ export function CaseStudiesContent() {
           })()}
           {/* Title panel connected to rail */}
           {activeStudyData && (
-            <div
-              className="rounded-xl px-6 py-4"
-              style={{ backgroundColor: "hsl(var(--border))" }}
-            >
-              <h2 className="font-bold title-font leading-tight text-foreground mb-1">
+            <div className="rounded-xl px-6 py-4 bg-brand-dynamic/10 mt-2 md:mt-0">
+              <h2 className="font-bold title-font leading-tight text-brand-dynamic mb-1">
                 {activeStudyData.title}
               </h2>
               <p className="text-foreground/70 text-sm">
@@ -340,7 +337,7 @@ export function CaseStudiesContent() {
                   <li>Section 508 mapping references</li>
                 </ul>
 
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     Developers were given working, compliant examples instead of abstract rules.
                   </p>
@@ -402,7 +399,7 @@ export function CaseStudiesContent() {
                   <li>Compliance response language for bids</li>
                   <li>Internal accessibility playbooks</li>
                 </ul>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     Delta Dental could now respond to RFPs with defensible, documented standards backed by implementation evidence. Accessibility shifted from uncertainty to institutional capability.
                   </p>
@@ -482,7 +479,7 @@ export function CaseStudiesContent() {
                   <li>Embed governance into enterprise workflows</li>
                   <li>Enable revenue opportunities through compliance readiness</li>
                 </ul>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground/80 leading-relaxed">
                     Delta Dental encountered compliance requirements.
                   </p>
@@ -523,7 +520,7 @@ export function CaseStudiesContent() {
                 <p className="text-foreground/80 leading-relaxed mb-3">
                   The opportunity required more than adding AI to an existing interface. It required designing a real time AI interaction model that users could trust in high stakes environments such as healthcare and government interpretation.
                 </p>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     I led the UX and front end architecture from concept through production.
                   </p>
@@ -574,7 +571,7 @@ export function CaseStudiesContent() {
               {/* Phase 1 */}
               <div>
                 <h3 className="font-semibold mb-3 text-foreground title-font">Phase 1: Defining the AI Interaction Model</h3>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium italic">
                     AI features must be designed around human workflow, not technical capability.
                   </p>
@@ -666,7 +663,7 @@ export function CaseStudiesContent() {
                   <li>Validate accessibility patterns</li>
                   <li>Debug asynchronous streaming behavior</li>
                 </ul>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     Cursor's AI co-pilot allowed me to iterate on architecture faster while maintaining strict control over implementation quality. It functioned as an augmentation tool rather than an automation crutch.
                   </p>
@@ -706,7 +703,7 @@ export function CaseStudiesContent() {
                   <li>Allow user controlled vocabulary overrides</li>
                   <li>Maintain clarity under rapid update conditions</li>
                 </ul>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     Trust was treated as a design requirement, not a secondary feature.
                   </p>
@@ -832,7 +829,7 @@ export function CaseStudiesContent() {
               {/* Why This Work Matters */}
               <div>
                 <h3 className="font-semibold mb-3 text-foreground title-font">Why This Work Matters</h3>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium italic">
                     AI integration without thoughtful UX creates complexity and distrust.
                   </p>
@@ -845,7 +842,7 @@ export function CaseStudiesContent() {
                   <li>Align design, engineering, and business strategy</li>
                   <li>Deliver production ready AI experiences in regulated industries</li>
                 </ul>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground/80 leading-relaxed">
                     The result was not simply AI integration.
                   </p>
@@ -885,7 +882,7 @@ export function CaseStudiesContent() {
                 <p className="text-foreground/80 leading-relaxed mb-3">
                   Teams were solving the same user testing problem repeatedly, but with slightly different implementations.
                 </p>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     The inefficiency was not in research itself. It was in the lack of a shared testing architecture.
                   </p>
@@ -967,7 +964,7 @@ export function CaseStudiesContent() {
                 <p className="text-foreground/80 leading-relaxed mb-3">
                   This ensured that regardless of product theme or purpose, the underlying data model remained consistent.
                 </p>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     The UI adapts. The data structure remains stable.
                   </p>
@@ -995,7 +992,7 @@ export function CaseStudiesContent() {
                   <li>Structured input zones</li>
                   <li>Consistent reporting layout</li>
                 </ul>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     Predictability was treated as a design principle. Users should not relearn layout behavior when themes change.
                   </p>
@@ -1053,7 +1050,7 @@ export function CaseStudiesContent() {
                   <li>Reduced interpretation effort</li>
                   <li>Standardized executive summaries</li>
                 </ul>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     The reporting system becomes a shared language between teams.
                   </p>
@@ -1191,7 +1188,7 @@ export function CaseStudiesContent() {
                   <li>Maintain brand flexibility</li>
                   <li>Preserve layout predictability</li>
                 </ul>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     It reflects systems thinking at both UX and engineering levels.
                   </p>
@@ -1220,7 +1217,7 @@ export function CaseStudiesContent() {
                 <p className="text-foreground/80 leading-relaxed mb-3">
                   I led the design and development of an AI-augmented inventory management system tightly integrated with their existing Customer Relationship Management (CRM), transforming disconnected tools into a cohesive, scalable operational backbone.
                 </p>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium italic">
                     How do you unify siloed systems, automate manual processes, and introduce AI-powered insights without disrupting active operations?
                   </p>
@@ -1272,7 +1269,7 @@ export function CaseStudiesContent() {
                 <p className="text-foreground/80 leading-relaxed mb-3">
                   React, TypeScript, Next.js, Tailwind CSS, FastAPI (Python), PostgreSQL (Supabase), JWT Authentication, Supabase Row Level Security, Supabase Realtime, Edge Functions (Deno), Docker, Railway, OpenAI GPT-4o-mini, Groq API, Sentence Transformers, pgvector.
                 </p>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground font-medium">
                     AI tooling & development workflow included Cursor IDE with the Cursor Co-pilot for accelerated coding, prototyping, and iterative refinement.
                   </p>
@@ -1419,7 +1416,7 @@ export function CaseStudiesContent() {
                   <li>Real-time sync across systems reduced operational drag more than any single dashboard feature</li>
                   <li>Secure defaults (JWT + RLS) prevent costly data exposure while enabling fine-grained control</li>
                 </ul>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground/80 leading-relaxed">
                     The project is not publicly accessible due to client privacy.
                   </p>
@@ -1665,7 +1662,7 @@ export function CaseStudiesContent() {
                   <li>Tools don't fix process problems. Frameworks and habits do.</li>
                   <li>Continuous improvement isn't optional. It's what makes delivery discipline sustainable.</li>
                 </ul>
-                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 sm:p-6 my-4">
+                <div className="my-4">
                   <p className="text-foreground/80 leading-relaxed">
                     This case study synthesizes work from multiple enterprise engagements (Meridian Health Plan, Optum/UnitedHealthcare, Dewpoint Inc.). Specific artifacts and internal dashboards are proprietary to each organization.
                   </p>

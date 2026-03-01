@@ -11,7 +11,7 @@ export default function DesignSystemAbout() {
           <SectionHeader title="How It Works" subtitle="" className="" />
           <div className="mt-6">
             {content.designSystem.specsContent.split("\n\n").map((paragraph, i) => (
-              <p key={i} className="text-sm mb-4" style={{ color: "hsl(var(--muted-foreground))" }}>
+              <p key={i} className="text-sm mb-4" style={{ color: "hsl(var(--foreground))" }}>
                 {paragraph}
               </p>
             ))}

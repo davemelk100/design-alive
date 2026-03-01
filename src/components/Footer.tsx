@@ -93,7 +93,7 @@ export const Footer = () => {
           <button
             type="submit"
             disabled={contactStatus === "sending"}
-            className="px-6 py-3 rounded-md font-medium hover:brightness-[0.85] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="h-12 px-6 rounded-lg text-xs font-semibold hover:opacity-80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1"
             style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}
           >
             {contactStatus === "sending"
