@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useRef } from "react";
+import React, { Suspense, useState, useRef, useEffect, useCallback } from "react";
 import type { AxeResults } from "axe-core";
 import type { DesignSystemEditorProps } from "./types";
 import { useColorState } from "./hooks/useColorState";
@@ -19,7 +19,21 @@ import {
   fgForBg,
   persistContrastFixes,
   saveContrastCorrection,
+  CARD_STYLE_KEY,
+  DEFAULT_CARD_STYLE,
+  CARD_PRESETS,
+  applyCardStyle,
+  applyStoredCardStyle,
+  removeCardStyleProperties,
+  TYPOGRAPHY_KEY,
+  DEFAULT_TYPOGRAPHY,
+  TYPOGRAPHY_PRESETS,
+  FONT_FAMILY_OPTIONS,
+  applyTypography,
+  applyStoredTypography,
+  removeTypographyProperties,
 } from "./utils/themeUtils";
+import type { CardStyleState, TypographyState } from "./utils/themeUtils";
 import "./styles/editor.css";
 
 const LazyLinkedin = React.lazy(() =>
@@ -231,10 +245,74 @@ export function DesignSystemEditor({
   const [violationIndex, setViolationIndex] = useState(0);
   const [harmonySchemeIndex, setHarmonySchemeIndex] = useState(-1);
   const [shuffleOpen, setShuffleOpen] = useState(false);
+  const [cardStyle, setCardStyle] = useState<CardStyleState>(() => {
+    const saved = storage.get<CardStyleState>(CARD_STYLE_KEY);
+    return saved || { ...DEFAULT_CARD_STYLE };
+  });
+  const [cardCssVisible, setCardCssVisible] = useState(false);
+  const [cardCssCopied, setCardCssCopied] = useState(false);
+  const [typographyState, setTypographyState] = useState<TypographyState>(() => {
+    const saved = storage.get<TypographyState>(TYPOGRAPHY_KEY);
+    return saved || { ...DEFAULT_TYPOGRAPHY };
+  });
+  const [typoCssVisible, setTypoCssVisible] = useState(false);
+  const [typoCssCopied, setTypoCssCopied] = useState(false);
 
   const fireOnChange = (newColors: Record<string, string>) => {
     onChange?.(newColors);
   };
+
+  useEffect(() => {
+    applyCardStyle(cardStyle, colors);
+  }, [cardStyle, colors]);
+
+  useEffect(() => {
+    applyStoredCardStyle(colors);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const updateCardStyle = useCallback((patch: Partial<CardStyleState>) => {
+    setCardStyle(prev => {
+      const next = { ...prev, ...patch };
+      if (patch.preset === undefined && prev.preset !== "custom") {
+        next.preset = "custom";
+      }
+      return next;
+    });
+  }, []);
+
+  const selectCardPreset = useCallback((presetKey: string) => {
+    const preset = CARD_PRESETS[presetKey];
+    if (preset) {
+      setCardStyle(prev => ({ ...prev, ...preset }));
+    }
+  }, []);
+
+  useEffect(() => {
+    applyTypography(typographyState);
+  }, [typographyState]);
+
+  useEffect(() => {
+    applyStoredTypography();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const updateTypography = useCallback((patch: Partial<TypographyState>) => {
+    setTypographyState(prev => {
+      const next = { ...prev, ...patch };
+      if (patch.preset === undefined && prev.preset !== "custom") {
+        next.preset = "custom";
+      }
+      return next;
+    });
+  }, []);
+
+  const selectTypoPreset = useCallback((presetKey: string) => {
+    const preset = TYPOGRAPHY_PRESETS[presetKey];
+    if (preset) {
+      setTypographyState({ ...preset });
+    }
+  }, []);
 
   const handleColorChange = (key: string, hex: string) => {
     const lower = hex.toLowerCase();
@@ -299,6 +377,24 @@ export function DesignSystemEditor({
       const val = colors[key];
       if (val) css += `  ${key}: ${val};\n`;
     });
+    css += "\n  /* Card Style */\n";
+    css += `  --card-radius: ${cardStyle.borderRadius}px;\n`;
+    const shadowVal =
+      cardStyle.shadowBlur === 0 && cardStyle.shadowOffsetX === 0 && cardStyle.shadowOffsetY === 0 && cardStyle.shadowSpread === 0
+        ? "none"
+        : `${cardStyle.shadowOffsetX}px ${cardStyle.shadowOffsetY}px ${cardStyle.shadowBlur}px ${cardStyle.shadowSpread}px ${cardStyle.shadowColor}`;
+    css += `  --card-shadow: ${shadowVal};\n`;
+    css += `  --card-border: ${cardStyle.borderWidth > 0 ? `${cardStyle.borderWidth}px solid hsl(var(--border))` : "none"};\n`;
+    css += `  --card-backdrop: ${cardStyle.backdropBlur > 0 ? `blur(${cardStyle.backdropBlur}px)` : "none"};\n`;
+    css += "\n  /* Typography */\n";
+    css += `  --font-heading: ${typographyState.headingFamily};\n`;
+    css += `  --font-body: ${typographyState.bodyFamily};\n`;
+    css += `  --font-size-base: ${typographyState.baseFontSize}px;\n`;
+    css += `  --font-weight-heading: ${typographyState.headingWeight};\n`;
+    css += `  --font-weight-body: ${typographyState.bodyWeight};\n`;
+    css += `  --line-height: ${typographyState.lineHeight};\n`;
+    css += `  --letter-spacing: ${typographyState.letterSpacing}em;\n`;
+    css += `  --letter-spacing-heading: ${typographyState.headingLetterSpacing}em;\n`;
     css += "}\n";
 
     let tw = "\n// tailwind.config.ts → theme.extend.colors\ncolors: {\n";
@@ -396,6 +492,12 @@ export function DesignSystemEditor({
     storage.remove(THEME_COLORS_KEY);
     storage.remove(PENDING_COLORS_KEY);
     storage.remove(COLOR_HISTORY_KEY);
+    storage.remove(CARD_STYLE_KEY);
+    removeCardStyleProperties();
+    setCardStyle({ ...DEFAULT_CARD_STYLE });
+    storage.remove(TYPOGRAPHY_KEY);
+    removeTypographyProperties();
+    setTypographyState({ ...DEFAULT_TYPOGRAPHY });
     readCurrentColors();
     setGeneratedCode(null);
     setPrStatus('idle');
@@ -656,7 +758,7 @@ export function DesignSystemEditor({
   return (
     <div className={`ds-editor${className ? ` ${className}` : ''}`}>
       <section className="pt-4 sm:pt-6 lg:pt-8 pb-2 sm:pb-3 lg:pb-4 xl:pb-6 relative">
-        <div className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* Title and description */}
           <div className="w-full mb-4">
             <h2 className="font-light pt-4 pb-3 title-font" style={{ color: "hsl(var(--foreground))" }}>NEW - Live Design System!</h2>
@@ -910,138 +1012,34 @@ export function DesignSystemEditor({
             </div>
           )}
 
-          {/* Hero colors row */}
-          {(() => {
-            const heroKeys = [
-              { key: "--brand", label: "Brand" },
-              { key: "--secondary", label: "Secondary" },
-              { key: "--accent", label: "Tertiary" },
-              { key: "--background", label: "Background" },
-              { key: "--foreground", label: "Foreground" },
-              { key: "--primary", label: "Primary" },
-            ];
-            const renderHeroSwatch = ({ key, label: displayLabel }: { key: string; label: string }) => {
-              const inputId = `home-color-input-${key}`;
-              return (
-                <div
-                  key={key}
-                  data-color-key={key}
-                  className="relative text-left group cursor-pointer"
-                >
-                  <div
-                    className="relative w-full h-[100px] rounded-lg transition-all overflow-hidden shadow-md group-hover:shadow-lg"
-                    onClick={() => {
-                      const input = document.getElementById(inputId) as HTMLInputElement | null;
-                      input?.click();
-                    }}
-                  >
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        backgroundColor: colors[key]
-                          ? `hsl(${colors[key]})`
-                          : undefined,
-                      }}
-                    />
-                    <div className="absolute inset-0">
-                      {(() => {
-                        const hsl = colors[key];
-                        const bgHsl = hsl || "0 0% 50%";
-                        const whiteContrast = contrastRatio("0 0% 100%", bgHsl);
-                        const blackContrast = contrastRatio("0 0% 0%", bgHsl);
-                        const useWhite = whiteContrast >= 4.5 && blackContrast < 4.5
-                          ? true
-                          : blackContrast >= 4.5 && whiteContrast < 4.5
-                            ? false
-                            : whiteContrast >= blackContrast;
-                        const textColor = useWhite ? "#ffffff" : "#000000";
-                        const hexCode = colors[key] ? hslStringToHex(colors[key]) : "#000000";
-                        return (
-                          <div className="absolute inset-0 flex items-center justify-center min-w-0">
-                            <p className="text-[14px] font-light truncate" style={{ color: textColor }}>
-                              {hexCode}
-                            </p>
-                          </div>
-                        );
-                      })()}
-
-                      <span className="absolute top-1 right-1 bg-white/90 dark:bg-black/70 text-gray-700 dark:text-gray-200 w-6 h-6 rounded-full shadow flex items-center justify-center flex-shrink-0 pointer-events-none">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                        </svg>
-                      </span>
-                      <input
-                        id={inputId}
-                        type="color"
-                        aria-label={`Select ${displayLabel} color`}
-                        value={colors[key] ? hslStringToHex(colors[key]) : "#000000"}
-                        onChange={(e) => handleColorChange(key, e.target.value)}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                      />
-                    </div>
-                  </div>
-                  {key === "--brand" && (
-                    <button
-                      type="button"
-                      aria-label={lockedKeys.has(key) ? `Unlock ${displayLabel}` : `Lock ${displayLabel}`}
-                      className="absolute z-20 flex items-center justify-center cursor-pointer"
-                      style={{ top: "-6px", left: "-6px", width: "32px", height: "32px", minWidth: "32px", minHeight: "32px", padding: 0 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        setLockedKeys(prev => {
-                          const next = new Set(prev);
-                          if (next.has(key)) next.delete(key);
-                          else next.add(key);
-                          return next;
-                        });
-                      }}
-                    >
-                      {lockedKeys.has(key) ? (
-                        <svg style={{ width: "18px", height: "18px", color: colors[key] ? `hsl(${fgForBg(colors[key])})` : undefined }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                        </svg>
-                      ) : (
-                        <svg className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ width: "18px", height: "18px", color: colors[key] ? `hsl(${fgForBg(colors[key])})` : undefined }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                          <path d="M7 11V7a5 5 0 0 1 9.9-1" />
-                        </svg>
-                      )}
-                    </button>
-                  )}
-                  <p className="hidden md:block text-[14px] font-light text-[color:hsl(var(--foreground))] truncate mt-1">
-                    {displayLabel}
-                  </p>
-                </div>
-              );
-            };
-            return (
-              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-4 mb-4" data-axe-exclude>
-                {heroKeys.map((v) => renderHeroSwatch(v))}
-              </div>
-            );
-          })()}
-
           <div className="flex flex-col md:flex-row md:items-stretch gap-4 md:gap-6 lg:gap-10">
-            {/* Color swatches (non-hero) */}
-            <div className="min-w-0 rounded-lg p-2 md:p-4">
+            {/* All color swatches */}
+            <div className="min-w-0 rounded-lg p-2 md:p-4" data-axe-exclude>
               <div className="flex items-center justify-between mb-2 md:mb-3">
                 <p className="text-[17px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>
                   Colors
                 </p>
               </div>
               <div className="flex flex-wrap gap-1.5 md:grid md:gap-1.5" style={{ gridTemplateColumns: "repeat(4, 76px)" }}>
-                {COLOR_SWATCHES.filter(v => !["--brand", "--secondary", "--accent", "--background", "--foreground", "--primary"].includes(v.key)).map(({ key, label }) => {
+                {COLOR_SWATCHES.map(({ key, label }) => {
                   const hsl = colors[key];
                   const bgHsl = hsl || "0 0% 50%";
                   const wc = contrastRatio("0 0% 100%", bgHsl);
                   const bc = contrastRatio("0 0% 0%", bgHsl);
                   const swatchTextColor = (wc >= bc) ? "#ffffff" : "#000000";
                   const hexCode = hsl ? hslStringToHex(hsl) : "";
+                  const isEditable = ["--brand", "--secondary", "--accent", "--background", "--foreground", "--primary"].includes(key);
+                  const inputId = `home-color-input-${key}`;
                   return (
-                  <div key={key} data-color-key={key} className="text-left">
-                    <div className="relative w-[76px] h-[76px] rounded-md mb-1 overflow-hidden flex items-center justify-center shadow-md">
+                  <div key={key} data-color-key={key} className={`text-left${isEditable ? ' relative group cursor-pointer' : ''}`}>
+                    <div
+                      className={`relative w-[76px] h-[76px] rounded-md mb-1 overflow-hidden flex items-center justify-center${isEditable ? ' transition-shadow hover:shadow-lg' : ' shadow-md'}`}
+                      style={isEditable ? { boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" } : undefined}
+                      onClick={isEditable ? () => {
+                        const input = document.getElementById(inputId) as HTMLInputElement | null;
+                        input?.click();
+                      } : undefined}
+                    >
                       <div
                         className="absolute inset-0"
                         style={{
@@ -1051,8 +1049,55 @@ export function DesignSystemEditor({
                         }}
                       />
                       <span className="relative text-[14px] font-light truncate" style={{ color: swatchTextColor }}>{hexCode}</span>
+                      {isEditable && (
+                        <>
+                          <span className="absolute top-1 right-1 w-5 h-5 flex items-center justify-center flex-shrink-0 pointer-events-none" style={{ color: swatchTextColor }}>
+                            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                          </span>
+                          <input
+                            id={inputId}
+                            type="color"
+                            aria-label={`Select ${label} color`}
+                            value={colors[key] ? hslStringToHex(colors[key]) : "#000000"}
+                            onChange={(e) => handleColorChange(key, e.target.value)}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          />
+                        </>
+                      )}
                     </div>
-                    <p className="hidden md:block text-[14px] font-light text-[color:hsl(var(--foreground))] truncate">
+                    {key === "--brand" && (
+                      <button
+                        type="button"
+                        aria-label={lockedKeys.has(key) ? `Unlock ${label}` : `Lock ${label}`}
+                        className="absolute z-20 flex items-center justify-center cursor-pointer"
+                        style={{ top: "-6px", left: "-6px", width: "28px", height: "28px", minWidth: "28px", minHeight: "28px", padding: 0 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          setLockedKeys(prev => {
+                            const next = new Set(prev);
+                            if (next.has(key)) next.delete(key);
+                            else next.add(key);
+                            return next;
+                          });
+                        }}
+                      >
+                        {lockedKeys.has(key) ? (
+                          <svg style={{ width: "16px", height: "16px", color: colors[key] ? `hsl(${fgForBg(colors[key])})` : undefined }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                          </svg>
+                        ) : (
+                          <svg className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ width: "16px", height: "16px", color: colors[key] ? `hsl(${fgForBg(colors[key])})` : undefined }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+                          </svg>
+                        )}
+                      </button>
+                    )}
+                    <p className="hidden md:block text-[14px] font-light text-[color:hsl(var(--foreground))] truncate" style={{ maxWidth: "76px" }}>
                       {label}
                     </p>
                   </div>
@@ -1084,14 +1129,14 @@ export function DesignSystemEditor({
                   <div className="min-w-0 space-y-2">
                     <p className="text-[17px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Badges</p>
                     <div className="flex flex-row flex-wrap gap-1.5 items-start">
-                      <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "white" }}>Brand</span>
-                      <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</span>
-                      <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}>Muted</span>
-                      <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}>Accent</span>
-                      <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Destructive</span>
-                      <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))" }}>Success</span>
-                      <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))" }}>Warning</span>
-                      <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-full text-[17px] font-light border border-border max-w-full truncate" style={{ color: "hsl(var(--foreground))" }}>Outlined</span>
+                      <span className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "white" }}>Brand</span>
+                      <span className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</span>
+                      <span className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}>Muted</span>
+                      <span className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--accent))", color: "hsl(var(--accent-foreground))" }}>Accent</span>
+                      <span className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Destructive</span>
+                      <span className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))" }}>Success</span>
+                      <span className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[17px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))" }}>Warning</span>
+                      <span className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[17px] font-light border border-border max-w-full truncate" style={{ color: "hsl(var(--foreground))" }}>Outlined</span>
                     </div>
                   </div>
                 </div>
@@ -1100,14 +1145,14 @@ export function DesignSystemEditor({
                 <div className="flex-1 min-w-0 space-y-2">
                   <p className="text-[17px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Buttons</p>
                   <div className="flex flex-row flex-wrap gap-1.5 items-start">
-                    <button className="px-4 py-2 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--primary))", color: colors["--primary"] ? `hsl(${fgForBg(colors["--primary"])})` : "hsl(var(--primary-foreground))" }}>Primary</button>
-                    <button className="px-4 py-2 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))" }}>Secondary</button>
-                    <button className="px-4 py-2 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))" }}>Outlined</button>
-                    <button className="px-4 py-2 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))" }}>Ghost</button>
-                    <button className="px-4 py-2 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}>Destructive</button>
-                    <button className="px-4 py-2 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}>Muted</button>
-                    <button className="px-4 py-2 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))" }}>Success</button>
-                    <button className="px-4 py-2 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))" }}>Warning</button>
+                    <button className="h-12 px-3 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--primary))", color: colors["--primary"] ? `hsl(${fgForBg(colors["--primary"])})` : "hsl(var(--primary-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Primary</button>
+                    <button className="h-12 px-3 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Secondary</button>
+                    <button className="h-12 px-3 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Outlined</button>
+                    <button className="h-12 px-3 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Ghost</button>
+                    <button className="h-12 px-3 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Destructive</button>
+                    <button className="h-12 px-3 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Muted</button>
+                    <button className="h-12 px-3 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Success</button>
+                    <button className="h-12 px-3 rounded-lg font-light text-[17px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Warning</button>
                   </div>
                 </div>
               </div>
@@ -1126,6 +1171,388 @@ export function DesignSystemEditor({
                   </div>
                 ))}
               </Suspense>
+            </div>
+          </div>
+
+          {/* Card Style section */}
+          <div className="min-w-0 p-2 md:p-4 space-y-3">
+            <p className="text-[17px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Card Style</p>
+
+            {/* Preset buttons */}
+            <div className="flex flex-wrap gap-2 sm:gap-4">
+              {(["liquid-glass", "solid", "gradient", "border-only"] as const).map((key) => {
+                const labels: Record<string, string> = { "liquid-glass": "Liquid Glass", solid: "Solid Color", gradient: "Gradient", "border-only": "Border Only" };
+                const active = cardStyle.preset === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => selectCardPreset(key)}
+                    className="h-12 px-3 text-[17px] font-light rounded-lg transition-colors hover:opacity-80"
+                    style={active
+                      ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                      : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                    }
+                  >
+                    {labels[key]}
+                  </button>
+                );
+              })}
+              <button
+                onClick={() => setCardCssVisible(!cardCssVisible)}
+                className="h-12 px-3 text-[17px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                style={{ backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}
+              >
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                <span className="truncate"><span className="sm:hidden">{cardCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{cardCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
+              </button>
+            </div>
+
+            {/* Card CSS output */}
+            {cardCssVisible && (() => {
+              const shadowVal =
+                cardStyle.shadowBlur === 0 && cardStyle.shadowOffsetX === 0 && cardStyle.shadowOffsetY === 0 && cardStyle.shadowSpread === 0
+                  ? "none"
+                  : `${cardStyle.shadowOffsetX}px ${cardStyle.shadowOffsetY}px ${cardStyle.shadowBlur}px ${cardStyle.shadowSpread}px ${cardStyle.shadowColor}`;
+              const cardCss = `:root {\n  --card-radius: ${cardStyle.borderRadius}px;\n  --card-shadow: ${shadowVal};\n  --card-border: ${cardStyle.borderWidth > 0 ? `${cardStyle.borderWidth}px solid hsl(var(--border))` : "none"};\n  --card-backdrop: ${cardStyle.backdropBlur > 0 ? `blur(${cardStyle.backdropBlur}px)` : "none"};\n}`;
+              return (
+                <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
+                  <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
+                    <span className="text-[17px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Card Style CSS</span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(cardCss);
+                          setCardCssCopied(true);
+                          setTimeout(() => setCardCssCopied(false), 2000);
+                        }}
+                        className="px-2 py-0.5 text-[17px] font-light rounded-lg transition-colors hover:opacity-80"
+                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                      >
+                        {cardCssCopied ? "Copied!" : "Copy"}
+                      </button>
+                      <button
+                        onClick={() => setCardCssVisible(false)}
+                        className="px-2 py-0.5 text-[17px] font-light rounded-lg transition-colors hover:opacity-80"
+                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                  <pre className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono" style={{ color: "hsl(var(--card-foreground))" }}>
+                    <code>{cardCss}</code>
+                  </pre>
+                </div>
+              );
+            })()}
+
+            {/* Controls + Preview */}
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+              {/* Slider controls */}
+              <div className="flex-1 min-w-0 space-y-3">
+                {/* Shadow */}
+                <div className="space-y-1.5">
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Shadow</p>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Y Offset: {cardStyle.shadowOffsetY}px</span>
+                    <input type="range" min={0} max={30} value={cardStyle.shadowOffsetY} onChange={e => updateCardStyle({ shadowOffsetY: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Blur: {cardStyle.shadowBlur}px</span>
+                    <input type="range" min={0} max={50} value={cardStyle.shadowBlur} onChange={e => updateCardStyle({ shadowBlur: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Spread: {cardStyle.shadowSpread}px</span>
+                    <input type="range" min={-10} max={20} value={cardStyle.shadowSpread} onChange={e => updateCardStyle({ shadowSpread: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                </div>
+                {/* Shape */}
+                <div className="space-y-1.5">
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Shape</p>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Border Radius: {cardStyle.borderRadius}px</span>
+                    <input type="range" min={0} max={40} value={cardStyle.borderRadius} onChange={e => updateCardStyle({ borderRadius: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Border Width: {cardStyle.borderWidth}px</span>
+                    <input type="range" min={0} max={4} value={cardStyle.borderWidth} onChange={e => updateCardStyle({ borderWidth: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                </div>
+                {/* Background */}
+                <div className="space-y-1.5">
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Background</p>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Opacity: {Math.round(cardStyle.bgOpacity * 100)}%</span>
+                    <input type="range" min={0} max={100} value={Math.round(cardStyle.bgOpacity * 100)} onChange={e => updateCardStyle({ bgOpacity: Number(e.target.value) / 100 })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Backdrop Blur: {cardStyle.backdropBlur}px</span>
+                    <input type="range" min={0} max={30} value={cardStyle.backdropBlur} onChange={e => updateCardStyle({ backdropBlur: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                </div>
+              </div>
+
+              {/* Live preview */}
+              <div className="flex-1 min-w-0 flex items-center justify-center">
+                {(() => {
+                  // Compute the effective text color based on what the card bg actually looks like
+                  const bgHsl = colors["--background"] || "0 0% 100%";
+                  const brandHsl = colors["--brand"] || "220 70% 50%";
+
+                  let previewTextColor: string;
+                  let previewSubtextColor: string;
+
+                  if (cardStyle.bgType === "gradient") {
+                    // Gradient bg: use text that contrasts with brand (the dominant gradient stop)
+                    previewTextColor = `hsl(${fgForBg(brandHsl)})`;
+                    previewSubtextColor = previewTextColor;
+                  } else if (cardStyle.bgType === "transparent" || cardStyle.bgOpacity < 0.4) {
+                    // Transparent or very low opacity: text sits on the page background
+                    previewTextColor = `hsl(${fgForBg(bgHsl)})`;
+                    previewSubtextColor = previewTextColor;
+                  } else {
+                    // Solid or semi-opaque: card-foreground works
+                    previewTextColor = "hsl(var(--card-foreground))";
+                    previewSubtextColor = "hsl(var(--muted-foreground))";
+                  }
+
+                  return (
+                    <div
+                      className="relative w-full max-w-[280px] overflow-hidden"
+                      style={{
+                        borderRadius: `${cardStyle.borderRadius}px`,
+                        background: "repeating-linear-gradient(45deg, hsl(var(--muted)) 0px, hsl(var(--muted)) 10px, hsl(var(--background)) 10px, hsl(var(--background)) 20px)",
+                        padding: "2px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          borderRadius: `${cardStyle.borderRadius}px`,
+                          boxShadow: cardStyle.shadowBlur === 0 && cardStyle.shadowOffsetX === 0 && cardStyle.shadowOffsetY === 0 && cardStyle.shadowSpread === 0
+                            ? "none"
+                            : `${cardStyle.shadowOffsetX}px ${cardStyle.shadowOffsetY}px ${cardStyle.shadowBlur}px ${cardStyle.shadowSpread}px ${cardStyle.shadowColor}`,
+                          background: cardStyle.bgType === "transparent"
+                            ? "transparent"
+                            : cardStyle.bgType === "gradient"
+                              ? `linear-gradient(${cardStyle.bgGradientAngle}deg, hsl(${colors["--brand"] || "220 70% 50%"}), hsl(${colors["--secondary"] || "220 30% 60%"}), hsl(${colors["--accent"] || "220 50% 55%"}))`
+                              : cardStyle.bgOpacity < 1
+                                ? (() => { const p = (colors["--card"] || "0 0% 100%").trim().split(/\s+/); return p.length >= 3 ? `hsla(${p[0]}, ${p[1]}, ${p[2]}, ${cardStyle.bgOpacity})` : `hsl(${colors["--card"] || "0 0% 100%"})`; })()
+                                : `hsl(${colors["--card"] || "0 0% 100%"})`,
+                          border: cardStyle.borderWidth > 0 ? `${cardStyle.borderWidth}px solid hsl(${colors["--border"] || "0 0% 80%"})` : "none",
+                          backdropFilter: cardStyle.backdropBlur > 0 ? `blur(${cardStyle.backdropBlur}px)` : "none",
+                          WebkitBackdropFilter: cardStyle.backdropBlur > 0 ? `blur(${cardStyle.backdropBlur}px)` : "none",
+                          padding: "20px",
+                        }}
+                      >
+                        <h4 className="text-[17px] font-light mb-1" style={{ color: previewTextColor }}>Card Title</h4>
+                        <p className="text-[14px] font-light mb-3" style={{ color: previewSubtextColor }}>This is a preview of your card style with customizable shadow, radius, and background.</p>
+                        <button
+                          className="h-9 px-3 text-[14px] font-light rounded-lg"
+                          style={{ backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff" }}
+                        >
+                          Action
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            </div>
+          </div>
+        {/* Typography section */}
+          <div className="min-w-0 p-2 md:p-4 space-y-3">
+            <p className="text-[17px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Typography</p>
+
+            {/* Preset buttons */}
+            <div className="flex flex-wrap gap-2 sm:gap-4">
+              {(["modern", "classic", "compact", "editorial"] as const).map((key) => {
+                const labels: Record<string, string> = { modern: "Modern", classic: "Classic", compact: "Compact", editorial: "Editorial" };
+                const active = typographyState.preset === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => selectTypoPreset(key)}
+                    className="h-12 px-3 text-[17px] font-light rounded-lg transition-colors hover:opacity-80"
+                    style={active
+                      ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                      : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                    }
+                  >
+                    {labels[key]}
+                  </button>
+                );
+              })}
+              <button
+                onClick={() => setTypoCssVisible(!typoCssVisible)}
+                className="h-12 px-3 text-[17px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                style={{ backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}
+              >
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                <span className="truncate"><span className="sm:hidden">{typoCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{typoCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
+              </button>
+            </div>
+
+            {/* Typography CSS output */}
+            {typoCssVisible && (() => {
+              const typoCss = `:root {\n  --font-heading: ${typographyState.headingFamily};\n  --font-body: ${typographyState.bodyFamily};\n  --font-size-base: ${typographyState.baseFontSize}px;\n  --font-weight-heading: ${typographyState.headingWeight};\n  --font-weight-body: ${typographyState.bodyWeight};\n  --line-height: ${typographyState.lineHeight};\n  --letter-spacing: ${typographyState.letterSpacing}em;\n  --letter-spacing-heading: ${typographyState.headingLetterSpacing}em;\n}`;
+              return (
+                <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
+                  <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
+                    <span className="text-[17px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Typography CSS</span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(typoCss);
+                          setTypoCssCopied(true);
+                          setTimeout(() => setTypoCssCopied(false), 2000);
+                        }}
+                        className="px-2 py-0.5 text-[17px] font-light rounded-lg transition-colors hover:opacity-80"
+                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                      >
+                        {typoCssCopied ? "Copied!" : "Copy"}
+                      </button>
+                      <button
+                        onClick={() => setTypoCssVisible(false)}
+                        className="px-2 py-0.5 text-[17px] font-light rounded-lg transition-colors hover:opacity-80"
+                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                  <pre className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono" style={{ color: "hsl(var(--card-foreground))" }}>
+                    <code>{typoCss}</code>
+                  </pre>
+                </div>
+              );
+            })()}
+
+            {/* Controls + Preview */}
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+              {/* Controls */}
+              <div className="flex-1 min-w-0 space-y-3">
+                {/* Fonts */}
+                <div className="space-y-1.5">
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Fonts</p>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Heading:</span>
+                    <select
+                      value={typographyState.headingFamily}
+                      onChange={e => updateTypography({ headingFamily: e.target.value })}
+                      className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
+                      style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                    >
+                      {FONT_FAMILY_OPTIONS.map(opt => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Body:</span>
+                    <select
+                      value={typographyState.bodyFamily}
+                      onChange={e => updateTypography({ bodyFamily: e.target.value })}
+                      className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
+                      style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                    >
+                      {FONT_FAMILY_OPTIONS.map(opt => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                {/* Size & Weight */}
+                <div className="space-y-1.5">
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Size & Weight</p>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Base Size: {typographyState.baseFontSize}px</span>
+                    <input type="range" min={14} max={22} value={typographyState.baseFontSize} onChange={e => updateTypography({ baseFontSize: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Heading Wt: {typographyState.headingWeight}</span>
+                    <input type="range" min={100} max={900} step={100} value={typographyState.headingWeight} onChange={e => updateTypography({ headingWeight: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Body Wt: {typographyState.bodyWeight}</span>
+                    <input type="range" min={100} max={900} step={100} value={typographyState.bodyWeight} onChange={e => updateTypography({ bodyWeight: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                </div>
+                {/* Spacing */}
+                <div className="space-y-1.5">
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Spacing</p>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Line Height: {typographyState.lineHeight.toFixed(2)}</span>
+                    <input type="range" min={100} max={200} step={5} value={Math.round(typographyState.lineHeight * 100)} onChange={e => updateTypography({ lineHeight: Number(e.target.value) / 100 })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Letter Sp: {typographyState.letterSpacing.toFixed(2)}em</span>
+                    <input type="range" min={-5} max={15} step={1} value={Math.round(typographyState.letterSpacing * 100)} onChange={e => updateTypography({ letterSpacing: Number(e.target.value) / 100 })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Heading Sp: {typographyState.headingLetterSpacing.toFixed(2)}em</span>
+                    <input type="range" min={-5} max={10} step={1} value={Math.round(typographyState.headingLetterSpacing * 100)} onChange={e => updateTypography({ headingLetterSpacing: Number(e.target.value) / 100 })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                </div>
+              </div>
+
+              {/* Live preview */}
+              <div className="flex-1 min-w-0 flex items-start justify-center pt-2">
+                <div
+                  className="w-full max-w-[320px] rounded-lg p-5 space-y-3"
+                  style={{
+                    backgroundColor: "hsl(var(--card))",
+                    color: "hsl(var(--card-foreground))",
+                    border: "1px solid hsl(var(--border))",
+                  }}
+                >
+                  <h3
+                    style={{
+                      fontFamily: typographyState.headingFamily,
+                      fontSize: `${Math.round(typographyState.baseFontSize * 1.75)}px`,
+                      fontWeight: typographyState.headingWeight,
+                      lineHeight: typographyState.lineHeight,
+                      letterSpacing: `${typographyState.headingLetterSpacing}em`,
+                    }}
+                  >
+                    Heading Text
+                  </h3>
+                  <h4
+                    style={{
+                      fontFamily: typographyState.headingFamily,
+                      fontSize: `${Math.round(typographyState.baseFontSize * 1.25)}px`,
+                      fontWeight: typographyState.headingWeight,
+                      lineHeight: typographyState.lineHeight,
+                      letterSpacing: `${typographyState.headingLetterSpacing}em`,
+                      color: "hsl(var(--muted-foreground))",
+                    }}
+                  >
+                    Subheading Text
+                  </h4>
+                  <p
+                    style={{
+                      fontFamily: typographyState.bodyFamily,
+                      fontSize: `${typographyState.baseFontSize}px`,
+                      fontWeight: typographyState.bodyWeight,
+                      lineHeight: typographyState.lineHeight,
+                      letterSpacing: `${typographyState.letterSpacing}em`,
+                    }}
+                  >
+                    Body text paragraph demonstrating the selected font family, size, weight, and spacing settings in real time.
+                  </p>
+                  <p
+                    style={{
+                      fontFamily: typographyState.bodyFamily,
+                      fontSize: `${Math.round(typographyState.baseFontSize * 0.8)}px`,
+                      fontWeight: typographyState.bodyWeight,
+                      lineHeight: typographyState.lineHeight,
+                      letterSpacing: `${typographyState.letterSpacing}em`,
+                      color: "hsl(var(--muted-foreground))",
+                    }}
+                  >
+                    Small / Caption text for secondary information and labels.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -655,6 +655,298 @@ export const generateRandomPalette = (
   return result;
 };
 
+export const CARD_STYLE_KEY = "ds-card-style";
+
+export interface CardStyleState {
+  preset: "liquid-glass" | "solid" | "gradient" | "border-only" | "custom";
+  shadowOffsetX: number;
+  shadowOffsetY: number;
+  shadowBlur: number;
+  shadowSpread: number;
+  shadowColor: string;
+  borderRadius: number;
+  bgType: "solid" | "gradient" | "transparent";
+  bgGradientAngle: number;
+  borderWidth: number;
+  backdropBlur: number;
+  bgOpacity: number;
+}
+
+export const DEFAULT_CARD_STYLE: CardStyleState = {
+  preset: "solid",
+  shadowOffsetX: 0,
+  shadowOffsetY: 2,
+  shadowBlur: 8,
+  shadowSpread: 0,
+  shadowColor: "rgba(0,0,0,0.1)",
+  borderRadius: 12,
+  bgType: "solid",
+  bgGradientAngle: 135,
+  borderWidth: 0,
+  backdropBlur: 0,
+  bgOpacity: 1,
+};
+
+export const CARD_PRESETS: Record<string, Partial<CardStyleState>> = {
+  "liquid-glass": {
+    preset: "liquid-glass",
+    shadowOffsetX: 0,
+    shadowOffsetY: 4,
+    shadowBlur: 16,
+    shadowSpread: 0,
+    shadowColor: "rgba(0,0,0,0.08)",
+    borderRadius: 16,
+    bgType: "solid",
+    bgGradientAngle: 135,
+    borderWidth: 1,
+    backdropBlur: 16,
+    bgOpacity: 0.25,
+  },
+  solid: {
+    preset: "solid",
+    shadowOffsetX: 0,
+    shadowOffsetY: 2,
+    shadowBlur: 8,
+    shadowSpread: 0,
+    shadowColor: "rgba(0,0,0,0.1)",
+    borderRadius: 12,
+    bgType: "solid",
+    bgGradientAngle: 135,
+    borderWidth: 0,
+    backdropBlur: 0,
+    bgOpacity: 1,
+  },
+  gradient: {
+    preset: "gradient",
+    shadowOffsetX: 0,
+    shadowOffsetY: 2,
+    shadowBlur: 8,
+    shadowSpread: 0,
+    shadowColor: "rgba(0,0,0,0.1)",
+    borderRadius: 12,
+    bgType: "gradient",
+    bgGradientAngle: 135,
+    borderWidth: 0,
+    backdropBlur: 0,
+    bgOpacity: 1,
+  },
+  "border-only": {
+    preset: "border-only",
+    shadowOffsetX: 0,
+    shadowOffsetY: 0,
+    shadowBlur: 0,
+    shadowSpread: 0,
+    shadowColor: "rgba(0,0,0,0)",
+    borderRadius: 12,
+    bgType: "transparent",
+    bgGradientAngle: 135,
+    borderWidth: 2,
+    backdropBlur: 0,
+    bgOpacity: 0,
+  },
+};
+
+export function applyCardStyle(
+  state: CardStyleState,
+  themeColors: Record<string, string>,
+) {
+  const root = document.documentElement;
+
+  root.style.setProperty("--card-radius", `${state.borderRadius}px`);
+
+  const shadow =
+    state.shadowBlur === 0 && state.shadowOffsetX === 0 && state.shadowOffsetY === 0 && state.shadowSpread === 0
+      ? "none"
+      : `${state.shadowOffsetX}px ${state.shadowOffsetY}px ${state.shadowBlur}px ${state.shadowSpread}px ${state.shadowColor}`;
+  root.style.setProperty("--card-shadow", shadow);
+
+  const cardHsl = themeColors["--card"] || "0 0% 100%";
+  const brandHsl = themeColors["--brand"] || "220 70% 50%";
+  const secondaryHsl = themeColors["--secondary"] || "220 30% 60%";
+  const accentHsl = themeColors["--accent"] || "220 50% 55%";
+
+  let bg: string;
+  if (state.bgType === "transparent") {
+    bg = "transparent";
+  } else if (state.bgType === "gradient") {
+    bg = `linear-gradient(${state.bgGradientAngle}deg, hsl(${brandHsl}), hsl(${secondaryHsl}), hsl(${accentHsl}))`;
+  } else {
+    if (state.bgOpacity < 1) {
+      const parts = cardHsl.trim().split(/\s+/);
+      if (parts.length >= 3) {
+        bg = `hsla(${parts[0]}, ${parts[1]}, ${parts[2]}, ${state.bgOpacity})`;
+      } else {
+        bg = `hsl(${cardHsl})`;
+      }
+    } else {
+      bg = `hsl(${cardHsl})`;
+    }
+  }
+  root.style.setProperty("--card-bg", bg);
+
+  const borderColor = themeColors["--border"] || "0 0% 80%";
+  const border =
+    state.borderWidth > 0
+      ? `${state.borderWidth}px solid hsl(${borderColor})`
+      : "none";
+  root.style.setProperty("--card-border", border);
+
+  const backdrop =
+    state.backdropBlur > 0
+      ? `blur(${state.backdropBlur}px)`
+      : "none";
+  root.style.setProperty("--card-backdrop", backdrop);
+
+  storage.set(CARD_STYLE_KEY, state);
+}
+
+export function removeCardStyleProperties() {
+  const root = document.documentElement;
+  for (const prop of ["--card-radius", "--card-shadow", "--card-bg", "--card-border", "--card-backdrop"]) {
+    root.style.removeProperty(prop);
+  }
+}
+
+export function applyStoredCardStyle(themeColors: Record<string, string>): CardStyleState | null {
+  const saved = storage.get<CardStyleState>(CARD_STYLE_KEY);
+  if (saved) {
+    applyCardStyle(saved, themeColors);
+    return saved;
+  }
+  return null;
+}
+
+export const TYPOGRAPHY_KEY = "ds-typography";
+
+export interface TypographyState {
+  preset: "modern" | "classic" | "compact" | "editorial" | "custom";
+  headingFamily: string;
+  bodyFamily: string;
+  baseFontSize: number;
+  headingWeight: number;
+  bodyWeight: number;
+  lineHeight: number;
+  letterSpacing: number;
+  headingLetterSpacing: number;
+}
+
+export const DEFAULT_TYPOGRAPHY: TypographyState = {
+  preset: "modern",
+  headingFamily: "Roboto, sans-serif",
+  bodyFamily: "Roboto, sans-serif",
+  baseFontSize: 17,
+  headingWeight: 300,
+  bodyWeight: 300,
+  lineHeight: 1.5,
+  letterSpacing: 0,
+  headingLetterSpacing: 0,
+};
+
+export const TYPOGRAPHY_PRESETS: Record<string, TypographyState> = {
+  modern: { ...DEFAULT_TYPOGRAPHY },
+  classic: {
+    preset: "classic",
+    headingFamily: "Georgia, serif",
+    bodyFamily: "system-ui, sans-serif",
+    baseFontSize: 17,
+    headingWeight: 700,
+    bodyWeight: 400,
+    lineHeight: 1.6,
+    letterSpacing: 0,
+    headingLetterSpacing: 0,
+  },
+  compact: {
+    preset: "compact",
+    headingFamily: "system-ui, sans-serif",
+    bodyFamily: "system-ui, sans-serif",
+    baseFontSize: 15,
+    headingWeight: 500,
+    bodyWeight: 400,
+    lineHeight: 1.35,
+    letterSpacing: 0,
+    headingLetterSpacing: 0,
+  },
+  editorial: {
+    preset: "editorial",
+    headingFamily: '"Playfair Display", serif',
+    bodyFamily: "Georgia, serif",
+    baseFontSize: 19,
+    headingWeight: 700,
+    bodyWeight: 400,
+    lineHeight: 1.55,
+    letterSpacing: 0,
+    headingLetterSpacing: -0.02,
+  },
+};
+
+export const FONT_FAMILY_OPTIONS = [
+  { label: "Roboto", value: "Roboto, sans-serif" },
+  { label: "Inter", value: "Inter, sans-serif" },
+  { label: "Georgia", value: "Georgia, serif" },
+  { label: "System UI", value: "system-ui, sans-serif" },
+  { label: "Courier New", value: '"Courier New", monospace' },
+  { label: "Playfair Display", value: '"Playfair Display", serif' },
+  { label: "Space Grotesk", value: '"Space Grotesk", sans-serif' },
+];
+
+const GOOGLE_FONTS_TO_LOAD: Record<string, string> = {
+  '"Playfair Display", serif': "Playfair+Display:wght@400;700",
+  '"Space Grotesk", sans-serif': "Space+Grotesk:wght@300;400;500;600;700",
+  "Inter, sans-serif": "Inter:wght@100;200;300;400;500;600;700;800;900",
+};
+
+export function loadGoogleFont(family: string) {
+  const spec = GOOGLE_FONTS_TO_LOAD[family];
+  if (!spec) return;
+  const id = `gf-${spec.replace(/[^a-zA-Z0-9]/g, "-")}`;
+  if (document.getElementById(id)) return;
+  const link = document.createElement("link");
+  link.id = id;
+  link.rel = "stylesheet";
+  link.href = `https://fonts.googleapis.com/css2?family=${spec}&display=swap`;
+  document.head.appendChild(link);
+}
+
+export function removeGoogleFontLinks() {
+  document.querySelectorAll('link[id^="gf-"]').forEach((el) => el.remove());
+}
+
+export function applyTypography(state: TypographyState) {
+  const root = document.documentElement;
+  root.style.setProperty("--font-heading", state.headingFamily);
+  root.style.setProperty("--font-body", state.bodyFamily);
+  root.style.setProperty("--font-size-base", `${state.baseFontSize}px`);
+  root.style.setProperty("--font-weight-heading", String(state.headingWeight));
+  root.style.setProperty("--font-weight-body", String(state.bodyWeight));
+  root.style.setProperty("--line-height", String(state.lineHeight));
+  root.style.setProperty("--letter-spacing", `${state.letterSpacing}em`);
+  root.style.setProperty("--letter-spacing-heading", `${state.headingLetterSpacing}em`);
+  loadGoogleFont(state.headingFamily);
+  loadGoogleFont(state.bodyFamily);
+  storage.set(TYPOGRAPHY_KEY, state);
+}
+
+export function removeTypographyProperties() {
+  const root = document.documentElement;
+  for (const prop of [
+    "--font-heading", "--font-body", "--font-size-base",
+    "--font-weight-heading", "--font-weight-body", "--line-height",
+    "--letter-spacing", "--letter-spacing-heading",
+  ]) {
+    root.style.removeProperty(prop);
+  }
+  removeGoogleFontLinks();
+}
+
+export function applyStoredTypography(): TypographyState | null {
+  const saved = storage.get<TypographyState>(TYPOGRAPHY_KEY);
+  if (saved) {
+    applyTypography(saved);
+    return saved;
+  }
+  return null;
+}
+
 export function applyStoredThemeColors() {
   const saved = storage.get<Record<string, string>>(THEME_COLORS_KEY);
   if (saved) {
