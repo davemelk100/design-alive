@@ -1,5 +1,4 @@
 import React, { Suspense, useState, useRef } from "react";
-import { Link } from "react-router-dom";
 import type { AxeResults } from "axe-core";
 import { content } from "../../content";
 import storage from "../../utils/storage";
@@ -206,7 +205,6 @@ interface Props {
 
 export default function PortfolioLandingDesignSystem({ colors, setColors, lockedKeys, setLockedKeys, prevColors, setPrevColors, readCurrentColors }: Props) {
   const [showResetModal, setShowResetModal] = useState(false);
-  const [showSpecs, setShowSpecs] = useState(false);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [codeCopied, setCodeCopied] = useState(false);
   const [prStatus, setPrStatus] = useState<'idle' | 'creating' | 'created' | 'error' | 'rate-limited'>('idle');
@@ -623,11 +621,17 @@ export default function PortfolioLandingDesignSystem({ colors, setColors, locked
         <div className="w-full mb-4">
           <h2 className="font-bold mb-1 title-font" style={{ color: "hsl(var(--foreground))" }}>NEW - Live Design System!</h2>
           <p className="text-[17px]" style={{ color: "hsl(var(--foreground))" }}>
-            Explore the interactive design system powering this site. Pick a brand color and watch every token transform in real time. Automatic WCAG AA contrast correction. Generate a CSS snapshot of your custom theme. Open a pull request to propose changes directly to the repo.{" "}Here's how it works:{" "}
-            <button onClick={() => setShowSpecs(true)} className="underline text-brand-dynamic hover:opacity-80">
-              Specs
-            </button>
+            Explore the interactive design system powering this site. Pick a brand color and watch every token transform in real time. Automatic WCAG AA contrast correction. Generate a CSS snapshot of your custom theme. Open a pull request to propose changes directly to the repo.
           </p>
+        </div>
+
+        {/* Specs content */}
+        <div className="mb-4 space-y-3">
+          {content.designSystem.specsContent.split("\n\n").map((paragraph, i) => (
+            <p key={i} className="text-[17px]" style={{ color: "hsl(var(--foreground))" }}>
+              {paragraph}
+            </p>
+          ))}
         </div>
 
         {/* Action buttons + alerts row */}
@@ -865,48 +869,6 @@ export default function PortfolioLandingDesignSystem({ colors, setColors, locked
         )}
 
         {/* Specs Modal */}
-        {showSpecs && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="home-specs-modal-title"
-            onClick={() => setShowSpecs(false)}
-            onKeyDown={(e) => { if (e.key === "Escape") setShowSpecs(false); }}
-          >
-            <div
-              className="rounded-lg shadow-xl p-6 w-full max-w-lg mx-4 max-h-[80vh] overflow-y-auto relative"
-              style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                onClick={() => setShowSpecs(false)}
-                className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full hover:opacity-80 transition-opacity"
-                style={{ color: "hsl(var(--card-foreground))" }}
-                aria-label="Close"
-              >
-                ✕
-              </button>
-              <h4 id="home-specs-modal-title" className="text-2xl font-medium mb-4">
-                How It Works
-              </h4>
-              {content.designSystem.specsContent.split("\n\n").map((paragraph, i) => (
-                <p key={i} className="text-[17px] mb-3" style={{ color: "hsl(var(--card-foreground))" }}>
-                  {paragraph}
-                </p>
-              ))}
-              <div className="mt-4 pt-3 border-t" style={{ borderColor: "hsl(var(--border))" }}>
-                <Link
-                  to="/portfolio/design-system/about"
-                  className="text-[17px] underline hover:opacity-80"
-                  style={{ color: "hsl(var(--card-foreground))" }}
-                >
-                  View as standalone page →
-                </Link>
-              </div>
-            </div>
-          </div>
-        )}
 
           {/* Hero colors row */}
           {(() => {
