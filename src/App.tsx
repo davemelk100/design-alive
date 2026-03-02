@@ -4,7 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { applyStoredThemeColors } from "@design-alive/editor";
 
-const PortfolioLanding = lazy(() => import("./pages/portfolio/PortfolioLanding"));
+const PortfolioLanding = lazy(
+  () => import("./pages/portfolio/PortfolioLanding"),
+);
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const ReadmePage = lazy(() => import("./pages/ReadmePage"));
 
@@ -32,8 +34,18 @@ export default function App() {
               </Routes>
             </Suspense>
           </main>
-          <footer className="h-16 flex items-center justify-center text-[13px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>
-            <a href="https://davemelk.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity">melkonian industries</a>
+          <footer
+            className="h-16 flex items-center justify-center text-[13px] font-light"
+            style={{ color: "hsl(var(--muted-foreground))" }}
+          >
+            <a
+              href="https://davemelk.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline uppercase hover:opacity-70 transition-opacity"
+            >
+              Melkonian Industries
+            </a>
           </footer>
         </div>
       </ThemeProvider>

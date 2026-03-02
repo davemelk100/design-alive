@@ -872,7 +872,7 @@ export function DesignSystemEditor({
           {/* Title + nav links */}
           <div className="w-full mb-4 flex items-center gap-x-4">
             <div className="flex-1 min-w-0">
-              <h1 className="font-light pt-4 pb-1 sm:pb-3 title-font" style={{ color: "hsl(var(--foreground))" }}>NEW - Live Design System!</h1>
+              <h1 className="font-light pt-4 pb-1 sm:pb-3 title-font" style={{ color: "hsl(var(--foreground))" }}>Design Inline</h1>
               <div className="flex items-center gap-4 pb-2 sm:pb-0">
                 <a
                   href="/how-it-works"
@@ -933,18 +933,6 @@ export function DesignSystemEditor({
           {/* Alerts */}
           <div className="mb-0">
             <div className="w-full sm:w-auto order-first sm:order-last flex-shrink-0 min-h-[36px] pointer-events-none [&>*]:pointer-events-auto" data-axe-exclude>
-                {(() => {
-                  const mainSt = sectionPrStatus["main"] || { status: 'idle' as const };
-                  return (<>
-                    {mainSt.status === 'created' && mainSt.url && (
-                      <span className="inline-flex items-center gap-2 px-3 h-12 text-[14px] font-light rounded-lg border border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
-                        PR Created!
-                        <a href={mainSt.url} target="_blank" rel="noopener noreferrer" className="underline font-light hover:text-green-900 dark:hover:text-green-100 transition-colors">View</a>
-                        <button onClick={() => setSectionPrStatus(prev => ({ ...prev, main: { status: 'idle' } }))} className="text-green-500 hover:text-green-800 dark:hover:text-green-100 transition-colors" aria-label="Dismiss PR notification">&#10005;</button>
-                      </span>
-                    )}
-                  </>);
-                })()}
                 {accessibilityAudit && auditStatus === 'failed' && (
                   <span aria-live="assertive" className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center gap-1.5 border-t-2 border-red-400 dark:border-red-600 bg-red-100 dark:bg-red-950 px-4 h-12 text-[14px] font-light text-red-800 dark:text-red-200 shadow-2xl">
                     <span>&#10007; {auditViolations.length} issue{auditViolations.length !== 1 ? 's' : ''}</span>
@@ -1081,13 +1069,21 @@ export function DesignSystemEditor({
                   style={{ color: "hsl(var(--muted-foreground))" }}
                 >
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
-                  <span className="whitespace-nowrap">{harmonySchemeIndex >= 0 ? HARMONY_SCHEMES[harmonySchemeIndex] : "Variations"}</span>
+                  <span className="whitespace-nowrap">{harmonySchemeIndex >= 0 ? HARMONY_SCHEMES[harmonySchemeIndex] : "Default"}</span>
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path d="M6 9l6 6 6-6" /></svg>
                 </button>
                 {shuffleOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setShuffleOpen(false)} />
                     <div className="absolute right-0 top-full mt-1 z-50 min-w-[180px] rounded-lg shadow-lg py-1 border" style={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}>
+                      <button
+                        onClick={() => { setHarmonySchemeIndex(-1); setShuffleOpen(false); }}
+                        className="w-full text-left px-4 py-2 text-[14px] font-light transition-colors hover:opacity-80 flex items-center justify-between"
+                        style={{ color: "hsl(var(--foreground))" }}
+                      >
+                        Default
+                        {harmonySchemeIndex < 0 && <span className="text-green-600 dark:text-green-400">&#10003;</span>}
+                      </button>
                       {HARMONY_SCHEMES.map((scheme, idx) => (
                         <button
                           key={scheme}
