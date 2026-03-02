@@ -14,30 +14,30 @@
 
 @layer base {
   :root {
-    --brand: 100.6 19% 26%;
-    --background: 120.6 32.8% 96.9%;
+    --brand: 199.2 18.8% 26.1%;
+    --background: 0 0% 87.1%;
     --foreground: 0 0% 0%;
-    --card: 120.6 32.8% 96.9%;
+    --card: 0 0% 87.1%;
     --card-foreground: 0 0% 0%;
-    --popover: 120.6 32.8% 96.9%;
+    --popover: 0 0% 87.1%;
     --popover-foreground: 0 0% 0%;
-    --primary: 100.6 83.2% 48.0%;
-    --primary-foreground: 100.6 40.0% 22.0%;
-    --secondary: 130.6 16.1% 27.3%;
-    --secondary-foreground: 130.6 0% 75%;
-    --muted: 70.6 17.9% 95.3%;
-    --muted-foreground: 0 0% 41%;
-    --accent: 130.6 63.8% 49.5%;
-    --accent-foreground: 70.6 0.0% 0.0%;
-    --destructive: 0 18.8% 35.0%;
+    --primary: 199.2 83.2% 48.0%;
+    --primary-foreground: 199.2 40% 16%;
+    --secondary: 199.2 16.1% 27.3%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 199.2 17.9% 95.3%;
+    --muted-foreground: 0 0% 38%;
+    --accent: 199.2 63.8% 49.5%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 20.7% 35.0%;
     --destructive-foreground: 0 0% 100%;
-    --success: 142 15.4% 35.0%;
+    --success: 142 16.9% 35.0%;
     --success-foreground: 0 0% 100%;
-    --warning: 45 18.0% 40.0%;
+    --warning: 45 19.7% 40.0%;
     --warning-foreground: 0 0% 99%;
-    --border: 70.6 15.2% 90.4%;
+    --border: 0 0.0% 78.1%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 100.6 83.2% 53.3%;
+    --ring: 199.2 83.2% 53.3%;
     --radius: 0.5rem;
     --font-heading: Roboto, sans-serif;
     --font-body: Roboto, sans-serif;
