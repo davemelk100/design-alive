@@ -1,4 +1,4 @@
-# Live Design System
+# Theemal
 
 An interactive design system that lets you pick a brand color and watch every token update in real time. Export a CSS snapshot or open a PR to propose changes.
 
@@ -17,8 +17,8 @@ npm install @design-alive/editor
 ```
 
 ```tsx
-import { DesignSystemEditor } from '@design-alive/editor';
-import '@design-alive/editor/style.css';
+import { DesignSystemEditor } from "@design-alive/editor";
+import "@design-alive/editor/style.css";
 
 function App() {
   return <DesignSystemEditor />;

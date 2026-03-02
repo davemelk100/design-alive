@@ -6,7 +6,7 @@
   "workspaces": [
     "packages/*"
   ],
-  "description": "Live Design System",
+  "description": "Theemal",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

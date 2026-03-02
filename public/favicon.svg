@@ -1,5 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="8" fill="#000000"/>
-  <path d="M8 16L12 20L24 8" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-</svg> 
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="c"><circle cx="16" cy="16" r="15"/></clipPath>
+  </defs>
+  <g clip-path="url(#c)">
+    <path d="M16 16L16 0A16 16 0 0 1 29.86 24Z" fill="#ff0000"/>
+    <path d="M16 16L29.86 24A16 16 0 0 1 16 32Z" fill="#ff8800"/>
+    <path d="M16 16L16 32A16 16 0 0 1 2.14 24Z" fill="#ffdd00"/>
+    <path d="M16 16L2.14 24A16 16 0 0 1 2.14 8Z" fill="#00cc44"/>
+    <path d="M16 16L2.14 8A16 16 0 0 1 16 0Z" fill="#0088ff"/>
+    <path d="M16 16L16 0A16 16 0 0 0 2.14 8Z" fill="#8833ff"/>
+  </g>
+  <circle cx="16" cy="16" r="5" fill="white"/>
+</svg>

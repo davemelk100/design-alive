@@ -872,7 +872,21 @@ export function DesignSystemEditor({
           {/* Title + nav links */}
           <div className="w-full mb-4 flex items-center gap-x-4">
             <div className="flex-1 min-w-0">
-              <h1 className="font-light pt-4 pb-1 sm:pb-3 title-font" style={{ color: "hsl(var(--foreground))" }}>Design Inline</h1>
+              <h1 className="font-light pt-4 pb-1 sm:pb-3 title-font flex items-center gap-3" style={{ color: "hsl(var(--foreground))" }}>
+                <svg className="w-8 h-8 flex-shrink-0" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                  <defs><clipPath id="cw"><circle cx="16" cy="16" r="15"/></clipPath></defs>
+                  <g clipPath="url(#cw)">
+                    <path d="M16 16L16 0A16 16 0 0 1 29.86 24Z" fill="#ff0000"/>
+                    <path d="M16 16L29.86 24A16 16 0 0 1 16 32Z" fill="#ff8800"/>
+                    <path d="M16 16L16 32A16 16 0 0 1 2.14 24Z" fill="#ffdd00"/>
+                    <path d="M16 16L2.14 24A16 16 0 0 1 2.14 8Z" fill="#00cc44"/>
+                    <path d="M16 16L2.14 8A16 16 0 0 1 16 0Z" fill="#0088ff"/>
+                    <path d="M16 16L16 0A16 16 0 0 0 2.14 8Z" fill="#8833ff"/>
+                  </g>
+                  <circle cx="16" cy="16" r="5" fill="white"/>
+                </svg>
+                Theemal
+              </h1>
               <div className="flex items-center gap-4 pb-2 sm:pb-0">
                 <a
                   href="/how-it-works"
