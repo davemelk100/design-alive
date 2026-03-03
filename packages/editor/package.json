@@ -1,6 +1,6 @@
 {
   "name": "@theemel/editor",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "type": "module",
   "description": "Interactive design system editor — pick colors, enforce WCAG AA contrast, export CSS custom properties",
   "main": "./dist/index.js",
