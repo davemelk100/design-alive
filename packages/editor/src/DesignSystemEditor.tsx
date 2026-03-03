@@ -2066,17 +2066,17 @@ export function DesignSystemEditor({
       {/* PR Section Picker Modal */}
       {showPrSetupModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={() => setShowPrSetupModal(false)}>
-          <div className="rounded-xl p-6 w-[380px] shadow-xl" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }} onClick={e => e.stopPropagation()}>
-            <h3 className="text-[18px] font-light mb-4">PR Integration Setup</h3>
-            <p className="text-[14px] font-light mb-3" style={{ color: "hsl(var(--muted-foreground))" }}>
-              To enable pull request creation, pass a <code className="px-1 py-0.5 rounded text-[13px]" style={{ backgroundColor: "hsl(var(--muted))" }}>prEndpointUrl</code> prop to the editor:
+          <div className="rounded-xl p-6 w-[380px] shadow-xl" style={{ backgroundColor: "#fff", color: "#111" }} onClick={e => e.stopPropagation()}>
+            <h3 className="text-[18px] font-light mb-4" style={{ color: "#111" }}>PR Integration Setup</h3>
+            <p className="text-[14px] font-light mb-3" style={{ color: "#444" }}>
+              To enable pull request creation, pass a <code className="px-1 py-0.5 rounded text-[13px]" style={{ backgroundColor: "#f3f4f6", color: "#111" }}>prEndpointUrl</code> prop to the editor:
             </p>
-            <pre className="text-[12px] font-light rounded-lg p-3 mb-4 overflow-x-auto" style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--card-foreground))" }}>
+            <pre className="text-[12px] font-light rounded-lg p-3 mb-4 overflow-x-auto" style={{ backgroundColor: "#1e293b", color: "#e2e8f0" }}>
 {`<DesignSystemEditor
   prEndpointUrl="/api/design-pr"
 />`}
             </pre>
-            <p className="text-[13px] font-light mb-4" style={{ color: "hsl(var(--muted-foreground))" }}>
+            <p className="text-[13px] font-light mb-4" style={{ color: "#444" }}>
               The endpoint receives a POST with the generated CSS and creates a GitHub PR on your behalf.
             </p>
             <div className="flex justify-end">
