@@ -13,7 +13,7 @@ export default function ReadmePage() {
         </Link>
 
         <h1 className="text-3xl sm:text-4xl font-light mb-8 title-font" style={{ color: "hsl(var(--foreground))" }}>
-          @design-alive/editor
+          @theemel/editor
         </h1>
 
         <p className="text-[14px] leading-relaxed mb-8" style={{ color: "hsl(var(--foreground))" }}>
@@ -24,10 +24,10 @@ export default function ReadmePage() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Install</h2>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>npm install @design-alive/editor</code>
+            <code>npm install @theemel/editor</code>
           </pre>
           <p className="text-[14px] mt-2" style={{ color: "hsl(var(--muted-foreground))" }}>
-            Peer dependencies: <code className="font-mono text-[14px]">react</code> and <code className="font-mono text-[14px]">react-dom</code> (v18+).
+            Peer dependencies: <code className="font-mono text-[14px]">react</code> and <code className="font-mono text-[14px]">react-dom</code> (v18 or v19).
           </p>
           <p className="text-[14px] mt-1" style={{ color: "hsl(var(--muted-foreground))" }}>
             Optional peers: <code className="font-mono text-[14px]">axe-core</code> (accessibility auditing), <code className="font-mono text-[14px]">lucide-react</code> (icon previews).
@@ -38,8 +38,8 @@ export default function ReadmePage() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Quick Start</h2>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>{`import { DesignSystemEditor } from '@design-alive/editor';
-import '@design-alive/editor/style.css';
+            <code>{`import { DesignSystemEditor } from '@theemel/editor';
+import '@theemel/editor/style.css';
 
 function App() {
   return <DesignSystemEditor />;
@@ -94,6 +94,24 @@ function App() {
                   <td className="px-4 py-2">—</td>
                   <td className="px-4 py-2">Additional CSS class for the wrapper element.</td>
                 </tr>
+                <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <td className="px-4 py-2 font-mono text-xs">showNavLinks</td>
+                  <td className="px-4 py-2 font-mono text-xs">boolean</td>
+                  <td className="px-4 py-2 font-mono text-xs">true</td>
+                  <td className="px-4 py-2">Show "How It Works" and "README" nav links.</td>
+                </tr>
+                <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <td className="px-4 py-2 font-mono text-xs">licenseKey</td>
+                  <td className="px-4 py-2 font-mono text-xs">string</td>
+                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">License key to unlock premium features.</td>
+                </tr>
+                <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <td className="px-4 py-2 font-mono text-xs">upgradeUrl</td>
+                  <td className="px-4 py-2 font-mono text-xs">string</td>
+                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">Custom URL for the "Upgrade" link shown on gated features.</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -144,7 +162,7 @@ function App() {
   EDITABLE_VARS,     // Array of { key, label } token definitions
   HARMONY_SCHEMES,   // ['Complementary', 'Analogous', ...]
   applyStoredThemeColors, // Restore persisted theme from localStorage
-} from '@design-alive/editor';`}</code>
+} from '@theemel/editor';`}</code>
           </pre>
         </section>
 
@@ -152,7 +170,7 @@ function App() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Tailwind Scoping</h2>
           <p className="text-[14px] leading-relaxed" style={{ color: "hsl(var(--foreground))" }}>
-            The editor ships pre-compiled CSS via <code className="font-mono text-[14px]">@design-alive/editor/style.css</code>. Styles are scoped using Tailwind's <code className="font-mono text-[14px]">{`important: '.ds-editor'`}</code> so they don't conflict with your app's styles. The root element is automatically wrapped in <code className="font-mono text-[14px]">{`<div className="ds-editor">`}</code>.
+            The editor ships pre-compiled CSS via <code className="font-mono text-[14px]">@theemel/editor/style.css</code>. Styles are scoped using Tailwind's <code className="font-mono text-[14px]">{`important: '.ds-editor'`}</code> so they don't conflict with your app's styles. The root element is automatically wrapped in <code className="font-mono text-[14px]">{`<div className="ds-editor">`}</code>.
           </p>
         </section>
       </div>

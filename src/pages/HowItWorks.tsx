@@ -147,7 +147,7 @@ export default function HowItWorks() {
               <li><span className="font-medium">Editorial</span> — Playfair Display headings (700), Georgia body, 19px base, negative heading letter spacing.</li>
             </ul>
             <p className="text-[14px] leading-relaxed mt-3" style={{ color: "hsl(var(--foreground))" }}>
-              Google Fonts (Playfair Display, Space Grotesk, Inter) are loaded on demand when selected. Eight font families are available. All properties are individually adjustable.
+              Google Fonts (Playfair Display, Space Grotesk, Inter) are loaded on demand when selected. Eleven font families are available. All properties are individually adjustable.
             </p>
           </section>
 

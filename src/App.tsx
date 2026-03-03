@@ -9,6 +9,7 @@ const PortfolioLanding = lazy(
 );
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const ReadmePage = lazy(() => import("./pages/ReadmePage"));
+const Pricing = lazy(() => import("./pages/Pricing"));
 
 export default function App() {
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function App() {
                 <Route path="/" element={<PortfolioLanding />} />
                 <Route path="/how-it-works" element={<HowItWorks />} />
                 <Route path="/readme" element={<ReadmePage />} />
+                <Route path="/pricing" element={<Pricing />} />
               </Routes>
             </Suspense>
           </main>
