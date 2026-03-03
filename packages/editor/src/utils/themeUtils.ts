@@ -1102,4 +1102,10 @@ export function applyStoredThemeColors() {
     });
     persistContrastFixes(fixes);
   }
+
+  // Also restore stored typography
+  const typo = storage.get<TypographyState>(TYPOGRAPHY_KEY);
+  if (typo) {
+    applyTypography(typo);
+  }
 }
