@@ -940,8 +940,11 @@ export function removeGoogleFontLinks() {
   document.querySelectorAll('link[id^="gf-"]').forEach((el) => el.remove());
 }
 
+const THEEMEL_TYPO_STYLE_ID = "theemel-typography";
+
 export function applyTypography(state: TypographyState) {
   const root = document.documentElement;
+  // Set CSS custom properties for apps that consume them
   root.style.setProperty("--font-heading", state.headingFamily);
   root.style.setProperty("--font-body", state.bodyFamily);
   root.style.setProperty("--font-size-base", `${state.baseFontSize}px`);
@@ -950,6 +953,34 @@ export function applyTypography(state: TypographyState) {
   root.style.setProperty("--line-height", String(state.lineHeight));
   root.style.setProperty("--letter-spacing", `${state.letterSpacing}em`);
   root.style.setProperty("--letter-spacing-heading", `${state.headingLetterSpacing}em`);
+
+  // Inject global styles so typography applies to the entire page
+  let styleEl = document.getElementById(THEEMEL_TYPO_STYLE_ID) as HTMLStyleElement | null;
+  if (!styleEl) {
+    styleEl = document.createElement("style");
+    styleEl.id = THEEMEL_TYPO_STYLE_ID;
+    document.head.appendChild(styleEl);
+  }
+  styleEl.textContent = `
+    body {
+      font-family: ${state.bodyFamily} !important;
+      font-size: ${state.baseFontSize}px !important;
+      font-weight: ${state.bodyWeight} !important;
+      line-height: ${state.lineHeight} !important;
+      letter-spacing: ${state.letterSpacing}em !important;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: ${state.headingFamily} !important;
+      font-weight: ${state.headingWeight} !important;
+      letter-spacing: ${state.headingLetterSpacing}em !important;
+    }
+    p, ul, ol, li, a, button, input, select, textarea, label, span {
+      font-family: ${state.bodyFamily} !important;
+      font-weight: ${state.bodyWeight} !important;
+      line-height: ${state.lineHeight} !important;
+    }
+  `;
+
   loadGoogleFont(state.headingFamily);
   loadGoogleFont(state.bodyFamily);
   storage.set(TYPOGRAPHY_KEY, state);
@@ -965,6 +996,8 @@ export function removeTypographyProperties() {
     root.style.removeProperty(prop);
   }
   removeGoogleFontLinks();
+  const styleEl = document.getElementById(THEEMEL_TYPO_STYLE_ID);
+  if (styleEl) styleEl.remove();
 }
 
 export function applyStoredTypography(): TypographyState | null {
