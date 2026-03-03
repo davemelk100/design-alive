@@ -192,6 +192,7 @@ export function DesignSystemEditor({
   onChange,
   onExport,
   className,
+  showNavLinks = true,
 }: DesignSystemEditorProps) {
   const {
     colors,
@@ -879,22 +880,24 @@ export function DesignSystemEditor({
                 </svg>
                 Theemal
               </h1>
-              <div className="flex items-center gap-4 pb-2 sm:pb-0">
-                <a
-                  href="/how-it-works"
-                  className="text-[14px] font-light hover:opacity-70 transition-opacity"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  How It Works &rarr;
-                </a>
-                <a
-                  href="/readme"
-                  className="text-[14px] font-light hover:opacity-70 transition-opacity"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  README &rarr;
-                </a>
-              </div>
+              {showNavLinks && (
+                <div className="flex items-center gap-4 pb-2 sm:pb-0">
+                  <a
+                    href="/how-it-works"
+                    className="text-[14px] font-light hover:opacity-70 transition-opacity"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    How It Works &rarr;
+                  </a>
+                  <a
+                    href="/readme"
+                    className="text-[14px] font-light hover:opacity-70 transition-opacity"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    README &rarr;
+                  </a>
+                </div>
+              )}
             </div>
             {prEndpointUrl && (() => {
               const mainSt = sectionPrStatus["main"] || { status: 'idle' as const };

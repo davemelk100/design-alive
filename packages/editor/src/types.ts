@@ -9,6 +9,8 @@ export interface DesignSystemEditorProps {
   onExport?: (css: string) => void;
   /** Additional CSS class for the wrapper element */
   className?: string;
+  /** Show "How It Works" and "README" nav links. Default: true */
+  showNavLinks?: boolean;
 }
 
 export interface TokenDefinition {
