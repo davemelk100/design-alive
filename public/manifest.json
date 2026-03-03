@@ -1,16 +1,21 @@
 {
-  "name": "Dave Melkonian - Digital Experience Designer",
-  "short_name": "Dave Melkonian",
-  "description": "Digital Experience Designer Portfolio",
+  "name": "Theemel — Real-Time Theming",
+  "short_name": "Theemel",
+  "description": "Interactive design system editor — pick colors, enforce WCAG AA contrast, and export CSS custom properties in real time.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "/theemel-logo.svg",
       "sizes": "any",
       "type": "image/svg+xml"
+    },
+    {
+      "src": "/theemel-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
-} 
+}

@@ -17,17 +17,29 @@ export function PremiumGate({
 
   if (isPremium) return <>{children}</>;
 
+  const gateStyle: React.CSSProperties = {
+    opacity: 0.4,
+    cursor: "not-allowed",
+    userSelect: "none",
+  };
+
+  const blockInteraction = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const gateProps = {
+    title: "Premium feature — Pro version required",
+    onClickCapture: blockInteraction,
+    onKeyDownCapture: blockInteraction,
+  };
+
   if (variant === "inline") {
     return (
       <span
         className="ds-premium-inline"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          opacity: 0.4,
-          pointerEvents: "none" as const,
-          userSelect: "none" as const,
-        }}
+        style={{ display: "inline-flex", alignItems: "center", ...gateStyle }}
+        {...gateProps}
       >
         {children}
       </span>
@@ -38,11 +50,8 @@ export function PremiumGate({
   return (
     <div
       className="ds-premium-section"
-      style={{
-        opacity: 0.4,
-        pointerEvents: "none" as const,
-        userSelect: "none" as const,
-      }}
+      style={gateStyle}
+      {...gateProps}
     >
       {children}
     </div>
