@@ -38,7 +38,7 @@
   left: auto;
   bottom: calc(100% + 8px);
   right: 0;
-  transform: none;
+  transform: scale(0.9) translateY(6px);
 }
 
 .ds-premium-locked-content {
@@ -79,7 +79,7 @@
   left: auto;
   bottom: calc(100% + 8px);
   right: 0;
-  transform: none;
+  transform: scale(0.9) translateY(6px);
 }
 
 /* Popover that appears on hover over gated sections */
@@ -87,30 +87,36 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0.9) translateY(6px);
   z-index: 30;
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
   border-radius: 10px;
-  background-color: hsl(var(--foreground));
-  color: hsl(var(--background));
-  font-size: 13px;
-  font-weight: 500;
+  background-color: #1a1a1a;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
   white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.15s;
+  filter: blur(4px);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ds-premium-popover a {
-  color: hsl(var(--background));
+  color: #fff;
   text-decoration: underline;
-  font-size: 13px;
-  font-weight: 500;
-  opacity: 0.8;
+  font-size: 15px;
+  font-weight: 700;
+  opacity: 0.85;
   pointer-events: auto;
   cursor: pointer;
 }

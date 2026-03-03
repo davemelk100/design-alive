@@ -33,7 +33,7 @@ export default function App() {
           >
             Skip to content
           </a>
-          <main id="main-content" className="flex-1 relative z-10">
+          <main id="main-content" className="flex-1 relative z-10 flex flex-col">
             <Suspense
               fallback={
                 <div className="min-h-screen" style={{ backgroundColor: "hsl(var(--background))" }}>

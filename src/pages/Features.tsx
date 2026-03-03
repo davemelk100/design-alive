@@ -47,6 +47,7 @@ const features = [
     items: [
       "23 HSL CSS custom properties for full design system coverage",
       "Real-time color picking with live preview",
+      "SVG elements update dynamically — inline SVGs using currentColor and CSS variables respond to theme changes in real time",
       "Random palette generation with smart derivation",
       "WCAG AA contrast enforcement (4.6:1 ratio)",
       "Contrast learning loop — saves corrections to localStorage",
@@ -66,7 +67,7 @@ const check = (
 
 export default function Features() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "hsl(var(--background))" }}>
+    <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <Link
           to="/"

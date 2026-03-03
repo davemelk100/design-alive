@@ -1,5 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useLicense } from "../hooks/useLicense";
+
+// Shared listener so only one popover is open at a time
+type CloseListener = () => void;
+const closeListeners = new Set<CloseListener>();
+function notifyOthers(except: CloseListener) {
+  closeListeners.forEach((fn) => { if (fn !== except) fn(); });
+}
 
 export interface PremiumGateProps {
   feature: string;
@@ -30,15 +37,25 @@ function UpgradePopover({
   upgradeUrl,
   signInUrl,
   visible,
+  centered = false,
 }: {
   upgradeUrl: string;
   signInUrl?: string;
   visible: boolean;
+  centered?: boolean;
 }) {
+  const visibleStyle = visible
+    ? {
+        opacity: 1,
+        pointerEvents: "auto" as const,
+        transform: centered ? "translate(-50%, -50%) scale(1) translateY(0)" : "scale(1) translateY(0)",
+        filter: "blur(0)",
+      }
+    : undefined;
   return (
     <div
       className="ds-premium-popover"
-      style={visible ? { opacity: 1, pointerEvents: "auto" } : undefined}
+      style={visibleStyle}
     >
       <span>{lockIcon}</span>
       <span>Pro feature</span>
@@ -58,12 +75,23 @@ export function PremiumGate({
   const [hovered, setHovered] = useState(false);
   const leaveTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const closeMe = useCallback(() => {
+    if (leaveTimer.current) { clearTimeout(leaveTimer.current); leaveTimer.current = null; }
+    setHovered(false);
+  }, []);
+
+  useEffect(() => {
+    closeListeners.add(closeMe);
+    return () => { closeListeners.delete(closeMe); };
+  }, [closeMe]);
+
   const handleEnter = () => {
     if (leaveTimer.current) { clearTimeout(leaveTimer.current); leaveTimer.current = null; }
+    notifyOthers(closeMe);
     setHovered(true);
   };
   const handleLeave = () => {
-    leaveTimer.current = setTimeout(() => setHovered(false), 300);
+    leaveTimer.current = setTimeout(() => setHovered(false), 2000);
   };
 
   if (isPremium) return <>{children}</>;

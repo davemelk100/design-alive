@@ -231,6 +231,7 @@ function DesignSystemEditorInner({
   const [auditStatus, setAuditStatus] = useState<'idle' | 'running' | 'failed' | 'passed'>('idle');
   const auditTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const lockLeaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [auditViolations, setAuditViolations] = useState<{ selector: string; text: string }[]>([]);
   const [violationIndex, setViolationIndex] = useState(0);
   const [harmonySchemeIndex, setHarmonySchemeIndex] = useState(-1);
@@ -262,6 +263,7 @@ function DesignSystemEditorInner({
   const [interactionCssCopied, setInteractionCssCopied] = useState(false);
   const [showInteractionResetModal, setShowInteractionResetModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [imagePaletteStatus, setImagePaletteStatus] = useState<'idle' | 'extracting' | 'done' | 'error'>('idle');
 
   const fireOnChange = (newColors: Record<string, string>) => {
     onChange?.(newColors);
@@ -650,6 +652,7 @@ function DesignSystemEditorInner({
 
   const handleImagePalette = async (file: File) => {
     try {
+      setImagePaletteStatus('extracting');
       const palette = await extractPaletteFromImage(file);
       setPrevColors({ ...colors });
 
@@ -690,8 +693,12 @@ function DesignSystemEditorInner({
       setHarmonySchemeIndex(-1);
       fireOnChange(finalColors);
       if (accessibilityAudit) runAccessibilityAudit();
+      setImagePaletteStatus('done');
+      setTimeout(() => setImagePaletteStatus('idle'), 3000);
     } catch (err) {
       console.error("Image palette extraction failed:", err);
+      setImagePaletteStatus('error');
+      setTimeout(() => setImagePaletteStatus('idle'), 3000);
     }
   };
 
@@ -989,7 +996,7 @@ function DesignSystemEditorInner({
           {/* Title + nav links — single header row */}
           <div className="w-full mb-4 flex items-end gap-x-4 pt-4">
             <a href="#top" className="flex-shrink-0 leading-none" style={{ color: "hsl(var(--foreground))" }}>
-              <svg className="h-8 block" viewBox="0 0 1740 477" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Theemel">
+              <svg className="h-14 block" viewBox="0 0 1740 477" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Theemel">
                 <path d="M0 20.1279C0 9.01158 9.01159 0 20.128 0H120.768V144.921H20.1279C9.01157 144.921 0 135.91 0 124.793V20.1279Z" fill="#FC0000"/>
                 <path d="M409 20.1279C409 9.01158 399.988 0 388.872 0H288.232V144.921H388.872C399.988 144.921 409 135.91 409 124.793V20.1279Z" fill="#0095FE"/>
                 <path d="M120.768 144.921H204.5V310.776H120.768V144.921Z" fill="#FF8100"/>
@@ -1075,34 +1082,6 @@ function DesignSystemEditorInner({
               <div className="hidden lg:flex ml-auto items-end gap-4 flex-shrink-0">
                 {showNavLinks && (
                   <>
-                    <a
-                      href="/how-it-works"
-                      className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-                      style={{ color: "hsl(var(--muted-foreground))", lineHeight: 1 }}
-                    >
-                      How It Works &rarr;
-                    </a>
-                    <a
-                      href="/readme"
-                      className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-                      style={{ color: "hsl(var(--muted-foreground))", lineHeight: 1 }}
-                    >
-                      README &rarr;
-                    </a>
-                    <a
-                      href="/pricing"
-                      className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-                      style={{ color: "hsl(var(--muted-foreground))", lineHeight: 1 }}
-                    >
-                      Pricing &rarr;
-                    </a>
-                    <a
-                      href="/features"
-                      className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-                      style={{ color: "hsl(var(--muted-foreground))", lineHeight: 1 }}
-                    >
-                      Features &rarr;
-                    </a>
                   </>
                 )}
                 {headerRight}
@@ -1267,7 +1246,7 @@ function DesignSystemEditorInner({
           {/* Colors section */}
           <div id="colors" className="min-w-0 p-2 md:p-4 space-y-3 scroll-mt-28">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Colors <a href="#top" className="opacity-30 hover:opacity-70 transition-opacity" aria-label="Back to top"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Colors <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
               <PremiumGate feature="harmony-schemes" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
               <div className="relative">
@@ -1347,8 +1326,16 @@ function DesignSystemEditorInner({
                   className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
                   style={{ color: "hsl(var(--muted-foreground))" }}
                 >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path strokeLinecap="round" strokeLinejoin="round" d="M21 15l-5-5L5 21" /></svg>
-                  <span className="truncate">Image</span>
+                  {imagePaletteStatus === 'extracting' ? (
+                    <svg className="w-4 h-4 flex-shrink-0 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                  ) : imagePaletteStatus === 'done' ? (
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                  ) : imagePaletteStatus === 'error' ? (
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                  ) : (
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path strokeLinecap="round" strokeLinejoin="round" d="M21 15l-5-5L5 21" /></svg>
+                  )}
+                  <span className="truncate">{imagePaletteStatus === 'extracting' ? 'Extracting...' : imagePaletteStatus === 'done' ? 'Palette applied' : imagePaletteStatus === 'error' ? 'Failed' : 'Upload Image'}</span>
                 </button>
                 </PremiumGate>
                 <button
@@ -1371,7 +1358,7 @@ function DesignSystemEditorInner({
             </div>
 
             {/* Color swatch buttons */}
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 rounded-lg p-3" data-axe-exclude style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 rounded-lg p-3 overflow-visible" data-axe-exclude style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {COLOR_SWATCHES.filter(({ key }) => ["--brand", "--secondary", "--accent", "--background", "--foreground"].includes(key)).map(({ key, label }) => {
                 const hsl = colors[key];
                 const bgHsl = hsl || "0 0% 50%";
@@ -1385,10 +1372,10 @@ function DesignSystemEditorInner({
                 return (
                   <div
                     key={key}
-                    className="relative group flex items-stretch rounded-lg"
+                    className="relative group flex items-stretch rounded-lg overflow-visible"
                     style={{ boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}
-                    onMouseEnter={() => { if (!isPremium) setHoveredLockKey(key); }}
-                    onMouseLeave={() => setHoveredLockKey(null)}
+                    onMouseEnter={() => { if (!isPremium) { if (lockLeaveTimer.current) { clearTimeout(lockLeaveTimer.current); lockLeaveTimer.current = null; } setHoveredLockKey(key); } }}
+                    onMouseLeave={() => { lockLeaveTimer.current = setTimeout(() => setHoveredLockKey(null), 4000); }}
                   >
                     <button
                       className="w-full h-14 sm:h-20 text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-l-lg"
@@ -1448,7 +1435,7 @@ function DesignSystemEditorInner({
                     {!isPremium && hoveredLockKey === key && (
                       <div
                         className="ds-premium-popover"
-                        style={{ opacity: 1, pointerEvents: "auto", top: "auto", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)" }}
+                        style={{ opacity: 1, pointerEvents: "auto", top: "auto", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%) scale(1)", filter: "blur(0)", zIndex: 50 }}
                       >
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
@@ -1586,10 +1573,216 @@ function DesignSystemEditorInner({
             </div>
           </div>
 
+          {/* Interactions section */}
+          <div id="interactions" className="min-w-0 p-2 md:p-4 space-y-3 mt-4 scroll-mt-28">
+            <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
+              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Interactions <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+              <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
+                <button
+                  onClick={() => setInteractionCssVisible(!interactionCssVisible)}
+                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                  style={{ color: "hsl(var(--muted-foreground))" }}
+                >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                  <span className="truncate"><span className="sm:hidden">{interactionCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{interactionCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
+                </button>
+                <button
+                  onClick={() => setShowInteractionResetModal(true)}
+                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                  style={{ color: "hsl(var(--muted-foreground))" }}
+                >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
+                  <span className="truncate">Reset</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Preset buttons */}
+            <PremiumGate feature="interaction-states" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+            <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
+              {(["subtle", "elevated", "bold"] as const).map((key) => {
+                const labels: Record<string, string> = { subtle: "Subtle", elevated: "Elevated", bold: "Bold" };
+                const active = interactionStyle.preset === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => selectInteractionPreset(key)}
+                    className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                    style={active
+                      ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                      : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                    }
+                  >
+                    {labels[key]}
+                  </button>
+                );
+              })}
+            </div>
+            </PremiumGate>
+
+            {/* Interaction CSS output */}
+            {interactionCssVisible && (() => {
+              const intCss = `:root {\n  --hover-opacity: ${interactionStyle.hoverOpacity};\n  --hover-scale: ${interactionStyle.hoverScale};\n  --active-scale: ${interactionStyle.activeScale};\n  --transition-duration: ${interactionStyle.transitionDuration}ms;\n  --focus-ring-width: ${interactionStyle.focusRingWidth}px;\n  --focus-ring-color: hsl(var(--ring));\n}`;
+              return (
+                <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
+                  <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
+                    <span className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Interaction Style CSS</span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(intCss);
+                          setInteractionCssCopied(true);
+                          setTimeout(() => setInteractionCssCopied(false), 2000);
+                        }}
+                        className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                      >
+                        {interactionCssCopied ? "Copied!" : "Copy"}
+                      </button>
+                      <button
+                        onClick={() => setInteractionCssVisible(false)}
+                        className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                  <pre className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono" style={{ color: "hsl(var(--card-foreground))" }}>
+                    <code>{intCss}</code>
+                  </pre>
+                </div>
+              );
+            })()}
+
+            {/* Controls + Preview */}
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+              {/* Slider controls */}
+              <PremiumGate feature="interaction-states" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+              <div className="flex-1 min-w-0 space-y-3">
+                <div className="space-y-1.5">
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Hover</p>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Opacity: {interactionStyle.hoverOpacity}</span>
+                    <input type="range" min={0.6} max={1} step={0.01} value={interactionStyle.hoverOpacity} onChange={e => updateInteractionStyle({ hoverOpacity: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Scale: {interactionStyle.hoverScale}</span>
+                    <input type="range" min={1} max={1.1} step={0.005} value={interactionStyle.hoverScale} onChange={e => updateInteractionStyle({ hoverScale: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                </div>
+                <div className="space-y-1.5">
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Active</p>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Scale: {interactionStyle.activeScale}</span>
+                    <input type="range" min={0.9} max={1.05} step={0.005} value={interactionStyle.activeScale} onChange={e => updateInteractionStyle({ activeScale: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                </div>
+                <div className="space-y-1.5">
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Timing & Focus</p>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Duration: {interactionStyle.transitionDuration}ms</span>
+                    <input type="range" min={0} max={500} step={10} value={interactionStyle.transitionDuration} onChange={e => updateInteractionStyle({ transitionDuration: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Focus Ring: {interactionStyle.focusRingWidth}px</span>
+                    <input type="range" min={0} max={4} step={0.5} value={interactionStyle.focusRingWidth} onChange={e => updateInteractionStyle({ focusRingWidth: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                </div>
+              </div>
+              </PremiumGate>
+
+              {/* Live preview */}
+              <div className="flex-1 min-w-0 flex items-start justify-center pt-2">
+                <div className="w-full md:max-w-[400px] space-y-3" data-axe-exclude>
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Preview</p>
+                  <div className="flex flex-wrap gap-3">
+                    <button
+                      className="px-4 py-2 text-[14px] font-light rounded-lg"
+                      style={{
+                        backgroundColor: "hsl(var(--primary))",
+                        color: "hsl(var(--primary-foreground))",
+                        transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
+                      }}
+                      onMouseEnter={e => { (e.target as HTMLElement).style.opacity = String(interactionStyle.hoverOpacity); (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
+                      onMouseLeave={e => { (e.target as HTMLElement).style.opacity = "1"; (e.target as HTMLElement).style.transform = "scale(1)"; }}
+                      onMouseDown={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.activeScale})`; }}
+                      onMouseUp={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
+                    >
+                      Primary Button
+                    </button>
+                    <button
+                      className="px-4 py-2 text-[14px] font-light rounded-lg"
+                      style={{
+                        backgroundColor: "hsl(var(--secondary))",
+                        color: "hsl(var(--secondary-foreground))",
+                        transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
+                      }}
+                      onMouseEnter={e => { (e.target as HTMLElement).style.opacity = String(interactionStyle.hoverOpacity); (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
+                      onMouseLeave={e => { (e.target as HTMLElement).style.opacity = "1"; (e.target as HTMLElement).style.transform = "scale(1)"; }}
+                      onMouseDown={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.activeScale})`; }}
+                      onMouseUp={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
+                    >
+                      Secondary
+                    </button>
+                    <button
+                      className="px-4 py-2 text-[14px] font-light rounded-lg border"
+                      style={{
+                        backgroundColor: "transparent",
+                        color: "hsl(var(--foreground))",
+                        borderColor: "hsl(var(--border))",
+                        transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
+                      }}
+                      onMouseEnter={e => { (e.target as HTMLElement).style.opacity = String(interactionStyle.hoverOpacity); (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
+                      onMouseLeave={e => { (e.target as HTMLElement).style.opacity = "1"; (e.target as HTMLElement).style.transform = "scale(1)"; }}
+                      onMouseDown={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.activeScale})`; }}
+                      onMouseUp={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
+                    >
+                      Outline
+                    </button>
+                  </div>
+                  <p className="text-[12px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>
+                    Hover and click the buttons above to preview interaction states.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Interaction Reset Confirmation Modal */}
+          {showInteractionResetModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" role="dialog" aria-modal="true" aria-labelledby="interaction-reset-modal-title">
+              <div className="rounded-lg shadow-xl p-6 w-full max-w-sm mx-4" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}>
+                <h4 id="interaction-reset-modal-title" className="text-2xl font-light mb-2">
+                  Reset Interaction Style?
+                </h4>
+                <p className="text-[14px] mb-4" style={{ color: "hsl(var(--card-foreground))" }}>
+                  This will revert all interaction style settings to their defaults. Any customizations will be lost.
+                </p>
+                <div className="flex justify-end gap-2">
+                  <button
+                    onClick={() => setShowInteractionResetModal(false)}
+                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                    style={{ backgroundColor: "transparent", color: "hsl(var(--card-foreground))" }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => { handleResetInteractionStyle(); setShowInteractionResetModal(false); }}
+                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                    style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Card Style section */}
           <div id="card-style" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-28">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Card Style <a href="#top" className="opacity-30 hover:opacity-70 transition-opacity" aria-label="Back to top"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Card Style <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
                 <button
                   onClick={() => setCardCssVisible(!cardCssVisible)}
@@ -1856,7 +2049,7 @@ function DesignSystemEditorInner({
         {/* Typography section */}
           <div id="typography" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-28">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Typography <a href="#top" className="opacity-30 hover:opacity-70 transition-opacity" aria-label="Back to top"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Typography <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
                 <button
                   onClick={() => setTypoCssVisible(!typoCssVisible)}
@@ -2073,7 +2266,7 @@ function DesignSystemEditorInner({
           {/* Alerts section */}
           <div id="alerts" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-28">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts <a href="#top" className="opacity-30 hover:opacity-70 transition-opacity" aria-label="Back to top"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
                 <button
                   onClick={() => setAlertCssVisible(!alertCssVisible)}
@@ -2282,209 +2475,6 @@ function DesignSystemEditorInner({
             </div>
           )}
 
-          {/* Interactions section */}
-          <PremiumGate feature="interaction-states" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-          <div id="interactions" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-28">
-            <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Interactions <a href="#top" className="opacity-30 hover:opacity-70 transition-opacity" aria-label="Back to top"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
-              <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
-                <button
-                  onClick={() => setInteractionCssVisible(!interactionCssVisible)}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                  <span className="truncate"><span className="sm:hidden">{interactionCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{interactionCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
-                </button>
-                <button
-                  onClick={() => setShowInteractionResetModal(true)}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
-                  <span className="truncate">Reset</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Preset buttons */}
-            <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
-              {(["subtle", "elevated", "bold"] as const).map((key) => {
-                const labels: Record<string, string> = { subtle: "Subtle", elevated: "Elevated", bold: "Bold" };
-                const active = interactionStyle.preset === key;
-                return (
-                  <button
-                    key={key}
-                    onClick={() => selectInteractionPreset(key)}
-                    className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-                    style={active
-                      ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
-                      : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
-                    }
-                  >
-                    {labels[key]}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Interaction CSS output */}
-            {interactionCssVisible && (() => {
-              const intCss = `:root {\n  --hover-opacity: ${interactionStyle.hoverOpacity};\n  --hover-scale: ${interactionStyle.hoverScale};\n  --active-scale: ${interactionStyle.activeScale};\n  --transition-duration: ${interactionStyle.transitionDuration}ms;\n  --focus-ring-width: ${interactionStyle.focusRingWidth}px;\n  --focus-ring-color: hsl(var(--ring));\n}`;
-              return (
-                <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
-                  <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
-                    <span className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Interaction Style CSS</span>
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(intCss);
-                          setInteractionCssCopied(true);
-                          setTimeout(() => setInteractionCssCopied(false), 2000);
-                        }}
-                        className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
-                      >
-                        {interactionCssCopied ? "Copied!" : "Copy"}
-                      </button>
-                      <button
-                        onClick={() => setInteractionCssVisible(false)}
-                        className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </div>
-                  <pre className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono" style={{ color: "hsl(var(--card-foreground))" }}>
-                    <code>{intCss}</code>
-                  </pre>
-                </div>
-              );
-            })()}
-
-            {/* Controls + Preview */}
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-              {/* Slider controls */}
-              <div className="flex-1 min-w-0 space-y-3">
-                <div className="space-y-1.5">
-                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Hover</p>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Opacity: {interactionStyle.hoverOpacity}</span>
-                    <input type="range" min={0.6} max={1} step={0.01} value={interactionStyle.hoverOpacity} onChange={e => updateInteractionStyle({ hoverOpacity: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Scale: {interactionStyle.hoverScale}</span>
-                    <input type="range" min={1} max={1.1} step={0.005} value={interactionStyle.hoverScale} onChange={e => updateInteractionStyle({ hoverScale: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                </div>
-                <div className="space-y-1.5">
-                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Active</p>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Scale: {interactionStyle.activeScale}</span>
-                    <input type="range" min={0.9} max={1.05} step={0.005} value={interactionStyle.activeScale} onChange={e => updateInteractionStyle({ activeScale: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                </div>
-                <div className="space-y-1.5">
-                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Timing & Focus</p>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Duration: {interactionStyle.transitionDuration}ms</span>
-                    <input type="range" min={0} max={500} step={10} value={interactionStyle.transitionDuration} onChange={e => updateInteractionStyle({ transitionDuration: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Focus Ring: {interactionStyle.focusRingWidth}px</span>
-                    <input type="range" min={0} max={4} step={0.5} value={interactionStyle.focusRingWidth} onChange={e => updateInteractionStyle({ focusRingWidth: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                </div>
-              </div>
-
-              {/* Live preview */}
-              <div className="flex-1 min-w-0 flex items-start justify-center pt-2">
-                <div className="w-full md:max-w-[400px] space-y-3" data-axe-exclude>
-                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Preview</p>
-                  <div className="flex flex-wrap gap-3">
-                    <button
-                      className="px-4 py-2 text-[14px] font-light rounded-lg"
-                      style={{
-                        backgroundColor: "hsl(var(--primary))",
-                        color: "hsl(var(--primary-foreground))",
-                        transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
-                      }}
-                      onMouseEnter={e => { (e.target as HTMLElement).style.opacity = String(interactionStyle.hoverOpacity); (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
-                      onMouseLeave={e => { (e.target as HTMLElement).style.opacity = "1"; (e.target as HTMLElement).style.transform = "scale(1)"; }}
-                      onMouseDown={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.activeScale})`; }}
-                      onMouseUp={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
-                    >
-                      Primary Button
-                    </button>
-                    <button
-                      className="px-4 py-2 text-[14px] font-light rounded-lg"
-                      style={{
-                        backgroundColor: "hsl(var(--secondary))",
-                        color: "hsl(var(--secondary-foreground))",
-                        transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
-                      }}
-                      onMouseEnter={e => { (e.target as HTMLElement).style.opacity = String(interactionStyle.hoverOpacity); (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
-                      onMouseLeave={e => { (e.target as HTMLElement).style.opacity = "1"; (e.target as HTMLElement).style.transform = "scale(1)"; }}
-                      onMouseDown={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.activeScale})`; }}
-                      onMouseUp={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
-                    >
-                      Secondary
-                    </button>
-                    <button
-                      className="px-4 py-2 text-[14px] font-light rounded-lg border"
-                      style={{
-                        backgroundColor: "transparent",
-                        color: "hsl(var(--foreground))",
-                        borderColor: "hsl(var(--border))",
-                        transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
-                      }}
-                      onMouseEnter={e => { (e.target as HTMLElement).style.opacity = String(interactionStyle.hoverOpacity); (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
-                      onMouseLeave={e => { (e.target as HTMLElement).style.opacity = "1"; (e.target as HTMLElement).style.transform = "scale(1)"; }}
-                      onMouseDown={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.activeScale})`; }}
-                      onMouseUp={e => { (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`; }}
-                    >
-                      Outline
-                    </button>
-                  </div>
-                  <p className="text-[12px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>
-                    Hover and click the buttons above to preview interaction states.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          </PremiumGate>
-
-          {/* Interaction Reset Confirmation Modal */}
-          {showInteractionResetModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" role="dialog" aria-modal="true" aria-labelledby="interaction-reset-modal-title">
-              <div className="rounded-lg shadow-xl p-6 w-full max-w-sm mx-4" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}>
-                <h4 id="interaction-reset-modal-title" className="text-2xl font-light mb-2">
-                  Reset Interaction Style?
-                </h4>
-                <p className="text-[14px] mb-4" style={{ color: "hsl(var(--card-foreground))" }}>
-                  This will revert all interaction style settings to their defaults. Any customizations will be lost.
-                </p>
-                <div className="flex justify-end gap-2">
-                  <button
-                    onClick={() => setShowInteractionResetModal(false)}
-                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                    style={{ backgroundColor: "transparent", color: "hsl(var(--card-foreground))" }}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => { handleResetInteractionStyle(); setShowInteractionResetModal(false); }}
-                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                    style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </section>
       {/* PR Section Picker Modal */}
