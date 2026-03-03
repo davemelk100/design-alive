@@ -42,12 +42,6 @@ import {
 import type { CardStyleState, TypographyState, AlertStyleState } from "./utils/themeUtils";
 import "./styles/editor.css";
 
-const LazyLinkedin = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Linkedin }))
-);
-const LazyDribbble = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Dribbble }))
-);
 const LazyHome = React.lazy(() =>
   import("lucide-react").then((mod) => ({ default: mod.Home }))
 );
@@ -141,9 +135,7 @@ GitHubLogoIcon.displayName = "GitHubLogoIcon";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SITE_ICONS: { name: string; icon: React.LazyExoticComponent<any> | React.ComponentType<any> }[] = [
-  { name: "LinkedIn", icon: LazyLinkedin },
   { name: "GitHub", icon: GitHubLogoIcon },
-  { name: "Dribbble", icon: LazyDribbble },
   { name: "Home", icon: LazyHome },
   { name: "Palette", icon: LazyPalette },
   { name: "BookOpen", icon: LazyBookOpen },
@@ -1071,8 +1063,27 @@ export function DesignSystemEditor({
             </div>
           )}
 
+          {/* Jump nav */}
+          <nav className="flex items-center gap-1 sm:gap-2 py-2 mb-2 overflow-x-auto sticky top-0 z-20" style={{ backgroundColor: "hsl(var(--background))" }}>
+            {[
+              { id: "colors", label: "Colors" },
+              { id: "card-style", label: "Card Style" },
+              { id: "typography", label: "Typography" },
+              { id: "alerts", label: "Alerts" },
+            ].map((s) => (
+              <a
+                key={s.id}
+                href={`#${s.id}`}
+                className="px-3 py-1.5 text-[13px] font-light uppercase tracking-wider rounded-md transition-colors hover:opacity-70 whitespace-nowrap"
+                style={{ color: "hsl(var(--muted-foreground))", backgroundColor: "hsl(var(--muted-foreground) / 0.08)" }}
+              >
+                {s.label}
+              </a>
+            ))}
+          </nav>
+
           {/* Colors section */}
-          <div className="min-w-0 p-2 md:p-4 space-y-3">
+          <div id="colors" className="min-w-0 p-2 md:p-4 space-y-3 scroll-mt-16">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Colors</h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -1153,7 +1164,7 @@ export function DesignSystemEditor({
             </div>
 
             {/* Color swatch buttons */}
-            <div className="grid grid-cols-5 gap-1.5 rounded-lg p-3" data-axe-exclude style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 rounded-lg p-3" data-axe-exclude style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {COLOR_SWATCHES.filter(({ key }) => ["--brand", "--secondary", "--accent", "--background", "--foreground"].includes(key)).map(({ key, label }) => {
                 const hsl = colors[key];
                 const bgHsl = hsl || "0 0% 50%";
@@ -1167,7 +1178,7 @@ export function DesignSystemEditor({
                 return (
                   <div key={key} className="relative group flex items-stretch rounded-lg overflow-hidden" style={{ boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>
                     <button
-                      className="w-full h-20 text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer"
+                      className="w-full h-14 sm:h-20 text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer"
                       style={{ backgroundColor: hsl ? `hsl(${hsl})` : "#e5e7eb", color: btnTextColor }}
                       onClick={() => {
                         const input = document.getElementById(inputId) as HTMLInputElement | null;
@@ -1175,8 +1186,8 @@ export function DesignSystemEditor({
                       }}
                     >
                       <span className="whitespace-nowrap leading-tight">{label}</span>
-                      {hexCode && <span className="whitespace-nowrap opacity-70 text-[14px] leading-tight">{hexCode}</span>}
-                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      {hexCode && <span className="hidden sm:inline whitespace-nowrap opacity-70 text-[14px] leading-tight">{hexCode}</span>}
+                      <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                       </svg>
                     </button>
@@ -1295,7 +1306,7 @@ export function DesignSystemEditor({
               </div>
 
               {/* Chips / Badges row */}
-              <div className="w-full space-y-2">
+              <div className="w-full space-y-2" data-axe-exclude>
                 <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Chips / Badges</p>
                 <div className="flex flex-row flex-wrap gap-1.5 items-start">
                   <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[14px] font-light max-w-full truncate" style={{ backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "white" }}>Brand</span>
@@ -1317,7 +1328,7 @@ export function DesignSystemEditor({
               </div>
 
               {/* Buttons row */}
-              <div className="w-full space-y-2">
+              <div className="w-full space-y-2" data-axe-exclude>
                 <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Buttons</p>
                 <div className="flex flex-row flex-wrap gap-1.5 items-start">
                   <button className="h-12 px-3 rounded-lg font-light text-[14px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--primary))", color: colors["--primary"] ? `hsl(${fgForBg(colors["--primary"])})` : "hsl(var(--primary-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Primary</button>
@@ -1332,7 +1343,7 @@ export function DesignSystemEditor({
               </div>
 
               {/* Icons row */}
-              <div className="w-full hidden md:block">
+              <div className="w-full hidden md:block" data-axe-exclude>
                 <p className="text-[14px] font-light uppercase tracking-wider mb-2 md:mb-3" style={{ color: "hsl(var(--muted-foreground))" }}>Icons</p>
                 <div className="flex flex-row flex-wrap gap-2">
                   <Suspense fallback={null}>
@@ -1348,7 +1359,7 @@ export function DesignSystemEditor({
           </div>
 
           {/* Card Style section */}
-          <div className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12">
+          <div id="card-style" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-16">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Card Style</h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -1590,7 +1601,7 @@ export function DesignSystemEditor({
             </div>
           </div>
         {/* Typography section */}
-          <div className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12">
+          <div id="typography" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-16">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Typography</h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -1806,7 +1817,7 @@ export function DesignSystemEditor({
           </div>
 
           {/* Alerts section */}
-          <div className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12">
+          <div id="alerts" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-16">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Alerts</h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">

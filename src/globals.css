@@ -105,8 +105,14 @@
     line-height: var(--line-height);
   }
 
-  p, ul, ol, li, a, button, input, select, textarea, label {
+  p, ul, ol, a, button, input, select, textarea, label {
     font-size: var(--font-size-base);
+    font-weight: var(--font-weight-body);
+    line-height: var(--line-height);
+  }
+
+  li {
+    font-size: 14px;
     font-weight: var(--font-weight-body);
     line-height: var(--line-height);
   }
