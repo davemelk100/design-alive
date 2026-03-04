@@ -13,9 +13,9 @@ export default function ReadmePage() {
           &larr; Back to Editor
         </Link>
 
-        <div className="flex items-center gap-3 mb-8">
-          <img src="/theemal-logo-wide.svg" alt="Themal" className="h-10 sm:h-12" />
-          <h1 className="text-3xl sm:text-4xl font-light title-font" style={{ color: "hsl(var(--foreground))" }}>
+        <div className="flex items-end gap-3 mb-8">
+          <img src="/themal-logo-wide.svg" alt="Themal" className="h-10 sm:h-12" />
+          <h1 className="text-3xl sm:text-4xl font-light title-font" style={{ color: "hsl(var(--foreground))", lineHeight: ".75" }}>
             @theemel/editor
           </h1>
         </div>

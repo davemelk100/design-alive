@@ -139,9 +139,9 @@ export default function Pricing() {
           &larr; Back to Editor
         </Link>
 
-        <div className="flex items-center gap-3 mb-3">
-          <img src="/theemal-logo-wide.svg" alt="Themal" className="h-10 sm:h-12" />
-          <h1 className="text-3xl sm:text-4xl font-light title-font" style={{ color: "hsl(var(--foreground))" }}>
+        <div className="flex items-end gap-3 mb-3">
+          <img src="/themal-logo-wide.svg" alt="Themal" className="h-10 sm:h-12" />
+          <h1 className="text-3xl sm:text-4xl font-light title-font" style={{ color: "hsl(var(--foreground))", lineHeight: ".75" }}>
             Pricing
           </h1>
         </div>
