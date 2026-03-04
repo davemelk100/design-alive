@@ -222,7 +222,7 @@ function DesignSystemEditorInner({
   const [activeSection, setActiveSection] = useState<string>("colors");
 
   useEffect(() => {
-    const ids = ["colors", "card-style", "typography", "alerts", "buttons"];
+    const ids = ["colors", "card-alerts", "typography", "buttons"];
     const elements = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     if (elements.length === 0) return;
 
@@ -1040,9 +1040,8 @@ function DesignSystemEditorInner({
             <nav className="hidden lg:flex items-center gap-3 lg:gap-4 flex-1 min-w-0 ml-6">
               {[
                 { id: "colors", label: "Colors", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" /></svg> },
-                { id: "card-style", label: "Card Style", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg> },
+                { id: "card-alerts", label: "Card & Alerts", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg> },
                 { id: "typography", label: "Typography", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg> },
-                { id: "alerts", label: "Alerts", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg> },
                 { id: "buttons", label: "Buttons", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" /></svg> },
               ].map((s) => (
                 <a
@@ -1856,8 +1855,11 @@ function DesignSystemEditorInner({
             </div>
           )}
 
+          {/* Card Style & Alerts row */}
+          <div id="card-alerts" className="min-w-0 p-2 md:p-4 mt-8 md:mt-12 scroll-mt-28">
+          <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
           {/* Card Style section */}
-          <div id="card-style" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-28">
+          <div className="w-full md:w-1/2 space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Card Style <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -2123,6 +2125,221 @@ function DesignSystemEditorInner({
               </div>
             </div>
           </div>
+
+          {/* Alerts section */}
+          <div className="w-full md:w-1/2 space-y-3">
+            <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
+              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts</h2>
+              <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
+                <button
+                  onClick={() => setAlertCssVisible(!alertCssVisible)}
+                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                  style={{ color: "hsl(var(--muted-foreground))" }}
+                >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                  <span className="truncate"><span className="sm:hidden">{alertCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{alertCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
+                </button>
+                <button
+                  onClick={() => setShowAlertResetModal(true)}
+                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                  style={{ color: "hsl(var(--muted-foreground))" }}
+                >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
+                  <span className="truncate">Reset</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Preset buttons */}
+            <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
+              {(["filled", "soft", "outline", "minimal"] as const).map((key) => {
+                const labels: Record<string, string> = { filled: "Filled", soft: "Soft", outline: "Outline", minimal: "Minimal" };
+                const icons: Record<string, React.ReactNode> = {
+                  filled: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+                  soft: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+                  outline: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="3" /></svg>,
+                  minimal: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" d="M3 4v16" /><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h13" /></svg>,
+                };
+                const active = alertStyle.preset === key;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => selectAlertPreset(key)}
+                    className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                    style={active
+                      ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                      : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                    }
+                  >
+                    {icons[key]}
+                    {labels[key]}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Alert CSS output */}
+            {alertCssVisible && (() => {
+              const alertCss = `:root {\n  --alert-radius: ${alertStyle.borderRadius}px;\n  --alert-border-width: ${alertStyle.borderWidth}px;\n  --alert-padding: ${alertStyle.padding}px;\n}`;
+              return (
+                <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
+                  <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
+                    <span className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Alert Style CSS</span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(alertCss);
+                          setAlertCssCopied(true);
+                          setTimeout(() => setAlertCssCopied(false), 2000);
+                        }}
+                        className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                      >
+                        {alertCssCopied ? "Copied!" : "Copy"}
+                      </button>
+                      <button
+                        onClick={() => setAlertCssVisible(false)}
+                        className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                  <pre className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono" style={{ color: "hsl(var(--card-foreground))" }}>
+                    <code>{alertCss}</code>
+                  </pre>
+                </div>
+              );
+            })()}
+
+            {/* Controls + Preview */}
+            <div className="flex flex-col gap-4">
+              {/* Slider controls */}
+              <div className="min-w-0 space-y-3">
+                <div className="space-y-1.5">
+                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Shape</p>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Border Radius: {alertStyle.borderRadius}px</span>
+                    <input type="range" min={0} max={24} value={alertStyle.borderRadius} onChange={e => updateAlertStyle({ borderRadius: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Border Width: {alertStyle.borderWidth}px</span>
+                    <input type="range" min={0} max={4} value={alertStyle.borderWidth} onChange={e => updateAlertStyle({ borderWidth: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                    <span>Padding: {alertStyle.padding}px</span>
+                    <input type="range" min={8} max={32} value={alertStyle.padding} onChange={e => updateAlertStyle({ padding: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                  </label>
+                </div>
+              </div>
+
+              {/* Live preview */}
+              <div className="min-w-0">
+                <div className="w-full space-y-3" data-axe-exclude>
+                  {(() => {
+                    const alertTypes = [
+                      { key: "success", label: "Success", message: "Operation completed successfully.", colorVar: "--success", fgVar: "--success-foreground", iconPath: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
+                      { key: "warning", label: "Warning", message: "Please review before continuing.", colorVar: "--warning", fgVar: "--warning-foreground", iconPath: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" },
+                      { key: "error", label: "Error", message: "Something went wrong. Try again.", colorVar: "--destructive", fgVar: "--destructive-foreground", iconPath: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" },
+                      { key: "info", label: "Info", message: "Here is some useful information.", colorVar: "--brand", fgVar: null, iconPath: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
+                    ];
+
+                    return alertTypes.map(({ key, label, message, colorVar, fgVar, iconPath }) => {
+                      const colorRef = `var(${colorVar})`;
+                      const fgRef = fgVar ? `var(${fgVar})` : null;
+                      const preset = alertStyle.preset;
+
+                      const colorHsl = colors[colorVar] || "220 70% 50%";
+
+                      let bgStyle: string;
+                      let textColor: string;
+                      let borderStyle: string;
+                      let leftBorder = "";
+
+                      if (preset === "filled") {
+                        bgStyle = `hsl(${colorRef})`;
+                        textColor = fgRef ? `hsl(${fgRef})` : (colors[colorVar] ? `hsl(${fgForBg(colors[colorVar])})` : "#fff");
+                        borderStyle = "none";
+                      } else if (preset === "soft") {
+                        const parts = colorHsl.trim().split(/\s+/);
+                        bgStyle = parts.length >= 3 ? `hsla(${parts[0]}, ${parts[1]}, ${parts[2]}, 0.12)` : `hsl(${colorRef})`;
+                        textColor = `hsl(${colorRef})`;
+                        borderStyle = "none";
+                      } else if (preset === "outline") {
+                        bgStyle = "transparent";
+                        textColor = `hsl(${colorRef})`;
+                        borderStyle = `${alertStyle.borderWidth}px solid hsl(${colorRef})`;
+                      } else {
+                        bgStyle = "transparent";
+                        textColor = `hsl(${colorRef})`;
+                        borderStyle = "none";
+                        leftBorder = `3px solid hsl(${colorRef})`;
+                      }
+
+                      return (
+                        <div
+                          key={key}
+                          className="flex items-start gap-3"
+                          style={{
+                            backgroundColor: bgStyle,
+                            color: textColor,
+                            borderRadius: preset === "minimal" ? 0 : `${alertStyle.borderRadius}px`,
+                            border: borderStyle,
+                            borderLeft: leftBorder || borderStyle,
+                            padding: `${alertStyle.padding}px`,
+                          }}
+                        >
+                          <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d={iconPath} />
+                          </svg>
+                          <div className="min-w-0">
+                            <p className="text-[14px] font-medium">{label}</p>
+                            <p className="text-[13px] font-light opacity-90">{message}</p>
+                          </div>
+                        </div>
+                      );
+                    });
+                  })()}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          </div>{/* end flex row */}
+
+          {/* Alert Reset Confirmation Modal */}
+          {showAlertResetModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" role="dialog" aria-modal="true" aria-labelledby="alert-reset-modal-title">
+              <div className="rounded-lg shadow-xl p-6 w-full max-w-sm mx-4" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}>
+                <h4 id="alert-reset-modal-title" className="text-2xl font-light mb-2">
+                  Reset Alert Style?
+                </h4>
+                <p className="text-[14px] mb-4" style={{ color: "hsl(var(--card-foreground))" }}>
+                  This will revert all alert style settings to their defaults. Any customizations will be lost.
+                </p>
+                <div className="flex justify-end gap-2">
+                  <button
+                    onClick={() => setShowAlertResetModal(false)}
+                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                    style={{ backgroundColor: "transparent", color: "hsl(var(--card-foreground))" }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => { handleResetAlertStyle(); setShowAlertResetModal(false); }}
+                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                    style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          </div>{/* end card-alerts wrapper */}
+
         {/* Typography section */}
           <div id="typography" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-28">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
@@ -2340,217 +2557,6 @@ function DesignSystemEditorInner({
             </div>
           </div>
 
-          {/* Alerts section */}
-          <div id="alerts" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-28">
-            <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
-              <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
-                <button
-                  onClick={() => setAlertCssVisible(!alertCssVisible)}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                  <span className="truncate"><span className="sm:hidden">{alertCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{alertCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
-                </button>
-                <button
-                  onClick={() => setShowAlertResetModal(true)}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
-                  <span className="truncate">Reset</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Preset buttons */}
-            <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
-              {(["filled", "soft", "outline", "minimal"] as const).map((key) => {
-                const labels: Record<string, string> = { filled: "Filled", soft: "Soft", outline: "Outline", minimal: "Minimal" };
-                const icons: Record<string, React.ReactNode> = {
-                  filled: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
-                  soft: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
-                  outline: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="3" /></svg>,
-                  minimal: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" d="M3 4v16" /><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h13" /></svg>,
-                };
-                const active = alertStyle.preset === key;
-                return (
-                  <button
-                    key={key}
-                    onClick={() => selectAlertPreset(key)}
-                    className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-                    style={active
-                      ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
-                      : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
-                    }
-                  >
-                    {icons[key]}
-                    {labels[key]}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Alert CSS output */}
-            {alertCssVisible && (() => {
-              const alertCss = `:root {\n  --alert-radius: ${alertStyle.borderRadius}px;\n  --alert-border-width: ${alertStyle.borderWidth}px;\n  --alert-padding: ${alertStyle.padding}px;\n}`;
-              return (
-                <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
-                  <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
-                    <span className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Alert Style CSS</span>
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(alertCss);
-                          setAlertCssCopied(true);
-                          setTimeout(() => setAlertCssCopied(false), 2000);
-                        }}
-                        className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
-                      >
-                        {alertCssCopied ? "Copied!" : "Copy"}
-                      </button>
-                      <button
-                        onClick={() => setAlertCssVisible(false)}
-                        className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </div>
-                  <pre className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono" style={{ color: "hsl(var(--card-foreground))" }}>
-                    <code>{alertCss}</code>
-                  </pre>
-                </div>
-              );
-            })()}
-
-            {/* Controls + Preview */}
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-              {/* Slider controls */}
-              <div className="flex-1 min-w-0 space-y-3">
-                <div className="space-y-1.5">
-                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Shape</p>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Border Radius: {alertStyle.borderRadius}px</span>
-                    <input type="range" min={0} max={24} value={alertStyle.borderRadius} onChange={e => updateAlertStyle({ borderRadius: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Border Width: {alertStyle.borderWidth}px</span>
-                    <input type="range" min={0} max={4} value={alertStyle.borderWidth} onChange={e => updateAlertStyle({ borderWidth: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Padding: {alertStyle.padding}px</span>
-                    <input type="range" min={8} max={32} value={alertStyle.padding} onChange={e => updateAlertStyle({ padding: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                </div>
-              </div>
-
-              {/* Live preview */}
-              <div className="flex-1 min-w-0 flex items-start justify-center pt-2">
-                <div className="w-full md:max-w-[400px] space-y-3" data-axe-exclude>
-                  {(() => {
-                    const alertTypes = [
-                      { key: "success", label: "Success", message: "Operation completed successfully.", colorVar: "--success", fgVar: "--success-foreground", iconPath: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
-                      { key: "warning", label: "Warning", message: "Please review before continuing.", colorVar: "--warning", fgVar: "--warning-foreground", iconPath: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" },
-                      { key: "error", label: "Error", message: "Something went wrong. Try again.", colorVar: "--destructive", fgVar: "--destructive-foreground", iconPath: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" },
-                      { key: "info", label: "Info", message: "Here is some useful information.", colorVar: "--brand", fgVar: null, iconPath: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
-                    ];
-
-                    return alertTypes.map(({ key, label, message, colorVar, fgVar, iconPath }) => {
-                      const colorRef = `var(${colorVar})`;
-                      const fgRef = fgVar ? `var(${fgVar})` : null;
-                      const preset = alertStyle.preset;
-
-                      // For "soft" preset we need the actual HSL values to apply opacity
-                      const colorHsl = colors[colorVar] || "220 70% 50%";
-
-                      let bgStyle: string;
-                      let textColor: string;
-                      let borderStyle: string;
-                      let leftBorder = "";
-
-                      if (preset === "filled") {
-                        bgStyle = `hsl(${colorRef})`;
-                        textColor = fgRef ? `hsl(${fgRef})` : (colors[colorVar] ? `hsl(${fgForBg(colors[colorVar])})` : "#fff");
-                        borderStyle = "none";
-                      } else if (preset === "soft") {
-                        const parts = colorHsl.trim().split(/\s+/);
-                        bgStyle = parts.length >= 3 ? `hsla(${parts[0]}, ${parts[1]}, ${parts[2]}, 0.12)` : `hsl(${colorRef})`;
-                        textColor = `hsl(${colorRef})`;
-                        borderStyle = "none";
-                      } else if (preset === "outline") {
-                        bgStyle = "transparent";
-                        textColor = `hsl(${colorRef})`;
-                        borderStyle = `${alertStyle.borderWidth}px solid hsl(${colorRef})`;
-                      } else {
-                        // minimal
-                        bgStyle = "transparent";
-                        textColor = `hsl(${colorRef})`;
-                        borderStyle = "none";
-                        leftBorder = `3px solid hsl(${colorRef})`;
-                      }
-
-                      return (
-                        <div
-                          key={key}
-                          className="flex items-start gap-3"
-                          style={{
-                            backgroundColor: bgStyle,
-                            color: textColor,
-                            borderRadius: preset === "minimal" ? 0 : `${alertStyle.borderRadius}px`,
-                            border: borderStyle,
-                            borderLeft: leftBorder || borderStyle,
-                            padding: `${alertStyle.padding}px`,
-                          }}
-                        >
-                          <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d={iconPath} />
-                          </svg>
-                          <div className="min-w-0">
-                            <p className="text-[14px] font-medium">{label}</p>
-                            <p className="text-[13px] font-light opacity-90">{message}</p>
-                          </div>
-                        </div>
-                      );
-                    });
-                  })()}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Alert Reset Confirmation Modal */}
-          {showAlertResetModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" role="dialog" aria-modal="true" aria-labelledby="alert-reset-modal-title">
-              <div className="rounded-lg shadow-xl p-6 w-full max-w-sm mx-4" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}>
-                <h4 id="alert-reset-modal-title" className="text-2xl font-light mb-2">
-                  Reset Alert Style?
-                </h4>
-                <p className="text-[14px] mb-4" style={{ color: "hsl(var(--card-foreground))" }}>
-                  This will revert all alert style settings to their defaults. Any customizations will be lost.
-                </p>
-                <div className="flex justify-end gap-2">
-                  <button
-                    onClick={() => setShowAlertResetModal(false)}
-                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                    style={{ backgroundColor: "transparent", color: "hsl(var(--card-foreground))" }}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => { handleResetAlertStyle(); setShowAlertResetModal(false); }}
-                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                    style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
-                  >
-                    Reset
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
 
         </div>
       </section>
@@ -2650,9 +2656,8 @@ function DesignSystemEditorInner({
               <p className="text-[11px] font-semibold uppercase tracking-wider mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Sections</p>
               {[
                 { id: "colors", label: "Colors" },
-                { id: "card-style", label: "Card Style" },
+                { id: "card-alerts", label: "Card & Alerts" },
                 { id: "typography", label: "Typography" },
-                { id: "alerts", label: "Alerts" },
                 { id: "buttons", label: "Buttons" },
               ].map((s) => (
                 <a

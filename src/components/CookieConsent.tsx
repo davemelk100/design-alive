@@ -41,8 +41,8 @@ export default function CookieConsent() {
           onClick={accept}
           className="px-4 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 whitespace-nowrap"
           style={{
-            backgroundColor: "hsl(var(--brand))",
-            color: "hsl(var(--brand-foreground, var(--primary-foreground)))",
+            backgroundColor: "#111",
+            color: "#fff",
           }}
         >
           Got it
