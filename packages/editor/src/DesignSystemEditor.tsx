@@ -66,7 +66,7 @@ import {
 } from "./utils/themeUtils";
 import type { CustomFontEntry } from "./utils/themeUtils";
 import type { CardStyleState, TypographyState, AlertStyleState, InteractionStyleState, TypoInteractionStyleState } from "./utils/themeUtils";
-import { extractPaletteFromImage } from "./utils/extractPalette";
+import { extractPaletteFromImage, extractPaletteFromUrl } from "./utils/extractPalette";
 import "./styles/editor.css";
 
 const LazyHome = React.lazy(() =>
@@ -260,6 +260,7 @@ function DesignSystemEditorInner({
   }, []);
 
   const [showResetModal, setShowResetModal] = useState(false);
+  const [showFeaturesModal, setShowFeaturesModal] = useState(false);
   const [showCardResetModal, setShowCardResetModal] = useState(false);
   const [showTypoResetModal, setShowTypoResetModal] = useState(false);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
@@ -328,6 +329,8 @@ function DesignSystemEditorInner({
   const [showTypoInteractionResetModal, setShowTypoInteractionResetModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [imagePaletteStatus, setImagePaletteStatus] = useState<'idle' | 'extracting' | 'done' | 'error'>('idle');
+  const [imageUrlInput, setImageUrlInput] = useState("");
+  const [imageUrlError, setImageUrlError] = useState("");
   const [exportFormat, setExportFormat] = useState<"css" | "tokens">("css");
   const [shareCopied, setShareCopied] = useState(false);
   const [showPaletteExport, setShowPaletteExport] = useState(false);
@@ -824,6 +827,30 @@ function DesignSystemEditorInner({
     }
   };
 
+  const handleImageUrlSubmit = async () => {
+    const url = imageUrlInput.trim();
+    if (!url) return;
+    try {
+      new URL(url);
+    } catch {
+      setImageUrlError("Please enter a valid URL");
+      return;
+    }
+    setImageUrlError("");
+    try {
+      setImagePaletteStatus('extracting');
+      const palette = await extractPaletteFromUrl(url);
+      setPendingImagePalette({ imageUrl: url, palette });
+      setImagePaletteStatus('idle');
+      setImageUrlInput("");
+    } catch (err) {
+      console.error("Image URL palette extraction failed:", err);
+      setImageUrlError("Failed to load image. The server may block cross-origin requests.");
+      setImagePaletteStatus('error');
+      setTimeout(() => setImagePaletteStatus('idle'), 3000);
+    }
+  };
+
   const applyImagePalette = (palette: Record<string, string>) => {
     setPrevColors({ ...colors });
 
@@ -1211,6 +1238,17 @@ function DesignSystemEditorInner({
             <div className="ml-auto flex items-center gap-3 lg:hidden">
               {headerRight}
               <button
+                onClick={() => setShowFeaturesModal(true)}
+                className="p-2 rounded-lg transition-opacity hover:opacity-70 sm:hidden"
+                style={{ color: "hsl(var(--muted-foreground))" }}
+                aria-label="Features"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <circle cx="12" cy="12" r="10" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0-4h.01" />
+                </svg>
+              </button>
+              <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="p-2 rounded-lg transition-opacity hover:opacity-70"
                 style={{ color: "hsl(var(--foreground))" }}
@@ -1229,7 +1267,7 @@ function DesignSystemEditorInner({
         </div>
       </div>}
 
-      <ul className="w-full px-4 sm:px-6 lg:px-8 pt-1.5 columns-1 sm:columns-2 gap-x-8 text-[13px] font-light list-disc pl-9 sm:pl-11" style={{ color: "hsl(var(--muted-foreground))" }}>
+      <ul className="w-full px-4 sm:px-6 lg:px-8 pt-1.5 hidden sm:block columns-1 sm:columns-2 gap-x-8 text-[13px] font-light list-disc pl-9 sm:pl-11" style={{ color: "hsl(var(--muted-foreground))" }}>
         <li>Real-time color picking with live preview</li>
         <li>Random palette generation with smart derivation</li>
         <li>Color harmony schemes (Complementary, Analogous, Triadic, Split-Complementary)</li>
@@ -1244,8 +1282,117 @@ function DesignSystemEditorInner({
         <li>GitHub PR integration</li>
       </ul>
 
+      {/* Features modal (mobile) */}
+      {showFeaturesModal && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center sm:hidden" onClick={() => setShowFeaturesModal(false)}>
+          <div className="absolute inset-0 bg-black/30" />
+          <div
+            className="relative w-full rounded-t-2xl px-6 py-6 pb-10 max-h-[80vh] overflow-y-auto"
+            style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-10 h-1 rounded-full mx-auto mb-4" style={{ backgroundColor: "hsl(var(--muted-foreground) / 0.3)" }} />
+            <h3 className="text-[16px] font-medium mb-3">Features</h3>
+            <ul className="space-y-2 text-[14px] font-light list-disc pl-5" style={{ color: "hsl(var(--card-foreground))" }}>
+              <li>Real-time color picking with live preview</li>
+              <li>Random palette generation with smart derivation</li>
+              <li>Color harmony schemes (Complementary, Analogous, Triadic, Split-Complementary)</li>
+              <li>Image-based palette extraction via upload</li>
+              <li>Dark mode with automatic foreground/background swap</li>
+              <li>WCAG AA contrast enforcement</li>
+              <li>Typography system with presets and custom Google Fonts</li>
+              <li>Card, alert, and button style presets</li>
+              <li>Per-section CSS and Design Token export</li>
+              <li>Shareable URLs for full theme state</li>
+              <li>Accessibility audit via axe-core</li>
+              <li>GitHub PR integration</li>
+            </ul>
+            <button
+              onClick={() => setShowFeaturesModal(false)}
+              className="mt-4 w-full h-10 text-[14px] font-medium rounded-md transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Mobile-only Open PR */}
-      <div className="sm:hidden w-full px-4 pt-4">
+      <div className="sm:hidden w-full px-4 pt-4 [&_.ds-premium-gated-inline]:w-full [&_.ds-premium-gated-inline]:flex [&_.ds-premium-locked-content]:w-full">
+        <PremiumGate feature="pr-integration" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+        {(() => {
+          const mainSt = sectionPrStatus["main"] || { status: 'idle' as const };
+          return (
+          <div className="w-full flex flex-col gap-2">
+            {prEndpointUrl && mainSt.status === 'created' && (
+              <div className="flex items-center gap-2 text-[13px] font-light text-green-600 dark:text-green-400">
+                <span>PR Created!</span>
+                {mainSt.url && (
+                  <a href={mainSt.url} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70 transition-opacity">View</a>
+                )}
+                <button
+                  onClick={() => setSectionPrStatus(prev => ({ ...prev, main: { status: 'idle' } }))}
+                  className="hover:opacity-70 transition-opacity"
+                  aria-label="Dismiss"
+                >&#10005;</button>
+              </div>
+            )}
+            {prEndpointUrl && mainSt.status === 'rate-limited' && mainSt.error && (
+              <span className="text-[13px] font-light text-yellow-700 dark:text-yellow-300">
+                {mainSt.error}
+              </span>
+            )}
+            <button
+              disabled={mainSt.status === 'creating'}
+              onClick={() => {
+                if (mainSt.status === 'creating') return;
+                setShowPrSetupModal(true);
+              }}
+              className={`w-full h-10 text-[14px] font-medium uppercase tracking-wider transition-colors hover:opacity-90 flex items-center justify-center gap-2 whitespace-nowrap rounded-md ${
+                mainSt.status === 'error' || mainSt.status === 'rate-limited'
+                  ? 'text-red-600 dark:text-red-400'
+                  : ''
+              }`}
+              style={{
+                backgroundColor: mainSt.status === 'error' || mainSt.status === 'rate-limited' ? undefined : "hsl(var(--brand))",
+                color: mainSt.status === 'error' || mainSt.status === 'rate-limited' ? undefined : (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff"),
+                lineHeight: 1,
+              }}
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
+              <span>{mainSt.status === 'creating' ? 'Preparing...' : mainSt.status === 'error' ? 'Retry PR' : mainSt.status === 'rate-limited' ? 'Retry PR' : 'Open PR'}</span>
+            </button>
+          </div>
+          );
+        })()}
+        </PremiumGate>
+      </div>
+
+      {/* Section nav */}
+      <nav className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-10 pb-1 hidden sm:flex items-center justify-between gap-3 lg:gap-4 flex-wrap" style={{ backgroundColor: "hsl(var(--background))" }}>
+        {[
+          { id: "colors", label: "Colors", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" /></svg> },
+          { id: "card", label: "Cards", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg> },
+          { id: "alerts", label: "Alerts", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg> },
+          { id: "typography", label: "Typography", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg> },
+          { id: "buttons", label: "Buttons", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" /></svg> },
+        ].map((s) => (
+          <a
+            key={s.id}
+            href={`#${s.id}`}
+            className="text-[20px] font-light uppercase tracking-wider transition-all whitespace-nowrap flex items-center gap-2 no-underline ds-nav-link"
+            style={{
+              color: activeSection === s.id ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))",
+              lineHeight: 1,
+              borderBottom: activeSection === s.id ? "1px solid hsl(var(--foreground))" : "1px solid transparent",
+              paddingBottom: 2,
+            }}
+          >
+            <span>{s.label}</span>
+            <svg className="w-5 h-5 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
+          </a>
+        ))}
         <PremiumGate feature="pr-integration" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
         {(() => {
           const mainSt = sectionPrStatus["main"] || { status: 'idle' as const };
@@ -1275,83 +1422,18 @@ function DesignSystemEditorInner({
                 if (mainSt.status === 'creating') return;
                 setShowPrSetupModal(true);
               }}
-              className={`text-[16px] font-light uppercase tracking-wider transition-colors hover:opacity-70 flex items-center gap-2 whitespace-nowrap ${
+              className={`h-10 px-4 text-[14px] font-medium uppercase tracking-wider transition-colors hover:opacity-90 flex items-center justify-center gap-2 whitespace-nowrap rounded-md ${
                 mainSt.status === 'error' || mainSt.status === 'rate-limited'
                   ? 'text-red-600 dark:text-red-400'
                   : ''
               }`}
-              style={{ color: mainSt.status === 'error' || mainSt.status === 'rate-limited' ? undefined : "hsl(var(--brand))", lineHeight: 1 }}
+              style={{
+                backgroundColor: mainSt.status === 'error' || mainSt.status === 'rate-limited' ? undefined : "hsl(var(--brand))",
+                color: mainSt.status === 'error' || mainSt.status === 'rate-limited' ? undefined : (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff"),
+                lineHeight: 1,
+              }}
             >
               <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
-              <span>{mainSt.status === 'creating' ? 'Preparing...' : mainSt.status === 'error' ? 'Retry PR' : mainSt.status === 'rate-limited' ? 'Retry PR' : 'Open PR'}</span>
-            </button>
-          </div>
-          );
-        })()}
-        </PremiumGate>
-      </div>
-
-      {/* Section nav */}
-      <nav className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-10 pb-1 hidden sm:flex items-center gap-3 lg:gap-4 flex-wrap" style={{ backgroundColor: "hsl(var(--background))" }}>
-        {[
-          { id: "colors", label: "Colors", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" /></svg> },
-          { id: "card", label: "Cards", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg> },
-          { id: "alerts", label: "Alerts", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg> },
-          { id: "typography", label: "Typography", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg> },
-          { id: "buttons", label: "Buttons", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" /></svg> },
-        ].map((s) => (
-          <a
-            key={s.id}
-            href={`#${s.id}`}
-            className="text-[20px] font-light uppercase tracking-wider transition-all whitespace-nowrap flex items-center gap-2 no-underline ds-nav-link"
-            style={{
-              color: activeSection === s.id ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))",
-              lineHeight: 1,
-              borderBottom: activeSection === s.id ? "1px solid hsl(var(--foreground))" : "1px solid transparent",
-              paddingBottom: 2,
-            }}
-          >
-            <span>{s.label}</span>
-            <svg className="w-5 h-5 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
-          </a>
-        ))}
-        <PremiumGate feature="pr-integration" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-        {(() => {
-          const mainSt = sectionPrStatus["main"] || { status: 'idle' as const };
-          return (
-          <div className="flex items-center gap-2 ml-auto">
-            {prEndpointUrl && mainSt.status === 'created' && (
-              <div className="flex items-center gap-2 text-[13px] font-light text-green-600 dark:text-green-400">
-                <span>PR Created!</span>
-                {mainSt.url && (
-                  <a href={mainSt.url} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70 transition-opacity">View</a>
-                )}
-                <button
-                  onClick={() => setSectionPrStatus(prev => ({ ...prev, main: { status: 'idle' } }))}
-                  className="hover:opacity-70 transition-opacity"
-                  aria-label="Dismiss"
-                >&#10005;</button>
-              </div>
-            )}
-            {prEndpointUrl && mainSt.status === 'rate-limited' && mainSt.error && (
-              <span className="text-[13px] font-light text-yellow-700 dark:text-yellow-300">
-                {mainSt.error}
-              </span>
-            )}
-            <button
-              disabled={mainSt.status === 'creating'}
-              onClick={() => {
-                if (mainSt.status === 'creating') return;
-                setShowPrSetupModal(true);
-              }}
-              className={`text-[20px] font-light uppercase tracking-wider transition-colors hover:opacity-70 flex items-center gap-2 whitespace-nowrap ${
-                mainSt.status === 'error' || mainSt.status === 'rate-limited'
-                  ? 'text-red-600 dark:text-red-400'
-                  : ''
-              }`}
-              style={{ color: mainSt.status === 'error' || mainSt.status === 'rate-limited' ? undefined : "hsl(var(--brand))", lineHeight: 1 }}
-            >
-              <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
               <span>{mainSt.status === 'creating' ? 'Preparing...' : mainSt.status === 'error' ? 'Retry PR' : mainSt.status === 'rate-limited' ? 'Retry PR' : 'Open PR'}</span>
             </button>
           </div>
@@ -1617,6 +1699,29 @@ function DesignSystemEditorInner({
                   )}
                   <span className="truncate">{imagePaletteStatus === 'extracting' ? 'Extracting...' : imagePaletteStatus === 'done' ? 'Palette applied' : imagePaletteStatus === 'error' ? 'Failed' : 'Upload Image'}</span>
                 </button>
+                </PremiumGate>
+                <PremiumGate feature="image-palette" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                <div className="flex items-center gap-1">
+                  <input
+                    type="text"
+                    value={imageUrlInput}
+                    onChange={(e) => { setImageUrlInput(e.target.value); setImageUrlError(""); }}
+                    onKeyDown={(e) => { if (e.key === "Enter") handleImageUrlSubmit(); }}
+                    placeholder="Paste image URL"
+                    className="h-10 px-2 text-[14px] font-light rounded-lg border bg-transparent w-[140px] sm:w-[180px]"
+                    style={{ borderColor: imageUrlError ? "hsl(var(--destructive))" : "hsl(var(--border))", color: "hsl(var(--foreground))" }}
+                  />
+                  <button
+                    onClick={handleImageUrlSubmit}
+                    disabled={imagePaletteStatus === 'extracting'}
+                    className="h-10 px-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                    title="Extract palette from image URL"
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                  </button>
+                </div>
+                {imageUrlError && <span className="text-[12px] font-light" style={{ color: "hsl(var(--destructive))" }}>{imageUrlError}</span>}
                 </PremiumGate>
                 <PremiumGate feature="palette-export" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
                   <button

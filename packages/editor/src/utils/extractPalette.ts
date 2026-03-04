@@ -116,6 +116,76 @@ function toHslString(c: RGB): string {
   return `${h.toFixed(1)} ${s.toFixed(1)}% ${l.toFixed(1)}%`;
 }
 
+export async function extractPaletteFromUrl(url: string): Promise<Record<string, string>> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const scale = Math.min(1, 100 / Math.max(img.width, img.height));
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(img, 0, 0, w, h);
+
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const pixels: RGB[] = [];
+      for (let i = 0; i < imageData.data.length; i += 4) {
+        const a = imageData.data[i + 3];
+        if (a < 128) continue;
+        pixels.push({ r: imageData.data[i], g: imageData.data[i + 1], b: imageData.data[i + 2] });
+      }
+
+      if (pixels.length === 0) {
+        reject(new Error("Image contains no visible pixels."));
+        return;
+      }
+
+      resolve(assignRoles(pixels));
+    };
+    img.onerror = () => reject(new Error("Failed to load image. The URL may be invalid or the server blocks cross-origin requests."));
+    img.src = url;
+  });
+}
+
+function assignRoles(pixels: RGB[]): Record<string, string> {
+  let clusters = kMeans(pixels, 6, 12);
+  clusters = mergeSimilar(clusters, 25);
+
+  while (clusters.length < 5) {
+    const c = clusters[0];
+    clusters.push({ r: Math.min(255, c.r + 30), g: Math.min(255, c.g + 30), b: Math.min(255, c.b + 30) });
+  }
+
+  const sorted = [...clusters].sort((a, b) => luminance(a) - luminance(b));
+  const darkest = sorted[0];
+  const lightest = sorted[sorted.length - 1];
+
+  const avgLum = pixels.reduce((s, p) => s + luminance(p), 0) / pixels.length;
+  const isDark = avgLum < 128;
+
+  const bg = isDark ? darkest : lightest;
+  const fg = isDark ? lightest : darkest;
+
+  const remaining = clusters.filter((c) => c !== darkest && c !== lightest);
+  remaining.sort((a, b) => saturation(b) - saturation(a));
+
+  const brand = remaining[0] || sorted[Math.floor(sorted.length / 2)];
+  const secondary = remaining[1] || sorted[Math.floor(sorted.length / 3)];
+  const accent = remaining[2] || sorted[Math.floor(sorted.length * 2 / 3)];
+
+  return {
+    "--background": toHslString(bg),
+    "--foreground": toHslString(fg),
+    "--brand": toHslString(brand),
+    "--secondary": toHslString(secondary),
+    "--accent": toHslString(accent),
+  };
+}
+
 export async function extractPaletteFromImage(file: File): Promise<Record<string, string>> {
   const validTypes = ["image/png", "image/jpeg", "image/jpg"];
   if (!validTypes.includes(file.type)) {
@@ -144,41 +214,5 @@ export async function extractPaletteFromImage(file: File): Promise<Record<string
     throw new Error("Image contains no visible pixels.");
   }
 
-  let clusters = kMeans(pixels, 6, 12);
-  clusters = mergeSimilar(clusters, 25);
-
-  // Ensure at least 5 clusters by splitting if needed
-  while (clusters.length < 5) {
-    const idx = 0;
-    const c = clusters[idx];
-    clusters.push({ r: Math.min(255, c.r + 30), g: Math.min(255, c.g + 30), b: Math.min(255, c.b + 30) });
-  }
-
-  // Sort by luminance
-  const sorted = [...clusters].sort((a, b) => luminance(a) - luminance(b));
-  const darkest = sorted[0];
-  const lightest = sorted[sorted.length - 1];
-
-  // Determine if image is mostly dark
-  const avgLum = pixels.reduce((s, p) => s + luminance(p), 0) / pixels.length;
-  const isDark = avgLum < 128;
-
-  const bg = isDark ? darkest : lightest;
-  const fg = isDark ? lightest : darkest;
-
-  // From remaining clusters, pick by saturation
-  const remaining = clusters.filter((c) => c !== darkest && c !== lightest);
-  remaining.sort((a, b) => saturation(b) - saturation(a));
-
-  const brand = remaining[0] || sorted[Math.floor(sorted.length / 2)];
-  const secondary = remaining[1] || sorted[Math.floor(sorted.length / 3)];
-  const accent = remaining[2] || sorted[Math.floor(sorted.length * 2 / 3)];
-
-  return {
-    "--background": toHslString(bg),
-    "--foreground": toHslString(fg),
-    "--brand": toHslString(brand),
-    "--secondary": toHslString(secondary),
-    "--accent": toHslString(accent),
-  };
+  return assignRoles(pixels);
 }
