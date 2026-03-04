@@ -16,6 +16,12 @@ export {
   applyStoredAlertStyle,
   INTERACTION_STYLE_KEY,
   applyStoredInteractionStyle,
+  serializeThemeState,
+  deserializeThemeState,
+  generateDesignTokens,
+  exportPaletteAsText,
+  exportPaletteAsSvg,
+  exportPaletteAsPng,
 } from "./utils/themeUtils";
 export type { HarmonyScheme, CardStyleState, TypographyState, AlertStyleState, InteractionStyleState, TypoInteractionStyleState } from "./utils/themeUtils";
 

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth, SignInButton } from "@clerk/clerk-react";
 import { useSubscription } from "../hooks/useSubscription";
 import SiteFooter from "../components/SiteFooter";
+import ThemalLogo from "../components/ThemalLogo";
 
 const check = (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 mt-[2px]">
@@ -14,7 +15,9 @@ const freeFeatures = [
   "Color picking & live derivation",
   "Random palette generation (Refresh)",
   "Card style, typography, alerts customization",
-  "Show / copy CSS",
+  "Show / copy CSS + Tailwind config",
+  "W3C Design Token export (JSON)",
+  "Shareable theme URLs",
   "Reset to defaults",
   "Dark mode support",
 ];
@@ -23,9 +26,11 @@ const proFeatures = [
   "Everything in Free, plus:",
   "Color harmony schemes (complementary, analogous, triadic, split-complementary)",
   "Color locks — pin colors during regeneration",
+  "Image-based palette extraction",
+  "Export palette as SVG, PNG, or HEX/RGB/RGBA text",
   "GitHub PR integration",
   "WCAG AA accessibility audit with auto-fix",
-  "Undo support",
+  "Undo support for theme refreshes",
   "Hover & active state customization",
 ];
 
@@ -139,8 +144,8 @@ export default function Pricing() {
           &larr; Back to Editor
         </Link>
 
-        <div className="flex items-end gap-3 mb-3">
-          <img src="/themal-logo-wide.svg" alt="Themal" className="h-10 sm:h-12" />
+        <div className="flex items-end gap-3 mb-3" style={{ color: "hsl(var(--foreground))" }}>
+          <ThemalLogo className="h-10 sm:h-12" />
           <h1 className="text-3xl sm:text-4xl font-light title-font" style={{ color: "hsl(var(--foreground))", lineHeight: ".75" }}>
             Pricing
           </h1>

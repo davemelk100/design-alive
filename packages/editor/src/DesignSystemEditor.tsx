@@ -52,6 +52,12 @@ import {
   applyTypoInteractionStyle,
   applyStoredTypoInteractionStyle,
   removeTypoInteractionStyleProperties,
+  serializeThemeState,
+  deserializeThemeState,
+  generateDesignTokens,
+  exportPaletteAsText,
+  exportPaletteAsSvg,
+  exportPaletteAsPng,
 } from "./utils/themeUtils";
 import type { CardStyleState, TypographyState, AlertStyleState, InteractionStyleState, TypoInteractionStyleState } from "./utils/themeUtils";
 import { extractPaletteFromImage } from "./utils/extractPalette";
@@ -298,6 +304,11 @@ function DesignSystemEditorInner({
   const [showTypoInteractionResetModal, setShowTypoInteractionResetModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [imagePaletteStatus, setImagePaletteStatus] = useState<'idle' | 'extracting' | 'done' | 'error'>('idle');
+  const [exportFormat, setExportFormat] = useState<"css" | "tokens">("css");
+  const [shareCopied, setShareCopied] = useState(false);
+  const [showPaletteExport, setShowPaletteExport] = useState(false);
+  const [paletteExportCopied, setPaletteExportCopied] = useState(false);
+  const [pendingImagePalette, setPendingImagePalette] = useState<{ imageUrl: string; palette: Record<string, string> } | null>(null);
 
   const fireOnChange = (newColors: Record<string, string>) => {
     onChange?.(newColors);
@@ -309,6 +320,33 @@ function DesignSystemEditorInner({
 
   useEffect(() => {
     applyStoredCardStyle(colors);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Hydrate from URL hash if present (shareable URL)
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    const parsed = deserializeThemeState(hash);
+    if (!parsed) return;
+    // Apply colors
+    for (const [key, val] of Object.entries(parsed.colors)) {
+      document.documentElement.style.setProperty(key, val);
+    }
+    setColors(parsed.colors);
+    // Apply styles
+    setCardStyle(parsed.cardStyle);
+    applyCardStyle(parsed.cardStyle, parsed.colors);
+    setTypographyState(parsed.typographyState);
+    applyTypography(parsed.typographyState);
+    setAlertStyle(parsed.alertStyle);
+    applyAlertStyle(parsed.alertStyle);
+    setInteractionStyle(parsed.interactionStyle);
+    applyInteractionStyle(parsed.interactionStyle);
+    setTypoInteractionStyle(parsed.typoInteractionStyle);
+    applyTypoInteractionStyle(parsed.typoInteractionStyle);
+    // Clear hash so it doesn't re-hydrate on state changes
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -720,52 +758,54 @@ function DesignSystemEditorInner({
     try {
       setImagePaletteStatus('extracting');
       const palette = await extractPaletteFromImage(file);
-      setPrevColors({ ...colors });
-
-      // Start from brand and derive the full palette, then layer other primaries
-      let newColors = { ...colors };
-      const brandDerived = derivePaletteFromChange("--brand", palette["--brand"], newColors, lockedKeys);
-      newColors = { ...newColors, ...brandDerived, "--brand": palette["--brand"] };
-
-      // Layer on the other 4 primaries
-      for (const key of ["--secondary", "--accent", "--background", "--foreground"] as const) {
-        if (lockedKeys.has(key)) continue;
-        const derived = derivePaletteFromChange(key, palette[key], newColors, lockedKeys);
-        newColors = { ...newColors, ...derived, [key]: palette[key] };
-      }
-
-      // Contrast enforcement
-      const contrastFixes = autoAdjustContrast(newColors, lockedKeys);
-      newColors = { ...newColors, ...contrastFixes };
-
-      // Apply to DOM + state (same pattern as handleGenerate)
-      const history = storage.get<{ key: string; previousValue: string }[]>(COLOR_HISTORY_KEY) || [];
-      const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
-      const finalColors = { ...colors };
-
-      for (const [key, val] of Object.entries(newColors)) {
-        if (val !== colors[key]) {
-          history.push({ key, previousValue: finalColors[key] || '' });
-          document.documentElement.style.setProperty(key, val);
-          finalColors[key] = val;
-          pending[key] = val;
-        }
-      }
-
-      storage.set(COLOR_HISTORY_KEY, history);
-      setColors(finalColors);
-      storage.set(PENDING_COLORS_KEY, pending);
-      window.dispatchEvent(new Event('theme-pending-update'));
-      setHarmonySchemeIndex(-1);
-      fireOnChange(finalColors);
-      if (accessibilityAudit) runAccessibilityAudit();
-      setImagePaletteStatus('done');
-      setTimeout(() => setImagePaletteStatus('idle'), 3000);
+      const imageUrl = URL.createObjectURL(file);
+      setPendingImagePalette({ imageUrl, palette });
+      setImagePaletteStatus('idle');
     } catch (err) {
       console.error("Image palette extraction failed:", err);
       setImagePaletteStatus('error');
       setTimeout(() => setImagePaletteStatus('idle'), 3000);
     }
+  };
+
+  const applyImagePalette = (palette: Record<string, string>) => {
+    setPrevColors({ ...colors });
+
+    let newColors = { ...colors };
+    const brandDerived = derivePaletteFromChange("--brand", palette["--brand"], newColors, lockedKeys);
+    newColors = { ...newColors, ...brandDerived, "--brand": palette["--brand"] };
+
+    for (const key of ["--secondary", "--accent", "--background", "--foreground"] as const) {
+      if (lockedKeys.has(key)) continue;
+      const derived = derivePaletteFromChange(key, palette[key], newColors, lockedKeys);
+      newColors = { ...newColors, ...derived, [key]: palette[key] };
+    }
+
+    const contrastFixes = autoAdjustContrast(newColors, lockedKeys);
+    newColors = { ...newColors, ...contrastFixes };
+
+    const history = storage.get<{ key: string; previousValue: string }[]>(COLOR_HISTORY_KEY) || [];
+    const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
+    const finalColors = { ...colors };
+
+    for (const [key, val] of Object.entries(newColors)) {
+      if (val !== colors[key]) {
+        history.push({ key, previousValue: finalColors[key] || '' });
+        document.documentElement.style.setProperty(key, val);
+        finalColors[key] = val;
+        pending[key] = val;
+      }
+    }
+
+    storage.set(COLOR_HISTORY_KEY, history);
+    setColors(finalColors);
+    storage.set(PENDING_COLORS_KEY, pending);
+    window.dispatchEvent(new Event('theme-pending-update'));
+    setHarmonySchemeIndex(-1);
+    fireOnChange(finalColors);
+    if (accessibilityAudit) runAccessibilityAudit();
+    setImagePaletteStatus('done');
+    setTimeout(() => setImagePaletteStatus('idle'), 3000);
   };
 
   const handleReset = () => {
@@ -1094,7 +1134,7 @@ function DesignSystemEditorInner({
                 <a
                   key={s.id}
                   href={`#${s.id}`}
-                  className="text-[13px] font-light uppercase tracking-wider transition-all whitespace-nowrap flex items-center gap-1 ds-nav-link"
+                  className="text-[13px] font-light uppercase tracking-wider transition-all whitespace-nowrap flex items-center gap-1 no-underline ds-nav-link"
                   style={{
                     color: activeSection === s.id ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))",
                     lineHeight: 1,
@@ -1150,6 +1190,21 @@ function DesignSystemEditorInner({
                 );
               })()}
               </PremiumGate>
+              <button
+                onClick={() => {
+                  const hash = serializeThemeState(colors, cardStyle, typographyState, alertStyle, interactionStyle, typoInteractionStyle);
+                  window.location.hash = hash;
+                  navigator.clipboard.writeText(window.location.href).then(() => {
+                    setShareCopied(true);
+                    setTimeout(() => setShareCopied(false), 2000);
+                  });
+                }}
+                className="text-[13px] font-light uppercase tracking-wider transition-colors hover:opacity-70 flex items-center gap-1 whitespace-nowrap"
+                style={{ color: "hsl(var(--muted-foreground))", lineHeight: 1 }}
+              >
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <span>{shareCopied ? "Link copied!" : "Share"}</span>
+              </button>
             </nav>
             {(showNavLinks || headerRight) && (
               <div className="hidden lg:flex ml-auto items-end gap-4 flex-shrink-0">
@@ -1187,7 +1242,6 @@ function DesignSystemEditorInner({
         <div className="w-full px-4 sm:px-6 lg:px-8">
 
           {/* Alerts */}
-          <PremiumGate feature="accessibility-audit" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
           <div className="mb-0">
             <div className="w-full sm:w-auto order-first sm:order-last flex-shrink-0 min-h-[36px] pointer-events-none [&>*]:pointer-events-auto" data-axe-exclude>
                 {accessibilityAudit && auditStatus === 'failed' && (
@@ -1223,7 +1277,6 @@ function DesignSystemEditorInner({
                 )}
             </div>
           </div>
-          </PremiumGate>
 
           {/* Reset Confirmation Modal */}
           {showResetModal && (
@@ -1398,6 +1451,7 @@ function DesignSystemEditorInner({
                   onClick={() => fileInputRef.current?.click()}
                   className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
                   style={{ color: "hsl(var(--muted-foreground))" }}
+                  title="Upload an image to extract a color palette from it"
                 >
                   {imagePaletteStatus === 'extracting' ? (
                     <svg className="w-4 h-4 flex-shrink-0 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
@@ -1419,6 +1473,16 @@ function DesignSystemEditorInner({
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
                   <span className="truncate"><span className="sm:hidden">{generatedCode ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{generatedCode ? "Hide CSS" : "Show CSS"}</span></span>
                 </button>
+                <PremiumGate feature="palette-export" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                  <button
+                    onClick={() => setShowPaletteExport(true)}
+                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    <span className="truncate"><span className="sm:hidden">Export</span><span className="hidden sm:inline">Export Palette</span></span>
+                  </button>
+                </PremiumGate>
                 <button
                   onClick={() => setShowResetModal(true)}
                   className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
@@ -1429,6 +1493,10 @@ function DesignSystemEditorInner({
                 </button>
               </div>
             </div>
+
+            <p className="text-[12px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>
+              Note: Some color choices may be automatically adjusted to meet WCAG AA contrast ratio requirements (4.5:1 minimum), ensuring your design system remains accessible.
+            </p>
 
             {/* Color swatch buttons */}
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 rounded-lg p-3 overflow-visible" data-axe-exclude style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
@@ -1548,11 +1616,35 @@ function DesignSystemEditorInner({
             {generatedCode && (
               <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
                 <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
-                  <span className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Generated Theme</span>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setExportFormat("css")}
+                      className="px-2 py-0.5 text-[13px] font-light rounded transition-colors"
+                      style={{
+                        backgroundColor: exportFormat === "css" ? "hsl(var(--brand))" : "transparent",
+                        color: exportFormat === "css" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))",
+                      }}
+                    >
+                      CSS + Tailwind
+                    </button>
+                    <button
+                      onClick={() => setExportFormat("tokens")}
+                      className="px-2 py-0.5 text-[13px] font-light rounded transition-colors"
+                      style={{
+                        backgroundColor: exportFormat === "tokens" ? "hsl(var(--brand))" : "transparent",
+                        color: exportFormat === "tokens" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))",
+                      }}
+                    >
+                      Design Tokens
+                    </button>
+                  </div>
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText(generatedCode);
+                        const text = exportFormat === "tokens"
+                          ? JSON.stringify(generateDesignTokens(colors, cardStyle, typographyState, alertStyle, interactionStyle), null, 2)
+                          : generatedCode;
+                        navigator.clipboard.writeText(text);
                         setCodeCopied(true);
                         setTimeout(() => setCodeCopied(false), 2000);
                       }}
@@ -1571,7 +1663,9 @@ function DesignSystemEditorInner({
                   </div>
                 </div>
                 <pre className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono" style={{ color: "hsl(var(--card-foreground))" }}>
-                  <code>{generatedCode}</code>
+                  <code>{exportFormat === "tokens"
+                    ? JSON.stringify(generateDesignTokens(colors, cardStyle, typographyState, alertStyle, interactionStyle), null, 2)
+                    : generatedCode}</code>
                 </pre>
               </div>
             )}
@@ -1656,10 +1750,10 @@ function DesignSystemEditorInner({
             <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Buttons <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
 
             {/* Swatches + Interactions side-by-side on desktop */}
-            <div className="flex flex-col md:flex-row md:items-stretch gap-4 md:gap-12">
+            <div className="flex flex-col lg:flex-row lg:items-stretch gap-4 lg:gap-12">
 
             {/* Types subsection */}
-            <div className="w-full md:w-1/2 flex flex-col rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+            <div className="w-full lg:w-1/2 flex flex-col rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
               <div className="flex items-center h-10 mb-3">
                 <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Types</h3>
               </div>
@@ -1713,7 +1807,7 @@ function DesignSystemEditorInner({
             </div>
 
             {/* Interactions subsection */}
-            <div className="w-full md:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+            <div className="w-full lg:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
               <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
                 <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Interactions</h3>
                 <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -1923,9 +2017,9 @@ function DesignSystemEditorInner({
 
           {/* Card Style & Alerts row */}
           <div id="card-alerts" className="min-w-0 p-2 md:p-4 mt-8 md:mt-12 scroll-mt-28">
-          <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-12">
+          <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-12">
           {/* Card Style section */}
-          <div className="w-full md:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+          <div className="w-full lg:w-1/2 space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Card Style <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -1948,6 +2042,7 @@ function DesignSystemEditorInner({
               </div>
             </div>
 
+            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
             {/* Preset buttons */}
             <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {(["liquid-glass", "solid", "gradient", "border-only"] as const).map((key) => {
@@ -2189,11 +2284,11 @@ function DesignSystemEditorInner({
                   );
                 })()}
               </div>
-            </div>
+            </div>{/* end Card Style border wrapper */}
           </div>
 
           {/* Alerts section */}
-          <div className="w-full md:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+          <div className="w-full lg:w-1/2 space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts</h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -2216,6 +2311,7 @@ function DesignSystemEditorInner({
               </div>
             </div>
 
+            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
             {/* Preset buttons */}
             <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {(["filled", "soft", "outline", "minimal"] as const).map((key) => {
@@ -2404,6 +2500,8 @@ function DesignSystemEditorInner({
             </div>
           )}
 
+            </div>{/* end Alerts border wrapper */}
+          </div>{/* end Alerts column */}
           </div>{/* end card-alerts wrapper */}
 
         {/* Typography section */}
@@ -2411,10 +2509,10 @@ function DesignSystemEditorInner({
             <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Typography <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
 
             {/* Typography controls + interactions side-by-side */}
-            <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-12">
+            <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-12">
 
             {/* Controls + Preview column */}
-            <div className="w-full md:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+            <div className="w-full lg:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
               <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
                 <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Styles</h3>
                 <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -2633,7 +2731,7 @@ function DesignSystemEditorInner({
             </div>{/* end Styles column */}
 
             {/* Typography Interactions column */}
-            <div className="w-full md:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+            <div className="w-full lg:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
               <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
                 <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Typography Interactions</h3>
                 <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -2866,6 +2964,113 @@ function DesignSystemEditorInner({
         </div>
       </section>
       {/* PR Section Picker Modal */}
+      {pendingImagePalette && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={() => { URL.revokeObjectURL(pendingImagePalette.imageUrl); setPendingImagePalette(null); }}>
+          <div className="rounded-xl p-6 w-[380px] max-h-[90vh] overflow-y-auto shadow-xl" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }} onClick={e => e.stopPropagation()}>
+            <h3 className="text-[18px] font-light mb-4">Extracted Palette</h3>
+            <img
+              src={pendingImagePalette.imageUrl}
+              alt="Uploaded"
+              className="w-full rounded-lg mb-4 object-cover"
+              style={{ maxHeight: 200 }}
+            />
+            <div className="flex gap-2 mb-4">
+              {(["--brand", "--secondary", "--accent", "--background", "--foreground"] as const).map(key => {
+                const hsl = pendingImagePalette.palette[key];
+                if (!hsl) return null;
+                const hex = hslStringToHex(hsl);
+                return (
+                  <div key={key} className="flex-1 text-center">
+                    <div
+                      className="w-full aspect-square rounded-lg mb-1"
+                      style={{ backgroundColor: `hsl(${hsl})`, boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.1)" }}
+                    />
+                    <span className="text-[10px] font-light block" style={{ color: "hsl(var(--muted-foreground))" }}>
+                      {key.replace("--", "").split("-").map(w => w[0].toUpperCase() + w.slice(1)).join(" ")}
+                    </span>
+                    <span className="text-[10px] font-mono block" style={{ color: "hsl(var(--muted-foreground))" }}>
+                      {hex}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => { URL.revokeObjectURL(pendingImagePalette.imageUrl); setPendingImagePalette(null); }}
+                className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                style={{ color: "hsl(var(--card-foreground))" }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  applyImagePalette(pendingImagePalette.palette);
+                  URL.revokeObjectURL(pendingImagePalette.imageUrl);
+                  setPendingImagePalette(null);
+                }}
+                className="px-4 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                style={{
+                  backgroundColor: "hsl(var(--brand))",
+                  color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "hsl(var(--primary-foreground))",
+                }}
+              >
+                Apply Palette
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showPaletteExport && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={() => setShowPaletteExport(false)}>
+          <div className="rounded-xl p-6 w-[340px] shadow-xl" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }} onClick={e => e.stopPropagation()}>
+            <h3 className="text-[18px] font-light mb-4">Export Palette</h3>
+            <div className="flex flex-col gap-2">
+              {([
+                { label: "Copy as HEX", action: () => { navigator.clipboard.writeText(exportPaletteAsText(colors, "hex")); setPaletteExportCopied(true); setTimeout(() => setPaletteExportCopied(false), 2000); } },
+                { label: "Copy as RGB", action: () => { navigator.clipboard.writeText(exportPaletteAsText(colors, "rgb")); setPaletteExportCopied(true); setTimeout(() => setPaletteExportCopied(false), 2000); } },
+                { label: "Copy as RGBA", action: () => { navigator.clipboard.writeText(exportPaletteAsText(colors, "rgba")); setPaletteExportCopied(true); setTimeout(() => setPaletteExportCopied(false), 2000); } },
+                { label: "Download SVG", action: () => {
+                  const svg = exportPaletteAsSvg(colors);
+                  const blob = new Blob([svg], { type: "image/svg+xml" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a"); a.href = url; a.download = "palette.svg"; a.click();
+                  URL.revokeObjectURL(url);
+                }},
+                { label: "Download PNG", action: async () => {
+                  const blob = await exportPaletteAsPng(colors);
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a"); a.href = url; a.download = "palette.png"; a.click();
+                  URL.revokeObjectURL(url);
+                }},
+              ] as { label: string; action: () => void }[]).map(({ label, action }) => (
+                <button
+                  key={label}
+                  onClick={action}
+                  className="w-full text-left px-3 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                  style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {paletteExportCopied && (
+              <p className="text-[13px] font-light mt-2" style={{ color: "hsl(var(--success))" }}>Copied to clipboard!</p>
+            )}
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => setShowPaletteExport(false)}
+                className="px-4 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showPrSetupModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={() => setShowPrSetupModal(false)}>
           <div className="rounded-xl p-6 w-[380px] shadow-xl" style={{ backgroundColor: "#fff", color: "#111" }} onClick={e => e.stopPropagation()}>

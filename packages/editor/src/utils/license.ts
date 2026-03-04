@@ -10,8 +10,8 @@ export type PremiumFeature =
   | "harmony-schemes"
   | "color-locks"
   | "pr-integration"
-  | "accessibility-audit"
-  | "undo";
+  | "undo"
+  | "palette-export";
 
 const ALPHABET = "2345679ABCDEFGHJKMNPQRSTUVWXYZ"; // 29 chars, no 0/O/1/I/L/8
 

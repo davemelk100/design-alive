@@ -12,7 +12,18 @@
   .focus\:ring-brand-dynamic:focus { --tw-ring-color: hsl(var(--brand)); }
 }
 
-.ds-nav-link:hover {
+.ds-nav-link,
+.ds-nav-link:hover,
+.ds-nav-link:focus,
+.ds-nav-link:active,
+.ds-editor .ds-nav-link,
+.ds-editor .ds-nav-link:hover {
+  text-decoration: none !important;
+  -webkit-text-decoration: none !important;
+}
+
+.ds-nav-link:hover,
+.ds-editor .ds-nav-link:hover {
   color: hsl(var(--foreground)) !important;
   border-bottom-color: hsl(var(--foreground)) !important;
 }

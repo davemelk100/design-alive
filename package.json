@@ -17,6 +17,8 @@
     "test:lighthouse": "lhci autorun"
   },
   "dependencies": {
+    "@capacitor/cli": "^8.1.0",
+    "@capacitor/core": "^8.1.0",
     "@clerk/clerk-react": "^5.61.3",
     "@clerk/clerk-sdk-node": "^4.13.23",
     "axe-core": "^4.11.1",

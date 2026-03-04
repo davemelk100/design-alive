@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import SiteFooter from "../components/SiteFooter";
+import ThemalLogo from "../components/ThemalLogo";
 
 const features = [
   {
@@ -92,8 +93,8 @@ export default function Features() {
           &larr; Back to Editor
         </Link>
 
-        <div className="flex items-end gap-3 mb-8">
-          <img src="/themal-logo-wide.svg" alt="Themal" className="h-10 sm:h-12" />
+        <div className="flex items-end gap-3 mb-8" style={{ color: "hsl(var(--foreground))" }}>
+          <ThemalLogo className="h-10 sm:h-12" />
           <h1 className="text-3xl sm:text-4xl font-light title-font" style={{ color: "hsl(var(--foreground))", lineHeight: ".75" }}>
             Features
           </h1>

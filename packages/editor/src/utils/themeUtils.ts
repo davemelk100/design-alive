@@ -1344,3 +1344,231 @@ export function applyStoredTypoInteractionStyle(): TypoInteractionStyleState | n
   }
   return null;
 }
+
+// ── Palette Export ───────────────────────────────────────────────────
+
+function hslStringToRgb255(hsl: string): [number, number, number] {
+  const [r, g, b] = hslToRgb(hsl);
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
+function rgbToHexStr(r: number, g: number, b: number): string {
+  return "#" + [r, g, b].map(c => c.toString(16).padStart(2, "0")).join("");
+}
+
+const PALETTE_LABELS: Record<string, string> = {
+  "--brand": "Brand",
+  "--secondary": "Secondary",
+  "--accent": "Accent",
+  "--background": "Background",
+  "--foreground": "Foreground",
+  "--primary-foreground": "Primary FG",
+  "--secondary-foreground": "Secondary FG",
+  "--muted": "Muted",
+  "--muted-foreground": "Muted FG",
+  "--accent-foreground": "Accent FG",
+  "--destructive": "Destructive",
+  "--destructive-foreground": "Destructive FG",
+  "--success": "Success",
+  "--success-foreground": "Success FG",
+  "--warning": "Warning",
+  "--warning-foreground": "Warning FG",
+  "--border": "Border",
+};
+
+export function exportPaletteAsText(colors: Record<string, string>, format: "hex" | "rgb" | "rgba"): string {
+  const lines: string[] = [];
+  for (const [key, label] of Object.entries(PALETTE_LABELS)) {
+    const hsl = colors[key];
+    if (!hsl) continue;
+    const [r, g, b] = hslStringToRgb255(hsl);
+    let value: string;
+    if (format === "hex") value = rgbToHexStr(r, g, b);
+    else if (format === "rgb") value = `rgb(${r}, ${g}, ${b})`;
+    else value = `rgba(${r}, ${g}, ${b}, 1)`;
+    lines.push(`${label}: ${value}`);
+  }
+  return lines.join("\n");
+}
+
+export function exportPaletteAsSvg(colors: Record<string, string>): string {
+  const entries = Object.entries(PALETTE_LABELS).filter(([key]) => colors[key]);
+  const swatchSize = 60;
+  const gap = 8;
+  const labelHeight = 20;
+  const cols = Math.min(entries.length, 6);
+  const rows = Math.ceil(entries.length / cols);
+  const width = cols * (swatchSize + gap) - gap + 20;
+  const height = rows * (swatchSize + labelHeight + gap) - gap + 20;
+
+  let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">\n`;
+  svg += `  <rect width="${width}" height="${height}" fill="#ffffff" rx="8"/>\n`;
+
+  entries.forEach(([key, label], i) => {
+    const hsl = colors[key];
+    if (!hsl) return;
+    const [r, g, b] = hslStringToRgb255(hsl);
+    const hex = rgbToHexStr(r, g, b);
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const x = 10 + col * (swatchSize + gap);
+    const y = 10 + row * (swatchSize + labelHeight + gap);
+    svg += `  <rect x="${x}" y="${y}" width="${swatchSize}" height="${swatchSize}" fill="${hex}" rx="6"/>\n`;
+    svg += `  <text x="${x + swatchSize / 2}" y="${y + swatchSize + 14}" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#666">${label}</text>\n`;
+  });
+
+  svg += `</svg>`;
+  return svg;
+}
+
+export async function exportPaletteAsPng(colors: Record<string, string>): Promise<Blob> {
+  const svgStr = exportPaletteAsSvg(colors);
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d")!;
+  const img = new Image();
+
+  return new Promise((resolve, reject) => {
+    img.onload = () => {
+      canvas.width = img.width * 2;
+      canvas.height = img.height * 2;
+      ctx.scale(2, 2);
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob((blob) => {
+        if (blob) resolve(blob);
+        else reject(new Error("Failed to create PNG"));
+      }, "image/png");
+    };
+    img.onerror = reject;
+    img.src = "data:image/svg+xml;base64," + btoa(svgStr);
+  });
+}
+
+// ── Shareable URL serialization ──────────────────────────────────────
+
+interface SerializedTheme {
+  c: Record<string, string>;
+  cs: CardStyleState;
+  t: TypographyState;
+  a: AlertStyleState;
+  i: InteractionStyleState;
+  ti: TypoInteractionStyleState;
+}
+
+export function serializeThemeState(
+  colors: Record<string, string>,
+  cardStyle: CardStyleState,
+  typographyState: TypographyState,
+  alertStyle: AlertStyleState,
+  interactionStyle: InteractionStyleState,
+  typoInteractionStyle: TypoInteractionStyleState,
+): string {
+  const data: SerializedTheme = {
+    c: colors,
+    cs: cardStyle,
+    t: typographyState,
+    a: alertStyle,
+    i: interactionStyle,
+    ti: typoInteractionStyle,
+  };
+  return btoa(JSON.stringify(data));
+}
+
+export function deserializeThemeState(hash: string): {
+  colors: Record<string, string>;
+  cardStyle: CardStyleState;
+  typographyState: TypographyState;
+  alertStyle: AlertStyleState;
+  interactionStyle: InteractionStyleState;
+  typoInteractionStyle: TypoInteractionStyleState;
+} | null {
+  try {
+    const json = atob(hash);
+    const data: SerializedTheme = JSON.parse(json);
+    if (!data.c || !data.cs || !data.t || !data.a || !data.i || !data.ti) return null;
+    return {
+      colors: data.c,
+      cardStyle: data.cs,
+      typographyState: data.t,
+      alertStyle: data.a,
+      interactionStyle: data.i,
+      typoInteractionStyle: data.ti,
+    };
+  } catch {
+    return null;
+  }
+}
+
+// ── W3C Design Token Export ──────────────────────────────────────────
+
+export function generateDesignTokens(
+  colors: Record<string, string>,
+  cardStyle: CardStyleState,
+  typographyState: TypographyState,
+  alertStyle: AlertStyleState,
+  interactionStyle: InteractionStyleState,
+): Record<string, unknown> {
+  const colorTokens: Record<string, unknown> = {};
+  const colorMap: Record<string, string> = {
+    "--brand": "brand",
+    "--secondary": "secondary",
+    "--accent": "accent",
+    "--background": "background",
+    "--foreground": "foreground",
+    "--primary-foreground": "primary-foreground",
+    "--secondary-foreground": "secondary-foreground",
+    "--muted": "muted",
+    "--muted-foreground": "muted-foreground",
+    "--accent-foreground": "accent-foreground",
+    "--destructive": "destructive",
+    "--destructive-foreground": "destructive-foreground",
+    "--success": "success",
+    "--success-foreground": "success-foreground",
+    "--warning": "warning",
+    "--warning-foreground": "warning-foreground",
+    "--border": "border",
+  };
+
+  for (const [cssVar, tokenName] of Object.entries(colorMap)) {
+    if (colors[cssVar]) {
+      colorTokens[tokenName] = { $value: `hsl(${colors[cssVar]})`, $type: "color" };
+    }
+  }
+
+  return {
+    color: colorTokens,
+    typography: {
+      fontFamily: {
+        heading: { $value: typographyState.headingFamily, $type: "fontFamily" },
+        body: { $value: typographyState.bodyFamily, $type: "fontFamily" },
+      },
+      fontSize: {
+        base: { $value: `${typographyState.baseFontSize}px`, $type: "dimension" },
+      },
+      fontWeight: {
+        heading: { $value: typographyState.headingWeight, $type: "fontWeight" },
+        body: { $value: typographyState.bodyWeight, $type: "fontWeight" },
+      },
+      lineHeight: {
+        default: { $value: typographyState.lineHeight, $type: "number" },
+      },
+      letterSpacing: {
+        body: { $value: `${typographyState.letterSpacing}em`, $type: "dimension" },
+        heading: { $value: `${typographyState.headingLetterSpacing}em`, $type: "dimension" },
+      },
+    },
+    borderRadius: {
+      card: { $value: `${cardStyle.borderRadius}px`, $type: "dimension" },
+      alert: { $value: `${alertStyle.borderRadius}px`, $type: "dimension" },
+    },
+    spacing: {
+      alertPadding: { $value: `${alertStyle.padding}px`, $type: "dimension" },
+    },
+    interaction: {
+      hoverOpacity: { $value: interactionStyle.hoverOpacity, $type: "number" },
+      hoverScale: { $value: interactionStyle.hoverScale, $type: "number" },
+      activeScale: { $value: interactionStyle.activeScale, $type: "number" },
+      transitionDuration: { $value: `${interactionStyle.transitionDuration}ms`, $type: "duration" },
+      focusRingWidth: { $value: `${interactionStyle.focusRingWidth}px`, $type: "dimension" },
+    },
+  };
+}

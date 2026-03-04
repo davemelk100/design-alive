@@ -61,7 +61,6 @@ The following features require a valid license key:
 | Harmony schemes | Generate palettes using complementary, analogous, triadic, or split-complementary color relationships. |
 | Color locks | Lock up to 4 colors to preserve them during palette regeneration. |
 | PR integration | Create design system pull requests directly from the editor. |
-| Accessibility audit | Run axe-core WCAG contrast audits on your color system. |
 | Undo/redo | History management for color changes. |
 | Image palette extraction | Extract color palettes from uploaded images. |
 | Interaction states | Style hover, focus, and active states for buttons and components. |

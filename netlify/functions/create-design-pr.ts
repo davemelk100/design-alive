@@ -1,9 +1,18 @@
-const headers = {
-  "Content-Type": "application/json",
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "Content-Type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+const ALLOWED_ORIGINS = [
+  "https://themal.netlify.app",
+  "http://localhost:5173",
+  "http://localhost:5174",
+];
+
+function corsHeaders(origin?: string) {
+  const allowed = ALLOWED_ORIGINS.includes(origin || "") ? origin! : ALLOWED_ORIGINS[0];
+  return {
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": allowed,
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+}
 
 const REPO = "davemelk100/design-alive";
 const FILE_PATH = "src/globals.css";
@@ -82,6 +91,8 @@ function replaceRootBlock(fileContent: string, newCssVars: string): string {
 }
 
 export const handler = async (event: any) => {
+  const headers = corsHeaders(event.headers.origin);
+
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 200, headers, body: "" };
   }

@@ -139,6 +139,12 @@
       <input name="email" />
       <textarea name="message"></textarea>
     </form>
+    <form name="bug-report" netlify netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="email" />
+      <textarea name="description"></textarea>
+      <textarea name="steps"></textarea>
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
