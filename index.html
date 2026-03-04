@@ -133,6 +133,12 @@
         }
       </style>
     </div>
+    <!-- Hidden Netlify form for SPA detection -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input name="bot-field" />
+      <input name="email" />
+      <textarea name="message"></textarea>
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

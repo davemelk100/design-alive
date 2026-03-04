@@ -136,20 +136,26 @@ export function PremiumGate({
     );
   }
 
-  // return (
-  //   <div className="ds-premium-gated-section">
-  //     {children}
-  //     <span
-  //       className="ds-premium-lock ds-premium-section-lock"
-  //       onMouseEnter={handleEnter}
-  //       onMouseLeave={handleLeave}
-  //       style={
-  //         hovered ? { opacity: 1, color: "hsl(var(--brand))" } : undefined
-  //       }
-  //     >
-  //       {lockIcon}
-  //       <UpgradePopover upgradeUrl={pricingHref} signInUrl={signInUrl} visible={hovered} />
-  //     </span>
-  //   </div>
-  // );
+  return (
+    <div className="ds-premium-gated-section" style={{ position: "relative" }}>
+      <div style={{ opacity: 0.4, pointerEvents: "none", filter: "grayscale(0.5)", userSelect: "none" }}>
+        {children}
+      </div>
+      <span
+        className="ds-premium-lock ds-premium-section-lock"
+        onMouseEnter={handleEnter}
+        onMouseLeave={handleLeave}
+        style={{
+          position: "absolute",
+          top: 8,
+          right: 8,
+          cursor: "pointer",
+          ...(hovered ? { opacity: 1, color: "hsl(var(--brand))" } : undefined),
+        }}
+      >
+        {lockIcon}
+        <UpgradePopover upgradeUrl={pricingHref} signInUrl={signInUrl} visible={hovered} />
+      </span>
+    </div>
+  );
 }

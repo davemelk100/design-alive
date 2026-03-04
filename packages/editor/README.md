@@ -85,7 +85,7 @@ import { PremiumGate } from '@theemel/editor';
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `feature` | `string` | — | Name of the premium feature being gated. |
-| `variant` | `"section" \| "inline"` | `"section"` | `"section"` blocks content; `"inline"` shows a lock icon inline. |
+| `variant` | `"section" \| "inline"` | `"section"` | `"section"` dims content with a lock overlay; `"inline"` shows a lock icon inline. |
 | `upgradeUrl` | `string` | `"/pricing"` | URL for the upgrade prompt. |
 | `signInUrl` | `string` | — | URL for the sign-in prompt. |
 

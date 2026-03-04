@@ -219,6 +219,28 @@ function DesignSystemEditorInner({
     readCurrentColors,
   } = useColorState();
 
+  const [activeSection, setActiveSection] = useState<string>("colors");
+
+  useEffect(() => {
+    const ids = ["colors", "card-style", "typography", "alerts", "buttons"];
+    const elements = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    if (elements.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        }
+      },
+      { rootMargin: "-20% 0px -60% 0px", threshold: 0 }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   const [showResetModal, setShowResetModal] = useState(false);
   const [showCardResetModal, setShowCardResetModal] = useState(false);
   const [showTypoResetModal, setShowTypoResetModal] = useState(false);
@@ -1015,21 +1037,27 @@ function DesignSystemEditorInner({
             </a>
 
             {/* Desktop nav */}
-            <nav className="hidden lg:flex items-end gap-3 lg:gap-4 flex-1 min-w-0 ml-6">
+            <nav className="hidden lg:flex items-center gap-3 lg:gap-4 flex-1 min-w-0 ml-6">
               {[
-                { id: "colors", label: "Colors" },
-                { id: "card-style", label: "Card Style" },
-                { id: "typography", label: "Typography" },
-                { id: "alerts", label: "Alerts" },
-                { id: "interactions", label: "Interactions" },
+                { id: "colors", label: "Colors", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" /></svg> },
+                { id: "card-style", label: "Card Style", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg> },
+                { id: "typography", label: "Typography", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg> },
+                { id: "alerts", label: "Alerts", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg> },
+                { id: "buttons", label: "Buttons", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" /></svg> },
               ].map((s) => (
                 <a
                   key={s.id}
                   href={`#${s.id}`}
-                  className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-                  style={{ color: "hsl(var(--muted-foreground))", lineHeight: 1 }}
+                  className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-all whitespace-nowrap flex items-center gap-1"
+                  style={{
+                    color: activeSection === s.id ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))",
+                    lineHeight: 1,
+                    borderBottom: activeSection === s.id ? "2px solid hsl(var(--foreground))" : "2px solid transparent",
+                    paddingBottom: 2,
+                  }}
                 >
-                  {s.label}
+                  {s.icon}
+                  <span>{s.label}</span>
                 </a>
               ))}
               <PremiumGate feature="pr-integration" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
@@ -1572,52 +1600,99 @@ function DesignSystemEditorInner({
             </div>
           </div>
 
-          {/* Interactions section */}
-          <div id="interactions" className="min-w-0 p-2 md:p-4 space-y-3 mt-4 scroll-mt-28">
-            <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Interactions <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
-              <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
-                <button
-                  onClick={() => setInteractionCssVisible(!interactionCssVisible)}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                  <span className="truncate"><span className="sm:hidden">{interactionCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{interactionCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
-                </button>
-                <button
-                  onClick={() => setShowInteractionResetModal(true)}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
-                  <span className="truncate">Reset</span>
-                </button>
+          {/* Buttons section */}
+          <div id="buttons" className="min-w-0 p-2 md:p-4 space-y-3 mt-4 scroll-mt-28">
+            <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Buttons <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+
+            {/* Swatches + Interactions side-by-side on desktop */}
+            <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
+
+            {/* Types subsection */}
+            <div className="w-full md:w-1/2 space-y-3">
+              <div className="flex items-center h-10">
+                <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Types</h3>
+              </div>
+              <div className="grid grid-cols-4 gap-1 md:grid-cols-[repeat(auto-fit,minmax(76px,1fr))] md:gap-1.5" data-axe-exclude>
+                {([
+                  { bg: "--primary", fg: "--primary-foreground", label: "Primary" },
+                  { bg: "--secondary", fg: "--secondary-foreground", label: "Secondary" },
+                  { bg: "--destructive", fg: "--destructive-foreground", label: "Destructive" },
+                  { bg: "--muted", fg: "--muted-foreground", label: "Muted" },
+                  { bg: "--success", fg: "--success-foreground", label: "Success" },
+                  { bg: "--warning", fg: "--warning-foreground", label: "Warning" },
+                ] as const).map(({ bg, label }) => {
+                  const bgHsl = colors[bg] || "0 0% 50%";
+                  const wc = contrastRatio("0 0% 100%", bgHsl);
+                  const bc = contrastRatio("0 0% 0%", bgHsl);
+                  const swatchTextColor = (wc >= bc) ? "#ffffff" : "#000000";
+                  const hexCode = colors[bg] ? hslStringToHex(colors[bg]!) : "";
+                  return (
+                    <div key={bg} className="text-left">
+                      <div className="relative w-full aspect-square rounded-md mb-1 overflow-hidden flex items-center justify-center shadow-md">
+                        <div className="absolute inset-0" style={{ backgroundColor: `hsl(${bgHsl})` }} />
+                        <span className="relative text-[14px] font-light truncate" style={{ color: swatchTextColor }}>{hexCode}</span>
+                      </div>
+                      <p className="hidden md:block text-[14px] font-light text-[color:hsl(var(--foreground))] truncate">{label}</p>
+                    </div>
+                  );
+                })}
+                {/* Brand (outlined/ghost) */}
+                <div className="text-left">
+                  <div className="relative w-full aspect-square rounded-md mb-1 overflow-hidden flex items-center justify-center shadow-md border" style={{ borderColor: colors["--brand"] ? `hsl(${colors["--brand"]})` : "hsl(var(--brand))" }}>
+                    <div className="absolute inset-0" style={{ backgroundColor: "transparent" }} />
+                    <span className="relative text-[14px] font-light truncate" style={{ color: colors["--brand"] ? `hsl(${colors["--brand"]})` : "hsl(var(--brand))" }}>{colors["--brand"] ? hslStringToHex(colors["--brand"]) : ""}</span>
+                  </div>
+                  <p className="hidden md:block text-[14px] font-light text-[color:hsl(var(--foreground))] truncate">Brand</p>
+                </div>
               </div>
             </div>
 
-            {/* Preset buttons */}
-            <PremiumGate feature="interaction-states" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-            <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
-              {(["subtle", "elevated", "bold"] as const).map((key) => {
-                const labels: Record<string, string> = { subtle: "Subtle", elevated: "Elevated", bold: "Bold" };
-                const active = interactionStyle.preset === key;
-                return (
+            {/* Interactions subsection */}
+            <div className="w-full md:w-1/2 space-y-3">
+              <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
+                <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Interactions</h3>
+                <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
                   <button
-                    key={key}
-                    onClick={() => selectInteractionPreset(key)}
-                    className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-                    style={active
-                      ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
-                      : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
-                    }
+                    onClick={() => setInteractionCssVisible(!interactionCssVisible)}
+                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
                   >
-                    {labels[key]}
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                    <span className="truncate"><span className="sm:hidden">{interactionCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{interactionCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
                   </button>
-                );
-              })}
-            </div>
-            </PremiumGate>
+                  <button
+                    onClick={() => setShowInteractionResetModal(true)}
+                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
+                    <span className="truncate">Reset</span>
+                  </button>
+                </div>
+              </div>
+
+              <PremiumGate feature="interaction-states" variant="section" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+
+              {/* Preset buttons */}
+              <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
+                {(["subtle", "elevated", "bold"] as const).map((key) => {
+                  const labels: Record<string, string> = { subtle: "Subtle", elevated: "Elevated", bold: "Bold" };
+                  const active = interactionStyle.preset === key;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => selectInteractionPreset(key)}
+                      className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                      style={active
+                        ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                        : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                      }
+                    >
+                      {labels[key]}
+                    </button>
+                  );
+                })}
+              </div>
 
             {/* Interaction CSS output */}
             {interactionCssVisible && (() => {
@@ -1657,7 +1732,6 @@ function DesignSystemEditorInner({
             {/* Controls + Preview */}
             <div className="flex flex-col md:flex-row gap-4 md:gap-6">
               {/* Slider controls */}
-              <PremiumGate feature="interaction-states" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
               <div className="flex-1 min-w-0 space-y-3">
                 <div className="space-y-1.5">
                   <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Hover</p>
@@ -1689,7 +1763,6 @@ function DesignSystemEditorInner({
                   </label>
                 </div>
               </div>
-              </PremiumGate>
 
               {/* Live preview */}
               <div className="flex-1 min-w-0 flex items-start justify-center pt-2">
@@ -1746,6 +1819,11 @@ function DesignSystemEditorInner({
                 </div>
               </div>
             </div>
+
+              </PremiumGate>
+            </div>
+
+            </div>{/* end flex row */}
           </div>
 
           {/* Interaction Reset Confirmation Modal */}
@@ -2575,7 +2653,7 @@ function DesignSystemEditorInner({
                 { id: "card-style", label: "Card Style" },
                 { id: "typography", label: "Typography" },
                 { id: "alerts", label: "Alerts" },
-                { id: "interactions", label: "Interactions" },
+                { id: "buttons", label: "Buttons" },
               ].map((s) => (
                 <a
                   key={s.id}

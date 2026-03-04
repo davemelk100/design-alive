@@ -3,6 +3,21 @@ import SiteFooter from "../components/SiteFooter";
 
 const features = [
   {
+    version: "0.6",
+    items: [
+      "Buttons section — renamed from Interactions, split into Types (color swatches) and Interactions (premium controls) side-by-side",
+      "Button color swatches — read-only swatches for Primary, Secondary, Destructive, Muted, Success, Warning, and Brand",
+      "PremiumGate section variant — gated content now renders disabled (dimmed, non-interactive) instead of hidden",
+      "Nav icons — section navigation items now have inline icons for visual alignment",
+      "Legal pages — Privacy Policy, Cookies Policy, Terms & Conditions, and Accessibility page",
+      "Accessibility commitment — WCAG 2.1 Level AA compliance statement",
+      "Cookie consent banner — first-visit notification with localStorage persistence",
+      "Contact form — Netlify Forms integration with honeypot spam protection",
+      "Test suite — Vitest + Testing Library + jsdom with smoke tests",
+      "Lighthouse CI — automated performance, accessibility, SEO, and best practices auditing",
+    ],
+  },
+  {
     version: "0.5",
     items: [
       "Image-based palette extraction — upload a PNG/JPG and derive a full color palette via k-means clustering",

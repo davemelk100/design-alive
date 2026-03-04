@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { ThemeProvider } from "./context/ThemeContext";
 import { applyStoredThemeColors } from "@design-alive/editor";
+import CookieConsent from "./components/CookieConsent";
 
 const PortfolioLanding = lazy(
   () => import("./pages/portfolio/PortfolioLanding"),
@@ -11,6 +12,10 @@ const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const ReadmePage = lazy(() => import("./pages/ReadmePage"));
 const Pricing = lazy(() => import("./pages/Pricing"));
 const Features = lazy(() => import("./pages/Features"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const CookiesPolicy = lazy(() => import("./pages/CookiesPolicy"));
+const Terms = lazy(() => import("./pages/Terms"));
+const Accessibility = lazy(() => import("./pages/Accessibility"));
 const ClerkSignIn = lazy(() =>
   import("@clerk/clerk-react").then((m) => ({ default: m.SignIn })),
 );
@@ -55,6 +60,10 @@ export default function App() {
                 <Route path="/readme" element={<ReadmePage />} />
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/features" element={<Features />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/cookies" element={<CookiesPolicy />} />
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/accessibility" element={<Accessibility />} />
                 <Route path="/sign-in/*" element={<ClerkSignIn routing="path" path="/sign-in" />} />
                 <Route path="/sign-up/*" element={<ClerkSignUp routing="path" path="/sign-up" />} />
               </Routes>
@@ -73,6 +82,7 @@ export default function App() {
               Another MELKONIAN INDUSTRIES production
             </a>
           </footer>
+          <CookieConsent />
         </div>
       </ThemeProvider>
     </BrowserRouter>

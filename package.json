@@ -1,6 +1,6 @@
 {
   "name": "design-alive",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -11,7 +11,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "preview:build": "npm run build && npm run preview"
+    "preview:build": "npm run build && npm run preview",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:lighthouse": "lhci autorun"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.3",
@@ -24,15 +27,21 @@
     "stripe": "^20.4.0"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@vitejs/plugin-react": "^4.2.0",
     "autoprefixer": "^10.0.1",
+    "jsdom": "^28.1.0",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5",
-    "vite": "^5.0.0"
+    "vite": "^5.0.0",
+    "vitest": "^4.0.18"
   },
   "overrides": {
     "esbuild": "^0.25.6"
