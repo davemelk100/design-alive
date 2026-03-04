@@ -259,6 +259,64 @@ function DesignSystemEditorInner({
     return () => observer.disconnect();
   }, []);
 
+  const NAV_IDS = ["colors", "buttons", "card", "alerts", "typography"];
+
+  useEffect(() => {
+    const refs = navItemRefs.current;
+    const container = navContainerRef.current;
+    if (!container) return;
+
+    // Temporarily remove transforms so we can measure natural positions
+    const elements: { el: HTMLAnchorElement; prev: string }[] = [];
+    for (const id of NAV_IDS) {
+      const el = refs[id];
+      if (el) {
+        elements.push({ el, prev: el.style.transform });
+        el.style.transform = "none";
+      }
+    }
+
+    // Force layout recalc
+    void container.offsetWidth;
+
+    // Measure natural positions
+    const positions: Record<string, { left: number; width: number }> = {};
+    for (const id of NAV_IDS) {
+      const el = refs[id];
+      if (el) {
+        positions[id] = { left: el.offsetLeft, width: el.offsetWidth };
+      }
+    }
+
+    // Restore transforms immediately (will be overwritten by state update)
+    for (const { el, prev } of elements) {
+      el.style.transform = prev;
+    }
+
+    if (!positions[activeSection]) return;
+
+    // Compute gap from container
+    const gap = parseFloat(getComputedStyle(container).gap) || 12;
+
+    // Build the reordered list: active first, then others in original order
+    const reordered = [activeSection, ...NAV_IDS.filter(id => id !== activeSection)];
+
+    // Calculate where each item should go based on reordered positions
+    let cursor = positions[NAV_IDS[0]]?.left ?? 0;
+    const targetLeft: Record<string, number> = {};
+    for (const id of reordered) {
+      targetLeft[id] = cursor;
+      cursor += (positions[id]?.width ?? 0) + gap;
+    }
+
+    // Offset = target - natural
+    const offsets: Record<string, number> = {};
+    for (const id of NAV_IDS) {
+      offsets[id] = Math.round((targetLeft[id] ?? 0) - (positions[id]?.left ?? 0));
+    }
+    setNavOffsets(offsets);
+  }, [activeSection]);
+
   const [showResetModal, setShowResetModal] = useState(false);
   const [showFeaturesModal, setShowFeaturesModal] = useState(false);
   const [showCardResetModal, setShowCardResetModal] = useState(false);
@@ -272,6 +330,9 @@ function DesignSystemEditorInner({
   const [auditStatus, setAuditStatus] = useState<'idle' | 'running' | 'failed' | 'passed'>('idle');
   const auditTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const navItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const navContainerRef = useRef<HTMLDivElement | null>(null);
+  const [navOffsets, setNavOffsets] = useState<Record<string, number>>({});
   const [auditViolations, setAuditViolations] = useState<{ selector: string; text: string }[]>([]);
   const [violationIndex, setViolationIndex] = useState(0);
   const [harmonySchemeIndex, setHarmonySchemeIndex] = useState(-1);
@@ -331,6 +392,7 @@ function DesignSystemEditorInner({
   const [imagePaletteStatus, setImagePaletteStatus] = useState<'idle' | 'extracting' | 'done' | 'error'>('idle');
   const [imageUrlInput, setImageUrlInput] = useState("");
   const [imageUrlError, setImageUrlError] = useState("");
+  const [showImagePaletteModal, setShowImagePaletteModal] = useState(false);
   const [exportFormat, setExportFormat] = useState<"css" | "tokens">("css");
   const [shareCopied, setShareCopied] = useState(false);
   const [showPaletteExport, setShowPaletteExport] = useState(false);
@@ -1183,10 +1245,10 @@ function DesignSystemEditorInner({
 
   return (
     <div id="top" className={`ds-editor${className ? ` ${className}` : ''}`}>
-      {showHeader && <div className="pt-4 sm:pt-6 lg:pt-8 pb-2 sm:pb-3" style={{ backgroundColor: "hsl(var(--background))" }}>
+      {showHeader && <div className="pt-2 sm:pt-3 lg:pt-8 pb-1 sm:pb-2 lg:pb-3" style={{ backgroundColor: "hsl(var(--background))" }}>
         <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* Title + nav links — single header row */}
-          <div className="w-full mb-4 flex items-end gap-x-4 pt-4">
+          <div className="w-full mb-2 sm:mb-3 lg:mb-4 flex items-end gap-x-4 pt-2 sm:pt-3 lg:pt-4">
             <a href="#top" className="flex-shrink-0 leading-none" style={{ color: "hsl(var(--foreground))" }}>
               <svg className="h-10 block" viewBox="0 0 1654 514" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Themal">
                 <path d="M0 21.3583C0 9.56245 9.56242 0 21.3583 0H128.15V153.78H21.3583C9.56242 153.78 0 144.217 0 132.421V21.3583Z" fill="#FC0000"/>
@@ -1207,7 +1269,7 @@ function DesignSystemEditorInner({
             </a>
 
             {/* Desktop header actions */}
-            <div className="hidden lg:flex items-center gap-3 lg:gap-4 flex-1 min-w-0 ml-6 justify-end">
+            <div className="hidden lg:flex ml-auto items-center gap-4 flex-shrink-0">
               <button
                 onClick={() => {
                   const hash = serializeThemeState(colors, cardStyle, typographyState, alertStyle, interactionStyle, typoInteractionStyle);
@@ -1223,19 +1285,27 @@ function DesignSystemEditorInner({
                 <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                 <span>{shareCopied ? "Link copied!" : "Share"}</span>
               </button>
+              <button
+                onClick={() => setShowPrSetupModal(true)}
+                className="text-[13px] font-light uppercase tracking-wider transition-colors hover:opacity-70 flex items-center gap-1 whitespace-nowrap"
+                style={{ color: "hsl(var(--muted-foreground))", lineHeight: 1 }}
+              >
+                <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
+                <span>Open PR</span>
+              </button>
+              {headerRight}
             </div>
-            {(showNavLinks || headerRight) && (
-              <div className="hidden lg:flex ml-auto items-end gap-4 flex-shrink-0">
-                {showNavLinks && (
-                  <>
-                  </>
-                )}
-                {headerRight}
-              </div>
-            )}
 
-            {/* Mobile hamburger */}
+            {/* Mobile/tablet header actions */}
             <div className="ml-auto flex items-center gap-3 lg:hidden">
+              <button
+                onClick={() => setShowPrSetupModal(true)}
+                className="text-[13px] font-light uppercase tracking-wider transition-colors hover:opacity-70 flex items-center gap-1 whitespace-nowrap"
+                style={{ color: "hsl(var(--muted-foreground))", lineHeight: 1 }}
+              >
+                <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
+                <span>Open PR</span>
+              </button>
               {headerRight}
               <button
                 onClick={() => setShowFeaturesModal(true)}
@@ -1267,7 +1337,7 @@ function DesignSystemEditorInner({
         </div>
       </div>}
 
-      <ul className="w-full px-4 sm:px-6 lg:px-8 pt-1.5 hidden sm:block columns-1 sm:columns-2 gap-x-8 text-[13px] font-light list-disc pl-9 sm:pl-11" style={{ color: "hsl(var(--muted-foreground))" }}>
+      <ul className="w-full px-4 sm:px-6 lg:px-8 pt-1.5 hidden sm:block columns-1 sm:columns-2 gap-x-8 text-[13px] font-light list-disc pl-9 sm:pl-11" style={{ color: "hsl(var(--muted-foreground))", marginLeft: "15px" }}>
         <li>Real-time color picking with live preview</li>
         <li>Random palette generation with smart derivation</li>
         <li>Color harmony schemes (Complementary, Analogous, Triadic, Split-Complementary)</li>
@@ -1318,128 +1388,34 @@ function DesignSystemEditorInner({
         </div>
       )}
 
-      {/* Mobile-only Open PR */}
-      <div className="sm:hidden w-full px-4 pt-4 [&_.ds-premium-gated-inline]:w-full [&_.ds-premium-gated-inline]:flex [&_.ds-premium-locked-content]:w-full">
-        <PremiumGate feature="pr-integration" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-        {(() => {
-          const mainSt = sectionPrStatus["main"] || { status: 'idle' as const };
-          return (
-          <div className="w-full flex flex-col gap-2">
-            {prEndpointUrl && mainSt.status === 'created' && (
-              <div className="flex items-center gap-2 text-[13px] font-light text-green-600 dark:text-green-400">
-                <span>PR Created!</span>
-                {mainSt.url && (
-                  <a href={mainSt.url} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70 transition-opacity">View</a>
-                )}
-                <button
-                  onClick={() => setSectionPrStatus(prev => ({ ...prev, main: { status: 'idle' } }))}
-                  className="hover:opacity-70 transition-opacity"
-                  aria-label="Dismiss"
-                >&#10005;</button>
-              </div>
-            )}
-            {prEndpointUrl && mainSt.status === 'rate-limited' && mainSt.error && (
-              <span className="text-[13px] font-light text-yellow-700 dark:text-yellow-300">
-                {mainSt.error}
-              </span>
-            )}
-            <button
-              disabled={mainSt.status === 'creating'}
-              onClick={() => {
-                if (mainSt.status === 'creating') return;
-                setShowPrSetupModal(true);
-              }}
-              className={`w-full h-10 text-[14px] font-medium uppercase tracking-wider transition-colors hover:opacity-90 flex items-center justify-center gap-2 whitespace-nowrap rounded-md ${
-                mainSt.status === 'error' || mainSt.status === 'rate-limited'
-                  ? 'text-red-600 dark:text-red-400'
-                  : ''
-              }`}
-              style={{
-                backgroundColor: mainSt.status === 'error' || mainSt.status === 'rate-limited' ? undefined : "hsl(var(--brand))",
-                color: mainSt.status === 'error' || mainSt.status === 'rate-limited' ? undefined : (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff"),
-                lineHeight: 1,
-              }}
-            >
-              <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
-              <span>{mainSt.status === 'creating' ? 'Preparing...' : mainSt.status === 'error' ? 'Retry PR' : mainSt.status === 'rate-limited' ? 'Retry PR' : 'Open PR'}</span>
-            </button>
-          </div>
-          );
-        })()}
-        </PremiumGate>
-      </div>
 
       {/* Section nav */}
-      <nav className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-10 pb-1 hidden sm:flex items-center justify-between gap-3 lg:gap-4 flex-wrap" style={{ backgroundColor: "hsl(var(--background))" }}>
+      <nav ref={navContainerRef} className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-10 pb-1 hidden sm:flex items-center gap-3 lg:gap-4" style={{ backgroundColor: "hsl(var(--background))" }}>
         {[
           { id: "colors", label: "Colors", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" /></svg> },
+          { id: "buttons", label: "Buttons", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" /></svg> },
           { id: "card", label: "Cards", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg> },
           { id: "alerts", label: "Alerts", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg> },
           { id: "typography", label: "Typography", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg> },
-          { id: "buttons", label: "Buttons", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" /></svg> },
         ].map((s) => (
           <a
             key={s.id}
+            ref={(el) => { navItemRefs.current[s.id] = el; }}
             href={`#${s.id}`}
-            className="text-[20px] font-light uppercase tracking-wider transition-all whitespace-nowrap flex items-center gap-2 no-underline ds-nav-link"
+            className="whitespace-nowrap flex items-center gap-2 no-underline ds-nav-link"
             style={{
               color: activeSection === s.id ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))",
               lineHeight: 1,
               borderBottom: activeSection === s.id ? "1px solid hsl(var(--foreground))" : "1px solid transparent",
               paddingBottom: 2,
+              transform: `translateX(${navOffsets[s.id] ?? 0}px)`,
+              transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s, border-bottom-color 0.2s",
             }}
           >
-            <span>{s.label}</span>
+            <span style={{ fontSize: "20px", fontWeight: 400, textTransform: "uppercase", letterSpacing: "normal" }}>{s.label}</span>
             <svg className="w-5 h-5 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
           </a>
         ))}
-        <PremiumGate feature="pr-integration" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-        {(() => {
-          const mainSt = sectionPrStatus["main"] || { status: 'idle' as const };
-          return (
-          <div className="flex items-center gap-2">
-            {prEndpointUrl && mainSt.status === 'created' && (
-              <div className="flex items-center gap-2 text-[13px] font-light text-green-600 dark:text-green-400">
-                <span>PR Created!</span>
-                {mainSt.url && (
-                  <a href={mainSt.url} target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70 transition-opacity">View</a>
-                )}
-                <button
-                  onClick={() => setSectionPrStatus(prev => ({ ...prev, main: { status: 'idle' } }))}
-                  className="hover:opacity-70 transition-opacity"
-                  aria-label="Dismiss"
-                >&#10005;</button>
-              </div>
-            )}
-            {prEndpointUrl && mainSt.status === 'rate-limited' && mainSt.error && (
-              <span className="text-[13px] font-light text-yellow-700 dark:text-yellow-300">
-                {mainSt.error}
-              </span>
-            )}
-            <button
-              disabled={mainSt.status === 'creating'}
-              onClick={() => {
-                if (mainSt.status === 'creating') return;
-                setShowPrSetupModal(true);
-              }}
-              className={`h-10 px-4 text-[14px] font-medium uppercase tracking-wider transition-colors hover:opacity-90 flex items-center justify-center gap-2 whitespace-nowrap rounded-md ${
-                mainSt.status === 'error' || mainSt.status === 'rate-limited'
-                  ? 'text-red-600 dark:text-red-400'
-                  : ''
-              }`}
-              style={{
-                backgroundColor: mainSt.status === 'error' || mainSt.status === 'rate-limited' ? undefined : "hsl(var(--brand))",
-                color: mainSt.status === 'error' || mainSt.status === 'rate-limited' ? undefined : (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff"),
-                lineHeight: 1,
-              }}
-            >
-              <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
-              <span>{mainSt.status === 'creating' ? 'Preparing...' : mainSt.status === 'error' ? 'Retry PR' : mainSt.status === 'rate-limited' ? 'Retry PR' : 'Open PR'}</span>
-            </button>
-          </div>
-          );
-        })()}
-        </PremiumGate>
       </nav>
 
       <section className="pb-2 sm:pb-3 lg:pb-4 xl:pb-6 relative">
@@ -1574,7 +1550,7 @@ function DesignSystemEditorInner({
 
 
           {/* Colors section */}
-          <div id="colors" className="min-w-0 p-2 md:p-4 space-y-3 scroll-mt-28">
+          <div id="colors" className="min-w-0 space-y-3 scroll-mt-4 sm:scroll-mt-[90px]">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Colors <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex items-center">
@@ -1587,7 +1563,7 @@ function DesignSystemEditorInner({
                   const v = e.target.value;
                   if (v === "default") { setHarmonySchemeIndex(-1); handleGenerate(); }
                   else if (v === "refresh") handleGenerate();
-                  else if (v === "upload") fileInputRef.current?.click();
+                  else if (v === "upload") setShowImagePaletteModal(true);
                   else if (v === "export") setShowPaletteExport(true);
                   else if (v === "css") { setExportFormat("css"); generateCode(); }
                   else if (v === "tokens") { setExportFormat("tokens"); generateCode(); }
@@ -1604,20 +1580,18 @@ function DesignSystemEditorInner({
                 <option value="tokens">Tokens</option>
                 <option value="reset">Reset</option>
               </select>
-              {/* Hidden file input - outside desktop wrapper so mobile dropdown can access it */}
-              <PremiumGate feature="image-palette" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".png,.jpg,.jpeg"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleImagePalette(file);
-                    e.target.value = '';
-                  }}
-                />
-              </PremiumGate>
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".png,.jpg,.jpeg"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) { setShowImagePaletteModal(false); handleImagePalette(file); }
+                  e.target.value = '';
+                }}
+              />
               {/* Desktop: buttons */}
               <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
               <PremiumGate feature="harmony-schemes" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
@@ -1683,10 +1657,10 @@ function DesignSystemEditorInner({
               </div>
                 <PremiumGate feature="image-palette" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
                 <button
-                  onClick={() => fileInputRef.current?.click()}
+                  onClick={() => setShowImagePaletteModal(true)}
                   className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
                   style={{ color: "hsl(var(--muted-foreground))" }}
-                  title="Upload an image to extract a color palette from it"
+                  title="Extract a color palette from an image"
                 >
                   {imagePaletteStatus === 'extracting' ? (
                     <svg className="w-4 h-4 flex-shrink-0 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
@@ -1697,31 +1671,8 @@ function DesignSystemEditorInner({
                   ) : (
                     <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path strokeLinecap="round" strokeLinejoin="round" d="M21 15l-5-5L5 21" /></svg>
                   )}
-                  <span className="truncate">{imagePaletteStatus === 'extracting' ? 'Extracting...' : imagePaletteStatus === 'done' ? 'Palette applied' : imagePaletteStatus === 'error' ? 'Failed' : 'Upload Image'}</span>
+                  <span className="truncate">{imagePaletteStatus === 'extracting' ? 'Extracting...' : imagePaletteStatus === 'done' ? 'Palette applied' : imagePaletteStatus === 'error' ? 'Failed' : 'Image'}</span>
                 </button>
-                </PremiumGate>
-                <PremiumGate feature="image-palette" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-                <div className="flex items-center gap-1">
-                  <input
-                    type="text"
-                    value={imageUrlInput}
-                    onChange={(e) => { setImageUrlInput(e.target.value); setImageUrlError(""); }}
-                    onKeyDown={(e) => { if (e.key === "Enter") handleImageUrlSubmit(); }}
-                    placeholder="Paste image URL"
-                    className="h-10 px-2 text-[14px] font-light rounded-lg border bg-transparent w-[140px] sm:w-[180px]"
-                    style={{ borderColor: imageUrlError ? "hsl(var(--destructive))" : "hsl(var(--border))", color: "hsl(var(--foreground))" }}
-                  />
-                  <button
-                    onClick={handleImageUrlSubmit}
-                    disabled={imagePaletteStatus === 'extracting'}
-                    className="h-10 px-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                    title="Extract palette from image URL"
-                  >
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
-                  </button>
-                </div>
-                {imageUrlError && <span className="text-[12px] font-light" style={{ color: "hsl(var(--destructive))" }}>{imageUrlError}</span>}
                 </PremiumGate>
                 <PremiumGate feature="palette-export" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
                   <button
@@ -2012,7 +1963,7 @@ function DesignSystemEditorInner({
           </div>
 
           {/* Buttons section */}
-          <div id="buttons" className="min-w-0 p-2 md:p-4 space-y-3 mt-4 scroll-mt-28">
+          <div id="buttons" className="min-w-0 space-y-3 mt-4 scroll-mt-4 sm:scroll-mt-[90px]">
             <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Buttons <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
 
             {/* Swatches + Interactions side-by-side on desktop */}
@@ -2328,7 +2279,7 @@ function DesignSystemEditorInner({
           )}
 
           {/* Card Style section */}
-          <div id="card" className="min-w-0 p-2 md:p-4 mt-8 md:mt-12 scroll-mt-28 space-y-3">
+          <div id="card" className="min-w-0 mt-8 md:mt-12 scroll-mt-4 sm:scroll-mt-[90px] space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Cards <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
             </div>
@@ -2627,7 +2578,7 @@ function DesignSystemEditorInner({
           </div>{/* end Card Style section */}
 
           {/* Alerts section */}
-          <div id="alerts" className="min-w-0 p-2 md:p-4 mt-8 md:mt-12 scroll-mt-28 space-y-3">
+          <div id="alerts" className="min-w-0 mt-8 md:mt-12 scroll-mt-4 sm:scroll-mt-[90px] space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
             </div>
@@ -2868,7 +2819,7 @@ function DesignSystemEditorInner({
           </div>{/* end Alerts section */}
 
         {/* Typography section */}
-          <div id="typography" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-28">
+          <div id="typography" className="min-w-0 space-y-3 mt-8 md:mt-12 scroll-mt-4 sm:scroll-mt-[90px]">
             <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Typography <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
 
             {/* Typography controls + interactions stacked */}
@@ -3455,7 +3406,81 @@ function DesignSystemEditorInner({
 
         </div>
       </section>
-      {/* PR Section Picker Modal */}
+      {/* Image Palette Modal */}
+      {showImagePaletteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={() => { setShowImagePaletteModal(false); setImageUrlInput(""); setImageUrlError(""); }}>
+          <div className="rounded-xl p-6 w-[380px] max-h-[90vh] overflow-y-auto shadow-xl" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }} onClick={e => e.stopPropagation()}>
+            <h3 className="text-[18px] font-light mb-4">Extract Palette from Image</h3>
+
+            {/* Upload file */}
+            <div className="mb-4">
+              <p className="text-[13px] font-light mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Upload an image file</p>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={imagePaletteStatus === 'extracting'}
+                className="w-full h-10 text-[14px] font-light rounded-lg border flex items-center justify-center gap-2 transition-colors hover:opacity-80"
+                style={{ borderColor: "hsl(var(--border))", color: "hsl(var(--foreground))" }}
+              >
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
+                <span>Choose File</span>
+              </button>
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex-1 h-px" style={{ backgroundColor: "hsl(var(--border))" }} />
+              <span className="text-[12px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>or</span>
+              <div className="flex-1 h-px" style={{ backgroundColor: "hsl(var(--border))" }} />
+            </div>
+
+            {/* Paste URL */}
+            <div className="mb-4">
+              <p className="text-[13px] font-light mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Paste an image URL</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={imageUrlInput}
+                  onChange={(e) => { setImageUrlInput(e.target.value); setImageUrlError(""); }}
+                  onKeyDown={(e) => { if (e.key === "Enter") { handleImageUrlSubmit(); setShowImagePaletteModal(false); } }}
+                  placeholder="https://example.com/photo.jpg"
+                  className="flex-1 h-10 px-3 text-[14px] font-light rounded-lg border bg-transparent"
+                  style={{ borderColor: imageUrlError ? "hsl(var(--destructive))" : "hsl(var(--border))", color: "hsl(var(--foreground))" }}
+                  autoFocus
+                />
+                <button
+                  onClick={() => { handleImageUrlSubmit(); setShowImagePaletteModal(false); }}
+                  disabled={imagePaletteStatus === 'extracting' || !imageUrlInput.trim()}
+                  className="h-10 px-4 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                  style={{ backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff" }}
+                >
+                  Go
+                </button>
+              </div>
+              {imageUrlError && <p className="text-[12px] font-light mt-1" style={{ color: "hsl(var(--destructive))" }}>{imageUrlError}</p>}
+            </div>
+
+            {/* Status */}
+            {imagePaletteStatus === 'extracting' && (
+              <div className="flex items-center gap-2 text-[13px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>
+                <svg className="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                <span>Extracting palette...</span>
+              </div>
+            )}
+
+            {/* Close */}
+            <div className="flex justify-end mt-2">
+              <button
+                onClick={() => { setShowImagePaletteModal(false); setImageUrlInput(""); setImageUrlError(""); }}
+                className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                style={{ color: "hsl(var(--muted-foreground))" }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Extracted Palette Confirmation Modal */}
       {pendingImagePalette && (
         <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={() => { URL.revokeObjectURL(pendingImagePalette.imageUrl); setPendingImagePalette(null); }}>
           <div className="rounded-xl p-6 w-[380px] max-h-[90vh] overflow-y-auto shadow-xl" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }} onClick={e => e.stopPropagation()}>
@@ -3658,16 +3683,16 @@ function DesignSystemEditorInner({
               <p className="text-[11px] font-semibold uppercase tracking-wider mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Sections</p>
               {[
                 { id: "colors", label: "Colors" },
+                { id: "buttons", label: "Buttons" },
                 { id: "card", label: "Cards" },
                 { id: "alerts", label: "Alerts" },
                 { id: "typography", label: "Typography" },
-                { id: "buttons", label: "Buttons" },
               ].map((s) => (
                 <a
                   key={s.id}
                   href={`#${s.id}`}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70"
+                  className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70"
                   style={{ color: "hsl(var(--foreground))" }}
                 >
                   {s.label}
@@ -3693,7 +3718,7 @@ function DesignSystemEditorInner({
                     if (!prEndpointUrl) { setShowPrSetupModal(true); return; }
                     setPrSections(new Set()); setShowPrModal(true);
                   }}
-                  className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70 flex items-center gap-2"
+                  className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70 flex items-center gap-2"
                   style={{ color: "hsl(var(--foreground))" }}
                 >
                   <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>
