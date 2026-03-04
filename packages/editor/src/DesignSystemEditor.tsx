@@ -1471,6 +1471,16 @@ function DesignSystemEditorInner({
                   <span className="truncate">{imagePaletteStatus === 'extracting' ? 'Extracting...' : imagePaletteStatus === 'done' ? 'Palette applied' : imagePaletteStatus === 'error' ? 'Failed' : 'Upload Image'}</span>
                 </button>
                 </PremiumGate>
+                <PremiumGate feature="palette-export" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                  <button
+                    onClick={() => setShowPaletteExport(true)}
+                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    <span className="truncate"><span className="sm:hidden">Export</span><span className="hidden sm:inline">Export Palette</span></span>
+                  </button>
+                </PremiumGate>
                 <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
                   <button
                     onClick={() => {
@@ -1504,16 +1514,6 @@ function DesignSystemEditorInner({
                     <span className="truncate"><span className="sm:hidden">Tokens</span><span className="hidden sm:inline">Design Tokens</span></span>
                   </button>
                 </div>
-                <PremiumGate feature="palette-export" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-                  <button
-                    onClick={() => setShowPaletteExport(true)}
-                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                    <span className="truncate"><span className="sm:hidden">Export</span><span className="hidden sm:inline">Export Palette</span></span>
-                  </button>
-                </PremiumGate>
                 <button
                   onClick={() => setShowResetModal(true)}
                   className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
@@ -2048,9 +2048,9 @@ function DesignSystemEditorInner({
 
           {/* Card Style & Alerts row */}
           <div id="card-alerts" className="min-w-0 p-2 md:p-4 mt-8 md:mt-12 scroll-mt-28">
-          <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-12">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", alignItems: "start" }}>
           {/* Card Style section */}
-          <div className="w-full lg:w-1/2 space-y-3">
+          <div className="space-y-3" style={{ minWidth: 0 }}>
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Card Style <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -2326,9 +2326,10 @@ function DesignSystemEditorInner({
               </div>
             </div>{/* end Card Style border wrapper */}
           </div>
+          </div>{/* end Card Style column */}
 
           {/* Alerts section */}
-          <div className="w-full lg:w-1/2 space-y-3">
+          <div className="space-y-3" style={{ minWidth: 0 }}>
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts</h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -2515,42 +2516,39 @@ function DesignSystemEditorInner({
                 </div>
               </div>
             </div>
-          </div>
+          </div>{/* end Alerts border wrapper */}
 
-          </div>{/* end flex row */}
-
-          {/* Alert Reset Confirmation Modal */}
-          {showAlertResetModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" role="dialog" aria-modal="true" aria-labelledby="alert-reset-modal-title">
-              <div className="rounded-lg shadow-xl p-6 w-full max-w-sm mx-4" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}>
-                <h4 id="alert-reset-modal-title" className="text-2xl font-light mb-2">
-                  Reset Alert Style?
-                </h4>
-                <p className="text-[14px] mb-4" style={{ color: "hsl(var(--card-foreground))" }}>
-                  This will revert all alert style settings to their defaults. Any customizations will be lost.
-                </p>
-                <div className="flex justify-end gap-2">
-                  <button
-                    onClick={() => setShowAlertResetModal(false)}
-                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                    style={{ backgroundColor: "transparent", color: "hsl(var(--card-foreground))" }}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={() => { handleResetAlertStyle(); setShowAlertResetModal(false); }}
-                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                    style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
-                  >
-                    Reset
-                  </button>
+            {/* Alert Reset Confirmation Modal */}
+            {showAlertResetModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" role="dialog" aria-modal="true" aria-labelledby="alert-reset-modal-title">
+                <div className="rounded-lg shadow-xl p-6 w-full max-w-sm mx-4" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}>
+                  <h4 id="alert-reset-modal-title" className="text-2xl font-light mb-2">
+                    Reset Alert Style?
+                  </h4>
+                  <p className="text-[14px] mb-4" style={{ color: "hsl(var(--card-foreground))" }}>
+                    This will revert all alert style settings to their defaults. Any customizations will be lost.
+                  </p>
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={() => setShowAlertResetModal(false)}
+                      className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                      style={{ backgroundColor: "transparent", color: "hsl(var(--card-foreground))" }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => { handleResetAlertStyle(); setShowAlertResetModal(false); }}
+                      className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                      style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))" }}
+                    >
+                      Reset
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-
-            </div>{/* end Alerts border wrapper */}
+            )}
           </div>{/* end Alerts column */}
+          </div>{/* end flex row */}
           </div>{/* end card-alerts wrapper */}
 
         {/* Typography section */}
