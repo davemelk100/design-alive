@@ -362,10 +362,7 @@ export default function SiteFooter() {
         backgroundColor: "hsl(var(--background))",
       }}
     >
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
-        <Link to="/" className="flex-shrink-0 leading-none">
-          <img src="/themal-just-t.svg" alt="Themal" className="h-8" width="28" height="32" />
-        </Link>
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-center">
         <nav className="hidden sm:flex items-center gap-4 sm:gap-6">
           <div className="hidden lg:contents">
             <Link
@@ -373,14 +370,14 @@ export default function SiteFooter() {
               className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
               style={{ color: "hsl(var(--foreground))" }}
             >
-              How It Works
+              How
             </Link>
             <Link
               to="/readme"
               className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
               style={{ color: "hsl(var(--foreground))" }}
             >
-              README
+              Dev
             </Link>
             <Link
               to="/pricing"
@@ -435,7 +432,10 @@ export default function SiteFooter() {
           <LegalDropUp />
         </nav>
       </div>
-      <div className="w-full px-4 sm:px-6 lg:px-8 pb-4 flex justify-center">
+      <div className="w-full px-4 sm:px-6 lg:px-8 pb-4 flex items-center justify-center gap-3">
+        <Link to="/" className="flex-shrink-0 leading-none">
+          <img src="/themal-just-t.svg" alt="Themal" className="h-6" width="21" height="24" />
+        </Link>
         <a
           href="https://davemelk.com"
           target="_blank"

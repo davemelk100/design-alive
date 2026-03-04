@@ -49,7 +49,7 @@ The editor writes CSS custom properties (HSL values) to `:root`, so it works wit
 | `onExport` | `(css: string) => void` | — | Override built-in CSS modal. Receives the generated CSS string. |
 | `className` | `string` | — | Additional CSS class for the wrapper element. |
 | `showHeader` | `boolean` | `true` | Show the editor header with logo and navigation. |
-| `showNavLinks` | `boolean` | — | Show section navigation links in the header. |
+| `showNavLinks` | `boolean` | — | Show page navigation links in the mobile menu. |
 | `headerRight` | `React.ReactNode` | — | Custom content rendered on the right side of the header. |
 
 ## Premium Features

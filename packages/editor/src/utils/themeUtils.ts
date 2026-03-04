@@ -959,17 +959,16 @@ function saveCustomFonts(fonts: CustomFontEntry[]) {
   localStorage.setItem(CUSTOM_FONTS_KEY, JSON.stringify(fonts));
 }
 
-export async function validateGoogleFont(name: string): Promise<boolean> {
+export function validateGoogleFont(name: string): Promise<boolean> {
   const encoded = name.trim().replace(/\s+/g, "+");
-  try {
-    const res = await fetch(
-      `https://fonts.googleapis.com/css2?family=${encoded}:wght@400`,
-      { method: "HEAD" }
-    );
-    return res.ok;
-  } catch {
-    return false;
-  }
+  return new Promise((resolve) => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = `https://fonts.googleapis.com/css2?family=${encoded}:wght@400`;
+    link.onload = () => { link.remove(); resolve(true); };
+    link.onerror = () => { link.remove(); resolve(false); };
+    document.head.appendChild(link);
+  });
 }
 
 export async function addCustomFont(name: string): Promise<CustomFontEntry> {
