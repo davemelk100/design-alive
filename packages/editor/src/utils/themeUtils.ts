@@ -936,6 +936,81 @@ export function loadGoogleFont(family: string) {
   document.head.appendChild(link);
 }
 
+// ── Custom Google Fonts ──────────────────────────────────────────────
+
+export interface CustomFontEntry {
+  label: string;
+  value: string;
+  spec: string;
+}
+
+const CUSTOM_FONTS_KEY = "ds-custom-fonts";
+
+export function getCustomFonts(): CustomFontEntry[] {
+  try {
+    const raw = localStorage.getItem(CUSTOM_FONTS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveCustomFonts(fonts: CustomFontEntry[]) {
+  localStorage.setItem(CUSTOM_FONTS_KEY, JSON.stringify(fonts));
+}
+
+export async function validateGoogleFont(name: string): Promise<boolean> {
+  const encoded = name.trim().replace(/\s+/g, "+");
+  try {
+    const res = await fetch(
+      `https://fonts.googleapis.com/css2?family=${encoded}:wght@400`,
+      { method: "HEAD" }
+    );
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function addCustomFont(name: string): Promise<CustomFontEntry> {
+  const trimmed = name.trim();
+  const valid = await validateGoogleFont(trimmed);
+  if (!valid) throw new Error(`"${trimmed}" not found on Google Fonts`);
+
+  const encoded = trimmed.replace(/\s+/g, "+");
+  const spec = `${encoded}:wght@100;200;300;400;500;600;700;800;900`;
+  const value = trimmed.includes(" ")
+    ? `"${trimmed}", sans-serif`
+    : `${trimmed}, sans-serif`;
+  const entry: CustomFontEntry = { label: trimmed, value, spec };
+
+  // Register in runtime map and load
+  GOOGLE_FONTS_TO_LOAD[value] = spec;
+  loadGoogleFont(value);
+
+  // Persist
+  const fonts = getCustomFonts().filter((f) => f.label !== trimmed);
+  fonts.push(entry);
+  saveCustomFonts(fonts);
+
+  return entry;
+}
+
+export function removeCustomFont(label: string) {
+  const allFonts = getCustomFonts();
+  const removed = allFonts.find((f) => f.label === label);
+  if (removed) delete GOOGLE_FONTS_TO_LOAD[removed.value];
+  saveCustomFonts(allFonts.filter((f) => f.label !== label));
+}
+
+export function initCustomFonts() {
+  const fonts = getCustomFonts();
+  for (const f of fonts) {
+    GOOGLE_FONTS_TO_LOAD[f.value] = f.spec;
+    loadGoogleFont(f.value);
+  }
+}
+
 export function removeGoogleFontLinks() {
   document.querySelectorAll('link[id^="gf-"]').forEach((el) => el.remove());
 }
@@ -1395,7 +1470,7 @@ export function exportPaletteAsSvg(colors: Record<string, string>): string {
   const entries = Object.entries(PALETTE_LABELS).filter(([key]) => colors[key]);
   const swatchSize = 60;
   const gap = 8;
-  const labelHeight = 20;
+  const labelHeight = 32;
   const cols = Math.min(entries.length, 6);
   const rows = Math.ceil(entries.length / cols);
   const width = cols * (swatchSize + gap) - gap + 20;
@@ -1414,7 +1489,8 @@ export function exportPaletteAsSvg(colors: Record<string, string>): string {
     const x = 10 + col * (swatchSize + gap);
     const y = 10 + row * (swatchSize + labelHeight + gap);
     svg += `  <rect x="${x}" y="${y}" width="${swatchSize}" height="${swatchSize}" fill="${hex}" rx="6"/>\n`;
-    svg += `  <text x="${x + swatchSize / 2}" y="${y + swatchSize + 14}" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#666">${label}</text>\n`;
+    svg += `  <text x="${x + swatchSize / 2}" y="${y + swatchSize + 12}" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#666">${label}</text>\n`;
+    svg += `  <text x="${x + swatchSize / 2}" y="${y + swatchSize + 24}" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" fill="#999">${hex}</text>\n`;
   });
 
   svg += `</svg>`;

@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useRef, useEffect, useCallback } from "react";
+import React, { Suspense, useState, useRef, useEffect, useCallback, useMemo } from "react";
 import type { AxeResults } from "axe-core";
 import type { DesignSystemEditorProps } from "./types";
 import { useColorState } from "./hooks/useColorState";
@@ -59,7 +59,12 @@ import {
   exportPaletteAsText,
   exportPaletteAsSvg,
   exportPaletteAsPng,
+  getCustomFonts,
+  addCustomFont,
+  removeCustomFont,
+  initCustomFonts,
 } from "./utils/themeUtils";
+import type { CustomFontEntry } from "./utils/themeUtils";
 import type { CardStyleState, TypographyState, AlertStyleState, InteractionStyleState, TypoInteractionStyleState } from "./utils/themeUtils";
 import { extractPaletteFromImage } from "./utils/extractPalette";
 import "./styles/editor.css";
@@ -235,7 +240,7 @@ function DesignSystemEditorInner({
   const [activeSection, setActiveSection] = useState<string>("colors");
 
   useEffect(() => {
-    const ids = ["colors", "card-alerts", "typography", "buttons"];
+    const ids = ["colors", "card", "alerts", "typography", "buttons"];
     const elements = ids.map((id) => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     if (elements.length === 0) return;
 
@@ -281,6 +286,19 @@ function DesignSystemEditorInner({
     const saved = storage.get<TypographyState>(TYPOGRAPHY_KEY);
     return saved || { ...DEFAULT_TYPOGRAPHY };
   });
+  const [customFonts, setCustomFonts] = useState<CustomFontEntry[]>(() => getCustomFonts());
+  const [newFontName, setNewFontName] = useState("");
+  const [fontAddError, setFontAddError] = useState("");
+  const [fontAddLoading, setFontAddLoading] = useState(false);
+
+  const fontOptions = useMemo(
+    () => [
+      ...FONT_FAMILY_OPTIONS,
+      ...customFonts.map((f) => ({ label: `${f.label} *`, value: f.value })),
+    ],
+    [customFonts]
+  );
+
   const [typoCssVisible, setTypoCssVisible] = useState(false);
   const [typoCssCopied, setTypoCssCopied] = useState(false);
   const [typoExportFormat, setTypoExportFormat] = useState<"css" | "tokens">("css");
@@ -378,6 +396,7 @@ function DesignSystemEditorInner({
   }, [typographyState]);
 
   useEffect(() => {
+    initCustomFonts();
     applyStoredTypography();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -398,6 +417,37 @@ function DesignSystemEditorInner({
       setTypographyState({ ...preset });
     }
   }, []);
+
+  const handleAddCustomFont = useCallback(async () => {
+    const name = newFontName.trim();
+    if (!name) return;
+    setFontAddLoading(true);
+    setFontAddError("");
+    try {
+      await addCustomFont(name);
+      setCustomFonts(getCustomFonts());
+      setNewFontName("");
+    } catch (err: unknown) {
+      setFontAddError(err instanceof Error ? err.message : "Failed to add font");
+    } finally {
+      setFontAddLoading(false);
+    }
+  }, [newFontName]);
+
+  const handleRemoveCustomFont = useCallback((label: string) => {
+    const fonts = getCustomFonts();
+    const entry = fonts.find((f) => f.label === label);
+    removeCustomFont(label);
+    setCustomFonts(getCustomFonts());
+    // Reset heading/body if the removed font was in use
+    if (entry) {
+      const defaultFamily = FONT_FAMILY_OPTIONS[0].value;
+      const patch: Partial<TypographyState> = {};
+      if (typographyState.headingFamily === entry.value) patch.headingFamily = defaultFamily;
+      if (typographyState.bodyFamily === entry.value) patch.bodyFamily = defaultFamily;
+      if (Object.keys(patch).length) updateTypography(patch);
+    }
+  }, [typographyState, updateTypography]);
 
   useEffect(() => {
     applyAlertStyle(alertStyle);
@@ -1133,7 +1183,8 @@ function DesignSystemEditorInner({
             <nav className="hidden lg:flex items-center gap-3 lg:gap-4 flex-1 min-w-0 ml-6">
               {[
                 { id: "colors", label: "Colors", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" /></svg> },
-                { id: "card-alerts", label: "Card & Alerts", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg> },
+                { id: "card", label: "Card Style", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg> },
+                { id: "alerts", label: "Alerts", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg> },
                 { id: "typography", label: "Typography", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" /></svg> },
                 { id: "buttons", label: "Buttons", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" /></svg> },
               ].map((s) => (
@@ -1243,6 +1294,10 @@ function DesignSystemEditorInner({
           </div>
         </div>
       </div>}
+
+      <p className="w-full px-4 sm:px-6 lg:px-8 pt-2 text-[14px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>
+        Color choices will be automatically adjusted to meet WCAG AA contrast ratio requirements (4.5:1 minimum), ensuring your design system remains accessible.
+      </p>
 
       <section className="pb-2 sm:pb-3 lg:pb-4 xl:pb-6 relative">
         <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -1379,7 +1434,49 @@ function DesignSystemEditorInner({
           <div id="colors" className="min-w-0 p-2 md:p-4 space-y-3 scroll-mt-28">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Colors <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
-              <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
+              <div className="ml-auto flex items-center">
+              {/* Mobile: dropdown */}
+              <select
+                className="sm:hidden h-8 px-2 text-[13px] font-light rounded-md border"
+                style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                value=""
+                onChange={e => {
+                  const v = e.target.value;
+                  if (v === "default") { setHarmonySchemeIndex(-1); handleGenerate(); }
+                  else if (v === "refresh") handleGenerate();
+                  else if (v === "upload") fileInputRef.current?.click();
+                  else if (v === "export") setShowPaletteExport(true);
+                  else if (v === "css") { setExportFormat("css"); generateCode(); }
+                  else if (v === "tokens") { setExportFormat("tokens"); generateCode(); }
+                  else if (v === "reset") setShowResetModal(true);
+                  e.target.value = "";
+                }}
+              >
+                <option value="" disabled>Actions…</option>
+                <option value="default">Default Scheme</option>
+                <option value="refresh">Refresh</option>
+                <option value="upload">Upload Image</option>
+                <option value="export">Export Palette</option>
+                <option value="css">CSS</option>
+                <option value="tokens">Tokens</option>
+                <option value="reset">Reset</option>
+              </select>
+              {/* Hidden file input - outside desktop wrapper so mobile dropdown can access it */}
+              <PremiumGate feature="image-palette" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".png,.jpg,.jpeg"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleImagePalette(file);
+                    e.target.value = '';
+                  }}
+                />
+              </PremiumGate>
+              {/* Desktop: buttons */}
+              <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
               <PremiumGate feature="harmony-schemes" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
               <div className="relative">
                 <button
@@ -1442,17 +1539,6 @@ function DesignSystemEditorInner({
                 )}
               </div>
                 <PremiumGate feature="image-palette" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept=".png,.jpg,.jpeg"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleImagePalette(file);
-                    e.target.value = '';
-                  }}
-                />
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
@@ -1523,14 +1609,11 @@ function DesignSystemEditorInner({
                   <span className="truncate">Reset</span>
                 </button>
               </div>
+              </div>
             </div>
 
-            <p className="text-[12px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>
-              Note: Some color choices may be automatically adjusted to meet WCAG AA contrast ratio requirements (4.5:1 minimum), ensuring your design system remains accessible.
-            </p>
-
             {/* Color swatch buttons */}
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-4 sm:gap-5 rounded-lg p-4 overflow-visible" data-axe-exclude style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
+            <div className="grid grid-cols-5 gap-2 sm:gap-5 rounded-lg p-4 overflow-visible" data-axe-exclude style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {COLOR_SWATCHES.filter(({ key }) => ["--brand", "--secondary", "--accent", "--background", "--foreground"].includes(key)).map(({ key, label }) => {
                 const hsl = colors[key];
                 const bgHsl = hsl || "0 0% 50%";
@@ -1542,20 +1625,21 @@ function DesignSystemEditorInner({
                 const isLocked = lockedKeys.has(key);
                 const canLock = isLocked || lockedKeys.size < 4;
                 return (
+                  <div key={key} className="flex flex-col items-stretch overflow-visible">
+                    <span className="sm:hidden text-[11px] font-light text-center truncate mb-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>{label}</span>
                   <div
-                    key={key}
-                    className="relative group flex items-stretch rounded-lg overflow-visible"
+                    className="relative group flex flex-col sm:flex-row items-stretch rounded-lg overflow-visible"
                     style={{ boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}
                   >
                     <button
-                      className="w-full h-14 sm:h-20 text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-l-lg"
+                      className="w-full h-20 text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-t-lg sm:rounded-t-none sm:rounded-l-lg"
                       style={{ backgroundColor: hsl ? `hsl(${hsl})` : "#e5e7eb", color: btnTextColor }}
                       onClick={() => {
                         const input = document.getElementById(inputId) as HTMLInputElement | null;
                         input?.click();
                       }}
                     >
-                      <span className="whitespace-nowrap leading-tight">{label}</span>
+                      <span className="hidden sm:inline whitespace-nowrap leading-tight">{label}</span>
                       {hexCode && <span className="hidden sm:inline whitespace-nowrap opacity-70 text-[14px] leading-tight">{hexCode}</span>}
                       <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -1568,10 +1652,10 @@ function DesignSystemEditorInner({
                       value={colors[key] ? hslStringToHex(colors[key]) : "#000000"}
                       onChange={(e) => handleColorChange(key, e.target.value)}
                       className="absolute inset-0 opacity-0 cursor-pointer"
-                      style={{ width: "calc(100% - 32px)", height: "100%" }}
+                      style={{ width: "100%", height: "calc(100% - 24px)" }}
                     />
                     <button
-                      className={`w-8 flex items-center justify-center transition-all rounded-r-lg ${isPremium ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                      className={`h-6 sm:h-auto sm:w-8 flex items-center justify-center transition-all rounded-b-lg sm:rounded-b-none sm:rounded-r-lg ${isPremium ? 'cursor-pointer' : 'cursor-not-allowed'}`}
                       style={{
                         backgroundColor: isLocked ? `hsl(${bgHsl})` : "rgba(0,0,0,0.08)",
                         color: isLocked ? btnTextColor : "hsl(var(--muted-foreground))",
@@ -1605,6 +1689,7 @@ function DesignSystemEditorInner({
                         </svg>
                       )}
                     </button>
+                  </div>
                   </div>
                 );
               })}
@@ -1695,8 +1780,10 @@ function DesignSystemEditorInner({
                     const bc = contrastRatio("0 0% 0%", bgHsl);
                     const swatchTextColor = (wc >= bc) ? "#ffffff" : "#000000";
                     const hexCode = hsl ? hslStringToHex(hsl) : "";
+                    const initials = label.split(/\s+/).map(w => w[0]).join("");
                     return (
                     <div key={key} data-color-key={key} className="text-left">
+                      <p className="sm:hidden text-[11px] font-light text-center mb-0.5" style={{ color: "hsl(var(--muted-foreground))" }}>{initials}</p>
                       <div
                         className="relative w-full aspect-square rounded-md mb-1 overflow-hidden flex items-center justify-center shadow-md"
                       >
@@ -1708,7 +1795,7 @@ function DesignSystemEditorInner({
                               : undefined,
                           }}
                         />
-                        <span className="relative text-[14px] font-light truncate" style={{ color: swatchTextColor }}>{hexCode}</span>
+                        <span className="relative hidden sm:inline text-[14px] font-light truncate" style={{ color: swatchTextColor }}>{hexCode}</span>
                       </div>
                       <p className="hidden md:block text-[14px] font-light text-[color:hsl(var(--foreground))] truncate">
                         {label}
@@ -1822,40 +1909,61 @@ function DesignSystemEditorInner({
             <div className="w-full lg:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
               <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
                 <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Interactions</h3>
-                <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
-                  <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
+                <div className="ml-auto flex items-center">
+                  {/* Mobile: dropdown */}
+                  <select
+                    className="sm:hidden h-8 px-2 text-[13px] font-light rounded-md border"
+                    style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                    value=""
+                    onChange={e => {
+                      const v = e.target.value;
+                      if (v === "css") { setInteractionExportFormat("css"); setInteractionCssVisible(true); }
+                      else if (v === "tokens") { setInteractionExportFormat("tokens"); setInteractionCssVisible(true); }
+                      else if (v === "reset") setShowInteractionResetModal(true);
+                      e.target.value = "";
+                    }}
+                  >
+                    <option value="" disabled>Actions…</option>
+                    <option value="css">CSS</option>
+                    <option value="tokens">Tokens</option>
+                    <option value="reset">Reset</option>
+                  </select>
+                  {/* Desktop: buttons */}
+                  <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
+                    <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
+                      <button
+                        onClick={() => { if (interactionCssVisible && interactionExportFormat === "css") { setInteractionCssVisible(false); return; } setInteractionExportFormat("css"); setInteractionCssVisible(true); }}
+                        className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                        style={{
+                          backgroundColor: interactionCssVisible && interactionExportFormat === "css" ? "hsl(var(--brand))" : "transparent",
+                          color: interactionCssVisible && interactionExportFormat === "css" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))",
+                        }}
+                      >
+                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                        <span className="truncate">CSS</span>
+                      </button>
+                      <span className="w-px h-5" style={{ backgroundColor: "hsl(var(--border))" }} />
+                      <button
+                        onClick={() => { if (interactionCssVisible && interactionExportFormat === "tokens") { setInteractionCssVisible(false); return; } setInteractionExportFormat("tokens"); setInteractionCssVisible(true); }}
+                        className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                        style={{
+                          backgroundColor: interactionCssVisible && interactionExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent",
+                          color: interactionCssVisible && interactionExportFormat === "tokens" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))",
+                        }}
+                      >
+                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16" /></svg>
+                        <span className="truncate">Tokens</span>
+                      </button>
+                    </div>
                     <button
-                      onClick={() => { if (interactionCssVisible && interactionExportFormat === "css") { setInteractionCssVisible(false); return; } setInteractionExportFormat("css"); setInteractionCssVisible(true); }}
-                      className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                      style={{
-                        backgroundColor: interactionCssVisible && interactionExportFormat === "css" ? "hsl(var(--brand))" : "transparent",
-                        color: interactionCssVisible && interactionExportFormat === "css" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))",
-                      }}
+                      onClick={() => setShowInteractionResetModal(true)}
+                      className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                      style={{ color: "hsl(var(--muted-foreground))" }}
                     >
-                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                      <span className="truncate"><span className="sm:hidden">CSS</span><span className="hidden sm:inline">CSS</span></span>
-                    </button>
-                    <span className="w-px h-5" style={{ backgroundColor: "hsl(var(--border))" }} />
-                    <button
-                      onClick={() => { if (interactionCssVisible && interactionExportFormat === "tokens") { setInteractionCssVisible(false); return; } setInteractionExportFormat("tokens"); setInteractionCssVisible(true); }}
-                      className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                      style={{
-                        backgroundColor: interactionCssVisible && interactionExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent",
-                        color: interactionCssVisible && interactionExportFormat === "tokens" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))",
-                      }}
-                    >
-                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16" /></svg>
-                      <span className="truncate"><span className="sm:hidden">Tokens</span><span className="hidden sm:inline">Tokens</span></span>
+                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
+                      <span className="truncate">Reset</span>
                     </button>
                   </div>
-                  <button
-                    onClick={() => setShowInteractionResetModal(true)}
-                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
-                    <span className="truncate">Reset</span>
-                  </button>
                 </div>
               </div>
 
@@ -1865,6 +1973,11 @@ function DesignSystemEditorInner({
               <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
                 {(["subtle", "elevated", "bold"] as const).map((key) => {
                   const labels: Record<string, string> = { subtle: "Subtle", elevated: "Elevated", bold: "Bold" };
+                  const icons: Record<string, React.ReactNode> = {
+                    subtle: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+                    elevated: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" /></svg>,
+                    bold: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
+                  };
                   const active = interactionStyle.preset === key;
                   return (
                     <button
@@ -1876,6 +1989,7 @@ function DesignSystemEditorInner({
                         : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
                       }
                     >
+                      {icons[key]}
                       {labels[key]}
                     </button>
                   );
@@ -2046,14 +2160,34 @@ function DesignSystemEditorInner({
             </div>
           )}
 
-          {/* Card Style & Alerts row */}
-          <div id="card-alerts" className="min-w-0 p-2 md:p-4 mt-8 md:mt-12 scroll-mt-28">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", alignItems: "start" }}>
           {/* Card Style section */}
-          <div className="space-y-3" style={{ minWidth: 0 }}>
+          <div id="card" className="min-w-0 p-2 md:p-4 mt-8 md:mt-12 scroll-mt-28 space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Card Style <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
-              <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
+            </div>
+
+            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+            {/* CSS / Tokens / Reset */}
+            {/* Mobile: dropdown */}
+            <select
+              className="sm:hidden h-8 px-2 text-[13px] font-light rounded-md border w-full"
+              style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+              value=""
+              onChange={e => {
+                const v = e.target.value;
+                if (v === "css") { setCardExportFormat("css"); setCardCssVisible(true); }
+                else if (v === "tokens") { setCardExportFormat("tokens"); setCardCssVisible(true); }
+                else if (v === "reset") setShowCardResetModal(true);
+                e.target.value = "";
+              }}
+            >
+              <option value="" disabled>Actions…</option>
+              <option value="css">CSS</option>
+              <option value="tokens">Tokens</option>
+              <option value="reset">Reset</option>
+            </select>
+            {/* Desktop: buttons */}
+            <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
                 <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
                   <button
                     onClick={() => { if (cardCssVisible && cardExportFormat === "css") { setCardCssVisible(false); return; } setCardExportFormat("css"); setCardCssVisible(true); }}
@@ -2061,7 +2195,7 @@ function DesignSystemEditorInner({
                     style={{ backgroundColor: cardCssVisible && cardExportFormat === "css" ? "hsl(var(--brand))" : "transparent", color: cardCssVisible && cardExportFormat === "css" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
                   >
                     <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                    <span className="truncate"><span className="sm:hidden">CSS</span><span className="hidden sm:inline">CSS</span></span>
+                    <span className="truncate">CSS</span>
                   </button>
                   <span className="w-px h-5" style={{ backgroundColor: "hsl(var(--border))" }} />
                   <button
@@ -2070,7 +2204,7 @@ function DesignSystemEditorInner({
                     style={{ backgroundColor: cardCssVisible && cardExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent", color: cardCssVisible && cardExportFormat === "tokens" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
                   >
                     <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16" /></svg>
-                    <span className="truncate"><span className="sm:hidden">Tokens</span><span className="hidden sm:inline">Tokens</span></span>
+                    <span className="truncate">Tokens</span>
                   </button>
                 </div>
                 <button
@@ -2081,10 +2215,7 @@ function DesignSystemEditorInner({
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
                   <span className="truncate">Reset</span>
                 </button>
-              </div>
             </div>
-
-            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
             {/* Preset buttons */}
             <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {(["liquid-glass", "solid", "gradient", "border-only"] as const).map((key) => {
@@ -2326,13 +2457,36 @@ function DesignSystemEditorInner({
               </div>
             </div>{/* end Card Style border wrapper */}
           </div>
-          </div>{/* end Card Style column */}
+          </div>{/* end Card Style section */}
 
           {/* Alerts section */}
-          <div className="space-y-3" style={{ minWidth: 0 }}>
+          <div id="alerts" className="min-w-0 p-2 md:p-4 mt-8 md:mt-12 scroll-mt-28 space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts</h2>
-              <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
+              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+            </div>
+
+            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+            {/* CSS / Tokens / Reset */}
+            {/* Mobile: dropdown */}
+            <select
+              className="sm:hidden h-8 px-2 text-[13px] font-light rounded-md border w-full"
+              style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+              value=""
+              onChange={e => {
+                const v = e.target.value;
+                if (v === "css") { setAlertExportFormat("css"); setAlertCssVisible(true); }
+                else if (v === "tokens") { setAlertExportFormat("tokens"); setAlertCssVisible(true); }
+                else if (v === "reset") setShowAlertResetModal(true);
+                e.target.value = "";
+              }}
+            >
+              <option value="" disabled>Actions…</option>
+              <option value="css">CSS</option>
+              <option value="tokens">Tokens</option>
+              <option value="reset">Reset</option>
+            </select>
+            {/* Desktop: buttons */}
+            <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
                 <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
                   <button
                     onClick={() => { if (alertCssVisible && alertExportFormat === "css") { setAlertCssVisible(false); return; } setAlertExportFormat("css"); setAlertCssVisible(true); }}
@@ -2340,7 +2494,7 @@ function DesignSystemEditorInner({
                     style={{ backgroundColor: alertCssVisible && alertExportFormat === "css" ? "hsl(var(--brand))" : "transparent", color: alertCssVisible && alertExportFormat === "css" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
                   >
                     <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                    <span className="truncate"><span className="sm:hidden">CSS</span><span className="hidden sm:inline">CSS</span></span>
+                    <span className="truncate">CSS</span>
                   </button>
                   <span className="w-px h-5" style={{ backgroundColor: "hsl(var(--border))" }} />
                   <button
@@ -2349,7 +2503,7 @@ function DesignSystemEditorInner({
                     style={{ backgroundColor: alertCssVisible && alertExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent", color: alertCssVisible && alertExportFormat === "tokens" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
                   >
                     <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16" /></svg>
-                    <span className="truncate"><span className="sm:hidden">Tokens</span><span className="hidden sm:inline">Tokens</span></span>
+                    <span className="truncate">Tokens</span>
                   </button>
                 </div>
                 <button
@@ -2360,10 +2514,7 @@ function DesignSystemEditorInner({
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
                   <span className="truncate">Reset</span>
                 </button>
-              </div>
             </div>
-
-            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
             {/* Preset buttons */}
             <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {(["filled", "soft", "outline", "minimal"] as const).map((key) => {
@@ -2547,49 +2698,68 @@ function DesignSystemEditorInner({
                 </div>
               </div>
             )}
-          </div>{/* end Alerts column */}
-          </div>{/* end flex row */}
-          </div>{/* end card-alerts wrapper */}
+          </div>{/* end Alerts section */}
 
         {/* Typography section */}
           <div id="typography" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-28">
             <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Typography <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
 
-            {/* Typography controls + interactions side-by-side */}
-            <div className="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-12">
+            {/* Typography controls + interactions stacked */}
+            <div className="space-y-6">
 
             {/* Controls + Preview column */}
-            <div className="w-full lg:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))", minWidth: 0 }}>
               <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
                 <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Styles</h3>
-                <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
-                  <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
+                <div className="ml-auto flex items-center">
+                  {/* Mobile: dropdown */}
+                  <select
+                    className="sm:hidden h-8 px-2 text-[13px] font-light rounded-md border"
+                    style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                    value=""
+                    onChange={e => {
+                      const v = e.target.value;
+                      if (v === "css") { setTypoExportFormat("css"); setTypoCssVisible(true); }
+                      else if (v === "tokens") { setTypoExportFormat("tokens"); setTypoCssVisible(true); }
+                      else if (v === "reset") setShowTypoResetModal(true);
+                      e.target.value = "";
+                    }}
+                  >
+                    <option value="" disabled>Actions…</option>
+                    <option value="css">CSS</option>
+                    <option value="tokens">Tokens</option>
+                    <option value="reset">Reset</option>
+                  </select>
+                  {/* Desktop: buttons */}
+                  <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
+                    <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
+                      <button
+                        onClick={() => { if (typoCssVisible && typoExportFormat === "css") { setTypoCssVisible(false); return; } setTypoExportFormat("css"); setTypoCssVisible(true); }}
+                        className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                        style={{ backgroundColor: typoCssVisible && typoExportFormat === "css" ? "hsl(var(--brand))" : "transparent", color: typoCssVisible && typoExportFormat === "css" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
+                      >
+                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                        <span className="truncate">CSS</span>
+                      </button>
+                      <span className="w-px h-5" style={{ backgroundColor: "hsl(var(--border))" }} />
+                      <button
+                        onClick={() => { if (typoCssVisible && typoExportFormat === "tokens") { setTypoCssVisible(false); return; } setTypoExportFormat("tokens"); setTypoCssVisible(true); }}
+                        className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                        style={{ backgroundColor: typoCssVisible && typoExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent", color: typoCssVisible && typoExportFormat === "tokens" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
+                      >
+                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16" /></svg>
+                        <span className="truncate">Tokens</span>
+                      </button>
+                    </div>
                     <button
-                      onClick={() => { if (typoCssVisible && typoExportFormat === "css") { setTypoCssVisible(false); return; } setTypoExportFormat("css"); setTypoCssVisible(true); }}
-                      className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                      style={{ backgroundColor: typoCssVisible && typoExportFormat === "css" ? "hsl(var(--brand))" : "transparent", color: typoCssVisible && typoExportFormat === "css" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
+                      onClick={() => setShowTypoResetModal(true)}
+                      className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                      style={{ color: "hsl(var(--muted-foreground))" }}
                     >
-                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                      <span className="truncate"><span className="sm:hidden">CSS</span><span className="hidden sm:inline">CSS</span></span>
-                    </button>
-                    <span className="w-px h-5" style={{ backgroundColor: "hsl(var(--border))" }} />
-                    <button
-                      onClick={() => { if (typoCssVisible && typoExportFormat === "tokens") { setTypoCssVisible(false); return; } setTypoExportFormat("tokens"); setTypoCssVisible(true); }}
-                      className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                      style={{ backgroundColor: typoCssVisible && typoExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent", color: typoCssVisible && typoExportFormat === "tokens" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
-                    >
-                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16" /></svg>
-                      <span className="truncate"><span className="sm:hidden">Tokens</span><span className="hidden sm:inline">Tokens</span></span>
+                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
+                      <span className="truncate">Reset</span>
                     </button>
                   </div>
-                  <button
-                    onClick={() => setShowTypoResetModal(true)}
-                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
-                    <span className="truncate">Reset</span>
-                  </button>
                 </div>
               </div>
 
@@ -2670,7 +2840,7 @@ function DesignSystemEditorInner({
                         className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
                         style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
                       >
-                        {FONT_FAMILY_OPTIONS.map(opt => (
+                        {fontOptions.map(opt => (
                           <option key={opt.value} value={opt.value}>{opt.label}</option>
                         ))}
                       </select>
@@ -2683,7 +2853,7 @@ function DesignSystemEditorInner({
                         className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
                         style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
                       >
-                        {FONT_FAMILY_OPTIONS.map(opt => (
+                        {fontOptions.map(opt => (
                           <option key={opt.value} value={opt.value}>{opt.label}</option>
                         ))}
                       </select>
@@ -2728,6 +2898,67 @@ function DesignSystemEditorInner({
                 {/* Live preview */}
                 <div className="flex-1 min-w-0 flex items-start justify-center pt-2">
                   <div className="w-full md:max-w-[400px] space-y-3" data-axe-exclude>
+                    {/* Custom font input */}
+                    <PremiumGate feature="custom-fonts" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                    <div className="space-y-1.5">
+                      <label className="flex items-center gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                        <span className="whitespace-nowrap">Custom:</span>
+                        <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                          <input
+                            type="text"
+                            value={newFontName}
+                            onChange={e => { setNewFontName(e.target.value); setFontAddError(""); }}
+                            placeholder="Google Font name…"
+                            className="flex-1 min-w-0 h-8 px-2 text-[14px] font-light rounded-md border"
+                            style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                            onKeyDown={e => {
+                              if (e.key === "Enter" && newFontName.trim()) {
+                                e.preventDefault();
+                                handleAddCustomFont();
+                              }
+                            }}
+                          />
+                          <button
+                            disabled={fontAddLoading || !newFontName.trim()}
+                            onClick={handleAddCustomFont}
+                            className="h-8 px-2 text-[12px] font-medium rounded-md border whitespace-nowrap"
+                            style={{
+                              backgroundColor: "hsl(var(--primary))",
+                              color: "hsl(var(--primary-foreground))",
+                              borderColor: "hsl(var(--border))",
+                              opacity: fontAddLoading || !newFontName.trim() ? 0.5 : 1,
+                            }}
+                          >
+                            {fontAddLoading ? "…" : "+ Font"}
+                          </button>
+                        </div>
+                      </label>
+                      {fontAddError && (
+                        <p className="text-[12px] mt-0.5" style={{ color: "hsl(var(--destructive))" }}>{fontAddError}</p>
+                      )}
+                      {customFonts.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {customFonts.map(f => (
+                            <span
+                              key={f.label}
+                              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[11px] rounded-md border"
+                              style={{ borderColor: "hsl(var(--border))", color: "hsl(var(--foreground))" }}
+                            >
+                              {f.label}
+                              <button
+                                onClick={() => handleRemoveCustomFont(f.label)}
+                                className="ml-0.5 hover:opacity-70"
+                                style={{ color: "hsl(var(--muted-foreground))" }}
+                                title={`Remove ${f.label}`}
+                              >
+                                ×
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    </PremiumGate>
                     <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Preview</p>
                     <div
                       className="w-full rounded-lg p-5 space-y-3"
@@ -2789,37 +3020,58 @@ function DesignSystemEditorInner({
             </div>{/* end Styles column */}
 
             {/* Typography Interactions column */}
-            <div className="w-full lg:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))", minWidth: 0 }}>
               <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-                <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Typography Interactions</h3>
-                <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
-                  <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
+                <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Interactions</h3>
+                <div className="ml-auto flex items-center">
+                  {/* Mobile: dropdown */}
+                  <select
+                    className="sm:hidden h-8 px-2 text-[13px] font-light rounded-md border"
+                    style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                    value=""
+                    onChange={e => {
+                      const v = e.target.value;
+                      if (v === "css") { setTypoInteractionExportFormat("css"); setTypoInteractionCssVisible(true); }
+                      else if (v === "tokens") { setTypoInteractionExportFormat("tokens"); setTypoInteractionCssVisible(true); }
+                      else if (v === "reset") setShowTypoInteractionResetModal(true);
+                      e.target.value = "";
+                    }}
+                  >
+                    <option value="" disabled>Actions…</option>
+                    <option value="css">CSS</option>
+                    <option value="tokens">Tokens</option>
+                    <option value="reset">Reset</option>
+                  </select>
+                  {/* Desktop: buttons */}
+                  <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
+                    <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
+                      <button
+                        onClick={() => { if (typoInteractionCssVisible && typoInteractionExportFormat === "css") { setTypoInteractionCssVisible(false); return; } setTypoInteractionExportFormat("css"); setTypoInteractionCssVisible(true); }}
+                        className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                        style={{ backgroundColor: typoInteractionCssVisible && typoInteractionExportFormat === "css" ? "hsl(var(--brand))" : "transparent", color: typoInteractionCssVisible && typoInteractionExportFormat === "css" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
+                      >
+                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                        <span className="truncate">CSS</span>
+                      </button>
+                      <span className="w-px h-5" style={{ backgroundColor: "hsl(var(--border))" }} />
+                      <button
+                        onClick={() => { if (typoInteractionCssVisible && typoInteractionExportFormat === "tokens") { setTypoInteractionCssVisible(false); return; } setTypoInteractionExportFormat("tokens"); setTypoInteractionCssVisible(true); }}
+                        className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                        style={{ backgroundColor: typoInteractionCssVisible && typoInteractionExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent", color: typoInteractionCssVisible && typoInteractionExportFormat === "tokens" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
+                      >
+                        <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16" /></svg>
+                        <span className="truncate">Tokens</span>
+                      </button>
+                    </div>
                     <button
-                      onClick={() => { if (typoInteractionCssVisible && typoInteractionExportFormat === "css") { setTypoInteractionCssVisible(false); return; } setTypoInteractionExportFormat("css"); setTypoInteractionCssVisible(true); }}
-                      className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                      style={{ backgroundColor: typoInteractionCssVisible && typoInteractionExportFormat === "css" ? "hsl(var(--brand))" : "transparent", color: typoInteractionCssVisible && typoInteractionExportFormat === "css" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
+                      onClick={() => setShowTypoInteractionResetModal(true)}
+                      className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                      style={{ color: "hsl(var(--muted-foreground))" }}
                     >
-                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                      <span className="truncate"><span className="sm:hidden">CSS</span><span className="hidden sm:inline">CSS</span></span>
-                    </button>
-                    <span className="w-px h-5" style={{ backgroundColor: "hsl(var(--border))" }} />
-                    <button
-                      onClick={() => { if (typoInteractionCssVisible && typoInteractionExportFormat === "tokens") { setTypoInteractionCssVisible(false); return; } setTypoInteractionExportFormat("tokens"); setTypoInteractionCssVisible(true); }}
-                      className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                      style={{ backgroundColor: typoInteractionCssVisible && typoInteractionExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent", color: typoInteractionCssVisible && typoInteractionExportFormat === "tokens" ? (colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff") : "hsl(var(--muted-foreground))" }}
-                    >
-                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16" /></svg>
-                      <span className="truncate"><span className="sm:hidden">Tokens</span><span className="hidden sm:inline">Tokens</span></span>
+                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
+                      <span className="truncate">Reset</span>
                     </button>
                   </div>
-                  <button
-                    onClick={() => setShowTypoInteractionResetModal(true)}
-                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
-                    <span className="truncate">Reset</span>
-                  </button>
                 </div>
               </div>
 
@@ -2829,6 +3081,11 @@ function DesignSystemEditorInner({
               <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
                 {(["subtle", "elevated", "bold"] as const).map((key) => {
                   const labels: Record<string, string> = { subtle: "Subtle", elevated: "Elevated", bold: "Bold" };
+                  const icons: Record<string, React.ReactNode> = {
+                    subtle: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>,
+                    elevated: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" /></svg>,
+                    bold: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
+                  };
                   const active = typoInteractionStyle.preset === key;
                   return (
                     <button
@@ -2840,6 +3097,7 @@ function DesignSystemEditorInner({
                         : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
                       }
                     >
+                      {icons[key]}
                       {labels[key]}
                     </button>
                   );
@@ -2854,7 +3112,7 @@ function DesignSystemEditorInner({
                 return (
                   <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
                     <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
-                      <span className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>{typoInteractionExportFormat === "tokens" ? "Typography Interaction Tokens" : "Typography Interaction CSS"}</span>
+                      <span className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>{typoInteractionExportFormat === "tokens" ? "Interaction Tokens" : "Interaction CSS"}</span>
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => { navigator.clipboard.writeText(output); setTypoInteractionCssCopied(true); setTimeout(() => setTypoInteractionCssCopied(false), 2000); }}
@@ -3010,7 +3268,7 @@ function DesignSystemEditorInner({
             {showTypoInteractionResetModal && (
               <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={() => setShowTypoInteractionResetModal(false)}>
                 <div className="rounded-xl p-6 w-[340px] shadow-xl" style={{ backgroundColor: "#fff", color: "#111" }} onClick={e => e.stopPropagation()}>
-                  <h3 className="text-[18px] font-light mb-3">Reset Typography Interactions?</h3>
+                  <h3 className="text-[18px] font-light mb-3">Reset Interactions?</h3>
                   <p className="text-[14px] font-light mb-4" style={{ color: "#555" }}>This will restore the default typography interaction styles.</p>
                   <div className="flex gap-2 justify-end">
                     <button onClick={() => setShowTypoInteractionResetModal(false)} className="px-4 py-2 text-[14px] font-light rounded-lg" style={{ backgroundColor: "#e5e7eb", color: "#111" }}>Cancel</button>
@@ -3233,7 +3491,8 @@ function DesignSystemEditorInner({
               <p className="text-[11px] font-semibold uppercase tracking-wider mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Sections</p>
               {[
                 { id: "colors", label: "Colors" },
-                { id: "card-alerts", label: "Card & Alerts" },
+                { id: "card", label: "Card Style" },
+                { id: "alerts", label: "Alerts" },
                 { id: "typography", label: "Typography" },
                 { id: "buttons", label: "Buttons" },
               ].map((s) => (

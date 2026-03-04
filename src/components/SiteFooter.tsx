@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 function ContactForm() {
   const [open, setOpen] = useState(false);
@@ -368,14 +367,7 @@ export default function SiteFooter() {
           <img src="/themal-just-t.svg" alt="Themal" className="h-8" width="28" height="32" />
         </Link>
         <nav className="hidden sm:flex items-center gap-4 sm:gap-6">
-          <div className="hidden xl:contents">
-            <Link
-              to="/"
-              className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-              style={{ color: "hsl(var(--foreground))" }}
-            >
-              Home
-            </Link>
+          <div className="hidden lg:contents">
             <Link
               to="/how-it-works"
               className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
@@ -407,7 +399,7 @@ export default function SiteFooter() {
           </div>
           <span className="w-px h-4" style={{ backgroundColor: "hsl(var(--border))" }} />
           {/* Desktop: show all links inline */}
-          <div className="hidden xl:contents">
+          <div className="hidden lg:contents">
             <Link
               to="/privacy"
               className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
@@ -441,21 +433,18 @@ export default function SiteFooter() {
           </div>
           {/* Tablet: drop-up menu for legal + contact */}
           <LegalDropUp />
-          <span className="w-px h-4" style={{ backgroundColor: "hsl(var(--border))" }} />
-          <SignedOut>
-            <SignInButton mode="modal">
-              <button
-                className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-                style={{ color: "hsl(var(--foreground))" }}
-              >
-                Sign In
-              </button>
-            </SignInButton>
-          </SignedOut>
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-          </SignedIn>
         </nav>
+      </div>
+      <div className="w-full px-4 sm:px-6 lg:px-8 pb-4 flex justify-center">
+        <a
+          href="https://davemelk.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[11px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
+          style={{ color: "hsl(var(--muted-foreground))" }}
+        >
+          Another MELKONIAN INDUSTRIES production
+        </a>
       </div>
     </footer>
   );

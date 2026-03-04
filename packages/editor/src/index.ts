@@ -22,8 +22,12 @@ export {
   exportPaletteAsText,
   exportPaletteAsSvg,
   exportPaletteAsPng,
+  getCustomFonts,
+  addCustomFont,
+  removeCustomFont,
+  initCustomFonts,
 } from "./utils/themeUtils";
-export type { HarmonyScheme, CardStyleState, TypographyState, AlertStyleState, InteractionStyleState, TypoInteractionStyleState } from "./utils/themeUtils";
+export type { HarmonyScheme, CardStyleState, TypographyState, AlertStyleState, InteractionStyleState, TypoInteractionStyleState, CustomFontEntry } from "./utils/themeUtils";
 
 export { validateLicenseKey, generateLicenseKey } from "./utils/license";
 export type { PremiumFeature, LicenseValidation } from "./utils/license";

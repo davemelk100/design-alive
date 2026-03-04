@@ -14,7 +14,7 @@ export default function Accessibility() {
         </Link>
 
         <h1 className="text-3xl sm:text-4xl font-light mb-2" style={{ color: "hsl(var(--foreground))" }}>
-          Accessibility
+          Themal's Accessibility Commitment
         </h1>
         <p className="text-[14px] mb-8" style={{ color: "hsl(var(--muted-foreground))" }}>
           Last updated: March 3, 2026

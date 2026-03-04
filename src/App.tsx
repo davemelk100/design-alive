@@ -79,19 +79,6 @@ export default function App() {
               </Routes>
             </Suspense>
           </main>
-          <footer
-            className="h-16 flex items-center justify-center text-[13px] font-light"
-            style={{ color: "hsl(var(--muted-foreground))" }}
-          >
-            <a
-              href="https://davemelk.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:opacity-70 text-[13px] transition-opacity"
-            >
-              Another MELKONIAN INDUSTRIES production
-            </a>
-          </footer>
           <CookieConsent />
         </div>
       </ThemeProvider>

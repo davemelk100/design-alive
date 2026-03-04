@@ -8,7 +8,7 @@ All palette colors are HSL custom properties on `:root`. From one brand color, t
 
 Every foreground/background pair is audited against WCAG AA (4.5:1) via axe-core. Failing pairs are auto-corrected by adjusting foreground lightness.
 
-Beyond colors, the editor includes typography controls (fonts, sizes, weights, spacing with five presets), button interaction states (hover, active, focus), typography interaction states (link/heading hover effects), card style customization, and alert styling — all with live preview. Premium features are gated behind a license key with a click-to-upgrade modal.
+Beyond colors, the editor includes typography controls (fonts, sizes, weights, spacing with five presets — plus custom Google Font loading), button interaction states (hover, active, focus), typography interaction states (link/heading hover effects), card style customization, and alert styling — all with live preview. Premium features are gated behind a license key with a click-to-upgrade modal.
 
 Your entire theme (colors, typography, interactions, card styles, alerts) persists in localStorage across reloads.
 

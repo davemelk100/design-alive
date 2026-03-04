@@ -66,6 +66,7 @@ The following features require a valid license key:
 | Palette export | Download palette as SVG/PNG, or copy as HEX/RGB/RGBA text. |
 | Interaction states | Style hover, focus, and active states for buttons and components. |
 | Typography interactions | Customize hover, active, and underline behavior for links and headings. |
+| Custom fonts | Add any Google Font by name — validated, loaded, and persisted across sessions. |
 
 ### License Key Format
 
@@ -175,6 +176,12 @@ import {
   exportPaletteAsSvg,             // Export palette as SVG string
   exportPaletteAsPng,             // Export palette as PNG Blob
 
+  // Custom font utilities
+  getCustomFonts,       // Load custom fonts from localStorage
+  addCustomFont,        // Validate & add a Google Font by name
+  removeCustomFont,     // Remove a custom font by label
+  initCustomFonts,      // Re-register all custom fonts on startup
+
   // License utilities
   validateLicenseKey,   // Validate a THEEMEL-XXXX-XXXX-XXXX key
   generateLicenseKey,   // Generate a valid license key
@@ -191,14 +198,15 @@ import {
 1. **Color picking** — Click any swatch to open the native color picker. Changing a key color (brand, secondary, accent, background) automatically derives related tokens.
 2. **Harmony schemes** *(Pro)* — Generate palettes using complementary, analogous, triadic, or split-complementary color relationships.
 3. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1). Failing pairs are auto-corrected by adjusting lightness.
-4. **Typography** — Choose heading and body fonts, adjust sizes, weights, line height, and letter spacing with live preview. Five built-in presets (System, Modern, Classic, Compact, Editorial).
+4. **Typography** — Choose heading and body fonts (including custom Google Fonts), adjust sizes, weights, line height, and letter spacing with live preview. Five built-in presets (System, Modern, Classic, Compact, Editorial).
 5. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
 6. **Typography interactions** *(Pro)* — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
 7. **Persistence** — All settings (colors, typography, card styles, alerts, interactions) are saved to `localStorage` and restored on reload.
 8. **Per-section export** — Every section header includes a CSS | Tokens split button to export CSS custom properties with Tailwind config, or W3C Design Token JSON, for that section.
 9. **Shareable URLs** — Encode your full theme state in the URL hash and share it with anyone via a single link.
 10. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
-11. **Mobile friendly** — Fully responsive UI lets you tweak your design system and open PRs from any device.
+11. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
+12. **Mobile friendly** — Fully responsive UI with mobile-optimized dropdowns, compact swatch labels, and stacked layouts for smaller screens.
 
 ## Package Architecture
 
