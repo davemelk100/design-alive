@@ -256,7 +256,6 @@ function DesignSystemEditorInner({
   upgradeUrl,
   signInUrl,
   headerRight,
-  featuresUrl,
   aboutUrl,
 }: DesignSystemEditorProps) {
   const { isPremium } = useLicense();
@@ -1621,6 +1620,7 @@ function DesignSystemEditorInner({
         {/* Mobile dropdown - right-aligned */}
         <div className="ml-auto sm:hidden">
           <select
+            aria-label="Global actions"
             className="h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
             style={{
               backgroundColor: "hsl(var(--background))",
@@ -2543,6 +2543,7 @@ function DesignSystemEditorInner({
               <div className="ml-auto flex items-center">
                 {/* Mobile: dropdown (Colors section actions only) */}
                 <select
+                  aria-label="Colors actions"
                   className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
                   style={{
                     backgroundColor: "hsl(var(--background))",
@@ -2748,6 +2749,7 @@ function DesignSystemEditorInner({
                         }}
                       >
                         <button
+                          aria-label={`${label} color swatch`}
                           className="w-full h-20 text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-t-lg sm:rounded-t-none sm:rounded-l-lg"
                           style={{
                             backgroundColor: hsl ? `hsl(${hsl})` : "#e5e7eb",
@@ -3469,6 +3471,7 @@ function DesignSystemEditorInner({
                   <div className="ml-auto flex items-center">
                     {/* Mobile: dropdown */}
                     <select
+                      aria-label="Color interactions actions"
                       className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
                       style={{
                         backgroundColor: "hsl(var(--background))",
@@ -4138,6 +4141,7 @@ function DesignSystemEditorInner({
                 {/* CSS / Tokens / Reset */}
                 {/* Mobile: dropdown */}
                 <select
+                  aria-label="Card actions"
                   className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
                   style={{
                     backgroundColor: "hsl(var(--background))",
@@ -4921,6 +4925,7 @@ function DesignSystemEditorInner({
                 {/* CSS / Tokens / Reset */}
                 {/* Mobile: dropdown */}
                 <select
+                  aria-label="Alerts actions"
                   className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
                   style={{
                     backgroundColor: "hsl(var(--background))",
@@ -5630,6 +5635,7 @@ function DesignSystemEditorInner({
                                   {label}
                                 </p>
                                 <button
+                                  aria-label="Dismiss"
                                   className="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity"
                                   style={{ color: textColor }}
                                 >
@@ -5770,6 +5776,7 @@ function DesignSystemEditorInner({
                   <div className="ml-auto flex items-center">
                     {/* Mobile: dropdown */}
                     <select
+                      aria-label="Typography styles actions"
                       className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
                       style={{
                         backgroundColor: "hsl(var(--background))",
@@ -6514,6 +6521,7 @@ function DesignSystemEditorInner({
                   <div className="ml-auto flex items-center">
                     {/* Mobile: dropdown */}
                     <select
+                      aria-label="Typography interactions actions"
                       className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
                       style={{
                         backgroundColor: "hsl(var(--background))",
