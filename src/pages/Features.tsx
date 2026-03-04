@@ -7,8 +7,7 @@ const features = [
     version: "0.7",
     items: [
       "Shareable URLs — encode full theme state in URL hash, copy link to clipboard with one click",
-      "W3C Design Token export — export theme as W3C Design Token Community Group JSON alongside CSS + Tailwind",
-      "Export format toggle — switch between CSS + Tailwind and Design Tokens in the code output area",
+      "Per-section CSS and Design Token export — every section header (colors, card, alerts, typography, interactions) has a split-button toggle for CSS + Tailwind or W3C Design Token JSON",
       "Premium palette export — download palette as SVG or PNG, copy as HEX, RGB, or RGBA text list",
       "Image palette confirmation modal — preview uploaded image and extracted colors before applying",
       "Share button — new header action to generate and copy shareable theme links",

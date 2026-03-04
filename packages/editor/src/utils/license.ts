@@ -11,7 +11,8 @@ export type PremiumFeature =
   | "color-locks"
   | "pr-integration"
   | "undo"
-  | "palette-export";
+  | "palette-export"
+  | "typography-spacing";
 
 const ALPHABET = "2345679ABCDEFGHJKMNPQRSTUVWXYZ"; // 29 chars, no 0/O/1/I/L/8
 

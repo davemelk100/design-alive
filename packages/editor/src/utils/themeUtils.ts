@@ -1443,6 +1443,85 @@ export async function exportPaletteAsPng(colors: Record<string, string>): Promis
   });
 }
 
+export function generateSectionDesignTokens(
+  section: "card" | "typography" | "alerts" | "interactions" | "typo-interactions",
+  cardStyle: CardStyleState,
+  typographyState: TypographyState,
+  alertStyle: AlertStyleState,
+  interactionStyle: InteractionStyleState,
+  typoInteractionStyle: TypoInteractionStyleState,
+): Record<string, unknown> {
+  switch (section) {
+    case "card":
+      return {
+        borderRadius: { card: { $value: `${cardStyle.borderRadius}px`, $type: "dimension" } },
+        shadow: {
+          card: {
+            offsetX: { $value: `${cardStyle.shadowOffsetX}px`, $type: "dimension" },
+            offsetY: { $value: `${cardStyle.shadowOffsetY}px`, $type: "dimension" },
+            blur: { $value: `${cardStyle.shadowBlur}px`, $type: "dimension" },
+            spread: { $value: `${cardStyle.shadowSpread}px`, $type: "dimension" },
+            color: { $value: cardStyle.shadowColor, $type: "color" },
+          },
+        },
+        borderWidth: { card: { $value: `${cardStyle.borderWidth}px`, $type: "dimension" } },
+        backdropBlur: { card: { $value: `${cardStyle.backdropBlur}px`, $type: "dimension" } },
+      };
+    case "typography":
+      return {
+        typography: {
+          fontFamily: {
+            heading: { $value: typographyState.headingFamily, $type: "fontFamily" },
+            body: { $value: typographyState.bodyFamily, $type: "fontFamily" },
+          },
+          fontSize: { base: { $value: `${typographyState.baseFontSize}px`, $type: "dimension" } },
+          fontWeight: {
+            heading: { $value: typographyState.headingWeight, $type: "fontWeight" },
+            body: { $value: typographyState.bodyWeight, $type: "fontWeight" },
+          },
+          lineHeight: { default: { $value: typographyState.lineHeight, $type: "number" } },
+          letterSpacing: {
+            body: { $value: `${typographyState.letterSpacing}em`, $type: "dimension" },
+            heading: { $value: `${typographyState.headingLetterSpacing}em`, $type: "dimension" },
+          },
+        },
+      };
+    case "alerts":
+      return {
+        borderRadius: { alert: { $value: `${alertStyle.borderRadius}px`, $type: "dimension" } },
+        borderWidth: { alert: { $value: `${alertStyle.borderWidth}px`, $type: "dimension" } },
+        spacing: { alertPadding: { $value: `${alertStyle.padding}px`, $type: "dimension" } },
+      };
+    case "interactions":
+      return {
+        interaction: {
+          hoverOpacity: { $value: interactionStyle.hoverOpacity, $type: "number" },
+          hoverScale: { $value: interactionStyle.hoverScale, $type: "number" },
+          activeScale: { $value: interactionStyle.activeScale, $type: "number" },
+          transitionDuration: { $value: `${interactionStyle.transitionDuration}ms`, $type: "duration" },
+          focusRingWidth: { $value: `${interactionStyle.focusRingWidth}px`, $type: "dimension" },
+        },
+      };
+    case "typo-interactions":
+      return {
+        typographyInteraction: {
+          link: {
+            hoverOpacity: { $value: typoInteractionStyle.linkHoverOpacity, $type: "number" },
+            hoverScale: { $value: typoInteractionStyle.linkHoverScale, $type: "number" },
+            activeScale: { $value: typoInteractionStyle.linkActiveScale, $type: "number" },
+            transitionDuration: { $value: `${typoInteractionStyle.linkTransitionDuration}ms`, $type: "duration" },
+            underline: { $value: typoInteractionStyle.linkUnderline, $type: "string" },
+          },
+          heading: {
+            hoverOpacity: { $value: typoInteractionStyle.headingHoverOpacity, $type: "number" },
+            hoverScale: { $value: typoInteractionStyle.headingHoverScale, $type: "number" },
+            transitionDuration: { $value: `${typoInteractionStyle.headingTransitionDuration}ms`, $type: "duration" },
+          },
+        },
+      };
+  }
+}
+
 // ── Shareable URL serialization ──────────────────────────────────────
 
 interface SerializedTheme {

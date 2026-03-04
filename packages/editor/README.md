@@ -195,7 +195,7 @@ import {
 5. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
 6. **Typography interactions** *(Pro)* — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
 7. **Persistence** — All settings (colors, typography, card styles, alerts, interactions) are saved to `localStorage` and restored on reload.
-8. **CSS export** — Generate a `:root` CSS block and Tailwind config snippet, or export as W3C Design Token JSON.
+8. **Per-section export** — Every section header includes a CSS | Tokens split button to export CSS custom properties with Tailwind config, or W3C Design Token JSON, for that section.
 9. **Shareable URLs** — Encode your full theme state in the URL hash and share it with anyone via a single link.
 10. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
 11. **Mobile friendly** — Fully responsive UI lets you tweak your design system and open PRs from any device.
