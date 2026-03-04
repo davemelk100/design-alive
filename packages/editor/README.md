@@ -62,7 +62,8 @@ The following features require a valid license key:
 | Color locks | Lock up to 4 colors to preserve them during palette regeneration. |
 | PR integration | Create design system pull requests directly from the editor. |
 | Undo/redo | History management for color changes. |
-| Image palette extraction | Extract color palettes from uploaded images. |
+| Image palette extraction | Extract color palettes from uploaded images with preview confirmation. |
+| Palette export | Download palette as SVG/PNG, or copy as HEX/RGB/RGBA text. |
 | Interaction states | Style hover, focus, and active states for buttons and components. |
 | Typography interactions | Customize hover, active, and underline behavior for links and headings. |
 
@@ -164,6 +165,16 @@ import {
   applyStoredAlertStyle,          // Restore alert style from localStorage
   applyStoredInteractionStyle,    // Restore button interaction style from localStorage
 
+  // Shareable URL utilities
+  serializeThemeState,            // Encode full theme state as base64 string
+  deserializeThemeState,          // Decode base64 string back to theme state
+
+  // Export utilities
+  generateDesignTokens,           // Generate W3C Design Token JSON from theme state
+  exportPaletteAsText,            // Export palette as HEX, RGB, or RGBA text
+  exportPaletteAsSvg,             // Export palette as SVG string
+  exportPaletteAsPng,             // Export palette as PNG Blob
+
   // License utilities
   validateLicenseKey,   // Validate a THEEMEL-XXXX-XXXX-XXXX key
   generateLicenseKey,   // Generate a valid license key
@@ -184,8 +195,10 @@ import {
 5. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
 6. **Typography interactions** *(Pro)* — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
 7. **Persistence** — All settings (colors, typography, card styles, alerts, interactions) are saved to `localStorage` and restored on reload.
-8. **CSS export** — Generate a `:root` CSS block and Tailwind config snippet for your custom theme.
-9. **Mobile friendly** — Fully responsive UI lets you tweak your design system and open PRs from any device.
+8. **CSS export** — Generate a `:root` CSS block and Tailwind config snippet, or export as W3C Design Token JSON.
+9. **Shareable URLs** — Encode your full theme state in the URL hash and share it with anyone via a single link.
+10. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
+11. **Mobile friendly** — Fully responsive UI lets you tweak your design system and open PRs from any device.
 
 ## Package Architecture
 
