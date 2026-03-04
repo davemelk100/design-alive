@@ -21,7 +21,7 @@ export default function ReadmePage() {
         </div>
 
         <p className="text-[14px] leading-relaxed mb-8" style={{ color: "hsl(var(--foreground))" }}>
-          Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, and export CSS custom properties — all in real time.
+          Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography and interaction states, and export CSS custom properties — all in real time.
         </p>
 
         {/* Install */}
@@ -111,6 +111,12 @@ function App() {
                   <td className="px-4 py-2">License key to unlock premium features.</td>
                 </tr>
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <td className="px-4 py-2 font-mono text-xs">signInUrl</td>
+                  <td className="px-4 py-2 font-mono text-xs">string</td>
+                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">URL for the sign-in prompt in premium gate modals.</td>
+                </tr>
+                <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">showHeader</td>
                   <td className="px-4 py-2 font-mono text-xs">boolean</td>
                   <td className="px-4 py-2 font-mono text-xs">true</td>
@@ -177,7 +183,11 @@ function App() {
   fgForBg,           // Best foreground (black/white) for a background HSL
   EDITABLE_VARS,     // Array of { key, label } token definitions
   HARMONY_SCHEMES,   // ['Complementary', 'Analogous', ...]
-  applyStoredThemeColors, // Restore persisted theme from localStorage
+  applyStoredThemeColors,      // Restore persisted theme from localStorage
+  applyStoredCardStyle,        // Restore card style from localStorage
+  applyStoredTypography,       // Restore typography from localStorage
+  applyStoredAlertStyle,       // Restore alert style from localStorage
+  applyStoredInteractionStyle, // Restore interaction style from localStorage
 } from '@theemel/editor';`}</code>
           </pre>
         </section>
@@ -193,6 +203,14 @@ function App() {
           </pre>
           <p className="text-[14px] mt-2" style={{ color: "hsl(var(--muted-foreground))" }}>
             Hides the sticky header and nav links for embedding inside another app or plugin.
+          </p>
+        </section>
+
+        {/* Mobile */}
+        <section className="mb-8">
+          <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Mobile Friendly</h2>
+          <p className="text-[14px] leading-relaxed" style={{ color: "hsl(var(--foreground))" }}>
+            Themal is fully responsive — you can tweak your design system and open a PR straight from your phone. Color pickers, typography controls, and the PR button all work on mobile viewports, so you can iterate on the go.
           </p>
         </section>
 

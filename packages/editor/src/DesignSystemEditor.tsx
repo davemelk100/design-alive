@@ -46,8 +46,14 @@ import {
   applyInteractionStyle,
   applyStoredInteractionStyle,
   removeInteractionStyleProperties,
+  TYPO_INTERACTION_STYLE_KEY,
+  DEFAULT_TYPO_INTERACTION_STYLE,
+  TYPO_INTERACTION_PRESETS,
+  applyTypoInteractionStyle,
+  applyStoredTypoInteractionStyle,
+  removeTypoInteractionStyleProperties,
 } from "./utils/themeUtils";
-import type { CardStyleState, TypographyState, AlertStyleState, InteractionStyleState } from "./utils/themeUtils";
+import type { CardStyleState, TypographyState, AlertStyleState, InteractionStyleState, TypoInteractionStyleState } from "./utils/themeUtils";
 import { extractPaletteFromImage } from "./utils/extractPalette";
 import "./styles/editor.css";
 
@@ -253,7 +259,6 @@ function DesignSystemEditorInner({
   const [auditStatus, setAuditStatus] = useState<'idle' | 'running' | 'failed' | 'passed'>('idle');
   const auditTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const lockLeaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [auditViolations, setAuditViolations] = useState<{ selector: string; text: string }[]>([]);
   const [violationIndex, setViolationIndex] = useState(0);
   const [harmonySchemeIndex, setHarmonySchemeIndex] = useState(-1);
@@ -284,6 +289,13 @@ function DesignSystemEditorInner({
   const [interactionCssVisible, setInteractionCssVisible] = useState(false);
   const [interactionCssCopied, setInteractionCssCopied] = useState(false);
   const [showInteractionResetModal, setShowInteractionResetModal] = useState(false);
+  const [typoInteractionStyle, setTypoInteractionStyle] = useState<TypoInteractionStyleState>(() => {
+    const saved = storage.get<TypoInteractionStyleState>(TYPO_INTERACTION_STYLE_KEY);
+    return saved || { ...DEFAULT_TYPO_INTERACTION_STYLE };
+  });
+  const [typoInteractionCssVisible, setTypoInteractionCssVisible] = useState(false);
+  const [typoInteractionCssCopied, setTypoInteractionCssCopied] = useState(false);
+  const [showTypoInteractionResetModal, setShowTypoInteractionResetModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [imagePaletteStatus, setImagePaletteStatus] = useState<'idle' | 'extracting' | 'done' | 'error'>('idle');
 
@@ -405,6 +417,38 @@ function DesignSystemEditorInner({
     storage.remove(INTERACTION_STYLE_KEY);
     removeInteractionStyleProperties();
     setInteractionStyle({ ...DEFAULT_INTERACTION_STYLE });
+  };
+
+  useEffect(() => {
+    applyTypoInteractionStyle(typoInteractionStyle);
+  }, [typoInteractionStyle]);
+
+  useEffect(() => {
+    applyStoredTypoInteractionStyle();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const updateTypoInteractionStyle = useCallback((patch: Partial<TypoInteractionStyleState>) => {
+    setTypoInteractionStyle(prev => {
+      const next = { ...prev, ...patch };
+      if (patch.preset === undefined && prev.preset !== "custom") {
+        next.preset = "custom";
+      }
+      return next;
+    });
+  }, []);
+
+  const selectTypoInteractionPreset = useCallback((presetKey: string) => {
+    const preset = TYPO_INTERACTION_PRESETS[presetKey];
+    if (preset) {
+      setTypoInteractionStyle({ ...preset });
+    }
+  }, []);
+
+  const handleResetTypoInteractionStyle = () => {
+    storage.remove(TYPO_INTERACTION_STYLE_KEY);
+    removeTypoInteractionStyleProperties();
+    setTypoInteractionStyle({ ...DEFAULT_TYPO_INTERACTION_STYLE });
   };
 
   const buildSectionCss = useCallback((sections: Iterable<string>) => {
@@ -743,6 +787,9 @@ function DesignSystemEditorInner({
     storage.remove(INTERACTION_STYLE_KEY);
     removeInteractionStyleProperties();
     setInteractionStyle({ ...DEFAULT_INTERACTION_STYLE });
+    storage.remove(TYPO_INTERACTION_STYLE_KEY);
+    removeTypoInteractionStyleProperties();
+    setTypoInteractionStyle({ ...DEFAULT_TYPO_INTERACTION_STYLE });
     readCurrentColors();
     setGeneratedCode(null);
     setSectionPrStatus({});
@@ -1018,7 +1065,7 @@ function DesignSystemEditorInner({
           {/* Title + nav links — single header row */}
           <div className="w-full mb-4 flex items-end gap-x-4 pt-4">
             <a href="#top" className="flex-shrink-0 leading-none" style={{ color: "hsl(var(--foreground))" }}>
-              <svg className="h-14 block" viewBox="0 0 1654 514" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Themal">
+              <svg className="h-10 block" viewBox="0 0 1654 514" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Themal">
                 <path d="M0 21.3583C0 9.56245 9.56242 0 21.3583 0H128.15V153.78H21.3583C9.56242 153.78 0 144.217 0 132.421V21.3583Z" fill="#FC0000"/>
                 <path d="M434 21.3583C434 9.56245 424.438 0 412.642 0H305.85V153.78H412.642C424.438 153.78 434 144.217 434 132.421V21.3583Z" fill="#0095FE"/>
                 <path d="M128.15 153.78H217V329.772H128.15V153.78Z" fill="#FF8100"/>
@@ -1047,7 +1094,7 @@ function DesignSystemEditorInner({
                 <a
                   key={s.id}
                   href={`#${s.id}`}
-                  className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-all whitespace-nowrap flex items-center gap-1"
+                  className="text-[13px] font-light uppercase tracking-wider transition-all whitespace-nowrap flex items-center gap-1 ds-nav-link"
                   style={{
                     color: activeSection === s.id ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))",
                     lineHeight: 1,
@@ -1400,8 +1447,6 @@ function DesignSystemEditorInner({
                     key={key}
                     className="relative group flex items-stretch rounded-lg overflow-visible"
                     style={{ boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}
-                    onMouseEnter={() => { if (!isPremium) { if (lockLeaveTimer.current) { clearTimeout(lockLeaveTimer.current); lockLeaveTimer.current = null; } setHoveredLockKey(key); } }}
-                    onMouseLeave={() => { lockLeaveTimer.current = setTimeout(() => setHoveredLockKey(null), 2000); }}
                   >
                     <button
                       className="w-full h-14 sm:h-20 text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-l-lg"
@@ -1434,7 +1479,10 @@ function DesignSystemEditorInner({
                         opacity: canLock ? 1 : 0.3,
                       }}
                       onClick={() => {
-                        if (!isPremium) return;
+                        if (!isPremium) {
+                          setHoveredLockKey(prev => prev === key ? null : key);
+                          return;
+                        }
                         if (!canLock) return;
                         setLockedKeys(prev => {
                           const next = new Set(prev);
@@ -1458,24 +1506,43 @@ function DesignSystemEditorInner({
                         </svg>
                       )}
                     </button>
-                    {!isPremium && hoveredLockKey === key && (
-                      <div
-                        className="ds-premium-popover"
-                        style={{ opacity: 1, pointerEvents: "auto", top: "auto", bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%) scale(1)", filter: "blur(0)", zIndex: 50 }}
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                        </svg>
-                        <span>Pro feature</span>
-                        {signInUrl && <a href={signInUrl}>Sign in &rarr;</a>}
-                        <a href={upgradeUrl || "/pricing"}>View pricing &rarr;</a>
-                      </div>
-                    )}
                   </div>
                 );
               })}
             </div>
+
+            {!isPremium && hoveredLockKey && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={() => setHoveredLockKey(null)}>
+                <div className="rounded-xl p-6 w-[360px] shadow-xl" style={{ backgroundColor: "#fff", color: "#111" }} onClick={e => e.stopPropagation()}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: "#f3f4f6" }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-[18px] font-medium" style={{ color: "#111" }}>Pro Feature</h3>
+                      <p className="text-[13px]" style={{ color: "#888" }}>Color Locks</p>
+                    </div>
+                  </div>
+                  <p className="text-[14px] font-light mb-5" style={{ color: "#555" }}>
+                    This feature requires a Themal Pro license. Upgrade to unlock all premium features including harmony schemes, color locks, interaction controls, and more.
+                  </p>
+                  <div className="flex flex-col gap-2">
+                    <a href={upgradeUrl || "/pricing"} className="w-full text-center px-4 py-2.5 text-[14px] font-medium rounded-lg transition-opacity hover:opacity-90" style={{ backgroundColor: "#111", color: "#fff" }}>View Pricing</a>
+                    {signInUrl && (
+                      <button onClick={() => { setHoveredLockKey(null); window.dispatchEvent(new CustomEvent("theemel:sign-in")); }} className="w-full text-center px-4 py-2.5 text-[14px] font-light rounded-lg transition-opacity hover:opacity-70" style={{ backgroundColor: "#f3f4f6", color: "#111" }}>
+                        Already have a license? Sign in
+                      </button>
+                    )}
+                  </div>
+                  <button onClick={() => setHoveredLockKey(null)} className="absolute top-4 right-4 p-1 rounded-lg transition-opacity hover:opacity-70" style={{ color: "#999" }} aria-label="Close">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Generated code output */}
             {generatedCode && (
@@ -1568,21 +1635,6 @@ function DesignSystemEditorInner({
                 </div>
               </div>
 
-              {/* Buttons row */}
-              <div className="w-full space-y-2" data-axe-exclude>
-                <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Buttons</p>
-                <div className="flex flex-row flex-wrap gap-1.5 items-start">
-                  <button className="h-12 px-3 rounded-lg font-light text-[14px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--primary))", color: colors["--primary"] ? `hsl(${fgForBg(colors["--primary"])})` : "hsl(var(--primary-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Primary</button>
-                  <button className="h-12 px-3 rounded-lg font-light text-[14px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--secondary))", color: "hsl(var(--secondary-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Secondary</button>
-                  <button className="h-12 px-3 rounded-lg font-light text-[14px] transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", border: "1px solid hsl(var(--brand))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Outlined</button>
-                  <button className="h-12 px-3 rounded-lg font-light text-[14px] transition-colors max-w-full truncate" style={{ backgroundColor: "transparent", color: "hsl(var(--brand))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Ghost</button>
-                  <button className="h-12 px-3 rounded-lg font-light text-[14px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--destructive))", color: "hsl(var(--destructive-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Destructive</button>
-                  <button className="h-12 px-3 rounded-lg font-light text-[14px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Muted</button>
-                  <button className="h-12 px-3 rounded-lg font-light text-[14px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--success))", color: "hsl(var(--success-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Success</button>
-                  <button className="h-12 px-3 rounded-lg font-light text-[14px] transition-colors max-w-full truncate" style={{ backgroundColor: "hsl(var(--warning))", color: "hsl(var(--warning-foreground))", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}>Warning</button>
-                </div>
-              </div>
-
               {/* Icons row */}
               <div className="w-full hidden md:block" data-axe-exclude>
                 <p className="text-[14px] font-light uppercase tracking-wider mb-2 md:mb-3" style={{ color: "hsl(var(--muted-foreground))" }}>Icons</p>
@@ -1604,14 +1656,14 @@ function DesignSystemEditorInner({
             <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Buttons <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
 
             {/* Swatches + Interactions side-by-side on desktop */}
-            <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
+            <div className="flex flex-col md:flex-row md:items-stretch gap-4 md:gap-12">
 
             {/* Types subsection */}
-            <div className="w-full md:w-1/2 space-y-3">
-              <div className="flex items-center h-10">
+            <div className="w-full md:w-1/2 flex flex-col rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+              <div className="flex items-center h-10 mb-3">
                 <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Types</h3>
               </div>
-              <div className="grid grid-cols-4 gap-1 md:grid-cols-[repeat(auto-fit,minmax(76px,1fr))] md:gap-1.5" data-axe-exclude>
+              <div className="flex-1 flex flex-wrap gap-2 content-start" data-axe-exclude>
                 {([
                   { bg: "--primary", fg: "--primary-foreground", label: "Primary" },
                   { bg: "--secondary", fg: "--secondary-foreground", label: "Secondary" },
@@ -1619,35 +1671,49 @@ function DesignSystemEditorInner({
                   { bg: "--muted", fg: "--muted-foreground", label: "Muted" },
                   { bg: "--success", fg: "--success-foreground", label: "Success" },
                   { bg: "--warning", fg: "--warning-foreground", label: "Warning" },
-                ] as const).map(({ bg, label }) => {
+                ] as const).map(({ bg, fg, label }) => {
                   const bgHsl = colors[bg] || "0 0% 50%";
-                  const wc = contrastRatio("0 0% 100%", bgHsl);
-                  const bc = contrastRatio("0 0% 0%", bgHsl);
-                  const swatchTextColor = (wc >= bc) ? "#ffffff" : "#000000";
-                  const hexCode = colors[bg] ? hslStringToHex(colors[bg]!) : "";
+                  const fgHsl = colors[fg] || fgForBg(bgHsl);
                   return (
-                    <div key={bg} className="text-left">
-                      <div className="relative w-full aspect-square rounded-md mb-1 overflow-hidden flex items-center justify-center shadow-md">
-                        <div className="absolute inset-0" style={{ backgroundColor: `hsl(${bgHsl})` }} />
-                        <span className="relative text-[14px] font-light truncate" style={{ color: swatchTextColor }}>{hexCode}</span>
-                      </div>
-                      <p className="hidden md:block text-[14px] font-light text-[color:hsl(var(--foreground))] truncate">{label}</p>
-                    </div>
+                    <button
+                      key={bg}
+                      className="px-4 py-2 text-[14px] font-light rounded-lg"
+                      style={{
+                        backgroundColor: `hsl(${bgHsl})`,
+                        color: `hsl(${fgHsl})`,
+                        cursor: "default",
+                      }}
+                    >
+                      {label}
+                    </button>
                   );
                 })}
-                {/* Brand (outlined/ghost) */}
-                <div className="text-left">
-                  <div className="relative w-full aspect-square rounded-md mb-1 overflow-hidden flex items-center justify-center shadow-md border" style={{ borderColor: colors["--brand"] ? `hsl(${colors["--brand"]})` : "hsl(var(--brand))" }}>
-                    <div className="absolute inset-0" style={{ backgroundColor: "transparent" }} />
-                    <span className="relative text-[14px] font-light truncate" style={{ color: colors["--brand"] ? `hsl(${colors["--brand"]})` : "hsl(var(--brand))" }}>{colors["--brand"] ? hslStringToHex(colors["--brand"]) : ""}</span>
-                  </div>
-                  <p className="hidden md:block text-[14px] font-light text-[color:hsl(var(--foreground))] truncate">Brand</p>
-                </div>
+                <button
+                  className="px-4 py-2 text-[14px] font-light rounded-lg border"
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "hsl(var(--foreground))",
+                    borderColor: "hsl(var(--border))",
+                    cursor: "default",
+                  }}
+                >
+                  Outline
+                </button>
+                <button
+                  className="px-4 py-2 text-[14px] font-light rounded-lg"
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "hsl(var(--foreground))",
+                    cursor: "default",
+                  }}
+                >
+                  Ghost
+                </button>
               </div>
             </div>
 
             {/* Interactions subsection */}
-            <div className="w-full md:w-1/2 space-y-3">
+            <div className="w-full md:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
               <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
                 <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Interactions</h3>
                 <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -1857,9 +1923,9 @@ function DesignSystemEditorInner({
 
           {/* Card Style & Alerts row */}
           <div id="card-alerts" className="min-w-0 p-2 md:p-4 mt-8 md:mt-12 scroll-mt-28">
-          <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-6">
+          <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-12">
           {/* Card Style section */}
-          <div className="w-full md:w-1/2 space-y-3">
+          <div className="w-full md:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Card Style <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -2127,7 +2193,7 @@ function DesignSystemEditorInner({
           </div>
 
           {/* Alerts section */}
-          <div className="w-full md:w-1/2 space-y-3">
+          <div className="w-full md:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts</h2>
               <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
@@ -2342,189 +2408,197 @@ function DesignSystemEditorInner({
 
         {/* Typography section */}
           <div id="typography" className="min-w-0 p-2 md:p-4 space-y-3 mt-8 md:mt-12 scroll-mt-28">
-            <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Typography <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
-              <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
-                <button
-                  onClick={() => setTypoCssVisible(!typoCssVisible)}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                  <span className="truncate"><span className="sm:hidden">{typoCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{typoCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
-                </button>
-                <button
-                  onClick={() => setShowTypoResetModal(true)}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
-                  <span className="truncate">Reset</span>
-                </button>
-              </div>
-            </div>
+            <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Typography <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
 
-            {/* Preset buttons */}
-            <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
-              {(["system", "modern", "classic", "compact", "editorial"] as const).map((key) => {
-                const labels: Record<string, string> = { system: "System", modern: "Modern", classic: "Classic", compact: "Compact", editorial: "Editorial" };
-                const icons: Record<string, React.ReactNode> = {
-                  system: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
-                  modern: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
-                  classic: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>,
-                  compact: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>,
-                  editorial: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>,
-                };
-                const active = typographyState.preset === key;
-                return (
+            {/* Typography controls + interactions side-by-side */}
+            <div className="flex flex-col md:flex-row md:items-start gap-4 md:gap-12">
+
+            {/* Controls + Preview column */}
+            <div className="w-full md:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+              <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
+                <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Styles</h3>
+                <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
                   <button
-                    key={key}
-                    onClick={() => selectTypoPreset(key)}
-                    className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-                    style={active
-                      ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
-                      : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
-                    }
+                    onClick={() => setTypoCssVisible(!typoCssVisible)}
+                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
                   >
-                    {icons[key]}
-                    {labels[key]}
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                    <span className="truncate"><span className="sm:hidden">{typoCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{typoCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
                   </button>
-                );
-              })}
-            </div>
-
-            {/* Typography CSS output */}
-            {typoCssVisible && (() => {
-              const typoCss = `:root {\n  --font-heading: ${typographyState.headingFamily};\n  --font-body: ${typographyState.bodyFamily};\n  --font-size-base: ${typographyState.baseFontSize}px;\n  --font-weight-heading: ${typographyState.headingWeight};\n  --font-weight-body: ${typographyState.bodyWeight};\n  --line-height: ${typographyState.lineHeight};\n  --letter-spacing: ${typographyState.letterSpacing}em;\n  --letter-spacing-heading: ${typographyState.headingLetterSpacing}em;\n}`;
-              return (
-                <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
-                  <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
-                    <span className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Typography CSS</span>
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(typoCss);
-                          setTypoCssCopied(true);
-                          setTimeout(() => setTypoCssCopied(false), 2000);
-                        }}
-                        className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
-                      >
-                        {typoCssCopied ? "Copied!" : "Copy"}
-                      </button>
-                      <button
-                        onClick={() => setTypoCssVisible(false)}
-                        className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                        style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
-                      >
-                        Close
-                      </button>
-                    </div>
-                  </div>
-                  <pre className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono" style={{ color: "hsl(var(--card-foreground))" }}>
-                    <code>{typoCss}</code>
-                  </pre>
-                </div>
-              );
-            })()}
-
-            {/* Controls + Preview */}
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
-              {/* Controls */}
-              <div className="flex-1 min-w-0 space-y-3">
-                {/* Fonts */}
-                <div className="space-y-1.5">
-                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Fonts</p>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Heading:</span>
-                    <select
-                      value={typographyState.headingFamily}
-                      onChange={e => updateTypography({ headingFamily: e.target.value })}
-                      className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
-                      style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
-                    >
-                      {FONT_FAMILY_OPTIONS.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Body:</span>
-                    <select
-                      value={typographyState.bodyFamily}
-                      onChange={e => updateTypography({ bodyFamily: e.target.value })}
-                      className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
-                      style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
-                    >
-                      {FONT_FAMILY_OPTIONS.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
-                {/* Size & Weight */}
-                <div className="space-y-1.5">
-                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Size & Weight</p>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Base Size: {typographyState.baseFontSize}px</span>
-                    <input type="range" min={14} max={22} value={typographyState.baseFontSize} onChange={e => updateTypography({ baseFontSize: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Heading Wt: {typographyState.headingWeight}</span>
-                    <input type="range" min={100} max={900} step={100} value={typographyState.headingWeight} onChange={e => updateTypography({ headingWeight: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Body Wt: {typographyState.bodyWeight}</span>
-                    <input type="range" min={100} max={900} step={100} value={typographyState.bodyWeight} onChange={e => updateTypography({ bodyWeight: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                </div>
-                {/* Spacing */}
-                <div className="space-y-1.5">
-                  <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Spacing</p>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Line Height: {typographyState.lineHeight.toFixed(2)}</span>
-                    <input type="range" min={100} max={200} step={5} value={Math.round(typographyState.lineHeight * 100)} onChange={e => updateTypography({ lineHeight: Number(e.target.value) / 100 })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Letter Sp: {typographyState.letterSpacing.toFixed(2)}em</span>
-                    <input type="range" min={-5} max={15} step={1} value={Math.round(typographyState.letterSpacing * 100)} onChange={e => updateTypography({ letterSpacing: Number(e.target.value) / 100 })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
-                  <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
-                    <span>Heading Sp: {typographyState.headingLetterSpacing.toFixed(2)}em</span>
-                    <input type="range" min={-5} max={10} step={1} value={Math.round(typographyState.headingLetterSpacing * 100)} onChange={e => updateTypography({ headingLetterSpacing: Number(e.target.value) / 100 })} className="w-32 accent-[hsl(var(--brand))]" />
-                  </label>
+                  <button
+                    onClick={() => setShowTypoResetModal(true)}
+                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
+                    <span className="truncate">Reset</span>
+                  </button>
                 </div>
               </div>
 
-              {/* Live preview */}
-              <div className="flex-1 min-w-0 flex items-start justify-center pt-2">
-                <div
-                  className="w-full md:max-w-[320px] rounded-lg p-5 space-y-3"
-                  data-axe-exclude
-                  style={{
-                    backgroundColor: "hsl(var(--card))",
-                    color: "hsl(var(--card-foreground))",
-                  }}
-                >
-                  <h3
-                    style={{
-                      fontFamily: typographyState.headingFamily,
-                      fontSize: `${Math.round(typographyState.baseFontSize * 1.75)}px`,
-                      fontWeight: typographyState.headingWeight,
-                      lineHeight: typographyState.lineHeight,
-                      letterSpacing: `${typographyState.headingLetterSpacing}em`,
-                    }}
-                  >
-                    Heading Text
-                  </h3>
-                  <h4
-                    style={{
-                      fontFamily: typographyState.headingFamily,
-                      fontSize: `${Math.round(typographyState.baseFontSize * 1.25)}px`,
-                      fontWeight: typographyState.headingWeight,
-                      lineHeight: typographyState.lineHeight,
-                      letterSpacing: `${typographyState.headingLetterSpacing}em`,
-                      color: "hsl(var(--card-foreground) / 0.7)",
+              {/* Preset buttons */}
+              <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
+                {(["system", "modern", "classic", "compact", "editorial"] as const).map((key) => {
+                  const labels: Record<string, string> = { system: "System", modern: "Modern", classic: "Classic", compact: "Compact", editorial: "Editorial" };
+                  const icons: Record<string, React.ReactNode> = {
+                    system: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
+                    modern: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>,
+                    classic: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>,
+                    compact: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>,
+                    editorial: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>,
+                  };
+                  const active = typographyState.preset === key;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => selectTypoPreset(key)}
+                      className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                      style={active
+                        ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                        : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                      }
+                    >
+                      {icons[key]}
+                      {labels[key]}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Typography CSS output */}
+              {typoCssVisible && (() => {
+                const typoCss = `:root {\n  --font-heading: ${typographyState.headingFamily};\n  --font-body: ${typographyState.bodyFamily};\n  --font-size-base: ${typographyState.baseFontSize}px;\n  --font-weight-heading: ${typographyState.headingWeight};\n  --font-weight-body: ${typographyState.bodyWeight};\n  --line-height: ${typographyState.lineHeight};\n  --letter-spacing: ${typographyState.letterSpacing}em;\n  --letter-spacing-heading: ${typographyState.headingLetterSpacing}em;\n}`;
+                return (
+                  <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
+                    <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
+                      <span className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Typography CSS</span>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(typoCss);
+                            setTypoCssCopied(true);
+                            setTimeout(() => setTypoCssCopied(false), 2000);
+                          }}
+                          className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                          style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                        >
+                          {typoCssCopied ? "Copied!" : "Copy"}
+                        </button>
+                        <button
+                          onClick={() => setTypoCssVisible(false)}
+                          className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                          style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                    <pre className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono" style={{ color: "hsl(var(--card-foreground))" }}>
+                      <code>{typoCss}</code>
+                    </pre>
+                  </div>
+                );
+              })()}
+
+              {/* Controls + Preview side-by-side */}
+              <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+                {/* Slider controls */}
+                <div className="flex-1 min-w-0 space-y-3">
+                  {/* Fonts */}
+                  <div className="space-y-1.5">
+                    <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Fonts</p>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Heading:</span>
+                      <select
+                        value={typographyState.headingFamily}
+                        onChange={e => updateTypography({ headingFamily: e.target.value })}
+                        className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
+                        style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                      >
+                        {FONT_FAMILY_OPTIONS.map(opt => (
+                          <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Body:</span>
+                      <select
+                        value={typographyState.bodyFamily}
+                        onChange={e => updateTypography({ bodyFamily: e.target.value })}
+                        className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
+                        style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                      >
+                        {FONT_FAMILY_OPTIONS.map(opt => (
+                          <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                  {/* Size & Weight */}
+                  <div className="space-y-1.5">
+                    <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Size & Weight</p>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Base Size: {typographyState.baseFontSize}px</span>
+                      <input type="range" min={14} max={22} value={typographyState.baseFontSize} onChange={e => updateTypography({ baseFontSize: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Heading Wt: {typographyState.headingWeight}</span>
+                      <input type="range" min={100} max={900} step={100} value={typographyState.headingWeight} onChange={e => updateTypography({ headingWeight: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Body Wt: {typographyState.bodyWeight}</span>
+                      <input type="range" min={100} max={900} step={100} value={typographyState.bodyWeight} onChange={e => updateTypography({ bodyWeight: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                  </div>
+                  {/* Spacing */}
+                  <div className="space-y-1.5">
+                    <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Spacing</p>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Line Height: {typographyState.lineHeight.toFixed(2)}</span>
+                      <input type="range" min={100} max={200} step={5} value={Math.round(typographyState.lineHeight * 100)} onChange={e => updateTypography({ lineHeight: Number(e.target.value) / 100 })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Letter Sp: {typographyState.letterSpacing.toFixed(2)}em</span>
+                      <input type="range" min={-5} max={15} step={1} value={Math.round(typographyState.letterSpacing * 100)} onChange={e => updateTypography({ letterSpacing: Number(e.target.value) / 100 })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Heading Sp: {typographyState.headingLetterSpacing.toFixed(2)}em</span>
+                      <input type="range" min={-5} max={10} step={1} value={Math.round(typographyState.headingLetterSpacing * 100)} onChange={e => updateTypography({ headingLetterSpacing: Number(e.target.value) / 100 })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Live preview */}
+                <div className="flex-1 min-w-0 flex items-start justify-center pt-2">
+                  <div className="w-full md:max-w-[400px] space-y-3" data-axe-exclude>
+                    <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Preview</p>
+                    <div
+                      className="w-full rounded-lg p-5 space-y-3"
+                      style={{
+                        backgroundColor: "hsl(var(--card))",
+                        color: "hsl(var(--card-foreground))",
+                      }}
+                    >
+                      <h3
+                        style={{
+                          fontFamily: typographyState.headingFamily,
+                          fontSize: `${Math.round(typographyState.baseFontSize * 1.75)}px`,
+                          fontWeight: typographyState.headingWeight,
+                          lineHeight: typographyState.lineHeight,
+                          letterSpacing: `${typographyState.headingLetterSpacing}em`,
+                        }}
+                      >
+                        Heading Text
+                      </h3>
+                      <h4
+                        style={{
+                          fontFamily: typographyState.headingFamily,
+                          fontSize: `${Math.round(typographyState.baseFontSize * 1.25)}px`,
+                          fontWeight: typographyState.headingWeight,
+                          lineHeight: typographyState.lineHeight,
+                          letterSpacing: `${typographyState.headingLetterSpacing}em`,
+                          color: "hsl(var(--card-foreground) / 0.7)",
                     }}
                   >
                     Subheading Text
@@ -2552,9 +2626,240 @@ function DesignSystemEditorInner({
                   >
                     Small / Caption text for secondary information and labels.
                   </p>
+                    </div>
+                  </div>
+                </div>
+              </div>{/* end Controls + Preview row */}
+            </div>{/* end Styles column */}
+
+            {/* Typography Interactions column */}
+            <div className="w-full md:w-1/2 space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+              <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
+                <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Typography Interactions</h3>
+                <div className="ml-auto flex flex-wrap items-center gap-1 sm:gap-2">
+                  <button
+                    onClick={() => setTypoInteractionCssVisible(!typoInteractionCssVisible)}
+                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                    <span className="truncate"><span className="sm:hidden">{typoInteractionCssVisible ? "Hide" : "CSS"}</span><span className="hidden sm:inline">{typoInteractionCssVisible ? "Hide CSS" : "Show CSS"}</span></span>
+                  </button>
+                  <button
+                    onClick={() => setShowTypoInteractionResetModal(true)}
+                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" /></svg>
+                    <span className="truncate">Reset</span>
+                  </button>
                 </div>
               </div>
-            </div>
+
+              <PremiumGate feature="typography-interactions" variant="section" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+
+              {/* Preset buttons */}
+              <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
+                {(["subtle", "elevated", "bold"] as const).map((key) => {
+                  const labels: Record<string, string> = { subtle: "Subtle", elevated: "Elevated", bold: "Bold" };
+                  const active = typoInteractionStyle.preset === key;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => selectTypoInteractionPreset(key)}
+                      className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                      style={active
+                        ? { backgroundColor: "hsl(var(--brand))", color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                        : { backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }
+                      }
+                    >
+                      {labels[key]}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Typography Interaction CSS output */}
+              {typoInteractionCssVisible && (() => {
+                const tiCss = `:root {\n  --link-hover-opacity: ${typoInteractionStyle.linkHoverOpacity};\n  --link-hover-scale: ${typoInteractionStyle.linkHoverScale};\n  --link-active-scale: ${typoInteractionStyle.linkActiveScale};\n  --link-transition-duration: ${typoInteractionStyle.linkTransitionDuration}ms;\n  --link-underline: ${typoInteractionStyle.linkUnderline};\n  --heading-hover-opacity: ${typoInteractionStyle.headingHoverOpacity};\n  --heading-hover-scale: ${typoInteractionStyle.headingHoverScale};\n  --heading-transition-duration: ${typoInteractionStyle.headingTransitionDuration}ms;\n}`;
+                return (
+                  <div className="rounded-lg border" style={{ borderColor: "hsl(var(--border))" }}>
+                    <div className="flex items-center justify-between px-3 py-1.5 border-b" style={{ borderColor: "hsl(var(--border))" }}>
+                      <span className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--card-foreground))" }}>Typography Interaction CSS</span>
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(tiCss);
+                            setTypoInteractionCssCopied(true);
+                            setTimeout(() => setTypoInteractionCssCopied(false), 2000);
+                          }}
+                          className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                          style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                        >
+                          {typoInteractionCssCopied ? "Copied!" : "Copy"}
+                        </button>
+                        <button
+                          onClick={() => setTypoInteractionCssVisible(false)}
+                          className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                          style={{ backgroundColor: "hsl(var(--muted))", color: colors["--muted"] ? `hsl(${fgForBg(colors["--muted"])})` : "hsl(var(--muted-foreground))" }}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                    <pre className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono" style={{ color: "hsl(var(--card-foreground))" }}>
+                      <code>{tiCss}</code>
+                    </pre>
+                  </div>
+                );
+              })()}
+
+              {/* Controls + Preview */}
+              <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+                {/* Slider controls */}
+                <div className="flex-1 min-w-0 space-y-3">
+                  <div className="space-y-1.5">
+                    <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Links — Hover</p>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Opacity: {typoInteractionStyle.linkHoverOpacity}</span>
+                      <input type="range" min={0.6} max={1} step={0.01} value={typoInteractionStyle.linkHoverOpacity} onChange={e => updateTypoInteractionStyle({ linkHoverOpacity: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Scale: {typoInteractionStyle.linkHoverScale}</span>
+                      <input type="range" min={1} max={1.1} step={0.005} value={typoInteractionStyle.linkHoverScale} onChange={e => updateTypoInteractionStyle({ linkHoverScale: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Underline:</span>
+                      <select
+                        value={typoInteractionStyle.linkUnderline}
+                        onChange={e => updateTypoInteractionStyle({ linkUnderline: e.target.value as "always" | "hover" | "none" })}
+                        className="w-32 h-8 px-2 text-[14px] font-light rounded-md border"
+                        style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                      >
+                        <option value="always">Always</option>
+                        <option value="hover">On Hover</option>
+                        <option value="none">Never</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div className="space-y-1.5">
+                    <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Links — Active</p>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Scale: {typoInteractionStyle.linkActiveScale}</span>
+                      <input type="range" min={0.9} max={1.05} step={0.005} value={typoInteractionStyle.linkActiveScale} onChange={e => updateTypoInteractionStyle({ linkActiveScale: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                  </div>
+                  <div className="space-y-1.5">
+                    <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Headings — Hover</p>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Opacity: {typoInteractionStyle.headingHoverOpacity}</span>
+                      <input type="range" min={0.6} max={1} step={0.01} value={typoInteractionStyle.headingHoverOpacity} onChange={e => updateTypoInteractionStyle({ headingHoverOpacity: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Scale: {typoInteractionStyle.headingHoverScale}</span>
+                      <input type="range" min={1} max={1.05} step={0.005} value={typoInteractionStyle.headingHoverScale} onChange={e => updateTypoInteractionStyle({ headingHoverScale: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                  </div>
+                  <div className="space-y-1.5">
+                    <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Timing</p>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Link Duration: {typoInteractionStyle.linkTransitionDuration}ms</span>
+                      <input type="range" min={0} max={500} step={10} value={typoInteractionStyle.linkTransitionDuration} onChange={e => updateTypoInteractionStyle({ linkTransitionDuration: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Heading Duration: {typoInteractionStyle.headingTransitionDuration}ms</span>
+                      <input type="range" min={0} max={500} step={10} value={typoInteractionStyle.headingTransitionDuration} onChange={e => updateTypoInteractionStyle({ headingTransitionDuration: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                  </div>
+                </div>
+
+                {/* Live preview */}
+                <div className="flex-1 min-w-0 flex items-start justify-center pt-2">
+                  <div className="w-full md:max-w-[400px] space-y-3" data-axe-exclude>
+                    <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Preview</p>
+                    <div className="space-y-4 rounded-lg p-4" style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}>
+                      <h3
+                        className="cursor-default"
+                        style={{
+                          fontFamily: typographyState.headingFamily,
+                          fontSize: `${Math.round(typographyState.baseFontSize * 1.5)}px`,
+                          fontWeight: typographyState.headingWeight,
+                          transition: `opacity ${typoInteractionStyle.headingTransitionDuration}ms ease, transform ${typoInteractionStyle.headingTransitionDuration}ms ease`,
+                        }}
+                        onMouseEnter={e => { (e.target as HTMLElement).style.opacity = String(typoInteractionStyle.headingHoverOpacity); (e.target as HTMLElement).style.transform = `scale(${typoInteractionStyle.headingHoverScale})`; }}
+                        onMouseLeave={e => { (e.target as HTMLElement).style.opacity = "1"; (e.target as HTMLElement).style.transform = "scale(1)"; }}
+                      >
+                        Heading Example
+                      </h3>
+                      <p style={{ fontFamily: typographyState.bodyFamily, fontSize: `${typographyState.baseFontSize}px`, fontWeight: typographyState.bodyWeight }}>
+                        Body text with a{" "}
+                        <a
+                          href="#"
+                          onClick={e => e.preventDefault()}
+                          style={{
+                            color: "hsl(var(--brand))",
+                            textDecoration: typoInteractionStyle.linkUnderline === "always" ? "underline" : "none",
+                            transition: `opacity ${typoInteractionStyle.linkTransitionDuration}ms ease, transform ${typoInteractionStyle.linkTransitionDuration}ms ease`,
+                            display: "inline-block",
+                          }}
+                          onMouseEnter={e => { (e.target as HTMLElement).style.opacity = String(typoInteractionStyle.linkHoverOpacity); (e.target as HTMLElement).style.transform = `scale(${typoInteractionStyle.linkHoverScale})`; (e.target as HTMLElement).style.textDecoration = typoInteractionStyle.linkUnderline !== "none" ? "underline" : "none"; }}
+                          onMouseLeave={e => { (e.target as HTMLElement).style.opacity = "1"; (e.target as HTMLElement).style.transform = "scale(1)"; (e.target as HTMLElement).style.textDecoration = typoInteractionStyle.linkUnderline === "always" ? "underline" : "none"; }}
+                          onMouseDown={e => { (e.target as HTMLElement).style.transform = `scale(${typoInteractionStyle.linkActiveScale})`; }}
+                          onMouseUp={e => { (e.target as HTMLElement).style.transform = `scale(${typoInteractionStyle.linkHoverScale})`; }}
+                        >
+                          sample link
+                        </a>{" "}
+                        and another{" "}
+                        <a
+                          href="#"
+                          onClick={e => e.preventDefault()}
+                          style={{
+                            color: "hsl(var(--brand))",
+                            textDecoration: typoInteractionStyle.linkUnderline === "always" ? "underline" : "none",
+                            transition: `opacity ${typoInteractionStyle.linkTransitionDuration}ms ease, transform ${typoInteractionStyle.linkTransitionDuration}ms ease`,
+                            display: "inline-block",
+                          }}
+                          onMouseEnter={e => { (e.target as HTMLElement).style.opacity = String(typoInteractionStyle.linkHoverOpacity); (e.target as HTMLElement).style.transform = `scale(${typoInteractionStyle.linkHoverScale})`; (e.target as HTMLElement).style.textDecoration = typoInteractionStyle.linkUnderline !== "none" ? "underline" : "none"; }}
+                          onMouseLeave={e => { (e.target as HTMLElement).style.opacity = "1"; (e.target as HTMLElement).style.transform = "scale(1)"; (e.target as HTMLElement).style.textDecoration = typoInteractionStyle.linkUnderline === "always" ? "underline" : "none"; }}
+                          onMouseDown={e => { (e.target as HTMLElement).style.transform = `scale(${typoInteractionStyle.linkActiveScale})`; }}
+                          onMouseUp={e => { (e.target as HTMLElement).style.transform = `scale(${typoInteractionStyle.linkHoverScale})`; }}
+                        >
+                          navigation link
+                        </a>{" "}
+                        to test hover states.
+                      </p>
+                      <p className="text-[12px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>
+                        Hover over the heading and links to preview interaction states.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              </PremiumGate>
+            </div>{/* end Typography Interactions column */}
+
+            </div>{/* end side-by-side row */}
+
+            {/* Typography Interaction Reset Modal */}
+            {showTypoInteractionResetModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.5)" }} onClick={() => setShowTypoInteractionResetModal(false)}>
+                <div className="rounded-xl p-6 w-[340px] shadow-xl" style={{ backgroundColor: "#fff", color: "#111" }} onClick={e => e.stopPropagation()}>
+                  <h3 className="text-[18px] font-light mb-3">Reset Typography Interactions?</h3>
+                  <p className="text-[14px] font-light mb-4" style={{ color: "#555" }}>This will restore the default typography interaction styles.</p>
+                  <div className="flex gap-2 justify-end">
+                    <button onClick={() => setShowTypoInteractionResetModal(false)} className="px-4 py-2 text-[14px] font-light rounded-lg" style={{ backgroundColor: "#e5e7eb", color: "#111" }}>Cancel</button>
+                    <button
+                      onClick={() => { handleResetTypoInteractionStyle(); setShowTypoInteractionResetModal(false); }}
+                      className="px-4 py-2 text-[14px] font-light rounded-lg"
+                      style={{ backgroundColor: "#ef4444", color: "#fff" }}
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
 
@@ -2698,6 +3003,14 @@ function DesignSystemEditorInner({
                 </button>
               </div>
             </PremiumGate>
+
+            <div className="space-y-1" style={{ borderTop: "1px solid hsl(var(--border))", paddingTop: "16px" }}>
+              <p className="text-[11px] font-semibold uppercase tracking-wider mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Legal</p>
+              <a href="/privacy" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70" style={{ color: "hsl(var(--muted-foreground))" }}>Privacy Policy</a>
+              <a href="/cookies" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70" style={{ color: "hsl(var(--muted-foreground))" }}>Cookies Policy</a>
+              <a href="/terms" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70" style={{ color: "hsl(var(--muted-foreground))" }}>Terms & Conditions</a>
+              <a href="/accessibility" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70" style={{ color: "hsl(var(--muted-foreground))" }}>Accessibility</a>
+            </div>
           </div>
         </div>
       )}

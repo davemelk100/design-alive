@@ -1,5 +1,6 @@
 import { useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useClerk } from "@clerk/clerk-react";
 
 import { ThemeProvider } from "./context/ThemeContext";
 import { applyStoredThemeColors } from "@design-alive/editor";
@@ -24,9 +25,18 @@ const ClerkSignUp = lazy(() =>
 );
 
 export default function App() {
+  const clerk = useClerk();
+
   useEffect(() => {
     applyStoredThemeColors();
   }, []);
+
+  // Listen for sign-in requests from the editor's PremiumGate popover
+  useEffect(() => {
+    const handleSignIn = () => clerk.openSignIn();
+    window.addEventListener("theemel:sign-in", handleSignIn);
+    return () => window.removeEventListener("theemel:sign-in", handleSignIn);
+  }, [clerk]);
 
   return (
     <BrowserRouter>

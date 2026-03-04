@@ -1,6 +1,6 @@
 {
   "name": "@theemel/web-component",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Web component wrapper for Themal editor — use via a single <script> tag on any platform",

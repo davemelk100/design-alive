@@ -12,6 +12,11 @@
   .focus\:ring-brand-dynamic:focus { --tw-ring-color: hsl(var(--brand)); }
 }
 
+.ds-nav-link:hover {
+  color: hsl(var(--foreground)) !important;
+  border-bottom-color: hsl(var(--foreground)) !important;
+}
+
 .ds-premium-gated-section {
   position: relative;
   cursor: not-allowed;
@@ -33,13 +38,6 @@
   cursor: not-allowed;
 }
 
-.ds-premium-gated-inline .ds-premium-popover {
-  top: auto;
-  left: auto;
-  bottom: calc(100% + 8px);
-  right: 0;
-  transform: scale(0.9) translateY(6px);
-}
 
 .ds-premium-locked-content {
   pointer-events: none;
@@ -74,56 +72,6 @@
   z-index: 10;
 }
 
-.ds-premium-section-lock .ds-premium-popover {
-  top: auto;
-  left: auto;
-  bottom: calc(100% + 8px);
-  right: 0;
-  transform: scale(0.9) translateY(6px);
-}
-
-/* Popover that appears on hover over gated sections */
-.ds-premium-popover {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.9) translateY(6px);
-  z-index: 30;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border-radius: 10px;
-  background-color: #1a1a1a;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  white-space: nowrap;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-  pointer-events: none;
-  opacity: 0;
-  filter: blur(4px);
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.ds-premium-popover a {
-  color: #fff;
-  text-decoration: underline;
-  font-size: 15px;
-  font-weight: 700;
-  opacity: 0.85;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
-.ds-premium-popover a:hover {
-  opacity: 1;
-}
 
 
 

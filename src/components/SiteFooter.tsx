@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
@@ -136,6 +136,73 @@ function ContactForm() {
   );
 }
 
+function LegalDropUp() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const close = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("click", close, true);
+    return () => document.removeEventListener("click", close, true);
+  }, [open]);
+
+  return (
+    <div className="relative xl:hidden" ref={ref}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap flex items-center gap-1"
+        style={{ color: "hsl(var(--muted-foreground))" }}
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
+        Legal & Contact
+        <svg
+          className="w-3.5 h-3.5 transition-transform"
+          style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
+      {open && (
+        <div
+          className="absolute bottom-full mb-2 right-0 rounded-lg shadow-lg py-2 min-w-[160px]"
+          style={{
+            backgroundColor: "hsl(var(--card))",
+            border: "1px solid hsl(var(--border))",
+          }}
+        >
+          {[
+            { to: "/privacy", label: "Privacy" },
+            { to: "/cookies", label: "Cookies" },
+            { to: "/terms", label: "Terms" },
+            { to: "/accessibility", label: "Accessibility" },
+          ].map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={() => setOpen(false)}
+              className="block px-4 py-2 text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity"
+              style={{ color: "hsl(var(--muted-foreground))" }}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <div className="px-4 py-2">
+            <ContactForm />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function SiteFooter() {
   return (
     <footer
@@ -186,35 +253,40 @@ export default function SiteFooter() {
             Features
           </Link>
           <span className="w-px h-4" style={{ backgroundColor: "hsl(var(--border))" }} />
-          <Link
-            to="/privacy"
-            className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-            style={{ color: "hsl(var(--muted-foreground))" }}
-          >
-            Privacy
-          </Link>
-          <Link
-            to="/cookies"
-            className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-            style={{ color: "hsl(var(--muted-foreground))" }}
-          >
-            Cookies
-          </Link>
-          <Link
-            to="/terms"
-            className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-            style={{ color: "hsl(var(--muted-foreground))" }}
-          >
-            Terms
-          </Link>
-          <Link
-            to="/accessibility"
-            className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-            style={{ color: "hsl(var(--muted-foreground))" }}
-          >
-            Accessibility
-          </Link>
-          <ContactForm />
+          {/* Desktop: show all links inline */}
+          <div className="hidden xl:contents">
+            <Link
+              to="/privacy"
+              className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
+              style={{ color: "hsl(var(--muted-foreground))" }}
+            >
+              Privacy
+            </Link>
+            <Link
+              to="/cookies"
+              className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
+              style={{ color: "hsl(var(--muted-foreground))" }}
+            >
+              Cookies
+            </Link>
+            <Link
+              to="/terms"
+              className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
+              style={{ color: "hsl(var(--muted-foreground))" }}
+            >
+              Terms
+            </Link>
+            <Link
+              to="/accessibility"
+              className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
+              style={{ color: "hsl(var(--muted-foreground))" }}
+            >
+              Accessibility
+            </Link>
+            <ContactForm />
+          </div>
+          {/* Tablet: drop-up menu for legal + contact */}
+          <LegalDropUp />
           <span className="w-px h-4" style={{ backgroundColor: "hsl(var(--border))" }} />
           <SignedOut>
             <SignInButton mode="modal">

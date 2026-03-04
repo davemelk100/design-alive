@@ -1,6 +1,6 @@
 # @theemel/editor
 
-Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, and export CSS custom properties — all in real time.
+Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography and interaction states, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile.
 
 ## Install
 
@@ -64,7 +64,8 @@ The following features require a valid license key:
 | Accessibility audit | Run axe-core WCAG contrast audits on your color system. |
 | Undo/redo | History management for color changes. |
 | Image palette extraction | Extract color palettes from uploaded images. |
-| Interaction states | Style hover, focus, and active component states. |
+| Interaction states | Style hover, focus, and active states for buttons and components. |
+| Typography interactions | Customize hover, active, and underline behavior for links and headings. |
 
 ### License Key Format
 
@@ -72,7 +73,7 @@ Keys follow the format `THEEMEL-XXXX-XXXX-XXXX` with a checksum-validated third 
 
 ### PremiumGate Component
 
-Wrap any feature in `PremiumGate` to gate it behind a license key:
+Wrap any feature in `PremiumGate` to gate it behind a license key. Clicking a gated feature opens a modal with upgrade and sign-in options:
 
 ```tsx
 import { PremiumGate } from '@theemel/editor';
@@ -85,7 +86,7 @@ import { PremiumGate } from '@theemel/editor';
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `feature` | `string` | — | Name of the premium feature being gated. |
-| `variant` | `"section" \| "inline"` | `"section"` | `"section"` dims content with a lock overlay; `"inline"` shows a lock icon inline. |
+| `variant` | `"section" \| "inline"` | `"section"` | `"section"` dims content with a lock overlay; `"inline"` shows a lock icon inline. Both open a modal on click. |
 | `upgradeUrl` | `string` | `"/pricing"` | URL for the upgrade prompt. |
 | `signInUrl` | `string` | — | URL for the sign-in prompt. |
 
@@ -158,6 +159,12 @@ import {
   HARMONY_SCHEMES,   // ['Complementary', 'Analogous', 'Triadic', 'Split-Complementary']
   applyStoredThemeColors, // Restore persisted theme from localStorage
 
+  // Card, typography & interaction style utilities
+  applyStoredCardStyle,           // Restore card style from localStorage
+  applyStoredTypography,          // Restore typography from localStorage
+  applyStoredAlertStyle,          // Restore alert style from localStorage
+  applyStoredInteractionStyle,    // Restore button interaction style from localStorage
+
   // License utilities
   validateLicenseKey,   // Validate a THEEMEL-XXXX-XXXX-XXXX key
   generateLicenseKey,   // Generate a valid license key
@@ -174,8 +181,12 @@ import {
 1. **Color picking** — Click any swatch to open the native color picker. Changing a key color (brand, secondary, accent, background) automatically derives related tokens.
 2. **Harmony schemes** *(Pro)* — Generate palettes using complementary, analogous, triadic, or split-complementary color relationships.
 3. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1). Failing pairs are auto-corrected by adjusting lightness.
-4. **Persistence** — Theme colors are saved to `localStorage` and restored on reload.
-5. **CSS export** — Generate a `:root` CSS block and Tailwind config snippet for your custom theme.
+4. **Typography** — Choose heading and body fonts, adjust sizes, weights, line height, and letter spacing with live preview. Five built-in presets (System, Modern, Classic, Compact, Editorial).
+5. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
+6. **Typography interactions** *(Pro)* — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
+7. **Persistence** — All settings (colors, typography, card styles, alerts, interactions) are saved to `localStorage` and restored on reload.
+8. **CSS export** — Generate a `:root` CSS block and Tailwind config snippet for your custom theme.
+9. **Mobile friendly** — Fully responsive UI lets you tweak your design system and open PRs from any device.
 
 ## Package Architecture
 
