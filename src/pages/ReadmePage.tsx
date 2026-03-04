@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import SiteFooter from "../components/SiteFooter";
+import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 import ThemalLogo from "../components/ThemalLogo";
 
 export default function ReadmePage() {
@@ -277,6 +277,7 @@ function App() {
           </p>
         </section>
       </div>
+      <SiteFooterBranding />
       <SiteFooter />
     </div>
   );

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth, SignInButton } from "@clerk/clerk-react";
 import { useSubscription } from "../hooks/useSubscription";
-import SiteFooter from "../components/SiteFooter";
+import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 import ThemalLogo from "../components/ThemalLogo";
 
 const check = (
@@ -223,6 +223,7 @@ export default function Pricing() {
           </div>
         </div>
       </div>
+      <SiteFooterBranding />
       <SiteFooter />
     </div>
   );

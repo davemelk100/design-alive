@@ -1,7 +1,7 @@
 import { DesignSystemEditor } from "@design-alive/editor";
 import { useSubscription } from "../../hooks/useSubscription";
 import UserNav from "../../components/UserNav";
-import SiteFooter from "../../components/SiteFooter";
+import SiteFooter, { SiteFooterBranding } from "../../components/SiteFooter";
 
 export default function PortfolioLanding() {
   const { licenseKey, toggleDevPro, isDevPro } = useSubscription();
@@ -16,6 +16,7 @@ export default function PortfolioLanding() {
         signInUrl="/sign-in"
         headerRight={<UserNav />}
       />
+      <SiteFooterBranding />
       <SiteFooter />
       <div
         className="fixed top-0 left-1/2 -translate-x-1/2 z-50 group"

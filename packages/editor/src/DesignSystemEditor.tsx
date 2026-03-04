@@ -1392,8 +1392,103 @@ function DesignSystemEditorInner({
       )}
 
 
+      {/* Palette action buttons — above sticky nav */}
+      <div className="w-full px-4 sm:px-6 lg:px-8 pt-6 hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
+              <h2 className="text-[20px] font-normal uppercase tracking-wider mr-2" style={{ color: "hsl(var(--foreground))" }}>Global Actions</h2>
+              <PremiumGate feature="harmony-schemes" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+              <div className="relative">
+                <button
+                  onClick={() => setShuffleOpen(!shuffleOpen)}
+                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                  style={{ color: "hsl(var(--muted-foreground))" }}
+                >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
+                  <span className="whitespace-nowrap">{harmonySchemeIndex >= 0 ? HARMONY_SCHEMES[harmonySchemeIndex] : "Default"}</span>
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path d="M6 9l6 6 6-6" /></svg>
+                </button>
+                {shuffleOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setShuffleOpen(false)} />
+                    <div className="absolute right-0 top-full mt-1 z-50 min-w-[180px] rounded-lg shadow-lg py-1 border" style={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}>
+                      <button
+                        onClick={() => { setHarmonySchemeIndex(-1); setShuffleOpen(false); }}
+                        className="w-full text-left px-4 py-2 text-[14px] font-light transition-colors hover:opacity-80 flex items-center justify-between"
+                        style={{ color: "hsl(var(--foreground))" }}
+                      >
+                        Default
+                        {harmonySchemeIndex < 0 && <span className="text-green-600 dark:text-green-400">&#10003;</span>}
+                      </button>
+                      {HARMONY_SCHEMES.map((scheme, idx) => (
+                        <button
+                          key={scheme}
+                          onClick={() => handleRegenerate(idx)}
+                          className="w-full text-left px-4 py-2 text-[14px] font-light transition-colors hover:opacity-80 flex items-center justify-between"
+                          style={{ color: "hsl(var(--foreground))" }}
+                        >
+                          {scheme}
+                          {idx === harmonySchemeIndex && <span className="text-green-600 dark:text-green-400">&#10003;</span>}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+              </PremiumGate>
+              <div className="flex items-center">
+                <button
+                  onClick={handleGenerate}
+                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                  style={{ color: "hsl(var(--muted-foreground))" }}
+                >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                  <span className="truncate">Refresh</span>
+                </button>
+                {prevColors && (
+                  <PremiumGate feature="undo" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                  <button
+                    onClick={handleUndo}
+                    aria-label="Undo last color change"
+                    className="h-10 pl-1 pr-2 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h10a5 5 0 010 10H9m-6-10l4-4m-4 4l4 4" /></svg>
+                  </button>
+                  </PremiumGate>
+                )}
+              </div>
+                <PremiumGate feature="image-palette" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                <button
+                  onClick={() => setShowImagePaletteModal(true)}
+                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                  style={{ color: "hsl(var(--muted-foreground))" }}
+                  title="Extract a color palette from an image"
+                >
+                  {imagePaletteStatus === 'extracting' ? (
+                    <svg className="w-4 h-4 flex-shrink-0 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                  ) : imagePaletteStatus === 'done' ? (
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                  ) : imagePaletteStatus === 'error' ? (
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                  ) : (
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path strokeLinecap="round" strokeLinejoin="round" d="M21 15l-5-5L5 21" /></svg>
+                  )}
+                  <span className="truncate">{imagePaletteStatus === 'extracting' ? 'Extracting...' : imagePaletteStatus === 'done' ? 'Palette applied' : imagePaletteStatus === 'error' ? 'Failed' : 'Image'}</span>
+                </button>
+                </PremiumGate>
+                <PremiumGate feature="palette-export" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                  <button
+                    onClick={() => setShowPaletteExport(true)}
+                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    <span className="truncate"><span className="sm:hidden">Export</span><span className="hidden sm:inline">Export Palette</span></span>
+                  </button>
+                </PremiumGate>
+      </div>
+
       {/* Section nav */}
-      <nav ref={navContainerRef} className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-10 pb-1 hidden sm:flex items-center gap-3 lg:gap-4" style={{ backgroundColor: "hsl(var(--background))" }}>
+      <nav ref={navContainerRef} className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-2 pb-1 hidden sm:flex items-center gap-3 lg:gap-4" style={{ backgroundColor: "hsl(var(--background))" }}>
         {[
           { id: "colors", label: "Colors", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" /></svg> },
           { id: "buttons", label: "Buttons", icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59" /></svg> },
@@ -1597,96 +1692,6 @@ function DesignSystemEditorInner({
               />
               {/* Desktop: buttons */}
               <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
-              <PremiumGate feature="harmony-schemes" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-              <div className="relative">
-                <button
-                  onClick={() => setShuffleOpen(!shuffleOpen)}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
-                  <span className="whitespace-nowrap">{harmonySchemeIndex >= 0 ? HARMONY_SCHEMES[harmonySchemeIndex] : "Default"}</span>
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path d="M6 9l6 6 6-6" /></svg>
-                </button>
-                {shuffleOpen && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setShuffleOpen(false)} />
-                    <div className="absolute right-0 top-full mt-1 z-50 min-w-[180px] rounded-lg shadow-lg py-1 border" style={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))" }}>
-                      <button
-                        onClick={() => { setHarmonySchemeIndex(-1); setShuffleOpen(false); }}
-                        className="w-full text-left px-4 py-2 text-[14px] font-light transition-colors hover:opacity-80 flex items-center justify-between"
-                        style={{ color: "hsl(var(--foreground))" }}
-                      >
-                        Default
-                        {harmonySchemeIndex < 0 && <span className="text-green-600 dark:text-green-400">&#10003;</span>}
-                      </button>
-                      {HARMONY_SCHEMES.map((scheme, idx) => (
-                        <button
-                          key={scheme}
-                          onClick={() => handleRegenerate(idx)}
-                          className="w-full text-left px-4 py-2 text-[14px] font-light transition-colors hover:opacity-80 flex items-center justify-between"
-                          style={{ color: "hsl(var(--foreground))" }}
-                        >
-                          {scheme}
-                          {idx === harmonySchemeIndex && <span className="text-green-600 dark:text-green-400">&#10003;</span>}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-              </PremiumGate>
-              <div className="flex items-center">
-                <button
-                  onClick={handleGenerate}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                  <span className="truncate">Refresh</span>
-                </button>
-                {prevColors && (
-                  <PremiumGate feature="undo" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-                  <button
-                    onClick={handleUndo}
-                    aria-label="Undo last color change"
-                    className="h-10 pl-1 pr-2 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h10a5 5 0 010 10H9m-6-10l4-4m-4 4l4 4" /></svg>
-                  </button>
-                  </PremiumGate>
-                )}
-              </div>
-                <PremiumGate feature="image-palette" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-                <button
-                  onClick={() => setShowImagePaletteModal(true)}
-                  className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                  title="Extract a color palette from an image"
-                >
-                  {imagePaletteStatus === 'extracting' ? (
-                    <svg className="w-4 h-4 flex-shrink-0 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                  ) : imagePaletteStatus === 'done' ? (
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                  ) : imagePaletteStatus === 'error' ? (
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                  ) : (
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><path strokeLinecap="round" strokeLinejoin="round" d="M21 15l-5-5L5 21" /></svg>
-                  )}
-                  <span className="truncate">{imagePaletteStatus === 'extracting' ? 'Extracting...' : imagePaletteStatus === 'done' ? 'Palette applied' : imagePaletteStatus === 'error' ? 'Failed' : 'Image'}</span>
-                </button>
-                </PremiumGate>
-                <PremiumGate feature="palette-export" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-                  <button
-                    onClick={() => setShowPaletteExport(true)}
-                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                    <span className="truncate"><span className="sm:hidden">Export</span><span className="hidden sm:inline">Export Palette</span></span>
-                  </button>
-                </PremiumGate>
                 <div className="flex items-center rounded-lg overflow-hidden border" style={{ borderColor: "hsl(var(--border))" }}>
                   <button
                     onClick={() => {
@@ -1732,6 +1737,7 @@ function DesignSystemEditorInner({
               </div>
             </div>
 
+            <div className="rounded-xl p-4 sm:p-6 space-y-3" style={{ border: "1px solid hsl(var(--border))" }}>
             {/* Color swatch buttons */}
             <div className="grid grid-cols-5 gap-2 sm:gap-5 rounded-lg p-4 overflow-visible" data-axe-exclude style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {COLOR_SWATCHES.filter(({ key }) => ["--brand", "--secondary", "--accent", "--background", "--foreground"].includes(key)).map(({ key, label }) => {
@@ -1962,6 +1968,7 @@ function DesignSystemEditorInner({
                   </Suspense>
                 </div>
               </div>
+            </div>
             </div>
           </div>
 
@@ -2285,13 +2292,11 @@ function DesignSystemEditorInner({
           <div id="card" className="min-w-0 mt-8 md:mt-12 scroll-mt-4 sm:scroll-mt-[90px] space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Cards <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
-            </div>
-
-            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+              <div className="ml-auto flex items-center">
             {/* CSS / Tokens / Reset */}
             {/* Mobile: dropdown */}
             <select
-              className="sm:hidden h-8 px-2 text-[13px] font-light rounded-md border w-full"
+              className="sm:hidden h-8 px-2 text-[13px] font-light rounded-md border"
               style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
               value=""
               onChange={e => {
@@ -2337,6 +2342,10 @@ function DesignSystemEditorInner({
                   <span className="truncate">Reset</span>
                 </button>
             </div>
+              </div>
+            </div>
+
+            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
             {/* Preset buttons */}
             <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {(["liquid-glass", "solid", "gradient", "border-only"] as const).map((key) => {
@@ -2576,21 +2585,19 @@ function DesignSystemEditorInner({
                   );
                 })()}
               </div>
-            </div>{/* end Card Style border wrapper */}
+            </div>
+            </div>
           </div>
-          </div>{/* end Card Style section */}
 
           {/* Alerts section */}
           <div id="alerts" className="min-w-0 mt-8 md:mt-12 scroll-mt-4 sm:scroll-mt-[90px] space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
               <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
-            </div>
-
-            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
+              <div className="ml-auto flex items-center">
             {/* CSS / Tokens / Reset */}
             {/* Mobile: dropdown */}
             <select
-              className="sm:hidden h-8 px-2 text-[13px] font-light rounded-md border w-full"
+              className="sm:hidden h-8 px-2 text-[13px] font-light rounded-md border"
               style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
               value=""
               onChange={e => {
@@ -2636,6 +2643,10 @@ function DesignSystemEditorInner({
                   <span className="truncate">Reset</span>
                 </button>
             </div>
+              </div>
+            </div>
+
+            <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
             {/* Preset buttons */}
             <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {(["filled", "soft", "outline", "minimal"] as const).map((key) => {
@@ -3706,10 +3717,10 @@ function DesignSystemEditorInner({
             {showNavLinks && (
               <div className="space-y-1" style={{ borderTop: "1px solid hsl(var(--border))", paddingTop: "16px" }}>
                 <p className="text-[11px] font-semibold uppercase tracking-wider mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Pages</p>
-                <a href="/how-it-works" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>How It Works</a>
-                <a href="/readme" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>README</a>
-                <a href="/pricing" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Pricing</a>
-                <a href="/features" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Features</a>
+                <a href="/how-it-works" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>How</a>
+                <a href="/readme" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Dev</a>
+                <a href="/pricing" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Pricing</a>
+                <a href="/features" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Features</a>
               </div>
             )}
 

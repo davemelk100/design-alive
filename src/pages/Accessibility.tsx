@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import SiteFooter from "../components/SiteFooter";
+import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 
 export default function Accessibility() {
   return (
@@ -81,6 +81,7 @@ export default function Accessibility() {
           </section>
         </div>
       </div>
+      <SiteFooterBranding />
       <SiteFooter />
     </div>
   );

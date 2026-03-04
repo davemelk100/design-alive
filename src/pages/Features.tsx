@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import SiteFooter from "../components/SiteFooter";
+import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 import ThemalLogo from "../components/ThemalLogo";
 
 const features = [
@@ -141,6 +141,7 @@ export default function Features() {
           ))}
         </div>
       </div>
+      <SiteFooterBranding />
       <SiteFooter />
     </div>
   );

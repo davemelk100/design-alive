@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import SiteFooter from "../components/SiteFooter";
+import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 
 export default function PrivacyPolicy() {
   return (
@@ -82,6 +82,7 @@ export default function PrivacyPolicy() {
           </section>
         </div>
       </div>
+      <SiteFooterBranding />
       <SiteFooter />
     </div>
   );

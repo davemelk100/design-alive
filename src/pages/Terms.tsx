@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import SiteFooter from "../components/SiteFooter";
+import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 
 export default function Terms() {
   return (
@@ -89,6 +89,7 @@ export default function Terms() {
           </section>
         </div>
       </div>
+      <SiteFooterBranding />
       <SiteFooter />
     </div>
   );
