@@ -400,8 +400,11 @@ export default function SiteFooter() {
         backgroundColor: "hsl(var(--background))",
       }}
     >
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-center">
-        <nav className="hidden sm:flex items-center gap-4 sm:gap-6">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-5 flex items-center">
+        <Link to="/" className="flex-shrink-0 mr-4 sm:mr-6 leading-none hover:opacity-70 transition-opacity">
+          <img src="/themal-just-t.svg" alt="Themal" className="h-5" width="17" height="20" />
+        </Link>
+        <nav className="hidden sm:flex items-center gap-4 sm:gap-6 mx-auto">
           <div className="hidden lg:contents">
             <Link
               to="/how-it-works"

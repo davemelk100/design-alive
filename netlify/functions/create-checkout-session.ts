@@ -67,6 +67,33 @@ export const handler = async (event: any) => {
     }
 
     const { billingCycle } = JSON.parse(event.body || "{}");
+    const stripe = new Stripe(stripeKey);
+    const origin = event.headers.origin || "https://themalive.com";
+
+    // Test product: one-time $0.10 payment
+    if (billingCycle === "test") {
+      const testPriceId = process.env.STRIPE_TEST_PRICE_ID;
+      if (!testPriceId) {
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({ error: "Test price not configured" }),
+        };
+      }
+      const session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        line_items: [{ price: testPriceId, quantity: 1 }],
+        success_url: `${origin}/?checkout=success`,
+        cancel_url: `${origin}/pricing`,
+        metadata: { clerkUserId: userId },
+      });
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({ url: session.url }),
+      };
+    }
+
     const priceId =
       billingCycle === "yearly"
         ? process.env.STRIPE_YEARLY_PRICE_ID
@@ -80,12 +107,11 @@ export const handler = async (event: any) => {
       };
     }
 
-    const stripe = new Stripe(stripeKey);
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${event.headers.origin || "https://themalive.com"}/?checkout=success`,
-      cancel_url: `${event.headers.origin || "https://themalive.com"}/pricing`,
+      success_url: `${origin}/?checkout=success`,
+      cancel_url: `${origin}/pricing`,
       metadata: { clerkUserId: userId },
       subscription_data: { metadata: { clerkUserId: userId } },
     });

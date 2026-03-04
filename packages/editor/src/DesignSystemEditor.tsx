@@ -224,6 +224,7 @@ function DesignSystemEditorInner({
   upgradeUrl,
   signInUrl,
   headerRight,
+  featuresUrl,
 }: DesignSystemEditorProps) {
   const { isPremium } = useLicense();
   const [hoveredLockKey, setHoveredLockKey] = useState<string | null>(null);
@@ -318,7 +319,7 @@ function DesignSystemEditorInner({
   }, [activeSection]);
 
   const [showResetModal, setShowResetModal] = useState(false);
-  const [showFeaturesModal, setShowFeaturesModal] = useState(false);
+
   const [showCardResetModal, setShowCardResetModal] = useState(false);
   const [showTypoResetModal, setShowTypoResetModal] = useState(false);
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
@@ -861,7 +862,7 @@ function DesignSystemEditorInner({
   };
 
   const handleUndo = () => {
-    if (!isPremium || !prevColors) return;
+    if (!prevColors) return;
     const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
     for (const [key, val] of Object.entries(prevColors)) {
       document.documentElement.style.setProperty(key, val);
@@ -1307,8 +1308,8 @@ function DesignSystemEditorInner({
                 <span>Open PR</span>
               </button>
               {headerRight}
-              <button
-                onClick={() => setShowFeaturesModal(true)}
+              {featuresUrl && <a
+                href={featuresUrl}
                 className="p-2 rounded-lg transition-opacity hover:opacity-70 sm:hidden"
                 style={{ color: "hsl(var(--muted-foreground))" }}
                 aria-label="Features"
@@ -1317,7 +1318,7 @@ function DesignSystemEditorInner({
                   <circle cx="12" cy="12" r="10" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0-4h.01" />
                 </svg>
-              </button>
+              </a>}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="p-2 rounded-lg transition-opacity hover:opacity-70"
@@ -1337,100 +1338,72 @@ function DesignSystemEditorInner({
         </div>
       </div>}
 
-      <p className="w-full px-4 sm:px-6 lg:px-8 pt-2 text-[14px] font-light leading-relaxed" style={{ color: "hsl(var(--muted-foreground))" }}>
-        Pick a brand color and watch every token update in real time. Customize typography, buttons, cards, and alerts. Every foreground/background pair is checked against WCAG AA contrast. Export CSS custom properties or open a PR to propose design system changes.
+      <p className="w-full px-4 sm:px-6 lg:px-8 pt-2 pb-4 md:pb-0 text-[14px] font-light leading-relaxed" style={{ color: "hsl(var(--muted-foreground))" }}>
+        Pick a brand color and watch every token update in real time. Customize typography, buttons, cards, and alerts. Every foreground/background pair is checked against WCAG AA contrast. Export CSS custom properties or open a PR to propose design system changes.{" "}
+        {featuresUrl ? <a href={featuresUrl} className="text-[14px] underline hover:opacity-70 transition-opacity" style={{ color: "hsl(var(--muted-foreground))" }}>Learn more about features.</a> : null}
       </p>
-      <ul className="w-full px-4 sm:px-6 lg:px-8 pt-3 hidden sm:block columns-1 sm:columns-2 gap-x-8 text-[13px] font-light list-disc pl-9 sm:pl-11" style={{ color: "hsl(var(--muted-foreground))", marginLeft: "15px" }}>
-        <li>Real-time color picking with live preview</li>
-        <li>Random palette generation with smart derivation</li>
-        <li>Color harmony schemes (Complementary, Analogous, Triadic, Split-Complementary)</li>
-        <li>Image-based palette extraction via upload</li>
-        <li>Dark mode with automatic foreground/background swap</li>
-        <li>WCAG AA contrast enforcement</li>
-        <li>Typography system with presets and custom Google Fonts</li>
-        <li>Card, alert, and button style presets</li>
-        <li>Per-section CSS and Design Token export</li>
-        <li>Shareable URLs for full theme state</li>
-        <li>Accessibility audit via axe-core</li>
-        <li>GitHub PR integration</li>
-      </ul>
 
-      {/* Features modal (mobile) */}
-      {showFeaturesModal && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center sm:hidden" onClick={() => setShowFeaturesModal(false)}>
-          <div className="absolute inset-0 bg-black/30" />
-          <div
-            className="relative w-full rounded-t-2xl px-6 py-6 pb-10 max-h-[80vh] overflow-y-auto"
-            style={{ backgroundColor: "hsl(var(--card))", color: "hsl(var(--card-foreground))" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="w-10 h-1 rounded-full mx-auto mb-4" style={{ backgroundColor: "hsl(var(--muted-foreground) / 0.3)" }} />
-            <h3 className="text-[16px] font-medium mb-3">Features</h3>
-            <ul className="space-y-2 text-[14px] font-light list-disc pl-5" style={{ color: "hsl(var(--card-foreground))" }}>
-              <li>Real-time color picking with live preview</li>
-              <li>Random palette generation with smart derivation</li>
-              <li>Color harmony schemes (Complementary, Analogous, Triadic, Split-Complementary)</li>
-              <li>Image-based palette extraction via upload</li>
-              <li>Dark mode with automatic foreground/background swap</li>
-              <li>WCAG AA contrast enforcement</li>
-              <li>Typography system with presets and custom Google Fonts</li>
-              <li>Card, alert, and button style presets</li>
-              <li>Per-section CSS and Design Token export</li>
-              <li>Shareable URLs for full theme state</li>
-              <li>Accessibility audit via axe-core</li>
-              <li>GitHub PR integration</li>
-            </ul>
-            <button
-              onClick={() => setShowFeaturesModal(false)}
-              className="mt-4 w-full h-10 text-[14px] font-medium rounded-md transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--muted-foreground))" }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
 
 
       {/* Global Actions title */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 pt-12">
-        <h2 className="text-[20px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Global Actions</h2>
+      <div className="w-full px-4 sm:px-6 lg:px-8 md:pt-12 flex items-center gap-2">
+        <h2 className="text-[20px] font-bold tracking-wider mb-[5px]" style={{ color: "hsl(var(--foreground))" }}>Global Actions</h2>
+        {/* Mobile dropdown — right-aligned */}
+        <div className="ml-auto sm:hidden">
+          <select
+            className="h-8 px-2 text-[13px] font-light rounded-md border"
+            style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+            value=""
+            onChange={e => {
+              const v = e.target.value;
+              if (v === "default") { setHarmonySchemeIndex(-1); handleGenerate(); }
+              else if (v === "refresh") handleGenerate();
+              else if (v === "upload") setShowImagePaletteModal(true);
+              else if (v === "export") setShowPaletteExport(true);
+              e.target.value = "";
+            }}
+          >
+            <option value="" disabled>Actions…</option>
+            <option value="refresh">Refresh Theme</option>
+            <option value="default">Default Scheme</option>
+            <option value="upload">Upload Image</option>
+            <option value="export">Export Palette</option>
+          </select>
+        </div>
       </div>
-      {/* Palette action buttons — mobile: dropdown, desktop: buttons */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 pt-2 pb-12 flex flex-wrap items-center gap-2 sm:gap-4">
-              {/* Mobile dropdown */}
-              <select
-                className="sm:hidden h-10 px-2 text-[13px] font-light rounded-lg border"
-                style={{ backgroundColor: "#e5e7eb", color: "#111", borderColor: "hsl(var(--border))" }}
-                value=""
-                onChange={e => {
-                  const v = e.target.value;
-                  if (v === "default") { setHarmonySchemeIndex(-1); handleGenerate(); }
-                  else if (v === "refresh") handleGenerate();
-                  else if (v === "upload") setShowImagePaletteModal(true);
-                  else if (v === "export") setShowPaletteExport(true);
-                  e.target.value = "";
-                }}
-              >
-                <option value="" disabled>Global Actions…</option>
-                <option value="default">Default Scheme</option>
-                <option value="refresh">Refresh</option>
-                <option value="upload">Upload Image</option>
-                <option value="export">Export Palette</option>
-              </select>
+      {/* Palette action buttons — desktop only */}
+      <div className="w-full px-4 sm:px-6 lg:px-8 pt-2 pb-2 md:pb-6 flex flex-wrap items-center gap-2 sm:gap-4">
               {/* Desktop buttons */}
               <div className="hidden sm:contents">
-              <PremiumGate feature="harmony-schemes" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+              <div className="flex items-center">
+                <button
+                  onClick={handleGenerate}
+                  className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                >
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                  <span className="truncate">Refresh Theme</span>
+                  {prevColors && (
+                    <span
+                      onClick={(e) => { e.stopPropagation(); handleUndo(); }}
+                      className="ml-1 pl-1 border-l flex items-center justify-center hover:opacity-70 transition-opacity cursor-pointer"
+                      style={{ borderColor: "rgba(0,0,0,0.2)" }}
+                      title="Undo last refresh"
+                    >
+                      <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h10a5 5 0 010 10H9m-6-10l4-4m-4 4l4 4" /></svg>
+                    </span>
+                  )}
+                </button>
+              </div>
+              <PremiumGate feature="harmony-schemes" variant="inline" hideLock upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
               <div className="relative">
                 <button
                   onClick={() => setShuffleOpen(!shuffleOpen)}
-                  className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-                  style={{ backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}
+                  className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
                 >
-                  {!isPremium && <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>}
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
                   <span className="whitespace-nowrap">{harmonySchemeIndex >= 0 ? HARMONY_SCHEMES[harmonySchemeIndex] : "Palette Options"}</span>
                   <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path d="M6 9l6 6 6-6" /></svg>
+                  {!isPremium && <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>}
                 </button>
                 {shuffleOpen && (
                   <>
@@ -1460,33 +1433,10 @@ function DesignSystemEditorInner({
                 )}
               </div>
               </PremiumGate>
-              <div className="flex items-center">
-                <button
-                  onClick={handleGenerate}
-                  className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-                  style={{ backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}
-                >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                  <span className="truncate">Refresh</span>
-                </button>
-                {prevColors && (
-                  <PremiumGate feature="undo" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-                  <button
-                    onClick={handleUndo}
-                    aria-label="Undo last color change"
-                    className="h-10 pl-1 pr-2 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 10h10a5 5 0 010 10H9m-6-10l4-4m-4 4l4 4" /></svg>
-                  </button>
-                  </PremiumGate>
-                )}
-              </div>
-                <PremiumGate feature="image-palette" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                <PremiumGate feature="image-palette" variant="inline" hideLock upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
                 <button
                   onClick={() => setShowImagePaletteModal(true)}
-                  className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-                  style={{ backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}
+                  className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
                   title="Extract a color palette from an image"
                 >
                   {imagePaletteStatus === 'extracting' ? (
@@ -1502,11 +1452,10 @@ function DesignSystemEditorInner({
                   {!isPremium && <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>}
                 </button>
                 </PremiumGate>
-                <PremiumGate feature="palette-export" variant="inline" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                <PremiumGate feature="palette-export" variant="inline" hideLock upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
                   <button
                     onClick={() => setShowPaletteExport(true)}
-                    className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-                    style={{ backgroundColor: "#e5e7eb", color: "#111", boxShadow: "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)" }}
+                    className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
                   >
                     <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
                     <span className="truncate"><span className="sm:hidden">Export</span><span className="hidden sm:inline">Export Palette</span></span>
@@ -1516,6 +1465,10 @@ function DesignSystemEditorInner({
               </div>{/* end desktop buttons wrapper */}
       </div>
 
+      {/* Design Elements divider + title */}
+      <div className="w-full px-4 sm:px-6 lg:px-8 pt-1 md:pt-12">
+        <h2 className="text-[20px] font-bold tracking-wider mb-[5px]" style={{ color: "hsl(var(--foreground))" }}>Design Elements</h2>
+      </div>
       {/* Section nav */}
       <nav ref={navContainerRef} className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-2 pb-1 hidden sm:flex items-center gap-3 lg:gap-4" style={{ backgroundColor: "hsl(var(--background))" }}>
         {[
@@ -1539,7 +1492,7 @@ function DesignSystemEditorInner({
               transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s, border-bottom-color 0.2s",
             }}
           >
-            <span style={{ fontSize: "20px", fontWeight: 400, textTransform: "uppercase", letterSpacing: "normal" }}>{s.label}</span>
+            <span style={{ fontSize: "20px", fontWeight: 700 }}>{s.label}</span>
             <svg className="w-5 h-5 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" /></svg>
           </a>
         ))}
@@ -1677,9 +1630,9 @@ function DesignSystemEditorInner({
 
 
           {/* Colors section */}
-          <div id="colors" className="min-w-0 space-y-3 scroll-mt-4 sm:scroll-mt-[90px]">
+          <div id="colors" className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px]">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Colors <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+              <h2 className="text-[20px] font-bold tracking-wider mb-[5px] flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Colors <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex items-center">
               {/* Mobile: dropdown (Colors section actions only) */}
               <select
@@ -1994,8 +1947,8 @@ function DesignSystemEditorInner({
           </div>
 
           {/* Buttons section */}
-          <div id="buttons" className="min-w-0 space-y-3 mt-4 scroll-mt-4 sm:scroll-mt-[90px]">
-            <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Buttons <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+          <div id="buttons" className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px]">
+            <h2 className="text-[20px] font-bold tracking-wider mb-[5px] flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Buttons <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
 
             {/* Swatches + Interactions side-by-side on desktop */}
             <div className="flex flex-col lg:flex-row lg:items-stretch gap-4 lg:gap-12">
@@ -2310,9 +2263,9 @@ function DesignSystemEditorInner({
           )}
 
           {/* Card Style section */}
-          <div id="card" className="min-w-0 mt-8 md:mt-12 scroll-mt-4 sm:scroll-mt-[90px] space-y-3">
+          <div id="card" className="min-w-0 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px] space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Cards <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+              <h2 className="text-[20px] font-bold tracking-wider mb-[5px] flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Cards <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex items-center">
             {/* CSS / Tokens / Reset */}
             {/* Mobile: dropdown */}
@@ -2611,9 +2564,9 @@ function DesignSystemEditorInner({
           </div>
 
           {/* Alerts section */}
-          <div id="alerts" className="min-w-0 mt-8 md:mt-12 scroll-mt-4 sm:scroll-mt-[90px] space-y-3">
+          <div id="alerts" className="min-w-0 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px] space-y-3">
             <div className="flex items-center flex-wrap gap-2 sm:gap-4" data-axe-exclude>
-              <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+              <h2 className="text-[20px] font-bold tracking-wider mb-[5px] flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Alerts <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
               <div className="ml-auto flex items-center">
             {/* CSS / Tokens / Reset */}
             {/* Mobile: dropdown */}
@@ -2667,8 +2620,8 @@ function DesignSystemEditorInner({
               </div>
             </div>
 
+            {/* Preset buttons (shared) */}
             <div className="space-y-3 rounded-lg p-4" style={{ border: "1px solid hsl(var(--border))" }}>
-            {/* Preset buttons */}
             <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
               {(["filled", "soft", "outline", "minimal"] as const).map((key) => {
                 const labels: Record<string, string> = { filled: "Filled", soft: "Soft", outline: "Outline", minimal: "Minimal" };
@@ -2729,10 +2682,12 @@ function DesignSystemEditorInner({
               );
             })()}
 
-            {/* Controls + Preview */}
-            <div className="flex flex-col gap-4">
-              {/* Slider controls */}
-              <div className="min-w-0 space-y-3">
+            {/* Two-column: Dialog Boxes + Toast Messages */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Dialog Boxes (left) */}
+              <div className="space-y-3">
+                <h3 className="text-[16px] font-normal tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Dialog Boxes</h3>
+                {/* Controls */}
                 <div className="space-y-1.5">
                   <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Shape</p>
                   <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
@@ -2748,10 +2703,7 @@ function DesignSystemEditorInner({
                     <input type="range" min={8} max={32} value={alertStyle.padding} onChange={e => updateAlertStyle({ padding: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
                   </label>
                 </div>
-              </div>
-
-              {/* Live preview */}
-              <div className="min-w-0">
+                {/* Preview */}
                 <div className="w-full space-y-3" data-axe-exclude>
                   {(() => {
                     const alertTypes = [
@@ -2819,77 +2771,100 @@ function DesignSystemEditorInner({
                   })()}
                 </div>
               </div>
-            </div>
 
-            {/* Toast Messages (Pro) */}
-            <PremiumGate feature="toast-messages" variant="section" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-              <div className="space-y-3">
-                <h3 className="text-[16px] font-normal uppercase tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Toast Messages</h3>
-                <div className="w-full space-y-3" data-axe-exclude>
-                  {(() => {
-                    const toasts = [
-                      { key: "success", label: "Changes saved", colorVar: "--success", fgVar: "--success-foreground", iconPath: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
-                      { key: "error", label: "Failed to save", colorVar: "--destructive", fgVar: "--destructive-foreground", iconPath: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" },
-                      { key: "info", label: "3 items updated", colorVar: "--brand", fgVar: null, iconPath: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
-                      { key: "warning", label: "Connection unstable", colorVar: "--warning", fgVar: "--warning-foreground", iconPath: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" },
-                    ];
+              {/* Toast Messages (right, Pro) */}
+              <PremiumGate feature="toast-messages" variant="section" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
+                <div className="space-y-3">
+                  <h3 className="text-[16px] font-normal tracking-wider" style={{ color: "hsl(var(--foreground))" }}>Toast Messages</h3>
+                  {/* Toast Controls */}
+                  <div className="space-y-1.5">
+                    <p className="text-[14px] font-light uppercase tracking-wider" style={{ color: "hsl(var(--muted-foreground))" }}>Shape</p>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Border Radius: {alertStyle.borderRadius}px</span>
+                      <input type="range" min={0} max={24} value={alertStyle.borderRadius} onChange={e => updateAlertStyle({ borderRadius: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Padding: {Math.max(alertStyle.padding - 4, 8)}px</span>
+                      <input type="range" min={8} max={32} value={alertStyle.padding} onChange={e => updateAlertStyle({ padding: Number(e.target.value) })} className="w-32 accent-[hsl(var(--brand))]" />
+                    </label>
+                    <label className="flex items-center justify-between gap-2 text-[14px] font-light" style={{ color: "hsl(var(--foreground))" }}>
+                      <span>Shadow</span>
+                      <select
+                        className="h-8 px-2 text-[13px] font-light rounded-md border"
+                        style={{ backgroundColor: "hsl(var(--background))", color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                        value="lg"
+                        disabled
+                      >
+                        <option value="lg">Large</option>
+                      </select>
+                    </label>
+                  </div>
+                  {/* Toast Preview */}
+                  <div className="w-full space-y-3" data-axe-exclude>
+                    {(() => {
+                      const toasts = [
+                        { key: "success", label: "Changes saved", colorVar: "--success", fgVar: "--success-foreground", iconPath: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
+                        { key: "error", label: "Failed to save", colorVar: "--destructive", fgVar: "--destructive-foreground", iconPath: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" },
+                        { key: "info", label: "3 items updated", colorVar: "--brand", fgVar: null, iconPath: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" },
+                        { key: "warning", label: "Connection unstable", colorVar: "--warning", fgVar: "--warning-foreground", iconPath: "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" },
+                      ];
 
-                    return toasts.map(({ key, label, colorVar, fgVar, iconPath }) => {
-                      const colorHsl = colors[colorVar] || "220 70% 50%";
-                      const colorRef = `var(${colorVar})`;
-                      const fgRef = fgVar ? `var(${fgVar})` : null;
-                      const preset = alertStyle.preset;
+                      return toasts.map(({ key, label, colorVar, fgVar, iconPath }) => {
+                        const colorHsl = colors[colorVar] || "220 70% 50%";
+                        const colorRef = `var(${colorVar})`;
+                        const fgRef = fgVar ? `var(${fgVar})` : null;
+                        const preset = alertStyle.preset;
 
-                      let bgStyle: string;
-                      let textColor: string;
-                      let borderStyle: string;
+                        let bgStyle: string;
+                        let textColor: string;
+                        let borderStyle: string;
 
-                      if (preset === "filled") {
-                        bgStyle = `hsl(${colorRef})`;
-                        textColor = fgRef ? `hsl(${fgRef})` : (colors[colorVar] ? `hsl(${fgForBg(colors[colorVar])})` : "#fff");
-                        borderStyle = "none";
-                      } else if (preset === "soft") {
-                        const parts = colorHsl.trim().split(/\s+/);
-                        bgStyle = parts.length >= 3 ? `hsla(${parts[0]}, ${parts[1]}, ${parts[2]}, 0.12)` : `hsl(${colorRef})`;
-                        textColor = `hsl(${colorRef})`;
-                        borderStyle = "none";
-                      } else if (preset === "outline") {
-                        bgStyle = "hsl(var(--card))";
-                        textColor = `hsl(${colorRef})`;
-                        borderStyle = `${alertStyle.borderWidth}px solid hsl(${colorRef})`;
-                      } else {
-                        bgStyle = "hsl(var(--card))";
-                        textColor = `hsl(${colorRef})`;
-                        borderStyle = `1px solid hsl(var(--border))`;
-                      }
+                        if (preset === "filled") {
+                          bgStyle = `hsl(${colorRef})`;
+                          textColor = fgRef ? `hsl(${fgRef})` : (colors[colorVar] ? `hsl(${fgForBg(colors[colorVar])})` : "#fff");
+                          borderStyle = "none";
+                        } else if (preset === "soft") {
+                          const parts = colorHsl.trim().split(/\s+/);
+                          bgStyle = parts.length >= 3 ? `hsla(${parts[0]}, ${parts[1]}, ${parts[2]}, 0.12)` : `hsl(${colorRef})`;
+                          textColor = `hsl(${colorRef})`;
+                          borderStyle = "none";
+                        } else if (preset === "outline") {
+                          bgStyle = "hsl(var(--card))";
+                          textColor = `hsl(${colorRef})`;
+                          borderStyle = `${alertStyle.borderWidth}px solid hsl(${colorRef})`;
+                        } else {
+                          bgStyle = "hsl(var(--card))";
+                          textColor = `hsl(${colorRef})`;
+                          borderStyle = `1px solid hsl(var(--border))`;
+                        }
 
-                      return (
-                        <div
-                          key={key}
-                          className="flex items-center gap-3 shadow-lg"
-                          style={{
-                            backgroundColor: bgStyle,
-                            color: textColor,
-                            borderRadius: `${alertStyle.borderRadius}px`,
-                            border: borderStyle,
-                            padding: `${Math.max(alertStyle.padding - 4, 8)}px ${alertStyle.padding}px`,
-                            maxWidth: "360px",
-                          }}
-                        >
-                          <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d={iconPath} />
-                          </svg>
-                          <p className="text-[14px] font-medium flex-1 min-w-0">{label}</p>
-                          <button className="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity" style={{ color: textColor }}>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-                          </button>
-                        </div>
-                      );
-                    });
-                  })()}
+                        return (
+                          <div
+                            key={key}
+                            className="flex items-center gap-3 shadow-lg"
+                            style={{
+                              backgroundColor: bgStyle,
+                              color: textColor,
+                              borderRadius: `${alertStyle.borderRadius}px`,
+                              border: borderStyle,
+                              padding: `${Math.max(alertStyle.padding - 4, 8)}px ${alertStyle.padding}px`,
+                            }}
+                          >
+                            <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d={iconPath} />
+                            </svg>
+                            <p className="text-[14px] font-medium flex-1 min-w-0">{label}</p>
+                            <button className="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity" style={{ color: textColor }}>
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
                 </div>
-              </div>
-            </PremiumGate>
+              </PremiumGate>
+            </div>{/* end two-column grid */}
           </div>{/* end Alerts border wrapper */}
 
             {/* Alert Reset Confirmation Modal */}
@@ -2924,8 +2899,8 @@ function DesignSystemEditorInner({
           </div>{/* end Alerts section */}
 
         {/* Typography section */}
-          <div id="typography" className="min-w-0 space-y-3 mt-8 md:mt-12 scroll-mt-4 sm:scroll-mt-[90px]">
-            <h2 className="text-[20px] font-normal uppercase tracking-wider flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Typography <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
+          <div id="typography" className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px]">
+            <h2 className="text-[20px] font-bold tracking-wider mb-[5px] flex items-center gap-2" style={{ color: "hsl(var(--foreground))" }}>Typography <a href="#top" className="opacity-30 hover:opacity-100 transition-all hover:scale-125" aria-label="Back to top"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 19V5m0 0l-7 7m7-7l7 7" /></svg></a></h2>
 
             {/* Typography controls + interactions stacked */}
             <div className="space-y-6">
@@ -3797,7 +3772,7 @@ function DesignSystemEditorInner({
                   key={s.id}
                   href={`#${s.id}`}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70"
+                  className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70"
                   style={{ color: "hsl(var(--foreground))" }}
                 >
                   {s.label}
@@ -3808,10 +3783,10 @@ function DesignSystemEditorInner({
             {showNavLinks && (
               <div className="space-y-1" style={{ borderTop: "1px solid hsl(var(--border))", paddingTop: "16px" }}>
                 <p className="text-[11px] font-semibold uppercase tracking-wider mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Pages</p>
-                <a href="/how-it-works" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>How</a>
-                <a href="/readme" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Dev</a>
-                <a href="/pricing" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Pricing</a>
-                <a href="/features" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Features</a>
+                <a href="/how-it-works" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>How</a>
+                <a href="/readme" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Dev</a>
+                <a href="/pricing" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Pricing</a>
+                <a href="/features" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70" style={{ color: "hsl(var(--foreground))" }}>Features</a>
               </div>
             )}
 
@@ -3823,7 +3798,7 @@ function DesignSystemEditorInner({
                     if (!prEndpointUrl) { setShowPrSetupModal(true); return; }
                     setPrSections(new Set()); setShowPrModal(true);
                   }}
-                  className="block py-2 text-[20px] font-normal uppercase tracking-wider transition-opacity hover:opacity-70 flex items-center gap-2"
+                  className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70 flex items-center gap-2"
                   style={{ color: "hsl(var(--foreground))" }}
                 >
                   <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" /></svg>

@@ -15,6 +15,7 @@ export default function PortfolioLanding() {
         upgradeUrl="/pricing"
         signInUrl="/sign-in"
         headerRight={<UserNav />}
+        featuresUrl="/readme"
       />
       <SiteFooterBranding />
       <SiteFooter />

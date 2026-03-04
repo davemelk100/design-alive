@@ -23,6 +23,8 @@ export interface DesignSystemEditorProps {
   signInUrl?: string;
   /** Content rendered at the far right of the header row (e.g. auth buttons) */
   headerRight?: React.ReactNode;
+  /** URL for the "Learn more about features" link */
+  featuresUrl?: string;
 }
 
 export interface TokenDefinition {

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { useLicense } from "../hooks/useLicense";
+import { validateLicenseKey } from "../utils/license";
 
 export interface PremiumGateProps {
   feature: string;
   /** "section" blocks content; "inline" shows lock inline. Default: "section" */
   variant?: "section" | "inline";
+  /** Hide the external lock icon (e.g. when the button already has one inside) */
+  hideLock?: boolean;
   upgradeUrl?: string;
   signInUrl?: string;
   children: React.ReactNode;
@@ -37,6 +40,20 @@ function UpgradeModal({
   feature: string;
   onClose: () => void;
 }) {
+  const [showLicenseInput, setShowLicenseInput] = useState(false);
+  const [licenseInput, setLicenseInput] = useState("");
+  const [licenseError, setLicenseError] = useState("");
+
+  const handleActivate = () => {
+    const result = validateLicenseKey(licenseInput);
+    if (result.isValid) {
+      window.dispatchEvent(new CustomEvent("theemel:license-activate", { detail: { key: licenseInput.trim().toUpperCase() } }));
+      onClose();
+    } else {
+      setLicenseError("Invalid license key. Please check and try again.");
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
@@ -44,7 +61,7 @@ function UpgradeModal({
       onClick={onClose}
     >
       <div
-        className="rounded-xl p-6 w-[360px] shadow-xl"
+        className="rounded-xl p-6 w-[360px] shadow-xl relative"
         style={{ backgroundColor: "#fff", color: "#111" }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -84,6 +101,38 @@ function UpgradeModal({
               Already have a license? Sign in
             </button>
           )}
+          {!showLicenseInput ? (
+            <button
+              onClick={() => setShowLicenseInput(true)}
+              className="w-full text-center px-4 py-2 text-[13px] font-light transition-opacity hover:opacity-70"
+              style={{ color: "#888" }}
+            >
+              Enter license key
+            </button>
+          ) : (
+            <div className="mt-1 flex flex-col gap-2">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={licenseInput}
+                  onChange={(e) => { setLicenseInput(e.target.value); setLicenseError(""); }}
+                  placeholder="THEEMEL-XXXX-XXXX-XXXX"
+                  className="flex-1 px-3 py-2 text-[13px] font-light rounded-lg border outline-none"
+                  style={{ borderColor: licenseError ? "#ef4444" : "#e5e7eb", color: "#111" }}
+                  onKeyDown={(e) => { if (e.key === "Enter") handleActivate(); }}
+                  autoFocus
+                />
+                <button
+                  onClick={handleActivate}
+                  className="px-3 py-2 text-[13px] font-medium rounded-lg transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: "#111", color: "#fff" }}
+                >
+                  Activate
+                </button>
+              </div>
+              {licenseError && <p className="text-[12px]" style={{ color: "#ef4444" }}>{licenseError}</p>}
+            </div>
+          )}
         </div>
         <button
           onClick={onClose}
@@ -103,6 +152,7 @@ function UpgradeModal({
 export function PremiumGate({
   feature,
   variant = "section",
+  hideLock = false,
   upgradeUrl,
   signInUrl,
   children,
@@ -122,14 +172,14 @@ export function PremiumGate({
   if (variant === "inline") {
     return (
       <>
-        <div className="ds-premium-gated-inline" style={{ display: "inline-flex", alignItems: "center", gap: 4, cursor: "pointer" }}>
+        <div className="ds-premium-gated-inline" style={{ display: "inline-flex", alignItems: "center", gap: 4, cursor: "pointer" }} onClick={handleClick}>
           <span className="ds-premium-locked-content">{children}</span>
-          <span
+          {!hideLock && <span
             className="ds-premium-lock"
             onClick={handleClick}
           >
             {lockIcon}
-          </span>
+          </span>}
         </div>
         {open && <UpgradeModal upgradeUrl={pricingHref} signInUrl={signInUrl} feature={feature} onClose={() => setOpen(false)} />}
       </>

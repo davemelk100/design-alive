@@ -113,8 +113,54 @@ export default function Features() {
         </div>
 
         <p className="text-[14px] leading-relaxed mb-10" style={{ color: "hsl(var(--foreground))" }}>
-          A running log of everything shipped in the Themal design system editor.
+          Everything you can do with the Themal design system editor.
         </p>
+
+        <section className="mb-16">
+          <h2
+            className="text-xl font-medium mb-6 pb-2 border-b"
+            style={{ color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+          >
+            Features
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+            {[
+              { title: "Real-Time Color Picking", desc: "Pick a brand color and watch every token update instantly with live preview." },
+              { title: "Random Palette Generation", desc: "Generate harmonious palettes with smart derivation from a single brand color." },
+              { title: "Color Harmony Schemes", desc: "Complementary, Analogous, Triadic, and Split-Complementary schemes." },
+              { title: "Image Palette Extraction", desc: "Upload a photo and extract a full color palette via k-means clustering." },
+              { title: "Dark Mode", desc: "Automatic foreground/background swap with one click." },
+              { title: "WCAG AA Contrast", desc: "Every foreground/background pair is checked against a 4.6:1 contrast ratio." },
+              { title: "Typography System", desc: "4 presets (Modern, Classic, Compact, Editorial) with custom Google Fonts support." },
+              { title: "Card Style Presets", desc: "Liquid Glass, Solid Color, Gradient, and Border Only card styles." },
+              { title: "Alert Style Presets", desc: "Filled, Soft, Outline, and Minimal alert styles with toast message previews." },
+              { title: "Button Previews", desc: "Color swatches for Primary, Secondary, Destructive, Muted, Success, Warning, and Brand." },
+              { title: "Interaction States", desc: "Subtle, Elevated, and Bold hover/focus/active presets." },
+              { title: "CSS & Design Token Export", desc: "Per-section export of CSS custom properties or W3C Design Token JSON." },
+              { title: "Palette Export", desc: "Download palette as SVG or PNG, copy as HEX, RGB, or RGBA." },
+              { title: "Shareable URLs", desc: "Encode full theme state in a URL hash and share with one click." },
+              { title: "Accessibility Audit", desc: "Built-in axe-core audit with inline violation reporting." },
+              { title: "GitHub PR Integration", desc: "Open design system PRs directly from the editor." },
+              { title: "Color Locks", desc: "Pin individual color tokens during palette generation." },
+              { title: "Responsive Layout", desc: "Mobile-first design with adaptive controls across all viewports." },
+            ].map(({ title, desc }) => (
+              <div key={title} className="flex items-start gap-2">
+                <span className="mt-0.5" style={{ color: "hsl(var(--brand))" }}>{check}</span>
+                <div>
+                  <p className="text-[14px] font-medium" style={{ color: "hsl(var(--foreground))" }}>{title}</p>
+                  <p className="text-[13px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <h2
+          className="text-xl font-medium mb-6 pb-2 border-b"
+          style={{ color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+        >
+          Changelog
+        </h2>
 
         <div className="space-y-10">
           {features.map(({ version, items }) => (

@@ -36,7 +36,7 @@ const proFeatures = [
 function UpgradeButton() {
   const { isSignedIn, getToken } = useAuth();
   const { isPro } = useSubscription();
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly" | "test">("monthly");
   const [loading, setLoading] = useState(false);
 
   if (!isSignedIn) {
@@ -131,6 +131,64 @@ function UpgradeButton() {
   );
 }
 
+function TestUpgradeButton() {
+  const { isSignedIn, getToken } = useAuth();
+  const [loading, setLoading] = useState(false);
+
+  if (!isSignedIn) {
+    return (
+      <SignInButton mode="modal">
+        <button
+          className="mt-6 w-full inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-[14px] font-medium transition-opacity hover:opacity-80"
+          style={{
+            backgroundColor: "hsl(var(--primary))",
+            color: "hsl(var(--primary-foreground))",
+          }}
+        >
+          Sign in to test
+        </button>
+      </SignInButton>
+    );
+  }
+
+  async function handleTest() {
+    setLoading(true);
+    try {
+      const token = await getToken();
+      const res = await fetch("/.netlify/functions/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ billingCycle: "test" }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <button
+      onClick={handleTest}
+      disabled={loading}
+      className="mt-6 w-full inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-[14px] font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
+      style={{
+        backgroundColor: "hsl(var(--muted))",
+        color: "hsl(var(--muted-foreground))",
+      }}
+    >
+      {loading ? "Redirecting..." : "Test for $0.10"}
+    </button>
+  );
+}
+
 export default function Pricing() {
   return (
     <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
@@ -153,7 +211,7 @@ export default function Pricing() {
           Start for free, upgrade when you need more.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Free tier */}
           <div
             className="rounded-xl p-6 flex flex-col"
@@ -220,6 +278,37 @@ export default function Pricing() {
               ))}
             </ul>
             <UpgradeButton />
+          </div>
+
+          {/* Test tier */}
+          <div
+            className="rounded-xl p-6 flex flex-col"
+            style={{
+              backgroundColor: "hsl(var(--card))",
+              border: "1px dashed hsl(var(--border))",
+            }}
+          >
+            <h2 className="text-xl font-semibold mb-1" style={{ color: "hsl(var(--foreground))" }}>
+              Test
+            </h2>
+            <div className="mb-2">
+              <span className="text-2xl font-semibold" style={{ color: "hsl(var(--foreground))" }}>$0.10</span>
+              <span className="text-[14px] ml-1" style={{ color: "hsl(var(--muted-foreground))" }}>one-time</span>
+            </div>
+            <p className="text-[14px] mb-6" style={{ color: "hsl(var(--muted-foreground))" }}>
+              Test the upgrade flow for 10 cents.
+            </p>
+            <ul className="space-y-3 flex-1">
+              <li className="flex items-start gap-2 text-[14px]" style={{ color: "hsl(var(--foreground))" }}>
+                {check}
+                <span>Full Pro access</span>
+              </li>
+              <li className="flex items-start gap-2 text-[14px]" style={{ color: "hsl(var(--foreground))" }}>
+                {check}
+                <span>Verify Stripe checkout flow</span>
+              </li>
+            </ul>
+            <TestUpgradeButton />
           </div>
         </div>
       </div>
