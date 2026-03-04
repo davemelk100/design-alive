@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { generateLicenseKey } from "@design-alive/editor";
 
@@ -62,6 +62,8 @@ interface SubscriptionState {
 export function useSubscription(): SubscriptionState {
   const { user, isLoaded } = useUser();
   const [devPro, setDevPro] = useState(() => localStorage.getItem(DEV_PRO_KEY) === "true");
+  // Stable fallback key for when devPro is active but user hasn't loaded yet
+  const fallbackKey = useMemo(() => generateLicenseKey(), []);
 
   const toggleDevPro = useCallback(() => {
     setDevPro(prev => {
@@ -83,13 +85,20 @@ export function useSubscription(): SubscriptionState {
   }, [toggleDevPro]);
 
   if (!isLoaded) {
-    return { isPro: false, licenseKey: undefined, isLoaded: false, user: null, toggleDevPro, isDevPro: devPro };
+    return {
+      isPro: devPro,
+      licenseKey: devPro ? fallbackKey : undefined,
+      isLoaded: false,
+      user: null,
+      toggleDevPro,
+      isDevPro: devPro,
+    };
   }
 
   const plan = user ? (user.publicMetadata as { plan?: string }).plan : undefined;
   const isPro = devPro || plan === "pro";
   const licenseKey = isPro
-    ? (user ? deriveKey(user.id) : generateLicenseKey())
+    ? (user ? deriveKey(user.id) : fallbackKey)
     : undefined;
 
   return { isPro, licenseKey, isLoaded, user: user ?? null, toggleDevPro, isDevPro: devPro };

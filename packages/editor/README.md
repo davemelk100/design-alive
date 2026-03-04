@@ -1,11 +1,11 @@
-# @design-alive/editor
+# @theemel/editor
 
 Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, and export CSS custom properties — all in real time.
 
 ## Install
 
 ```bash
-npm install @design-alive/editor
+npm install @theemel/editor
 ```
 
 ### Peer Dependencies
@@ -15,7 +15,7 @@ npm install @design-alive/editor
 | `react` | `^18.0.0 \|\| ^19.0.0` | Yes |
 | `react-dom` | `^18.0.0 \|\| ^19.0.0` | Yes |
 | `axe-core` | `>=4.0.0` | Optional — enables accessibility auditing |
-| `lucide-react` | `>=0.300.0` | Optional — enables icon previews |
+| `lucide-react` | `>=0.294.0` | Optional — enables icon previews |
 
 Install optional peers for full functionality:
 
@@ -26,8 +26,8 @@ npm install axe-core lucide-react
 ## Quick Start
 
 ```tsx
-import { DesignSystemEditor } from '@design-alive/editor';
-import '@design-alive/editor/style.css';
+import { DesignSystemEditor } from '@theemel/editor';
+import '@theemel/editor/style.css';
 
 function App() {
   return <DesignSystemEditor />;
@@ -40,11 +40,66 @@ The editor writes CSS custom properties (HSL values) to `:root`, so it works wit
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `licenseKey` | `string` | — | License key to unlock premium features. |
+| `upgradeUrl` | `string` | `"/pricing"` | URL shown in premium gate upgrade prompts. |
+| `signInUrl` | `string` | — | URL shown in premium gate sign-in prompts. |
 | `prEndpointUrl` | `string` | — | URL for PR creation endpoint. PR button hidden if omitted. |
 | `accessibilityAudit` | `boolean` | `true` | Enable axe-core color contrast auditing. |
 | `onChange` | `(colors: Record<string, string>) => void` | — | Callback on every color change with the full color map. |
 | `onExport` | `(css: string) => void` | — | Override built-in CSS modal. Receives the generated CSS string. |
 | `className` | `string` | — | Additional CSS class for the wrapper element. |
+| `showHeader` | `boolean` | `true` | Show the editor header with logo and navigation. |
+| `showNavLinks` | `boolean` | — | Show section navigation links in the header. |
+| `headerRight` | `React.ReactNode` | — | Custom content rendered on the right side of the header. |
+
+## Premium Features
+
+The following features require a valid license key:
+
+| Feature | Description |
+|---------|-------------|
+| Harmony schemes | Generate palettes using complementary, analogous, triadic, or split-complementary color relationships. |
+| Color locks | Lock up to 4 colors to preserve them during palette regeneration. |
+| PR integration | Create design system pull requests directly from the editor. |
+| Accessibility audit | Run axe-core WCAG contrast audits on your color system. |
+| Undo/redo | History management for color changes. |
+| Image palette extraction | Extract color palettes from uploaded images. |
+| Interaction states | Style hover, focus, and active component states. |
+
+### License Key Format
+
+Keys follow the format `THEEMEL-XXXX-XXXX-XXXX` with a checksum-validated third segment. Use `generateLicenseKey()` to create valid keys.
+
+### PremiumGate Component
+
+Wrap any feature in `PremiumGate` to gate it behind a license key:
+
+```tsx
+import { PremiumGate } from '@theemel/editor';
+
+<PremiumGate feature="harmony-schemes" upgradeUrl="/pricing" signInUrl="/sign-in">
+  <HarmonyControls />
+</PremiumGate>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `feature` | `string` | — | Name of the premium feature being gated. |
+| `variant` | `"section" \| "inline"` | `"section"` | `"section"` blocks content; `"inline"` shows a lock icon inline. |
+| `upgradeUrl` | `string` | `"/pricing"` | URL for the upgrade prompt. |
+| `signInUrl` | `string` | — | URL for the sign-in prompt. |
+
+### LicenseProvider
+
+If using `PremiumGate` or `useLicense` outside of `DesignSystemEditor`, wrap your tree in `LicenseProvider`:
+
+```tsx
+import { LicenseProvider } from '@theemel/editor';
+
+<LicenseProvider licenseKey="THEEMEL-XXXX-XXXX-XXXX">
+  <App />
+</LicenseProvider>
+```
 
 ## Usage Examples
 
@@ -58,6 +113,16 @@ The editor writes CSS custom properties (HSL values) to `:root`, so it works wit
 
 ```tsx
 <DesignSystemEditor prEndpointUrl="/api/create-design-pr" />
+```
+
+### With premium features
+
+```tsx
+<DesignSystemEditor
+  licenseKey="THEEMEL-XXXX-XXXX-XXXX"
+  upgradeUrl="/pricing"
+  signInUrl="/sign-in"
+/>
 ```
 
 ### Listen for changes
@@ -75,7 +140,6 @@ The editor writes CSS custom properties (HSL values) to `:root`, so it works wit
 ```tsx
 <DesignSystemEditor
   onExport={(css) => {
-    // Send to your own modal, clipboard, or API
     navigator.clipboard.writeText(css);
   }}
 />
@@ -83,24 +147,32 @@ The editor writes CSS custom properties (HSL values) to `:root`, so it works wit
 
 ## Exported Utilities
 
-The package also exports utility functions for working with the color system:
-
 ```tsx
 import {
-  hslStringToHex,    // "210 50% 40%" → "#336699"
-  hexToHslString,    // "#336699" → "210.0 50.0% 40.0%"
+  // Color utilities
+  hslStringToHex,    // "210 50% 40%" -> "#336699"
+  hexToHslString,    // "#336699" -> "210.0 50.0% 40.0%"
   contrastRatio,     // WCAG contrast ratio between two HSL strings
   fgForBg,           // Best foreground (black/white) for a background HSL
   EDITABLE_VARS,     // Array of { key, label } token definitions
   HARMONY_SCHEMES,   // ['Complementary', 'Analogous', 'Triadic', 'Split-Complementary']
   applyStoredThemeColors, // Restore persisted theme from localStorage
-} from '@design-alive/editor';
+
+  // License utilities
+  validateLicenseKey,   // Validate a THEEMEL-XXXX-XXXX-XXXX key
+  generateLicenseKey,   // Generate a valid license key
+
+  // Premium components & hooks
+  LicenseProvider,      // Context provider for license state
+  useLicense,           // Hook: { isValid, isPremium }
+  PremiumGate,          // Gate component for premium features
+} from '@theemel/editor';
 ```
 
 ## How It Works
 
 1. **Color picking** — Click any swatch to open the native color picker. Changing a key color (brand, secondary, accent, background) automatically derives related tokens.
-2. **Harmony schemes** — Generate palettes using complementary, analogous, triadic, or split-complementary color relationships.
+2. **Harmony schemes** *(Pro)* — Generate palettes using complementary, analogous, triadic, or split-complementary color relationships.
 3. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1). Failing pairs are auto-corrected by adjusting lightness.
 4. **Persistence** — Theme colors are saved to `localStorage` and restored on reload.
 5. **CSS export** — Generate a `:root` CSS block and Tailwind config snippet for your custom theme.
@@ -110,7 +182,7 @@ import {
 The editor is built with Vite in library mode and published as an ES module:
 
 ```
-@design-alive/editor
+@theemel/editor
 ├── dist/index.js      # ESM bundle (all components + utilities)
 ├── dist/index.d.ts    # TypeScript declarations
 └── dist/style.css     # Pre-compiled, scoped Tailwind styles
@@ -129,7 +201,7 @@ Import the main entry point for components and utilities, and `style.css` separa
 
 ## Tailwind Scoping
 
-The editor ships pre-compiled CSS via `@design-alive/editor/style.css`. Styles are scoped using Tailwind's `important: '.ds-editor'` so they don't conflict with your app's styles. The root element is automatically wrapped in `<div className="ds-editor">`.
+The editor ships pre-compiled CSS via `@theemel/editor/style.css`. Styles are scoped using Tailwind's `important: '.ds-editor'` so they don't conflict with your app's styles. The root element is automatically wrapped in `<div className="ds-editor">`.
 
 ## Development
 
@@ -147,7 +219,7 @@ npm run dev
 
 ## Publishing to npm
 
-The package is published as `@design-alive/editor` on npm. To publish a new version:
+The package is published as `@theemel/editor` on npm. To publish a new version:
 
 ```bash
 # 1. Build
@@ -164,7 +236,7 @@ npm version patch   # or minor / major
 npm publish --access public
 ```
 
-You must be logged in to npm (`npm login`) with publish access to the `@design-alive` scope.
+You must be logged in to npm (`npm login`) with publish access to the `@theemel` scope.
 
 ## License
 
