@@ -28,14 +28,14 @@ export default function About() {
           <section>
             <h2 className="text-xl font-medium mb-2">What is Themal?</h2>
             <p>
-              Themal is a visual design system editor that lets you pick a brand color and watch every token update in real time. Customize typography, buttons, cards, and alerts — all while every foreground/background pair is checked against WCAG AA contrast standards. Export CSS custom properties, design tokens, or open a PR directly to your GitHub repository.
+              Themal is a visual design system editor that lets you pick a brand color and watch every token update in real time. Customize typography, buttons, cards, and alerts - all while every foreground/background pair is checked against WCAG AA contrast standards. Export CSS custom properties, design tokens, or open a PR directly to your GitHub repository.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-medium mb-2">How It Works</h2>
             <p>
-              Start by choosing a primary brand color. Themal automatically derives a complete, harmonious palette — secondary, accent, background, foreground, and semantic colors — using perceptual color science. Every change is live. Every combination is accessibility-checked. When you're ready, export your theme as CSS custom properties, Tailwind config, or design tokens.
+              Start by choosing a primary brand color. Themal automatically derives a complete, harmonious palette - secondary, accent, background, foreground, and semantic colors - using perceptual color science. Every change is live. Every combination is accessibility-checked. When you're ready, export your theme as CSS custom properties, Tailwind config, or design tokens.
             </p>
           </section>
 
@@ -56,7 +56,7 @@ export default function About() {
             <h2 className="text-xl font-medium mb-2">Pro Features</h2>
             <ul className="list-disc pl-5 space-y-1.5 mt-2">
               <li>Color harmony schemes (complementary, analogous, triadic, split-complementary)</li>
-              <li>Color locks — pin colors during regeneration</li>
+              <li>Color locks - pin colors during regeneration</li>
               <li>Image-based palette extraction</li>
               <li>Export palette as SVG, PNG, or text</li>
               <li>GitHub PR integration</li>

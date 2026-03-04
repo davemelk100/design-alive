@@ -7,7 +7,7 @@ export interface DesignSystemEditorProps {
   accessibilityAudit?: boolean;
   /** Callback fired on every color change with the full color map */
   onChange?: (colors: Record<string, string>) => void;
-  /** Override built-in CSS export modal — receives the generated CSS string */
+  /** Override built-in CSS export modal - receives the generated CSS string */
   onExport?: (css: string) => void;
   /** Additional CSS class for the wrapper element */
   className?: string;

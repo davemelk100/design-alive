@@ -47,10 +47,10 @@ export default function PrivacyPolicy() {
             <h2 className="text-xl font-medium mb-2">3. Third-Party Services</h2>
             <p>We use the following third-party services that may collect data:</p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
-              <li><strong>Clerk</strong> — Authentication and user management. Clerk may set cookies to maintain your session. See <a href="https://clerk.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70">Clerk's Privacy Policy</a>.</li>
-              <li><strong>Stripe</strong> — Payment processing for subscriptions. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70">Stripe's Privacy Policy</a>.</li>
-              <li><strong>Google Fonts</strong> — Font loading for typography previews. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70">Google's Privacy Policy</a>.</li>
-              <li><strong>GitHub API</strong> — Used when submitting pull requests for design system changes. Only accessed when you explicitly initiate a PR.</li>
+              <li><strong>Clerk</strong> - Authentication and user management. Clerk may set cookies to maintain your session. See <a href="https://clerk.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70">Clerk's Privacy Policy</a>.</li>
+              <li><strong>Stripe</strong> - Payment processing for subscriptions. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70">Stripe's Privacy Policy</a>.</li>
+              <li><strong>Google Fonts</strong> - Font loading for typography previews. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70">Google's Privacy Policy</a>.</li>
+              <li><strong>GitHub API</strong> - Used when submitting pull requests for design system changes. Only accessed when you explicitly initiate a PR.</li>
             </ul>
           </section>
 

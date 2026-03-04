@@ -1,6 +1,6 @@
 {
   "name": "design-alive",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -25,6 +25,7 @@
     "lucide-react": "^0.294.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet-async": "^3.0.0",
     "react-router-dom": "^7.13.1",
     "stripe": "^20.4.0"
   },

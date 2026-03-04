@@ -22,7 +22,7 @@ export default function ReadmePage() {
         </div>
 
         <p className="text-[14px] leading-relaxed mb-8" style={{ color: "hsl(var(--foreground))" }}>
-          Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography and interaction states, and export CSS custom properties — all in real time.
+          Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography and interaction states, and export CSS custom properties - all in real time.
         </p>
 
         {/* Install */}
@@ -72,7 +72,7 @@ function App() {
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">prEndpointUrl</td>
                   <td className="px-4 py-2 font-mono text-xs">string</td>
-                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">-</td>
                   <td className="px-4 py-2">URL for PR creation endpoint. PR button hidden if omitted.</td>
                 </tr>
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
@@ -84,19 +84,19 @@ function App() {
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">onChange</td>
                   <td className="px-4 py-2 font-mono text-xs">{`(colors: Record<string, string>) => void`}</td>
-                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">-</td>
                   <td className="px-4 py-2">Callback on every color change with the full color map.</td>
                 </tr>
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">onExport</td>
                   <td className="px-4 py-2 font-mono text-xs">{`(css: string) => void`}</td>
-                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">-</td>
                   <td className="px-4 py-2">Override built-in CSS modal. Receives the generated CSS string.</td>
                 </tr>
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">className</td>
                   <td className="px-4 py-2 font-mono text-xs">string</td>
-                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">-</td>
                   <td className="px-4 py-2">Additional CSS class for the wrapper element.</td>
                 </tr>
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
@@ -108,13 +108,13 @@ function App() {
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">licenseKey</td>
                   <td className="px-4 py-2 font-mono text-xs">string</td>
-                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">-</td>
                   <td className="px-4 py-2">License key to unlock premium features.</td>
                 </tr>
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">signInUrl</td>
                   <td className="px-4 py-2 font-mono text-xs">string</td>
-                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">-</td>
                   <td className="px-4 py-2">URL for the sign-in prompt in premium gate modals.</td>
                 </tr>
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
@@ -126,13 +126,13 @@ function App() {
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">upgradeUrl</td>
                   <td className="px-4 py-2 font-mono text-xs">string</td>
-                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">-</td>
                   <td className="px-4 py-2">Custom URL for the "Upgrade" link shown on gated features.</td>
                 </tr>
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">headerRight</td>
                   <td className="px-4 py-2 font-mono text-xs">ReactNode</td>
-                  <td className="px-4 py-2">—</td>
+                  <td className="px-4 py-2">-</td>
                   <td className="px-4 py-2">Content rendered at the far right of the header (e.g. auth buttons).</td>
                 </tr>
               </tbody>
@@ -144,7 +144,7 @@ function App() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Usage Examples</h2>
 
-          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Basic — color picker only</h3>
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Basic - color picker only</h3>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor accessibilityAudit={false} />`}</code>
           </pre>
@@ -211,7 +211,7 @@ function App() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Mobile Friendly</h2>
           <p className="text-[14px] leading-relaxed" style={{ color: "hsl(var(--foreground))" }}>
-            Themal is fully responsive — you can tweak your design system and open a PR straight from your phone. Color pickers, typography controls, and the PR button all work on mobile viewports, so you can iterate on the go.
+            Themal is fully responsive - you can tweak your design system and open a PR straight from your phone. Color pickers, typography controls, and the PR button all work on mobile viewports, so you can iterate on the go.
           </p>
         </section>
 
@@ -219,7 +219,7 @@ function App() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Web Component</h2>
           <p className="text-[14px] leading-relaxed mb-3" style={{ color: "hsl(var(--foreground))" }}>
-            For WordPress, static sites, or any non-React platform, use the <code className="font-mono text-[14px]">&lt;theemel-editor&gt;</code> web component. A single script tag bundles everything — no build step required.
+            For WordPress, static sites, or any non-React platform, use the <code className="font-mono text-[14px]">&lt;theemel-editor&gt;</code> web component. A single script tag bundles everything - no build step required.
           </p>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<script src="https://cdn.example.com/theemel-editor.js"></script>

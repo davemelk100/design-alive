@@ -382,7 +382,7 @@ export function SiteFooterBranding() {
             <path d="M440.336 55.5225C439.174 54.1325 437.51 53.4375 435.346 53.4375C432.383 53.4375 430.367 54.5426 429.296 56.7529C428.681 58.029 428.316 60.057 428.202 62.8369H418.734C418.894 58.6214 419.657 55.2148 421.024 52.6172C423.622 47.6725 428.236 45.2002 434.867 45.2002C440.108 45.2002 444.278 46.6585 447.377 49.5752C450.476 52.4691 452.025 56.3086 452.025 61.0938C452.025 64.7624 450.932 68.0208 448.744 70.8691C447.309 72.7604 444.95 74.8682 441.669 77.1924L437.772 79.9609C435.334 81.6927 433.66 82.946 432.748 83.7207C431.859 84.4954 431.107 85.3955 430.492 86.4209H452.128V95H418.188C418.279 91.4453 419.042 88.1982 420.478 85.2588C421.868 81.9548 425.149 78.457 430.321 74.7656C434.81 71.5527 437.715 69.2513 439.037 67.8613C441.065 65.6966 442.079 63.3268 442.079 60.752C442.079 58.6556 441.498 56.9124 440.336 55.5225ZM478.461 62.8369C482.859 62.8369 486.459 64.3294 489.262 67.3145C492.088 70.2995 493.5 74.1162 493.5 78.7646C493.5 83.3903 492.122 87.4691 489.365 91.001C486.607 94.5329 482.324 96.2988 476.513 96.2988C470.27 96.2988 465.667 93.6898 462.704 88.4717C460.403 84.3929 459.252 79.1292 459.252 72.6807C459.252 68.8981 459.412 65.8219 459.731 63.4521C460.301 59.2367 461.406 55.7275 463.046 52.9248C464.459 50.5322 466.305 48.6068 468.583 47.1484C470.885 45.6901 473.631 44.9609 476.821 44.9609C481.424 44.9609 485.092 46.1458 487.827 48.5156C490.561 50.8626 492.099 53.9958 492.441 57.915H482.734C482.734 57.1175 482.426 56.2402 481.811 55.2832C480.763 53.7337 479.179 52.959 477.06 52.959C473.893 52.959 471.637 54.7363 470.292 58.291C469.563 60.2507 469.062 63.1445 468.788 66.9727C469.996 65.5371 471.398 64.4889 472.993 63.8281C474.588 63.1673 476.411 62.8369 478.461 62.8369ZM471.899 72.1338C469.985 73.6149 469.028 76.0075 469.028 79.3115C469.028 81.9775 469.746 84.1536 471.181 85.8398C472.617 87.526 474.44 88.3691 476.65 88.3691C478.815 88.3691 480.512 87.5602 481.743 85.9424C482.996 84.3018 483.622 82.1826 483.622 79.585C483.622 76.6911 482.916 74.4808 481.503 72.9541C480.091 71.4046 478.359 70.6299 476.308 70.6299C474.645 70.6299 473.175 71.1312 471.899 72.1338Z" fill="currentColor" />
           </svg>
         </a>
-        {/* Tablet: drop-up menu for legal + contact — positioned absolutely so it doesn't shift center content */}
+        {/* Tablet: drop-up menu for legal + contact - positioned absolutely so it doesn't shift center content */}
         <div className="absolute right-4 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2">
           <LegalDropUp />
         </div>
@@ -405,38 +405,6 @@ export default function SiteFooter() {
           <img src="/themal-just-t.svg" alt="Themal" className="h-5" width="17" height="20" />
         </Link>
         <nav className="hidden sm:flex items-center gap-4 sm:gap-6 mx-auto">
-          <div className="hidden lg:contents">
-            <Link
-              to="/how-it-works"
-              className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-              style={{ color: "hsl(var(--foreground))" }}
-            >
-              How
-            </Link>
-            <Link
-              to="/readme"
-              className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-              style={{ color: "hsl(var(--foreground))" }}
-            >
-              Dev
-            </Link>
-            <Link
-              to="/pricing"
-              className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-              style={{ color: "hsl(var(--foreground))" }}
-            >
-              Pricing
-            </Link>
-            <Link
-              to="/features"
-              className="text-[13px] font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"
-              style={{ color: "hsl(var(--foreground))" }}
-            >
-              Features
-            </Link>
-          </div>
-          <span className="w-px h-4" style={{ backgroundColor: "hsl(var(--border))" }} />
-          {/* Desktop: show all links inline */}
           <div className="hidden lg:contents">
             <Link
               to="/privacy"

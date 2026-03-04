@@ -24,7 +24,7 @@ const freeFeatures = [
 const proFeatures = [
   "Everything in Free, plus:",
   "Color harmony schemes (complementary, analogous, triadic, split-complementary)",
-  "Color locks — pin colors during regeneration",
+  "Color locks - pin colors during regeneration",
   "Image-based palette extraction",
   "Export palette as SVG, PNG, or HEX/RGB/RGBA text",
   "GitHub PR integration",

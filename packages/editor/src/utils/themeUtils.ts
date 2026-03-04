@@ -343,7 +343,7 @@ export const autoAdjustContrast = (
       const brandLocked = locked.has("--brand");
       const bgLocked = locked.has("--background");
       if (brandLocked && bgLocked) {
-        // Both locked — skip
+        // Both locked - skip
       } else {
         const bg = parseHsl(bgVal);
         const brand = parseHsl(brandVal);

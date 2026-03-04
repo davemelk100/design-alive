@@ -23,7 +23,7 @@ export default function Accessibility() {
         <div className="space-y-6 text-[14px] leading-relaxed" style={{ color: "hsl(var(--foreground))" }}>
           <section>
             <h2 className="text-xl font-medium mb-2">Our Commitment</h2>
-            <p>Themal is committed to ensuring digital accessibility for all users. We strive for <strong>WCAG 2.1 Level AA compliance</strong> across our entire application. Accessibility is not an afterthought — it is a core part of how we build and a core feature of what our product helps you achieve.</p>
+            <p>Themal is committed to ensuring digital accessibility for all users. We strive for <strong>WCAG 2.1 Level AA compliance</strong> across our entire application. Accessibility is not an afterthought - it is a core part of how we build and a core feature of what our product helps you achieve.</p>
           </section>
 
           <section>
@@ -41,9 +41,9 @@ export default function Accessibility() {
             <h2 className="text-xl font-medium mb-2">Standards We Follow</h2>
             <p>We strive to conform to:</p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
-              <li><strong>WCAG 2.1 Level AA</strong> — Our target compliance level for all user-facing pages and interactive components.</li>
-              <li><strong>WAI-ARIA 1.2</strong> — Proper use of ARIA roles, states, and properties for interactive elements like sliders, modals, and navigation.</li>
-              <li><strong>Section 508</strong> — Compliance with U.S. federal accessibility standards.</li>
+              <li><strong>WCAG 2.1 Level AA</strong> - Our target compliance level for all user-facing pages and interactive components.</li>
+              <li><strong>WAI-ARIA 1.2</strong> - Proper use of ARIA roles, states, and properties for interactive elements like sliders, modals, and navigation.</li>
+              <li><strong>Section 508</strong> - Compliance with U.S. federal accessibility standards.</li>
             </ul>
           </section>
 

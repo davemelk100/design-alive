@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://davemelkonian.com/sitemap.xml
+Sitemap: https://themalive.com/sitemap.xml
