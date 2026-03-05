@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Wipe down: transparent band sweeps top→bottom then back up */
+@keyframes heroWipeDown {
+  0%        { -webkit-mask-position: 0 -100%; mask-position: 0 -100%; }
+  50%       { -webkit-mask-position: 0 100%; mask-position: 0 100%; }
+  100%      { -webkit-mask-position: 0 -100%; mask-position: 0 -100%; }
+}
+/* Wipe up: transparent band sweeps bottom→top then back down */
+@keyframes heroWipeUp {
+  0%        { -webkit-mask-position: 0 200%; mask-position: 0 200%; }
+  50%       { -webkit-mask-position: 0 0%; mask-position: 0 0%; }
+  100%      { -webkit-mask-position: 0 200%; mask-position: 0 200%; }
+}
+
 @layer utilities {
   .text-brand-dynamic { color: hsl(var(--brand)); }
   .bg-brand-dynamic { background-color: hsl(var(--brand)); }

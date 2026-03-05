@@ -6,6 +6,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { applyStoredThemeColors } from "@design-alive/editor";
 import CookieConsent from "./components/CookieConsent";
 
+const LandingPage = lazy(() => import("./pages/LandingPage"));
 const PortfolioLanding = lazy(
   () => import("./pages/portfolio/PortfolioLanding"),
 );
@@ -66,7 +67,8 @@ export default function App() {
               }
             >
               <Routes>
-                <Route path="/" element={<PortfolioLanding />} />
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/editor" element={<PortfolioLanding />} />
                 <Route path="/how-it-works" element={<HowItWorks />} />
                 <Route path="/readme" element={<ReadmePage />} />
                 <Route path="/pricing" element={<Pricing />} />

@@ -7,7 +7,7 @@ export default function About() {
     <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <Link
-          to="/"
+          to="/editor"
           className="inline-flex items-center gap-1 text-[14px] font-medium mb-6 hover:opacity-70 transition-opacity"
           style={{ color: "hsl(var(--muted-foreground))" }}
         >

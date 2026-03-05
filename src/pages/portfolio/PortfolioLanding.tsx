@@ -7,7 +7,7 @@ export default function PortfolioLanding() {
   const { licenseKey } = useSubscription();
 
   return (
-    <>
+    <div className="max-w-6xl mx-auto w-full">
       <DesignSystemEditor
         prEndpointUrl="/.netlify/functions/create-design-pr"
         accessibilityAudit={true}
@@ -20,6 +20,6 @@ export default function PortfolioLanding() {
       />
       <SiteFooterBranding />
       <SiteFooter />
-    </>
+    </div>
   );
 }
