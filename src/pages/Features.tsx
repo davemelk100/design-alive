@@ -4,6 +4,17 @@ import ThemalLogo from "../components/ThemalLogo";
 
 const features = [
   {
+    version: "0.16",
+    items: [
+      "Early access mode - all Pro features unlocked for free, no account required",
+      "Independent dialog and toast styling - each section has its own preset buttons, shape controls, CSS/Tokens export, and reset",
+      "Toast style presets - Filled, Soft, Outline, Minimal with independent persistence",
+      "Button preview improvements - Types and Interactions sections now reflect dynamic border radius and interaction styles in real time",
+      "Mobile color picker scroll - page auto-scrolls to keep swatches visible when the native color picker opens on mobile",
+      "Consistent typography - paragraph and list text sizes now match across all pages",
+    ],
+  },
+  {
     version: "0.7",
     items: [
       "Shareable URLs - encode full theme state in URL hash, copy link to clipboard with one click",
@@ -170,6 +181,7 @@ export default function Features() {
               { title: "VS Code Extension", desc: "Edit and preview design tokens directly inside your code editor." },
               { title: "Webflow App", desc: "Apply Themal design systems to Webflow sites without writing code." },
               { title: "Drupal Module", desc: "Integrate design token management into Drupal's admin interface." },
+              { title: "AI-Assisted Design", desc: "Describe your brand or mood and let AI generate a complete design system with colors, typography, and component styles." },
               { title: "Mobile App", desc: "Edit and preview your design system on the go with a native iOS and Android app." },
             ].map(({ title, desc }) => (
               <div key={title} className="flex items-start gap-2">

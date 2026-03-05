@@ -37,7 +37,7 @@ That's it — the script bundles React, the editor, and all styles into one file
            'theemel-editor',
            get_template_directory_uri() . '/js/theemel-editor.js',
            [],
-           '0.15.1',
+           '0.16.0',
            true
        );
    });
@@ -56,7 +56,7 @@ Create `wp-content/plugins/theemel/theemel.php`:
 /**
  * Plugin Name: Themal Editor
  * Description: Embed the Themal design system editor via [theemel] shortcode.
- * Version: 0.15.1
+ * Version: 0.16.0
  */
 
 add_action('wp_enqueue_scripts', function() {
@@ -64,7 +64,7 @@ add_action('wp_enqueue_scripts', function() {
         'theemel-editor',
         plugins_url('theemel-editor.js', __FILE__),
         [],
-        '0.15.1',
+        '0.16.0',
         true
     );
 });

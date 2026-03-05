@@ -4,15 +4,17 @@ An interactive design system editor that lets you pick a brand color and watch e
 
 **Live:** [themalive.com](https://themalive.com)
 
+> **Early Access:** All features are currently free — no account required.
+
 ## How It Works
 
 All palette colors are HSL custom properties on `:root`. From one brand color, the system derives a full token set (secondary, accent, muted, destructive) using your choice of color harmony scheme: complementary, triadic, analogous, split-complementary, or tetradic.
 
 Every foreground/background pair is audited against WCAG AA (4.5:1) via axe-core. Failing pairs are auto-corrected by adjusting foreground lightness.
 
-Beyond colors, the editor includes typography controls (fonts, sizes, weights, spacing with five presets — plus custom Google Font loading), button interaction states (hover, active, focus), typography interaction states (link/heading hover effects), card customization, and alert styling — all with live preview. A sticky section nav (Colors, Cards, Alerts, Typography, Buttons) provides quick navigation. Premium features are gated behind a license key with a click-to-upgrade modal.
+Beyond colors, the editor includes typography controls (fonts, sizes, weights, spacing with five presets — plus custom Google Font loading), button interaction states (hover, active, focus), typography interaction states (link/heading hover effects), card customization, and independent dialog box and toast message styling — all with live preview. A sticky section nav (Colors, Cards, Alerts, Typography, Buttons) provides quick navigation.
 
-Your entire theme (colors, typography, interactions, card styles, alerts) persists in localStorage across reloads.
+Your entire theme (colors, typography, interactions, card styles, dialog styles, toast styles) persists in localStorage across reloads.
 
 ## npm Package
 
@@ -45,8 +47,8 @@ For WordPress, static sites, or any non-React platform, use the `<theemel-editor
 - axe-core (WCAG AA accessibility auditing)
 - Lucide React (icons)
 - Netlify Functions (GitHub PR creation, Stripe checkout)
-- Clerk (authentication)
-- Stripe (subscription billing)
+- Clerk (authentication — currently disabled during early access)
+- Stripe (subscription billing — currently disabled during early access)
 
 ## Testing
 

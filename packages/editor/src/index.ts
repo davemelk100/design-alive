@@ -14,6 +14,8 @@ export {
   applyStoredTypography,
   ALERT_STYLE_KEY,
   applyStoredAlertStyle,
+  TOAST_STYLE_KEY,
+  applyStoredToastStyle,
   INTERACTION_STYLE_KEY,
   applyStoredInteractionStyle,
   serializeThemeState,
@@ -27,7 +29,7 @@ export {
   removeCustomFont,
   initCustomFonts,
 } from "./utils/themeUtils";
-export type { HarmonyScheme, CardStyleState, TypographyState, AlertStyleState, InteractionStyleState, TypoInteractionStyleState, CustomFontEntry } from "./utils/themeUtils";
+export type { HarmonyScheme, CardStyleState, TypographyState, AlertStyleState, ToastStyleState, InteractionStyleState, TypoInteractionStyleState, CustomFontEntry } from "./utils/themeUtils";
 
 export { validateLicenseKey, generateLicenseKey } from "./utils/license";
 export type { PremiumFeature, LicenseValidation } from "./utils/license";

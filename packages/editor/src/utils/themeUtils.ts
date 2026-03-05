@@ -1160,6 +1160,49 @@ export function applyStoredAlertStyle(): AlertStyleState | null {
   return null;
 }
 
+export const TOAST_STYLE_KEY = "ds-toast-style";
+
+export type ToastStyleState = AlertStyleState;
+
+export const DEFAULT_TOAST_STYLE: ToastStyleState = {
+  preset: "filled",
+  borderRadius: 8,
+  borderWidth: 0,
+  iconStyle: "circle",
+  padding: 16,
+};
+
+export const TOAST_PRESETS: Record<string, ToastStyleState> = {
+  filled: { ...DEFAULT_TOAST_STYLE },
+  soft: { preset: "soft", borderRadius: 8, borderWidth: 0, iconStyle: "circle", padding: 16 },
+  outline: { preset: "outline", borderRadius: 8, borderWidth: 2, iconStyle: "plain", padding: 16 },
+  minimal: { preset: "minimal", borderRadius: 0, borderWidth: 0, iconStyle: "plain", padding: 16 },
+};
+
+export function applyToastStyle(state: ToastStyleState) {
+  const root = document.documentElement;
+  root.style.setProperty("--toast-radius", `${state.borderRadius}px`);
+  root.style.setProperty("--toast-border-width", `${state.borderWidth}px`);
+  root.style.setProperty("--toast-padding", `${state.padding}px`);
+  storage.set(TOAST_STYLE_KEY, state);
+}
+
+export function removeToastStyleProperties() {
+  const root = document.documentElement;
+  for (const prop of ["--toast-radius", "--toast-border-width", "--toast-padding"]) {
+    root.style.removeProperty(prop);
+  }
+}
+
+export function applyStoredToastStyle(): ToastStyleState | null {
+  const saved = storage.get<ToastStyleState>(TOAST_STYLE_KEY);
+  if (saved) {
+    applyToastStyle(saved);
+    return saved;
+  }
+  return null;
+}
+
 export const INTERACTION_STYLE_KEY = "ds-interaction-style";
 
 export interface InteractionStyleState {

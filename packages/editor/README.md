@@ -2,6 +2,8 @@
 
 Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography and interaction states, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile.
 
+> **Early Access:** All features are currently unlocked for free — no license key or account required.
+
 ## Install
 
 ```bash
@@ -182,13 +184,15 @@ import {
   // localStorage key constants
   CARD_STYLE_KEY,            // Key for card style storage
   TYPOGRAPHY_KEY,            // Key for typography storage
-  ALERT_STYLE_KEY,           // Key for alert style storage
+  ALERT_STYLE_KEY,           // Key for dialog alert style storage
+  TOAST_STYLE_KEY,           // Key for toast style storage
   INTERACTION_STYLE_KEY,     // Key for interaction style storage
 
   // Card, typography & interaction style utilities
   applyStoredCardStyle,           // Restore card style from localStorage
   applyStoredTypography,          // Restore typography from localStorage
-  applyStoredAlertStyle,          // Restore alert style from localStorage
+  applyStoredAlertStyle,          // Restore dialog alert style from localStorage
+  applyStoredToastStyle,          // Restore toast style from localStorage
   applyStoredInteractionStyle,    // Restore button interaction style from localStorage
 
   // Shareable URL utilities
@@ -228,6 +232,7 @@ import type {
   CardStyleState,
   TypographyState,
   AlertStyleState,
+  ToastStyleState,
   InteractionStyleState,
   TypoInteractionStyleState,
   CustomFontEntry,
@@ -246,7 +251,7 @@ import type {
 4. **Typography** — Choose heading and body fonts (including custom Google Fonts), adjust sizes, weights, line height, and letter spacing with live preview. Five built-in presets (System, Modern, Classic, Compact, Editorial).
 5. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
 6. **Typography interactions** *(Pro)* — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
-7. **Persistence** — All settings (colors, typography, card styles, alerts, interactions) are saved to `localStorage` and restored on reload.
+7. **Persistence** — All settings (colors, typography, card styles, dialog styles, toast styles, interactions) are saved to `localStorage` and restored on reload.
 8. **Per-section export** — Every section header includes a CSS | Tokens split button to export CSS custom properties with Tailwind config, or W3C Design Token JSON, for that section.
 9. **Shareable URLs** — Encode your full theme state in the URL hash and share it with anyone via a single link.
 10. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.

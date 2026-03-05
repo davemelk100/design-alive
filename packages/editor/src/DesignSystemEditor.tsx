@@ -47,6 +47,12 @@ import {
   applyAlertStyle,
   applyStoredAlertStyle,
   removeAlertStyleProperties,
+  TOAST_STYLE_KEY,
+  DEFAULT_TOAST_STYLE,
+  TOAST_PRESETS,
+  applyToastStyle,
+  applyStoredToastStyle,
+  removeToastStyleProperties,
   INTERACTION_STYLE_KEY,
   DEFAULT_INTERACTION_STYLE,
   INTERACTION_PRESETS,
@@ -432,9 +438,18 @@ function DesignSystemEditorInner({
     const saved = storage.get<AlertStyleState>(ALERT_STYLE_KEY);
     return saved || { ...DEFAULT_ALERT_STYLE };
   });
+  const [toastStyle, setToastStyle] = useState<AlertStyleState>(() => {
+    const saved = storage.get<AlertStyleState>(TOAST_STYLE_KEY);
+    return saved || { ...DEFAULT_TOAST_STYLE };
+  });
   const [alertCssVisible, setAlertCssVisible] = useState(false);
   const [alertCssCopied, setAlertCssCopied] = useState(false);
   const [alertExportFormat, setAlertExportFormat] = useState<"css" | "tokens">(
+    "css",
+  );
+  const [toastCssVisible, setToastCssVisible] = useState(false);
+  const [toastCssCopied, setToastCssCopied] = useState(false);
+  const [toastExportFormat, setToastExportFormat] = useState<"css" | "tokens">(
     "css",
   );
   const [showAlertResetModal, setShowAlertResetModal] = useState(false);
@@ -637,7 +652,36 @@ function DesignSystemEditorInner({
     storage.remove(ALERT_STYLE_KEY);
     removeAlertStyleProperties();
     setAlertStyle({ ...DEFAULT_ALERT_STYLE });
+    storage.remove(TOAST_STYLE_KEY);
+    removeToastStyleProperties();
+    setToastStyle({ ...DEFAULT_TOAST_STYLE });
   };
+
+  useEffect(() => {
+    applyToastStyle(toastStyle);
+  }, [toastStyle]);
+
+  useEffect(() => {
+    applyStoredToastStyle();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const updateToastStyle = useCallback((patch: Partial<AlertStyleState>) => {
+    setToastStyle((prev) => {
+      const next = { ...prev, ...patch };
+      if (patch.preset === undefined && prev.preset !== "custom") {
+        next.preset = "custom";
+      }
+      return next;
+    });
+  }, []);
+
+  const selectToastPreset = useCallback((presetKey: string) => {
+    const preset = TOAST_PRESETS[presetKey];
+    if (preset) {
+      setToastStyle({ ...preset });
+    }
+  }, []);
 
   useEffect(() => {
     applyInteractionStyle(interactionStyle);
@@ -1657,7 +1701,7 @@ function DesignSystemEditorInner({
             <option value="" disabled>
               Actions…
             </option>
-            <option value="reset-all">Reset All</option>
+            <option value="reset-all">Reset theme to default</option>
             <option value="refresh">Refresh Theme</option>
             <option value="default">Default Scheme</option>
             <option value="upload">Upload Image</option>
@@ -1689,7 +1733,7 @@ function DesignSystemEditorInner({
                 d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z"
               />
             </svg>
-            <span className="truncate">Reset All</span>
+            <span className="truncate">Reset theme to default</span>
           </button>
           <div className="flex items-center">
             <button
@@ -2333,7 +2377,7 @@ function DesignSystemEditorInner({
             </div>
           )}
 
-          {/* Global Reset All Confirmation Modal */}
+          {/* Global Reset theme to default Confirmation Modal */}
           {showGlobalResetModal && (
             <div
               className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -2384,7 +2428,7 @@ function DesignSystemEditorInner({
                       color: "hsl(var(--destructive-foreground))",
                     }}
                   >
-                    Reset All
+                    Reset theme to default
                   </button>
                 </div>
               </div>
@@ -2707,6 +2751,7 @@ function DesignSystemEditorInner({
             >
               {/* Color swatch buttons */}
               <div
+                id="color-swatch-grid"
                 className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-5 rounded-lg p-4 overflow-visible"
                 data-axe-exclude
                 style={{ backgroundColor: "rgba(0,0,0,0.04)" }}
@@ -2755,12 +2800,21 @@ function DesignSystemEditorInner({
                             color: btnTextColor,
                           }}
                           onClick={() => {
-                            document
-                              .getElementById("colors")
-                              ?.scrollIntoView({
-                                behavior: "smooth",
-                                block: "start",
-                              });
+                            const isMobile = window.innerWidth < 640;
+                            if (isMobile) {
+                              const grid = document.getElementById("color-swatch-grid");
+                              if (grid) {
+                                const top = grid.getBoundingClientRect().top + window.scrollY - 8;
+                                window.scrollTo({ top, behavior: "smooth" });
+                              }
+                            } else {
+                              document
+                                .getElementById("colors")
+                                ?.scrollIntoView({
+                                  behavior: "smooth",
+                                  block: "start",
+                                });
+                            }
                             const input = document.getElementById(
                               inputId,
                             ) as HTMLInputElement | null;
@@ -3417,11 +3471,26 @@ function DesignSystemEditorInner({
                     return (
                       <button
                         key={bg}
-                        className="px-4 py-2 text-[14px] font-light rounded-lg"
+                        className="px-4 py-2 text-[14px] font-light"
                         style={{
                           backgroundColor: `hsl(${bgHsl})`,
                           color: `hsl(${fgHsl})`,
-                          cursor: "default",
+                          borderRadius: `${cardStyle.borderRadius}px`,
+                          transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
+                        }}
+                        onMouseEnter={(e) => {
+                          (e.target as HTMLElement).style.opacity = String(interactionStyle.hoverOpacity);
+                          (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`;
+                        }}
+                        onMouseLeave={(e) => {
+                          (e.target as HTMLElement).style.opacity = "1";
+                          (e.target as HTMLElement).style.transform = "scale(1)";
+                        }}
+                        onMouseDown={(e) => {
+                          (e.target as HTMLElement).style.transform = `scale(${interactionStyle.activeScale})`;
+                        }}
+                        onMouseUp={(e) => {
+                          (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`;
                         }}
                       >
                         {label}
@@ -3429,22 +3498,52 @@ function DesignSystemEditorInner({
                     );
                   })}
                   <button
-                    className="px-4 py-2 text-[14px] font-light rounded-lg border"
+                    className="px-4 py-2 text-[14px] font-light border"
                     style={{
                       backgroundColor: "transparent",
                       color: "hsl(var(--foreground))",
                       borderColor: "hsl(var(--border))",
-                      cursor: "default",
+                      borderRadius: `${cardStyle.borderRadius}px`,
+                      transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.target as HTMLElement).style.opacity = String(interactionStyle.hoverOpacity);
+                      (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`;
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.target as HTMLElement).style.opacity = "1";
+                      (e.target as HTMLElement).style.transform = "scale(1)";
+                    }}
+                    onMouseDown={(e) => {
+                      (e.target as HTMLElement).style.transform = `scale(${interactionStyle.activeScale})`;
+                    }}
+                    onMouseUp={(e) => {
+                      (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`;
                     }}
                   >
                     Outline
                   </button>
                   <button
-                    className="px-4 py-2 text-[14px] font-light rounded-lg"
+                    className="px-4 py-2 text-[14px] font-light"
                     style={{
                       backgroundColor: "transparent",
                       color: "hsl(var(--foreground))",
-                      cursor: "default",
+                      borderRadius: `${cardStyle.borderRadius}px`,
+                      transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.target as HTMLElement).style.opacity = String(interactionStyle.hoverOpacity);
+                      (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`;
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.target as HTMLElement).style.opacity = "1";
+                      (e.target as HTMLElement).style.transform = "scale(1)";
+                    }}
+                    onMouseDown={(e) => {
+                      (e.target as HTMLElement).style.transform = `scale(${interactionStyle.activeScale})`;
+                    }}
+                    onMouseUp={(e) => {
+                      (e.target as HTMLElement).style.transform = `scale(${interactionStyle.hoverScale})`;
                     }}
                   >
                     Ghost
@@ -3938,10 +4037,11 @@ function DesignSystemEditorInner({
                         </p>
                         <div className="flex flex-wrap gap-3">
                           <button
-                            className="px-4 py-2 text-[14px] font-light rounded-lg"
+                            className="px-4 py-2 text-[14px] font-light"
                             style={{
                               backgroundColor: "hsl(var(--primary))",
                               color: "hsl(var(--primary-foreground))",
+                              borderRadius: `${cardStyle.borderRadius}px`,
                               transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
                             }}
                             onMouseEnter={(e) => {
@@ -3968,10 +4068,11 @@ function DesignSystemEditorInner({
                             Primary Button
                           </button>
                           <button
-                            className="px-4 py-2 text-[14px] font-light rounded-lg"
+                            className="px-4 py-2 text-[14px] font-light"
                             style={{
                               backgroundColor: "hsl(var(--secondary))",
                               color: "hsl(var(--secondary-foreground))",
+                              borderRadius: `${cardStyle.borderRadius}px`,
                               transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
                             }}
                             onMouseEnter={(e) => {
@@ -3998,11 +4099,12 @@ function DesignSystemEditorInner({
                             Secondary
                           </button>
                           <button
-                            className="px-4 py-2 text-[14px] font-light rounded-lg border"
+                            className="px-4 py-2 text-[14px] font-light border"
                             style={{
                               backgroundColor: "transparent",
                               color: "hsl(var(--foreground))",
                               borderColor: "hsl(var(--border))",
+                              borderRadius: `${cardStyle.borderRadius}px`,
                               transition: `opacity ${interactionStyle.transitionDuration}ms ease, transform ${interactionStyle.transitionDuration}ms ease`,
                             }}
                             onMouseEnter={(e) => {
@@ -4920,342 +5022,58 @@ function DesignSystemEditorInner({
                   </svg>
                 </a>
               </h2>
-              <div className="ml-auto flex items-center">
-                {/* CSS / Tokens / Reset */}
-                {/* Mobile: dropdown */}
-                <select
-                  aria-label="Alerts actions"
-                  className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
-                  style={{
-                    backgroundColor: "hsl(var(--background))",
-                    color: "hsl(var(--foreground))",
-                    borderColor: "hsl(var(--border))",
-                  }}
-                  value=""
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    if (v === "css") {
-                      setAlertExportFormat("css");
-                      setAlertCssVisible(true);
-                    } else if (v === "tokens") {
-                      setAlertExportFormat("tokens");
-                      setAlertCssVisible(true);
-                    } else if (v === "reset") setShowAlertResetModal(true);
-                    e.target.value = "";
-                  }}
-                >
-                  <option value="" disabled>
-                    Actions…
-                  </option>
-                  <option value="css">CSS</option>
-                  <option value="tokens">Tokens</option>
-                  <option value="reset">Reset</option>
-                </select>
-                {/* Desktop: buttons */}
-                <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
-                  <div
-                    className="flex items-center rounded-lg overflow-hidden border"
-                    style={{ borderColor: "hsl(var(--border))" }}
-                  >
-                    <button
-                      onClick={() => {
-                        if (alertCssVisible && alertExportFormat === "css") {
-                          setAlertCssVisible(false);
-                          return;
-                        }
-                        setAlertExportFormat("css");
-                        setAlertCssVisible(true);
-                      }}
-                      className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                      style={{
-                        backgroundColor:
-                          alertCssVisible && alertExportFormat === "css"
-                            ? "hsl(var(--brand))"
-                            : "transparent",
-                        color:
-                          alertCssVisible && alertExportFormat === "css"
-                            ? colors["--brand"]
-                              ? `hsl(${fgForBg(colors["--brand"])})`
-                              : "#fff"
-                            : "hsl(var(--muted-foreground))",
-                      }}
-                    >
-                      <svg
-                        className="w-4 h-4 flex-shrink-0"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                        />
-                      </svg>
-                      <span className="truncate">CSS</span>
-                    </button>
-                    <span
-                      className="w-px h-5"
-                      style={{ backgroundColor: "hsl(var(--border))" }}
-                    />
-                    <button
-                      onClick={() => {
-                        if (alertCssVisible && alertExportFormat === "tokens") {
-                          setAlertCssVisible(false);
-                          return;
-                        }
-                        setAlertExportFormat("tokens");
-                        setAlertCssVisible(true);
-                      }}
-                      className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                      style={{
-                        backgroundColor:
-                          alertCssVisible && alertExportFormat === "tokens"
-                            ? "hsl(var(--brand))"
-                            : "transparent",
-                        color:
-                          alertCssVisible && alertExportFormat === "tokens"
-                            ? colors["--brand"]
-                              ? `hsl(${fgForBg(colors["--brand"])})`
-                              : "#fff"
-                            : "hsl(var(--muted-foreground))",
-                      }}
-                    >
-                      <svg
-                        className="w-4 h-4 flex-shrink-0"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16"
-                        />
-                      </svg>
-                      <span className="truncate">Tokens</span>
-                    </button>
-                  </div>
-                  <button
-                    onClick={() => setShowAlertResetModal(true)}
-                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    <svg
-                      className="w-4 h-4 flex-shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z"
-                      />
-                    </svg>
-                    <span className="truncate">Reset</span>
-                  </button>
-                </div>
-              </div>
             </div>
-
-            {/* Preset buttons (shared) */}
-            <div
-              className="space-y-3 rounded-lg p-4"
-              style={{ border: "1px solid hsl(var(--border))" }}
-            >
-              <div
-                className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3"
-                style={{ backgroundColor: "rgba(0,0,0,0.04)" }}
-              >
-                {(["filled", "soft", "outline", "minimal"] as const).map(
-                  (key) => {
-                    const labels: Record<string, string> = {
-                      filled: "Filled",
-                      soft: "Soft",
-                      outline: "Outline",
-                      minimal: "Minimal",
-                    };
-                    const icons: Record<string, React.ReactNode> = {
-                      filled: (
-                        <svg
-                          className="w-4 h-4 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      ),
-                      soft: (
-                        <svg
-                          className="w-4 h-4 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      ),
-                      outline: (
-                        <svg
-                          className="w-4 h-4 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                        >
-                          <rect x="3" y="3" width="18" height="18" rx="3" />
-                        </svg>
-                      ),
-                      minimal: (
-                        <svg
-                          className="w-4 h-4 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                        >
-                          <path strokeLinecap="round" d="M3 4v16" />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M8 12h13"
-                          />
-                        </svg>
-                      ),
-                    };
-                    const active = alertStyle.preset === key;
-                    return (
-                      <button
-                        key={key}
-                        onClick={() => selectAlertPreset(key)}
-                        className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-                        style={
-                          active
-                            ? {
-                                backgroundColor: "hsl(var(--brand))",
-                                color: colors["--brand"]
-                                  ? `hsl(${fgForBg(colors["--brand"])})`
-                                  : "#fff",
-                                boxShadow:
-                                  "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
-                              }
-                            : {
-                                backgroundColor: "#e5e7eb",
-                                color: "#111",
-                                boxShadow:
-                                  "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
-                              }
-                        }
-                      >
-                        {icons[key]}
-                        {labels[key]}
-                      </button>
-                    );
-                  },
-                )}
-              </div>
-
-              {/* Alert CSS/Tokens output */}
-              {alertCssVisible &&
-                (() => {
-                  const alertCss = `:root {\n  --alert-radius: ${alertStyle.borderRadius}px;\n  --alert-border-width: ${alertStyle.borderWidth}px;\n  --alert-padding: ${alertStyle.padding}px;\n}`;
-                  const alertTokens = JSON.stringify(
-                    generateSectionDesignTokens(
-                      "alerts",
-                      cardStyle,
-                      typographyState,
-                      alertStyle,
-                      interactionStyle,
-                      typoInteractionStyle,
-                    ),
-                    null,
-                    2,
-                  );
-                  const output =
-                    alertExportFormat === "tokens" ? alertTokens : alertCss;
-                  return (
-                    <div
-                      className="rounded-lg border"
-                      style={{ borderColor: "hsl(var(--border))" }}
-                    >
-                      <div
-                        className="flex items-center justify-between px-3 py-1.5 border-b"
-                        style={{ borderColor: "hsl(var(--border))" }}
-                      >
-                        <span
-                          className="text-[14px] font-light uppercase tracking-wider"
-                          style={{ color: "hsl(var(--card-foreground))" }}
-                        >
-                          {alertExportFormat === "tokens"
-                            ? "Alert Tokens"
-                            : "Alert CSS"}
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <button
-                            onClick={() => {
-                              navigator.clipboard.writeText(output);
-                              setAlertCssCopied(true);
-                              setTimeout(() => setAlertCssCopied(false), 2000);
-                            }}
-                            className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                            style={{
-                              backgroundColor: "hsl(var(--muted))",
-                              color: colors["--muted"]
-                                ? `hsl(${fgForBg(colors["--muted"])})`
-                                : "hsl(var(--muted-foreground))",
-                            }}
-                          >
-                            {alertCssCopied ? "Copied!" : "Copy"}
-                          </button>
-                          <button
-                            onClick={() => setAlertCssVisible(false)}
-                            className="px-2 py-0.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                            style={{
-                              backgroundColor: "hsl(var(--muted))",
-                              color: colors["--muted"]
-                                ? `hsl(${fgForBg(colors["--muted"])})`
-                                : "hsl(var(--muted-foreground))",
-                            }}
-                          >
-                            Close
-                          </button>
-                        </div>
-                      </div>
-                      <pre
-                        className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono"
-                        style={{ color: "hsl(var(--card-foreground))" }}
-                      >
-                        <code>{output}</code>
-                      </pre>
-                    </div>
-                  );
-                })()}
-
               {/* Two-column: Dialog Boxes + Toast Messages */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Dialog Boxes (left) */}
-                <div className="space-y-3">
+                <div
+                  className="space-y-3 rounded-lg p-4"
+                  style={{ border: "1px solid hsl(var(--border))" }}
+                >
                   <h3
                     className="text-[16px] font-normal uppercase tracking-wider"
                     style={{ color: "hsl(var(--foreground))" }}
                   >
                     Dialog Boxes
                   </h3>
+                  {/* Dialog Preset Buttons */}
+                  <div className="grid grid-cols-4 gap-2">
+                    {Object.keys(ALERT_PRESETS).map((key) => {
+                      const labels: Record<string, string> = {
+                        filled: "Filled",
+                        soft: "Soft",
+                        outline: "Outline",
+                        minimal: "Minimal",
+                      };
+                      const active = alertStyle.preset === key;
+                      return (
+                        <button
+                          key={key}
+                          onClick={() => selectAlertPreset(key)}
+                          className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                          style={
+                            active
+                              ? {
+                                  backgroundColor: "hsl(var(--brand))",
+                                  color: colors["--brand"]
+                                    ? `hsl(${fgForBg(colors["--brand"])})`
+                                    : "#fff",
+                                  boxShadow:
+                                    "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
+                                }
+                              : {
+                                  backgroundColor: "#e5e7eb",
+                                  color: "#111",
+                                  boxShadow:
+                                    "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
+                                }
+                          }
+                        >
+                          {labels[key]}
+                        </button>
+                      );
+                    })}
+                  </div>
                   {/* Controls */}
                   <div className="space-y-1.5">
                     <p
@@ -5449,6 +5267,145 @@ function DesignSystemEditorInner({
                       );
                     })()}
                   </div>
+                  {/* Dialog action buttons */}
+                  <div className="flex flex-wrap items-center gap-1 pt-2">
+                    <div
+                      className="flex items-center rounded-lg overflow-hidden border"
+                      style={{ borderColor: "hsl(var(--border))" }}
+                    >
+                      <button
+                        onClick={() => {
+                          if (alertCssVisible && alertExportFormat === "css") {
+                            setAlertCssVisible(false);
+                            return;
+                          }
+                          setAlertExportFormat("css");
+                          setAlertCssVisible(true);
+                        }}
+                        className="h-8 px-2 text-[13px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                        style={{
+                          backgroundColor:
+                            alertCssVisible && alertExportFormat === "css"
+                              ? "hsl(var(--brand))"
+                              : "transparent",
+                          color:
+                            alertCssVisible && alertExportFormat === "css"
+                              ? colors["--brand"]
+                                ? `hsl(${fgForBg(colors["--brand"])})`
+                                : "#fff"
+                              : "hsl(var(--muted-foreground))",
+                        }}
+                      >
+                        CSS
+                      </button>
+                      <span
+                        className="w-px h-4"
+                        style={{ backgroundColor: "hsl(var(--border))" }}
+                      />
+                      <button
+                        onClick={() => {
+                          if (alertCssVisible && alertExportFormat === "tokens") {
+                            setAlertCssVisible(false);
+                            return;
+                          }
+                          setAlertExportFormat("tokens");
+                          setAlertCssVisible(true);
+                        }}
+                        className="h-8 px-2 text-[13px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                        style={{
+                          backgroundColor:
+                            alertCssVisible && alertExportFormat === "tokens"
+                              ? "hsl(var(--brand))"
+                              : "transparent",
+                          color:
+                            alertCssVisible && alertExportFormat === "tokens"
+                              ? colors["--brand"]
+                                ? `hsl(${fgForBg(colors["--brand"])})`
+                                : "#fff"
+                              : "hsl(var(--muted-foreground))",
+                        }}
+                      >
+                        Tokens
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => {
+                        storage.remove(ALERT_STYLE_KEY);
+                        removeAlertStyleProperties();
+                        setAlertStyle({ ...DEFAULT_ALERT_STYLE });
+                      }}
+                      className="h-8 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                      style={{ color: "hsl(var(--muted-foreground))" }}
+                    >
+                      Reset
+                    </button>
+                  </div>
+                  {/* Dialog CSS/Tokens output */}
+                  {alertCssVisible &&
+                    (() => {
+                      const dialogCss = `:root {\n  --alert-radius: ${alertStyle.borderRadius}px;\n  --alert-border-width: ${alertStyle.borderWidth}px;\n  --alert-padding: ${alertStyle.padding}px;\n}`;
+                      const dialogTokens = JSON.stringify(
+                        { dialog: { borderRadius: alertStyle.borderRadius, borderWidth: alertStyle.borderWidth, padding: alertStyle.padding, preset: alertStyle.preset } },
+                        null,
+                        2,
+                      );
+                      const output =
+                        alertExportFormat === "tokens" ? dialogTokens : dialogCss;
+                      return (
+                        <div
+                          className="rounded-lg border"
+                          style={{ borderColor: "hsl(var(--border))" }}
+                        >
+                          <div
+                            className="flex items-center justify-between px-3 py-1.5 border-b"
+                            style={{ borderColor: "hsl(var(--border))" }}
+                          >
+                            <span
+                              className="text-[13px] font-light uppercase tracking-wider"
+                              style={{ color: "hsl(var(--card-foreground))" }}
+                            >
+                              {alertExportFormat === "tokens" ? "Dialog Tokens" : "Dialog CSS"}
+                            </span>
+                            <div className="flex items-center gap-1">
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText(output);
+                                  setAlertCssCopied(true);
+                                  setTimeout(() => setAlertCssCopied(false), 2000);
+                                }}
+                                className="px-2 py-0.5 text-[13px] font-light rounded-lg transition-colors hover:opacity-80"
+                                style={{
+                                  backgroundColor: "hsl(var(--muted))",
+                                  color: colors["--muted"]
+                                    ? `hsl(${fgForBg(colors["--muted"])})`
+                                    : "hsl(var(--muted-foreground))",
+                                }}
+                              >
+                                {alertCssCopied ? "Copied!" : "Copy"}
+                              </button>
+                              <button
+                                onClick={() => setAlertCssVisible(false)}
+                                className="px-2 py-0.5 text-[13px] font-light rounded-lg transition-colors hover:opacity-80"
+                                style={{
+                                  backgroundColor: "hsl(var(--muted))",
+                                  color: colors["--muted"]
+                                    ? `hsl(${fgForBg(colors["--muted"])})`
+                                    : "hsl(var(--muted-foreground))",
+                                }}
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                          <pre
+                            className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono"
+                            style={{ color: "hsl(var(--card-foreground))" }}
+                          >
+                            <code>{output}</code>
+                          </pre>
+                        </div>
+                      );
+                    })()}
                 </div>
 
                 {/* Toast Messages (right, Pro) */}
@@ -5458,13 +5415,54 @@ function DesignSystemEditorInner({
                   upgradeUrl={upgradeUrl}
                   signInUrl={signInUrl}
                 >
-                  <div className="space-y-3">
+                  <div
+                    className="space-y-3 rounded-lg p-4"
+                    style={{ border: "1px solid hsl(var(--border))" }}
+                  >
                     <h3
                       className="text-[16px] font-normal uppercase tracking-wider"
                       style={{ color: "hsl(var(--foreground))" }}
                     >
                       Toast Messages
                     </h3>
+                    {/* Toast Preset Buttons */}
+                    <div className="grid grid-cols-4 gap-2">
+                      {Object.keys(TOAST_PRESETS).map((key) => {
+                        const labels: Record<string, string> = {
+                          filled: "Filled",
+                          soft: "Soft",
+                          outline: "Outline",
+                          minimal: "Minimal",
+                        };
+                        const active = toastStyle.preset === key;
+                        return (
+                          <button
+                            key={key}
+                            onClick={() => selectToastPreset(key)}
+                            className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                            style={
+                              active
+                                ? {
+                                    backgroundColor: "hsl(var(--brand))",
+                                    color: colors["--brand"]
+                                      ? `hsl(${fgForBg(colors["--brand"])})`
+                                      : "#fff",
+                                    boxShadow:
+                                      "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
+                                  }
+                                : {
+                                    backgroundColor: "#e5e7eb",
+                                    color: "#111",
+                                    boxShadow:
+                                      "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
+                                  }
+                            }
+                          >
+                            {labels[key]}
+                          </button>
+                        );
+                      })}
+                    </div>
                     {/* Toast Controls */}
                     <div className="space-y-1.5">
                       <p
@@ -5477,14 +5475,14 @@ function DesignSystemEditorInner({
                         className="flex items-center justify-between gap-2 text-[14px] font-light"
                         style={{ color: "hsl(var(--foreground))" }}
                       >
-                        <span>Border Radius: {alertStyle.borderRadius}px</span>
+                        <span>Border Radius: {toastStyle.borderRadius}px</span>
                         <input
                           type="range"
                           min={0}
                           max={24}
-                          value={alertStyle.borderRadius}
+                          value={toastStyle.borderRadius}
                           onChange={(e) =>
-                            updateAlertStyle({
+                            updateToastStyle({
                               borderRadius: Number(e.target.value),
                             })
                           }
@@ -5496,15 +5494,15 @@ function DesignSystemEditorInner({
                         style={{ color: "hsl(var(--foreground))" }}
                       >
                         <span>
-                          Padding: {Math.max(alertStyle.padding - 4, 8)}px
+                          Padding: {Math.max(toastStyle.padding - 4, 8)}px
                         </span>
                         <input
                           type="range"
                           min={8}
                           max={32}
-                          value={alertStyle.padding}
+                          value={toastStyle.padding}
                           onChange={(e) =>
-                            updateAlertStyle({
+                            updateToastStyle({
                               padding: Number(e.target.value),
                             })
                           }
@@ -5573,7 +5571,7 @@ function DesignSystemEditorInner({
                             const colorHsl = colors[colorVar] || "220 70% 50%";
                             const colorRef = `var(${colorVar})`;
                             const fgRef = fgVar ? `var(${fgVar})` : null;
-                            const preset = alertStyle.preset;
+                            const preset = toastStyle.preset;
 
                             let bgStyle: string;
                             let textColor: string;
@@ -5598,7 +5596,7 @@ function DesignSystemEditorInner({
                             } else if (preset === "outline") {
                               bgStyle = "hsl(var(--card))";
                               textColor = `hsl(${colorRef})`;
-                              borderStyle = `${alertStyle.borderWidth}px solid hsl(${colorRef})`;
+                              borderStyle = `${toastStyle.borderWidth}px solid hsl(${colorRef})`;
                             } else {
                               bgStyle = "hsl(var(--card))";
                               textColor = `hsl(${colorRef})`;
@@ -5612,9 +5610,9 @@ function DesignSystemEditorInner({
                                 style={{
                                   backgroundColor: bgStyle,
                                   color: textColor,
-                                  borderRadius: `${alertStyle.borderRadius}px`,
+                                  borderRadius: `${toastStyle.borderRadius}px`,
                                   border: borderStyle,
-                                  padding: `${Math.max(alertStyle.padding - 4, 8)}px ${alertStyle.padding}px`,
+                                  padding: `${Math.max(toastStyle.padding - 4, 8)}px ${toastStyle.padding}px`,
                                 }}
                               >
                                 <svg
@@ -5658,12 +5656,149 @@ function DesignSystemEditorInner({
                         );
                       })()}
                     </div>
+                    {/* Toast action buttons */}
+                    <div className="flex flex-wrap items-center gap-1 pt-2">
+                      <div
+                        className="flex items-center rounded-lg overflow-hidden border"
+                        style={{ borderColor: "hsl(var(--border))" }}
+                      >
+                        <button
+                          onClick={() => {
+                            if (toastCssVisible && toastExportFormat === "css") {
+                              setToastCssVisible(false);
+                              return;
+                            }
+                            setToastExportFormat("css");
+                            setToastCssVisible(true);
+                          }}
+                          className="h-8 px-2 text-[13px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                          style={{
+                            backgroundColor:
+                              toastCssVisible && toastExportFormat === "css"
+                                ? "hsl(var(--brand))"
+                                : "transparent",
+                            color:
+                              toastCssVisible && toastExportFormat === "css"
+                                ? colors["--brand"]
+                                  ? `hsl(${fgForBg(colors["--brand"])})`
+                                  : "#fff"
+                                : "hsl(var(--muted-foreground))",
+                          }}
+                        >
+                          CSS
+                        </button>
+                        <span
+                          className="w-px h-4"
+                          style={{ backgroundColor: "hsl(var(--border))" }}
+                        />
+                        <button
+                          onClick={() => {
+                            if (toastCssVisible && toastExportFormat === "tokens") {
+                              setToastCssVisible(false);
+                              return;
+                            }
+                            setToastExportFormat("tokens");
+                            setToastCssVisible(true);
+                          }}
+                          className="h-8 px-2 text-[13px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                          style={{
+                            backgroundColor:
+                              toastCssVisible && toastExportFormat === "tokens"
+                                ? "hsl(var(--brand))"
+                                : "transparent",
+                            color:
+                              toastCssVisible && toastExportFormat === "tokens"
+                                ? colors["--brand"]
+                                  ? `hsl(${fgForBg(colors["--brand"])})`
+                                  : "#fff"
+                                : "hsl(var(--muted-foreground))",
+                          }}
+                        >
+                          Tokens
+                        </button>
+                      </div>
+                      <button
+                        onClick={() => {
+                          storage.remove(TOAST_STYLE_KEY);
+                          removeToastStyleProperties();
+                          setToastStyle({ ...DEFAULT_TOAST_STYLE });
+                        }}
+                        className="h-8 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                        style={{ color: "hsl(var(--muted-foreground))" }}
+                      >
+                        Reset
+                      </button>
+                    </div>
+                    {/* Toast CSS/Tokens output */}
+                    {toastCssVisible &&
+                      (() => {
+                        const tCss = `:root {\n  --toast-radius: ${toastStyle.borderRadius}px;\n  --toast-border-width: ${toastStyle.borderWidth}px;\n  --toast-padding: ${toastStyle.padding}px;\n}`;
+                        const tTokens = JSON.stringify(
+                          { toast: { borderRadius: toastStyle.borderRadius, borderWidth: toastStyle.borderWidth, padding: toastStyle.padding, preset: toastStyle.preset } },
+                          null,
+                          2,
+                        );
+                        const output =
+                          toastExportFormat === "tokens" ? tTokens : tCss;
+                        return (
+                          <div
+                            className="rounded-lg border"
+                            style={{ borderColor: "hsl(var(--border))" }}
+                          >
+                            <div
+                              className="flex items-center justify-between px-3 py-1.5 border-b"
+                              style={{ borderColor: "hsl(var(--border))" }}
+                            >
+                              <span
+                                className="text-[13px] font-light uppercase tracking-wider"
+                                style={{ color: "hsl(var(--card-foreground))" }}
+                              >
+                                {toastExportFormat === "tokens" ? "Toast Tokens" : "Toast CSS"}
+                              </span>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(output);
+                                    setToastCssCopied(true);
+                                    setTimeout(() => setToastCssCopied(false), 2000);
+                                  }}
+                                  className="px-2 py-0.5 text-[13px] font-light rounded-lg transition-colors hover:opacity-80"
+                                  style={{
+                                    backgroundColor: "hsl(var(--muted))",
+                                    color: colors["--muted"]
+                                      ? `hsl(${fgForBg(colors["--muted"])})`
+                                      : "hsl(var(--muted-foreground))",
+                                  }}
+                                >
+                                  {toastCssCopied ? "Copied!" : "Copy"}
+                                </button>
+                                <button
+                                  onClick={() => setToastCssVisible(false)}
+                                  className="px-2 py-0.5 text-[13px] font-light rounded-lg transition-colors hover:opacity-80"
+                                  style={{
+                                    backgroundColor: "hsl(var(--muted))",
+                                    color: colors["--muted"]
+                                      ? `hsl(${fgForBg(colors["--muted"])})`
+                                      : "hsl(var(--muted-foreground))",
+                                  }}
+                                >
+                                  Close
+                                </button>
+                              </div>
+                            </div>
+                            <pre
+                              className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono"
+                              style={{ color: "hsl(var(--card-foreground))" }}
+                            >
+                              <code>{output}</code>
+                            </pre>
+                          </div>
+                        );
+                      })()}
                   </div>
                 </PremiumGate>
               </div>
               {/* end two-column grid */}
-            </div>
-            {/* end Alerts border wrapper */}
 
             {/* Alert Reset Confirmation Modal */}
             {showAlertResetModal && (

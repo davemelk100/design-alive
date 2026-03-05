@@ -1,7 +1,4 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth, SignInButton } from "@clerk/clerk-react";
-import { useSubscription } from "../hooks/useSubscription";
 import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 import ThemalLogo from "../components/ThemalLogo";
 
@@ -11,7 +8,7 @@ const check = (
   </svg>
 );
 
-const freeFeatures = [
+const allFeatures = [
   "Color picking & live derivation",
   "Random palette generation (Refresh)",
   "Card style, typography, alerts customization",
@@ -19,8 +16,17 @@ const freeFeatures = [
   "Shareable theme URLs",
   "Reset to defaults",
   "Dark mode support",
+  "Color harmony schemes (complementary, analogous, triadic, split-complementary)",
+  "Color locks - pin colors during regeneration",
+  "Image-based palette extraction",
+  "Export palette as SVG, PNG, or HEX/RGB/RGBA text",
+  "GitHub PR integration",
+  "WCAG AA accessibility audit with auto-fix",
+  "Undo support for theme refreshes",
+  "Hover & active state customization",
 ];
 
+/* --- Pro / Test tiers commented out for now ---
 const proFeatures = [
   "Everything in Free, plus:",
   "Color harmony schemes (complementary, analogous, triadic, split-complementary)",
@@ -32,162 +38,7 @@ const proFeatures = [
   "Undo support for theme refreshes",
   "Hover & active state customization",
 ];
-
-function UpgradeButton() {
-  const { isSignedIn, getToken } = useAuth();
-  const { isPro } = useSubscription();
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly" | "test">("monthly");
-  const [loading, setLoading] = useState(false);
-
-  if (!isSignedIn) {
-    return (
-      <SignInButton mode="modal">
-        <button
-          className="mt-6 w-full inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-[14px] font-medium transition-opacity hover:opacity-80"
-          style={{
-            backgroundColor: "hsl(var(--primary))",
-            color: "hsl(var(--primary-foreground))",
-          }}
-        >
-          Sign in to upgrade
-        </button>
-      </SignInButton>
-    );
-  }
-
-  if (isPro) {
-    return (
-      <div
-        className="mt-6 w-full inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-[14px] font-medium"
-        style={{
-          backgroundColor: "hsl(var(--muted))",
-          color: "hsl(var(--muted-foreground))",
-        }}
-      >
-        Current plan
-      </div>
-    );
-  }
-
-  async function handleUpgrade() {
-    setLoading(true);
-    try {
-      const token = await getToken();
-      const res = await fetch("/.netlify/functions/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ billingCycle }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (err) {
-      console.error("Checkout error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  return (
-    <div className="mt-6 space-y-3">
-      <div className="flex rounded-lg overflow-hidden" style={{ border: "1px solid hsl(var(--border))" }}>
-        <button
-          onClick={() => setBillingCycle("monthly")}
-          className="flex-1 px-3 py-2 text-[13px] font-medium transition-colors"
-          style={{
-            backgroundColor: billingCycle === "monthly" ? "hsl(var(--primary))" : "transparent",
-            color: billingCycle === "monthly" ? "hsl(var(--primary-foreground))" : "hsl(var(--muted-foreground))",
-          }}
-        >
-          $9/month
-        </button>
-        <button
-          onClick={() => setBillingCycle("yearly")}
-          className="flex-1 px-3 py-2 text-[13px] font-medium transition-colors"
-          style={{
-            backgroundColor: billingCycle === "yearly" ? "hsl(var(--primary))" : "transparent",
-            color: billingCycle === "yearly" ? "hsl(var(--primary-foreground))" : "hsl(var(--muted-foreground))",
-          }}
-        >
-          $49/year
-        </button>
-      </div>
-      <button
-        onClick={handleUpgrade}
-        disabled={loading}
-        className="w-full inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-[14px] font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
-        style={{
-          backgroundColor: "hsl(var(--primary))",
-          color: "hsl(var(--primary-foreground))",
-        }}
-      >
-        {loading ? "Redirecting..." : "Upgrade to Pro"}
-      </button>
-    </div>
-  );
-}
-
-function TestUpgradeButton() {
-  const { isSignedIn, getToken } = useAuth();
-  const [loading, setLoading] = useState(false);
-
-  if (!isSignedIn) {
-    return (
-      <SignInButton mode="modal">
-        <button
-          className="mt-6 w-full inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-[14px] font-medium transition-opacity hover:opacity-80"
-          style={{
-            backgroundColor: "hsl(var(--primary))",
-            color: "hsl(var(--primary-foreground))",
-          }}
-        >
-          Sign in to test
-        </button>
-      </SignInButton>
-    );
-  }
-
-  async function handleTest() {
-    setLoading(true);
-    try {
-      const token = await getToken();
-      const res = await fetch("/.netlify/functions/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ billingCycle: "test" }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (err) {
-      console.error("Checkout error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  return (
-    <button
-      onClick={handleTest}
-      disabled={loading}
-      className="mt-6 w-full inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-[14px] font-medium transition-opacity hover:opacity-80 disabled:opacity-50"
-      style={{
-        backgroundColor: "hsl(var(--muted))",
-        color: "hsl(var(--muted-foreground))",
-      }}
-    >
-      {loading ? "Redirecting..." : "Test for $0.10"}
-    </button>
-  );
-}
+--- end commented out pricing --- */
 
 export default function Pricing() {
   return (
@@ -208,39 +59,23 @@ export default function Pricing() {
           </h1>
         </div>
         <p className="text-[14px] leading-relaxed mb-8" style={{ color: "hsl(var(--muted-foreground))" }}>
-          Start for free, upgrade when you need more.
+          All features are currently free while we're in early access.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Free tier */}
-          <div
-            className="rounded-xl p-6 flex flex-col"
-            style={{
-              backgroundColor: "hsl(var(--card))",
-              border: "1px solid hsl(var(--border))",
-            }}
-          >
-            <h2 className="text-xl font-semibold mb-1" style={{ color: "hsl(var(--foreground))" }}>
-              Free
-            </h2>
-            <div className="mb-6">
-              <span className="text-2xl font-semibold" style={{ color: "hsl(var(--foreground))" }}>$0</span>
-              <span className="text-[14px] ml-1" style={{ color: "hsl(var(--muted-foreground))" }}>forever</span>
-            </div>
-            <p className="text-[14px] mb-6" style={{ color: "hsl(var(--muted-foreground))" }}>
-              Everything you need to get started.
-            </p>
-            <ul className="space-y-3 flex-1">
-              {freeFeatures.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-[14px]" style={{ color: "hsl(var(--foreground))" }}>
-                  {check}
-                  <span>{f}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+        {/* Limited-time banner */}
+        <div
+          className="rounded-lg px-4 py-3 mb-8 text-[14px] font-medium"
+          style={{
+            backgroundColor: "hsl(var(--primary) / 0.1)",
+            color: "hsl(var(--foreground))",
+            border: "1px solid hsl(var(--primary) / 0.25)",
+          }}
+        >
+          Limited time: All Pro features are unlocked for free during early access. No account required.
+        </div>
 
-          {/* Pro tier */}
+        <div className="max-w-md mx-auto">
+          {/* Free tier — all features */}
           <div
             className="rounded-xl p-6 flex flex-col"
             style={{
@@ -250,7 +85,7 @@ export default function Pricing() {
           >
             <div className="flex items-center gap-2 mb-1">
               <h2 className="text-xl font-semibold" style={{ color: "hsl(var(--foreground))" }}>
-                Pro
+                Free
               </h2>
               <span
                 className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full"
@@ -259,58 +94,28 @@ export default function Pricing() {
                   color: "hsl(var(--primary-foreground))",
                 }}
               >
-                Recommended
+                Early Access
               </span>
             </div>
-            <div className="mb-2">
-              <span className="text-2xl font-semibold" style={{ color: "hsl(var(--foreground))" }}>$9</span>
-              <span className="text-[14px] ml-1" style={{ color: "hsl(var(--muted-foreground))" }}>/month</span>
+            <div className="mb-6">
+              <span className="text-2xl font-semibold" style={{ color: "hsl(var(--foreground))" }}>$0</span>
+              <span className="text-[14px] ml-1" style={{ color: "hsl(var(--muted-foreground))" }}>during early access</span>
             </div>
             <p className="text-[14px] mb-6" style={{ color: "hsl(var(--muted-foreground))" }}>
-              or $49/year (save 55%)
+              Full access to every feature — no sign-up needed.
             </p>
             <ul className="space-y-3 flex-1">
-              {proFeatures.map((f) => (
+              {allFeatures.map((f) => (
                 <li key={f} className="flex items-start gap-2 text-[14px]" style={{ color: "hsl(var(--foreground))" }}>
                   {check}
                   <span>{f}</span>
                 </li>
               ))}
             </ul>
-            <UpgradeButton />
-          </div>
-
-          {/* Test tier */}
-          <div
-            className="rounded-xl p-6 flex flex-col"
-            style={{
-              backgroundColor: "hsl(var(--card))",
-              border: "1px dashed hsl(var(--border))",
-            }}
-          >
-            <h2 className="text-xl font-semibold mb-1" style={{ color: "hsl(var(--foreground))" }}>
-              Test
-            </h2>
-            <div className="mb-2">
-              <span className="text-2xl font-semibold" style={{ color: "hsl(var(--foreground))" }}>$0.10</span>
-              <span className="text-[14px] ml-1" style={{ color: "hsl(var(--muted-foreground))" }}>one-time</span>
-            </div>
-            <p className="text-[14px] mb-6" style={{ color: "hsl(var(--muted-foreground))" }}>
-              Test the upgrade flow for 10 cents.
-            </p>
-            <ul className="space-y-3 flex-1">
-              <li className="flex items-start gap-2 text-[14px]" style={{ color: "hsl(var(--foreground))" }}>
-                {check}
-                <span>Full Pro access</span>
-              </li>
-              <li className="flex items-start gap-2 text-[14px]" style={{ color: "hsl(var(--foreground))" }}>
-                {check}
-                <span>Verify Stripe checkout flow</span>
-              </li>
-            </ul>
-            <TestUpgradeButton />
           </div>
         </div>
+
+        {/* Pro and Test tiers commented out for now */}
       </div>
       <SiteFooterBranding />
       <SiteFooter />

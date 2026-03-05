@@ -40,29 +40,23 @@ export default function About() {
           </section>
 
           <section>
-            <h2 className="text-xl font-medium mb-2">Free Features</h2>
+            <h2 className="text-xl font-medium mb-2">Features</h2>
+            <p className="mb-2">All features are currently free during early access — no account required.</p>
             <ul className="list-disc pl-5 space-y-1.5 mt-2">
               <li>Color picking and live derivation</li>
               <li>Random palette generation</li>
-              <li>Card style, typography, and alert customization</li>
-              <li>Per-section CSS, Tailwind, and design token export</li>
-              <li>Shareable theme URLs</li>
-              <li>Dark mode support</li>
-              <li>WCAG AA contrast checking</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-medium mb-2">Pro Features</h2>
-            <ul className="list-disc pl-5 space-y-1.5 mt-2">
               <li>Color harmony schemes (complementary, analogous, triadic, split-complementary)</li>
               <li>Color locks - pin colors during regeneration</li>
               <li>Image-based palette extraction</li>
-              <li>Export palette as SVG, PNG, or text</li>
-              <li>GitHub PR integration</li>
-              <li>WCAG AA accessibility audit with auto-fix</li>
+              <li>Card style, typography, and alert customization</li>
+              <li>Independent dialog box and toast message styling</li>
               <li>Hover and active state customization</li>
-              <li>Toast message styling</li>
+              <li>Per-section CSS, Tailwind, and design token export</li>
+              <li>Export palette as SVG, PNG, or text</li>
+              <li>Shareable theme URLs</li>
+              <li>Dark mode support</li>
+              <li>WCAG AA contrast checking with auto-fix</li>
+              <li>GitHub PR integration</li>
             </ul>
           </section>
 
