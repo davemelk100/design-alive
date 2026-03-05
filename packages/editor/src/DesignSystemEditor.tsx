@@ -1529,51 +1529,50 @@ function DesignSystemEditorInner({
                 </svg>
               </a>
 
-              {/* Nav links - desktop */}
-              {showNavLinks && (
-                <nav className="hidden lg:flex items-center gap-4 ml-auto">
-                  {aboutUrl && (
+              {/* Header actions (right side) */}
+              <div className="ml-auto flex items-center gap-3">
+                {/* Nav links - desktop */}
+                {showNavLinks && (
+                  <nav className="hidden lg:flex items-center gap-4">
+                    {aboutUrl && (
+                      <a
+                        href={aboutUrl}
+                        className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
+                        style={{ color: "hsl(var(--muted-foreground))" }}
+                      >
+                        About
+                      </a>
+                    )}
                     <a
-                      href={aboutUrl}
+                      href="/how-it-works"
                       className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
                       style={{ color: "hsl(var(--muted-foreground))" }}
                     >
-                      About
+                      How
                     </a>
-                  )}
-                  <a
-                    href="/how-it-works"
-                    className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    How
-                  </a>
-                  <a
-                    href="/readme"
-                    className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    Dev
-                  </a>
-                  <a
-                    href="/pricing"
-                    className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    Pricing
-                  </a>
-                  <a
-                    href="/features"
-                    className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    Features
-                  </a>
-                </nav>
-              )}
-
-              {/* Header actions (right side) */}
-              <div className="ml-auto flex items-center gap-3">
+                    <a
+                      href="/readme"
+                      className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
+                      style={{ color: "hsl(var(--muted-foreground))" }}
+                    >
+                      Dev
+                    </a>
+                    <a
+                      href="/pricing"
+                      className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
+                      style={{ color: "hsl(var(--muted-foreground))" }}
+                    >
+                      Pricing
+                    </a>
+                    <a
+                      href="/features"
+                      className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
+                      style={{ color: "hsl(var(--muted-foreground))" }}
+                    >
+                      Features
+                    </a>
+                  </nav>
+                )}
                 {headerRight}
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
