@@ -2515,7 +2515,7 @@ function DesignSystemEditorInner({
               data-axe-exclude
             >
               <h2
-                className="text-[20px] font-bold tracking-wider mb-[5px] flex items-center gap-2"
+                className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
                 style={{ color: "hsl(var(--foreground))" }}
               >
                 Colors{" "}
@@ -3334,7 +3334,7 @@ function DesignSystemEditorInner({
             className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px]"
           >
             <h2
-              className="text-[20px] font-bold tracking-wider mb-[5px] flex items-center gap-2"
+              className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
               style={{ color: "hsl(var(--foreground))" }}
             >
               Buttons{" "}
@@ -4112,7 +4112,7 @@ function DesignSystemEditorInner({
               data-axe-exclude
             >
               <h2
-                className="text-[20px] font-bold tracking-wider mb-[5px] flex items-center gap-2"
+                className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
                 style={{ color: "hsl(var(--foreground))" }}
               >
                 Cards{" "}
@@ -4896,7 +4896,7 @@ function DesignSystemEditorInner({
               data-axe-exclude
             >
               <h2
-                className="text-[20px] font-bold tracking-wider mb-[5px] flex items-center gap-2"
+                className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
                 style={{ color: "hsl(var(--foreground))" }}
               >
                 Alerts{" "}
@@ -5730,7 +5730,7 @@ function DesignSystemEditorInner({
             className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px]"
           >
             <h2
-              className="text-[20px] font-bold tracking-wider mb-[5px] flex items-center gap-2"
+              className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
               style={{ color: "hsl(var(--foreground))" }}
             >
               Typography{" "}
@@ -7949,7 +7949,7 @@ function DesignSystemEditorInner({
                     setPrSections(new Set());
                     setShowPrModal(true);
                   }}
-                  className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70 flex items-center gap-2"
+                  className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70 flex items-baseline gap-2"
                   style={{ color: "hsl(var(--foreground))" }}
                 >
                   <svg
