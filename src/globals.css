@@ -2,17 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Wipe down: transparent band sweeps top→bottom then back up */
-@keyframes heroWipeDown {
-  0%        { -webkit-mask-position: 0 -100%; mask-position: 0 -100%; }
-  50%       { -webkit-mask-position: 0 100%; mask-position: 0 100%; }
-  100%      { -webkit-mask-position: 0 -100%; mask-position: 0 -100%; }
+@keyframes heroFadeLeft {
+  0%        { opacity: 1; transform: scale(1); }
+  5%        { opacity: 0.6; transform: scale(1.03); }
+  10%       { opacity: 1; transform: scale(1); }
+  15%       { opacity: 0.6; transform: scale(1.03); }
+  20%       { opacity: 1; transform: scale(1); }
+  25%       { opacity: 0.6; transform: scale(1.03); }
+  30%       { opacity: 1; transform: scale(1); }
+  35%       { opacity: 0.6; transform: scale(1.03); }
+  40%       { opacity: 1; transform: scale(1); }
+  100%      { opacity: 1; transform: scale(1); }
 }
-/* Wipe up: transparent band sweeps bottom→top then back down */
-@keyframes heroWipeUp {
-  0%        { -webkit-mask-position: 0 200%; mask-position: 0 200%; }
-  50%       { -webkit-mask-position: 0 0%; mask-position: 0 0%; }
-  100%      { -webkit-mask-position: 0 200%; mask-position: 0 200%; }
+@keyframes heroFadeRight {
+  0%        { opacity: 0.4; transform: translate(30%, -30%) scale(0.5); }
+  40%       { opacity: 1; transform: translate(0, 0) scale(1); }
+  50%       { opacity: 0; transform: translate(0, 0) scale(1); }
+  100%      { opacity: 0; transform: translate(0, 0) scale(1); }
 }
 
 @layer utilities {

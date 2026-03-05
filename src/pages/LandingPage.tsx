@@ -28,26 +28,14 @@ export default function LandingPage() {
         <img
           src="/themal-hero-t.svg"
           alt=""
-          className="absolute inset-0 w-full h-full object-contain object-left pointer-events-none"
-          style={{
-            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
-            maskImage: "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
-            WebkitMaskSize: "100% 300%",
-            maskSize: "100% 300%",
-            animation: "heroWipeDown 60s ease-in-out infinite",
-          }}
+          className="absolute inset-0 w-full h-full object-cover sm:object-contain object-left pointer-events-none"
+          style={{}}
         />
         <img
           src="/themal-hero-t.svg"
           alt=""
           className="absolute inset-0 w-full h-full object-contain object-right pointer-events-none"
-          style={{
-            WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
-            maskImage: "linear-gradient(to bottom, transparent 0%, black 30%, black 70%, transparent 100%)",
-            WebkitMaskSize: "100% 300%",
-            maskSize: "100% 300%",
-            animation: "heroWipeUp 60s ease-in-out infinite",
-          }}
+          style={{ animation: "heroFadeRight 60s cubic-bezier(0.25, 0, 0.15, 1) forwards" }}
         />
         <div className="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center gap-6">
           <ThemalLogo className="w-48 sm:w-64 lg:w-80" />
@@ -64,8 +52,8 @@ export default function LandingPage() {
             style={{ color: "hsl(var(--muted-foreground))" }}
           >
             Themal is a visual design-system editor that lets you craft, preview,
-            and export production-ready themes without writing a single line of
-            CSS.
+            and export production-ready themes. Create comps in real time and
+            iterate on your design system without writing a single line of CSS.
           </p>
 
           <Link
@@ -108,7 +96,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <SiteFooterBranding />
-      <SiteFooter />
+      <SiteFooter sticky={false} />
     </div>
   );
 }

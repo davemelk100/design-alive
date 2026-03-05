@@ -391,10 +391,10 @@ export function SiteFooterBranding() {
   );
 }
 
-export default function SiteFooter() {
+export default function SiteFooter({ sticky = true }: { sticky?: boolean }) {
   return (
     <footer
-      className="hidden md:block sticky bottom-0 z-40 mt-auto border-t"
+      className={`hidden md:block ${sticky ? "sticky bottom-0 z-40" : ""} mt-auto border-t`}
       style={{
         borderColor: "hsl(var(--border))",
         backgroundColor: "hsl(var(--background))",
