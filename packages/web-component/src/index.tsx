@@ -11,6 +11,8 @@ const ATTR_TO_PROP: Record<string, keyof DesignSystemEditorProps> = {
   "show-nav-links": "showNavLinks",
   "show-header": "showHeader",
   "upgrade-url": "upgradeUrl",
+  "sign-in-url": "signInUrl",
+  "about-url": "aboutUrl",
 };
 
 const OBSERVED_ATTRS = Object.keys(ATTR_TO_PROP);

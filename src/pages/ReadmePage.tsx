@@ -135,6 +135,12 @@ function App() {
                   <td className="px-4 py-2">-</td>
                   <td className="px-4 py-2">Content rendered at the far right of the header (e.g. auth buttons).</td>
                 </tr>
+                <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <td className="px-4 py-2 font-mono text-xs">aboutUrl</td>
+                  <td className="px-4 py-2 font-mono text-xs">string</td>
+                  <td className="px-4 py-2">-</td>
+                  <td className="px-4 py-2">URL for the About page link in header navigation.</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -152,6 +158,15 @@ function App() {
           <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>With PR creation</h3>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor prEndpointUrl="/api/create-design-pr" />`}</code>
+          </pre>
+
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>With premium features</h3>
+          <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
+            <code>{`<DesignSystemEditor
+  licenseKey="THEEMEL-XXXX-XXXX-XXXX"
+  upgradeUrl="/pricing"
+  signInUrl="/sign-in"
+/>`}</code>
           </pre>
 
           <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Listen for changes</h3>
@@ -178,6 +193,7 @@ function App() {
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Exported Utilities</h2>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`import {
+  // Color utilities
   hslStringToHex,    // "210 50% 40%" → "#336699"
   hexToHslString,    // "#336699" → "210.0 50.0% 40.0%"
   contrastRatio,     // WCAG contrast ratio between two HSL strings
@@ -185,10 +201,37 @@ function App() {
   EDITABLE_VARS,     // Array of { key, label } token definitions
   HARMONY_SCHEMES,   // ['Complementary', 'Analogous', ...]
   applyStoredThemeColors,      // Restore persisted theme from localStorage
+
+  // Persistence utilities
   applyStoredCardStyle,        // Restore card style from localStorage
   applyStoredTypography,       // Restore typography from localStorage
   applyStoredAlertStyle,       // Restore alert style from localStorage
   applyStoredInteractionStyle, // Restore interaction style from localStorage
+
+  // Shareable URL utilities
+  serializeThemeState,         // Encode full theme state as base64
+  deserializeThemeState,       // Decode base64 back to theme state
+
+  // Export utilities
+  generateDesignTokens,        // W3C Design Token JSON
+  exportPaletteAsText,         // HEX, RGB, or RGBA text
+  exportPaletteAsSvg,          // SVG string
+  exportPaletteAsPng,          // PNG Blob
+
+  // Custom font utilities
+  getCustomFonts,              // Load custom fonts from localStorage
+  addCustomFont,               // Validate & add a Google Font
+  removeCustomFont,            // Remove a custom font
+  initCustomFonts,             // Re-register fonts on startup
+
+  // License utilities
+  validateLicenseKey,          // Validate a THEEMEL key
+  generateLicenseKey,          // Generate a valid key
+
+  // Premium components & hooks
+  LicenseProvider,             // Context provider
+  useLicense,                  // Hook: { isValid, isPremium }
+  PremiumGate,                 // Gate component
 } from '@theemel/editor';`}</code>
           </pre>
         </section>
@@ -222,7 +265,7 @@ function App() {
             For WordPress, static sites, or any non-React platform, use the <code className="font-mono text-[14px]">&lt;theemel-editor&gt;</code> web component. A single script tag bundles everything - no build step required.
           </p>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>{`<script src="https://cdn.example.com/theemel-editor.js"></script>
+            <code>{`<script src="https://themalive.com/theemel-editor.js"></script>
 <theemel-editor license-key="THEEMEL-XXXX-XXXX-XXXX"></theemel-editor>`}</code>
           </pre>
           <p className="text-[14px] leading-relaxed mb-3" style={{ color: "hsl(var(--foreground))" }}>
@@ -260,6 +303,14 @@ function App() {
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">upgrade-url</td>
                   <td className="px-4 py-2 font-mono text-xs">upgradeUrl</td>
+                </tr>
+                <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <td className="px-4 py-2 font-mono text-xs">sign-in-url</td>
+                  <td className="px-4 py-2 font-mono text-xs">signInUrl</td>
+                </tr>
+                <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <td className="px-4 py-2 font-mono text-xs">about-url</td>
+                  <td className="px-4 py-2 font-mono text-xs">aboutUrl</td>
                 </tr>
               </tbody>
             </table>

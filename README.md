@@ -2,6 +2,8 @@
 
 An interactive design system editor that lets you pick a brand color and watch every token update in real time. Customize typography, button interactions, and link hover states. Export a CSS snapshot or open a PR to propose changes — from desktop, tablet, or phone.
 
+**Live:** [themalive.com](https://themalive.com)
+
 ## How It Works
 
 All palette colors are HSL custom properties on `:root`. From one brand color, the system derives a full token set (secondary, accent, muted, destructive) using your choice of color harmony scheme: complementary, triadic, analogous, split-complementary, or tetradic.
@@ -31,6 +33,10 @@ function App() {
 
 Requires `react` and `react-dom` v18 or v19. Optionally install `axe-core` (accessibility auditing) and `lucide-react` (icon previews) for full functionality. See [`packages/editor/README.md`](packages/editor/README.md) for full API docs, props, exported utilities, and premium feature details.
 
+## Web Component
+
+For WordPress, static sites, or any non-React platform, use the `<theemel-editor>` web component via a single `<script>` tag. See [`packages/web-component/README.md`](packages/web-component/README.md) for setup instructions.
+
 ## Tech Stack
 
 - React 18 + TypeScript
@@ -38,7 +44,22 @@ Requires `react` and `react-dom` v18 or v19. Optionally install `axe-core` (acce
 - Tailwind CSS
 - axe-core (WCAG AA accessibility auditing)
 - Lucide React (icons)
-- Netlify Functions (GitHub PR creation)
+- Netlify Functions (GitHub PR creation, Stripe checkout)
+- Clerk (authentication)
+- Stripe (subscription billing)
+
+## Testing
+
+- **Vitest + Testing Library** — unit and component tests
+- **vitest-axe** — automated axe-core accessibility testing
+- **ESLint + eslint-plugin-jsx-a11y** — static accessibility linting
+- **Lighthouse CI** — automated performance, accessibility, SEO, and best practices auditing
+
+```bash
+npm run test        # watch mode
+npm run test:run    # single run
+npm run lint        # ESLint with jsx-a11y rules
+```
 
 ## Getting Started
 
@@ -56,4 +77,4 @@ npm run preview
 
 ## Deployment
 
-Hosted on Netlify. Pushes to `main` trigger automatic deploys.
+Hosted on Netlify at [themalive.com](https://themalive.com). Pushes to `main` trigger automatic deploys.

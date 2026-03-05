@@ -155,6 +155,35 @@ export default function Features() {
           </div>
         </section>
 
+        <section className="mb-16">
+          <h2
+            className="text-xl font-medium mb-6 pb-2 border-b"
+            style={{ color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+          >
+            Upcoming
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
+            {[
+              { title: "WordPress Plugin", desc: "Install Themal as a WordPress plugin to manage your theme's design tokens from the admin dashboard." },
+              { title: "Shopify App", desc: "Embed the editor in your Shopify store admin to customize storefront colors, typography, and components." },
+              { title: "Figma Plugin", desc: "Sync design tokens between Themal and Figma for seamless designer-developer handoff." },
+              { title: "VS Code Extension", desc: "Edit and preview design tokens directly inside your code editor." },
+              { title: "Webflow App", desc: "Apply Themal design systems to Webflow sites without writing code." },
+              { title: "Drupal Module", desc: "Integrate design token management into Drupal's admin interface." },
+            ].map(({ title, desc }) => (
+              <div key={title} className="flex items-start gap-2">
+                <svg className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <circle cx="12" cy="12" r="10" strokeDasharray="4 3" />
+                </svg>
+                <div>
+                  <p className="text-[14px] font-medium" style={{ color: "hsl(var(--foreground))" }}>{title}</p>
+                  <p className="text-[13px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <h2
           className="text-xl font-medium mb-6 pb-2 border-b"
           style={{ color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}

@@ -5,7 +5,7 @@ Use Themal on WordPress, static sites, or any non-React platform via a single `<
 ## Quick Start
 
 ```html
-<script src="https://your-cdn.com/theemel-editor.js"></script>
+<script src="https://themalive.com/theemel-editor.js"></script>
 <theemel-editor></theemel-editor>
 ```
 
@@ -37,7 +37,7 @@ That's it — the script bundles React, the editor, and all styles into one file
            'theemel-editor',
            get_template_directory_uri() . '/js/theemel-editor.js',
            [],
-           '0.3.0',
+           '0.15.1',
            true
        );
    });
@@ -56,7 +56,7 @@ Create `wp-content/plugins/theemel/theemel.php`:
 /**
  * Plugin Name: Themal Editor
  * Description: Embed the Themal design system editor via [theemel] shortcode.
- * Version: 0.3.0
+ * Version: 0.15.1
  */
 
 add_action('wp_enqueue_scripts', function() {
@@ -64,7 +64,7 @@ add_action('wp_enqueue_scripts', function() {
         'theemel-editor',
         plugins_url('theemel-editor.js', __FILE__),
         [],
-        '0.3.0',
+        '0.15.1',
         true
     );
 });
@@ -73,6 +73,8 @@ add_shortcode('theemel', function($atts) {
     $atts = shortcode_atts([
         'license-key' => '',
         'show-header' => 'true',
+        'upgrade-url' => '',
+        'sign-in-url' => '',
     ], $atts);
 
     wp_enqueue_script('theemel-editor');
@@ -104,6 +106,8 @@ Then copy `theemel-editor.js` into the same plugin folder and use the `[theemel]
 | `show-nav-links` | boolean | `true` | Show section navigation links. |
 | `show-header` | boolean | `true` | Show the editor header. Set `false` for embedded use. |
 | `upgrade-url` | string | — | Custom URL for upgrade prompts. |
+| `sign-in-url` | string | — | Custom URL for sign-in prompts. |
+| `about-url` | string | — | URL for the About page link in header navigation. |
 
 ## Building
 

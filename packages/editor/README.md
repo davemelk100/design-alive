@@ -49,8 +49,9 @@ The editor writes CSS custom properties (HSL values) to `:root`, so it works wit
 | `onExport` | `(css: string) => void` | — | Override built-in CSS modal. Receives the generated CSS string. |
 | `className` | `string` | — | Additional CSS class for the wrapper element. |
 | `showHeader` | `boolean` | `true` | Show the editor header with logo and navigation. |
-| `showNavLinks` | `boolean` | — | Show page navigation links in the mobile menu. |
-| `headerRight` | `React.ReactNode` | — | Custom content rendered on the right side of the header. |
+| `showNavLinks` | `boolean` | `true` | Show page navigation links in the header and mobile menu. |
+| `headerRight` | `React.ReactNode` | — | Custom content rendered on the right side of the header (e.g. auth buttons). |
+| `aboutUrl` | `string` | — | URL for the About page link in the header navigation. |
 
 ## Premium Features
 
@@ -127,6 +128,15 @@ import { LicenseProvider } from '@theemel/editor';
 />
 ```
 
+### With custom header content
+
+```tsx
+<DesignSystemEditor
+  headerRight={<button onClick={handleSignIn}>Sign In</button>}
+  aboutUrl="/about"
+/>
+```
+
 ### Listen for changes
 
 ```tsx
@@ -147,6 +157,15 @@ import { LicenseProvider } from '@theemel/editor';
 />
 ```
 
+### Embedded / headless
+
+```tsx
+<DesignSystemEditor
+  showHeader={false}
+  showNavLinks={false}
+/>
+```
+
 ## Exported Utilities
 
 ```tsx
@@ -159,6 +178,12 @@ import {
   EDITABLE_VARS,     // Array of { key, label } token definitions
   HARMONY_SCHEMES,   // ['Complementary', 'Analogous', 'Triadic', 'Split-Complementary']
   applyStoredThemeColors, // Restore persisted theme from localStorage
+
+  // localStorage key constants
+  CARD_STYLE_KEY,            // Key for card style storage
+  TYPOGRAPHY_KEY,            // Key for typography storage
+  ALERT_STYLE_KEY,           // Key for alert style storage
+  INTERACTION_STYLE_KEY,     // Key for interaction style storage
 
   // Card, typography & interaction style utilities
   applyStoredCardStyle,           // Restore card style from localStorage
@@ -190,6 +215,26 @@ import {
   LicenseProvider,      // Context provider for license state
   useLicense,           // Hook: { isValid, isPremium }
   PremiumGate,          // Gate component for premium features
+} from '@theemel/editor';
+```
+
+### Exported Types
+
+```tsx
+import type {
+  DesignSystemEditorProps,
+  TokenDefinition,
+  HarmonyScheme,
+  CardStyleState,
+  TypographyState,
+  AlertStyleState,
+  InteractionStyleState,
+  TypoInteractionStyleState,
+  CustomFontEntry,
+  PremiumFeature,
+  LicenseValidation,
+  LicenseProviderProps,
+  PremiumGateProps,
 } from '@theemel/editor';
 ```
 
@@ -247,6 +292,20 @@ npm run build
 # Watch mode
 npm run dev
 ```
+
+## Testing
+
+The project includes automated accessibility testing:
+
+```bash
+# Run all tests (includes axe-core a11y checks)
+npm run test:run
+
+# Lint for accessibility issues
+npm run lint
+```
+
+The test suite uses **vitest-axe** to run axe-core against rendered components, catching WCAG violations automatically. ESLint with **eslint-plugin-jsx-a11y** provides static analysis for common accessibility anti-patterns.
 
 ## Publishing to npm
 
