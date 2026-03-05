@@ -2794,7 +2794,7 @@ function DesignSystemEditorInner({
                       >
                         <button
                           aria-label={`${label} color swatch`}
-                          className="w-full h-20 text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-t-lg sm:rounded-t-none sm:rounded-l-lg"
+                          className="w-full h-20 text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-tl-lg rounded-tr-lg sm:rounded-tr-none sm:rounded-bl-lg"
                           style={{
                             backgroundColor: hsl ? `hsl(${hsl})` : "#e5e7eb",
                             color: btnTextColor,
@@ -2859,7 +2859,7 @@ function DesignSystemEditorInner({
                           style={{ width: "100%", height: "calc(100% - 24px)" }}
                         />
                         <button
-                          className={`h-6 sm:h-auto sm:w-8 flex items-center justify-center transition-all rounded-b-lg sm:rounded-b-none sm:rounded-r-lg ${isPremium ? "cursor-pointer" : "cursor-not-allowed"}`}
+                          className={`h-6 sm:h-auto sm:w-8 flex items-center justify-center transition-all rounded-bl-lg rounded-br-lg sm:rounded-bl-none sm:rounded-tr-lg ${isPremium ? "cursor-pointer" : "cursor-not-allowed"}`}
                           style={{
                             backgroundColor: isLocked
                               ? `hsl(${bgHsl})`

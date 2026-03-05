@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useMemo } from "react";
-import { validateLicenseKey, type LicenseValidation } from "../utils/license";
+import React, { createContext, useContext } from "react";
+import { type LicenseValidation } from "../utils/license";
 
 const LicenseContext = createContext<LicenseValidation>({
-  isValid: false,
-  isPremium: false,
+  isValid: true,
+  isPremium: true,
 });
 
 export interface LicenseProviderProps {
@@ -11,10 +11,11 @@ export interface LicenseProviderProps {
   children: React.ReactNode;
 }
 
-export function LicenseProvider({ licenseKey, children }: LicenseProviderProps) {
-  const value = useMemo(() => validateLicenseKey(licenseKey), [licenseKey]);
+export function LicenseProvider({ children }: LicenseProviderProps) {
   return (
-    <LicenseContext.Provider value={value}>{children}</LicenseContext.Provider>
+    <LicenseContext.Provider value={{ isValid: true, isPremium: true }}>
+      {children}
+    </LicenseContext.Provider>
   );
 }
 
