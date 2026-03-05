@@ -2707,7 +2707,7 @@ function DesignSystemEditorInner({
             >
               {/* Color swatch buttons */}
               <div
-                className="grid grid-cols-5 gap-2 sm:gap-5 rounded-lg p-4 overflow-visible"
+                className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-5 rounded-lg p-4 overflow-visible"
                 data-axe-exclude
                 style={{ backgroundColor: "rgba(0,0,0,0.04)" }}
               >
