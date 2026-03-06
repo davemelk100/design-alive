@@ -2,7 +2,7 @@
 
 Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography and interaction states, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile.
 
-> **Early Access:** All features are currently unlocked for free — no license key or account required.
+> Free tier available with core features. Pro features ($9/mo or $50/yr) require a subscription.
 
 ## Install
 

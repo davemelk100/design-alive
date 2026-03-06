@@ -513,6 +513,8 @@ function DesignSystemEditorInner({
     palette: Record<string, string>;
   } | null>(null);
   const [appliedImageUrl, setAppliedImageUrl] = useState<string | null>(null);
+  const [mobilePickerKey, setMobilePickerKey] = useState<string | null>(null);
+  const [mobilePickerHex, setMobilePickerHex] = useState("#000000");
 
   const fireOnChange = (newColors: Record<string, string>) => {
     onChange?.(newColors);
@@ -2871,19 +2873,16 @@ function DesignSystemEditorInner({
                           onClick={() => {
                             const isMobile = window.innerWidth < 640;
                             if (isMobile) {
-                              const grid = document.getElementById("color-swatch-grid");
-                              if (grid) {
-                                const top = grid.getBoundingClientRect().top + window.scrollY - 8;
-                                window.scrollTo({ top, behavior: "smooth" });
-                              }
-                            } else {
-                              document
-                                .getElementById("colors")
-                                ?.scrollIntoView({
-                                  behavior: "smooth",
-                                  block: "start",
-                                });
+                              setMobilePickerKey(key);
+                              setMobilePickerHex(hsl ? hslStringToHex(hsl) : "#000000");
+                              return;
                             }
+                            document
+                              .getElementById("colors")
+                              ?.scrollIntoView({
+                                behavior: "smooth",
+                                block: "start",
+                              });
                             const input = document.getElementById(
                               inputId,
                             ) as HTMLInputElement | null;
@@ -8326,6 +8325,187 @@ function DesignSystemEditorInner({
           </div>
         </div>
       )}
+      {/* Mobile Color Picker */}
+      {mobilePickerKey && (() => {
+        const hexToRgb = (hex: string) => {
+          const r = parseInt(hex.slice(1,3), 16);
+          const g = parseInt(hex.slice(3,5), 16);
+          const b = parseInt(hex.slice(5,7), 16);
+          return { r, g, b };
+        };
+        const rgbToHsl = (r: number, g: number, b: number) => {
+          r /= 255; g /= 255; b /= 255;
+          const max = Math.max(r, g, b), min = Math.min(r, g, b);
+          let h = 0, s = 0;
+          const l = (max + min) / 2;
+          if (max !== min) {
+            const d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+            else if (max === g) h = ((b - r) / d + 2) / 6;
+            else h = ((r - g) / d + 4) / 6;
+          }
+          return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+        };
+        const hslToHex = (h: number, s: number, l: number) => {
+          s /= 100; l /= 100;
+          const a = s * Math.min(l, 1 - l);
+          const f = (n: number) => {
+            const k = (n + h / 30) % 12;
+            const c = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+            return Math.round(255 * c).toString(16).padStart(2, "0");
+          };
+          return `#${f(0)}${f(8)}${f(4)}`;
+        };
+        const { r, g, b } = hexToRgb(mobilePickerHex);
+        const hslVals = rgbToHsl(r, g, b);
+        const wc = contrastRatio("0 0% 100%", hexToHslString(mobilePickerHex));
+        const bc = contrastRatio("0 0% 0%", hexToHslString(mobilePickerHex));
+        const textColor = wc >= bc ? "#ffffff" : "#000000";
+
+        // Build swatch preview data
+        const previewColors = ["--brand", "--secondary", "--accent", "--background", "--foreground"].map(k => ({
+          key: k,
+          label: COLOR_SWATCHES.find(s => s.key === k)?.label || k,
+          hsl: k === mobilePickerKey ? hexToHslString(mobilePickerHex) : colors[k],
+          active: k === mobilePickerKey,
+        }));
+
+        return (
+          <div
+            className="fixed inset-0 z-50 flex flex-col"
+            style={{ backgroundColor: "hsl(var(--background))" }}
+          >
+            {/* Swatch preview row */}
+            <div className="flex gap-1.5 p-3" style={{ backgroundColor: "rgba(0,0,0,0.04)" }}>
+              {previewColors.map(pc => (
+                <button
+                  key={pc.key}
+                  onClick={() => {
+                    setMobilePickerKey(pc.key);
+                    setMobilePickerHex(pc.hsl ? hslStringToHex(pc.hsl) : "#000000");
+                  }}
+                  className="flex-1 flex flex-col items-center gap-0.5"
+                >
+                  <div
+                    className="w-full aspect-square rounded-lg transition-all"
+                    style={{
+                      backgroundColor: pc.hsl ? `hsl(${pc.hsl})` : "#e5e7eb",
+                      boxShadow: pc.active ? "0 0 0 3px hsl(var(--primary))" : "0 1px 3px rgba(0,0,0,0.15)",
+                    }}
+                  />
+                  <span
+                    className="text-[10px] font-medium truncate w-full text-center"
+                    style={{ color: pc.active ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))" }}
+                  >
+                    {pc.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {/* Current color display */}
+            <div
+              className="mx-3 mt-3 rounded-xl h-24 flex items-center justify-center"
+              style={{ backgroundColor: mobilePickerHex, color: textColor }}
+            >
+              <span className="text-lg font-mono font-medium">{mobilePickerHex.toUpperCase()}</span>
+            </div>
+
+            {/* HSL Sliders */}
+            <div className="flex-1 px-4 pt-4 space-y-5 overflow-y-auto">
+              <div>
+                <label className="text-[13px] font-medium mb-1.5 block" style={{ color: "hsl(var(--foreground))" }}>
+                  Hue ({hslVals.h})
+                </label>
+                <input
+                  type="range" min="0" max="360" value={hslVals.h}
+                  onChange={(e) => {
+                    const hex = hslToHex(Number(e.target.value), hslVals.s, hslVals.l);
+                    setMobilePickerHex(hex);
+                    handleColorChange(mobilePickerKey!, hex);
+                  }}
+                  className="w-full h-8 rounded-lg appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, ${Array.from({length: 13}, (_, i) => hslToHex(i * 30, hslVals.s || 70, hslVals.l || 50)).join(", ")})`,
+                  }}
+                />
+              </div>
+              <div>
+                <label className="text-[13px] font-medium mb-1.5 block" style={{ color: "hsl(var(--foreground))" }}>
+                  Saturation ({hslVals.s}%)
+                </label>
+                <input
+                  type="range" min="0" max="100" value={hslVals.s}
+                  onChange={(e) => {
+                    const hex = hslToHex(hslVals.h, Number(e.target.value), hslVals.l);
+                    setMobilePickerHex(hex);
+                    handleColorChange(mobilePickerKey!, hex);
+                  }}
+                  className="w-full h-8 rounded-lg appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, ${hslToHex(hslVals.h, 0, hslVals.l)}, ${hslToHex(hslVals.h, 100, hslVals.l)})`,
+                  }}
+                />
+              </div>
+              <div>
+                <label className="text-[13px] font-medium mb-1.5 block" style={{ color: "hsl(var(--foreground))" }}>
+                  Lightness ({hslVals.l}%)
+                </label>
+                <input
+                  type="range" min="0" max="100" value={hslVals.l}
+                  onChange={(e) => {
+                    const hex = hslToHex(hslVals.h, hslVals.s, Number(e.target.value));
+                    setMobilePickerHex(hex);
+                    handleColorChange(mobilePickerKey!, hex);
+                  }}
+                  className="w-full h-8 rounded-lg appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, #000000, ${hslToHex(hslVals.h, hslVals.s, 50)}, #ffffff)`,
+                  }}
+                />
+              </div>
+
+              {/* Hex input */}
+              <div>
+                <label className="text-[13px] font-medium mb-1.5 block" style={{ color: "hsl(var(--foreground))" }}>
+                  Hex
+                </label>
+                <input
+                  type="text"
+                  value={mobilePickerHex}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+                      setMobilePickerHex(v);
+                      handleColorChange(mobilePickerKey!, v);
+                    } else {
+                      setMobilePickerHex(v);
+                    }
+                  }}
+                  className="w-full h-10 px-3 text-[16px] font-mono rounded-lg border bg-transparent"
+                  style={{ borderColor: "hsl(var(--border))", color: "hsl(var(--foreground))" }}
+                />
+              </div>
+            </div>
+
+            {/* Done button */}
+            <div className="p-4">
+              <button
+                onClick={() => setMobilePickerKey(null)}
+                className="w-full h-12 rounded-xl text-[16px] font-medium cursor-pointer"
+                style={{
+                  backgroundColor: "hsl(var(--primary))",
+                  color: "hsl(var(--primary-foreground))",
+                  border: "none",
+                }}
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        );
+      })()}
       {showPaletteExport && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center"

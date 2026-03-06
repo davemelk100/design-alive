@@ -78,8 +78,8 @@ export default function App() {
                 <Route path="/cookies" element={<CookiesPolicy />} />
                 <Route path="/terms" element={<Terms />} />
                 <Route path="/accessibility" element={<Accessibility />} />
-                <Route path="/sign-in/*" element={<ClerkSignIn routing="path" path="/sign-in" />} />
-                <Route path="/sign-up/*" element={<ClerkSignUp routing="path" path="/sign-up" />} />
+                <Route path="/sign-in/*" element={<div className="flex-1 flex items-center justify-center py-12"><ClerkSignIn routing="path" path="/sign-in" /></div>} />
+                <Route path="/sign-up/*" element={<div className="flex-1 flex items-center justify-center py-12"><ClerkSignUp routing="path" path="/sign-up" /></div>} />
               </Routes>
             </Suspense>
           </main>

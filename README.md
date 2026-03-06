@@ -4,7 +4,7 @@ An interactive design system editor that lets you pick a brand color and watch e
 
 **Live:** [themalive.com](https://themalive.com)
 
-> **Early Access:** All features are currently free — no account required.
+> Free tier available. Pro features require a subscription ($9/mo or $50/yr).
 
 ## How It Works
 
@@ -47,8 +47,8 @@ For WordPress, static sites, or any non-React platform, use the `<theemel-editor
 - axe-core (WCAG AA accessibility auditing)
 - Lucide React (icons)
 - Netlify Functions (GitHub PR creation, Stripe checkout)
-- Clerk (authentication — currently disabled during early access)
-- Stripe (subscription billing — currently disabled during early access)
+- Clerk (authentication via Google OAuth)
+- Stripe (subscription billing: $9/mo or $50/yr Pro plan)
 
 ## Testing
 

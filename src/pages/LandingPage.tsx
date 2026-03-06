@@ -198,17 +198,6 @@ export default function LandingPage() {
             Plug Themal into your app. Design your elements on screen. Open a pull request right from the editor.
           </p>
 
-          {/* Demo video */}
-          <div className="w-full max-w-2xl rounded-xl overflow-hidden shadow-2xl" style={{ border: "1px solid hsl(var(--border))" }}>
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-auto block"
-              src="/themal-demo.mp4"
-            />
-          </div>
 
         </div>
 
