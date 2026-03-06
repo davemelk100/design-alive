@@ -100,17 +100,6 @@ const DEFAULT_THEME: Record<string, string> = {
 
 const CODE_SNIPPET = `npm install @theemel/editor`;
 
-const USAGE_SNIPPET = `import { DesignSystemEditor } from "@theemel/editor";
-
-function App() {
-  return (
-    <DesignSystemEditor
-      prEndpointUrl="/api/create-design-pr"
-      accessibilityAudit={true}
-      licenseKey="your-license-key"
-    />
-  );
-}`;
 
 export default function LandingPage() {
   const [zoomDone, setZoomDone] = useState(false);
