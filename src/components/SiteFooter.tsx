@@ -357,7 +357,7 @@ export function SiteFooterBranding() {
   return null;
 }
 
-export default function SiteFooter({ sticky = true }: { sticky?: boolean }) {
+export default function SiteFooter({ sticky = false }: { sticky?: boolean }) {
   return (
     <footer
       className={`hidden md:block ${sticky ? "sticky bottom-0 z-40" : ""} mt-auto border-t`}

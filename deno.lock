@@ -11,23 +11,38 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
+        "npm:@capacitor/cli@^8.1.0",
+        "npm:@capacitor/core@^8.1.0",
         "npm:@clerk/clerk-react@^5.61.3",
         "npm:@clerk/clerk-sdk-node@^4.13.23",
+        "npm:@eslint/js@^9.39.3",
+        "npm:@lhci/cli@~0.15.1",
+        "npm:@testing-library/jest-dom@^6.9.1",
+        "npm:@testing-library/react@^16.3.2",
+        "npm:@testing-library/user-event@^14.6.1",
         "npm:@types/node@20",
         "npm:@types/react-dom@18",
         "npm:@types/react@18",
         "npm:@vitejs/plugin-react@^4.2.0",
         "npm:autoprefixer@^10.0.1",
         "npm:axe-core@^4.11.1",
+        "npm:eslint-plugin-jsx-a11y@^6.10.2",
+        "npm:eslint-plugin-react-hooks@^7.0.1",
+        "npm:eslint@^9.39.3",
+        "npm:jsdom@^28.1.0",
         "npm:lucide-react@0.294",
         "npm:postcss@8",
         "npm:react-dom@^18.2.0",
+        "npm:react-helmet-async@3",
         "npm:react-router-dom@^7.13.1",
         "npm:react@^18.2.0",
         "npm:stripe@^20.4.0",
         "npm:tailwindcss@^3.3.0",
+        "npm:typescript-eslint@^8.56.1",
         "npm:typescript@5",
-        "npm:vite@5"
+        "npm:vite@5",
+        "npm:vitest-axe@0.1",
+        "npm:vitest@^4.0.18"
       ]
     },
     "members": {
@@ -42,6 +57,24 @@
             "npm:tailwindcss@^3.3.0",
             "npm:typescript@5",
             "npm:vite-plugin-dts@^3.7.0",
+            "npm:vite@5"
+          ]
+        }
+      },
+      "packages/web-component": {
+        "packageJson": {
+          "dependencies": [
+            "npm:@types/react-dom@18",
+            "npm:@types/react@18",
+            "npm:@vitejs/plugin-react@^4.2.0",
+            "npm:autoprefixer@^10.0.1",
+            "npm:axe-core@^4.11.1",
+            "npm:lucide-react@0.294",
+            "npm:postcss@8",
+            "npm:react-dom@^18.2.0",
+            "npm:react@^18.2.0",
+            "npm:tailwindcss@^3.3.0",
+            "npm:typescript@5",
             "npm:vite@5"
           ]
         }

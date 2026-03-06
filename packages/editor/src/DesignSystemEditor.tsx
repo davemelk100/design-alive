@@ -8009,6 +8009,8 @@ function DesignSystemEditorInner({
             setImageUrlInput("");
             setImageUrlError("");
           }}
+          onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+          onDrop={(e) => { e.preventDefault(); e.stopPropagation(); }}
         >
           <div
             className="rounded-xl p-6 w-[380px] max-h-[90vh] overflow-y-auto shadow-xl"
