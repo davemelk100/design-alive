@@ -16,7 +16,7 @@ if ("serviceWorker" in navigator) {
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/" {...(import.meta.env.PROD ? { domain: "clerk.themalive.com" } : {})}>
     <App />
   </ClerkProvider>,
 );
