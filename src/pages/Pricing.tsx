@@ -100,7 +100,39 @@ export default function Pricing() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
+          {/* Test */}
+          <div
+            className="rounded-xl p-6 flex flex-col"
+            style={{
+              backgroundColor: "hsl(var(--card))",
+              border: "1px solid hsl(var(--border))",
+            }}
+          >
+            <h2 className="text-xl font-semibold mb-1" style={{ color: "hsl(var(--foreground))" }}>
+              Test 50 Cent
+            </h2>
+            <div className="mb-4">
+              <span className="text-3xl font-semibold" style={{ color: "hsl(var(--foreground))" }}>$0.50</span>
+              <span className="text-[14px] ml-1" style={{ color: "hsl(var(--muted-foreground))" }}>one-time</span>
+            </div>
+            <p className="text-[14px] mb-6 flex-1" style={{ color: "hsl(var(--muted-foreground))" }}>
+              Verify the checkout flow with a minimal charge.
+            </p>
+            <button
+              onClick={() => handleCheckout("test")}
+              disabled={loading === "test"}
+              className="w-full h-10 rounded-lg text-[14px] font-medium flex items-center justify-center transition-opacity hover:opacity-80 disabled:opacity-50 cursor-pointer disabled:cursor-wait"
+              style={{
+                border: "1px solid hsl(var(--border))",
+                color: "hsl(var(--foreground))",
+                backgroundColor: "transparent",
+              }}
+            >
+              {loading === "test" ? "Redirecting..." : "Test Checkout"}
+            </button>
+          </div>
+
           {/* Free */}
           <div
             className="rounded-xl p-6 flex flex-col"
@@ -231,17 +263,6 @@ export default function Pricing() {
           </div>
         </div>
 
-        {/* Test checkout */}
-        <div className="text-center mb-8">
-          <button
-            onClick={() => handleCheckout("test")}
-            disabled={loading === "test"}
-            className="text-[13px] font-light underline transition-opacity hover:opacity-70 cursor-pointer disabled:opacity-50 bg-transparent border-none"
-            style={{ color: "hsl(var(--muted-foreground))" }}
-          >
-            {loading === "test" ? "Redirecting..." : "Test checkout ($0.10)"}
-          </button>
-        </div>
       </div>
       <SiteFooterBranding />
       <SiteFooter />
