@@ -3146,7 +3146,7 @@ function DesignSystemEditorInner({
                           onClick={() => {
                             setHoveredLockKey(null);
                             window.dispatchEvent(
-                              new CustomEvent("theemel:sign-in"),
+                              new CustomEvent("themal:sign-in"),
                             );
                           }}
                           className="w-full text-center px-4 py-2.5 text-[14px] font-light rounded-lg transition-opacity hover:opacity-70"

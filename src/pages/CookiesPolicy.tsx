@@ -85,7 +85,7 @@ export default function CookiesPolicy() {
 
           <section>
             <h2 className="text-xl font-medium mb-2">Contact</h2>
-            <p>If you have questions about our use of cookies, please contact us at <a href="mailto:privacy@theemel.com" className="underline hover:opacity-70">privacy@theemel.com</a>.</p>
+            <p>If you have questions about our use of cookies, please contact us at <a href="mailto:privacy@themalive.com" className="underline hover:opacity-70">privacy@themalive.com</a>.</p>
           </section>
         </div>
       </div>

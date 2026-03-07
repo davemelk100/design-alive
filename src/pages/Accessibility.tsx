@@ -75,7 +75,7 @@ export default function Accessibility() {
             <h2 className="text-xl font-medium mb-2">Feedback</h2>
             <p>We welcome feedback on the accessibility of Themal. If you encounter any barriers or have suggestions for improvement, please contact us:</p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
-              <li>Email: <a href="mailto:accessibility@theemel.com" className="underline hover:opacity-70">accessibility@theemel.com</a></li>
+              <li>Email: <a href="mailto:accessibility@themalive.com" className="underline hover:opacity-70">accessibility@themalive.com</a></li>
             </ul>
             <p className="mt-2">We aim to respond to accessibility feedback within 5 business days and to resolve reported issues as quickly as possible.</p>
           </section>

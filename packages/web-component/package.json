@@ -1,10 +1,10 @@
 {
-  "name": "@theemel/web-component",
+  "name": "@themal/web-component",
   "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Web component wrapper for Themal editor — use via a single <script> tag on any platform",
-  "main": "./dist/theemel-editor.js",
+  "main": "./dist/themal-editor.js",
   "files": [
     "dist"
   ],

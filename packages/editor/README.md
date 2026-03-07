@@ -1,4 +1,4 @@
-# @theemel/editor
+# @themal/editor
 
 Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography and interaction states, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile.
 
@@ -7,7 +7,7 @@ Interactive design system editor for React apps. Pick colors, generate harmony p
 ## Install
 
 ```bash
-npm install @theemel/editor
+npm install @themal/editor
 ```
 
 ### Peer Dependencies
@@ -28,8 +28,8 @@ npm install axe-core lucide-react
 ## Quick Start
 
 ```tsx
-import { DesignSystemEditor } from '@theemel/editor';
-import '@theemel/editor/style.css';
+import { DesignSystemEditor } from '@themal/editor';
+import '@themal/editor/style.css';
 
 function App() {
   return <DesignSystemEditor />;
@@ -73,14 +73,14 @@ The following features require a valid license key:
 
 ### License Key Format
 
-Keys follow the format `THEEMEL-XXXX-XXXX-XXXX` with a checksum-validated third segment. Use `generateLicenseKey()` to create valid keys.
+Keys follow the format `THEMAL-XXXX-XXXX-XXXX` with a checksum-validated third segment. Use `generateLicenseKey()` to create valid keys.
 
 ### PremiumGate Component
 
 Wrap any feature in `PremiumGate` to gate it behind a license key. Clicking a gated feature opens a modal with upgrade and sign-in options:
 
 ```tsx
-import { PremiumGate } from '@theemel/editor';
+import { PremiumGate } from '@themal/editor';
 
 <PremiumGate feature="harmony-schemes" upgradeUrl="/pricing" signInUrl="/sign-in">
   <HarmonyControls />
@@ -99,9 +99,9 @@ import { PremiumGate } from '@theemel/editor';
 If using `PremiumGate` or `useLicense` outside of `DesignSystemEditor`, wrap your tree in `LicenseProvider`:
 
 ```tsx
-import { LicenseProvider } from '@theemel/editor';
+import { LicenseProvider } from '@themal/editor';
 
-<LicenseProvider licenseKey="THEEMEL-XXXX-XXXX-XXXX">
+<LicenseProvider licenseKey="THEMAL-XXXX-XXXX-XXXX">
   <App />
 </LicenseProvider>
 ```
@@ -124,7 +124,7 @@ import { LicenseProvider } from '@theemel/editor';
 
 ```tsx
 <DesignSystemEditor
-  licenseKey="THEEMEL-XXXX-XXXX-XXXX"
+  licenseKey="THEMAL-XXXX-XXXX-XXXX"
   upgradeUrl="/pricing"
   signInUrl="/sign-in"
 />
@@ -212,14 +212,14 @@ import {
   initCustomFonts,      // Re-register all custom fonts on startup
 
   // License utilities
-  validateLicenseKey,   // Validate a THEEMEL-XXXX-XXXX-XXXX key
+  validateLicenseKey,   // Validate a THEMAL-XXXX-XXXX-XXXX key
   generateLicenseKey,   // Generate a valid license key
 
   // Premium components & hooks
   LicenseProvider,      // Context provider for license state
   useLicense,           // Hook: { isValid, isPremium }
   PremiumGate,          // Gate component for premium features
-} from '@theemel/editor';
+} from '@themal/editor';
 ```
 
 ### Exported Types
@@ -240,7 +240,7 @@ import type {
   LicenseValidation,
   LicenseProviderProps,
   PremiumGateProps,
-} from '@theemel/editor';
+} from '@themal/editor';
 ```
 
 ## How It Works
@@ -263,7 +263,7 @@ import type {
 The editor is built with Vite in library mode and published as an ES module:
 
 ```
-@theemel/editor
+@themal/editor
 ├── dist/index.js      # ESM bundle (all components + utilities)
 ├── dist/index.d.ts    # TypeScript declarations
 └── dist/style.css     # Pre-compiled, scoped Tailwind styles
@@ -282,7 +282,7 @@ Import the main entry point for components and utilities, and `style.css` separa
 
 ## Tailwind Scoping
 
-The editor ships pre-compiled CSS via `@theemel/editor/style.css`. Styles are scoped using Tailwind's `important: '.ds-editor'` so they don't conflict with your app's styles. The root element is automatically wrapped in `<div className="ds-editor">`.
+The editor ships pre-compiled CSS via `@themal/editor/style.css`. Styles are scoped using Tailwind's `important: '.ds-editor'` so they don't conflict with your app's styles. The root element is automatically wrapped in `<div className="ds-editor">`.
 
 ## Development
 
@@ -314,7 +314,7 @@ The test suite uses **vitest-axe** to run axe-core against rendered components, 
 
 ## Publishing to npm
 
-The package is published as `@theemel/editor` on npm. To publish a new version:
+The package is published as `@themal/editor` on npm. To publish a new version:
 
 ```bash
 # 1. Build
@@ -331,7 +331,7 @@ npm version patch   # or minor / major
 npm publish --access public
 ```
 
-You must be logged in to npm (`npm login`) with publish access to the `@theemel` scope.
+You must be logged in to npm (`npm login`) with publish access to the `@themal` scope.
 
 ## License
 

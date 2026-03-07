@@ -85,7 +85,7 @@ export default function Terms() {
 
           <section>
             <h2 className="text-xl font-medium mb-2">11. Contact</h2>
-            <p>For questions about these terms, please contact us at <a href="mailto:legal@theemel.com" className="underline hover:opacity-70">legal@theemel.com</a>.</p>
+            <p>For questions about these terms, please contact us at <a href="mailto:legal@themalive.com" className="underline hover:opacity-70">legal@themalive.com</a>.</p>
           </section>
         </div>
       </div>

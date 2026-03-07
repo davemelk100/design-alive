@@ -18,15 +18,15 @@ Your entire theme (colors, typography, interactions, card styles, dialog styles,
 
 ## npm Package
 
-The editor is published to npm as [`@theemel/editor`](https://www.npmjs.com/package/@theemel/editor) and can be installed in any React app:
+The editor is published to npm as [`@themal/editor`](https://www.npmjs.com/package/@themal/editor) and can be installed in any React app:
 
 ```bash
-npm install @theemel/editor
+npm install @themal/editor
 ```
 
 ```tsx
-import { DesignSystemEditor } from "@theemel/editor";
-import "@theemel/editor/style.css";
+import { DesignSystemEditor } from "@themal/editor";
+import "@themal/editor/style.css";
 
 function App() {
   return <DesignSystemEditor />;
@@ -37,7 +37,7 @@ Requires `react` and `react-dom` v18 or v19. Optionally install `axe-core` (acce
 
 ## Web Component
 
-For WordPress, static sites, or any non-React platform, use the `<theemel-editor>` web component via a single `<script>` tag. See [`packages/web-component/README.md`](packages/web-component/README.md) for setup instructions.
+For WordPress, static sites, or any non-React platform, use the `<themal-editor>` web component via a single `<script>` tag. See [`packages/web-component/README.md`](packages/web-component/README.md) for setup instructions.
 
 ## Tech Stack
 

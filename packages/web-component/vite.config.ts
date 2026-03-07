@@ -42,9 +42,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.tsx"),
-      name: "TheemelEditor",
+      name: "ThemalEditor",
       formats: ["iife"],
-      fileName: () => "theemel-editor.js",
+      fileName: () => "themal-editor.js",
     },
     rollupOptions: {
       output: {
@@ -56,7 +56,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@theemel/editor": path.resolve(__dirname, "../editor/src"),
+      "@themal/editor": path.resolve(__dirname, "../editor/src"),
     },
   },
 });

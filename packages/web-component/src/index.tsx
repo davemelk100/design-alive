@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { DesignSystemEditor } from "@theemel/editor";
-import type { DesignSystemEditorProps } from "@theemel/editor";
+import { DesignSystemEditor } from "@themal/editor";
+import type { DesignSystemEditorProps } from "@themal/editor";
 
 // Attribute name → React prop name mapping
 const ATTR_TO_PROP: Record<string, keyof DesignSystemEditorProps> = {
@@ -27,7 +27,7 @@ function parseAttrValue(propName: string, value: string | null): string | boolea
   return value;
 }
 
-class TheemelEditorElement extends HTMLElement {
+class ThemalEditorElement extends HTMLElement {
   private _root: ReactDOM.Root | null = null;
   private _mountPoint: HTMLDivElement | null = null;
 
@@ -92,4 +92,4 @@ class TheemelEditorElement extends HTMLElement {
   }
 }
 
-customElements.define("theemel-editor", TheemelEditorElement);
+customElements.define("themal-editor", ThemalEditorElement);

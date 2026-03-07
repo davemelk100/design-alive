@@ -36,8 +36,8 @@ export default function App() {
   // Listen for sign-in requests from the editor's PremiumGate popover
   useEffect(() => {
     const handleSignIn = () => clerk.openSignIn();
-    window.addEventListener("theemel:sign-in", handleSignIn);
-    return () => window.removeEventListener("theemel:sign-in", handleSignIn);
+    window.addEventListener("themal:sign-in", handleSignIn);
+    return () => window.removeEventListener("themal:sign-in", handleSignIn);
   }, [clerk]);
 
   return (

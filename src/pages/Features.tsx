@@ -78,7 +78,7 @@ const features = [
       "Typography presets with system font option",
       "CSS export for all sections - colors, card, typography, alerts, interactions",
       "Section-level reset controls",
-      "Package renamed to @theemel/editor",
+      "Package renamed to @themal/editor",
     ],
   },
   {
@@ -93,7 +93,7 @@ const features = [
       "Dark mode support with automatic foreground/background swap",
       "Accessibility audit via axe-core",
       "Responsive mobile-first layout with hamburger menu",
-      "Web component support via <theemel-editor> custom element",
+      "Web component support via <themal-editor> custom element",
     ],
   },
 ];

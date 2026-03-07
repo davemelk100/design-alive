@@ -47,7 +47,7 @@ function UpgradeModal({
   const handleActivate = () => {
     const result = validateLicenseKey(licenseInput);
     if (result.isValid) {
-      window.dispatchEvent(new CustomEvent("theemel:license-activate", { detail: { key: licenseInput.trim().toUpperCase() } }));
+      window.dispatchEvent(new CustomEvent("themal:license-activate", { detail: { key: licenseInput.trim().toUpperCase() } }));
       onClose();
     } else {
       setLicenseError("Invalid license key. Please check and try again.");
@@ -93,7 +93,7 @@ function UpgradeModal({
               onClick={(e) => {
                 e.preventDefault();
                 onClose();
-                window.dispatchEvent(new CustomEvent("theemel:sign-in"));
+                window.dispatchEvent(new CustomEvent("themal:sign-in"));
               }}
               className="w-full text-center px-4 py-2.5 text-[14px] font-light rounded-lg transition-opacity hover:opacity-70"
               style={{ backgroundColor: "#f3f4f6", color: "#111" }}
@@ -116,7 +116,7 @@ function UpgradeModal({
                   type="text"
                   value={licenseInput}
                   onChange={(e) => { setLicenseInput(e.target.value); setLicenseError(""); }}
-                  placeholder="THEEMEL-XXXX-XXXX-XXXX"
+                  placeholder="THEMAL-XXXX-XXXX-XXXX"
                   className="flex-1 px-3 py-2 text-[13px] font-light rounded-lg border outline-none"
                   style={{ borderColor: licenseError ? "#ef4444" : "#e5e7eb", color: "#111" }}
                   onKeyDown={(e) => { if (e.key === "Enter") handleActivate(); }}

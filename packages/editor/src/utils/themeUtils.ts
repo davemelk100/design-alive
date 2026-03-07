@@ -1014,7 +1014,7 @@ export function removeGoogleFontLinks() {
   document.querySelectorAll('link[id^="gf-"]').forEach((el) => el.remove());
 }
 
-const THEEMEL_TYPO_STYLE_ID = "theemel-typography";
+const THEMAL_TYPO_STYLE_ID = "themal-typography";
 
 export function applyTypography(state: TypographyState) {
   const root = document.documentElement;
@@ -1029,10 +1029,10 @@ export function applyTypography(state: TypographyState) {
   root.style.setProperty("--letter-spacing-heading", `${state.headingLetterSpacing}em`);
 
   // Inject global styles so typography applies to the entire page
-  let styleEl = document.getElementById(THEEMEL_TYPO_STYLE_ID) as HTMLStyleElement | null;
+  let styleEl = document.getElementById(THEMAL_TYPO_STYLE_ID) as HTMLStyleElement | null;
   if (!styleEl) {
     styleEl = document.createElement("style");
-    styleEl.id = THEEMEL_TYPO_STYLE_ID;
+    styleEl.id = THEMAL_TYPO_STYLE_ID;
     document.head.appendChild(styleEl);
   }
   styleEl.textContent = `
@@ -1080,7 +1080,7 @@ export function removeTypographyProperties() {
     root.style.removeProperty(prop);
   }
   removeGoogleFontLinks();
-  const styleEl = document.getElementById(THEEMEL_TYPO_STYLE_ID);
+  const styleEl = document.getElementById(THEMAL_TYPO_STYLE_ID);
   if (styleEl) styleEl.remove();
 }
 
@@ -1243,7 +1243,7 @@ export const INTERACTION_PRESETS: Record<string, InteractionStyleState> = {
   },
 };
 
-const THEEMEL_INTERACTION_STYLE_ID = "theemel-interaction";
+const THEMAL_INTERACTION_STYLE_ID = "themal-interaction";
 
 export function applyInteractionStyle(state: InteractionStyleState) {
   const root = document.documentElement;
@@ -1254,10 +1254,10 @@ export function applyInteractionStyle(state: InteractionStyleState) {
   root.style.setProperty("--focus-ring-width", `${state.focusRingWidth}px`);
   root.style.setProperty("--focus-ring-color", "hsl(var(--ring))");
 
-  let styleEl = document.getElementById(THEEMEL_INTERACTION_STYLE_ID) as HTMLStyleElement | null;
+  let styleEl = document.getElementById(THEMAL_INTERACTION_STYLE_ID) as HTMLStyleElement | null;
   if (!styleEl) {
     styleEl = document.createElement("style");
-    styleEl.id = THEEMEL_INTERACTION_STYLE_ID;
+    styleEl.id = THEMAL_INTERACTION_STYLE_ID;
     document.head.appendChild(styleEl);
   }
   styleEl.textContent = `
@@ -1292,7 +1292,7 @@ export function removeInteractionStyleProperties() {
   ]) {
     root.style.removeProperty(prop);
   }
-  const styleEl = document.getElementById(THEEMEL_INTERACTION_STYLE_ID);
+  const styleEl = document.getElementById(THEMAL_INTERACTION_STYLE_ID);
   if (styleEl) styleEl.remove();
 }
 
@@ -1457,7 +1457,7 @@ export const TYPO_INTERACTION_PRESETS: Record<string, TypoInteractionStyleState>
   },
 };
 
-const THEEMEL_TYPO_INTERACTION_STYLE_ID = "theemel-typo-interaction";
+const THEMAL_TYPO_INTERACTION_STYLE_ID = "themal-typo-interaction";
 
 export function applyTypoInteractionStyle(state: TypoInteractionStyleState) {
   const root = document.documentElement;
@@ -1469,10 +1469,10 @@ export function applyTypoInteractionStyle(state: TypoInteractionStyleState) {
   root.style.setProperty("--heading-hover-scale", String(state.headingHoverScale));
   root.style.setProperty("--heading-transition-duration", `${state.headingTransitionDuration}ms`);
 
-  let styleEl = document.getElementById(THEEMEL_TYPO_INTERACTION_STYLE_ID) as HTMLStyleElement | null;
+  let styleEl = document.getElementById(THEMAL_TYPO_INTERACTION_STYLE_ID) as HTMLStyleElement | null;
   if (!styleEl) {
     styleEl = document.createElement("style");
-    styleEl.id = THEEMEL_TYPO_INTERACTION_STYLE_ID;
+    styleEl.id = THEMAL_TYPO_INTERACTION_STYLE_ID;
     document.head.appendChild(styleEl);
   }
 
@@ -1513,7 +1513,7 @@ export function removeTypoInteractionStyleProperties() {
   ]) {
     root.style.removeProperty(prop);
   }
-  const styleEl = document.getElementById(THEEMEL_TYPO_INTERACTION_STYLE_ID);
+  const styleEl = document.getElementById(THEMAL_TYPO_INTERACTION_STYLE_ID);
   if (styleEl) styleEl.remove();
 }
 

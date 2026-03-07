@@ -78,7 +78,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-medium mb-2">7. Contact</h2>
-            <p>For privacy-related inquiries, please contact us at <a href="mailto:privacy@theemel.com" className="underline hover:opacity-70">privacy@theemel.com</a>.</p>
+            <p>For privacy-related inquiries, please contact us at <a href="mailto:privacy@themalive.com" className="underline hover:opacity-70">privacy@themalive.com</a>.</p>
           </section>
         </div>
       </div>

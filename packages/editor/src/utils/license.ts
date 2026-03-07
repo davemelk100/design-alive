@@ -1,7 +1,7 @@
 /**
- * License key validation and generation for @theemel/editor premium features.
+ * License key validation and generation for @themal/editor premium features.
  *
- * Key format:  THEEMEL-XXXX-XXXX-XXXX
+ * Key format:  THEMAL-XXXX-XXXX-XXXX
  *   - Segments use alphanumeric chars excluding ambiguous ones (0/O, 1/I/L).
  *   - The third segment is a checksum derived from the first two.
  */
@@ -58,7 +58,7 @@ export function validateLicenseKey(key: string | undefined | null): LicenseValid
   if (!key) return { isValid: false, isPremium: false };
 
   const normalized = key.trim().toUpperCase();
-  const pattern = /^THEEMEL-([2-9A-HJ-NP-Z]{4})-([2-9A-HJ-NP-Z]{4})-([2-9A-HJ-NP-Z]{4})$/;
+  const pattern = /^THEMAL-([2-9A-HJ-NP-Z]{4})-([2-9A-HJ-NP-Z]{4})-([2-9A-HJ-NP-Z]{4})$/;
   const match = normalized.match(pattern);
   if (!match) return { isValid: false, isPremium: false };
 
@@ -76,5 +76,5 @@ export function generateLicenseKey(): string {
   const seg1 = randomSegment();
   const seg2 = randomSegment();
   const seg3 = checksumSegment(seg1, seg2);
-  return `THEEMEL-${seg1}-${seg2}-${seg3}`;
+  return `THEMAL-${seg1}-${seg2}-${seg3}`;
 }

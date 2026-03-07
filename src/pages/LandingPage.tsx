@@ -98,7 +98,7 @@ const DEFAULT_THEME: Record<string, string> = {
   "--card-backdrop": "blur(16px)",
 };
 
-const CODE_SNIPPET = `npm install @theemel/editor`;
+const CODE_SNIPPET = `npm install @themal/editor`;
 
 
 export default function LandingPage() {

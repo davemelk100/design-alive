@@ -206,11 +206,11 @@ export default function HowItWorks() {
               Web Component
             </h2>
             <p className="text-[14px] leading-relaxed mb-3" style={{ color: "hsl(var(--foreground))" }}>
-              The editor is also available as a <code className="font-mono">&lt;theemel-editor&gt;</code> web component for use on WordPress, static sites, or any platform - no React knowledge required. A single script tag bundles React, the editor, and all styles into one self-contained file.
+              The editor is also available as a <code className="font-mono">&lt;themal-editor&gt;</code> web component for use on WordPress, static sites, or any platform - no React knowledge required. A single script tag bundles React, the editor, and all styles into one self-contained file.
             </p>
             <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-3" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-              <code>{`<script src="https://cdn.example.com/theemel-editor.js"></script>
-<theemel-editor license-key="THEEMEL-XXXX-XXXX-XXXX"></theemel-editor>`}</code>
+              <code>{`<script src="https://cdn.example.com/themal-editor.js"></script>
+<themal-editor license-key="THEMAL-XXXX-XXXX-XXXX"></themal-editor>`}</code>
             </pre>
             <p className="text-[14px] leading-relaxed mb-3" style={{ color: "hsl(var(--foreground))" }}>
               The custom element uses Shadow DOM for style isolation and maps HTML attributes to React props:

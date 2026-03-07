@@ -17,7 +17,7 @@ export default function ReadmePage() {
         <div className="flex items-end gap-3 mb-8" style={{ color: "hsl(var(--foreground))" }}>
           <ThemalLogo className="h-10 sm:h-12" />
           <h1 className="text-3xl sm:text-4xl font-light title-font" style={{ color: "hsl(var(--foreground))", lineHeight: ".75" }}>
-            @theemel/editor
+            @themal/editor
           </h1>
         </div>
 
@@ -29,7 +29,7 @@ export default function ReadmePage() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Install</h2>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>npm install @theemel/editor</code>
+            <code>npm install @themal/editor</code>
           </pre>
           <p className="text-[14px] mt-2" style={{ color: "hsl(var(--muted-foreground))" }}>
             Peer dependencies: <code className="font-mono text-[14px]">react</code> and <code className="font-mono text-[14px]">react-dom</code> (v18 or v19).
@@ -43,8 +43,8 @@ export default function ReadmePage() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Quick Start</h2>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>{`import { DesignSystemEditor } from '@theemel/editor';
-import '@theemel/editor/style.css';
+            <code>{`import { DesignSystemEditor } from '@themal/editor';
+import '@themal/editor/style.css';
 
 function App() {
   return <DesignSystemEditor />;
@@ -163,7 +163,7 @@ function App() {
           <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>With premium features</h3>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor
-  licenseKey="THEEMEL-XXXX-XXXX-XXXX"
+  licenseKey="THEMAL-XXXX-XXXX-XXXX"
   upgradeUrl="/pricing"
   signInUrl="/sign-in"
 />`}</code>
@@ -225,14 +225,14 @@ function App() {
   initCustomFonts,             // Re-register fonts on startup
 
   // License utilities
-  validateLicenseKey,          // Validate a THEEMEL key
+  validateLicenseKey,          // Validate a THEMAL key
   generateLicenseKey,          // Generate a valid key
 
   // Premium components & hooks
   LicenseProvider,             // Context provider
   useLicense,                  // Hook: { isValid, isPremium }
   PremiumGate,                 // Gate component
-} from '@theemel/editor';`}</code>
+} from '@themal/editor';`}</code>
           </pre>
         </section>
 
@@ -262,11 +262,11 @@ function App() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Web Component</h2>
           <p className="text-[14px] leading-relaxed mb-3" style={{ color: "hsl(var(--foreground))" }}>
-            For WordPress, static sites, or any non-React platform, use the <code className="font-mono text-[14px]">&lt;theemel-editor&gt;</code> web component. A single script tag bundles everything - no build step required.
+            For WordPress, static sites, or any non-React platform, use the <code className="font-mono text-[14px]">&lt;themal-editor&gt;</code> web component. A single script tag bundles everything - no build step required.
           </p>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>{`<script src="https://themalive.com/theemel-editor.js"></script>
-<theemel-editor license-key="THEEMEL-XXXX-XXXX-XXXX"></theemel-editor>`}</code>
+            <code>{`<script src="https://themalive.com/themal-editor.js"></script>
+<themal-editor license-key="THEMAL-XXXX-XXXX-XXXX"></themal-editor>`}</code>
           </pre>
           <p className="text-[14px] leading-relaxed mb-3" style={{ color: "hsl(var(--foreground))" }}>
             Supported attributes:
@@ -324,7 +324,7 @@ function App() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Framework Compatibility</h2>
           <p className="text-[14px] leading-relaxed mb-3" style={{ color: "hsl(var(--foreground))" }}>
-            The <code className="font-mono text-[14px]">@theemel/editor</code> npm package is for React apps. For all other frameworks, use the <code className="font-mono text-[14px]">&lt;theemel-editor&gt;</code> web component — it bundles React internally and works anywhere you can load a script tag.
+            The <code className="font-mono text-[14px]">@themal/editor</code> npm package is for React apps. For all other frameworks, use the <code className="font-mono text-[14px]">&lt;themal-editor&gt;</code> web component — it bundles React internally and works anywhere you can load a script tag.
           </p>
 
           <h3 className="text-[14px] font-medium mb-2 mt-4" style={{ color: "hsl(var(--muted-foreground))" }}>Vue 3</h3>
@@ -333,14 +333,14 @@ function App() {
           </p>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-2" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<!-- index.html -->
-<script src="https://themalive.com/theemel-editor.js"></script>`}</code>
+<script src="https://themalive.com/themal-editor.js"></script>`}</code>
           </pre>
           <p className="text-[14px] mb-2" style={{ color: "hsl(var(--foreground))" }}>
             2. Use the custom element in any component:
           </p>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-2" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<template>
-  <theemel-editor></theemel-editor>
+  <themal-editor></themal-editor>
 </template>`}</code>
           </pre>
           <p className="text-[14px] mb-2" style={{ color: "hsl(var(--foreground))" }}>
@@ -355,7 +355,7 @@ export default {
     vue({
       template: {
         compilerOptions: {
-          isCustomElement: (tag) => tag === 'theemel-editor'
+          isCustomElement: (tag) => tag === 'themal-editor'
         }
       }
     })
@@ -370,7 +370,7 @@ export default {
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-2" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`// angular.json
 "scripts": [
-  "https://themalive.com/theemel-editor.js"
+  "https://themalive.com/themal-editor.js"
 ]`}</code>
           </pre>
           <p className="text-[14px] mb-2" style={{ color: "hsl(var(--foreground))" }}>
@@ -384,7 +384,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   selector: 'app-root',
   standalone: true,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  template: \`<theemel-editor></theemel-editor>\`
+  template: \`<themal-editor></themal-editor>\`
 })
 export class AppComponent {}`}</code>
           </pre>
@@ -398,13 +398,13 @@ export class AppComponent {}`}</code>
           </p>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-2" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<!-- app.html -->
-<script src="https://themalive.com/theemel-editor.js"></script>`}</code>
+<script src="https://themalive.com/themal-editor.js"></script>`}</code>
           </pre>
           <p className="text-[14px] mb-2" style={{ color: "hsl(var(--foreground))" }}>
             2. Use in any Svelte component:
           </p>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>{`<theemel-editor></theemel-editor>`}</code>
+            <code>{`<themal-editor></themal-editor>`}</code>
           </pre>
           <p className="text-[14px] mb-4" style={{ color: "hsl(var(--muted-foreground))" }}>
             Svelte supports custom elements natively — no extra configuration needed.
@@ -417,10 +417,10 @@ export class AppComponent {}`}</code>
 ---
 <html>
   <head>
-    <script src="https://themalive.com/theemel-editor.js"></script>
+    <script src="https://themalive.com/themal-editor.js"></script>
   </head>
   <body>
-    <theemel-editor></theemel-editor>
+    <themal-editor></themal-editor>
   </body>
 </html>`}</code>
           </pre>
@@ -437,10 +437,10 @@ export default function DesignEditor() {
   return (
     <>
       <Script
-        src="https://themalive.com/theemel-editor.js"
+        src="https://themalive.com/themal-editor.js"
         strategy="lazyOnload"
       />
-      <theemel-editor></theemel-editor>
+      <themal-editor></themal-editor>
     </>
   )
 }`}</code>
@@ -453,13 +453,13 @@ export default function DesignEditor() {
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-2" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<template>
   <ClientOnly>
-    <theemel-editor></theemel-editor>
+    <themal-editor></themal-editor>
   </ClientOnly>
 </template>
 
 <script setup>
 useHead({
-  script: [{ src: 'https://themalive.com/theemel-editor.js' }]
+  script: [{ src: 'https://themalive.com/themal-editor.js' }]
 })
 </script>`}</code>
           </pre>
@@ -471,7 +471,7 @@ useHead({
 export default defineNuxtConfig({
   vue: {
     compilerOptions: {
-      isCustomElement: (tag) => tag === 'theemel-editor'
+      isCustomElement: (tag) => tag === 'themal-editor'
     }
   }
 })`}</code>
@@ -482,8 +482,8 @@ export default defineNuxtConfig({
             Add a Custom HTML block to any page or post:
           </p>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-2" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>{`<script src="https://themalive.com/theemel-editor.js"></script>
-<theemel-editor></theemel-editor>`}</code>
+            <code>{`<script src="https://themalive.com/themal-editor.js"></script>
+<themal-editor></themal-editor>`}</code>
           </pre>
           <p className="text-[14px] mb-4" style={{ color: "hsl(var(--muted-foreground))" }}>
             Or enqueue via <code className="font-mono text-[14px]">functions.php</code> or create a shortcode plugin. See the <a href="https://github.com/user/themal" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-70 transition-opacity" style={{ color: "hsl(var(--brand))" }}>web component README</a> for detailed WordPress setup options.
@@ -494,8 +494,8 @@ export default defineNuxtConfig({
             Add to any Liquid template or custom page:
           </p>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>{`<script src="https://themalive.com/theemel-editor.js"></script>
-<theemel-editor show-header="false"></theemel-editor>`}</code>
+            <code>{`<script src="https://themalive.com/themal-editor.js"></script>
+<themal-editor show-header="false"></themal-editor>`}</code>
           </pre>
 
           <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Static Sites (Hugo, Jekyll, Eleventy)</h3>
@@ -503,15 +503,15 @@ export default defineNuxtConfig({
             Add to any HTML template or page:
           </p>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>{`<script src="https://themalive.com/theemel-editor.js"></script>
-<theemel-editor></theemel-editor>`}</code>
+            <code>{`<script src="https://themalive.com/themal-editor.js"></script>
+<themal-editor></themal-editor>`}</code>
           </pre>
 
           <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>PHP (Laravel, Symfony, Drupal)</h3>
           <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<!-- In any Blade/Twig/PHP template -->
-<script src="https://themalive.com/theemel-editor.js"></script>
-<theemel-editor></theemel-editor>`}</code>
+<script src="https://themalive.com/themal-editor.js"></script>
+<themal-editor></themal-editor>`}</code>
           </pre>
         </section>
 
@@ -519,7 +519,7 @@ export default defineNuxtConfig({
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Tailwind Scoping</h2>
           <p className="text-[14px] leading-relaxed" style={{ color: "hsl(var(--foreground))" }}>
-            The editor ships pre-compiled CSS via <code className="font-mono text-[14px]">@theemel/editor/style.css</code>. Styles are scoped using Tailwind's <code className="font-mono text-[14px]">{`important: '.ds-editor'`}</code> so they don't conflict with your app's styles. The root element is automatically wrapped in <code className="font-mono text-[14px]">{`<div className="ds-editor">`}</code>.
+            The editor ships pre-compiled CSS via <code className="font-mono text-[14px]">@themal/editor/style.css</code>. Styles are scoped using Tailwind's <code className="font-mono text-[14px]">{`important: '.ds-editor'`}</code> so they don't conflict with your app's styles. The root element is automatically wrapped in <code className="font-mono text-[14px]">{`<div className="ds-editor">`}</code>.
           </p>
         </section>
       </div>

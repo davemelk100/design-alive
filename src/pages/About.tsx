@@ -63,7 +63,7 @@ export default function About() {
           <section>
             <h2 className="text-xl font-medium mb-2">For Developers</h2>
             <p>
-              Themal is available as an npm package (<code className="px-1.5 py-0.5 rounded text-[13px]" style={{ backgroundColor: "hsl(var(--muted))" }}>@theemel/editor</code>) that you can embed in your own application. Pass a brand color, configure callbacks, and let your users customize their own design system. See the <Link to="/readme" className="underline hover:opacity-70 transition-opacity">Dev docs</Link> for integration details.
+              Themal is available as an npm package (<code className="px-1.5 py-0.5 rounded text-[13px]" style={{ backgroundColor: "hsl(var(--muted))" }}>@themal/editor</code>) that you can embed in your own application. Pass a brand color, configure callbacks, and let your users customize their own design system. See the <Link to="/readme" className="underline hover:opacity-70 transition-opacity">Dev docs</Link> for integration details.
             </p>
           </section>
 

@@ -1,12 +1,12 @@
-# @theemel/web-component
+# @themal/web-component
 
 Use Themal on WordPress, static sites, or any non-React platform via a single `<script>` tag. No build step required.
 
 ## Quick Start
 
 ```html
-<script src="https://themalive.com/theemel-editor.js"></script>
-<theemel-editor></theemel-editor>
+<script src="https://themalive.com/themal-editor.js"></script>
+<themal-editor></themal-editor>
 ```
 
 That's it — the script bundles React, the editor, and all styles into one file.
@@ -20,22 +20,22 @@ That's it — the script bundles React, the editor, and all styles into one file
    cd packages/web-component
    npm run build
    ```
-2. Upload `dist/theemel-editor.js` to your WordPress Media Library or a CDN.
+2. Upload `dist/themal-editor.js` to your WordPress Media Library or a CDN.
 3. Add a **Custom HTML** block to any page or post:
    ```html
-   <script src="https://your-site.com/wp-content/uploads/theemel-editor.js"></script>
-   <theemel-editor license-key="THEEMEL-XXXX-XXXX-XXXX"></theemel-editor>
+   <script src="https://your-site.com/wp-content/uploads/themal-editor.js"></script>
+   <themal-editor license-key="THEMAL-XXXX-XXXX-XXXX"></themal-editor>
    ```
 
 ### Option B: Enqueue via functions.php
 
-1. Copy `dist/theemel-editor.js` into your theme directory (e.g. `your-theme/js/`).
+1. Copy `dist/themal-editor.js` into your theme directory (e.g. `your-theme/js/`).
 2. Add to your theme's `functions.php`:
    ```php
    add_action('wp_enqueue_scripts', function() {
        wp_enqueue_script(
-           'theemel-editor',
-           get_template_directory_uri() . '/js/theemel-editor.js',
+           'themal-editor',
+           get_template_directory_uri() . '/js/themal-editor.js',
            [],
            '0.16.0',
            true
@@ -44,32 +44,32 @@ That's it — the script bundles React, the editor, and all styles into one file
    ```
 3. Add the custom element to any page template or shortcode:
    ```html
-   <theemel-editor license-key="THEEMEL-XXXX-XXXX-XXXX"></theemel-editor>
+   <themal-editor license-key="THEMAL-XXXX-XXXX-XXXX"></themal-editor>
    ```
 
 ### Option C: Simple WordPress Plugin
 
-Create `wp-content/plugins/theemel/theemel.php`:
+Create `wp-content/plugins/themal/themal.php`:
 
 ```php
 <?php
 /**
  * Plugin Name: Themal Editor
- * Description: Embed the Themal design system editor via [theemel] shortcode.
+ * Description: Embed the Themal design system editor via [themal] shortcode.
  * Version: 0.16.0
  */
 
 add_action('wp_enqueue_scripts', function() {
     wp_register_script(
-        'theemel-editor',
-        plugins_url('theemel-editor.js', __FILE__),
+        'themal-editor',
+        plugins_url('themal-editor.js', __FILE__),
         [],
         '0.16.0',
         true
     );
 });
 
-add_shortcode('theemel', function($atts) {
+add_shortcode('themal', function($atts) {
     $atts = shortcode_atts([
         'license-key' => '',
         'show-header' => 'true',
@@ -77,7 +77,7 @@ add_shortcode('theemel', function($atts) {
         'sign-in-url' => '',
     ], $atts);
 
-    wp_enqueue_script('theemel-editor');
+    wp_enqueue_script('themal-editor');
 
     $attrs = '';
     foreach ($atts as $key => $value) {
@@ -86,14 +86,14 @@ add_shortcode('theemel', function($atts) {
         }
     }
 
-    return '<theemel-editor' . $attrs . '></theemel-editor>';
+    return '<themal-editor' . $attrs . '></themal-editor>';
 });
 ```
 
-Then copy `theemel-editor.js` into the same plugin folder and use the `[theemel]` shortcode in any post or page:
+Then copy `themal-editor.js` into the same plugin folder and use the `[themal]` shortcode in any post or page:
 
 ```
-[theemel license-key="THEEMEL-XXXX-XXXX-XXXX"]
+[themal license-key="THEMAL-XXXX-XXXX-XXXX"]
 ```
 
 ## Attributes
@@ -116,11 +116,11 @@ cd packages/web-component
 npm run build
 ```
 
-Output: `dist/theemel-editor.js` — a self-contained IIFE bundle with React, ReactDOM, and all editor styles included via Shadow DOM.
+Output: `dist/themal-editor.js` — a self-contained IIFE bundle with React, ReactDOM, and all editor styles included via Shadow DOM.
 
 ## How It Works
 
-The web component uses Shadow DOM for style isolation. When the `<theemel-editor>` element connects to the page, it:
+The web component uses Shadow DOM for style isolation. When the `<themal-editor>` element connects to the page, it:
 
 1. Creates a shadow root
 2. Copies document stylesheets into the shadow DOM

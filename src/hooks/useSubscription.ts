@@ -16,7 +16,7 @@ function checksumSegment(seg1: string, seg2: string): string {
   return result;
 }
 
-/** Derive a deterministic THEEMEL license key from a stable user ID. */
+/** Derive a deterministic THEMAL license key from a stable user ID. */
 function deriveKey(userId: string): string {
   let h = 0;
   for (let i = 0; i < userId.length; i++) {
@@ -41,7 +41,7 @@ function deriveKey(userId: string): string {
   }
 
   const seg3 = checksumSegment(seg1, seg2);
-  return `THEEMEL-${seg1}-${seg2}-${seg3}`;
+  return `THEMAL-${seg1}-${seg2}-${seg3}`;
 }
 
 interface SubscriptionState {

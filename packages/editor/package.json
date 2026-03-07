@@ -1,5 +1,5 @@
 {
-  "name": "@theemel/editor",
+  "name": "@themal/editor",
   "version": "0.16.2",
   "type": "module",
   "description": "Interactive design system editor — pick colors, enforce WCAG AA contrast, export CSS custom properties",

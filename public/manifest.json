@@ -8,12 +8,12 @@
   "theme_color": "#000000",
   "icons": [
     {
-      "src": "/theemel-logo.svg",
+      "src": "/themal-logo.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     },
     {
-      "src": "/theemel-logo.png",
+      "src": "/themal-logo.png",
       "sizes": "512x512",
       "type": "image/png"
     }
