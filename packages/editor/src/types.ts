@@ -1,5 +1,12 @@
 import type React from "react";
 
+export interface CustomIcon {
+  /** Display name for the icon */
+  name: string;
+  /** React component that renders the icon. Receives className and standard SVG props. */
+  icon: React.ComponentType<{ className?: string; [key: string]: unknown }>;
+}
+
 export interface DesignSystemEditorProps {
   /** URL for the PR creation endpoint. Hides PR button if omitted. */
   prEndpointUrl?: string;
@@ -27,6 +34,10 @@ export interface DesignSystemEditorProps {
   featuresUrl?: string;
   /** URL for the About page link in the header */
   aboutUrl?: string;
+  /** Custom icons to display in the Icons preview section */
+  customIcons?: CustomIcon[];
+  /** How custom icons interact with built-in icons. "append" adds them after built-ins, "replace" hides built-ins entirely. Default: "append" */
+  iconMode?: "append" | "replace";
 }
 
 export interface TokenDefinition {

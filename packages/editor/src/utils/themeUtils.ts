@@ -1035,33 +1035,31 @@ export function applyTypography(state: TypographyState) {
     styleEl.id = THEMAL_TYPO_STYLE_ID;
     document.head.appendChild(styleEl);
   }
+  /* No !important used here. Custom classes like .ds-h2 override these via
+     higher specificity. Keep selectors scoped to .ds-editor where possible. */
   styleEl.textContent = `
-    body, .ds-editor {
-      font-family: ${state.bodyFamily} !important;
-      font-size: ${state.baseFontSize}px !important;
-      font-weight: ${state.bodyWeight} !important;
-      line-height: ${state.lineHeight} !important;
-      letter-spacing: ${state.letterSpacing}em !important;
+    .ds-editor {
+      font-family: ${state.bodyFamily};
+      font-size: ${state.baseFontSize}px;
+      font-weight: ${state.bodyWeight};
+      line-height: ${state.lineHeight};
+      letter-spacing: ${state.letterSpacing}em;
     }
-    h1, h2, h3, h4, h5, h6,
     .ds-editor h1, .ds-editor h2, .ds-editor h3,
     .ds-editor h4, .ds-editor h5, .ds-editor h6 {
-      font-family: ${state.headingFamily} !important;
-      font-weight: ${state.headingWeight} !important;
-      letter-spacing: ${state.headingLetterSpacing}em !important;
+      font-family: ${state.headingFamily};
+      font-weight: ${state.headingWeight};
+      letter-spacing: ${state.headingLetterSpacing}em;
     }
-    p, ul, ol, li,
-    a:not(.ds-premium-tooltip a),
-    button, input, select, textarea, label,
-    span:not(.ds-premium-tooltip span),
     .ds-editor p, .ds-editor ul, .ds-editor ol, .ds-editor li,
-    .ds-editor a:not(.ds-premium-tooltip a),
-    .ds-editor button, .ds-editor input, .ds-editor select,
+    .ds-editor a:not(.ds-premium-tooltip a):not(.ds-nav-link),
+    .ds-editor button:not(.ds-h2-btn), .ds-editor input, .ds-editor select,
     .ds-editor textarea, .ds-editor label,
-    .ds-editor span:not(.ds-premium-tooltip span) {
-      font-family: ${state.bodyFamily} !important;
-      font-weight: ${state.bodyWeight} !important;
-      line-height: ${state.lineHeight} !important;
+    .ds-editor span:not(.ds-premium-tooltip span):not(.ds-h2) {
+      font-family: ${state.bodyFamily};
+      font-size: ${state.baseFontSize}px;
+      font-weight: ${state.bodyWeight};
+      line-height: ${state.lineHeight};
     }
   `;
 

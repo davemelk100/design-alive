@@ -260,7 +260,7 @@ export default function LandingPage() {
             cumbersome Figma files into code. Design and ship from the same
             place.
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 text-center mt-4 sm:mt-6">
             {[
               { title: "Live Preview", detail: "Every change renders instantly across your full component library." },
               { title: "Export Anything", detail: "CSS variables, SCSS, Tailwind configs, or W3C design tokens in one click." },
@@ -284,24 +284,23 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <Link
-            to="/editor"
-            className="self-center inline-flex items-center justify-center transition-opacity hover:opacity-90 mt-2"
-            style={{
-              backgroundColor: "hsl(var(--brand))",
-              color: "hsl(var(--brand-foreground, var(--background)))",
-              padding: "var(--btn-py, 8px) var(--btn-px, 16px)",
-              fontSize: "var(--btn-font-size, 14px)",
-              fontWeight: "var(--btn-font-weight, 300)",
-              borderRadius: "var(--btn-radius, 12px)",
-              boxShadow: "var(--btn-shadow, 0px 1px 3px 0px rgba(0,0,0,0.1))",
-              borderWidth: "var(--btn-border-width, 0px)",
-              borderStyle: "solid",
-              borderColor: "hsl(var(--border))",
-            }}
-          >
-            Open the Editor
-          </Link>
+          <div className="flex justify-center mt-2">
+            <Link
+              to="/editor"
+              className="inline-flex items-center justify-center transition-opacity hover:opacity-90"
+              style={{
+                backgroundColor: "hsl(var(--brand))",
+                color: "hsl(var(--brand-foreground, var(--background)))",
+                padding: "8px 24px",
+                fontSize: "14px",
+                fontWeight: 300,
+                borderRadius: "var(--btn-radius, 12px)",
+                boxShadow: "var(--btn-shadow, 0px 1px 3px 0px rgba(0,0,0,0.1))",
+              }}
+            >
+              Open the Editor
+            </Link>
+          </div>
         </div>
 
         {/* Scroll indicator */}
@@ -378,24 +377,23 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <Link
-            to="/editor"
-            className="self-center inline-flex items-center justify-center transition-opacity hover:opacity-90 mt-2"
-            style={{
-              backgroundColor: "hsl(var(--brand))",
-              color: "hsl(var(--brand-foreground, var(--background)))",
-              padding: "var(--btn-py, 8px) var(--btn-px, 16px)",
-              fontSize: "var(--btn-font-size, 14px)",
-              fontWeight: "var(--btn-font-weight, 300)",
-              borderRadius: "var(--btn-radius, 12px)",
-              boxShadow: "var(--btn-shadow, 0px 1px 3px 0px rgba(0,0,0,0.1))",
-              borderWidth: "var(--btn-border-width, 0px)",
-              borderStyle: "solid",
-              borderColor: "hsl(var(--border))",
-            }}
-          >
-            Open the Editor
-          </Link>
+          <div className="flex justify-center mt-2">
+            <Link
+              to="/editor"
+              className="inline-flex items-center justify-center transition-opacity hover:opacity-90"
+              style={{
+                backgroundColor: "hsl(var(--brand))",
+                color: "hsl(var(--brand-foreground, var(--background)))",
+                padding: "8px 24px",
+                fontSize: "14px",
+                fontWeight: 300,
+                borderRadius: "var(--btn-radius, 12px)",
+                boxShadow: "var(--btn-shadow, 0px 1px 3px 0px rgba(0,0,0,0.1))",
+              }}
+            >
+              Open the Editor
+            </Link>
+          </div>
         </div>
 
         {/* Scroll to top */}

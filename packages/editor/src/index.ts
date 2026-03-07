@@ -1,5 +1,5 @@
 export { DesignSystemEditor } from "./DesignSystemEditor";
-export type { DesignSystemEditorProps, TokenDefinition } from "./types";
+export type { DesignSystemEditorProps, TokenDefinition, CustomIcon } from "./types";
 export {
   hslStringToHex,
   hexToHslString,

@@ -363,35 +363,6 @@ export default {
 }`}</code>
           </pre>
 
-          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Angular</h3>
-          <p className="text-[14px] mb-2" style={{ color: "hsl(var(--foreground))" }}>
-            1. Add the script to <code className="font-mono text-[14px]">angular.json</code>:
-          </p>
-          <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-2" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>{`// angular.json
-"scripts": [
-  "https://themalive.com/themal-editor.js"
-]`}</code>
-          </pre>
-          <p className="text-[14px] mb-2" style={{ color: "hsl(var(--foreground))" }}>
-            2. Add <code className="font-mono text-[14px]">CUSTOM_ELEMENTS_SCHEMA</code> to your module or standalone component:
-          </p>
-          <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-2" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
-            <code>{`// app.component.ts
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
-@Component({
-  selector: 'app-root',
-  standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  template: \`<themal-editor></themal-editor>\`
-})
-export class AppComponent {}`}</code>
-          </pre>
-          <p className="text-[14px] mb-4" style={{ color: "hsl(var(--muted-foreground))" }}>
-            Or add <code className="font-mono text-[14px]">CUSTOM_ELEMENTS_SCHEMA</code> to your <code className="font-mono text-[14px]">NgModule</code> schemas array for module-based apps.
-          </p>
-
           <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Svelte / SvelteKit</h3>
           <p className="text-[14px] mb-2" style={{ color: "hsl(var(--foreground))" }}>
             1. Add the script to your <code className="font-mono text-[14px]">app.html</code> or load it in a component:

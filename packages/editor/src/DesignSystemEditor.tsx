@@ -270,6 +270,8 @@ function DesignSystemEditorInner({
   signInUrl,
   headerRight,
   aboutUrl,
+  customIcons,
+  iconMode = "append",
 }: DesignSystemEditorProps) {
   const { isPremium } = useLicense();
   const [hoveredLockKey, setHoveredLockKey] = useState<string | null>(null);
@@ -400,10 +402,10 @@ function DesignSystemEditorInner({
   const navItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const navContainerRef = useRef<HTMLDivElement | null>(null);
   const [navOffsets, setNavOffsets] = useState<Record<string, number>>({});
+  const [iconsHidden, setIconsHidden] = useState(false);
   const [auditViolations, setAuditViolations] = useState<
     { selector: string; text: string }[]
   >([]);
-  const [, setViolationIndex] = useState(0);
   const [harmonySchemeIndex, setHarmonySchemeIndex] = useState(-1);
   const [shuffleOpen, setShuffleOpen] = useState(false);
   const [cardStyle, setCardStyle] = useState<CardStyleState>(() => {
@@ -469,6 +471,7 @@ function DesignSystemEditorInner({
       const saved = storage.get<InteractionStyleState>(INTERACTION_STYLE_KEY);
       return saved || { ...DEFAULT_INTERACTION_STYLE };
     });
+  const [showBtnResetModal, setShowBtnResetModal] = useState(false);
   const [btnCssVisible, setBtnCssVisible] = useState(false);
   const [btnCssCopied, setBtnCssCopied] = useState(false);
   const [btnExportFormat, setBtnExportFormat] = useState<"css" | "tokens">("css");
@@ -513,6 +516,7 @@ function DesignSystemEditorInner({
     palette: Record<string, string>;
   } | null>(null);
   const [appliedImageUrl, setAppliedImageUrl] = useState<string | null>(null);
+  const [appliedImageFading, setAppliedImageFading] = useState(false);
   const [mobilePickerKey, setMobilePickerKey] = useState<string | null>(null);
   const [mobilePickerHex, setMobilePickerHex] = useState("#000000");
 
@@ -1250,22 +1254,29 @@ function DesignSystemEditorInner({
   };
 
 
-  const runAccessibilityAudit = async () => {
+  const runAccessibilityAudit = async (manual = false) => {
     if (!accessibilityAudit) return;
     setAuditStatus("running");
     setAuditViolations([]);
-    setViolationIndex(0);
     try {
       const axe = (await import("axe-core")).default;
       const results: AxeResults = await axe.run(
         { exclude: ["[data-axe-exclude]"] },
         { runOnly: { type: "rule", values: ["color-contrast"] } },
       );
+      const issueCount = results.violations.reduce((n, v) => n + v.nodes.length, 0);
+      console.log(
+        `[Themal] Accessibility audit: ${issueCount === 0 ? "PASSED" : `${issueCount} contrast issue${issueCount !== 1 ? "s" : ""} found`}`,
+      );
       if (results.violations.length === 0) {
-        setAuditStatus("idle");
+        setAuditStatus(manual ? "passed" : "idle");
         setAuditViolations([]);
-        setViolationIndex(0);
       } else {
+        for (const v of results.violations) {
+          for (const node of v.nodes) {
+            console.log(`[Themal]   - ${node.target[0]}: ${node.failureSummary?.split("\n")[0] || "contrast failure"}`);
+          }
+        }
         const style = getComputedStyle(document.documentElement);
         const liveColors: Record<string, string> = {};
         EDITABLE_VARS.forEach(({ key }) => {
@@ -1274,9 +1285,13 @@ function DesignSystemEditorInner({
         const fixes = autoAdjustContrast(liveColors, lockedKeys);
         if (Object.keys(fixes).length > 0) {
           const updatedColors = { ...liveColors };
+          const bg = liveColors["--background"];
           for (const [fixKey, fixVal] of Object.entries(fixes)) {
             document.documentElement.style.setProperty(fixKey, fixVal);
             updatedColors[fixKey] = fixVal;
+            // Save each fix to the knowledge base so the algorithm avoids this failure in the future
+            if (bg) saveContrastCorrection(bg, fixKey, fixVal);
+            console.log(`[Themal]   Fixed ${fixKey}: ${liveColors[fixKey]} -> ${fixVal}`);
           }
           persistContrastFixes(fixes);
           setColors(updatedColors);
@@ -1286,12 +1301,15 @@ function DesignSystemEditorInner({
           { exclude: ["[data-axe-exclude]"] },
           { runOnly: { type: "rule", values: ["color-contrast"] } },
         );
+        const remainingCount = reResults.violations.reduce((n, v) => n + v.nodes.length, 0);
+        console.log(
+          `[Themal] Post-fix audit: ${remainingCount === 0 ? "ALL ISSUES RESOLVED" : `${remainingCount} issue${remainingCount !== 1 ? "s" : ""} remaining`}`,
+        );
         if (reResults.violations.length === 0) {
-          setAuditStatus("idle");
+          setAuditStatus(manual ? "passed" : "idle");
           setAuditViolations([]);
-          setViolationIndex(0);
         } else {
-          setAuditStatus("failed");
+          setAuditStatus(manual ? "failed" : "idle");
           const elements: { selector: string; text: string }[] = [];
           for (const v of reResults.violations) {
             for (const node of v.nodes) {
@@ -1302,7 +1320,7 @@ function DesignSystemEditorInner({
             }
           }
           setAuditViolations(elements);
-          setViolationIndex(0);
+  
         }
       }
     } catch {
@@ -1494,7 +1512,6 @@ function DesignSystemEditorInner({
         );
         if (!contrastViolation) break;
         for (let ni = 0; ni < contrastViolation.nodes.length; ni++) {
-          setViolationIndex(ni);
           await fixElementAnimated(contrastViolation.nodes[ni]);
         }
       }
@@ -1504,7 +1521,7 @@ function DesignSystemEditorInner({
       if (finalResults.violations.length === 0) {
         setAuditStatus("passed");
         setAuditViolations([]);
-        setViolationIndex(0);
+
       } else {
         setAuditStatus("failed");
         const elements: { selector: string; text: string }[] = [];
@@ -1517,7 +1534,7 @@ function DesignSystemEditorInner({
           }
         }
         setAuditViolations(elements);
-        setViolationIndex(0);
+
       }
     } catch (err) {
       console.error("fixContrastIssues failed:", err);
@@ -1595,7 +1612,7 @@ function DesignSystemEditorInner({
         >
           <div className="w-full px-4 sm:px-6 lg:px-8">
             {/* Title + nav links - single header row */}
-            <div className="w-full mb-2 sm:mb-3 lg:mb-4 flex items-end gap-x-4 pt-2 sm:pt-3 lg:pt-4 relative">
+            <div className="w-full mb-2 sm:mb-3 lg:mb-4 flex items-end gap-x-8 sm:gap-x-12 pt-2 sm:pt-3 lg:pt-4 relative">
               <a
                 href="/"
                 className="flex-shrink-0 leading-none"
@@ -1664,50 +1681,25 @@ function DesignSystemEditorInner({
               {/* Nav links - desktop (next to logo) */}
               {showNavLinks && (
                 <nav className="hidden md:flex items-center gap-4">
-                  <a
-                    href="/editor"
-                    className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    Editor
-                  </a>
-                  {aboutUrl && (
-                    <a
-                      href={aboutUrl}
-                      className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
-                      style={{ color: "hsl(var(--muted-foreground))" }}
-                    >
-                      About
-                    </a>
-                  )}
-                  <a
-                    href="/how-it-works"
-                    className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    How
-                  </a>
-                  <a
-                    href="/readme"
-                    className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    Dev
-                  </a>
-                  <a
-                    href="/features"
-                    className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    Features
-                  </a>
-                  <a
-                    href="/pricing"
-                    className="text-[13px] font-light uppercase tracking-wider transition-opacity hover:opacity-70 whitespace-nowrap"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    Pricing
-                  </a>
+                  {[
+                    { href: "/editor", label: "Editor" },
+                    ...(aboutUrl ? [{ href: aboutUrl, label: "About" }] : []),
+                    { href: "/how-it-works", label: "How" },
+                    { href: "/readme", label: "Dev" },
+                    { href: "/features", label: "Features" },
+                    { href: "/pricing", label: "Pricing" },
+                  ].map(({ href, label }) => {
+                    const isActive = typeof window !== "undefined" && window.location.pathname === href;
+                    return (
+                      <a
+                        key={href}
+                        href={href}
+                        className={`ds-nav-link text-[13px] font-light uppercase tracking-wider hover:opacity-70 whitespace-nowrap${isActive ? " ds-active" : ""}`}
+                      >
+                        {label}
+                      </a>
+                    );
+                  })}
                 </nav>
               )}
 
@@ -1793,7 +1785,7 @@ function DesignSystemEditorInner({
                   setTimeout(() => setShareCopied(false), 2000);
                 });
               } else if (v === "pr") setShowPrSetupModal(true);
-              else if (v === "audit") runAccessibilityAudit();
+              else if (v === "audit") runAccessibilityAudit(true);
               e.target.value = "";
             }}
           >
@@ -2102,123 +2094,9 @@ function DesignSystemEditorInner({
               )}
             </button>
           </PremiumGate>
-          <PremiumGate
-            feature="palette-export"
-            variant="inline"
-            hideLock
-            upgradeUrl={upgradeUrl}
-            signInUrl={signInUrl}
-          >
-            <button
-              onClick={() => setShowPaletteExport(true)}
-              className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-            >
-              <svg
-                className="w-4 h-4 flex-shrink-0"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"
-                />
-              </svg>
-              <span className="truncate">
-                <span className="sm:hidden">Export</span>
-                <span className="hidden sm:inline">Export Palette</span>
-              </span>
-              {!isPremium && (
-                <svg
-                  className="w-4 h-4 flex-shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-              )}
-            </button>
-          </PremiumGate>
-          <button
-            onClick={() => {
-              const hash = serializeThemeState(
-                colors,
-                cardStyle,
-                typographyState,
-                alertStyle,
-                interactionStyle,
-                typoInteractionStyle,
-              );
-              window.location.hash = hash;
-              navigator.clipboard.writeText(window.location.href).then(() => {
-                setShareCopied(true);
-                setTimeout(() => setShareCopied(false), 2000);
-              });
-            }}
-            className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-          >
-            <svg
-              className="w-4 h-4 flex-shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-            >
-              <circle cx="18" cy="5" r="3" />
-              <circle cx="6" cy="12" r="3" />
-              <circle cx="18" cy="19" r="3" />
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-            </svg>
-            <span className="truncate">
-              {shareCopied ? "Link copied!" : "Share"}
-            </span>
-          </button>
-          <PremiumGate
-            feature="pr-integration"
-            variant="inline"
-            hideLock
-            upgradeUrl={upgradeUrl}
-            signInUrl={signInUrl}
-          >
-            <button
-              onClick={() => setShowPrSetupModal(true)}
-              className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
-            >
-              <svg
-                className="w-4 h-4 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-              </svg>
-              <span className="truncate">Open PR</span>
-              {!isPremium && (
-                <svg
-                  className="w-4 h-4 flex-shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-              )}
-            </button>
-          </PremiumGate>
           {accessibilityAudit && (
             <button
-              onClick={() => runAccessibilityAudit()}
+              onClick={() => runAccessibilityAudit(true)}
               className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
               title="Run accessibility audit"
             >
@@ -2354,24 +2232,12 @@ function DesignSystemEditorInner({
               navItemRefs.current[s.id] = el;
             }}
             href={`#${s.id}`}
-            className="whitespace-nowrap flex items-center gap-2 no-underline ds-nav-link"
+            className={`whitespace-nowrap flex items-center gap-2 no-underline ds-nav-link ds-nav-link-item${activeSection === s.id ? " ds-active" : ""}`}
             style={{
-              color:
-                activeSection === s.id
-                  ? "hsl(var(--foreground))"
-                  : "hsl(var(--muted-foreground))",
-              lineHeight: 1,
-              borderBottom:
-                activeSection === s.id
-                  ? "1px solid hsl(var(--foreground))"
-                  : "1px solid transparent",
-              paddingBottom: 2,
               transform: `translateX(${navOffsets[s.id] ?? 0}px)`,
-              transition:
-                "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s, border-bottom-color 0.2s",
             }}
           >
-            <span style={{ fontSize: "20px", fontWeight: 700 }}>{s.label}</span>
+            <h2 className="text-[20px] font-bold tracking-wider m-0 p-0">{s.label}</h2>
             <svg
               className="w-5 h-5 opacity-60"
               fill="none"
@@ -2387,6 +2253,71 @@ function DesignSystemEditorInner({
             </svg>
           </a>
         ))}
+        {/* Right-aligned action buttons */}
+        <div className="ml-auto flex items-center gap-3 lg:gap-4">
+          <PremiumGate
+            feature="palette-export"
+            variant="inline"
+            hideLock
+            upgradeUrl={upgradeUrl}
+            signInUrl={signInUrl}
+          >
+            <button
+              onClick={() => setShowPaletteExport(true)}
+              className="whitespace-nowrap flex items-center gap-2 no-underline ds-nav-link-item"
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+              </svg>
+              <h2 className="text-[20px] font-bold tracking-wider m-0 p-0">Export</h2>
+            </button>
+          </PremiumGate>
+          <button
+            onClick={() => {
+              const hash = serializeThemeState(
+                colors,
+                cardStyle,
+                typographyState,
+                alertStyle,
+                interactionStyle,
+                typoInteractionStyle,
+                buttonStyle,
+              );
+              window.location.hash = hash;
+              navigator.clipboard.writeText(window.location.href).then(() => {
+                setShareCopied(true);
+                setTimeout(() => setShareCopied(false), 2000);
+              });
+            }}
+            className="whitespace-nowrap flex items-center gap-2 no-underline ds-nav-link-item"
+          >
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+            </svg>
+            <h2 className="text-[20px] font-bold tracking-wider m-0 p-0">
+              {shareCopied ? "Copied!" : "Share"}
+            </h2>
+          </button>
+          {prEndpointUrl && (
+            <PremiumGate
+              feature="pr-integration"
+              variant="inline"
+              hideLock
+              upgradeUrl={upgradeUrl}
+              signInUrl={signInUrl}
+            >
+              <button
+                onClick={() => setShowPrSetupModal(true)}
+                className="whitespace-nowrap flex items-center gap-2 no-underline ds-nav-link-item"
+              >
+                <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+                <h2 className="text-[20px] font-bold tracking-wider m-0 p-0">Open PR</h2>
+              </button>
+            </PremiumGate>
+          )}
+        </div>
       </nav>
 
       <section className="pb-2 sm:pb-3 lg:pb-4 xl:pb-6 relative">
@@ -2968,29 +2899,33 @@ function DesignSystemEditorInner({
                             backgroundColor: hsl ? `hsl(${hsl})` : "#e5e7eb",
                             color: btnTextColor,
                           }}
-                          onClick={() => {
-                            const isMobile = window.innerWidth < 640;
-                            // Scroll the Colors section to top first
-                            const colorsSection = document.getElementById("colors");
-                            if (colorsSection) {
-                              const rect = colorsSection.getBoundingClientRect();
-                              const scrollY = window.scrollY + rect.top - 8;
-                              window.scrollTo({ top: scrollY, behavior: "smooth" });
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            // Force scroll to absolute top using every method
+                            window.scrollTo(0, 0);
+                            document.documentElement.scrollTop = 0;
+                            document.body.scrollTop = 0;
+                            // Also scroll any parent overflow containers
+                            let el: HTMLElement | null = e.currentTarget as HTMLElement;
+                            while (el) {
+                              el.scrollTop = 0;
+                              el = el.parentElement;
                             }
+                            const isMobile = window.innerWidth < 640;
                             if (isMobile) {
                               setTimeout(() => {
                                 setMobilePickerKey(key);
                                 setMobilePickerHex(hsl ? hslStringToHex(hsl) : "#000000");
-                              }, 350);
+                              }, 100);
                               return;
                             }
-                            // Delay the native color picker so scroll completes first
                             setTimeout(() => {
                               const input = document.getElementById(
                                 inputId,
                               ) as HTMLInputElement | null;
                               input?.click();
-                            }, 350);
+                            }, 100);
                           }}
                         >
                           <span className="hidden sm:inline whitespace-nowrap leading-tight">
@@ -3027,8 +2962,9 @@ function DesignSystemEditorInner({
                           onChange={(e) =>
                             handleColorChange(key, e.target.value)
                           }
-                          className="absolute inset-0 opacity-0 cursor-pointer"
-                          style={{ width: "100%", height: "calc(100% - 24px)" }}
+                          className="absolute inset-0 opacity-0 pointer-events-none"
+                          style={{ width: "100%", height: "calc(100% - 24px)", pointerEvents: "none" }}
+                          tabIndex={-1}
                         />
                         <button
                           className={`h-6 sm:h-auto sm:w-8 flex items-center justify-center transition-all rounded-bl-lg rounded-br-lg sm:rounded-bl-none sm:rounded-tr-lg ${isPremium ? "cursor-pointer" : "cursor-not-allowed"}`}
@@ -3525,31 +3461,58 @@ function DesignSystemEditorInner({
                 </div>
 
                 {/* Icons row */}
-                <div className="w-full hidden md:block" data-axe-exclude>
-                  <p
-                    className="text-[14px] font-light uppercase tracking-wider mb-2 md:mb-3"
-                    style={{ color: "hsl(var(--muted-foreground))" }}
-                  >
-                    Icons
-                  </p>
-                  <div className="flex flex-row flex-wrap gap-2">
-                    <Suspense fallback={null}>
-                      {SITE_ICONS.map(({ name, icon: Icon }) => (
-                        <div
-                          key={name}
-                          className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
-                          title={name}
+                {(() => {
+                  const builtInIcons = iconMode === "replace" ? [] : SITE_ICONS;
+                  const extraIcons = (customIcons || []).map((ci) => ({
+                    name: ci.name,
+                    icon: ci.icon as React.ComponentType<any>,
+                  }));
+                  const allIcons = [...builtInIcons, ...extraIcons];
+                  if (allIcons.length === 0) return null;
+                  return (
+                    <div className="w-full hidden md:block" data-axe-exclude>
+                      <div className="flex items-center gap-2 mb-2 md:mb-3">
+                        <p
+                          className="text-[14px] font-light uppercase tracking-wider"
+                          style={{ color: "hsl(var(--muted-foreground))" }}
                         >
-                          <Icon
-                            className="h-5 w-5 text-brand-dynamic"
-                            aria-label={name}
-                            role="img"
-                          />
+                          Icons
+                        </p>
+                        {allIcons.length > 0 && (
+                          <button
+                            onClick={() => setIconsHidden((h) => !h)}
+                            className="text-[12px] font-light px-2 py-0.5 rounded transition-colors hover:opacity-80"
+                            style={{
+                              color: "hsl(var(--muted-foreground))",
+                              border: "1px solid hsl(var(--border))",
+                            }}
+                          >
+                            {iconsHidden ? "Show All" : "Hide All"}
+                          </button>
+                        )}
+                      </div>
+                      {!iconsHidden && (
+                        <div className="flex flex-row flex-wrap gap-2">
+                          <Suspense fallback={null}>
+                            {allIcons.map(({ name, icon: Icon }) => (
+                              <div
+                                key={name}
+                                className="bg-brand-dynamic/10 dark:bg-brand-dynamic/20 hover:bg-brand-dynamic/20 dark:hover:bg-brand-dynamic/30 rounded-full p-2 shadow-sm hover:scale-110 transition-all duration-200 w-10 h-10 flex items-center justify-center"
+                                title={name}
+                              >
+                                <Icon
+                                  className="h-5 w-5 text-brand-dynamic"
+                                  aria-label={name}
+                                  role="img"
+                                />
+                              </div>
+                            ))}
+                          </Suspense>
                         </div>
-                      ))}
-                    </Suspense>
-                  </div>
-                </div>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -3617,7 +3580,7 @@ function DesignSystemEditorInner({
                         const v = e.target.value;
                         if (v === "css") { setBtnExportFormat("css"); setBtnCssVisible(true); }
                         else if (v === "tokens") { setBtnExportFormat("tokens"); setBtnCssVisible(true); }
-                        else if (v === "reset") setButtonStyle({ ...DEFAULT_BUTTON_STYLE });
+                        else if (v === "reset") setShowBtnResetModal(true);
                         e.target.value = "";
                       }}
                     >
@@ -3673,7 +3636,7 @@ function DesignSystemEditorInner({
                         </button>
                       </div>
                       <button
-                        onClick={() => setButtonStyle({ ...DEFAULT_BUTTON_STYLE })}
+                        onClick={() => setShowBtnResetModal(true)}
                         className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
                         style={{ color: "hsl(var(--muted-foreground))" }}
                       >
@@ -4637,6 +4600,63 @@ function DesignSystemEditorInner({
                     onClick={() => {
                       handleResetInteractionStyle();
                       setShowInteractionResetModal(false);
+                    }}
+                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                    style={{
+                      backgroundColor: "hsl(var(--destructive))",
+                      color: "hsl(var(--destructive-foreground))",
+                    }}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Button Reset Confirmation Modal */}
+          {showBtnResetModal && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="btn-reset-modal-title"
+            >
+              <div
+                className="rounded-lg shadow-xl p-6 w-full max-w-sm mx-4"
+                style={{
+                  backgroundColor: "hsl(var(--card))",
+                  color: "hsl(var(--card-foreground))",
+                }}
+              >
+                <h4
+                  id="btn-reset-modal-title"
+                  className="text-2xl font-light mb-2"
+                >
+                  Reset Button Style?
+                </h4>
+                <p
+                  className="text-[14px] mb-4"
+                  style={{ color: "hsl(var(--card-foreground))" }}
+                >
+                  This will revert all button style settings to their defaults.
+                  Any customizations will be lost.
+                </p>
+                <div className="flex justify-end gap-2">
+                  <button
+                    onClick={() => setShowBtnResetModal(false)}
+                    className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "hsl(var(--card-foreground))",
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={() => {
+                      setButtonStyle({ ...DEFAULT_BUTTON_STYLE });
+                      setShowBtnResetModal(false);
                     }}
                     className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
                     style={{
@@ -8384,11 +8404,15 @@ function DesignSystemEditorInner({
                   const imgUrl = pendingImagePalette.imageUrl;
                   setPendingImagePalette(null);
                   setAppliedImageUrl(imgUrl);
+                  setAppliedImageFading(false);
+                  // Start fade-out after 2s, then remove after transition (1s)
+                  setTimeout(() => setAppliedImageFading(true), 2000);
                   setTimeout(() => {
                     setAppliedImageUrl((cur) => {
                       if (cur === imgUrl) URL.revokeObjectURL(imgUrl);
                       return cur === imgUrl ? null : cur;
                     });
+                    setAppliedImageFading(false);
                   }, 3000);
                 }}
                 className="px-4 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
@@ -8406,10 +8430,14 @@ function DesignSystemEditorInner({
         </div>
       )}
 
-      {/* Applied image showcase (3s) */}
+      {/* Applied image showcase (fades out) */}
       {appliedImageUrl && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+          style={{
+            opacity: appliedImageFading ? 0 : 1,
+            transition: "opacity 1s ease-out",
+          }}
         >
           <div
             className="rounded-xl overflow-hidden shadow-2xl pointer-events-auto"

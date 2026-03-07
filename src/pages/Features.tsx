@@ -154,7 +154,7 @@ export default function Features() {
               { title: "GitHub PR Integration", desc: "Open design system PRs directly from the editor." },
               { title: "Color Locks", desc: "Pin individual color tokens during palette generation." },
               { title: "Responsive Layout", desc: "Mobile-first design with adaptive controls across all viewports." },
-              { title: "Web Component", desc: "Drop into Vue, Angular, Svelte, Astro, WordPress, Shopify, or any platform via a single script tag." },
+              { title: "Web Component", desc: "Drop into Vue, Svelte, Astro, WordPress, Shopify, or any platform via a single script tag." },
             ].map(({ title, desc }) => (
               <div key={title} className="flex items-start gap-2">
                 <span className="mt-0.5" style={{ color: "hsl(var(--brand))" }}>{check}</span>

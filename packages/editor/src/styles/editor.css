@@ -23,9 +23,18 @@
 }
 
 .ds-nav-link:hover,
-.ds-editor .ds-nav-link:hover {
+.ds-editor .ds-nav-link:hover,
+.ds-nav-link.ds-active,
+.ds-editor .ds-nav-link.ds-active {
   color: hsl(var(--foreground)) !important;
   border-bottom-color: hsl(var(--foreground)) !important;
+}
+
+/* Header nav links: subtle bottom border for active state */
+.ds-nav-link {
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: color 0.2s, border-bottom-color 0.2s;
 }
 
 .ds-premium-gated-section {
@@ -85,6 +94,32 @@
 
 
 
+
+/* Section heading style. Uses !important to guarantee these values
+   are never overridden by dynamically injected typography styles. */
+.ds-h2 {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  line-height: 1 !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* Nav link base (replaces inline styles on section nav items) */
+.ds-nav-link-item {
+  color: hsl(var(--muted-foreground));
+  line-height: 1;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.2s,
+              border-bottom-color 0.2s;
+}
+.ds-nav-link-item.ds-active {
+  color: hsl(var(--foreground));
+  border-bottom-color: hsl(var(--foreground));
+}
 
 /* Global Actions buttons */
 .ds-global-btn {

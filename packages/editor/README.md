@@ -54,6 +54,8 @@ The editor writes CSS custom properties (HSL values) to `:root`, so it works wit
 | `showNavLinks` | `boolean` | `true` | Show page navigation links in the header and mobile menu. |
 | `headerRight` | `React.ReactNode` | — | Custom content rendered on the right side of the header (e.g. auth buttons). |
 | `aboutUrl` | `string` | — | URL for the About page link in the header navigation. |
+| `customIcons` | `CustomIcon[]` | — | Custom icons to display in the Icons preview section. Each entry needs `name` and `icon` (a React component). |
+| `iconMode` | `"append" \| "replace"` | `"append"` | `"append"` adds custom icons after the built-in lucide icons. `"replace"` hides built-ins and shows only custom icons. |
 
 ## Premium Features
 
@@ -159,6 +161,37 @@ import { LicenseProvider } from '@themal/editor';
 />
 ```
 
+### With custom icons
+
+```tsx
+import { Rocket, Star, Flame } from 'lucide-react';
+// Or use any React component that accepts className
+import { MyBrandIcon } from './icons';
+
+<DesignSystemEditor
+  customIcons={[
+    { name: "Rocket", icon: Rocket },
+    { name: "Star", icon: Star },
+    { name: "Flame", icon: Flame },
+    { name: "Brand", icon: MyBrandIcon },
+  ]}
+/>
+```
+
+### Replace built-in icons entirely
+
+```tsx
+<DesignSystemEditor
+  customIcons={[
+    { name: "Brand", icon: MyBrandIcon },
+    { name: "Product", icon: ProductIcon },
+  ]}
+  iconMode="replace"
+/>
+```
+
+The Icons section includes a "Hide All" / "Show All" toggle so users can collapse the icon grid.
+
 ### Embedded / headless
 
 ```tsx
@@ -228,6 +261,7 @@ import {
 import type {
   DesignSystemEditorProps,
   TokenDefinition,
+  CustomIcon,
   HarmonyScheme,
   CardStyleState,
   TypographyState,
@@ -245,9 +279,9 @@ import type {
 
 ## How It Works
 
-1. **Color picking** — Click any swatch to open the native color picker. Changing a key color (brand, secondary, accent, background) automatically derives related tokens.
+1. **Color picking** — Click any swatch to scroll the Colors section into view, then open the native color picker. Changing a key color (brand, secondary, accent, background) automatically derives related tokens.
 2. **Harmony schemes** *(Pro)* — Generate palettes using complementary, analogous, triadic, or split-complementary color relationships.
-3. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1). Failing pairs are auto-corrected by adjusting lightness.
+3. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1). Failing pairs are auto-corrected by adjusting lightness. The accessibility audit shows a centered modal with results. On failure, choose "Ignore" to dismiss or "Suggest Alternative" to auto-fix contrast issues.
 4. **Typography** — Choose heading and body fonts (including custom Google Fonts), adjust sizes, weights, line height, and letter spacing with live preview. Five built-in presets (System, Modern, Classic, Compact, Editorial).
 5. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
 6. **Typography interactions** *(Pro)* — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
