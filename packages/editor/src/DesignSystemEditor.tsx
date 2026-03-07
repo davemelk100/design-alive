@@ -403,7 +403,7 @@ function DesignSystemEditorInner({
   const [auditViolations, setAuditViolations] = useState<
     { selector: string; text: string }[]
   >([]);
-  const [violationIndex, setViolationIndex] = useState(0);
+  const [, setViolationIndex] = useState(0);
   const [harmonySchemeIndex, setHarmonySchemeIndex] = useState(-1);
   const [shuffleOpen, setShuffleOpen] = useState(false);
   const [cardStyle, setCardStyle] = useState<CardStyleState>(() => {
@@ -1249,17 +1249,6 @@ function DesignSystemEditorInner({
     setTypographyState({ ...DEFAULT_TYPOGRAPHY });
   };
 
-  const scrollToViolation = (v: { selector: string }) => {
-    const el = document.querySelector(v.selector) as HTMLElement | null;
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "center" });
-    el.style.outline = "3px solid hsl(0 84% 60%)";
-    el.style.outlineOffset = "2px";
-    setTimeout(() => {
-      el.style.outline = "";
-      el.style.outlineOffset = "";
-    }, 3000);
-  };
 
   const runAccessibilityAudit = async () => {
     if (!accessibilityAudit) return;
@@ -1582,7 +1571,15 @@ function DesignSystemEditorInner({
       // Scroll editable swatch buttons and clickable color elements to top
       const swatch = target.closest("button[aria-label*='color swatch']") as HTMLElement | null;
       if (swatch) {
-        scrollToTop(swatch);
+        // Scroll the Colors section heading into view, not the swatch itself
+        const colorsSection = document.getElementById("colors");
+        if (colorsSection) {
+          setTimeout(() => {
+            const rect = colorsSection.getBoundingClientRect();
+            const scrollY = window.scrollY + rect.top - 8;
+            window.scrollTo({ top: scrollY, behavior: "smooth" });
+          }, 100);
+        }
         return;
       }
       // Also handle range inputs
@@ -2374,7 +2371,7 @@ function DesignSystemEditorInner({
               color:
                 activeSection === s.id
                   ? "hsl(var(--foreground))"
-                  : "hsl(var(--foreground) / 0.6)",
+                  : "hsl(var(--muted-foreground))",
               lineHeight: 1,
               borderBottom:
                 activeSection === s.id
@@ -2412,72 +2409,94 @@ function DesignSystemEditorInner({
               className="w-full sm:w-auto order-first sm:order-last flex-shrink-0 sm:min-h-[36px] pointer-events-none [&>*]:pointer-events-auto"
               data-axe-exclude
             >
-              {accessibilityAudit && auditStatus === "failed" && (
-                <span
-                  aria-live="assertive"
-                  className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center gap-1.5 border-t-2 border-red-400 dark:border-red-600 bg-red-100 dark:bg-red-950 px-4 h-12 text-[14px] font-light text-red-800 dark:text-red-200 shadow-2xl"
+              {accessibilityAudit && (auditStatus === "failed" || auditStatus === "passed") && (
+                <button
+                  type="button"
+                  className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 cursor-default"
+                  aria-label="Close accessibility audit results"
+                  onClick={(e) => {
+                    if (e.target === e.currentTarget) setAuditStatus("idle");
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") setAuditStatus("idle");
+                  }}
                 >
-                  <span>
-                    &#10007; {auditViolations.length} issue
-                    {auditViolations.length !== 1 ? "s" : ""}
-                  </span>
-                  <button
-                    onClick={() => {
-                      const idx =
-                        (violationIndex - 1 + auditViolations.length) %
-                        auditViolations.length;
-                      setViolationIndex(idx);
-                      scrollToViolation(auditViolations[idx]);
-                    }}
-                    className="text-red-600 dark:text-red-400 hover:opacity-70 disabled:opacity-30"
-                    disabled={auditViolations.length <= 1}
-                  >
-                    &#9664;
-                  </button>
-                  <span className="text-[14px] tabular-nums">
-                    {violationIndex + 1}/{auditViolations.length}
-                  </span>
-                  <button
-                    onClick={() => {
-                      const idx = (violationIndex + 1) % auditViolations.length;
-                      setViolationIndex(idx);
-                      scrollToViolation(auditViolations[idx]);
-                    }}
-                    className="text-red-600 dark:text-red-400 hover:opacity-70 disabled:opacity-30"
-                    disabled={auditViolations.length <= 1}
-                  >
-                    &#9654;
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (auditViolations[violationIndex])
-                        scrollToViolation(auditViolations[violationIndex]);
-                      setTimeout(() => fixContrastIssues(), 500);
-                    }}
-                    className="ml-1 px-2 py-0.5 text-[14px] font-light rounded transition-colors hover:opacity-80 whitespace-nowrap"
+                  <div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Accessibility audit results"
+                    className="rounded-xl shadow-2xl p-6 max-w-sm w-[90vw] text-center space-y-4"
                     style={{
-                      backgroundColor: "hsl(var(--destructive))",
-                      color: "hsl(var(--destructive-foreground))",
+                      backgroundColor: "hsl(var(--background))",
+                      color: "hsl(var(--foreground))",
+                      border: "1px solid hsl(var(--border))",
                     }}
+                    aria-live="assertive"
                   >
-                    Fix
-                  </button>
-                </span>
-              )}
-              {accessibilityAudit && auditStatus === "passed" && (
-                <span
-                  aria-live="assertive"
-                  className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center gap-1.5 border-t-2 border-green-400 dark:border-green-600 bg-green-100 dark:bg-green-950 px-4 h-12 text-[14px] font-light text-green-800 dark:text-green-200 shadow-2xl"
-                >
-                  <span>&#10003; WCAG AA Passed</span>
-                  <button
-                    onClick={() => setAuditStatus("idle")}
-                    className="ml-1 text-green-500 hover:text-green-800 dark:hover:text-green-100 transition-colors"
-                    aria-label="Dismiss"
-                  >
-                    &#10005;
-                  </button>
-                </span>
+                    {auditStatus === "passed" ? (
+                      <>
+                        <div className="flex justify-center">
+                          <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="hsl(var(--success, 142 76% 36%))" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <p className="text-[16px] font-medium">WCAG AA Passed</p>
+                        <p className="text-[14px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>
+                          All color contrast checks passed.
+                        </p>
+                        <button
+                          onClick={() => setAuditStatus("idle")}
+                          className="px-4 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                          style={{
+                            backgroundColor: "hsl(var(--brand))",
+                            color: "hsl(var(--brand-foreground, var(--background)))",
+                          }}
+                        >
+                          OK
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex justify-center">
+                          <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="hsl(var(--destructive))" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                          </svg>
+                        </div>
+                        <p className="text-[16px] font-medium">
+                          {auditViolations.length} Contrast Issue{auditViolations.length !== 1 ? "s" : ""} Found
+                        </p>
+                        <p className="text-[14px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>
+                          Some color combinations do not meet WCAG AA contrast requirements.
+                        </p>
+                        <div className="flex items-center justify-center gap-3">
+                          <button
+                            onClick={() => setAuditStatus("idle")}
+                            className="px-4 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                            style={{
+                              backgroundColor: "hsl(var(--muted))",
+                              color: "hsl(var(--muted-foreground))",
+                            }}
+                          >
+                            Ignore
+                          </button>
+                          <button
+                            onClick={() => {
+                              setAuditStatus("idle");
+                              fixContrastIssues();
+                            }}
+                            className="px-4 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                            style={{
+                              backgroundColor: "hsl(var(--brand))",
+                              color: "hsl(var(--brand-foreground, var(--background)))",
+                            }}
+                          >
+                            Suggest Alternative
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </button>
               )}
             </div>
           </div>
@@ -2968,12 +2987,6 @@ function DesignSystemEditorInner({
                               setMobilePickerHex(hsl ? hslStringToHex(hsl) : "#000000");
                               return;
                             }
-                            document
-                              .getElementById("colors")
-                              ?.scrollIntoView({
-                                behavior: "smooth",
-                                block: "start",
-                              });
                             const input = document.getElementById(
                               inputId,
                             ) as HTMLInputElement | null;
