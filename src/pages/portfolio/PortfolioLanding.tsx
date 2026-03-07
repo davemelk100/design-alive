@@ -25,8 +25,8 @@ export default function PortfolioLanding() {
         <div
           className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-lg shadow-lg text-[14px] font-medium animate-fade-in"
           style={{
-            backgroundColor: "hsl(var(--primary))",
-            color: "hsl(var(--primary-foreground))",
+            backgroundColor: "hsl(var(--success))",
+            color: "hsl(var(--success-foreground))",
           }}
         >
           Payment successful. Pro features are now unlocked.

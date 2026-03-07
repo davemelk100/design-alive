@@ -213,7 +213,7 @@ export default function LandingPage() {
 
         {/* Scroll indicator */}
         <button
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 animate-bounce cursor-pointer bg-transparent border-none p-2"
+          className="absolute bottom-6 left-0 right-0 mx-auto w-fit z-10 animate-bounce cursor-pointer bg-transparent border-none p-2"
           onClick={() => {
             const el = scrollRef.current;
             if (!el) return;
@@ -306,7 +306,7 @@ export default function LandingPage() {
 
         {/* Scroll indicator */}
         <button
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 animate-bounce cursor-pointer bg-transparent border-none p-2"
+          className="absolute bottom-6 left-0 right-0 mx-auto w-fit z-10 animate-bounce cursor-pointer bg-transparent border-none p-2"
           onClick={() => {
             const el = scrollRef.current;
             if (!el) return;
@@ -400,7 +400,7 @@ export default function LandingPage() {
 
         {/* Scroll to top */}
         <button
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 animate-bounce cursor-pointer bg-transparent border-none p-2"
+          className="absolute bottom-6 left-0 right-0 mx-auto w-fit z-10 animate-bounce cursor-pointer bg-transparent border-none p-2"
           onClick={() => {
             scrollRef.current?.scrollTo({ top: 0, behavior: "smooth" });
           }}

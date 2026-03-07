@@ -1808,6 +1808,7 @@ function DesignSystemEditorInner({
                   setTimeout(() => setShareCopied(false), 2000);
                 });
               } else if (v === "pr") setShowPrSetupModal(true);
+              else if (v === "audit") runAccessibilityAudit();
               e.target.value = "";
             }}
           >
@@ -1822,6 +1823,7 @@ function DesignSystemEditorInner({
             <option value="export">Export Palette</option>
             <option value="share">Share</option>
             <option value="pr">Open PR</option>
+            {accessibilityAudit && <option value="audit">Accessibility Check</option>}
           </select>
         </div>
       </div>
@@ -2229,6 +2231,30 @@ function DesignSystemEditorInner({
               )}
             </button>
           </PremiumGate>
+          {accessibilityAudit && (
+            <button
+              onClick={() => runAccessibilityAudit()}
+              className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+              title="Run accessibility audit"
+            >
+              <svg
+                className="w-4 h-4 flex-shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span className="truncate">
+                {auditStatus === "running" ? "Auditing..." : "Accessibility Check"}
+              </span>
+            </button>
+          )}
         </div>
         {/* end desktop buttons wrapper */}
       </div>

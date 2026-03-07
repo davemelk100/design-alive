@@ -66,9 +66,12 @@ npm run lint        # ESLint with jsx-a11y rules
 ## Getting Started
 
 ```bash
+cp .env.example .env   # then fill in the values
 npm install
 npm run dev
 ```
+
+See [`SETUP.md`](SETUP.md) for detailed instructions on configuring Clerk, Stripe, Google OAuth, and all environment variables for local development and production.
 
 ## Build
 
