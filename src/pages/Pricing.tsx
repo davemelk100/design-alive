@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
@@ -39,8 +39,11 @@ export default function Pricing() {
   const [error, setError] = useState("");
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
 
-  const handleCheckout = async (cycle: "monthly" | "yearly" | "test") => {
+  const pendingCheckoutRef = useRef(false);
+
+  const handleCheckout = useCallback(async (cycle: "monthly" | "yearly" | "test") => {
     if (!isSignedIn) {
+      sessionStorage.setItem("pending_checkout", cycle);
       window.location.href = "/sign-in?redirect_url=/pricing";
       return;
     }
@@ -64,7 +67,18 @@ export default function Pricing() {
     } finally {
       setLoading(null);
     }
-  };
+  }, [isSignedIn, getToken]);
+
+  // Auto-trigger checkout after returning from sign-in
+  useEffect(() => {
+    if (!isSignedIn || pendingCheckoutRef.current) return;
+    const pending = sessionStorage.getItem("pending_checkout") as "monthly" | "yearly" | "test" | null;
+    if (pending) {
+      pendingCheckoutRef.current = true;
+      sessionStorage.removeItem("pending_checkout");
+      handleCheckout(pending);
+    }
+  }, [isSignedIn, handleCheckout]);
 
   return (
     <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
