@@ -454,7 +454,11 @@ function DesignSystemEditorInner({
   const [typographyState, setTypographyState] = useState<TypographyState>(
     () => {
       const saved = storage.get<TypographyState>(TYPOGRAPHY_KEY);
-      return saved || { ...DEFAULT_TYPOGRAPHY };
+      if (saved) return saved;
+      if (defaultTypography) {
+        return { ...DEFAULT_TYPOGRAPHY, ...defaultTypography, preset: "custom" as const };
+      }
+      return { ...DEFAULT_TYPOGRAPHY };
     },
   );
   const [customFonts, setCustomFonts] = useState<CustomFontEntry[]>(() =>
@@ -464,13 +468,29 @@ function DesignSystemEditorInner({
   const [fontAddError, setFontAddError] = useState("");
   const [fontAddLoading, setFontAddLoading] = useState(false);
 
-  const fontOptions = useMemo(
-    () => [
+  const fontOptions = useMemo(() => {
+    const appDefaultOptions: { label: string; value: string }[] = [];
+    if (defaultTypography) {
+      // Collect unique app-default font families
+      const seen = new Set<string>();
+      for (const family of [defaultTypography.bodyFamily, defaultTypography.headingFamily]) {
+        if (family && !seen.has(family)) {
+          seen.add(family);
+          // Extract the first font name for the label (strip quotes and fallbacks)
+          const firstName = family.split(",")[0].trim().replace(/^["']|["']$/g, "");
+          // Skip if it matches the system default value
+          if (family !== "system-ui, -apple-system, sans-serif") {
+            appDefaultOptions.push({ label: `App Default (${firstName})`, value: family });
+          }
+        }
+      }
+    }
+    return [
+      ...appDefaultOptions,
       ...FONT_FAMILY_OPTIONS,
       ...customFonts.map((f) => ({ label: `${f.label} *`, value: f.value })),
-    ],
-    [customFonts],
-  );
+    ];
+  }, [customFonts, defaultTypography]);
 
   const [typoCssVisible, setTypoCssVisible] = useState(false);
   const [typoCssCopied, setTypoCssCopied] = useState(false);
@@ -2212,7 +2232,7 @@ function DesignSystemEditorInner({
       <nav
         ref={navContainerRef}
         className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-2 pb-1 hidden sm:flex items-center gap-3 lg:gap-4"
-        style={{ backgroundColor: "hsl(var(--background))" }}
+        style={{ backgroundColor: "#f9fafb" }}
       >
         {[
           {
@@ -6823,13 +6843,13 @@ function DesignSystemEditorInner({
                     <div className="space-y-1.5">
                       <p
                         className="text-[14px] font-light uppercase tracking-wider"
-                        style={{ color: "hsl(var(--muted-foreground))" }}
+                        style={{ color: "#6b7280" }}
                       >
                         Fonts
                       </p>
                       <label
                         className="flex items-center justify-between gap-2 text-[14px] font-light"
-                        style={{ color: "hsl(var(--foreground))" }}
+                        style={{ color: "#111827" }}
                       >
                         <span>Heading:</span>
                         <select
@@ -6839,9 +6859,9 @@ function DesignSystemEditorInner({
                           }
                           className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
                           style={{
-                            backgroundColor: "hsl(var(--background))",
-                            color: "hsl(var(--foreground))",
-                            borderColor: "hsl(var(--border))",
+                            backgroundColor: "#ffffff",
+                            color: "#111827",
+                            borderColor: "#d1d5db",
                           }}
                         >
                           {fontOptions.map((opt) => (
@@ -6853,7 +6873,7 @@ function DesignSystemEditorInner({
                       </label>
                       <label
                         className="flex items-center justify-between gap-2 text-[14px] font-light"
-                        style={{ color: "hsl(var(--foreground))" }}
+                        style={{ color: "#111827" }}
                       >
                         <span>Body:</span>
                         <select
@@ -6863,9 +6883,9 @@ function DesignSystemEditorInner({
                           }
                           className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
                           style={{
-                            backgroundColor: "hsl(var(--background))",
-                            color: "hsl(var(--foreground))",
-                            borderColor: "hsl(var(--border))",
+                            backgroundColor: "#ffffff",
+                            color: "#111827",
+                            borderColor: "#d1d5db",
                           }}
                         >
                           {fontOptions.map((opt) => (
@@ -6880,13 +6900,13 @@ function DesignSystemEditorInner({
                     <div className="space-y-1.5">
                       <p
                         className="text-[14px] font-light uppercase tracking-wider"
-                        style={{ color: "hsl(var(--muted-foreground))" }}
+                        style={{ color: "#6b7280" }}
                       >
                         Size & Weight
                       </p>
                       <label
                         className="flex items-center justify-between gap-2 text-[14px] font-light"
-                        style={{ color: "hsl(var(--foreground))" }}
+                        style={{ color: "#111827" }}
                       >
                         <span>Base Size: {typographyState.baseFontSize}px</span>
                         <input
@@ -6904,7 +6924,7 @@ function DesignSystemEditorInner({
                       </label>
                       <label
                         className="flex items-center justify-between gap-2 text-[14px] font-light"
-                        style={{ color: "hsl(var(--foreground))" }}
+                        style={{ color: "#111827" }}
                       >
                         <span>Heading Wt: {typographyState.headingWeight}</span>
                         <input
@@ -6923,7 +6943,7 @@ function DesignSystemEditorInner({
                       </label>
                       <label
                         className="flex items-center justify-between gap-2 text-[14px] font-light"
-                        style={{ color: "hsl(var(--foreground))" }}
+                        style={{ color: "#111827" }}
                       >
                         <span>Body Wt: {typographyState.bodyWeight}</span>
                         <input
@@ -6951,13 +6971,13 @@ function DesignSystemEditorInner({
                       <div className="space-y-1.5">
                         <p
                           className="text-[14px] font-light uppercase tracking-wider"
-                          style={{ color: "hsl(var(--muted-foreground))" }}
+                          style={{ color: "#6b7280" }}
                         >
                           Spacing
                         </p>
                         <label
                           className="flex items-center justify-between gap-2 text-[14px] font-light"
-                          style={{ color: "hsl(var(--foreground))" }}
+                          style={{ color: "#111827" }}
                         >
                           <span>
                             Line Height: {typographyState.lineHeight.toFixed(2)}
@@ -6978,7 +6998,7 @@ function DesignSystemEditorInner({
                         </label>
                         <label
                           className="flex items-center justify-between gap-2 text-[14px] font-light"
-                          style={{ color: "hsl(var(--foreground))" }}
+                          style={{ color: "#111827" }}
                         >
                           <span>
                             Letter Sp:{" "}
@@ -7002,7 +7022,7 @@ function DesignSystemEditorInner({
                         </label>
                         <label
                           className="flex items-center justify-between gap-2 text-[14px] font-light"
-                          style={{ color: "hsl(var(--foreground))" }}
+                          style={{ color: "#111827" }}
                         >
                           <span>
                             Heading Sp:{" "}
@@ -8231,12 +8251,12 @@ function DesignSystemEditorInner({
           <div
             className="rounded-xl p-6 w-[380px] max-h-[90vh] overflow-y-auto shadow-xl"
             style={{
-              backgroundColor: "hsl(var(--card))",
-              color: "hsl(var(--card-foreground))",
+              backgroundColor: "#ffffff",
+              color: "#111827",
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-[18px] font-light mb-4">
+            <h3 className="text-[18px] font-light mb-4" style={{ color: "#111827" }}>
               Extract Palette from Image
             </h3>
 
@@ -8244,7 +8264,7 @@ function DesignSystemEditorInner({
             <div className="mb-4">
               <p
                 className="text-[13px] font-light mb-2"
-                style={{ color: "hsl(var(--muted-foreground))" }}
+                style={{ color: "#6b7280" }}
               >
                 Upload an image file
               </p>
@@ -8270,10 +8290,10 @@ function DesignSystemEditorInner({
                     setShowImagePaletteModal(false);
                   }
                 }}
-                className="w-full py-6 text-[14px] font-light rounded-lg border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-colors hover:opacity-80 cursor-pointer [&[data-dragging=true]]:border-solid [&[data-dragging=true]]:bg-[hsl(var(--accent)/0.1)]"
+                className="w-full py-6 text-[14px] font-light rounded-lg border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-colors hover:opacity-80 cursor-pointer [&[data-dragging=true]]:border-solid [&[data-dragging=true]]:bg-gray-50"
                 style={{
-                  borderColor: "hsl(var(--border))",
-                  color: "hsl(var(--muted-foreground))",
+                  borderColor: "#d1d5db",
+                  color: "#6b7280",
                 }}
               >
                 <svg
@@ -8298,17 +8318,17 @@ function DesignSystemEditorInner({
             <div className="flex items-center gap-3 mb-4">
               <div
                 className="flex-1 h-px"
-                style={{ backgroundColor: "hsl(var(--border))" }}
+                style={{ backgroundColor: "#d1d5db" }}
               />
               <span
                 className="text-[12px] font-light"
-                style={{ color: "hsl(var(--muted-foreground))" }}
+                style={{ color: "#6b7280" }}
               >
                 or
               </span>
               <div
                 className="flex-1 h-px"
-                style={{ backgroundColor: "hsl(var(--border))" }}
+                style={{ backgroundColor: "#d1d5db" }}
               />
             </div>
 
@@ -8316,7 +8336,7 @@ function DesignSystemEditorInner({
             <div className="mb-4">
               <p
                 className="text-[13px] font-light mb-2"
-                style={{ color: "hsl(var(--muted-foreground))" }}
+                style={{ color: "#6b7280" }}
               >
                 Paste an image URL
               </p>
@@ -8335,12 +8355,11 @@ function DesignSystemEditorInner({
                     }
                   }}
                   placeholder="https://example.com/photo.jpg"
-                  className="flex-1 h-10 px-3 text-[14px] font-light rounded-lg border bg-transparent"
+                  className="flex-1 h-10 px-3 text-[14px] font-light rounded-lg border"
                   style={{
-                    borderColor: imageUrlError
-                      ? "hsl(var(--destructive))"
-                      : "hsl(var(--border))",
-                    color: "hsl(var(--foreground))",
+                    borderColor: imageUrlError ? "#ef4444" : "#d1d5db",
+                    color: "#111827",
+                    backgroundColor: "#f9fafb",
                   }}
                   autoFocus
                 />
@@ -8354,10 +8373,8 @@ function DesignSystemEditorInner({
                   }
                   className="h-10 px-4 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
                   style={{
-                    backgroundColor: "hsl(var(--brand))",
-                    color: colors["--brand"]
-                      ? `hsl(${fgForBg(colors["--brand"])})`
-                      : "#fff",
+                    backgroundColor: "#374151",
+                    color: "#ffffff",
                   }}
                 >
                   Go
@@ -8366,7 +8383,7 @@ function DesignSystemEditorInner({
               {imageUrlError && (
                 <p
                   className="text-[12px] font-light mt-1"
-                  style={{ color: "hsl(var(--destructive))" }}
+                  style={{ color: "#ef4444" }}
                 >
                   {imageUrlError}
                 </p>
@@ -8377,7 +8394,7 @@ function DesignSystemEditorInner({
             {imagePaletteStatus === "extracting" && (
               <div
                 className="flex items-center gap-2 text-[13px] font-light"
-                style={{ color: "hsl(var(--muted-foreground))" }}
+                style={{ color: "#6b7280" }}
               >
                 <svg
                   className="w-4 h-4 animate-spin"
@@ -8405,7 +8422,7 @@ function DesignSystemEditorInner({
                   setImageUrlError("");
                 }}
                 className="px-3 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                style={{ color: "hsl(var(--muted-foreground))" }}
+                style={{ color: "#6b7280" }}
               >
                 Cancel
               </button>

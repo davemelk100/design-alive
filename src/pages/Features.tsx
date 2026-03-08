@@ -4,9 +4,24 @@ import ThemalLogo from "../components/ThemalLogo";
 
 const features = [
   {
+    version: "0.19",
+    items: [
+      "App Default fonts - when a consuming app provides defaultTypography, the font dropdown shows an \"App Default\" option with the app's font name pre-selected on first load",
+      "Plugin contrast hardening - typography controls (Fonts, Size & Weight, Spacing) now use fixed colors so labels and inputs remain readable on any host theme",
+      "Case-insensitive font search - custom Google Font lookups now accept lowercase input and title-case it automatically",
+      "Custom reset defaults - new defaultColors and defaultTypography props let consuming apps define their own baseline for \"Reset theme to default\"",
+      "Site-wide typography - font changes now apply across the entire page, not just within the editor, using prioritized CSS injection",
+      "Editor chrome contrast fixes - section nav, modals (Extract Palette, WCAG audit), and action buttons all use fixed colors to prevent contrast issues on dark-themed host sites",
+      "Autoscroll scoping - clicking typography inputs and dropdowns no longer triggers the scroll-to-top behavior meant for color swatches",
+    ],
+  },
+  {
     version: "0.18",
     items: [
       "Mobile color spectrum picker - 2D saturation/lightness canvas with hue slider replaces the 3 separate HSL sliders for a more intuitive touch experience",
+      "Custom icon support - new customIcons prop accepts an array of React components for the Icons preview section",
+      "Icon mode toggle - iconMode prop to append custom icons after built-ins or replace them entirely",
+      "Show/hide logo - new showLogo prop for white-label and plugin usage",
     ],
   },
   {
@@ -160,6 +175,8 @@ export default function Features() {
               { title: "GitHub PR Integration", desc: "Open design system PRs directly from the editor." },
               { title: "Color Locks", desc: "Pin individual color tokens during palette generation." },
               { title: "Responsive Layout", desc: "Mobile-first design with a 2D color spectrum picker for touch, adaptive controls across all viewports." },
+              { title: "Plugin Mode", desc: "Embed the editor in any React app with props for custom default colors, typography, header content, and white-label branding." },
+              { title: "Custom Icons", desc: "Pass your own icon components to the Icons preview section, or replace the built-in set entirely." },
               { title: "Web Component", desc: "Drop into Vue, Svelte, Astro, WordPress, Shopify, or any platform via a single script tag." },
             ].map(({ title, desc }) => (
               <div key={title} className="flex items-start gap-2">

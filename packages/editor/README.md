@@ -57,6 +57,8 @@ The editor writes CSS custom properties (HSL values) to `:root` and injects glob
 | `customIcons` | `CustomIcon[]` | — | Custom icons to display in the Icons preview section. Each entry needs `name` and `icon` (a React component). |
 | `iconMode` | `"append" \| "replace"` | `"append"` | `"append"` adds custom icons after the built-in lucide icons. `"replace"` hides built-ins and shows only custom icons. |
 | `showLogo` | `boolean` | `true` | Show the Themal logo in the header. Set `false` for white-label or plugin usage. |
+| `defaultColors` | `Record<string, string>` | — | Default color values to restore on reset, keyed by CSS variable name (e.g. `{"--brand": "210 50% 40%"}`). When provided, "Reset theme to default" restores these instead of the Themal defaults. |
+| `defaultTypography` | `Partial<TypographyState>` | — | Default typography state to restore on reset. When provided, the font dropdown shows an "App Default" option with your font name, the editor initializes with your fonts on first load, and "Reset theme to default" restores your font settings instead of the Themal defaults. |
 
 ## Premium Features
 
