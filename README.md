@@ -12,7 +12,7 @@ All palette colors are HSL custom properties on `:root`. From one brand color, t
 
 Every foreground/background pair is audited against WCAG AA (4.5:1) via axe-core. Failing pairs are auto-corrected by adjusting foreground lightness.
 
-Beyond colors, the editor includes typography controls (fonts, sizes, weights, spacing with five presets — plus custom Google Font loading), button interaction states (hover, active, focus), typography interaction states (link/heading hover effects), card customization, and independent dialog box and toast message styling — all with live preview. A sticky section nav (Colors, Cards, Alerts, Typography, Buttons) provides quick navigation.
+Beyond colors, the editor includes typography controls (fonts, sizes, weights, spacing with five presets, plus custom Google Font loading) that apply site-wide, button interaction states (hover, active, focus), typography interaction states (link/heading hover effects), card customization, and independent dialog box and toast message styling. All with live preview. A sticky section nav (Colors, Cards, Alerts, Typography, Buttons) provides quick navigation.
 
 Your entire theme (colors, typography, interactions, card styles, dialog styles, toast styles) persists in localStorage across reloads.
 

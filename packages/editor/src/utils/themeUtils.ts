@@ -1036,8 +1036,28 @@ export function applyTypography(state: TypographyState) {
     document.head.appendChild(styleEl);
   }
   /* No !important used here. Custom classes like .ds-h2 override these via
-     higher specificity. Keep selectors scoped to .ds-editor where possible. */
+     higher specificity. The body-level rules ensure typography applies
+     site-wide when the plugin is used. The .ds-editor rules provide
+     specificity within the editor component itself. */
   styleEl.textContent = `
+    body {
+      font-family: ${state.bodyFamily};
+      font-size: ${state.baseFontSize}px;
+      font-weight: ${state.bodyWeight};
+      line-height: ${state.lineHeight};
+      letter-spacing: ${state.letterSpacing}em;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: ${state.headingFamily};
+      font-weight: ${state.headingWeight};
+      letter-spacing: ${state.headingLetterSpacing}em;
+    }
+    p, ul, ol, li, a, button, input, select, textarea, label, span {
+      font-family: ${state.bodyFamily};
+      font-size: ${state.baseFontSize}px;
+      font-weight: ${state.bodyWeight};
+      line-height: ${state.lineHeight};
+    }
     .ds-editor {
       font-family: ${state.bodyFamily};
       font-size: ${state.baseFontSize}px;

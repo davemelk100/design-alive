@@ -36,7 +36,7 @@ function App() {
 }
 ```
 
-The editor writes CSS custom properties (HSL values) to `:root`, so it works with any framework that consumes CSS variables.
+The editor writes CSS custom properties (HSL values) to `:root` and injects global typography styles, so colors and fonts apply across your entire site.
 
 ## Props
 
@@ -224,7 +224,7 @@ import {
 
   // Card, typography & interaction style utilities
   applyStoredCardStyle,           // Restore card style from localStorage
-  applyStoredTypography,          // Restore typography from localStorage
+  applyStoredTypography,          // Restore typography from localStorage (applies site-wide)
   applyStoredAlertStyle,          // Restore dialog alert style from localStorage
   applyStoredToastStyle,          // Restore toast style from localStorage
   applyStoredInteractionStyle,    // Restore button interaction style from localStorage
@@ -283,7 +283,7 @@ import type {
 1. **Color picking** — Click any swatch to scroll the Colors section into view, then open the native color picker. Changing a key color (brand, secondary, accent, background) automatically derives related tokens.
 2. **Harmony schemes** *(Pro)* — Generate palettes using complementary, analogous, triadic, or split-complementary color relationships.
 3. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1). Failing pairs are auto-corrected by adjusting lightness. The accessibility audit shows a centered modal with results. On failure, choose "Ignore" to dismiss or "Suggest Alternative" to auto-fix contrast issues. A WCAG On/Off toggle lets you disable auto-correction for marketing or other contexts that don't require WCAG compliance. Locks are still honored when enforcement is off.
-4. **Typography** — Choose heading and body fonts (including custom Google Fonts), adjust sizes, weights, line height, and letter spacing with live preview. Five built-in presets (System, Modern, Classic, Compact, Editorial).
+4. **Typography** — Choose heading and body fonts (including custom Google Fonts), adjust sizes, weights, line height, and letter spacing with live preview. Five built-in presets (System, Modern, Classic, Compact, Editorial). Typography applies site-wide, not just within the editor component, so toggling fonts updates the entire page.
 5. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
 6. **Typography interactions** *(Pro)* — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
 7. **Persistence** — All settings (colors, typography, card styles, dialog styles, toast styles, interactions) are saved to `localStorage` and restored on reload.
