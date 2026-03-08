@@ -1028,20 +1028,22 @@ export function applyTypography(state: TypographyState) {
   root.style.setProperty("--letter-spacing", `${state.letterSpacing}em`);
   root.style.setProperty("--letter-spacing-heading", `${state.headingLetterSpacing}em`);
 
-  // Inject global styles so typography applies to the entire page
+  // Inject global styles so typography applies to the entire page.
+  // Always re-append to end of <head> so these rules come after site CSS.
   let styleEl = document.getElementById(THEMAL_TYPO_STYLE_ID) as HTMLStyleElement | null;
   if (!styleEl) {
     styleEl = document.createElement("style");
     styleEl.id = THEMAL_TYPO_STYLE_ID;
-    document.head.appendChild(styleEl);
   }
-  /* No !important used here. Custom classes like .ds-h2 override these via
-     higher specificity. The body-level rules ensure typography applies
-     site-wide when the plugin is used. The .ds-editor rules provide
-     specificity within the editor component itself. */
+  document.head.appendChild(styleEl);
+
+  /* Global rules use !important on font-family so they override site CSS
+     regardless of selector specificity (e.g. .my-class span).
+     The .ds-editor scoped rules do NOT use !important so custom classes
+     like .ds-h2 can still override via natural specificity. */
   styleEl.textContent = `
     body, body * {
-      font-family: ${state.bodyFamily};
+      font-family: ${state.bodyFamily} !important;
       font-weight: ${state.bodyWeight};
       line-height: ${state.lineHeight};
       letter-spacing: ${state.letterSpacing}em;
@@ -1050,7 +1052,7 @@ export function applyTypography(state: TypographyState) {
       font-size: ${state.baseFontSize}px;
     }
     h1, h2, h3, h4, h5, h6 {
-      font-family: ${state.headingFamily};
+      font-family: ${state.headingFamily} !important;
       font-weight: ${state.headingWeight};
       letter-spacing: ${state.headingLetterSpacing}em;
     }
