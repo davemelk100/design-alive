@@ -1040,23 +1040,19 @@ export function applyTypography(state: TypographyState) {
      site-wide when the plugin is used. The .ds-editor rules provide
      specificity within the editor component itself. */
   styleEl.textContent = `
-    body {
+    body, body * {
       font-family: ${state.bodyFamily};
-      font-size: ${state.baseFontSize}px;
       font-weight: ${state.bodyWeight};
       line-height: ${state.lineHeight};
       letter-spacing: ${state.letterSpacing}em;
+    }
+    body {
+      font-size: ${state.baseFontSize}px;
     }
     h1, h2, h3, h4, h5, h6 {
       font-family: ${state.headingFamily};
       font-weight: ${state.headingWeight};
       letter-spacing: ${state.headingLetterSpacing}em;
-    }
-    p, ul, ol, li, a, button, input, select, textarea, label, span {
-      font-family: ${state.bodyFamily};
-      font-size: ${state.baseFontSize}px;
-      font-weight: ${state.bodyWeight};
-      line-height: ${state.lineHeight};
     }
     .ds-editor {
       font-family: ${state.bodyFamily};
