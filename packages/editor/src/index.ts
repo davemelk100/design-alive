@@ -1,5 +1,5 @@
 export { DesignSystemEditor } from "./DesignSystemEditor";
-export type { DesignSystemEditorProps, TokenDefinition, CustomIcon } from "./types";
+export type { DesignSystemEditorProps, TokenDefinition, CustomIcon, AiGenerateResult } from "./types";
 export {
   hslStringToHex,
   hexToHslString,
@@ -28,6 +28,7 @@ export {
   addCustomFont,
   removeCustomFont,
   initCustomFonts,
+  buildAiSystemPrompt,
 } from "./utils/themeUtils";
 export type { HarmonyScheme, CardStyleState, TypographyState, AlertStyleState, ToastStyleState, InteractionStyleState, TypoInteractionStyleState, CustomFontEntry } from "./utils/themeUtils";
 

@@ -7,6 +7,11 @@ export interface CustomIcon {
   icon: React.ComponentType<{ className?: string; [key: string]: unknown }>;
 }
 
+export interface AiGenerateResult {
+  colors?: Record<string, string>;
+  typography?: Partial<import("./utils/themeUtils").TypographyState>;
+}
+
 export interface DesignSystemEditorProps {
   /** URL for the PR creation endpoint. Hides PR button if omitted. */
   prEndpointUrl?: string;
@@ -44,6 +49,8 @@ export interface DesignSystemEditorProps {
   defaultColors?: Record<string, string>;
   /** Default typography state to restore on reset. When provided, "Reset theme to default" restores these font settings instead of the Themal defaults. Partial values are merged with the built-in defaults. */
   defaultTypography?: Partial<import("./utils/themeUtils").TypographyState>;
+  /** Provider-agnostic AI theme generation. When provided, an "AI Generate" button appears in Global Actions. The callback receives the user's text prompt and should return colors and/or typography to preview and apply. */
+  onAiGenerate?: (prompt: string) => Promise<AiGenerateResult>;
 }
 
 export interface TokenDefinition {

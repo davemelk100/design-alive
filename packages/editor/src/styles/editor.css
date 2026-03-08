@@ -147,3 +147,12 @@
   33% { transform: translate(10px, 12px) scale(0.9); }
   66% { transform: translate(-15px, -15px) scale(1.1); }
 }
+
+/* Independent active state for split-button undo portion */
+.ds-undo-btn {
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+.ds-undo-btn:active {
+  transform: scale(0.8);
+  opacity: 0.5;
+}

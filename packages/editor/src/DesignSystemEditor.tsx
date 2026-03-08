@@ -7,7 +7,7 @@ import React, {
   useMemo,
 } from "react";
 import type { AxeResults } from "axe-core";
-import type { DesignSystemEditorProps } from "./types";
+import type { DesignSystemEditorProps, AiGenerateResult } from "./types";
 import { useColorState } from "./hooks/useColorState";
 import { LicenseProvider, useLicense } from "./hooks/useLicense";
 import { PremiumGate } from "./components/PremiumGate";
@@ -301,6 +301,7 @@ function DesignSystemEditorInner({
   showLogo = true,
   defaultColors,
   defaultTypography,
+  onAiGenerate,
 }: DesignSystemEditorProps) {
   const { isPremium } = useLicense();
   const [hoveredLockKey, setHoveredLockKey] = useState<string | null>(null);
@@ -417,7 +418,7 @@ function DesignSystemEditorInner({
     new Set(["colors", "card", "typography", "alerts", "interactions"]),
   );
   const [showPrModal, setShowPrModal] = useState(false);
-  const [showPrSetupModal, setShowPrSetupModal] = useState(false);
+  const [prError, setPrError] = useState<string | null>(null);
   const [sectionPrStatus, setSectionPrStatus] = useState<
     Record<
       string,
@@ -574,6 +575,11 @@ function DesignSystemEditorInner({
   const [appliedImageFading, setAppliedImageFading] = useState(false);
   const [mobilePickerKey, setMobilePickerKey] = useState<string | null>(null);
   const [mobilePickerHex, setMobilePickerHex] = useState("#000000");
+  const [showAiGenerateModal, setShowAiGenerateModal] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState("");
+  const [aiPreview, setAiPreview] = useState<AiGenerateResult | null>(null);
 
   const fireOnChange = (newColors: Record<string, string>) => {
     onChange?.(newColors);
@@ -904,7 +910,12 @@ function DesignSystemEditorInner({
 
   const submitPr = useCallback(
     async (sections: Iterable<string>, statusKey: string) => {
-      if (!isPremium || !prEndpointUrl) return;
+      if (!isPremium) return;
+      if (!prEndpointUrl) {
+        setPrError("No prEndpointUrl prop provided. Pass prEndpointUrl to the editor to enable PR creation.");
+        return;
+      }
+      setPrError(null);
       setSectionPrStatus((prev) => ({
         ...prev,
         [statusKey]: { status: "creating" },
@@ -918,32 +929,49 @@ function DesignSystemEditorInner({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ css, sections: sectionArr }),
         });
-        const data = await res.json();
+        let data: Record<string, unknown> = {};
+        try {
+          data = await res.json();
+        } catch {
+          // Response wasn't JSON (e.g. 404 HTML page)
+        }
         if (!res.ok) {
+          const msg =
+            typeof data.error === "string"
+              ? data.error
+              : `PR endpoint returned ${res.status}. Make sure prEndpointUrl points to a running server.`;
           if (res.status === 429) {
             setSectionPrStatus((prev) => ({
               ...prev,
-              [statusKey]: { status: "rate-limited", error: data.error },
+              [statusKey]: { status: "rate-limited", error: msg },
             }));
             popup?.close();
             return;
           }
-          throw new Error(data.error || "Failed to create PR");
+          setPrError(msg);
+          setSectionPrStatus((prev) => ({
+            ...prev,
+            [statusKey]: { status: "error" },
+          }));
+          popup?.close();
+          return;
         }
         setSectionPrStatus((prev) => ({
           ...prev,
-          [statusKey]: { status: "created", url: data.url },
+          [statusKey]: { status: "created", url: data.url as string },
         }));
+        setShowPrModal(false);
         if (popup) {
-          popup.location.href = data.url;
+          popup.location.href = data.url as string;
         } else {
-          window.open(data.url, "_blank");
+          window.open(data.url as string, "_blank");
         }
-      } catch {
+      } catch (err) {
         setSectionPrStatus((prev) => ({
           ...prev,
           [statusKey]: { status: "error" },
         }));
+        setPrError(err instanceof Error ? err.message : "Failed to create PR");
         popup?.close();
       }
     },
@@ -1684,6 +1712,51 @@ function DesignSystemEditorInner({
     };
   }, []);
 
+  const handleAiGenerate = async () => {
+    setAiLoading(true);
+    setAiError("");
+    try {
+      const result = await onAiGenerate!(aiPrompt);
+      setAiPreview(result);
+    } catch (err: unknown) {
+      setAiError(err instanceof Error ? err.message : "Generation failed");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const handleAiApply = () => {
+    if (!aiPreview) return;
+
+    if (aiPreview.colors) {
+      const pending =
+        storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
+      const newColors = { ...colors };
+      for (const [key, val] of Object.entries(aiPreview.colors)) {
+        document.documentElement.style.setProperty(key, val);
+        newColors[key] = val;
+        pending[key] = val;
+      }
+      setColors(newColors);
+      storage.set(PENDING_COLORS_KEY, pending);
+      window.dispatchEvent(new Event("theme-pending-update"));
+      fireOnChange(newColors);
+    }
+
+    if (aiPreview.typography) {
+      setTypographyState((prev) => ({
+        ...prev,
+        ...aiPreview.typography,
+        preset: "custom" as const,
+      }));
+    }
+
+    setShowAiGenerateModal(false);
+    setAiPrompt("");
+    setAiPreview(null);
+    setAiError("");
+  };
+
   return (
     <div id="top" ref={editorRootRef} className={`ds-editor${className ? ` ${className}` : ""}`} style={{ background: "transparent" }}>
       {showHeader && (
@@ -1864,8 +1937,13 @@ function DesignSystemEditorInner({
                   setShareCopied(true);
                   setTimeout(() => setShareCopied(false), 2000);
                 });
-              } else if (v === "pr") setShowPrSetupModal(true);
+              } else if (v === "pr") {
+                setPrSections(new Set());
+                setPrError(null);
+                setShowPrModal(true);
+              }
               else if (v === "audit") runAccessibilityAudit(true);
+              else if (v === "ai-generate") setShowAiGenerateModal(true);
               else if (v === "wcag-toggle") {
                 const next = !wcagEnforcement;
                 setWcagEnforcement(next);
@@ -1886,6 +1964,7 @@ function DesignSystemEditorInner({
             <option value="share">Share</option>
             <option value="pr">Open PR</option>
             {accessibilityAudit && <option value="audit">Accessibility Check</option>}
+            {onAiGenerate && <option value="ai-generate">AI Generate</option>}
             {accessibilityAudit && <option value="wcag-toggle">WCAG {wcagEnforcement ? "On → Off" : "Off → On"}</option>}
           </select>
         </div>
@@ -1957,11 +2036,20 @@ function DesignSystemEditorInner({
               <span className="truncate">Refresh Theme</span>
               {colorUndoStack.length > 0 && (
                 <span
+                  role="button"
+                  tabIndex={0}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleUndo();
                   }}
-                  className="ml-1 pl-1 border-l flex items-center justify-center hover:opacity-70 transition-opacity cursor-pointer"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      handleUndo();
+                    }
+                  }}
+                  className="ds-undo-btn ml-1 pl-1 border-l flex items-center justify-center hover:opacity-70 cursor-pointer"
                   style={{ borderColor: "rgba(0,0,0,0.2)" }}
                   title="Undo last refresh"
                 >
@@ -2223,6 +2311,18 @@ function DesignSystemEditorInner({
               <span className="truncate">WCAG {wcagEnforcement ? "On" : "Off"}</span>
             </button>
           )}
+          {onAiGenerate && (
+            <button
+              onClick={() => setShowAiGenerateModal(true)}
+              className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+              title="Generate theme with AI"
+            >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
+              </svg>
+              <span className="truncate">AI Generate</span>
+            </button>
+          )}
         </div>
         {/* end desktop buttons wrapper */}
       </div>
@@ -2412,7 +2512,11 @@ function DesignSystemEditorInner({
               signInUrl={signInUrl}
             >
               <button
-                onClick={() => setShowPrSetupModal(true)}
+                onClick={() => {
+                  setPrSections(new Set());
+                  setPrError(null);
+                  setShowPrModal(true);
+                }}
                 className="whitespace-nowrap flex items-center gap-2 no-underline ds-nav-link-item"
               >
                 <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -8545,68 +8649,6 @@ function DesignSystemEditorInner({
         </div>
       )}
 
-      {showPrSetupModal && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-          onClick={() => setShowPrSetupModal(false)}
-        >
-          <div
-            className="rounded-xl p-6 w-[380px] shadow-xl"
-            style={{ backgroundColor: "#fff", color: "#111" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3
-              className="text-[18px] font-light mb-4"
-              style={{ color: "#111" }}
-            >
-              PR Integration Setup
-            </h3>
-            <p
-              className="text-[14px] font-light mb-3"
-              style={{ color: "#444" }}
-            >
-              To enable pull request creation, pass a{" "}
-              <code
-                className="px-1 py-0.5 rounded text-[13px]"
-                style={{ backgroundColor: "#f3f4f6", color: "#111" }}
-              >
-                prEndpointUrl
-              </code>{" "}
-              prop to the editor:
-            </p>
-            <pre
-              className="text-[12px] font-light rounded-lg p-3 mb-4 overflow-x-auto"
-              style={{ backgroundColor: "#1e293b", color: "#e2e8f0" }}
-            >
-              {`<DesignSystemEditor
-  prEndpointUrl="/api/design-pr"
-/>`}
-            </pre>
-            <p
-              className="text-[13px] font-light mb-4"
-              style={{ color: "#444" }}
-            >
-              The endpoint receives a POST with the generated CSS and creates a
-              GitHub PR on your behalf.
-            </p>
-            <div className="flex justify-end">
-              <button
-                onClick={() => setShowPrSetupModal(false)}
-                className="px-4 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
-                style={{
-                  backgroundColor: "#e5e7eb",
-                  color: "#111",
-                  boxShadow:
-                    "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6)",
-                }}
-              >
-                Got it
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {showPrModal && (
         <div
@@ -8669,6 +8711,14 @@ function DesignSystemEditorInner({
                 );
               })}
             </div>
+            {prError && (
+              <div
+                className="text-[13px] font-light rounded-lg p-3 mb-4"
+                style={{ backgroundColor: "hsl(var(--destructive) / 0.1)", color: "hsl(var(--destructive))" }}
+              >
+                {prError}
+              </div>
+            )}
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowPrModal(false)}
@@ -8687,7 +8737,6 @@ function DesignSystemEditorInner({
                 }
                 onClick={() => {
                   submitPr(prSections, "main");
-                  setShowPrModal(false);
                 }}
                 className="px-4 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 disabled:opacity-50"
                 style={{
@@ -8835,11 +8884,8 @@ function DesignSystemEditorInner({
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    if (!prEndpointUrl) {
-                      setShowPrSetupModal(true);
-                      return;
-                    }
                     setPrSections(new Set());
+                    setPrError(null);
                     setShowPrModal(true);
                   }}
                   className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70 flex items-baseline gap-2"
@@ -8903,6 +8949,150 @@ function DesignSystemEditorInner({
                 Accessibility
               </a>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* AI Generate Modal */}
+      {showAiGenerateModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+          onClick={() => {
+            setShowAiGenerateModal(false);
+            setAiPrompt("");
+            setAiPreview(null);
+            setAiError("");
+          }}
+        >
+          <div
+            className="rounded-xl shadow-xl p-6 w-full max-w-md mx-4"
+            style={{ backgroundColor: "#ffffff", color: "#111827" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {aiPreview === null ? (
+              <>
+                <h3 className="text-xl font-light mb-4" style={{ color: "#111827" }}>
+                  AI Generate Theme
+                </h3>
+                <textarea
+                  rows={4}
+                  className="w-full rounded-lg border p-3 text-[14px] font-light resize-none focus:outline-none focus:ring-2 focus:ring-offset-1"
+                  style={{
+                    borderColor: "#d1d5db",
+                    backgroundColor: "#f9fafb",
+                    color: "#111827",
+                  }}
+                  placeholder="Describe the theme you want, e.g. warm earthy tones for a coffee shop website..."
+                  value={aiPrompt}
+                  onChange={(e) => setAiPrompt(e.target.value)}
+                  disabled={aiLoading}
+                />
+                {aiError && (
+                  <p className="mt-2 text-[13px]" style={{ color: "#ef4444" }}>
+                    {aiError}
+                  </p>
+                )}
+                <div className="flex items-center justify-end gap-3 mt-4">
+                  <button
+                    onClick={() => {
+                      setShowAiGenerateModal(false);
+                      setAiPrompt("");
+                      setAiPreview(null);
+                      setAiError("");
+                    }}
+                    className="px-4 py-2 text-[14px] font-light rounded-lg transition-opacity hover:opacity-70"
+                    style={{ backgroundColor: "transparent", color: "#374151" }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAiGenerate}
+                    disabled={!aiPrompt.trim() || aiLoading}
+                    className="px-4 py-2 text-[14px] font-light rounded-lg transition-opacity hover:opacity-80 disabled:opacity-40 flex items-center gap-2"
+                    style={{ backgroundColor: "#374151", color: "#ffffff" }}
+                  >
+                    {aiLoading && (
+                      <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                    )}
+                    {aiLoading ? "Generating..." : "Generate"}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="text-xl font-light mb-4" style={{ color: "#111827" }}>
+                  Preview AI Theme
+                </h3>
+                {aiPreview.colors && Object.keys(aiPreview.colors).length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-[13px] font-light mb-2" style={{ color: "#374151" }}>
+                      Colors
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      {Object.entries(aiPreview.colors).map(([varName, value]) => (
+                        <div key={varName} className="flex flex-col items-center gap-1">
+                          <div
+                            className="w-8 h-8 rounded border"
+                            style={{
+                              backgroundColor: `hsl(${value})`,
+                              borderColor: "#d1d5db",
+                            }}
+                          />
+                          <span className="text-[11px] font-light" style={{ color: "#374151" }}>
+                            {varName.replace("--", "")}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {aiPreview.typography && Object.keys(aiPreview.typography).length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-[13px] font-light mb-2" style={{ color: "#374151" }}>
+                      Typography
+                    </p>
+                    <div className="flex flex-col gap-1">
+                      {Object.entries(aiPreview.typography).map(([key, value]) => (
+                        <div key={key} className="text-[13px] font-light" style={{ color: "#374151" }}>
+                          <span style={{ color: "#111827" }}>{key}:</span> {String(value)}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="flex items-center justify-end gap-3 mt-4">
+                  <button
+                    onClick={() => setAiPreview(null)}
+                    className="px-4 py-2 text-[14px] font-light rounded-lg transition-opacity hover:opacity-70"
+                    style={{ backgroundColor: "transparent", color: "#374151" }}
+                  >
+                    Back
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowAiGenerateModal(false);
+                      setAiPrompt("");
+                      setAiPreview(null);
+                      setAiError("");
+                    }}
+                    className="px-4 py-2 text-[14px] font-light rounded-lg transition-opacity hover:opacity-70"
+                    style={{ backgroundColor: "transparent", color: "#374151" }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleAiApply}
+                    className="px-4 py-2 text-[14px] font-light rounded-lg transition-opacity hover:opacity-80"
+                    style={{ backgroundColor: "#374151", color: "#ffffff" }}
+                  >
+                    Apply
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
