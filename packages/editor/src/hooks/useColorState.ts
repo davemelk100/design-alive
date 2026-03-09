@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   EDITABLE_VARS,
+  THEME_COLORS_KEY,
   applyStoredThemeColors,
 } from "../utils/themeUtils";
+import { storage } from "../utils/storage";
 import { useContrastEnforcement } from "./useContrastEnforcement";
 
-export function useColorState(wcagEnforcement: boolean = true) {
+export function useColorState(wcagEnforcement: boolean = true, defaultColors?: Record<string, string>) {
   const [colors, setColors] = useState<Record<string, string>>({});
   const [lockedKeys, setLockedKeys] = useState<Set<string>>(new Set());
   const [colorUndoStack, setColorUndoStack] = useState<Record<string, string>[]>([]);
@@ -35,6 +37,12 @@ export function useColorState(wcagEnforcement: boolean = true) {
   useContrastEnforcement(colors, setColors, lockedKeys, wcagEnforcement);
 
   useEffect(() => {
+    const hasSaved = storage.get<Record<string, string>>(THEME_COLORS_KEY);
+    if (!hasSaved && defaultColors) {
+      Object.entries(defaultColors).forEach(([key, value]) => {
+        document.documentElement.style.setProperty(key, value);
+      });
+    }
     applyStoredThemeColors();
     readCurrentColors();
 
