@@ -50,8 +50,8 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 199.2 83.2% 53.3%;
     --radius: 0.5rem;
-    --font-heading: Roboto, sans-serif;
-    --font-body: Roboto, sans-serif;
+    --font-heading: "Courier New", monospace;
+    --font-body: "Space Grotesk", sans-serif;
     --font-size-base: 17px;
     --font-weight-heading: 300;
     --font-weight-body: 300;
