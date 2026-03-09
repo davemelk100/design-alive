@@ -2332,7 +2332,7 @@ function DesignSystemEditorInner({
       <nav
         ref={navContainerRef}
         className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2 hidden sm:flex items-center gap-3 lg:gap-4"
-        style={{ backgroundColor: "hsl(var(--background))" }}
+        style={{ backgroundColor: colors["--background"] ? `hsl(${colors["--background"]})` : "#f9fafb" }}
       >
         {[
           {

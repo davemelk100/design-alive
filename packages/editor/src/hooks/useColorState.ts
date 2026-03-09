@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import {
   EDITABLE_VARS,
-  THEME_COLORS_KEY,
   applyStoredThemeColors,
 } from "../utils/themeUtils";
-import { storage } from "../utils/storage";
 import { useContrastEnforcement } from "./useContrastEnforcement";
 
 export function useColorState(wcagEnforcement: boolean = true, defaultColors?: Record<string, string>) {
@@ -37,8 +35,8 @@ export function useColorState(wcagEnforcement: boolean = true, defaultColors?: R
   useContrastEnforcement(colors, setColors, lockedKeys, wcagEnforcement);
 
   useEffect(() => {
-    const hasSaved = storage.get<Record<string, string>>(THEME_COLORS_KEY);
-    if (!hasSaved && defaultColors) {
+    // Apply defaultColors first as the baseline, then layer saved colors on top
+    if (defaultColors) {
       Object.entries(defaultColors).forEach(([key, value]) => {
         document.documentElement.style.setProperty(key, value);
       });
