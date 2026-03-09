@@ -310,6 +310,8 @@ function DesignSystemEditorInner({
     return saved !== false;
   });
 
+  const editorRootRef = useRef<HTMLDivElement>(null);
+
   const {
     colors,
     setColors,
@@ -319,6 +321,16 @@ function DesignSystemEditorInner({
     setColorUndoStack,
     readCurrentColors,
   } = useColorState(wcagEnforcement, defaultColors);
+
+  // Mirror CSS variables onto the editor root so they aren't shadowed
+  // by the consuming app's own variable definitions on ancestor elements.
+  useEffect(() => {
+    const root = editorRootRef.current;
+    if (!root) return;
+    for (const [key, val] of Object.entries(colors)) {
+      if (val) root.style.setProperty(key, val);
+    }
+  }, [colors]);
 
   const [activeSection, setActiveSection] = useState<string>("colors");
 
@@ -1648,8 +1660,6 @@ function DesignSystemEditorInner({
       setAuditStatus("failed");
     }
   };
-
-  const editorRootRef = useRef<HTMLDivElement>(null);
 
   // On mobile, scroll any focused editable element to the top of the viewport
   useEffect(() => {
