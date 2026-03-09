@@ -1092,7 +1092,7 @@ export function applyTypography(state: TypographyState, root: HTMLElement = docu
     .ds-editor a:not(.ds-premium-tooltip a):not(.ds-nav-link),
     .ds-editor button:not(.ds-h2-btn), .ds-editor input, .ds-editor select,
     .ds-editor textarea, .ds-editor label,
-    .ds-editor span:not(.ds-premium-tooltip span):not(.ds-h2) {
+    .ds-editor span:not(.ds-premium-tooltip span):not(.ds-h2):not(.ds-palette-label) {
       font-family: ${state.bodyFamily};
       font-size: ${state.baseFontSize}px;
       font-weight: ${state.bodyWeight};

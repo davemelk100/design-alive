@@ -19,6 +19,7 @@ import {
   THEME_COLORS_KEY,
   PENDING_COLORS_KEY,
   COLOR_HISTORY_KEY,
+  CONTRAST_KNOWLEDGE_KEY,
   hslStringToHex,
   hexToHslString,
   derivePaletteFromChange,
@@ -322,6 +323,15 @@ function DesignSystemEditorInner({
     readCurrentColors,
   } = useColorState(editorRootRef, wcagEnforcement, defaultColors);
 
+  // Keep body background-color in sync so the page bg matches the editor theme.
+  // Set backgroundColor directly (not the CSS variable) to avoid polluting the
+  // inheritance chain that readCurrentColors relies on after reset.
+  useEffect(() => {
+    const bg = colors["--background"];
+    if (bg) document.body.style.backgroundColor = `hsl(${bg})`;
+    return () => { document.body.style.backgroundColor = ""; };
+  }, [colors["--background"]]);
+
   const [activeSection, setActiveSection] = useState<string>("colors");
 
   useEffect(() => {
@@ -349,64 +359,74 @@ function DesignSystemEditorInner({
   const NAV_IDS = ["colors", "buttons", "card", "alerts", "typography"];
 
   useEffect(() => {
-    const refs = navItemRefs.current;
-    const container = navContainerRef.current;
-    if (!container) return;
+    const recalcNavOffsets = () => {
+      const refs = navItemRefs.current;
+      const container = navContainerRef.current;
+      if (!container) return;
 
-    // Temporarily remove transforms so we can measure natural positions
-    const elements: { el: HTMLAnchorElement; prev: string }[] = [];
-    for (const id of NAV_IDS) {
-      const el = refs[id];
-      if (el) {
-        elements.push({ el, prev: el.style.transform });
-        el.style.transform = "none";
+      // Temporarily remove transforms so we can measure natural positions
+      const elements: { el: HTMLAnchorElement; prev: string }[] = [];
+      for (const id of NAV_IDS) {
+        const el = refs[id];
+        if (el) {
+          elements.push({ el, prev: el.style.transform });
+          el.style.transform = "none";
+        }
       }
-    }
 
-    // Force layout recalc
-    void container.offsetWidth;
+      // Force layout reflow
+      void container.offsetWidth;
 
-    // Measure natural positions
-    const positions: Record<string, { left: number; width: number }> = {};
-    for (const id of NAV_IDS) {
-      const el = refs[id];
-      if (el) {
-        positions[id] = { left: el.offsetLeft, width: el.offsetWidth };
+      // Measure natural positions
+      const positions: Record<string, { left: number; width: number }> = {};
+      for (const id of NAV_IDS) {
+        const el = refs[id];
+        if (el) {
+          positions[id] = { left: el.offsetLeft, width: el.offsetWidth };
+        }
       }
-    }
 
-    // Restore transforms immediately (will be overwritten by state update)
-    for (const { el, prev } of elements) {
-      el.style.transform = prev;
-    }
+      // Restore transforms immediately (will be overwritten by state update)
+      for (const { el, prev } of elements) {
+        el.style.transform = prev;
+      }
 
-    if (!positions[activeSection]) return;
+      if (!positions[activeSection]) return;
 
-    // Compute gap from container
-    const gap = parseFloat(getComputedStyle(container).gap) || 12;
+      // Compute gap from container
+      const gap = parseFloat(getComputedStyle(container).gap) || 12;
 
-    // Build the reordered list: active first, then others in original order
-    const reordered = [
-      activeSection,
-      ...NAV_IDS.filter((id) => id !== activeSection),
-    ];
+      // Build the reordered list: active first, then others in original order
+      const reordered = [
+        activeSection,
+        ...NAV_IDS.filter((id) => id !== activeSection),
+      ];
 
-    // Calculate where each item should go based on reordered positions
-    let cursor = positions[NAV_IDS[0]]?.left ?? 0;
-    const targetLeft: Record<string, number> = {};
-    for (const id of reordered) {
-      targetLeft[id] = cursor;
-      cursor += (positions[id]?.width ?? 0) + gap;
-    }
+      // Calculate where each item should go based on reordered positions
+      let cursor = positions[NAV_IDS[0]]?.left ?? 0;
+      const targetLeft: Record<string, number> = {};
+      for (const id of reordered) {
+        targetLeft[id] = cursor;
+        cursor += (positions[id]?.width ?? 0) + gap;
+      }
 
-    // Offset = target - natural
-    const offsets: Record<string, number> = {};
-    for (const id of NAV_IDS) {
-      offsets[id] = Math.round(
-        (targetLeft[id] ?? 0) - (positions[id]?.left ?? 0),
-      );
-    }
-    setNavOffsets(offsets);
+      // Offset = target - natural
+      const offsets: Record<string, number> = {};
+      for (const id of NAV_IDS) {
+        offsets[id] = Math.round(
+          (targetLeft[id] ?? 0) - (positions[id]?.left ?? 0),
+        );
+      }
+      setNavOffsets(offsets);
+    };
+
+    // Delay to allow font/typography CSS to apply before measuring
+    const raf = requestAnimationFrame(() => recalcNavOffsets());
+    window.addEventListener("nav-recalc", recalcNavOffsets);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("nav-recalc", recalcNavOffsets);
+    };
   }, [activeSection]);
 
   const [showResetModal, setShowResetModal] = useState(false);
@@ -648,6 +668,10 @@ function DesignSystemEditorInner({
 
   useEffect(() => {
     applyTypography(typographyState, editorRootRef.current!);
+    // Recalculate nav offsets after font changes reflow
+    requestAnimationFrame(() => {
+      window.dispatchEvent(new Event("nav-recalc"));
+    });
   }, [typographyState]);
 
   useEffect(() => {
@@ -1317,6 +1341,7 @@ function DesignSystemEditorInner({
     storage.remove(THEME_COLORS_KEY);
     storage.remove(PENDING_COLORS_KEY);
     storage.remove(COLOR_HISTORY_KEY);
+    storage.remove(CONTRAST_KNOWLEDGE_KEY);
     storage.remove(CARD_STYLE_KEY);
     removeCardStyleProperties(editorRootRef.current!);
     setCardStyle({ ...DEFAULT_CARD_STYLE });
@@ -1368,8 +1393,9 @@ function DesignSystemEditorInner({
     setAuditViolations([]);
     try {
       const axe = (await import("axe-core")).default;
+      const context = editorRootRef.current || document.body;
       const results: AxeResults = await axe.run(
-        { exclude: ["[data-axe-exclude]"] },
+        { include: [context], exclude: ["[data-axe-exclude]"] },
         { runOnly: { type: "rule", values: ["color-contrast"] } },
       );
       const issueCount = results.violations.reduce((n, v) => n + v.nodes.length, 0);
@@ -1407,7 +1433,7 @@ function DesignSystemEditorInner({
           }
         }
         const reResults = await axe.run(
-          { exclude: ["[data-axe-exclude]"] },
+          { include: [context], exclude: ["[data-axe-exclude]"] },
           { runOnly: { type: "rule", values: ["color-contrast"] } },
         );
         const remainingCount = reResults.violations.reduce((n, v) => n + v.nodes.length, 0);
@@ -1765,7 +1791,7 @@ function DesignSystemEditorInner({
         >
           <div className="w-full px-4 sm:px-6 lg:px-8">
             {/* Title + nav links - single header row */}
-            <div className="w-full mb-2 sm:mb-3 lg:mb-4 flex items-end gap-x-8 sm:gap-x-12 pt-2 sm:pt-3 lg:pt-4 relative">
+            <div className="w-full mb-2 sm:mb-3 lg:mb-4 flex items-end gap-x-8 sm:gap-x-12 pt-2 sm:pt-3 lg:pt-4 relative" data-axe-exclude>
               {showLogo && <a
                 href="/"
                 className="flex-shrink-0 leading-none"
@@ -1894,7 +1920,7 @@ function DesignSystemEditorInner({
       )}
 
       {/* Global Actions title */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 pt-4 md:pt-12 flex items-center gap-2">
+      <div className="w-full px-4 sm:px-6 lg:px-8 pt-4 md:pt-12 flex items-center gap-2" data-axe-exclude>
         <h2
           className="text-[20px] font-bold tracking-wider mb-[5px]"
           style={{ color: "hsl(var(--foreground))" }}
@@ -1944,11 +1970,6 @@ function DesignSystemEditorInner({
               }
               else if (v === "audit") runAccessibilityAudit(true);
               else if (v === "ai-generate") setShowAiGenerateModal(true);
-              else if (v === "wcag-toggle") {
-                const next = !wcagEnforcement;
-                setWcagEnforcement(next);
-                storage.set("themal-wcag-enforcement", next);
-              }
               e.target.value = "";
             }}
           >
@@ -1965,12 +1986,11 @@ function DesignSystemEditorInner({
             {prEndpointUrl && <option value="pr">Open PR</option>}
             {accessibilityAudit && <option value="audit">Accessibility Check</option>}
             {onAiGenerate && <option value="ai-generate">AI Generate</option>}
-            {accessibilityAudit && <option value="wcag-toggle">WCAG {wcagEnforcement ? "On → Off" : "Off → On"}</option>}
           </select>
         </div>
       </div>
       {/* Palette action buttons - desktop only */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 pt-2 pb-2 md:pb-6 flex flex-wrap items-center gap-2 sm:gap-4">
+      <div className="w-full px-4 sm:px-6 lg:px-8 pt-2 pb-2 md:pb-6 flex flex-wrap items-center gap-2 sm:gap-4" data-axe-exclude>
         {/* Desktop buttons */}
         <div className="hidden sm:contents">
           <button
@@ -2292,25 +2312,6 @@ function DesignSystemEditorInner({
               </span>
             </button>
           )}
-          {accessibilityAudit && (
-            <button
-              onClick={() => {
-                const next = !wcagEnforcement;
-                setWcagEnforcement(next);
-                storage.set("themal-wcag-enforcement", next);
-              }}
-              className="ds-global-btn h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1.5"
-              title={wcagEnforcement ? "WCAG contrast enforcement is ON. Click to allow violations." : "WCAG contrast enforcement is OFF. Colors are not auto-corrected."}
-            >
-              <span
-                className="inline-block w-3 h-3 rounded-full flex-shrink-0"
-                style={{
-                  backgroundColor: wcagEnforcement ? "hsl(142 71% 45%)" : "hsl(var(--muted-foreground))",
-                }}
-              />
-              <span className="truncate">WCAG {wcagEnforcement ? "On" : "Off"}</span>
-            </button>
-          )}
           {onAiGenerate && (
             <button
               onClick={() => setShowAiGenerateModal(true)}
@@ -2332,7 +2333,7 @@ function DesignSystemEditorInner({
       <nav
         ref={navContainerRef}
         className="ds-section-nav sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2 hidden sm:flex items-center gap-3 lg:gap-4"
-        style={{ backgroundColor: "hsl(var(--background))", borderBottom: "1px solid hsl(var(--border))" }}
+        data-axe-exclude
       >
         {[
           {
@@ -8242,7 +8243,7 @@ function DesignSystemEditorInner({
           }}
         >
           <div
-            className="rounded-xl p-6 w-[380px] max-h-[90vh] overflow-y-auto shadow-xl"
+            className="rounded-xl p-6 w-[90vw] max-w-[480px] max-h-[90vh] overflow-y-auto shadow-xl"
             style={{
               backgroundColor: "hsl(var(--card))",
               color: "hsl(var(--card-foreground))",
@@ -8256,7 +8257,7 @@ function DesignSystemEditorInner({
               className="w-full rounded-lg mb-4 object-cover"
               style={{ maxHeight: 200 }}
             />
-            <div className="flex gap-2 mb-4">
+            <div className="grid grid-cols-5 gap-3 mb-4">
               {(
                 [
                   "--brand",
@@ -8270,16 +8271,16 @@ function DesignSystemEditorInner({
                 if (!hsl) return null;
                 const hex = hslStringToHex(hsl);
                 return (
-                  <div key={key} className="flex-1 text-center">
+                  <div key={key} className="min-w-0 text-center">
                     <div
-                      className="w-full aspect-square rounded-lg mb-1"
+                      className="w-full aspect-square rounded-md mb-1"
                       style={{
                         backgroundColor: `hsl(${hsl})`,
                         boxShadow: "inset 0 0 0 1px rgba(0,0,0,0.1)",
                       }}
                     />
                     <span
-                      className="text-[10px] font-light block"
+                      className="ds-palette-label font-light block truncate"
                       style={{ color: "hsl(var(--muted-foreground))" }}
                     >
                       {key
@@ -8289,7 +8290,7 @@ function DesignSystemEditorInner({
                         .join(" ")}
                     </span>
                     <span
-                      className="text-[10px] font-mono block"
+                      className="ds-palette-label font-mono block truncate"
                       style={{ color: "hsl(var(--muted-foreground))" }}
                     >
                       {hex}
