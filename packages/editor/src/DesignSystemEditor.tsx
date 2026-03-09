@@ -320,17 +320,7 @@ function DesignSystemEditorInner({
     colorUndoStack,
     setColorUndoStack,
     readCurrentColors,
-  } = useColorState(wcagEnforcement, defaultColors);
-
-  // Mirror CSS variables onto the editor root so they aren't shadowed
-  // by the consuming app's own variable definitions on ancestor elements.
-  useEffect(() => {
-    const root = editorRootRef.current;
-    if (!root) return;
-    for (const [key, val] of Object.entries(colors)) {
-      if (val) root.style.setProperty(key, val);
-    }
-  }, [colors]);
+  } = useColorState(editorRootRef, wcagEnforcement, defaultColors);
 
   const [activeSection, setActiveSection] = useState<string>("colors");
 
@@ -598,11 +588,11 @@ function DesignSystemEditorInner({
   };
 
   useEffect(() => {
-    applyCardStyle(cardStyle, colors);
+    applyCardStyle(cardStyle, colors, editorRootRef.current!);
   }, [cardStyle, colors]);
 
   useEffect(() => {
-    applyStoredCardStyle(colors);
+    applyStoredCardStyle(colors, editorRootRef.current!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -614,22 +604,22 @@ function DesignSystemEditorInner({
     if (!parsed) return;
     // Apply colors
     for (const [key, val] of Object.entries(parsed.colors)) {
-      document.documentElement.style.setProperty(key, val);
+      editorRootRef.current?.style.setProperty(key, val);
     }
     setColors(parsed.colors);
     // Apply styles
     setCardStyle(parsed.cardStyle);
-    applyCardStyle(parsed.cardStyle, parsed.colors);
+    applyCardStyle(parsed.cardStyle, parsed.colors, editorRootRef.current!);
     setTypographyState(parsed.typographyState);
-    applyTypography(parsed.typographyState);
+    applyTypography(parsed.typographyState, editorRootRef.current!);
     setAlertStyle(parsed.alertStyle);
-    applyAlertStyle(parsed.alertStyle);
+    applyAlertStyle(parsed.alertStyle, editorRootRef.current!);
     setInteractionStyle(parsed.interactionStyle);
-    applyInteractionStyle(parsed.interactionStyle);
+    applyInteractionStyle(parsed.interactionStyle, editorRootRef.current!);
     setTypoInteractionStyle(parsed.typoInteractionStyle);
-    applyTypoInteractionStyle(parsed.typoInteractionStyle);
+    applyTypoInteractionStyle(parsed.typoInteractionStyle, editorRootRef.current!);
     setButtonStyle(parsed.buttonStyle);
-    applyButtonStyle(parsed.buttonStyle);
+    applyButtonStyle(parsed.buttonStyle, editorRootRef.current!);
     // Clear hash so it doesn't re-hydrate on state changes
     window.history.replaceState(
       null,
@@ -657,12 +647,12 @@ function DesignSystemEditorInner({
   }, []);
 
   useEffect(() => {
-    applyTypography(typographyState);
+    applyTypography(typographyState, editorRootRef.current!);
   }, [typographyState]);
 
   useEffect(() => {
     initCustomFonts();
-    applyStoredTypography();
+    applyStoredTypography(editorRootRef.current!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -722,11 +712,11 @@ function DesignSystemEditorInner({
   );
 
   useEffect(() => {
-    applyAlertStyle(alertStyle);
+    applyAlertStyle(alertStyle, editorRootRef.current!);
   }, [alertStyle]);
 
   useEffect(() => {
-    applyStoredAlertStyle();
+    applyStoredAlertStyle(editorRootRef.current!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -749,19 +739,19 @@ function DesignSystemEditorInner({
 
   const handleResetAlertStyle = () => {
     storage.remove(ALERT_STYLE_KEY);
-    removeAlertStyleProperties();
+    removeAlertStyleProperties(editorRootRef.current!);
     setAlertStyle({ ...DEFAULT_ALERT_STYLE });
     storage.remove(TOAST_STYLE_KEY);
-    removeToastStyleProperties();
+    removeToastStyleProperties(editorRootRef.current!);
     setToastStyle({ ...DEFAULT_TOAST_STYLE });
   };
 
   useEffect(() => {
-    applyToastStyle(toastStyle);
+    applyToastStyle(toastStyle, editorRootRef.current!);
   }, [toastStyle]);
 
   useEffect(() => {
-    applyStoredToastStyle();
+    applyStoredToastStyle(editorRootRef.current!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -783,7 +773,7 @@ function DesignSystemEditorInner({
   }, []);
 
   useEffect(() => {
-    applyButtonStyle(buttonStyle);
+    applyButtonStyle(buttonStyle, editorRootRef.current!);
   }, [buttonStyle]);
 
   const updateButtonStyle = useCallback((patch: Partial<ButtonStyleState>) => {
@@ -791,16 +781,16 @@ function DesignSystemEditorInner({
   }, []);
 
   useEffect(() => {
-    applyInteractionStyle(interactionStyle);
+    applyInteractionStyle(interactionStyle, editorRootRef.current!);
   }, [interactionStyle]);
 
   useEffect(() => {
-    applyStoredButtonStyle();
+    applyStoredButtonStyle(editorRootRef.current!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    applyStoredInteractionStyle();
+    applyStoredInteractionStyle(editorRootRef.current!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -826,16 +816,16 @@ function DesignSystemEditorInner({
 
   const handleResetInteractionStyle = () => {
     storage.remove(INTERACTION_STYLE_KEY);
-    removeInteractionStyleProperties();
+    removeInteractionStyleProperties(editorRootRef.current!);
     setInteractionStyle({ ...DEFAULT_INTERACTION_STYLE });
   };
 
   useEffect(() => {
-    applyTypoInteractionStyle(typoInteractionStyle);
+    applyTypoInteractionStyle(typoInteractionStyle, editorRootRef.current!);
   }, [typoInteractionStyle]);
 
   useEffect(() => {
-    applyStoredTypoInteractionStyle();
+    applyStoredTypoInteractionStyle(editorRootRef.current!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -861,7 +851,7 @@ function DesignSystemEditorInner({
 
   const handleResetTypoInteractionStyle = () => {
     storage.remove(TYPO_INTERACTION_STYLE_KEY);
-    removeTypoInteractionStyleProperties();
+    removeTypoInteractionStyleProperties(editorRootRef.current!);
     setTypoInteractionStyle({ ...DEFAULT_TYPO_INTERACTION_STYLE });
   };
 
@@ -1017,7 +1007,7 @@ function DesignSystemEditorInner({
       ) || [];
     history.push({ key, previousValue: colors[key] || "" });
 
-    document.documentElement.style.setProperty(key, hsl);
+    editorRootRef.current?.style.setProperty(key, hsl);
     const newColors = { ...colors, [key]: hsl };
 
     const pending =
@@ -1035,7 +1025,7 @@ function DesignSystemEditorInner({
       const derived = derivePaletteFromChange(key, hsl, newColors, lockedKeys);
       for (const [dKey, dVal] of Object.entries(derived)) {
         history.push({ key: dKey, previousValue: newColors[dKey] || "" });
-        document.documentElement.style.setProperty(dKey, dVal);
+        editorRootRef.current?.style.setProperty(dKey, dVal);
         newColors[dKey] = dVal;
         pending[dKey] = dVal;
       }
@@ -1048,7 +1038,7 @@ function DesignSystemEditorInner({
       const fixes = autoAdjustContrast(newColors, contrastLocks);
       for (const [adjKey, adjVal] of Object.entries(fixes)) {
         history.push({ key: adjKey, previousValue: newColors[adjKey] || "" });
-        document.documentElement.style.setProperty(adjKey, adjVal);
+        editorRootRef.current?.style.setProperty(adjKey, adjVal);
         newColors[adjKey] = adjVal;
         pending[adjKey] = adjVal;
         adjustments[adjKey] = adjVal;
@@ -1147,7 +1137,7 @@ function DesignSystemEditorInner({
 
     for (const [key, val] of Object.entries(result)) {
       history.push({ key, previousValue: newColors[key] || "" });
-      document.documentElement.style.setProperty(key, val);
+      editorRootRef.current?.style.setProperty(key, val);
       newColors[key] = val;
       pending[key] = val;
     }
@@ -1178,7 +1168,7 @@ function DesignSystemEditorInner({
 
     for (const [key, val] of Object.entries(result)) {
       history.push({ key, previousValue: newColors[key] || "" });
-      document.documentElement.style.setProperty(key, val);
+      editorRootRef.current?.style.setProperty(key, val);
       newColors[key] = val;
       pending[key] = val;
     }
@@ -1199,7 +1189,7 @@ function DesignSystemEditorInner({
     const pending =
       storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
     for (const [key, val] of Object.entries(restored)) {
-      document.documentElement.style.setProperty(key, val);
+      editorRootRef.current?.style.setProperty(key, val);
       pending[key] = val;
     }
     setColors(restored);
@@ -1297,7 +1287,7 @@ function DesignSystemEditorInner({
     for (const [key, val] of Object.entries(newColors)) {
       if (val !== colors[key]) {
         history.push({ key, previousValue: finalColors[key] || "" });
-        document.documentElement.style.setProperty(key, val);
+        editorRootRef.current?.style.setProperty(key, val);
         finalColors[key] = val;
         pending[key] = val;
       }
@@ -1316,38 +1306,38 @@ function DesignSystemEditorInner({
 
   const handleReset = () => {
     EDITABLE_VARS.forEach(({ key }) => {
-      document.documentElement.style.removeProperty(key);
+      editorRootRef.current?.style.removeProperty(key);
     });
     // If the consumer provided default colors, restore them instead of bare defaults
     if (defaultColors) {
       Object.entries(defaultColors).forEach(([key, value]) => {
-        document.documentElement.style.setProperty(key, value);
+        editorRootRef.current?.style.setProperty(key, value);
       });
     }
     storage.remove(THEME_COLORS_KEY);
     storage.remove(PENDING_COLORS_KEY);
     storage.remove(COLOR_HISTORY_KEY);
     storage.remove(CARD_STYLE_KEY);
-    removeCardStyleProperties();
+    removeCardStyleProperties(editorRootRef.current!);
     setCardStyle({ ...DEFAULT_CARD_STYLE });
     storage.remove(TYPOGRAPHY_KEY);
-    removeTypographyProperties();
+    removeTypographyProperties(editorRootRef.current!);
     const resetTypo = defaultTypography
       ? { ...DEFAULT_TYPOGRAPHY, ...defaultTypography, preset: "custom" as const }
       : { ...DEFAULT_TYPOGRAPHY };
     setTypographyState(resetTypo);
-    if (defaultTypography) applyTypography(resetTypo);
+    if (defaultTypography) applyTypography(resetTypo, editorRootRef.current!);
     storage.remove(ALERT_STYLE_KEY);
-    removeAlertStyleProperties();
+    removeAlertStyleProperties(editorRootRef.current!);
     setAlertStyle({ ...DEFAULT_ALERT_STYLE });
     storage.remove(BUTTON_STYLE_KEY);
-    removeButtonStyleProperties();
+    removeButtonStyleProperties(editorRootRef.current!);
     setButtonStyle({ ...DEFAULT_BUTTON_STYLE });
     storage.remove(INTERACTION_STYLE_KEY);
-    removeInteractionStyleProperties();
+    removeInteractionStyleProperties(editorRootRef.current!);
     setInteractionStyle({ ...DEFAULT_INTERACTION_STYLE });
     storage.remove(TYPO_INTERACTION_STYLE_KEY);
-    removeTypoInteractionStyleProperties();
+    removeTypoInteractionStyleProperties(editorRootRef.current!);
     setTypoInteractionStyle({ ...DEFAULT_TYPO_INTERACTION_STYLE });
     readCurrentColors();
     setGeneratedCode(null);
@@ -1357,18 +1347,18 @@ function DesignSystemEditorInner({
 
   const handleResetCardStyle = () => {
     storage.remove(CARD_STYLE_KEY);
-    removeCardStyleProperties();
+    removeCardStyleProperties(editorRootRef.current!);
     setCardStyle({ ...DEFAULT_CARD_STYLE });
   };
 
   const handleResetTypography = () => {
     storage.remove(TYPOGRAPHY_KEY);
-    removeTypographyProperties();
+    removeTypographyProperties(editorRootRef.current!);
     const resetTypo = defaultTypography
       ? { ...DEFAULT_TYPOGRAPHY, ...defaultTypography, preset: "custom" as const }
       : { ...DEFAULT_TYPOGRAPHY };
     setTypographyState(resetTypo);
-    if (defaultTypography) applyTypography(resetTypo);
+    if (defaultTypography) applyTypography(resetTypo, editorRootRef.current!);
   };
 
 
@@ -1395,7 +1385,7 @@ function DesignSystemEditorInner({
             console.log(`[Themal]   - ${node.target[0]}: ${node.failureSummary?.split("\n")[0] || "contrast failure"}`);
           }
         }
-        const style = getComputedStyle(document.documentElement);
+        const style = getComputedStyle(editorRootRef.current || document.documentElement);
         const liveColors: Record<string, string> = {};
         EDITABLE_VARS.forEach(({ key }) => {
           liveColors[key] = style.getPropertyValue(key).trim();
@@ -1406,7 +1396,7 @@ function DesignSystemEditorInner({
             const updatedColors = { ...liveColors };
             const bg = liveColors["--background"];
             for (const [fixKey, fixVal] of Object.entries(fixes)) {
-              document.documentElement.style.setProperty(fixKey, fixVal);
+              editorRootRef.current?.style.setProperty(fixKey, fixVal);
               updatedColors[fixKey] = fixVal;
               if (bg) saveContrastCorrection(bg, fixKey, fixVal);
               console.log(`[Themal]   Fixed ${fixKey}: ${liveColors[fixKey]} -> ${fixVal}`);
@@ -1464,7 +1454,7 @@ function DesignSystemEditorInner({
         }, ms);
       };
 
-      const style = getComputedStyle(document.documentElement);
+      const style = getComputedStyle(editorRootRef.current || document.documentElement);
       const liveColors: Record<string, string> = {};
       EDITABLE_VARS.forEach(({ key }) => {
         liveColors[key] = style.getPropertyValue(key).trim();
@@ -1511,7 +1501,7 @@ function DesignSystemEditorInner({
           highlight(swatchEl, "hsl(0 84% 60%)");
           await delay(250);
         }
-        document.documentElement.style.setProperty(fixKey, fixVal);
+        editorRootRef.current?.style.setProperty(fixKey, fixVal);
         if (bg) saveContrastCorrection(bg, fixKey, fixVal);
         if (swatchEl) {
           await delay(150);
@@ -1743,7 +1733,7 @@ function DesignSystemEditorInner({
         storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
       const newColors = { ...colors };
       for (const [key, val] of Object.entries(aiPreview.colors)) {
-        document.documentElement.style.setProperty(key, val);
+        editorRootRef.current?.style.setProperty(key, val);
         newColors[key] = val;
         pending[key] = val;
       }
@@ -7937,7 +7927,7 @@ function DesignSystemEditorInner({
                     if (Object.keys(cssImportPreview.colors).length > 0) {
                       const merged = { ...colors, ...cssImportPreview.colors };
                       for (const [key, val] of Object.entries(cssImportPreview.colors)) {
-                        document.documentElement.style.setProperty(key, val);
+                        editorRootRef.current?.style.setProperty(key, val);
                       }
                       setColors(merged);
                     }
@@ -7945,7 +7935,7 @@ function DesignSystemEditorInner({
                     if (Object.keys(cssImportPreview.cardStyle).length > 0) {
                       setCardStyle((prev) => {
                         const next = { ...prev, ...cssImportPreview.cardStyle, preset: "custom" as const };
-                        applyCardStyle(next, colors);
+                        applyCardStyle(next, colors, editorRootRef.current!);
                         return next;
                       });
                     }
@@ -7953,7 +7943,7 @@ function DesignSystemEditorInner({
                     if (Object.keys(cssImportPreview.typographyState).length > 0) {
                       setTypographyState((prev) => {
                         const next = { ...prev, ...cssImportPreview.typographyState, preset: "custom" as const };
-                        applyTypography(next);
+                        applyTypography(next, editorRootRef.current!);
                         return next;
                       });
                     }
@@ -7961,7 +7951,7 @@ function DesignSystemEditorInner({
                     if (Object.keys(cssImportPreview.buttonStyle).length > 0) {
                       setButtonStyle((prev) => {
                         const next = { ...prev, ...cssImportPreview.buttonStyle };
-                        applyButtonStyle(next);
+                        applyButtonStyle(next, editorRootRef.current!);
                         return next;
                       });
                     }
@@ -7969,7 +7959,7 @@ function DesignSystemEditorInner({
                     if (Object.keys(cssImportPreview.interactionStyle).length > 0) {
                       setInteractionStyle((prev) => {
                         const next = { ...prev, ...cssImportPreview.interactionStyle, preset: "custom" as const };
-                        applyInteractionStyle(next);
+                        applyInteractionStyle(next, editorRootRef.current!);
                         return next;
                       });
                     }
@@ -7977,7 +7967,7 @@ function DesignSystemEditorInner({
                     if (Object.keys(cssImportPreview.alertStyle).length > 0) {
                       setAlertStyle((prev) => {
                         const next = { ...prev, ...cssImportPreview.alertStyle, preset: "custom" as const };
-                        applyAlertStyle(next);
+                        applyAlertStyle(next, editorRootRef.current!);
                         return next;
                       });
                     }

@@ -777,8 +777,8 @@ export const CARD_PRESETS: Record<string, Partial<CardStyleState>> = {
 export function applyCardStyle(
   state: CardStyleState,
   themeColors: Record<string, string>,
+  root: HTMLElement = document.documentElement,
 ) {
-  const root = document.documentElement;
 
   root.style.setProperty("--card-radius", `${state.borderRadius}px`);
 
@@ -828,17 +828,16 @@ export function applyCardStyle(
   storage.set(CARD_STYLE_KEY, state);
 }
 
-export function removeCardStyleProperties() {
-  const root = document.documentElement;
+export function removeCardStyleProperties(root: HTMLElement = document.documentElement) {
   for (const prop of ["--card-radius", "--card-shadow", "--card-bg", "--card-border", "--card-backdrop"]) {
     root.style.removeProperty(prop);
   }
 }
 
-export function applyStoredCardStyle(themeColors: Record<string, string>): CardStyleState | null {
+export function applyStoredCardStyle(themeColors: Record<string, string>, root: HTMLElement = document.documentElement): CardStyleState | null {
   const saved = storage.get<CardStyleState>(CARD_STYLE_KEY);
   if (saved) {
-    applyCardStyle(saved, themeColors);
+    applyCardStyle(saved, themeColors, root);
     return saved;
   }
   return null;
@@ -1038,8 +1037,7 @@ export function removeGoogleFontLinks() {
 
 const THEMAL_TYPO_STYLE_ID = "themal-typography";
 
-export function applyTypography(state: TypographyState) {
-  const root = document.documentElement;
+export function applyTypography(state: TypographyState, root: HTMLElement = document.documentElement) {
   // Set CSS custom properties for apps that consume them
   root.style.setProperty("--font-heading", state.headingFamily);
   root.style.setProperty("--font-body", state.bodyFamily);
@@ -1107,8 +1105,7 @@ export function applyTypography(state: TypographyState) {
   storage.set(TYPOGRAPHY_KEY, state);
 }
 
-export function removeTypographyProperties() {
-  const root = document.documentElement;
+export function removeTypographyProperties(root: HTMLElement = document.documentElement) {
   for (const prop of [
     "--font-heading", "--font-body", "--font-size-base",
     "--font-weight-heading", "--font-weight-body", "--line-height",
@@ -1121,10 +1118,10 @@ export function removeTypographyProperties() {
   if (styleEl) styleEl.remove();
 }
 
-export function applyStoredTypography(): TypographyState | null {
+export function applyStoredTypography(root: HTMLElement = document.documentElement): TypographyState | null {
   const saved = storage.get<TypographyState>(TYPOGRAPHY_KEY);
   if (saved) {
-    applyTypography(saved);
+    applyTypography(saved, root);
     return saved;
   }
   return null;
@@ -1173,25 +1170,23 @@ export const ALERT_PRESETS: Record<string, AlertStyleState> = {
   },
 };
 
-export function applyAlertStyle(state: AlertStyleState) {
-  const root = document.documentElement;
+export function applyAlertStyle(state: AlertStyleState, root: HTMLElement = document.documentElement) {
   root.style.setProperty("--alert-radius", `${state.borderRadius}px`);
   root.style.setProperty("--alert-border-width", `${state.borderWidth}px`);
   root.style.setProperty("--alert-padding", `${state.padding}px`);
   storage.set(ALERT_STYLE_KEY, state);
 }
 
-export function removeAlertStyleProperties() {
-  const root = document.documentElement;
+export function removeAlertStyleProperties(root: HTMLElement = document.documentElement) {
   for (const prop of ["--alert-radius", "--alert-border-width", "--alert-padding"]) {
     root.style.removeProperty(prop);
   }
 }
 
-export function applyStoredAlertStyle(): AlertStyleState | null {
+export function applyStoredAlertStyle(root: HTMLElement = document.documentElement): AlertStyleState | null {
   const saved = storage.get<AlertStyleState>(ALERT_STYLE_KEY);
   if (saved) {
-    applyAlertStyle(saved);
+    applyAlertStyle(saved, root);
     return saved;
   }
   return null;
@@ -1216,25 +1211,23 @@ export const TOAST_PRESETS: Record<string, ToastStyleState> = {
   minimal: { preset: "minimal", borderRadius: 0, borderWidth: 0, iconStyle: "plain", padding: 16 },
 };
 
-export function applyToastStyle(state: ToastStyleState) {
-  const root = document.documentElement;
+export function applyToastStyle(state: ToastStyleState, root: HTMLElement = document.documentElement) {
   root.style.setProperty("--toast-radius", `${state.borderRadius}px`);
   root.style.setProperty("--toast-border-width", `${state.borderWidth}px`);
   root.style.setProperty("--toast-padding", `${state.padding}px`);
   storage.set(TOAST_STYLE_KEY, state);
 }
 
-export function removeToastStyleProperties() {
-  const root = document.documentElement;
+export function removeToastStyleProperties(root: HTMLElement = document.documentElement) {
   for (const prop of ["--toast-radius", "--toast-border-width", "--toast-padding"]) {
     root.style.removeProperty(prop);
   }
 }
 
-export function applyStoredToastStyle(): ToastStyleState | null {
+export function applyStoredToastStyle(root: HTMLElement = document.documentElement): ToastStyleState | null {
   const saved = storage.get<ToastStyleState>(TOAST_STYLE_KEY);
   if (saved) {
-    applyToastStyle(saved);
+    applyToastStyle(saved, root);
     return saved;
   }
   return null;
@@ -1282,8 +1275,7 @@ export const INTERACTION_PRESETS: Record<string, InteractionStyleState> = {
 
 const THEMAL_INTERACTION_STYLE_ID = "themal-interaction";
 
-export function applyInteractionStyle(state: InteractionStyleState) {
-  const root = document.documentElement;
+export function applyInteractionStyle(state: InteractionStyleState, root: HTMLElement = document.documentElement) {
   root.style.setProperty("--hover-opacity", String(state.hoverOpacity));
   root.style.setProperty("--hover-scale", String(state.hoverScale));
   root.style.setProperty("--active-scale", String(state.activeScale));
@@ -1321,8 +1313,7 @@ export function applyInteractionStyle(state: InteractionStyleState) {
   storage.set(INTERACTION_STYLE_KEY, state);
 }
 
-export function removeInteractionStyleProperties() {
-  const root = document.documentElement;
+export function removeInteractionStyleProperties(root: HTMLElement = document.documentElement) {
   for (const prop of [
     "--hover-opacity", "--hover-scale", "--active-scale",
     "--transition-duration", "--focus-ring-width", "--focus-ring-color",
@@ -1333,10 +1324,10 @@ export function removeInteractionStyleProperties() {
   if (styleEl) styleEl.remove();
 }
 
-export function applyStoredInteractionStyle(): InteractionStyleState | null {
+export function applyStoredInteractionStyle(root: HTMLElement = document.documentElement): InteractionStyleState | null {
   const saved = storage.get<InteractionStyleState>(INTERACTION_STYLE_KEY);
   if (saved) {
-    applyInteractionStyle(saved);
+    applyInteractionStyle(saved, root);
     return saved;
   }
   return null;
@@ -1374,8 +1365,7 @@ export const DEFAULT_BUTTON_STYLE: ButtonStyleState = {
   borderWidth: 0,
 };
 
-export function applyButtonStyle(state: ButtonStyleState) {
-  const root = document.documentElement;
+export function applyButtonStyle(state: ButtonStyleState, root: HTMLElement = document.documentElement) {
   root.style.setProperty("--btn-px", `${state.paddingX}px`);
   root.style.setProperty("--btn-py", `${state.paddingY}px`);
   root.style.setProperty("--btn-font-size", `${state.fontSize}px`);
@@ -1390,45 +1380,44 @@ export function applyButtonStyle(state: ButtonStyleState) {
   storage.set(BUTTON_STYLE_KEY, state);
 }
 
-export function removeButtonStyleProperties() {
-  const root = document.documentElement;
+export function removeButtonStyleProperties(root: HTMLElement = document.documentElement) {
   for (const prop of ["--btn-px", "--btn-py", "--btn-font-size", "--btn-font-weight", "--btn-radius", "--btn-shadow", "--btn-border-width"]) {
     root.style.removeProperty(prop);
   }
 }
 
-export function applyStoredButtonStyle(): ButtonStyleState | null {
+export function applyStoredButtonStyle(root: HTMLElement = document.documentElement): ButtonStyleState | null {
   const saved = storage.get<ButtonStyleState>(BUTTON_STYLE_KEY);
   if (saved) {
-    applyButtonStyle(saved);
+    applyButtonStyle(saved, root);
     return saved;
   }
   return null;
 }
 
-export function applyStoredThemeColors() {
+export function applyStoredThemeColors(root: HTMLElement = document.documentElement) {
   const saved = storage.get<Record<string, string>>(THEME_COLORS_KEY);
   if (saved) {
     Object.entries(saved).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(key, value);
+      root.style.setProperty(key, value);
     });
   }
   const pending = storage.get<Record<string, string>>(PENDING_COLORS_KEY);
   if (pending) {
     Object.entries(pending).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(key, value);
+      root.style.setProperty(key, value);
     });
   }
 
   const applied: Record<string, string> = {};
   EDITABLE_VARS.forEach((v) => {
-    const val = document.documentElement.style.getPropertyValue(v.key)?.trim();
+    const val = root.style.getPropertyValue(v.key)?.trim();
     if (val) applied[v.key] = val;
   });
   if (Object.keys(applied).length > 0) {
     const fixes = autoAdjustContrast(applied);
     Object.entries(fixes).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(key, value);
+      root.style.setProperty(key, value);
     });
     persistContrastFixes(fixes);
   }
@@ -1436,7 +1425,7 @@ export function applyStoredThemeColors() {
   // Also restore stored typography
   const typo = storage.get<TypographyState>(TYPOGRAPHY_KEY);
   if (typo) {
-    applyTypography(typo);
+    applyTypography(typo, root);
   }
 }
 
@@ -1496,8 +1485,7 @@ export const TYPO_INTERACTION_PRESETS: Record<string, TypoInteractionStyleState>
 
 const THEMAL_TYPO_INTERACTION_STYLE_ID = "themal-typo-interaction";
 
-export function applyTypoInteractionStyle(state: TypoInteractionStyleState) {
-  const root = document.documentElement;
+export function applyTypoInteractionStyle(state: TypoInteractionStyleState, root: HTMLElement = document.documentElement) {
   root.style.setProperty("--link-hover-opacity", String(state.linkHoverOpacity));
   root.style.setProperty("--link-hover-scale", String(state.linkHoverScale));
   root.style.setProperty("--link-active-scale", String(state.linkActiveScale));
@@ -1541,8 +1529,7 @@ export function applyTypoInteractionStyle(state: TypoInteractionStyleState) {
   storage.set(TYPO_INTERACTION_STYLE_KEY, state);
 }
 
-export function removeTypoInteractionStyleProperties() {
-  const root = document.documentElement;
+export function removeTypoInteractionStyleProperties(root: HTMLElement = document.documentElement) {
   for (const prop of [
     "--link-hover-opacity", "--link-hover-scale", "--link-active-scale",
     "--link-transition-duration", "--heading-hover-opacity", "--heading-hover-scale",
@@ -1554,10 +1541,10 @@ export function removeTypoInteractionStyleProperties() {
   if (styleEl) styleEl.remove();
 }
 
-export function applyStoredTypoInteractionStyle(): TypoInteractionStyleState | null {
+export function applyStoredTypoInteractionStyle(root: HTMLElement = document.documentElement): TypoInteractionStyleState | null {
   const saved = storage.get<TypoInteractionStyleState>(TYPO_INTERACTION_STYLE_KEY);
   if (saved) {
-    applyTypoInteractionStyle(saved);
+    applyTypoInteractionStyle(saved, root);
     return saved;
   }
   return null;

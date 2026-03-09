@@ -5,13 +5,13 @@ import {
 } from "../utils/themeUtils";
 import { useContrastEnforcement } from "./useContrastEnforcement";
 
-export function useColorState(wcagEnforcement: boolean = true, defaultColors?: Record<string, string>) {
+export function useColorState(editorRootRef: React.RefObject<HTMLDivElement | null>, wcagEnforcement: boolean = true, defaultColors?: Record<string, string>) {
   const [colors, setColors] = useState<Record<string, string>>({});
   const [lockedKeys, setLockedKeys] = useState<Set<string>>(new Set());
   const [colorUndoStack, setColorUndoStack] = useState<Record<string, string>[]>([]);
 
   const readCurrentColors = useCallback(() => {
-    const style = getComputedStyle(document.documentElement);
+    const style = getComputedStyle(editorRootRef.current || document.documentElement);
     const current: Record<string, string> = {};
     let hasEmpty = false;
     EDITABLE_VARS.forEach(({ key }) => {
@@ -22,7 +22,7 @@ export function useColorState(wcagEnforcement: boolean = true, defaultColors?: R
     setColors(current);
     if (hasEmpty) {
       setTimeout(() => {
-        const retryStyle = getComputedStyle(document.documentElement);
+        const retryStyle = getComputedStyle(editorRootRef.current || document.documentElement);
         const retried: Record<string, string> = {};
         EDITABLE_VARS.forEach(({ key }) => {
           retried[key] = retryStyle.getPropertyValue(key).trim();
@@ -30,18 +30,19 @@ export function useColorState(wcagEnforcement: boolean = true, defaultColors?: R
         setColors(retried);
       }, 100);
     }
-  }, []);
+  }, [editorRootRef]);
 
-  useContrastEnforcement(colors, setColors, lockedKeys, wcagEnforcement);
+  useContrastEnforcement(colors, setColors, lockedKeys, wcagEnforcement, editorRootRef);
 
   useEffect(() => {
+    const el = editorRootRef.current || document.documentElement;
     // Apply defaultColors first as the baseline, then layer saved colors on top
     if (defaultColors) {
       Object.entries(defaultColors).forEach(([key, value]) => {
-        document.documentElement.style.setProperty(key, value);
+        el.style.setProperty(key, value);
       });
     }
-    applyStoredThemeColors();
+    applyStoredThemeColors(el);
     readCurrentColors();
 
     const handlePendingUpdate = () => {
@@ -49,7 +50,7 @@ export function useColorState(wcagEnforcement: boolean = true, defaultColors?: R
     };
     window.addEventListener("theme-pending-update", handlePendingUpdate);
     return () => window.removeEventListener("theme-pending-update", handlePendingUpdate);
-  }, [readCurrentColors]);
+  }, [readCurrentColors, editorRootRef]);
 
   return {
     colors,
