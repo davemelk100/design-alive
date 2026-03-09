@@ -108,7 +108,7 @@
 
 /* Nav link base (replaces inline styles on section nav items) */
 .ds-nav-link-item {
-  color: #374151;
+  color: hsl(var(--muted-foreground));
   line-height: 1;
   border-bottom: 1px solid transparent;
   padding-bottom: 2px;
@@ -117,14 +117,14 @@
               border-bottom-color 0.2s;
 }
 .ds-nav-link-item.ds-active {
-  color: #111827;
-  border-bottom-color: #111827;
+  color: hsl(var(--foreground));
+  border-bottom-color: hsl(var(--foreground));
 }
 
 /* Global Actions buttons */
 .ds-global-btn {
-  background-color: #e5e7eb;
-  color: #111;
+  background-color: hsl(var(--muted));
+  color: hsl(var(--foreground));
   box-shadow: 0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
 }
 

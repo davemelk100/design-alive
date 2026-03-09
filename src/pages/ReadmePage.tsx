@@ -699,6 +699,53 @@ export default defineNuxtConfig({
             The editor ships pre-compiled CSS via <code className="font-mono text-[14px]">@themal/editor/style.css</code>. Styles are scoped using Tailwind's <code className="font-mono text-[14px]">{`important: '.ds-editor'`}</code> so they don't conflict with your app's styles. The root element is automatically wrapped in <code className="font-mono text-[14px]">{`<div className="ds-editor">`}</code>.
           </p>
         </section>
+
+        {/* Theming & Styling */}
+        <section className="mb-8">
+          <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>Theming & Styling</h2>
+          <p className="text-[14px] leading-relaxed mb-3" style={{ color: "hsl(var(--foreground))" }}>
+            Every editor UI element (modals, controls, buttons, labels, inputs) uses CSS custom properties for colors. This means the editor fully respects whatever theme your app defines. There are no hardcoded hex colors in the editor chrome.
+          </p>
+
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Color variable mapping</h3>
+          <div className="overflow-x-auto rounded-lg border mb-4" style={{ borderColor: "hsl(var(--border))" }}>
+            <table className="w-full text-[14px]">
+              <thead>
+                <tr style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
+                  <th className="text-left p-3 font-medium">Purpose</th>
+                  <th className="text-left p-3 font-medium">Variable used</th>
+                </tr>
+              </thead>
+              <tbody style={{ color: "hsl(var(--foreground))" }}>
+                {[
+                  ["Modal / card backgrounds", "hsl(var(--card))"],
+                  ["Page backgrounds, inputs", "hsl(var(--background))"],
+                  ["Primary text, headings", "hsl(var(--foreground))"],
+                  ["Secondary / muted text", "hsl(var(--muted-foreground))"],
+                  ["Inactive buttons, tags", "hsl(var(--muted))"],
+                  ["Borders, dividers", "hsl(var(--border))"],
+                  ["Error text, validation", "hsl(var(--destructive))"],
+                  ["Primary action button bg", "hsl(var(--foreground))"],
+                  ["Primary action button text", "hsl(var(--background))"],
+                  ["Subtle tints (swatch grids)", "hsl(var(--foreground) / 0.04)"],
+                  ["Modal backdrop overlay", "rgba(0,0,0,0.5)"],
+                ].map(([purpose, variable], i) => (
+                  <tr key={i} style={{ borderTop: "1px solid hsl(var(--border))" }}>
+                    <td className="p-3 font-light">{purpose}</td>
+                    <td className="p-3 font-mono text-[13px]">{variable}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>CSS specificity</h3>
+          <ul className="list-disc pl-5 text-[14px] space-y-1.5 font-light" style={{ color: "hsl(var(--foreground))" }}>
+            <li>Injected typography styles (<code className="font-mono text-[13px]">applyTypography</code>) never use <code className="font-mono text-[13px]">!important</code>. They rely on natural specificity so your classes can override them.</li>
+            <li>Section heading (<code className="font-mono text-[13px]">.ds-h2</code>) and nav link (<code className="font-mono text-[13px]">.ds-nav-link-item</code>) classes in <code className="font-mono text-[13px]">editor.css</code> use <code className="font-mono text-[13px]">!important</code> only where needed to prevent injected typography from overriding structural UI.</li>
+            <li>All editor styles are scoped under <code className="font-mono text-[13px]">.ds-editor</code> so they do not leak into your app.</li>
+          </ul>
+        </section>
       </div>
       <SiteFooterBranding />
       <SiteFooter />

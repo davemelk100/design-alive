@@ -20,9 +20,10 @@ npm run dev
 5. [Netlify (Production)](#5-netlify-production)
 6. [Importing @themal/editor Into Your App](#6-importing-themal-editor-into-your-app)
 7. [GitHub PR Integration](#7-github-pr-integration)
-8. [Environment Variable Reference](#8-environment-variable-reference)
-9. [Command Reference](#9-command-reference)
-10. [Making the Repo Public](#10-making-the-repo-public)
+8. [Theming & Inline Style Rules](#8-theming--inline-style-rules)
+9. [Environment Variable Reference](#9-environment-variable-reference)
+10. [Command Reference](#10-command-reference)
+11. [Making the Repo Public](#11-making-the-repo-public)
 
 ---
 
@@ -342,7 +343,42 @@ If both `github` and `prEndpointUrl` are provided, `github` takes precedence.
 
 ---
 
-## 8. Environment Variable Reference
+## 8. Theming & Inline Style Rules
+
+The editor UI uses CSS custom properties for all colors. No hardcoded hex values in modals, controls, buttons, labels, or inputs. This means the editor fully adapts to whatever theme your app defines.
+
+### Color variable mapping
+
+| Purpose | CSS value used |
+|---------|---------------|
+| Modal / card backgrounds | `hsl(var(--card))` |
+| Page backgrounds, inputs | `hsl(var(--background))` |
+| Primary text, headings | `hsl(var(--foreground))` |
+| Secondary / muted text | `hsl(var(--muted-foreground))` |
+| Inactive buttons, tags | `hsl(var(--muted))` |
+| Borders, dividers | `hsl(var(--border))` |
+| Error text, validation | `hsl(var(--destructive))` |
+| Primary action button bg | `hsl(var(--foreground))` |
+| Primary action button text | `hsl(var(--background))` |
+| Subtle tints (swatch grids) | `hsl(var(--foreground) / 0.04)` |
+| Modal backdrop overlay | `rgba(0,0,0,0.5)` (acceptable) |
+
+### Exceptions (acceptable hardcoded values)
+
+- **Dynamic contrast fallbacks**: `#ffffff` / `#000000` in computed ternaries that pick white or black text based on background lightness.
+- **Logo SVG fills**: Brand colors in the Themal wordmark SVG.
+- **Code block backgrounds**: `#1e1e2e` for syntax-highlighted code blocks in documentation pages.
+
+### CSS specificity rules
+
+- Injected typography styles (`applyTypography` in `themeUtils.ts`) never use `!important`. They rely on natural specificity.
+- Section headings (`.ds-h2`) use `!important` in `editor.css` to prevent injected typography from overriding structural UI.
+- Nav link items (`.ds-nav-link-item`) and global action buttons (`.ds-global-btn`) in `editor.css` use CSS variables, not hex.
+- All editor styles are scoped under `.ds-editor` so they do not leak into the consuming app.
+
+---
+
+## 9. Environment Variable Reference
 
 | Variable | Where Used | Prefix | Where to Find |
 |----------|-----------|--------|---------------|
@@ -365,7 +401,7 @@ If both `github` and `prEndpointUrl` are provided, `github` takes precedence.
 
 ---
 
-## 9. Command Reference
+## 10. Command Reference
 
 ### Root (from repo root)
 
@@ -451,7 +487,7 @@ rm -rf node_modules/.vite dist .vite && cd packages/editor && npm run build && c
 
 ---
 
-## 10. Making the Repo Public
+## 11. Making the Repo Public
 
 Checklist to complete before making this repo public. Do not make the repo public until all items are addressed.
 
