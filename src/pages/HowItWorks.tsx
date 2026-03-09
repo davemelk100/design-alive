@@ -1,10 +1,54 @@
 import { Link } from "react-router-dom";
 import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 import ThemalLogo from "../components/ThemalLogo";
+import JsonLd from "../components/JsonLd";
+import usePageMeta from "../hooks/usePageMeta";
+
+const HOWTO_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How Themal's Color Derivation Works",
+  description:
+    "Learn how Themal derives a complete design system palette from a single brand color using perceptual color science, color harmony, and WCAG AA contrast enforcement.",
+  step: [
+    {
+      "@type": "HowToStep",
+      name: "Choose a Brand Color",
+      text: "Pick any of the five primary colors (Brand, Secondary, Accent, Background, Foreground). The system manages 23 HSL CSS custom properties on :root.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Automatic Palette Derivation",
+      text: "derivePaletteFromChange() cascades updates through the full token set. Brand hue-shifts primary, secondary, muted, accent, border, and ring. Semantic colors (destructive, success, warning) are re-derived with calibrated offsets.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Apply Color Harmony",
+      text: "Choose from four harmony schemes: Complementary (+180 degrees), Analogous (+/-30 degrees), Triadic (+120/+240 degrees), or Split-Complementary (+150/+210 degrees).",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Contrast Enforcement",
+      text: "Every foreground/background pair is enforced to a minimum 4.6:1 contrast ratio via autoAdjustContrast(). The algorithm adjusts lightness in steps of 3 across up to 34 iterations per pair.",
+    },
+    {
+      "@type": "HowToStep",
+      name: "Export or Open a PR",
+      text: "Export your theme as CSS custom properties, Tailwind config, or W3C design tokens. Or open a GitHub pull request directly from the editor.",
+    },
+  ],
+};
 
 export default function HowItWorks() {
+  usePageMeta({
+    title: "How It Works | Themal Design System Editor",
+    description:
+      "Technical deep-dive into Themal's color derivation, harmony schemes, WCAG AA contrast enforcement, typography system, card presets, and interaction states.",
+  });
+
   return (
     <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+      <JsonLd data={HOWTO_SCHEMA} />
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <Link
           to="/editor"

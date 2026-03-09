@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 import ThemalLogo from "../components/ThemalLogo";
+import JsonLd from "../components/JsonLd";
+import usePageMeta from "../hooks/usePageMeta";
 
 const features = [
   {
@@ -125,9 +127,47 @@ const check = (
   </svg>
 );
 
+const PRODUCT_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "Themal Editor",
+  description: "Interactive design system editor with real-time color picking, harmony palettes, WCAG AA contrast, typography, and CSS export.",
+  brand: { "@type": "Brand", name: "Themal" },
+  url: "https://themalive.com/features",
+  additionalProperty: [
+    "Real-Time Color Picking",
+    "Random Palette Generation",
+    "Color Harmony Schemes",
+    "Image Palette Extraction",
+    "Dark Mode",
+    "WCAG AA Contrast",
+    "Typography System",
+    "Card Style Presets",
+    "Alert Style Presets",
+    "Interaction States",
+    "CSS & Design Token Export",
+    "Palette Export",
+    "Shareable URLs",
+    "Accessibility Audit",
+    "GitHub PR Integration",
+    "Color Locks",
+    "Responsive Layout",
+    "Plugin Mode",
+    "Custom Icons",
+    "Web Component",
+  ].map((name) => ({ "@type": "PropertyValue", name })),
+};
+
 export default function Features() {
+  usePageMeta({
+    title: "Features | Themal Design System Editor",
+    description:
+      "21 features including real-time color picking, color harmony schemes, WCAG AA contrast, typography presets, card styles, GitHub PR integration, and web component support. Plus changelog.",
+  });
+
   return (
     <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+      <JsonLd data={PRODUCT_SCHEMA} />
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <Link
           to="/editor"

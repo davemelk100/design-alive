@@ -1,10 +1,36 @@
 import { Link } from "react-router-dom";
 import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 import ThemalLogo from "../components/ThemalLogo";
+import JsonLd from "../components/JsonLd";
+import usePageMeta from "../hooks/usePageMeta";
+
+const TECH_ARTICLE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  headline: "@themal/editor - Developer Documentation",
+  description:
+    "Installation, props, usage examples, web component setup, and framework compatibility for the @themal/editor npm package.",
+  url: "https://themalive.com/readme",
+  author: { "@type": "Organization", name: "Themal", url: "https://themalive.com" },
+  about: [
+    { "@type": "Thing", name: "React component library" },
+    { "@type": "Thing", name: "Design system editor" },
+    { "@type": "Thing", name: "CSS custom properties" },
+    { "@type": "Thing", name: "Web component" },
+  ],
+  proficiencyLevel: "Beginner",
+};
 
 export default function ReadmePage() {
+  usePageMeta({
+    title: "Developer Docs | @themal/editor",
+    description:
+      "Install @themal/editor in React, Vue, Svelte, Next.js, Astro, WordPress, or Shopify. Props reference, usage examples, web component setup, and exported utilities.",
+  });
+
   return (
     <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+      <JsonLd data={TECH_ARTICLE_SCHEMA} />
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <Link
           to="/editor"
@@ -73,7 +99,7 @@ function App() {
                   <td className="px-4 py-2 font-mono text-xs">prEndpointUrl</td>
                   <td className="px-4 py-2 font-mono text-xs">string</td>
                   <td className="px-4 py-2">-</td>
-                  <td className="px-4 py-2">URL for PR creation endpoint. PR button hidden if omitted.</td>
+                  <td className="px-4 py-2">URL for your PR creation endpoint. The PR button is hidden if omitted. See the PR Endpoint section below for the required API contract.</td>
                 </tr>
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">accessibilityAudit</td>
@@ -186,6 +212,100 @@ function App() {
   }}
 />`}</code>
           </pre>
+        </section>
+
+        {/* PR Endpoint */}
+        <section className="mb-8">
+          <h2 className="text-xl font-medium mb-3" style={{ color: "hsl(var(--foreground))" }}>PR Endpoint</h2>
+          <p className="text-[14px] leading-relaxed mb-3" style={{ color: "hsl(var(--foreground))" }}>
+            When you pass a <code className="font-mono text-[14px]">prEndpointUrl</code>, the editor sends design changes to your backend so you can create a pull request (or apply them however you like). You need to implement this endpoint yourself. The editor is entirely client-side and does not ship a backend.
+          </p>
+          <p className="text-[14px] leading-relaxed mb-3" style={{ color: "hsl(var(--foreground))" }}>
+            If <code className="font-mono text-[14px]">prEndpointUrl</code> is omitted, the PR button is hidden and no server is needed.
+          </p>
+
+          <h3 className="text-[14px] font-medium mb-2 mt-4" style={{ color: "hsl(var(--muted-foreground))" }}>Request (Editor sends)</h3>
+          <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
+            <code>{`POST <prEndpointUrl>
+Content-Type: application/json
+
+{
+  "css": ":root {\\n  --brand: 210 50% 40%;\\n  --primary: 210 83% 48%;\\n  ...\\n}",
+  "sections": ["colors", "typography", "card", "alerts", "interactions"]
+}`}</code>
+          </pre>
+          <ul className="text-[14px] leading-relaxed list-disc pl-5 space-y-1 mb-4" style={{ color: "hsl(var(--foreground))" }}>
+            <li><code className="font-mono text-[14px]">css</code> (string) — Complete <code className="font-mono text-[14px]">{`:root { ... }`}</code> block with CSS custom properties for the selected sections.</li>
+            <li><code className="font-mono text-[14px]">sections</code> (string[]) — Which sections the user chose to include. Possible values: <code className="font-mono text-[14px]">"colors"</code>, <code className="font-mono text-[14px]">"card"</code>, <code className="font-mono text-[14px]">"typography"</code>, <code className="font-mono text-[14px]">"alerts"</code>, <code className="font-mono text-[14px]">"interactions"</code>.</li>
+          </ul>
+
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Success response</h3>
+          <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-3" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
+            <code>{`200 OK
+{ "url": "https://github.com/owner/repo/compare/main...design-update" }`}</code>
+          </pre>
+          <p className="text-[14px] leading-relaxed mb-4" style={{ color: "hsl(var(--foreground))" }}>
+            The editor opens <code className="font-mono text-[14px]">url</code> in a new tab so the user can review the changes.
+          </p>
+
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Error response</h3>
+          <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-3" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
+            <code>{`4xx / 5xx
+{ "error": "Human-readable error message" }`}</code>
+          </pre>
+          <p className="text-[14px] leading-relaxed mb-4" style={{ color: "hsl(var(--foreground))" }}>
+            If the response includes an <code className="font-mono text-[14px]">error</code> field, that message is shown to the user. Otherwise the editor shows a generic message with the status code.
+          </p>
+
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Example: Express</h3>
+          <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
+            <code>{`app.post('/api/create-design-pr', async (req, res) => {
+  const { css, sections } = req.body;
+
+  // 1. Parse CSS variables from the :root block
+  // 2. Read your current CSS file from GitHub / disk
+  // 3. Replace the variables
+  // 4. Create a branch and commit via GitHub API
+  // 5. Return a compare URL
+
+  res.json({
+    url: \`https://github.com/you/repo/compare/main...\${branch}\`
+  });
+});`}</code>
+          </pre>
+
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Example: Next.js API route</h3>
+          <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
+            <code>{`// app/api/create-design-pr/route.ts
+import { NextResponse } from 'next/server';
+
+export async function POST(req: Request) {
+  const { css, sections } = await req.json();
+
+  // ... create branch, commit, return compare URL
+
+  return NextResponse.json({
+    url: \`https://github.com/you/repo/compare/main...\${branch}\`
+  });
+}`}</code>
+          </pre>
+
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>CORS</h3>
+          <p className="text-[14px] leading-relaxed mb-4" style={{ color: "hsl(var(--foreground))" }}>
+            If the editor and your endpoint are on different origins, your endpoint must handle CORS (return appropriate <code className="font-mono text-[14px]">Access-Control-Allow-Origin</code> and <code className="font-mono text-[14px]">Access-Control-Allow-Headers</code> headers, and respond to <code className="font-mono text-[14px]">OPTIONS</code> preflight requests).
+          </p>
+
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>CSS variables by section</h3>
+          <p className="text-[14px] leading-relaxed mb-2" style={{ color: "hsl(var(--foreground))" }}>
+            The <code className="font-mono text-[14px]">css</code> field includes variables for whichever sections the user selected:
+          </p>
+          <ul className="text-[14px] leading-relaxed list-disc pl-5 space-y-1 mb-4" style={{ color: "hsl(var(--foreground))" }}>
+            <li><span className="font-medium">colors</span> — <code className="font-mono text-[14px]">--brand</code>, <code className="font-mono text-[14px]">--primary</code>, <code className="font-mono text-[14px]">--accent</code>, <code className="font-mono text-[14px]">--foreground</code>, <code className="font-mono text-[14px]">--background</code>, <code className="font-mono text-[14px]">--border</code>, <code className="font-mono text-[14px]">--muted</code>, <code className="font-mono text-[14px]">--muted-foreground</code>, <code className="font-mono text-[14px]">--destructive</code>, <code className="font-mono text-[14px]">--success</code>, <code className="font-mono text-[14px]">--warning</code>, and their foreground pairs</li>
+            <li><span className="font-medium">typography</span> — <code className="font-mono text-[14px]">--font-heading</code>, <code className="font-mono text-[14px]">--font-body</code>, <code className="font-mono text-[14px]">--font-size-base</code>, <code className="font-mono text-[14px]">--font-weight-heading</code>, <code className="font-mono text-[14px]">--font-weight-body</code>, <code className="font-mono text-[14px]">--line-height</code>, <code className="font-mono text-[14px]">--letter-spacing</code>, <code className="font-mono text-[14px]">--letter-spacing-heading</code></li>
+            <li><span className="font-medium">card</span> — <code className="font-mono text-[14px]">--card-radius</code>, <code className="font-mono text-[14px]">--card-shadow</code>, <code className="font-mono text-[14px]">--card-border</code>, <code className="font-mono text-[14px]">--card-backdrop</code></li>
+            <li><span className="font-medium">alerts</span> — <code className="font-mono text-[14px]">--alert-radius</code>, <code className="font-mono text-[14px]">--alert-border-width</code>, <code className="font-mono text-[14px]">--alert-padding</code></li>
+            <li><span className="font-medium">interactions</span> — <code className="font-mono text-[14px]">--hover-opacity</code>, <code className="font-mono text-[14px]">--hover-scale</code>, <code className="font-mono text-[14px]">--active-scale</code>, <code className="font-mono text-[14px]">--transition-duration</code>, <code className="font-mono text-[14px]">--focus-ring-width</code>, <code className="font-mono text-[14px]">--focus-ring-color</code></li>
+          </ul>
         </section>
 
         {/* Exported Utilities */}

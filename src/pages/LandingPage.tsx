@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ThemalLogo from "../components/ThemalLogo";
 import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
+import JsonLd from "../components/JsonLd";
+import usePageMeta from "../hooks/usePageMeta";
 
 function CodeBlock({ label, code }: { label: string; code: string }) {
   const [copied, setCopied] = useState(false);
@@ -101,7 +103,62 @@ const DEFAULT_THEME: Record<string, string> = {
 const CODE_SNIPPET = `npm install @themal/editor`;
 
 
+const ORGANIZATION_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Themal",
+  url: "https://themalive.com",
+  logo: "https://themalive.com/themal-logo.png",
+  description: "Interactive design system editor for the modern web.",
+  foundingDate: "2025",
+  founder: { "@type": "Organization", name: "Melkonian Industries", url: "https://davemelk.com" },
+  contactPoint: { "@type": "ContactPoint", email: "privacy@themalive.com", contactType: "customer support" },
+};
+
+const SOFTWARE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Themal",
+  url: "https://themalive.com",
+  applicationCategory: "DesignApplication",
+  operatingSystem: "Web",
+  description:
+    "Interactive design system editor. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography and interaction states, and export CSS custom properties in real time.",
+  offers: {
+    "@type": "AggregateOffer",
+    priceCurrency: "USD",
+    lowPrice: "0",
+    highPrice: "50",
+    offerCount: 3,
+    offers: [
+      { "@type": "Offer", name: "Free", price: "0", priceCurrency: "USD" },
+      { "@type": "Offer", name: "Pro Monthly", price: "9", priceCurrency: "USD", billingIncrement: "MON" },
+      { "@type": "Offer", name: "Pro Yearly", price: "50", priceCurrency: "USD", billingIncrement: "ANN" },
+    ],
+  },
+  featureList: [
+    "Real-time color picking with live preview",
+    "Random palette generation",
+    "Color harmony schemes",
+    "WCAG AA contrast enforcement",
+    "Typography system with Google Fonts",
+    "Card style presets",
+    "Alert style presets",
+    "Interaction state presets",
+    "CSS and design token export",
+    "GitHub PR integration",
+    "Web component support",
+  ],
+};
+
 export default function LandingPage() {
+  usePageMeta({
+    title: "Themal | Real-Time Design System Editor",
+    description:
+      "Interactive design system editor. Pick colors, generate harmony palettes, enforce WCAG AA contrast, and export CSS custom properties in real time. Free to use.",
+    canonicalPath: "/",
+  });
+
   const [zoomDone, setZoomDone] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -136,6 +193,9 @@ export default function LandingPage() {
         scrollSnapType: "y mandatory",
       } as React.CSSProperties}
     >
+      <JsonLd data={ORGANIZATION_SCHEMA} />
+      <JsonLd data={SOFTWARE_SCHEMA} />
+
       {/* Background image - fixed, grows with scroll */}
       <div
         className="pointer-events-none"

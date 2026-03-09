@@ -1,7 +1,14 @@
 import { Link } from "react-router-dom";
 import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
+import usePageMeta from "../hooks/usePageMeta";
 
 export default function Terms() {
+  usePageMeta({
+    title: "Terms & Conditions | Themal",
+    description:
+      "Themal's terms and conditions. Covers service description, accounts, free and premium plans, intellectual property, acceptable use, and PR integration.",
+  });
+
   return (
     <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">

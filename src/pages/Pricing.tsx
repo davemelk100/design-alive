@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
 import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 import ThemalLogo from "../components/ThemalLogo";
+import JsonLd from "../components/JsonLd";
+import usePageMeta from "../hooks/usePageMeta";
 
 const check = (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="shrink-0 mt-[2px]">
@@ -80,8 +82,35 @@ export default function Pricing() {
     }
   }, [isSignedIn, handleCheckout]);
 
+  usePageMeta({
+    title: "Pricing | Themal Design System Editor",
+    description:
+      "Themal pricing: Free plan for personal projects, Pro at $9/month or $50/year for teams. Includes color harmony schemes, image palette extraction, GitHub PR integration, and WCAG auditing.",
+  });
+
+  const pricingSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Themal",
+    applicationCategory: "DesignApplication",
+    operatingSystem: "Web",
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "USD",
+      lowPrice: "0",
+      highPrice: "50",
+      offerCount: 3,
+      offers: [
+        { "@type": "Offer", name: "Free", price: "0", priceCurrency: "USD", description: "Core design system editing for personal projects." },
+        { "@type": "Offer", name: "Pro Monthly", price: "9", priceCurrency: "USD", description: "Full power for teams and professional workflows. Billed monthly." },
+        { "@type": "Offer", name: "Pro Yearly", price: "50", priceCurrency: "USD", description: "Full power for teams and professional workflows. Billed annually, save over 50%." },
+      ],
+    },
+  };
+
   return (
     <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+      <JsonLd data={pricingSchema} />
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <Link
           to="/editor"

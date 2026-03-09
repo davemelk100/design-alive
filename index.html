@@ -64,6 +64,40 @@
     />
     <link rel="canonical" href="https://themalive.com/" />
 
+    <!-- Structured Data: WebSite + SearchAction for answer engines -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Themal",
+      "url": "https://themalive.com",
+      "description": "Interactive design system editor with real-time color picking, harmony palettes, WCAG AA contrast enforcement, and CSS export.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Themal",
+        "url": "https://themalive.com",
+        "logo": "https://themalive.com/themal-logo.png"
+      }
+    }
+    </script>
+
+    <!-- Structured Data: BreadcrumbList for site navigation -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://themalive.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Editor", "item": "https://themalive.com/editor" },
+        { "@type": "ListItem", "position": 3, "name": "Features", "item": "https://themalive.com/features" },
+        { "@type": "ListItem", "position": 4, "name": "Pricing", "item": "https://themalive.com/pricing" },
+        { "@type": "ListItem", "position": 5, "name": "How It Works", "item": "https://themalive.com/how-it-works" },
+        { "@type": "ListItem", "position": 6, "name": "About", "item": "https://themalive.com/about" },
+        { "@type": "ListItem", "position": 7, "name": "Developer Docs", "item": "https://themalive.com/readme" }
+      ]
+    }
+    </script>
+
     <link
       rel="preconnect"
       href="https://fonts.googleapis.com"

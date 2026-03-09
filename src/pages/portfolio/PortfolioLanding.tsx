@@ -4,8 +4,15 @@ import { DesignSystemEditor } from "@design-alive/editor";
 import { useSubscription } from "../../hooks/useSubscription";
 import UserNav from "../../components/UserNav";
 import SiteFooter, { SiteFooterBranding } from "../../components/SiteFooter";
+import usePageMeta from "../../hooks/usePageMeta";
 
 export default function PortfolioLanding() {
+  usePageMeta({
+    title: "Design System Editor | Themal",
+    description:
+      "Open Themal's interactive design system editor. Pick colors, customize typography, cards, and alerts, enforce WCAG AA contrast, and export CSS or open a GitHub PR.",
+  });
+
   const { licenseKey } = useSubscription();
   const [searchParams, setSearchParams] = useSearchParams();
   const [showSuccess, setShowSuccess] = useState(false);

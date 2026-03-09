@@ -1,10 +1,66 @@
 import { Link } from "react-router-dom";
 import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 import ThemalLogo from "../components/ThemalLogo";
+import JsonLd from "../components/JsonLd";
+import usePageMeta from "../hooks/usePageMeta";
+
+const FAQ_SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What is Themal?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Themal is a visual design system editor that lets you pick a brand color and watch every token update in real time. Customize typography, buttons, cards, and alerts while every foreground/background pair is checked against WCAG AA contrast standards. Export CSS custom properties, design tokens, or open a PR directly to your GitHub repository.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How does Themal work?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Start by choosing a primary brand color. Themal automatically derives a complete, harmonious palette using perceptual color science. Every change is live. Every combination is accessibility-checked. When you're ready, export your theme as CSS custom properties, Tailwind config, or design tokens.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is Themal free?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "All features are currently free during early access, with no account required. A Pro plan at $9/month or $50/year adds advanced features like color harmony schemes, image palette extraction, and GitHub PR integration.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I use Themal with frameworks other than React?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. The @themal/editor npm package is for React apps. For all other frameworks (Vue, Svelte, Astro, Next.js, WordPress, Shopify, and more), use the <themal-editor> web component, which bundles React internally and works anywhere you can load a script tag.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Who built Themal?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Themal is a Melkonian Industries production.",
+      },
+    },
+  ],
+};
 
 export default function About() {
+  usePageMeta({
+    title: "About Themal | Real-Time Design System Editor",
+    description:
+      "Learn what Themal is, how it works, and what features it offers. A real-time design system editor with WCAG AA contrast enforcement, color harmony schemes, and CSS export.",
+  });
+
   return (
     <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+      <JsonLd data={FAQ_SCHEMA} />
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <Link
           to="/editor"
