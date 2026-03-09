@@ -22,6 +22,7 @@ npm run dev
 7. [GitHub PR Integration](#7-github-pr-integration)
 8. [Environment Variable Reference](#8-environment-variable-reference)
 9. [Command Reference](#9-command-reference)
+10. [Making the Repo Public](#10-making-the-repo-public)
 
 ---
 
@@ -447,3 +448,76 @@ rm -rf node_modules/.vite dist .vite
 # Rebuild everything from scratch
 rm -rf node_modules/.vite dist .vite && cd packages/editor && npm run build && cd ../.. && npm run build
 ```
+
+---
+
+## 10. Making the Repo Public
+
+Checklist to complete before making this repo public. Do not make the repo public until all items are addressed.
+
+### Pre-flight: audit git history for secrets
+
+Run these commands to verify no real secrets were ever committed:
+
+```bash
+# Search for Stripe keys
+git log --all -p -S 'sk_live_51' --oneline | head -20
+git log --all -p -S 'sk_test_51' --oneline | head -20
+
+# Search for GitHub tokens
+git log --all -p -S 'ghp_' --oneline | head -20
+
+# Search for Clerk secrets
+git log --all -p -S 'sk_live_mol' --oneline | head -20
+
+# Search for Google OAuth secrets
+git log --all -p -S 'GOCSPX-' --oneline | head -20
+
+# Search for webhook secrets
+git log --all -p -S 'whsec_' --oneline | head -20
+
+# Search for JWT secrets
+git log --all -p -S 'JWT_SECRET' --oneline | head -20
+
+# Check if .env was ever committed
+git log --all --oneline --diff-filter=A -- .env
+```
+
+All results should point to `.env.example` (which contains only placeholder prefixes like `sk_live_...`). If any real values appear, you need to rewrite history with `git filter-repo` or `BFG Repo-Cleaner` before going public.
+
+### Rotate all secrets
+
+Even if git history is clean, rotate secrets before going public as a precaution. Update both your local `.env` and Netlify environment variables after each rotation.
+
+| Secret | Where to rotate | Update in |
+|--------|----------------|-----------|
+| GitHub token | [github.com/settings/tokens](https://github.com/settings/tokens) - delete old, create new | `.env` + Netlify |
+| Stripe secret key | [dashboard.stripe.com/apikeys](https://dashboard.stripe.com/apikeys) - roll key | `.env` + Netlify |
+| Stripe webhook secret | Stripe > Developers > Webhooks - roll signing secret | `.env` + Netlify |
+| Clerk secret key | [dashboard.clerk.com](https://dashboard.clerk.com) - rotate key | `.env` + Netlify |
+| Google OAuth secret | [console.cloud.google.com](https://console.cloud.google.com/apis/credentials) - create new credentials | Clerk dashboard |
+
+Price IDs (`price_...`) and Clerk publishable keys (`pk_live_...`) do not need rotation. They are public by design.
+
+### Verify .gitignore coverage
+
+```bash
+# Confirm .env patterns are ignored
+grep '.env' .gitignore
+
+# Confirm no secrets are tracked
+git ls-files | grep -i -E '\.env$|secret|credential|\.pem|\.key$'
+```
+
+### Feature completeness
+
+- [ ] GitHub OAuth integration fully wired (client-side PR flow replaces server-side `GITHUB_TOKEN` approach)
+- [ ] `netlify/functions/github-oauth.ts` proxy deployed and tested
+- [ ] `netlify/functions/create-design-pr.ts` hardcoded repo/token removed or deprecated
+- [ ] `packages/editor/` source code reviewed for any hardcoded values
+
+### After going public
+
+- Monitor [GitHub secret scanning alerts](https://github.com/davemelk100/design-alive/security/secret-scanning) (enabled automatically on public repos)
+- Enable Dependabot for security updates
+- Add a `LICENSE` file if not already present
