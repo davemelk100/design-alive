@@ -306,10 +306,7 @@ function DesignSystemEditorInner({
 }: DesignSystemEditorProps) {
   const { isPremium } = useLicense();
   const [hoveredLockKey, setHoveredLockKey] = useState<string | null>(null);
-  const [wcagEnforcement, setWcagEnforcement] = useState(() => {
-    const saved = storage.get<boolean>("themal-wcag-enforcement");
-    return saved !== false;
-  });
+  const wcagEnforcement = true;
 
   const editorRootRef = useRef<HTMLDivElement>(null);
 
