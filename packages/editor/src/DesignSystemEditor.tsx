@@ -85,6 +85,7 @@ import {
   removeCustomFont,
   initCustomFonts,
   parseCssImport,
+  buildShadowCss,
 } from "./utils/themeUtils";
 import type { CustomFontEntry } from "./utils/themeUtils";
 import type {
@@ -100,90 +101,17 @@ import {
   extractPaletteFromUrl,
 } from "./utils/extractPalette";
 import { useImportedIcons } from "./hooks/useImportedIcons";
+import { useStyleState } from "./hooks/useStyleState";
 import { IconImportModal } from "./components/IconImportModal";
+import {
+  LazyHome, LazyPalette, LazyBookOpen, LazyBriefcase, LazySearch,
+  LazySun, LazyMoon, LazyEye, LazyHeart, LazyCheck,
+  LazyExternalLink, LazyLink2, LazyFlaskConical, LazyUsers, LazyAlertCircle,
+  LazyZap, LazyGlobe, LazyShield, LazySettings, LazyCode,
+  LazyDatabase, LazySmartphone, LazyCamera, LazyMail, LazyBell,
+  LazyClock, LazyDownload,
+} from "./utils/lazyIcons";
 import "./styles/editor.css";
-
-const LazyHome = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Home })),
-);
-const LazyPalette = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Palette })),
-);
-const LazyBookOpen = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.BookOpen })),
-);
-const LazyBriefcase = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Briefcase })),
-);
-const LazySearch = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Search })),
-);
-const LazySun = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Sun })),
-);
-const LazyMoon = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Moon })),
-);
-const LazyEye = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Eye })),
-);
-const LazyHeart = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Heart })),
-);
-const LazyCheck = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Check })),
-);
-const LazyExternalLink = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.ExternalLink })),
-);
-const LazyLink2 = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Link2 })),
-);
-const LazyFlaskConical = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.FlaskConical })),
-);
-const LazyUsers = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Users })),
-);
-const LazyAlertCircle = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.AlertCircle })),
-);
-const LazyZap = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Zap })),
-);
-const LazyGlobe = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Globe })),
-);
-const LazyShield = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Shield })),
-);
-const LazySettings = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Settings })),
-);
-const LazyCode = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Code })),
-);
-const LazyDatabase = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Database })),
-);
-const LazySmartphone = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Smartphone })),
-);
-const LazyCamera = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Camera })),
-);
-const LazyMail = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Mail })),
-);
-const LazyBell = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Bell })),
-);
-const LazyClock = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Clock })),
-);
-const LazyDownload = React.lazy(() =>
-  import("lucide-react").then((mod) => ({ default: mod.Download })),
-);
 function CopyIcon({ size = 14 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -524,14 +452,24 @@ function DesignSystemEditorInner({
   const [typoExportFormat, setTypoExportFormat] = useState<"css" | "tokens">(
     "css",
   );
-  const [alertStyle, setAlertStyle] = useState<AlertStyleState>(() => {
-    const saved = storage.get<AlertStyleState>(ALERT_STYLE_KEY);
-    return saved || { ...DEFAULT_ALERT_STYLE };
-  });
-  const [toastStyle, setToastStyle] = useState<AlertStyleState>(() => {
-    const saved = storage.get<AlertStyleState>(TOAST_STYLE_KEY);
-    return saved || { ...DEFAULT_TOAST_STYLE };
-  });
+  const {
+    state: alertStyle,
+    setState: setAlertStyle,
+    update: updateAlertStyle,
+    selectPreset: selectAlertPreset,
+  } = useStyleState<AlertStyleState>(
+    () => storage.get<AlertStyleState>(ALERT_STYLE_KEY) || { ...DEFAULT_ALERT_STYLE },
+    ALERT_PRESETS,
+  );
+  const {
+    state: toastStyle,
+    setState: setToastStyle,
+    update: updateToastStyle,
+    selectPreset: selectToastPreset,
+  } = useStyleState<AlertStyleState>(
+    () => storage.get<AlertStyleState>(TOAST_STYLE_KEY) || { ...DEFAULT_TOAST_STYLE },
+    TOAST_PRESETS,
+  );
   const [alertCssVisible, setAlertCssVisible] = useState(false);
   const [alertCssCopied, setAlertCssCopied] = useState(false);
   const [alertExportFormat, setAlertExportFormat] = useState<"css" | "tokens">(
@@ -543,15 +481,24 @@ function DesignSystemEditorInner({
     "css",
   );
   const [showAlertResetModal, setShowAlertResetModal] = useState(false);
-  const [buttonStyle, setButtonStyle] = useState<ButtonStyleState>(() => {
-    const saved = storage.get<ButtonStyleState>(BUTTON_STYLE_KEY);
-    return saved || { ...DEFAULT_BUTTON_STYLE };
-  });
-  const [interactionStyle, setInteractionStyle] =
-    useState<InteractionStyleState>(() => {
-      const saved = storage.get<InteractionStyleState>(INTERACTION_STYLE_KEY);
-      return saved || { ...DEFAULT_INTERACTION_STYLE };
-    });
+  const {
+    state: buttonStyle,
+    setState: setButtonStyle,
+    update: updateButtonStyle,
+    selectPreset: selectButtonPreset,
+  } = useStyleState<ButtonStyleState>(
+    () => storage.get<ButtonStyleState>(BUTTON_STYLE_KEY) || { ...DEFAULT_BUTTON_STYLE },
+    BUTTON_PRESETS,
+  );
+  const {
+    state: interactionStyle,
+    setState: setInteractionStyle,
+    update: updateInteractionStyle,
+    selectPreset: selectInteractionPreset,
+  } = useStyleState<InteractionStyleState>(
+    () => storage.get<InteractionStyleState>(INTERACTION_STYLE_KEY) || { ...DEFAULT_INTERACTION_STYLE },
+    INTERACTION_PRESETS,
+  );
   const [showBtnResetModal, setShowBtnResetModal] = useState(false);
   const [btnCssVisible, setBtnCssVisible] = useState(false);
   const [btnCssCopied, setBtnCssCopied] = useState(false);
@@ -563,13 +510,15 @@ function DesignSystemEditorInner({
   >("css");
   const [showInteractionResetModal, setShowInteractionResetModal] =
     useState(false);
-  const [typoInteractionStyle, setTypoInteractionStyle] =
-    useState<TypoInteractionStyleState>(() => {
-      const saved = storage.get<TypoInteractionStyleState>(
-        TYPO_INTERACTION_STYLE_KEY,
-      );
-      return saved || { ...DEFAULT_TYPO_INTERACTION_STYLE };
-    });
+  const {
+    state: typoInteractionStyle,
+    setState: setTypoInteractionStyle,
+    update: updateTypoInteractionStyle,
+    selectPreset: selectTypoInteractionPreset,
+  } = useStyleState<TypoInteractionStyleState>(
+    () => storage.get<TypoInteractionStyleState>(TYPO_INTERACTION_STYLE_KEY) || { ...DEFAULT_TYPO_INTERACTION_STYLE },
+    TYPO_INTERACTION_PRESETS,
+  );
   const [typoInteractionCssVisible, setTypoInteractionCssVisible] =
     useState(false);
   const [typoInteractionCssCopied, setTypoInteractionCssCopied] =
@@ -747,22 +696,6 @@ function DesignSystemEditorInner({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateAlertStyle = useCallback((patch: Partial<AlertStyleState>) => {
-    setAlertStyle((prev) => {
-      const next = { ...prev, ...patch };
-      if (patch.preset === undefined && prev.preset !== "custom") {
-        next.preset = "custom";
-      }
-      return next;
-    });
-  }, []);
-
-  const selectAlertPreset = useCallback((presetKey: string) => {
-    const preset = ALERT_PRESETS[presetKey];
-    if (preset) {
-      setAlertStyle({ ...preset });
-    }
-  }, []);
 
   const handleResetAlertStyle = () => {
     storage.remove(ALERT_STYLE_KEY);
@@ -782,43 +715,11 @@ function DesignSystemEditorInner({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateToastStyle = useCallback((patch: Partial<AlertStyleState>) => {
-    setToastStyle((prev) => {
-      const next = { ...prev, ...patch };
-      if (patch.preset === undefined && prev.preset !== "custom") {
-        next.preset = "custom";
-      }
-      return next;
-    });
-  }, []);
-
-  const selectToastPreset = useCallback((presetKey: string) => {
-    const preset = TOAST_PRESETS[presetKey];
-    if (preset) {
-      setToastStyle({ ...preset });
-    }
-  }, []);
 
   useEffect(() => {
     applyButtonStyle(buttonStyle, editorRootRef.current!);
   }, [buttonStyle]);
 
-  const updateButtonStyle = useCallback((patch: Partial<ButtonStyleState>) => {
-    setButtonStyle((prev) => {
-      const next = { ...prev, ...patch };
-      if (patch.preset === undefined && prev.preset !== "custom") {
-        next.preset = "custom";
-      }
-      return next;
-    });
-  }, []);
-
-  const selectButtonPreset = useCallback((presetKey: string) => {
-    const preset = BUTTON_PRESETS[presetKey];
-    if (preset) {
-      setButtonStyle({ ...preset });
-    }
-  }, []);
 
   useEffect(() => {
     applyInteractionStyle(interactionStyle, editorRootRef.current!);
@@ -834,25 +735,6 @@ function DesignSystemEditorInner({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateInteractionStyle = useCallback(
-    (patch: Partial<InteractionStyleState>) => {
-      setInteractionStyle((prev) => {
-        const next = { ...prev, ...patch };
-        if (patch.preset === undefined && prev.preset !== "custom") {
-          next.preset = "custom";
-        }
-        return next;
-      });
-    },
-    [],
-  );
-
-  const selectInteractionPreset = useCallback((presetKey: string) => {
-    const preset = INTERACTION_PRESETS[presetKey];
-    if (preset) {
-      setInteractionStyle({ ...preset });
-    }
-  }, []);
 
   const handleResetInteractionStyle = () => {
     storage.remove(INTERACTION_STYLE_KEY);
@@ -869,25 +751,6 @@ function DesignSystemEditorInner({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const updateTypoInteractionStyle = useCallback(
-    (patch: Partial<TypoInteractionStyleState>) => {
-      setTypoInteractionStyle((prev) => {
-        const next = { ...prev, ...patch };
-        if (patch.preset === undefined && prev.preset !== "custom") {
-          next.preset = "custom";
-        }
-        return next;
-      });
-    },
-    [],
-  );
-
-  const selectTypoInteractionPreset = useCallback((presetKey: string) => {
-    const preset = TYPO_INTERACTION_PRESETS[presetKey];
-    if (preset) {
-      setTypoInteractionStyle({ ...preset });
-    }
-  }, []);
 
   const handleResetTypoInteractionStyle = () => {
     storage.remove(TYPO_INTERACTION_STYLE_KEY);
@@ -907,15 +770,8 @@ function DesignSystemEditorInner({
             });
             break;
           case "card": {
-            const shadowVal =
-              cardStyle.shadowBlur === 0 &&
-              cardStyle.shadowOffsetX === 0 &&
-              cardStyle.shadowOffsetY === 0 &&
-              cardStyle.shadowSpread === 0
-                ? "none"
-                : `${cardStyle.shadowOffsetX}px ${cardStyle.shadowOffsetY}px ${cardStyle.shadowBlur}px ${cardStyle.shadowSpread}px ${cardStyle.shadowColor}`;
             vars += `  --card-radius: ${cardStyle.borderRadius}px;\n`;
-            vars += `  --card-shadow: ${shadowVal};\n`;
+            vars += `  --card-shadow: ${buildShadowCss(cardStyle)};\n`;
             vars += `  --card-border: ${cardStyle.borderWidth > 0 ? `${cardStyle.borderWidth}px solid hsl(var(--border))` : "none"};\n`;
             vars += `  --card-backdrop: ${cardStyle.backdropBlur > 0 ? `blur(${cardStyle.backdropBlur}px)` : "none"};\n`;
             break;
@@ -936,19 +792,12 @@ function DesignSystemEditorInner({
             vars += `  --alert-padding: ${alertStyle.padding}px;\n`;
             break;
           case "buttons": {
-            const btnShadow =
-              buttonStyle.shadowBlur === 0 &&
-              buttonStyle.shadowOffsetX === 0 &&
-              buttonStyle.shadowOffsetY === 0 &&
-              buttonStyle.shadowSpread === 0
-                ? "none"
-                : `${buttonStyle.shadowOffsetX}px ${buttonStyle.shadowOffsetY}px ${buttonStyle.shadowBlur}px ${buttonStyle.shadowSpread}px ${buttonStyle.shadowColor}`;
             vars += `  --btn-px: ${buttonStyle.paddingX}px;\n`;
             vars += `  --btn-py: ${buttonStyle.paddingY}px;\n`;
             vars += `  --btn-font-size: ${buttonStyle.fontSize}px;\n`;
             vars += `  --btn-font-weight: ${buttonStyle.fontWeight};\n`;
             vars += `  --btn-radius: ${buttonStyle.borderRadius}px;\n`;
-            vars += `  --btn-shadow: ${btnShadow};\n`;
+            vars += `  --btn-shadow: ${buildShadowCss(buttonStyle)};\n`;
             vars += `  --btn-border-width: ${buttonStyle.borderWidth}px;\n`;
             break;
           }
@@ -1123,14 +972,7 @@ function DesignSystemEditorInner({
     });
     css += "\n  /* Card Style */\n";
     css += `  --card-radius: ${cardStyle.borderRadius}px;\n`;
-    const shadowVal =
-      cardStyle.shadowBlur === 0 &&
-      cardStyle.shadowOffsetX === 0 &&
-      cardStyle.shadowOffsetY === 0 &&
-      cardStyle.shadowSpread === 0
-        ? "none"
-        : `${cardStyle.shadowOffsetX}px ${cardStyle.shadowOffsetY}px ${cardStyle.shadowBlur}px ${cardStyle.shadowSpread}px ${cardStyle.shadowColor}`;
-    css += `  --card-shadow: ${shadowVal};\n`;
+    css += `  --card-shadow: ${buildShadowCss(cardStyle)};\n`;
     css += `  --card-border: ${cardStyle.borderWidth > 0 ? `${cardStyle.borderWidth}px solid hsl(var(--border))` : "none"};\n`;
     css += `  --card-backdrop: ${cardStyle.backdropBlur > 0 ? `blur(${cardStyle.backdropBlur}px)` : "none"};\n`;
     css += "\n  /* Typography */\n";
@@ -3791,10 +3633,7 @@ function DesignSystemEditorInner({
 
                 {/* Button CSS/Tokens output */}
                 {btnCssVisible && (() => {
-                  const btnShadow = buttonStyle.shadowBlur === 0 && buttonStyle.shadowOffsetX === 0 && buttonStyle.shadowOffsetY === 0 && buttonStyle.shadowSpread === 0
-                    ? "none"
-                    : `${buttonStyle.shadowOffsetX}px ${buttonStyle.shadowOffsetY}px ${buttonStyle.shadowBlur}px ${buttonStyle.shadowSpread}px ${buttonStyle.shadowColor}`;
-                  const btnCss = `:root {\n  --btn-px: ${buttonStyle.paddingX}px;\n  --btn-py: ${buttonStyle.paddingY}px;\n  --btn-font-size: ${buttonStyle.fontSize}px;\n  --btn-font-weight: ${buttonStyle.fontWeight};\n  --btn-radius: ${buttonStyle.borderRadius}px;\n  --btn-shadow: ${btnShadow};\n  --btn-border-width: ${buttonStyle.borderWidth}px;\n}`;
+                  const btnCss = `:root {\n  --btn-px: ${buttonStyle.paddingX}px;\n  --btn-py: ${buttonStyle.paddingY}px;\n  --btn-font-size: ${buttonStyle.fontSize}px;\n  --btn-font-weight: ${buttonStyle.fontWeight};\n  --btn-radius: ${buttonStyle.borderRadius}px;\n  --btn-shadow: ${buildShadowCss(buttonStyle)};\n  --btn-border-width: ${buttonStyle.borderWidth}px;\n}`;
                   const btnTokens = JSON.stringify(
                     generateSectionDesignTokens(
                       "buttons",
@@ -4135,9 +3974,7 @@ function DesignSystemEditorInner({
                         Preview
                       </p>
                       {(() => {
-                        const previewShadow = buttonStyle.shadowBlur === 0 && buttonStyle.shadowOffsetX === 0 && buttonStyle.shadowOffsetY === 0 && buttonStyle.shadowSpread === 0
-                          ? "none"
-                          : `${buttonStyle.shadowOffsetX}px ${buttonStyle.shadowOffsetY}px ${buttonStyle.shadowBlur}px ${buttonStyle.shadowSpread}px ${buttonStyle.shadowColor}`;
+                        const previewShadow = buildShadowCss(buttonStyle);
                         const commonStyle = {
                           borderRadius: `${buttonStyle.borderRadius}px`,
                           padding: `${buttonStyle.paddingY}px ${buttonStyle.paddingX}px`,
@@ -4714,9 +4551,7 @@ function DesignSystemEditorInner({
                           Preview
                         </p>
                         {(() => {
-                          const ixShadow = buttonStyle.shadowBlur === 0 && buttonStyle.shadowOffsetX === 0 && buttonStyle.shadowOffsetY === 0 && buttonStyle.shadowSpread === 0
-                            ? "none"
-                            : `${buttonStyle.shadowOffsetX}px ${buttonStyle.shadowOffsetY}px ${buttonStyle.shadowBlur}px ${buttonStyle.shadowSpread}px ${buttonStyle.shadowColor}`;
+                          const ixShadow = buildShadowCss(buttonStyle);
                           const ixCommon = {
                             borderRadius: `${buttonStyle.borderRadius}px`,
                             padding: `${buttonStyle.paddingY}px ${buttonStyle.paddingX}px`,
@@ -5111,14 +4946,7 @@ function DesignSystemEditorInner({
               {/* Card CSS/Tokens output */}
               {cardCssVisible &&
                 (() => {
-                  const shadowVal =
-                    cardStyle.shadowBlur === 0 &&
-                    cardStyle.shadowOffsetX === 0 &&
-                    cardStyle.shadowOffsetY === 0 &&
-                    cardStyle.shadowSpread === 0
-                      ? "none"
-                      : `${cardStyle.shadowOffsetX}px ${cardStyle.shadowOffsetY}px ${cardStyle.shadowBlur}px ${cardStyle.shadowSpread}px ${cardStyle.shadowColor}`;
-                  const cardCss = `:root {\n  --card-radius: ${cardStyle.borderRadius}px;\n  --card-shadow: ${shadowVal};\n  --card-border: ${cardStyle.borderWidth > 0 ? `${cardStyle.borderWidth}px solid hsl(var(--border))` : "none"};\n  --card-backdrop: ${cardStyle.backdropBlur > 0 ? `blur(${cardStyle.backdropBlur}px)` : "none"};\n}`;
+                  const cardCss = `:root {\n  --card-radius: ${cardStyle.borderRadius}px;\n  --card-shadow: ${buildShadowCss(cardStyle)};\n  --card-border: ${cardStyle.borderWidth > 0 ? `${cardStyle.borderWidth}px solid hsl(var(--border))` : "none"};\n  --card-backdrop: ${cardStyle.backdropBlur > 0 ? `blur(${cardStyle.backdropBlur}px)` : "none"};\n}`;
                   const cardTokens = JSON.stringify(
                     generateSectionDesignTokens(
                       "card",
@@ -5501,13 +5329,7 @@ function DesignSystemEditorInner({
                                   cardStyle.backdropBlur > 0
                                     ? `blur(${cardStyle.backdropBlur}px)`
                                     : "none",
-                                boxShadow:
-                                  cardStyle.shadowBlur === 0 &&
-                                  cardStyle.shadowOffsetX === 0 &&
-                                  cardStyle.shadowOffsetY === 0 &&
-                                  cardStyle.shadowSpread === 0
-                                    ? "none"
-                                    : `${cardStyle.shadowOffsetX}px ${cardStyle.shadowOffsetY}px ${cardStyle.shadowBlur}px ${cardStyle.shadowSpread}px ${cardStyle.shadowColor}`,
+                                boxShadow: buildShadowCss(cardStyle),
                                 padding: "20px",
                               }}
                             >
@@ -5551,13 +5373,7 @@ function DesignSystemEditorInner({
                             style={{
                               minHeight: "240px",
                               borderRadius: `${cardStyle.borderRadius}px`,
-                              boxShadow:
-                                cardStyle.shadowBlur === 0 &&
-                                cardStyle.shadowOffsetX === 0 &&
-                                cardStyle.shadowOffsetY === 0 &&
-                                cardStyle.shadowSpread === 0
-                                  ? "none"
-                                  : `${cardStyle.shadowOffsetX}px ${cardStyle.shadowOffsetY}px ${cardStyle.shadowBlur}px ${cardStyle.shadowSpread}px ${cardStyle.shadowColor}`,
+                              boxShadow: buildShadowCss(cardStyle),
                               background:
                                 cardStyle.bgType === "transparent"
                                   ? "transparent"

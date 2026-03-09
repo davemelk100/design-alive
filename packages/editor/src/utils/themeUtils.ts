@@ -683,6 +683,25 @@ export const generateRandomPalette = (
   return result;
 };
 
+/** Build a CSS box-shadow value from shadow properties. Returns "none" when all offsets/blur/spread are zero. */
+export function buildShadowCss(style: {
+  shadowOffsetX: number;
+  shadowOffsetY: number;
+  shadowBlur: number;
+  shadowSpread: number;
+  shadowColor: string;
+}): string {
+  if (
+    style.shadowBlur === 0 &&
+    style.shadowOffsetX === 0 &&
+    style.shadowOffsetY === 0 &&
+    style.shadowSpread === 0
+  ) {
+    return "none";
+  }
+  return `${style.shadowOffsetX}px ${style.shadowOffsetY}px ${style.shadowBlur}px ${style.shadowSpread}px ${style.shadowColor}`;
+}
+
 export const CARD_STYLE_KEY = "ds-card-style";
 
 export interface CardStyleState {
