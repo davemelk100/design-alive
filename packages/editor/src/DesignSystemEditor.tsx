@@ -2331,8 +2331,8 @@ function DesignSystemEditorInner({
       {/* Section nav */}
       <nav
         ref={navContainerRef}
-        className="sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2 hidden sm:flex items-center gap-3 lg:gap-4"
-        style={{ backgroundColor: "hsl(var(--background, 0 0% 98%))" }}
+        className="ds-section-nav sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2 hidden sm:flex items-center gap-3 lg:gap-4"
+        style={{ backgroundColor: "hsl(var(--background))", borderBottom: "1px solid hsl(var(--border))" }}
       >
         {[
           {
@@ -2738,6 +2738,7 @@ function DesignSystemEditorInner({
                 <input
                   ref={fileInputRef}
                   type="file"
+                  name="image-upload"
                   accept=".png,.jpg,.jpeg"
                   className="hidden"
                   onChange={(e) => {
@@ -2873,7 +2874,7 @@ function DesignSystemEditorInner({
               {/* Color swatch buttons */}
               <div
                 id="color-swatch-grid"
-                className="grid grid-cols-3 sm:grid-cols-5 gap-2 sm:gap-5 rounded-lg p-4 overflow-visible"
+                className="grid grid-cols-5 gap-2 sm:gap-5 rounded-lg p-4 overflow-visible"
                 data-axe-exclude
                 style={{ backgroundColor: "hsl(var(--foreground) / 0.04)" }}
               >
@@ -2915,7 +2916,7 @@ function DesignSystemEditorInner({
                       >
                         <button
                           aria-label={`${label} color swatch`}
-                          className="w-full h-20 text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-tl-lg rounded-tr-lg sm:rounded-tr-none sm:rounded-bl-lg"
+                          className="w-full aspect-square text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-tl-lg rounded-tr-lg sm:rounded-tr-none sm:rounded-bl-lg"
                           style={{
                             backgroundColor: hsl ? `hsl(${hsl})` : "hsl(var(--muted))",
                             color: btnTextColor,
@@ -3765,6 +3766,7 @@ function DesignSystemEditorInner({
                         <span>Padding X: {buttonStyle.paddingX}px</span>
                         <input
                           type="range"
+                          name="btn-padding-x"
                           min={4}
                           max={40}
                           value={buttonStyle.paddingX}
@@ -3779,6 +3781,7 @@ function DesignSystemEditorInner({
                         <span>Padding Y: {buttonStyle.paddingY}px</span>
                         <input
                           type="range"
+                          name="btn-padding-y"
                           min={2}
                           max={20}
                           value={buttonStyle.paddingY}
@@ -3793,6 +3796,7 @@ function DesignSystemEditorInner({
                         <span>Radius: {buttonStyle.borderRadius}px</span>
                         <input
                           type="range"
+                          name="btn-border-radius"
                           min={0}
                           max={24}
                           value={buttonStyle.borderRadius}
@@ -3815,6 +3819,7 @@ function DesignSystemEditorInner({
                         <span>Font Size: {buttonStyle.fontSize}px</span>
                         <input
                           type="range"
+                          name="btn-font-size"
                           min={10}
                           max={22}
                           value={buttonStyle.fontSize}
@@ -3829,6 +3834,7 @@ function DesignSystemEditorInner({
                         <span>Font Weight: {buttonStyle.fontWeight}</span>
                         <input
                           type="range"
+                          name="btn-font-weight"
                           min={100}
                           max={900}
                           step={100}
@@ -3851,7 +3857,7 @@ function DesignSystemEditorInner({
                       >
                         <span>Offset X: {buttonStyle.shadowOffsetX}px</span>
                         <input
-                          type="range" min={-10} max={10}
+                          type="range" name="btn-shadow-x" min={-10} max={10}
                           value={buttonStyle.shadowOffsetX}
                           onChange={(e) => updateButtonStyle({ shadowOffsetX: Number(e.target.value) })}
                           className="w-32 accent-[hsl(var(--brand))]"
@@ -3863,7 +3869,7 @@ function DesignSystemEditorInner({
                       >
                         <span>Offset Y: {buttonStyle.shadowOffsetY}px</span>
                         <input
-                          type="range" min={-10} max={10}
+                          type="range" name="btn-shadow-y" min={-10} max={10}
                           value={buttonStyle.shadowOffsetY}
                           onChange={(e) => updateButtonStyle({ shadowOffsetY: Number(e.target.value) })}
                           className="w-32 accent-[hsl(var(--brand))]"
@@ -3875,7 +3881,7 @@ function DesignSystemEditorInner({
                       >
                         <span>Blur: {buttonStyle.shadowBlur}px</span>
                         <input
-                          type="range" min={0} max={30}
+                          type="range" name="btn-shadow-blur" min={0} max={30}
                           value={buttonStyle.shadowBlur}
                           onChange={(e) => updateButtonStyle({ shadowBlur: Number(e.target.value) })}
                           className="w-32 accent-[hsl(var(--brand))]"
@@ -3887,7 +3893,7 @@ function DesignSystemEditorInner({
                       >
                         <span>Spread: {buttonStyle.shadowSpread}px</span>
                         <input
-                          type="range" min={-5} max={10}
+                          type="range" name="btn-shadow-spread" min={-5} max={10}
                           value={buttonStyle.shadowSpread}
                           onChange={(e) => updateButtonStyle({ shadowSpread: Number(e.target.value) })}
                           className="w-32 accent-[hsl(var(--brand))]"
@@ -3907,7 +3913,7 @@ function DesignSystemEditorInner({
                       >
                         <span>Width: {buttonStyle.borderWidth}px</span>
                         <input
-                          type="range" min={0} max={4}
+                          type="range" name="btn-border-width" min={0} max={4}
                           value={buttonStyle.borderWidth}
                           onChange={(e) => updateButtonStyle({ borderWidth: Number(e.target.value) })}
                           className="w-32 accent-[hsl(var(--brand))]"
@@ -4377,6 +4383,7 @@ function DesignSystemEditorInner({
                           <span>Opacity: {interactionStyle.hoverOpacity}</span>
                           <input
                             type="range"
+                            name="hover-opacity"
                             min={0.6}
                             max={1}
                             step={0.01}
@@ -4396,6 +4403,7 @@ function DesignSystemEditorInner({
                           <span>Scale: {interactionStyle.hoverScale}</span>
                           <input
                             type="range"
+                            name="hover-scale"
                             min={1}
                             max={1.1}
                             step={0.005}
@@ -4423,6 +4431,7 @@ function DesignSystemEditorInner({
                           <span>Scale: {interactionStyle.activeScale}</span>
                           <input
                             type="range"
+                            name="active-scale"
                             min={0.9}
                             max={1.05}
                             step={0.005}
@@ -4452,6 +4461,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="transition-duration"
                             min={0}
                             max={500}
                             step={10}
@@ -4473,6 +4483,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="focus-ring-width"
                             min={0}
                             max={4}
                             step={0.5}
@@ -4999,6 +5010,7 @@ function DesignSystemEditorInner({
                       <span>Y Offset: {cardStyle.shadowOffsetY}px</span>
                       <input
                         type="range"
+                        name="card-shadow-offset-y"
                         min={0}
                         max={30}
                         value={cardStyle.shadowOffsetY}
@@ -5017,6 +5029,7 @@ function DesignSystemEditorInner({
                       <span>Blur: {cardStyle.shadowBlur}px</span>
                       <input
                         type="range"
+                        name="card-shadow-blur"
                         min={0}
                         max={50}
                         value={cardStyle.shadowBlur}
@@ -5035,6 +5048,7 @@ function DesignSystemEditorInner({
                       <span>Spread: {cardStyle.shadowSpread}px</span>
                       <input
                         type="range"
+                        name="card-shadow-spread"
                         min={-10}
                         max={20}
                         value={cardStyle.shadowSpread}
@@ -5062,6 +5076,7 @@ function DesignSystemEditorInner({
                       <span>Border Radius: {cardStyle.borderRadius}px</span>
                       <input
                         type="range"
+                        name="card-border-radius"
                         min={0}
                         max={40}
                         value={cardStyle.borderRadius}
@@ -5080,6 +5095,7 @@ function DesignSystemEditorInner({
                       <span>Border Width: {cardStyle.borderWidth}px</span>
                       <input
                         type="range"
+                        name="card-border-width"
                         min={0}
                         max={4}
                         value={cardStyle.borderWidth}
@@ -5109,6 +5125,7 @@ function DesignSystemEditorInner({
                       </span>
                       <input
                         type="range"
+                        name="card-bg-opacity"
                         min={0}
                         max={100}
                         value={Math.round(cardStyle.bgOpacity * 100)}
@@ -5127,6 +5144,7 @@ function DesignSystemEditorInner({
                       <span>Backdrop Blur: {cardStyle.backdropBlur}px</span>
                       <input
                         type="range"
+                        name="card-backdrop-blur"
                         min={0}
                         max={30}
                         value={cardStyle.backdropBlur}
@@ -5570,6 +5588,7 @@ function DesignSystemEditorInner({
                       <span>Border Radius: {alertStyle.borderRadius}px</span>
                       <input
                         type="range"
+                        name="alert-border-radius"
                         min={0}
                         max={24}
                         value={alertStyle.borderRadius}
@@ -5588,6 +5607,7 @@ function DesignSystemEditorInner({
                       <span>Border Width: {alertStyle.borderWidth}px</span>
                       <input
                         type="range"
+                        name="alert-border-width"
                         min={0}
                         max={4}
                         value={alertStyle.borderWidth}
@@ -5606,6 +5626,7 @@ function DesignSystemEditorInner({
                       <span>Padding: {alertStyle.padding}px</span>
                       <input
                         type="range"
+                        name="alert-padding"
                         min={8}
                         max={32}
                         value={alertStyle.padding}
@@ -5970,6 +5991,7 @@ function DesignSystemEditorInner({
                         <span>Border Radius: {toastStyle.borderRadius}px</span>
                         <input
                           type="range"
+                          name="toast-border-radius"
                           min={0}
                           max={24}
                           value={toastStyle.borderRadius}
@@ -5990,6 +6012,7 @@ function DesignSystemEditorInner({
                         </span>
                         <input
                           type="range"
+                          name="toast-padding"
                           min={8}
                           max={32}
                           value={toastStyle.padding}
@@ -6706,6 +6729,7 @@ function DesignSystemEditorInner({
                         <span>Base Size: {typographyState.baseFontSize}px</span>
                         <input
                           type="range"
+                          name="base-font-size"
                           min={14}
                           max={22}
                           value={typographyState.baseFontSize}
@@ -6724,6 +6748,7 @@ function DesignSystemEditorInner({
                         <span>Heading Wt: {typographyState.headingWeight}</span>
                         <input
                           type="range"
+                          name="heading-weight"
                           min={100}
                           max={900}
                           step={100}
@@ -6743,6 +6768,7 @@ function DesignSystemEditorInner({
                         <span>Body Wt: {typographyState.bodyWeight}</span>
                         <input
                           type="range"
+                          name="body-weight"
                           min={100}
                           max={900}
                           step={100}
@@ -6779,6 +6805,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="line-height"
                             min={100}
                             max={200}
                             step={5}
@@ -6801,6 +6828,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="letter-spacing"
                             min={-5}
                             max={15}
                             step={1}
@@ -6825,6 +6853,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="heading-letter-spacing"
                             min={-5}
                             max={10}
                             step={1}
@@ -6866,6 +6895,8 @@ function DesignSystemEditorInner({
                             <div className="flex items-center gap-1.5 flex-1 min-w-0">
                               <input
                                 type="text"
+                                name="custom-font"
+                                autoComplete="off"
                                 value={newFontName}
                                 onChange={(e) => {
                                   setNewFontName(e.target.value);
@@ -7377,6 +7408,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="link-hover-opacity"
                             min={0.6}
                             max={1}
                             step={0.01}
@@ -7398,6 +7430,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="link-hover-scale"
                             min={1}
                             max={1.1}
                             step={0.005}
@@ -7454,6 +7487,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="link-active-scale"
                             min={0.9}
                             max={1.05}
                             step={0.005}
@@ -7483,6 +7517,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="heading-hover-opacity"
                             min={0.6}
                             max={1}
                             step={0.01}
@@ -7504,6 +7539,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="heading-hover-scale"
                             min={1}
                             max={1.05}
                             step={0.005}
@@ -7534,6 +7570,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="link-transition-duration"
                             min={0}
                             max={500}
                             step={10}
@@ -7556,6 +7593,7 @@ function DesignSystemEditorInner({
                           </span>
                           <input
                             type="range"
+                            name="heading-transition-duration"
                             min={0}
                             max={500}
                             step={10}
@@ -8104,6 +8142,8 @@ function DesignSystemEditorInner({
               <div className="flex gap-2">
                 <input
                   type="text"
+                  name="image-url"
+                  autoComplete="off"
                   value={imageUrlInput}
                   onChange={(e) => {
                     setImageUrlInput(e.target.value);
@@ -8480,7 +8520,7 @@ function DesignSystemEditorInner({
               {/* Hue slider */}
               <div>
                 <input
-                  type="range" min="0" max="360" value={hslVals.h}
+                  type="range" name="color-hue" min="0" max="360" value={hslVals.h}
                   onChange={(e) => {
                     const hex = hslToHex(Number(e.target.value), hslVals.s, hslVals.l);
                     setMobilePickerHex(hex);
@@ -8500,6 +8540,8 @@ function DesignSystemEditorInner({
                 </label>
                 <input
                   type="text"
+                  name="hex-color"
+                  autoComplete="off"
                   value={mobilePickerHex}
                   onChange={(e) => {
                     const v = e.target.value;
@@ -8695,6 +8737,7 @@ function DesignSystemEditorInner({
                   >
                     <input
                       type="checkbox"
+                      name="export-section"
                       checked={prSections.has(section)}
                       onChange={() => {
                         setPrSections((prev) => {

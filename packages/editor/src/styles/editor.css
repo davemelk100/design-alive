@@ -12,6 +12,10 @@
   .focus\:ring-brand-dynamic:focus { --tw-ring-color: hsl(var(--brand)); }
 }
 
+.ds-section-nav {
+  background-color: hsl(var(--background, 0 0% 98%));
+}
+
 .ds-nav-link,
 .ds-nav-link:hover,
 .ds-nav-link:focus,
@@ -108,7 +112,7 @@
 
 /* Nav link base (replaces inline styles on section nav items) */
 .ds-nav-link-item {
-  color: hsl(var(--muted-foreground));
+  color: hsl(var(--foreground) / 0.65);
   line-height: 1;
   border-bottom: 1px solid transparent;
   padding-bottom: 2px;
@@ -121,11 +125,12 @@
   border-bottom-color: hsl(var(--foreground));
 }
 
-/* Global Actions buttons */
+/* Global Actions buttons — use foreground with low opacity so they
+   always contrast against the current background regardless of theme */
 .ds-editor .ds-global-btn {
-  background-color: hsl(var(--muted));
+  background-color: hsl(var(--foreground) / 0.1);
   color: hsl(var(--foreground));
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1);
 }
 
 @keyframes ds-glass-gradient {

@@ -114,6 +114,8 @@ function UpgradeModal({
               <div className="flex gap-2">
                 <input
                   type="text"
+                  name="license-key"
+                  autoComplete="off"
                   value={licenseInput}
                   onChange={(e) => { setLicenseInput(e.target.value); setLicenseError(""); }}
                   placeholder="THEMAL-XXXX-XXXX-XXXX"
