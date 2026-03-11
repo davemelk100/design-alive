@@ -1,6 +1,6 @@
 # @themal/web-component
 
-Use Themal on WordPress, static sites, or any non-React platform via a single `<script>` tag. No build step required.
+Use Themal on WordPress, static sites, or any non-React platform via a single `<script>` tag. No build step required. Includes all editor sections: Colors, Buttons, Cards, Alerts, Typography, and Inputs — with custom themed dropdowns, responsive sidebar navigation, and frosted-glass mobile menu.
 
 ## Quick Start
 

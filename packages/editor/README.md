@@ -1,6 +1,6 @@
 # @themal/editor
 
-Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography and interaction states, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile.
+Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography, interaction states, and input styles, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile with a frosted-glass sidebar menu.
 
 > Free tier available with core features. Pro features ($9/mo or $50/yr) require a subscription.
 
@@ -59,6 +59,9 @@ The editor writes CSS custom properties (HSL values) to `:root` and injects glob
 | `showLogo` | `boolean` | `true` | Show the Themal logo in the header. Set `false` for white-label or plugin usage. |
 | `defaultColors` | `Record<string, string>` | — | Default color values to restore on reset, keyed by CSS variable name (e.g. `{"--brand": "210 50% 40%"}`). When provided, "Reset theme to default" restores these instead of the Themal defaults. |
 | `defaultTypography` | `Partial<TypographyState>` | — | Default typography state to restore on reset. When provided, the font dropdown shows an "App Default" option with your font name, the editor initializes with your fonts on first load, and "Reset theme to default" restores your font settings instead of the Themal defaults. |
+| `sidebarLinks` | `{ to: string; label: string }[]` | — | Navigation links to display in the left sidebar. |
+| `sidebarExtra` | `React.ReactNode` | — | Custom content rendered at the bottom of the left sidebar (e.g. contact forms, branding). |
+| `featuresUrl` | `string` | — | URL for the Features page link in the sidebar. |
 
 ## Premium Features
 
@@ -234,6 +237,7 @@ import {
   ALERT_STYLE_KEY,           // Key for dialog alert style storage
   TOAST_STYLE_KEY,           // Key for toast style storage
   BUTTON_STYLE_KEY,          // Key for button style storage
+  INPUT_STYLE_KEY,           // Key for input style storage
   INTERACTION_STYLE_KEY,     // Key for interaction style storage
 
   // Card, typography & interaction style utilities
@@ -243,6 +247,8 @@ import {
   applyStoredToastStyle,          // Restore toast style from localStorage
   BUTTON_PRESETS,                     // Subtle, Elevated, Bold button style presets
   applyStoredButtonStyle,             // Restore button style from localStorage
+  INPUT_PRESETS,                      // Rounded, Sharp, Pill input style presets
+  applyStoredInputStyle,              // Restore input style from localStorage
   applyStoredInteractionStyle,    // Restore button interaction style from localStorage
 
   // Shareable URL utilities
@@ -283,6 +289,7 @@ import type {
   HarmonyScheme,
   CardStyleState,
   ButtonStyleState,
+  InputStyleState,
   TypographyState,
   AlertStyleState,
   ToastStyleState,
@@ -305,13 +312,15 @@ import type {
 5. **Button styles** — Customize button padding, font size, font weight, border radius, shadow, and border width with presets (Subtle, Elevated, Bold).
 6. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
 7. **Typography interactions** *(Pro)* — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
-8. **Persistence** — All settings (colors, typography, card styles, dialog styles, toast styles, interactions) are saved to `localStorage` and restored on reload.
-9. **Per-section export** — Every section header includes a CSS | Tokens split button to export CSS custom properties with Tailwind config, or W3C Design Token JSON, for that section.
-10. **Shareable URLs** — Encode your full theme state in the URL hash and share it with anyone via a single link.
-11. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
-12. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
-13. **Icon import** *(Pro)* — Import icons from CDN packages (Lucide, Heroicons, Phosphor), SVG sprites, or icon font CSS files directly from the browser.
-14. **Mobile friendly** — Fully responsive UI with a 2D color spectrum picker (saturation/lightness canvas + hue slider) for intuitive touch-based color selection, mobile-optimized dropdowns, compact swatch labels, and stacked layouts for smaller screens.
+8. **Input styles** — Customize input border radius, border width, padding, font size, and focus ring width with presets (Rounded, Sharp, Pill). Live preview includes text inputs, email inputs, textareas, a custom themed select dropdown, checkboxes, radio buttons, toggle switches, and a segmented toggle.
+9. **Custom select dropdowns** — All native `<select>` elements throughout the editor have been replaced with custom themed dropdowns that follow the design system's color scheme, with click-outside-to-close, chevron animation, and hover highlighting.
+10. **Persistence** — All settings (colors, typography, card styles, dialog styles, toast styles, interactions, input styles) are saved to `localStorage` and restored on reload.
+11. **Per-section export** — Every section header includes a CSS | Tokens split button to export CSS custom properties with Tailwind config, or W3C Design Token JSON, for that section.
+12. **Shareable URLs** — Encode your full theme state in the URL hash and share it with anyone via a single link.
+13. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
+14. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
+15. **Icon import** *(Pro)* — Import icons from CDN packages (Lucide, Heroicons, Phosphor), SVG sprites, or icon font CSS files directly from the browser.
+16. **Mobile friendly** — Fully responsive UI with a frosted-glass sidebar menu, responsive nav text sizes (14px/16px/20px), a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, and stacked layouts for smaller screens. A floating scroll-to-top button with frosted glass styling appears on scroll.
 
 ## Package Architecture
 

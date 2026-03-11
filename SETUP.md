@@ -345,7 +345,7 @@ If both `github` and `prEndpointUrl` are provided, `github` takes precedence.
 
 ## 8. Theming & Inline Style Rules
 
-The editor UI uses CSS custom properties for all colors. No hardcoded hex values in modals, controls, buttons, labels, or inputs. This means the editor fully adapts to whatever theme your app defines.
+The editor UI uses CSS custom properties for all colors. No hardcoded hex values in modals, controls, buttons, labels, or inputs. All native `<select>` elements have been replaced with custom themed dropdowns. This means the editor fully adapts to whatever theme your app defines.
 
 ### Color variable mapping
 
@@ -361,7 +361,11 @@ The editor UI uses CSS custom properties for all colors. No hardcoded hex values
 | Primary action button bg | `hsl(var(--foreground))` |
 | Primary action button text | `hsl(var(--background))` |
 | Subtle tints (swatch grids) | `hsl(var(--foreground) / 0.04)` |
+| Focus rings on inputs | `hsl(var(--ring))` |
+| Custom select active item | `hsl(var(--primary) / 0.08)` |
+| Custom select hover | `hsl(var(--muted))` |
 | Modal backdrop overlay | `rgba(0,0,0,0.5)` (acceptable) |
+| Frosted glass (menu, scroll btn) | `rgba(128,128,128,0.35)` with `backdrop-filter: blur(12px)` |
 
 ### Exceptions (acceptable hardcoded values)
 
@@ -374,6 +378,9 @@ The editor UI uses CSS custom properties for all colors. No hardcoded hex values
 - Injected typography styles (`applyTypography` in `themeUtils.ts`) never use `!important`. They rely on natural specificity.
 - Section headings (`.ds-h2`) use `!important` in `editor.css` to prevent injected typography from overriding structural UI.
 - Nav link items (`.ds-nav-link-item`) and global action buttons (`.ds-global-btn`) in `editor.css` use CSS variables, not hex.
+- H2 back-to-top links (`.ds-h2-link`) are excluded from font-size and transform rules to prevent layout shift.
+- Base font size (16px) is applied to editor elements via `.ds-editor p, .ds-editor button, .ds-editor input`, etc., with exclusions for premium tooltips, palette labels, and h2 elements.
+- Left sidebar (`.ds-left-nav`) and its children use `16px !important` to maintain consistent sizing.
 - All editor styles are scoped under `.ds-editor` so they do not leak into the consuming app.
 
 ---

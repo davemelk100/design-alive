@@ -50,12 +50,6 @@ export default function SiteHeader() {
     const container = navContainerRef.current;
     if (!container) return;
 
-    // Disable reordering on small screens to prevent overlap
-    if (window.innerWidth < 1024) {
-      setNavOffsets({});
-      return;
-    }
-
     // Temporarily remove transforms to measure natural positions
     const elements: { el: HTMLAnchorElement; prev: string }[] = [];
     for (const id of SECTION_IDS) {

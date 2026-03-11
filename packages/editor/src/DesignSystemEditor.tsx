@@ -12,6 +12,7 @@ import { useColorState } from "./hooks/useColorState";
 import { LicenseProvider, useLicense } from "./hooks/useLicense";
 import { PremiumGate } from "./components/PremiumGate";
 import { ResetConfirmModal } from "./components/ResetConfirmModal";
+import { CustomSelect } from "./components/CustomSelect";
 import storage from "./utils/storage";
 import {
   EDITABLE_VARS,
@@ -1891,19 +1892,14 @@ function DesignSystemEditorInner({
       {/* Mobile/tablet actions dropdown */}
       <div className="w-full px-4 sm:px-6 lg:px-8 pt-4 md:pt-12 flex items-center gap-2 lg:hidden" data-axe-exclude>
         <div className="ml-auto">
-          <select
-            aria-label="Global actions"
-            className="h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
-            style={{
-              backgroundColor: "hsl(var(--background))",
-              color: "hsl(var(--foreground))",
-              borderColor: "hsl(var(--border))",
-            }}
+          <CustomSelect
+            ariaLabel="Global actions"
+            placeholder="Actions…"
+            size="sm"
+            width="120px"
             value=""
-            onChange={(e) => {
-              const v = e.target.value;
+            onChange={(v) => {
               if (v === "reset-all") setShowGlobalResetModal(true);
-              // else if (v === "import-css") setShowCssImportModal(true);
               else if (v === "default") {
                 setHarmonySchemeIndex(-1);
                 handleGenerate();
@@ -1934,27 +1930,21 @@ function DesignSystemEditorInner({
               else if (v === "purge") setShowPurgeModal(true);
               else if (v === "audit") runAccessibilityAudit(true);
               else if (v === "ai-generate") setShowAiGenerateModal(true);
-              e.target.value = "";
             }}
-          >
-            <option value="" disabled>
-              Actions…
-            </option>
-            <option value="reset-all">Reset theme to default</option>
-            {/* <option value="import-css">Import CSS</option> */}
-            <option value="refresh">Refresh Theme</option>
-            {colorUndoStack.length > 0 && (
-              <option value="undo-refresh">Undo last refresh</option>
-            )}
-            <option value="default">Default Scheme</option>
-            <option value="upload">Upload Image</option>
-            <option value="export">Export Palette</option>
-            <option value="share">Share</option>
-            {prEndpointUrl && <option value="pr">Open PR</option>}
-            <option value="purge">Purge Storage</option>
-            {accessibilityAudit && <option value="audit">Accessibility Check</option>}
-            {onAiGenerate && <option value="ai-generate">AI Generate</option>}
-          </select>
+            options={[
+              { value: "reset-all", label: "Reset theme to default" },
+              { value: "refresh", label: "Refresh Theme" },
+              ...(colorUndoStack.length > 0 ? [{ value: "undo-refresh", label: "Undo last refresh" }] : []),
+              { value: "default", label: "Default Scheme" },
+              { value: "upload", label: "Upload Image" },
+              { value: "export", label: "Export Palette" },
+              { value: "share", label: "Share" },
+              ...(prEndpointUrl ? [{ value: "pr", label: "Open PR" }] : []),
+              { value: "purge", label: "Purge Storage" },
+              ...(accessibilityAudit ? [{ value: "audit", label: "Accessibility Check" }] : []),
+              ...(onAiGenerate ? [{ value: "ai-generate", label: "AI Generate" }] : []),
+            ]}
+          />
         </div>
       </div>
       {/* Main layout: left sidebar + content */}
@@ -2562,34 +2552,24 @@ function DesignSystemEditorInner({
               </h2>
               <div className="ml-auto flex items-center">
                 {/* Mobile: dropdown (Colors section actions only) */}
-                <select
-                  aria-label="Colors actions"
-                  className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
-                  style={{
-                    backgroundColor: "hsl(var(--background))",
-                    color: "hsl(var(--foreground))",
-                    borderColor: "hsl(var(--border))",
-                  }}
+                <CustomSelect
+                  ariaLabel="Colors actions"
+                  className="sm:hidden"
+                  placeholder="Actions…"
+                  size="sm"
+                  width="120px"
                   value=""
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    if (v === "css") {
-                      setExportFormat("css");
-                      generateCode();
-                    } else if (v === "tokens") {
-                      setExportFormat("tokens");
-                      generateCode();
-                    } else if (v === "reset") setShowResetModal(true);
-                    e.target.value = "";
+                  onChange={(v) => {
+                    if (v === "css") { setExportFormat("css"); generateCode(); }
+                    else if (v === "tokens") { setExportFormat("tokens"); generateCode(); }
+                    else if (v === "reset") setShowResetModal(true);
                   }}
-                >
-                  <option value="" disabled>
-                    Actions…
-                  </option>
-                  <option value="css">CSS</option>
-                  <option value="tokens">Tokens</option>
-                  <option value="reset">Reset</option>
-                </select>
+                  options={[
+                    { value: "css", label: "CSS" },
+                    { value: "tokens", label: "Tokens" },
+                    { value: "reset", label: "Reset" },
+                  ]}
+                />
                 {/* Hidden file input */}
                 <input
                   ref={fileInputRef}
@@ -3489,28 +3469,24 @@ function DesignSystemEditorInner({
                   </h3>
                   <div className="ml-auto flex items-center">
                     {/* Mobile: dropdown */}
-                    <select
-                      aria-label="Button types actions"
-                      className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
-                      style={{
-                        backgroundColor: "hsl(var(--background))",
-                        color: "hsl(var(--foreground))",
-                        borderColor: "hsl(var(--border))",
-                      }}
+                    <CustomSelect
+                      ariaLabel="Button types actions"
+                      className="sm:hidden"
+                      placeholder="Actions…"
+                      size="sm"
+                      width="120px"
                       value=""
-                      onChange={(e) => {
-                        const v = e.target.value;
+                      onChange={(v) => {
                         if (v === "css") { setBtnExportFormat("css"); setBtnCssVisible(true); }
                         else if (v === "tokens") { setBtnExportFormat("tokens"); setBtnCssVisible(true); }
                         else if (v === "reset") setShowBtnResetModal(true);
-                        e.target.value = "";
                       }}
-                    >
-                      <option value="" disabled>Actions…</option>
-                      <option value="css">CSS</option>
-                      <option value="tokens">Tokens</option>
-                      <option value="reset">Reset</option>
-                    </select>
+                      options={[
+                        { value: "css", label: "CSS" },
+                        { value: "tokens", label: "Tokens" },
+                        { value: "reset", label: "Reset" },
+                      ]}
+                    />
                     {/* Desktop: buttons */}
                     <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
                       <div
@@ -4018,35 +3994,24 @@ function DesignSystemEditorInner({
                   </h3>
                   <div className="ml-auto flex items-center">
                     {/* Mobile: dropdown */}
-                    <select
-                      aria-label="Color interactions actions"
-                      className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
-                      style={{
-                        backgroundColor: "hsl(var(--background))",
-                        color: "hsl(var(--foreground))",
-                        borderColor: "hsl(var(--border))",
-                      }}
+                    <CustomSelect
+                      ariaLabel="Color interactions actions"
+                      className="sm:hidden"
+                      placeholder="Actions…"
+                      size="sm"
+                      width="120px"
                       value=""
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        if (v === "css") {
-                          setInteractionExportFormat("css");
-                          setInteractionCssVisible(true);
-                        } else if (v === "tokens") {
-                          setInteractionExportFormat("tokens");
-                          setInteractionCssVisible(true);
-                        } else if (v === "reset")
-                          setShowInteractionResetModal(true);
-                        e.target.value = "";
+                      onChange={(v) => {
+                        if (v === "css") { setInteractionExportFormat("css"); setInteractionCssVisible(true); }
+                        else if (v === "tokens") { setInteractionExportFormat("tokens"); setInteractionCssVisible(true); }
+                        else if (v === "reset") setShowInteractionResetModal(true);
                       }}
-                    >
-                      <option value="" disabled>
-                        Actions…
-                      </option>
-                      <option value="css">CSS</option>
-                      <option value="tokens">Tokens</option>
-                      <option value="reset">Reset</option>
-                    </select>
+                      options={[
+                        { value: "css", label: "CSS" },
+                        { value: "tokens", label: "Tokens" },
+                        { value: "reset", label: "Reset" },
+                      ]}
+                    />
                     {/* Desktop: buttons */}
                     <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
                       <div
@@ -4626,34 +4591,24 @@ function DesignSystemEditorInner({
               <div className="ml-auto flex items-center">
                 {/* CSS / Tokens / Reset */}
                 {/* Mobile: dropdown */}
-                <select
-                  aria-label="Card actions"
-                  className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
-                  style={{
-                    backgroundColor: "hsl(var(--background))",
-                    color: "hsl(var(--foreground))",
-                    borderColor: "hsl(var(--border))",
-                  }}
+                <CustomSelect
+                  ariaLabel="Card actions"
+                  className="sm:hidden"
+                  placeholder="Actions…"
+                  size="sm"
+                  width="120px"
                   value=""
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    if (v === "css") {
-                      setCardExportFormat("css");
-                      setCardCssVisible(true);
-                    } else if (v === "tokens") {
-                      setCardExportFormat("tokens");
-                      setCardCssVisible(true);
-                    } else if (v === "reset") setShowCardResetModal(true);
-                    e.target.value = "";
+                  onChange={(v) => {
+                    if (v === "css") { setCardExportFormat("css"); setCardCssVisible(true); }
+                    else if (v === "tokens") { setCardExportFormat("tokens"); setCardCssVisible(true); }
+                    else if (v === "reset") setShowCardResetModal(true);
                   }}
-                >
-                  <option value="" disabled>
-                    Actions…
-                  </option>
-                  <option value="css">CSS</option>
-                  <option value="tokens">Tokens</option>
-                  <option value="reset">Reset</option>
-                </select>
+                  options={[
+                    { value: "css", label: "CSS" },
+                    { value: "tokens", label: "Tokens" },
+                    { value: "reset", label: "Reset" },
+                  ]}
+                />
                 {/* Desktop: buttons */}
                 <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
                   <div
@@ -5986,18 +5941,14 @@ function DesignSystemEditorInner({
                         style={{ color: "hsl(var(--foreground))" }}
                       >
                         <span>Shadow</span>
-                        <select
-                          className="h-8 px-2 text-[13px] font-light rounded-md border"
-                          style={{
-                            backgroundColor: "hsl(var(--background))",
-                            color: "hsl(var(--foreground))",
-                            borderColor: "hsl(var(--border))",
-                          }}
+                        <CustomSelect
                           value="lg"
                           disabled
-                        >
-                          <option value="lg">Large</option>
-                        </select>
+                          size="sm"
+                          width="100px"
+                          onChange={() => {}}
+                          options={[{ value: "lg", label: "Large" }]}
+                        />
                       </label>
                     </div>
                     {/* Toast Preview */}
@@ -6262,34 +6213,24 @@ function DesignSystemEditorInner({
                   </h3>
                   <div className="ml-auto flex items-center">
                     {/* Mobile: dropdown */}
-                    <select
-                      aria-label="Typography styles actions"
-                      className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
-                      style={{
-                        backgroundColor: "hsl(var(--background))",
-                        color: "hsl(var(--foreground))",
-                        borderColor: "hsl(var(--border))",
-                      }}
+                    <CustomSelect
+                      ariaLabel="Typography styles actions"
+                      className="sm:hidden"
+                      placeholder="Actions…"
+                      size="sm"
+                      width="120px"
                       value=""
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        if (v === "css") {
-                          setTypoExportFormat("css");
-                          setTypoCssVisible(true);
-                        } else if (v === "tokens") {
-                          setTypoExportFormat("tokens");
-                          setTypoCssVisible(true);
-                        } else if (v === "reset") setShowTypoResetModal(true);
-                        e.target.value = "";
+                      onChange={(v) => {
+                        if (v === "css") { setTypoExportFormat("css"); setTypoCssVisible(true); }
+                        else if (v === "tokens") { setTypoExportFormat("tokens"); setTypoCssVisible(true); }
+                        else if (v === "reset") setShowTypoResetModal(true);
                       }}
-                    >
-                      <option value="" disabled>
-                        Actions…
-                      </option>
-                      <option value="css">CSS</option>
-                      <option value="tokens">Tokens</option>
-                      <option value="reset">Reset</option>
-                    </select>
+                      options={[
+                        { value: "css", label: "CSS" },
+                        { value: "tokens", label: "Tokens" },
+                        { value: "reset", label: "Reset" },
+                      ]}
+                    />
                     {/* Desktop: buttons */}
                     <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
                       <div
@@ -6626,48 +6567,26 @@ function DesignSystemEditorInner({
                         style={{ color: "hsl(var(--foreground))" }}
                       >
                         <span>Heading:</span>
-                        <select
+                        <CustomSelect
                           value={typographyState.headingFamily}
-                          onChange={(e) =>
-                            updateTypography({ headingFamily: e.target.value })
-                          }
-                          className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
-                          style={{
-                            backgroundColor: "hsl(var(--card))",
-                            color: "hsl(var(--foreground))",
-                            borderColor: "hsl(var(--border))",
-                          }}
-                        >
-                          {fontOptions.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
-                              {opt.label}
-                            </option>
-                          ))}
-                        </select>
+                          onChange={(v) => updateTypography({ headingFamily: v })}
+                          options={fontOptions.map((opt) => ({ value: opt.value, label: opt.label }))}
+                          size="sm"
+                          width="160px"
+                        />
                       </label>
                       <label
                         className="flex items-center justify-between gap-2 text-[14px] font-light"
                         style={{ color: "hsl(var(--foreground))" }}
                       >
                         <span>Body:</span>
-                        <select
+                        <CustomSelect
                           value={typographyState.bodyFamily}
-                          onChange={(e) =>
-                            updateTypography({ bodyFamily: e.target.value })
-                          }
-                          className="w-40 h-8 px-2 text-[14px] font-light rounded-md border"
-                          style={{
-                            backgroundColor: "hsl(var(--card))",
-                            color: "hsl(var(--foreground))",
-                            borderColor: "hsl(var(--border))",
-                          }}
-                        >
-                          {fontOptions.map((opt) => (
-                            <option key={opt.value} value={opt.value}>
-                              {opt.label}
-                            </option>
-                          ))}
-                        </select>
+                          onChange={(v) => updateTypography({ bodyFamily: v })}
+                          options={fontOptions.map((opt) => ({ value: opt.value, label: opt.label }))}
+                          size="sm"
+                          width="160px"
+                        />
                       </label>
                     </div>
                     {/* Size & Weight */}
@@ -7015,35 +6934,24 @@ function DesignSystemEditorInner({
                   </h3>
                   <div className="ml-auto flex items-center">
                     {/* Mobile: dropdown */}
-                    <select
-                      aria-label="Typography interactions actions"
-                      className="sm:hidden h-8 w-[120px] px-2 text-[16px] font-light rounded-md border"
-                      style={{
-                        backgroundColor: "hsl(var(--background))",
-                        color: "hsl(var(--foreground))",
-                        borderColor: "hsl(var(--border))",
-                      }}
+                    <CustomSelect
+                      ariaLabel="Typography interactions actions"
+                      className="sm:hidden"
+                      placeholder="Actions…"
+                      size="sm"
+                      width="120px"
                       value=""
-                      onChange={(e) => {
-                        const v = e.target.value;
-                        if (v === "css") {
-                          setTypoInteractionExportFormat("css");
-                          setTypoInteractionCssVisible(true);
-                        } else if (v === "tokens") {
-                          setTypoInteractionExportFormat("tokens");
-                          setTypoInteractionCssVisible(true);
-                        } else if (v === "reset")
-                          setShowTypoInteractionResetModal(true);
-                        e.target.value = "";
+                      onChange={(v) => {
+                        if (v === "css") { setTypoInteractionExportFormat("css"); setTypoInteractionCssVisible(true); }
+                        else if (v === "tokens") { setTypoInteractionExportFormat("tokens"); setTypoInteractionCssVisible(true); }
+                        else if (v === "reset") setShowTypoInteractionResetModal(true);
                       }}
-                    >
-                      <option value="" disabled>
-                        Actions…
-                      </option>
-                      <option value="css">CSS</option>
-                      <option value="tokens">Tokens</option>
-                      <option value="reset">Reset</option>
-                    </select>
+                      options={[
+                        { value: "css", label: "CSS" },
+                        { value: "tokens", label: "Tokens" },
+                        { value: "reset", label: "Reset" },
+                      ]}
+                    />
                     {/* Desktop: buttons */}
                     <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
                       <div
@@ -7403,27 +7311,17 @@ function DesignSystemEditorInner({
                           style={{ color: "hsl(var(--foreground))" }}
                         >
                           <span>Underline:</span>
-                          <select
+                          <CustomSelect
                             value={typoInteractionStyle.linkUnderline}
-                            onChange={(e) =>
-                              updateTypoInteractionStyle({
-                                linkUnderline: e.target.value as
-                                  | "always"
-                                  | "hover"
-                                  | "none",
-                              })
-                            }
-                            className="w-32 h-8 px-2 text-[14px] font-light rounded-md border"
-                            style={{
-                              backgroundColor: "hsl(var(--background))",
-                              color: "hsl(var(--foreground))",
-                              borderColor: "hsl(var(--border))",
-                            }}
-                          >
-                            <option value="always">Always</option>
-                            <option value="hover">On Hover</option>
-                            <option value="none">Never</option>
-                          </select>
+                            onChange={(v) => updateTypoInteractionStyle({ linkUnderline: v as "always" | "hover" | "none" })}
+                            options={[
+                              { value: "always", label: "Always" },
+                              { value: "hover", label: "On Hover" },
+                              { value: "none", label: "Never" },
+                            ]}
+                            size="sm"
+                            width="128px"
+                          />
                         </label>
                       </div>
                       <div className="space-y-1.5">
