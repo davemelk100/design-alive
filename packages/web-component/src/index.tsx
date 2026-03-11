@@ -29,11 +29,55 @@ function parseAttrValue(propName: string, value: string | null): string | boolea
   return value;
 }
 
-/** Create a React icon component from an SVG string */
+/** Sanitize an SVG string by removing dangerous elements and attributes */
+function sanitizeSvgString(raw: string): string {
+  const SAFE_ELEMENTS = new Set([
+    "svg", "g", "path", "circle", "ellipse", "rect", "line", "polyline",
+    "polygon", "text", "tspan", "textPath", "defs", "symbol", "use",
+    "clipPath", "mask", "pattern", "linearGradient", "radialGradient",
+    "stop", "title", "desc", "metadata", "marker", "image",
+  ]);
+  const SAFE_ATTRS = new Set([
+    "id", "class", "style", "viewBox", "xmlns", "xmlns:xlink", "xml:space",
+    "width", "height", "x", "y", "dx", "dy", "cx", "cy", "r", "rx", "ry",
+    "x1", "y1", "x2", "y2", "d", "fill", "stroke", "stroke-width",
+    "stroke-linecap", "stroke-linejoin", "stroke-dasharray", "stroke-dashoffset",
+    "stroke-miterlimit", "stroke-opacity", "fill-opacity", "fill-rule",
+    "clip-rule", "opacity", "transform", "points", "pathLength",
+    "clip-path", "mask", "filter", "color", "display", "visibility",
+    "font-family", "font-size", "font-weight", "font-style", "text-anchor",
+    "dominant-baseline", "alignment-baseline", "offset", "stop-color",
+    "stop-opacity", "gradientUnits", "gradientTransform", "spreadMethod",
+    "preserveAspectRatio", "overflow", "vector-effect",
+  ]);
+  const DANGEROUS_URI = /^\s*(javascript|data\s*:|vbscript)\s*:/i;
+
+  const doc = new DOMParser().parseFromString(raw, "image/svg+xml");
+  if (doc.querySelector("parsererror")) return "";
+
+  for (const el of Array.from(doc.querySelectorAll("*"))) {
+    if (!SAFE_ELEMENTS.has(el.localName.toLowerCase())) { el.remove(); continue; }
+    for (const attr of Array.from(el.attributes)) {
+      const name = attr.name.toLowerCase();
+      if (name.startsWith("on") || !SAFE_ATTRS.has(name) || DANGEROUS_URI.test(attr.value)) {
+        el.removeAttribute(attr.name);
+      }
+    }
+    for (const h of ["href", "xlink:href"]) {
+      const v = el.getAttribute(h);
+      if (v && DANGEROUS_URI.test(v)) el.removeAttribute(h);
+    }
+  }
+  return new XMLSerializer().serializeToString(doc.documentElement);
+}
+
+/** Create a React icon component from an SVG string (sanitized) */
 function svgToComponent(svgString: string): React.FC<{ className?: string }> {
+  const sanitized = sanitizeSvgString(svgString.trim());
+  if (!sanitized) return () => null;
   return ({ className }) => {
     const wrapper = document.createElement("div");
-    wrapper.innerHTML = svgString.trim();
+    wrapper.innerHTML = sanitized;
     const svg = wrapper.querySelector("svg");
     if (!svg) return null;
     const attrs: Record<string, string> = {};

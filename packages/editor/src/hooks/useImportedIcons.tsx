@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
 import type { CustomIcon } from "../types";
 import type { ImportedIconData } from "../utils/iconImport";
+import { sanitizeSvg } from "../utils/iconImport";
 import { storage } from "../utils/storage";
 
 const IMPORTED_ICONS_KEY = "themal:imported-icons";
@@ -23,13 +24,15 @@ function ensureFontStylesheet(url: string) {
 }
 
 function createSvgComponent(svgMarkup: string) {
+  // Sanitize SVG markup before rendering to prevent XSS
+  const sanitized = sanitizeSvg(svgMarkup);
   return function SvgIcon({ className, ...props }: { className?: string; [key: string]: unknown }) {
     return (
       <span
         className={className}
         {...props}
         style={{ display: "inline-flex", width: "1em", height: "1em", ...((props.style as object) || {}) }}
-        dangerouslySetInnerHTML={{ __html: svgMarkup }}
+        dangerouslySetInnerHTML={{ __html: sanitized }}
       />
     );
   };

@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
 import usePageMeta from "../hooks/usePageMeta";
 
 export default function PrivacyPolicy() {
@@ -12,14 +10,6 @@ export default function PrivacyPolicy() {
   return (
     <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <Link
-          to="/editor"
-          className="inline-flex items-center gap-1 text-[14px] font-medium mb-6 hover:opacity-70 transition-opacity"
-          style={{ color: "hsl(var(--muted-foreground))" }}
-        >
-          &larr; Back to Editor
-        </Link>
-
         <h1 className="text-3xl sm:text-4xl font-light mb-2" style={{ color: "hsl(var(--foreground))" }}>
           Themal's Privacy Policy
         </h1>
@@ -89,8 +79,6 @@ export default function PrivacyPolicy() {
           </section>
         </div>
       </div>
-      <SiteFooterBranding />
-      <SiteFooter />
     </div>
   );
 }

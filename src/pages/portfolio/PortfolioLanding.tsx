@@ -3,7 +3,6 @@ import { useSearchParams } from "react-router-dom";
 import { DesignSystemEditor } from "@design-alive/editor";
 import { useSubscription } from "../../hooks/useSubscription";
 import UserNav from "../../components/UserNav";
-import SiteFooter, { SiteFooterBranding } from "../../components/SiteFooter";
 import usePageMeta from "../../hooks/usePageMeta";
 
 export default function PortfolioLanding() {
@@ -27,7 +26,7 @@ export default function PortfolioLanding() {
   }, [searchParams, setSearchParams]);
 
   return (
-    <div className="max-w-6xl mx-auto w-full">
+    <div className="mx-auto w-full" style={{ maxWidth: "1500px" }}>
       {showSuccess && (
         <div
           className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-lg shadow-lg text-[14px] font-medium animate-fade-in"
@@ -48,10 +47,9 @@ export default function PortfolioLanding() {
         headerRight={<UserNav />}
         featuresUrl="/readme"
         aboutUrl="/about"
-        devMode={import.meta.env.DEV}
+        showHeader={false}
+        showNavLinks={false}
       />
-      <SiteFooterBranding />
-      <SiteFooter sticky={false} />
     </div>
   );
 }

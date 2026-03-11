@@ -1835,6 +1835,38 @@ export function serializeThemeState(
   return btoa(JSON.stringify(data));
 }
 
+// HSL value pattern: "210 40% 98%" or "210.5 40.2% 98.1%"
+const HSL_VALUE_RE = /^\d+\.?\d*\s+\d+\.?\d*%\s+\d+\.?\d*%$/;
+
+function isValidColorMap(obj: unknown): obj is Record<string, string> {
+  if (typeof obj !== "object" || obj === null || Array.isArray(obj)) return false;
+  for (const [key, val] of Object.entries(obj as Record<string, unknown>)) {
+    if (typeof key !== "string" || typeof val !== "string") return false;
+    // Color values must be valid HSL triplets
+    if (!HSL_VALUE_RE.test(val.trim())) return false;
+  }
+  return true;
+}
+
+function isFiniteNumber(v: unknown): v is number {
+  return typeof v === "number" && Number.isFinite(v);
+}
+
+function isValidCardStyle(obj: unknown): obj is CardStyleState {
+  if (typeof obj !== "object" || obj === null || Array.isArray(obj)) return false;
+  const o = obj as Record<string, unknown>;
+  const validPresets = ["liquid-glass", "solid", "gradient", "border-only", "custom"];
+  if (typeof o.preset !== "string" || !validPresets.includes(o.preset)) return false;
+  for (const numField of ["shadowOffsetX", "shadowOffsetY", "shadowBlur", "shadowSpread", "borderRadius", "bgGradientAngle", "borderWidth", "backdropBlur", "bgOpacity"]) {
+    if (!isFiniteNumber(o[numField])) return false;
+  }
+  return true;
+}
+
+function isPlainObject(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null && !Array.isArray(v);
+}
+
 export function deserializeThemeState(hash: string): {
   colors: Record<string, string>;
   cardStyle: CardStyleState;
@@ -1846,16 +1878,28 @@ export function deserializeThemeState(hash: string): {
 } | null {
   try {
     const json = atob(hash);
+    // Reject excessively large payloads (max 100KB)
+    if (json.length > 102400) return null;
     const data: SerializedTheme = JSON.parse(json);
     if (!data.c || !data.cs || !data.t || !data.a || !data.i || !data.ti) return null;
+
+    // Validate color values are safe HSL strings
+    if (!isValidColorMap(data.c)) return null;
+
+    // Validate card style has expected shape
+    if (!isValidCardStyle(data.cs)) return null;
+
+    // Validate remaining objects are plain objects (not arrays, not null)
+    if (!isPlainObject(data.t) || !isPlainObject(data.a) || !isPlainObject(data.i) || !isPlainObject(data.ti)) return null;
+
     return {
       colors: data.c,
       cardStyle: data.cs,
-      typographyState: data.t,
-      alertStyle: data.a,
-      interactionStyle: data.i,
-      typoInteractionStyle: data.ti,
-      buttonStyle: data.bs || { ...DEFAULT_BUTTON_STYLE },
+      typographyState: data.t as TypographyState,
+      alertStyle: data.a as AlertStyleState,
+      interactionStyle: data.i as InteractionStyleState,
+      typoInteractionStyle: data.ti as TypoInteractionStyleState,
+      buttonStyle: data.bs && isPlainObject(data.bs) ? data.bs as ButtonStyleState : { ...DEFAULT_BUTTON_STYLE },
     };
   } catch {
     return null;

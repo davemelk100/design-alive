@@ -60,13 +60,21 @@ export const handler = async (event: any) => {
       userId = session.sub;
     } catch (err) {
       console.error("Clerk verifyToken failed:", err);
-      // Fallback: decode JWT payload without verification (local dev)
-      try {
-        const payload = JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-        userId = payload.sub;
-        if (!userId) throw new Error("No sub in token");
-        console.warn("Using unverified token fallback for userId:", userId);
-      } catch {
+      // Fallback: decode JWT payload without verification — LOCAL DEV ONLY
+      if (process.env.NETLIFY_DEV) {
+        try {
+          const payload = JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+          userId = payload.sub;
+          if (!userId) throw new Error("No sub in token");
+          console.warn("[DEV ONLY] Using unverified token fallback for userId:", userId);
+        } catch {
+          return {
+            statusCode: 401,
+            headers,
+            body: JSON.stringify({ error: "Invalid session" }),
+          };
+        }
+      } else {
         return {
           statusCode: 401,
           headers,

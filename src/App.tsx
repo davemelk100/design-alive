@@ -5,6 +5,7 @@ import { useClerk } from "@clerk/clerk-react";
 import { ThemeProvider } from "./context/ThemeContext";
 import { applyStoredThemeColors } from "@design-alive/editor";
 import CookieConsent from "./components/CookieConsent";
+import SiteLayout from "./components/SiteLayout";
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const PortfolioLanding = lazy(
@@ -68,18 +69,20 @@ export default function App() {
             >
               <Routes>
                 <Route path="/" element={<LandingPage />} />
-                <Route path="/editor" element={<PortfolioLanding />} />
-                <Route path="/how-it-works" element={<HowItWorks />} />
-                <Route path="/readme" element={<ReadmePage />} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/features" element={<Features />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
-                <Route path="/cookies" element={<CookiesPolicy />} />
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/accessibility" element={<Accessibility />} />
-                <Route path="/sign-in/*" element={<div className="flex-1 flex items-center justify-center py-12"><ClerkSignIn routing="path" path="/sign-in" /></div>} />
-                <Route path="/sign-up/*" element={<div className="flex-1 flex items-center justify-center py-12"><ClerkSignUp routing="path" path="/sign-up" /></div>} />
+                <Route element={<SiteLayout />}>
+                  <Route path="/editor" element={<PortfolioLanding />} />
+                  <Route path="/how-it-works" element={<HowItWorks />} />
+                  <Route path="/readme" element={<ReadmePage />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/features" element={<Features />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/cookies" element={<CookiesPolicy />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/accessibility" element={<Accessibility />} />
+                  <Route path="/sign-in/*" element={<div className="flex-1 flex items-center justify-center py-12"><ClerkSignIn routing="path" path="/sign-in" /></div>} />
+                  <Route path="/sign-up/*" element={<div className="flex-1 flex items-center justify-center py-12"><ClerkSignUp routing="path" path="/sign-up" /></div>} />
+                </Route>
               </Routes>
             </Suspense>
           </main>

@@ -132,12 +132,11 @@
   border-bottom-color: hsl(var(--foreground));
 }
 
-/* Global Actions buttons — use foreground with low opacity so they
-   always contrast against the current background regardless of theme */
+/* Global Actions buttons — text-only style */
 .ds-editor .ds-global-btn {
-  background-color: hsl(var(--foreground) / 0.1);
+  background-color: transparent;
   color: hsl(var(--foreground));
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: none;
 }
 
 @keyframes ds-glass-gradient {
@@ -260,4 +259,44 @@
 }
 .ds-icon-remove-parent:hover .ds-icon-remove-badge {
   opacity: 1;
+}
+
+/* Left sidebar nav */
+.ds-left-nav {
+  border-right: 1px solid hsl(var(--border));
+  background-color: hsl(var(--background, 0 0% 98%));
+}
+.ds-left-nav .ds-global-btn {
+  justify-content: flex-start;
+}
+
+/* Floating scroll-to-top button */
+.ds-scroll-top {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 50;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.2s, transform 0.2s, background-color 0.15s;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.ds-scroll-top.ds-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.ds-scroll-top:hover {
+  background-color: hsl(var(--foreground) / 0.05);
 }

@@ -17,22 +17,77 @@ export interface ImportedIconData {
 // SVG sanitisation — strip scripts and event-handler attributes
 // ---------------------------------------------------------------------------
 
-function sanitizeSvg(svg: string): string {
+// Whitelist of safe SVG elements
+const SAFE_SVG_ELEMENTS = new Set([
+  "svg", "g", "path", "circle", "ellipse", "rect", "line", "polyline",
+  "polygon", "text", "tspan", "textPath", "defs", "symbol", "use",
+  "clipPath", "mask", "pattern", "linearGradient", "radialGradient",
+  "stop", "title", "desc", "metadata", "marker", "image",
+]);
+
+// Whitelist of safe SVG attributes
+const SAFE_SVG_ATTRS = new Set([
+  "id", "class", "style", "viewBox", "xmlns", "xmlns:xlink", "xml:space",
+  "width", "height", "x", "y", "dx", "dy", "cx", "cy", "r", "rx", "ry",
+  "x1", "y1", "x2", "y2", "d", "fill", "stroke", "stroke-width",
+  "stroke-linecap", "stroke-linejoin", "stroke-dasharray", "stroke-dashoffset",
+  "stroke-miterlimit", "stroke-opacity", "fill-opacity", "fill-rule",
+  "clip-rule", "opacity", "transform", "points", "pathLength",
+  "marker-start", "marker-mid", "marker-end", "clip-path", "mask",
+  "filter", "color", "display", "visibility", "font-family", "font-size",
+  "font-weight", "font-style", "text-anchor", "dominant-baseline",
+  "alignment-baseline", "letter-spacing", "word-spacing", "text-decoration",
+  "offset", "stop-color", "stop-opacity", "gradientUnits",
+  "gradientTransform", "spreadMethod", "patternUnits", "patternTransform",
+  "preserveAspectRatio", "markerWidth", "markerHeight", "refX", "refY",
+  "orient", "overflow", "vector-effect",
+]);
+
+// Dangerous URI schemes
+const DANGEROUS_URI_RE = /^\s*(javascript|data\s*:|vbscript)\s*:/i;
+
+export function sanitizeSvg(svg: string): string {
   const doc = new DOMParser().parseFromString(svg, "image/svg+xml");
-  doc.querySelectorAll("script").forEach((el) => el.remove());
-  const allEls = doc.querySelectorAll("*");
-  allEls.forEach((el) => {
-    const attrs = [...el.attributes];
-    attrs.forEach((attr) => {
-      if (attr.name.startsWith("on")) el.removeAttribute(attr.name);
-    });
-    // Remove xlink:href with javascript: protocol
-    const href = el.getAttribute("xlink:href") || el.getAttribute("href");
-    if (href && href.trim().toLowerCase().startsWith("javascript:")) {
-      el.removeAttribute("xlink:href");
-      el.removeAttribute("href");
+
+  // Check for parse errors (DOMParser returns an error document for invalid XML)
+  const parseError = doc.querySelector("parsererror");
+  if (parseError) return "";
+
+  // Remove all elements not on the whitelist
+  const allEls = Array.from(doc.querySelectorAll("*"));
+  for (const el of allEls) {
+    const tagName = el.localName.toLowerCase();
+    if (!SAFE_SVG_ELEMENTS.has(tagName)) {
+      el.remove();
+      continue;
     }
-  });
+    // Remove attributes not on the whitelist
+    const attrs = Array.from(el.attributes);
+    for (const attr of attrs) {
+      const attrName = attr.name.toLowerCase();
+      // Remove any event handlers (on*)
+      if (attrName.startsWith("on")) {
+        el.removeAttribute(attr.name);
+        continue;
+      }
+      // Remove non-whitelisted attributes
+      if (!SAFE_SVG_ATTRS.has(attrName)) {
+        el.removeAttribute(attr.name);
+        continue;
+      }
+      // Check for dangerous URI values in any attribute
+      if (DANGEROUS_URI_RE.test(attr.value)) {
+        el.removeAttribute(attr.name);
+      }
+    }
+    // Also check href/xlink:href specifically (used by <use>, <image>, etc.)
+    for (const hrefAttr of ["href", "xlink:href"]) {
+      const val = el.getAttribute(hrefAttr);
+      if (val && DANGEROUS_URI_RE.test(val)) {
+        el.removeAttribute(hrefAttr);
+      }
+    }
+  }
   return new XMLSerializer().serializeToString(doc.documentElement);
 }
 
