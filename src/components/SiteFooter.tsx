@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export function ContactForm({ buttonClassName }: { buttonClassName?: string }) {
   const [open, setOpen] = useState(false);
@@ -289,6 +289,9 @@ export function SiteFooterBranding() {
 }
 
 export default function SiteFooter() {
+  const { pathname } = useLocation();
+  if (pathname === "/editor") return null;
+
   return (
     <footer
       className="hidden md:block sticky bottom-0 z-40 mt-auto border-t"

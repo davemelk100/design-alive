@@ -253,14 +253,21 @@ function DesignSystemEditorInner({
     readCurrentColors,
   } = useColorState(editorRootRef, wcagEnforcement, defaultColors);
 
-  // Keep body background-color in sync so the page bg matches the editor theme.
-  // Set backgroundColor directly (not the CSS variable) to avoid polluting the
-  // inheritance chain that readCurrentColors relies on after reset.
+  // Keep body background-color and root CSS variables in sync so elements
+  // outside the editor DOM (e.g. sticky header) follow the theme.
   useEffect(() => {
     const bg = colors["--background"];
     if (bg) document.body.style.backgroundColor = `hsl(${bg})`;
-    return () => { document.body.style.backgroundColor = ""; };
-  }, [colors["--background"]]);
+    const root = document.documentElement;
+    const varsToSync = ["--background", "--foreground", "--border", "--muted", "--muted-foreground", "--brand"] as const;
+    for (const v of varsToSync) {
+      if (colors[v]) root.style.setProperty(v, colors[v]);
+    }
+    return () => {
+      document.body.style.backgroundColor = "";
+      for (const v of varsToSync) root.style.removeProperty(v);
+    };
+  }, [colors["--background"], colors["--foreground"], colors["--border"], colors["--muted"], colors["--muted-foreground"], colors["--brand"]]);
 
   const [activeSection, setActiveSection] = useState<string>("colors");
 
@@ -2445,7 +2452,7 @@ function DesignSystemEditorInner({
           {/* Colors section */}
           <div
             id="colors"
-            className="min-w-0 space-y-3 mb-6 md:mt-0 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px]"
+            className="min-w-0 space-y-3 mb-6 md:mt-0 md:mb-16 scroll-mt-[56px]"
           >
             <div
               className="flex items-center flex-wrap gap-2 sm:gap-4"
@@ -2458,7 +2465,7 @@ function DesignSystemEditorInner({
                 Colors{" "}
                 <a
                   href="#top"
-                  className="opacity-30 hover:opacity-100 transition-all hover:scale-125"
+                  className="ds-h2-link opacity-30"
                   aria-label="Back to top"
                 >
                   <svg
@@ -3364,7 +3371,7 @@ function DesignSystemEditorInner({
           {/* Buttons section */}
           <div
             id="buttons"
-            className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px]"
+            className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-[56px]"
           >
             <h2
               className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
@@ -3373,7 +3380,7 @@ function DesignSystemEditorInner({
               Buttons{" "}
               <a
                 href="#top"
-                className="opacity-30 hover:opacity-100 transition-all hover:scale-125"
+                className="ds-h2-link opacity-30"
                 aria-label="Back to top"
               >
                 <svg
@@ -4514,7 +4521,7 @@ function DesignSystemEditorInner({
           {/* Card Style section */}
           <div
             id="card"
-            className="min-w-0 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px] space-y-3"
+            className="min-w-0 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-[56px] space-y-3"
           >
             <div
               className="flex items-center flex-wrap gap-2 sm:gap-4"
@@ -4527,7 +4534,7 @@ function DesignSystemEditorInner({
                 Cards{" "}
                 <a
                   href="#top"
-                  className="opacity-30 hover:opacity-100 transition-all hover:scale-125"
+                  className="ds-h2-link opacity-30"
                   aria-label="Back to top"
                 >
                   <svg
@@ -5286,7 +5293,7 @@ function DesignSystemEditorInner({
           {/* Alerts section */}
           <div
             id="alerts"
-            className="min-w-0 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px] space-y-3"
+            className="min-w-0 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-[56px] space-y-3"
           >
             <div
               className="flex items-center flex-wrap gap-2 sm:gap-4"
@@ -5299,7 +5306,7 @@ function DesignSystemEditorInner({
                 Alerts{" "}
                 <a
                   href="#top"
-                  className="opacity-30 hover:opacity-100 transition-all hover:scale-125"
+                  className="ds-h2-link opacity-30"
                   aria-label="Back to top"
                 >
                   <svg
@@ -6137,7 +6144,7 @@ function DesignSystemEditorInner({
           {/* Typography section */}
           <div
             id="typography"
-            className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-4 sm:scroll-mt-[52px]"
+            className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-[56px]"
           >
             <h2
               className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
@@ -6146,7 +6153,7 @@ function DesignSystemEditorInner({
               Typography{" "}
               <a
                 href="#top"
-                className="opacity-30 hover:opacity-100 transition-all hover:scale-125"
+                className="ds-h2-link opacity-30"
                 aria-label="Back to top"
               >
                 <svg

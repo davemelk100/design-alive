@@ -263,14 +263,25 @@
 
 /* Base text size for editor elements */
 .ds-editor p,
-.ds-editor a,
+.ds-editor ul,
+.ds-editor ol,
 .ds-editor li,
-.ds-editor span,
-.ds-editor button,
-.ds-editor [class*="chip"],
-.ds-editor [class*="badge"],
-.ds-editor [role="status"] {
+.ds-editor a:not(.ds-premium-tooltip a):not(.ds-nav-link):not(.ds-h2-link),
+.ds-editor button:not(.ds-h2-btn),
+.ds-editor input,
+.ds-editor select,
+.ds-editor textarea,
+.ds-editor label,
+.ds-editor span:not(.ds-premium-tooltip span):not(.ds-h2):not(.ds-palette-label) {
   font-size: 16px;
+}
+
+/* H2 back-to-top links — no transitions or size changes */
+.ds-h2-link,
+.ds-h2-link:hover {
+  transform: none !important;
+  transition: none !important;
+  font-size: inherit !important;
 }
 
 /* Left sidebar nav */
@@ -293,7 +304,7 @@
 .ds-scroll-top {
   position: fixed;
   bottom: 80px;
-  left: 24px;
+  right: 24px;
   z-index: 50;
   width: 36px;
   height: 36px;

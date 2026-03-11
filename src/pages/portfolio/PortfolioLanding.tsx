@@ -62,6 +62,11 @@ export default function PortfolioLanding() {
           <>
             <ContactForm buttonClassName="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2" />
             <ReportBugForm buttonClassName="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2" />
+            <div className="mt-auto pt-4">
+              <a href="/" className="hover:opacity-70 transition-opacity">
+                <img src="/themal-just-t.svg" alt="Themal" className="h-8" width="27" height="32" />
+              </a>
+            </div>
           </>
         }
       />

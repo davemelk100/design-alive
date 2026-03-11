@@ -154,7 +154,7 @@ export default function SiteHeader() {
                 >
                   {label}
                   <svg
-                    className="w-5 h-5 opacity-30 hover:opacity-100 transition-all hover:scale-125"
+                    className="w-5 h-5 opacity-30"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
