@@ -2,13 +2,14 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import ThemalLogo from "./ThemalLogo";
 
-const SECTION_IDS = ["colors", "buttons", "card", "alerts", "typography"];
+const SECTION_IDS = ["colors", "buttons", "card", "alerts", "typography", "inputs"];
 const SECTION_LINKS: { id: string; label: string }[] = [
   { id: "colors", label: "Colors" },
   { id: "buttons", label: "Buttons" },
   { id: "card", label: "Cards" },
   { id: "alerts", label: "Alerts" },
   { id: "typography", label: "Typography" },
+  { id: "inputs", label: "Inputs" },
 ];
 
 export default function SiteHeader() {
@@ -43,11 +44,17 @@ export default function SiteHeader() {
     return () => observer.disconnect();
   }, [isEditor]);
 
-  // Recalculate offsets so active item slides to the left
+  // Recalculate offsets so active item slides to the left (desktop only)
   const recalcNavOffsets = useCallback(() => {
     const refs = navItemRefs.current;
     const container = navContainerRef.current;
     if (!container) return;
+
+    // Disable reordering on small screens to prevent overlap
+    if (window.innerWidth < 1024) {
+      setNavOffsets({});
+      return;
+    }
 
     // Temporarily remove transforms to measure natural positions
     const elements: { el: HTMLAnchorElement; prev: string }[] = [];
@@ -102,9 +109,11 @@ export default function SiteHeader() {
     if (!isEditor) return;
     const raf = requestAnimationFrame(() => recalcNavOffsets());
     window.addEventListener("nav-recalc", recalcNavOffsets);
+    window.addEventListener("resize", recalcNavOffsets);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("nav-recalc", recalcNavOffsets);
+      window.removeEventListener("resize", recalcNavOffsets);
     };
   }, [isEditor, recalcNavOffsets]);
 
@@ -129,23 +138,16 @@ export default function SiteHeader() {
           </div>
           {/* Match content area: px-4 sm:px-6 lg:px-8 */}
           <div className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 py-3 flex items-end">
-            <Link
-              to="/"
-              className="lg:hidden flex-shrink-0 hover:opacity-70 transition-opacity mr-6"
-              aria-label="Themal home"
-            >
-              <ThemalLogo className="h-6 sm:h-7" />
-            </Link>
             <nav
               ref={navContainerRef}
-              className="flex items-baseline gap-4 sm:gap-6 overflow-x-auto"
+              className="flex items-baseline gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-x-auto flex-nowrap"
             >
               {SECTION_LINKS.map(({ id, label }) => (
                 <a
                   key={id}
                   ref={(el) => { navItemRefs.current[id] = el; }}
                   href={`#${id}`}
-                  className="text-[20px] font-light flex items-baseline gap-2 whitespace-nowrap no-underline"
+                  className="text-[14px] sm:text-[16px] md:text-[20px] font-light flex items-baseline gap-1 sm:gap-2 whitespace-nowrap no-underline"
                   style={{
                     color: "hsl(var(--foreground))",
                     transform: `translateX(${navOffsets[id] ?? 0}px)`,
@@ -154,7 +156,7 @@ export default function SiteHeader() {
                 >
                   {label}
                   <svg
-                    className="w-5 h-5 opacity-30"
+                    className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 opacity-30"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

@@ -61,6 +61,10 @@ import {
   applyButtonStyle,
   applyStoredButtonStyle,
   removeButtonStyleProperties,
+  INPUT_STYLE_KEY,
+  DEFAULT_INPUT_STYLE,
+  INPUT_PRESETS,
+  applyInputStyle,
   INTERACTION_STYLE_KEY,
   DEFAULT_INTERACTION_STYLE,
   INTERACTION_PRESETS,
@@ -95,6 +99,7 @@ import type {
   AlertStyleState,
   InteractionStyleState,
   TypoInteractionStyleState,
+  InputStyleState,
 } from "./utils/themeUtils";
 import {
   extractPaletteFromImage,
@@ -272,7 +277,7 @@ function DesignSystemEditorInner({
   const [activeSection, setActiveSection] = useState<string>("colors");
 
   useEffect(() => {
-    const ids = ["colors", "card", "alerts", "typography", "buttons"];
+    const ids = ["colors", "card", "alerts", "typography", "buttons", "inputs"];
     const elements = ids
       .map((id) => document.getElementById(id))
       .filter(Boolean) as HTMLElement[];
@@ -293,7 +298,7 @@ function DesignSystemEditorInner({
     return () => observer.disconnect();
   }, []);
 
-  const NAV_IDS = ["colors", "buttons", "card", "alerts", "typography"];
+  const NAV_IDS = ["colors", "buttons", "card", "alerts", "typography", "inputs"];
 
   useEffect(() => {
     const recalcNavOffsets = () => {
@@ -546,6 +551,34 @@ function DesignSystemEditorInner({
   const [shareCopied, setShareCopied] = useState(false);
   const [showPurgeModal, setShowPurgeModal] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const {
+    state: inputStyle,
+    update: updateInputStyle,
+    selectPreset: selectInputPreset,
+  } = useStyleState<InputStyleState>(
+    () => storage.get<InputStyleState>(INPUT_STYLE_KEY) || { ...DEFAULT_INPUT_STYLE },
+    INPUT_PRESETS,
+  );
+  const [showInputResetModal, setShowInputResetModal] = useState(false);
+  const [inputToggle1, setInputToggle1] = useState(false);
+  const [inputToggle2, setInputToggle2] = useState(true);
+  const [inputRadio, setInputRadio] = useState("option1");
+  const [inputCheck1, setInputCheck1] = useState(true);
+  const [inputCheck2, setInputCheck2] = useState(false);
+  const [inputCheck3, setInputCheck3] = useState(false);
+  const [inputSegmented, setInputSegmented] = useState("light");
+  const [inputSelectOpen, setInputSelectOpen] = useState(false);
+  const [inputSelectValue, setInputSelectValue] = useState("Choose an option");
+  const inputSelectRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!inputSelectOpen) return;
+    const close = (e: MouseEvent) => {
+      if (inputSelectRef.current && !inputSelectRef.current.contains(e.target as Node)) setInputSelectOpen(false);
+    };
+    document.addEventListener("click", close, true);
+    return () => document.removeEventListener("click", close, true);
+  }, [inputSelectOpen]);
   const [showPaletteExport, setShowPaletteExport] = useState(false);
   const [showCssImportModal, setShowCssImportModal] = useState(false);
   const [cssImportText, setCssImportText] = useState("");
@@ -736,6 +769,10 @@ function DesignSystemEditorInner({
   useEffect(() => {
     applyButtonStyle(buttonStyle, editorRootRef.current!);
   }, [buttonStyle]);
+
+  useEffect(() => {
+    applyInputStyle(inputStyle, editorRootRef.current!);
+  }, [inputStyle]);
 
 
   useEffect(() => {
@@ -1922,11 +1959,51 @@ function DesignSystemEditorInner({
       </div>
       {/* Main layout: left sidebar + content */}
       <div className="flex w-full">
-        {/* Left sidebar — desktop only */}
+        {/* Mobile menu button — visible below lg */}
+        <button
+          type="button"
+          className="lg:hidden fixed bottom-3 left-3 z-50 w-10 h-10 rounded-full flex items-center justify-center"
+          style={{
+            background: "linear-gradient(135deg, rgba(128,128,128,0.35), rgba(160,160,160,0.2))",
+            backdropFilter: "blur(12px) saturate(180%)",
+            WebkitBackdropFilter: "blur(12px) saturate(180%)",
+            color: "hsl(var(--foreground))",
+            border: "1px solid rgba(128,128,128,0.25)",
+            boxShadow: "4px 4px 12px rgba(0,0,0,0.1), -2px -2px 8px rgba(255,255,255,0.15), inset 1px 1px 2px rgba(255,255,255,0.2)",
+          }}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+        >
+          {mobileMenuOpen ? (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
+
+        {/* Mobile menu overlay */}
+        {mobileMenuOpen && (
+          <div
+            className="lg:hidden fixed inset-0 z-40"
+            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+
+        {/* Left sidebar — shared between desktop (always visible) and mobile (slide-in) */}
         <aside
-          className="ds-left-nav hidden lg:flex flex-col gap-1.5 flex-shrink-0 w-48 sticky top-0 self-start z-30 pt-4 pb-6 pl-4 pr-2 overflow-y-auto"
-          style={{ maxHeight: "100vh" }}
+          className={`ds-left-nav flex flex-col gap-1.5 flex-shrink-0 w-56 lg:w-48 pt-4 pb-6 pl-4 pr-2 overflow-y-auto ${
+            mobileMenuOpen
+              ? "fixed inset-y-0 left-0 z-50"
+              : "hidden lg:flex sticky top-0 self-start z-30"
+          }`}
+          style={{ maxHeight: mobileMenuOpen ? undefined : "100vh", backgroundColor: mobileMenuOpen ? "hsl(var(--background))" : undefined }}
           data-axe-exclude
+          onClick={mobileMenuOpen ? (e) => e.stopPropagation() : undefined}
         >
           <button
             onClick={() => setShowGlobalResetModal(true)}
@@ -2283,7 +2360,7 @@ function DesignSystemEditorInner({
               transform: `translateX(${navOffsets[s.id] ?? 0}px)`,
             }}
           >
-            <h2 className="text-[20px] font-bold tracking-wider m-0 p-0">{s.label}</h2>
+            <h2 className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider m-0 p-0">{s.label}</h2>
             <svg
               className="w-5 h-5 opacity-60"
               fill="none"
@@ -2459,7 +2536,7 @@ function DesignSystemEditorInner({
               data-axe-exclude
             >
               <h2
-                className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
+                className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
                 style={{ color: "hsl(var(--foreground))" }}
               >
                 Colors{" "}
@@ -2571,10 +2648,7 @@ function DesignSystemEditorInner({
                           d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
                         />
                       </svg>
-                      <span className="truncate">
-                        <span className="sm:hidden">CSS</span>
-                        <span className="hidden sm:inline">CSS + Tailwind</span>
-                      </span>
+                      <span className="truncate">CSS</span>
                     </button>
                     <span
                       className="w-px h-5"
@@ -2616,10 +2690,7 @@ function DesignSystemEditorInner({
                           d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16"
                         />
                       </svg>
-                      <span className="truncate">
-                        <span className="sm:hidden">Tokens</span>
-                        <span className="hidden sm:inline">Design Tokens</span>
-                      </span>
+                      <span className="truncate">Tokens</span>
                     </button>
                   </div>
                   <button
@@ -2970,8 +3041,8 @@ function DesignSystemEditorInner({
                       style={{ color: "hsl(var(--card-foreground))" }}
                     >
                       {exportFormat === "tokens"
-                        ? "W3C Design Tokens"
-                        : "CSS + Tailwind"}
+                        ? "Design Tokens"
+                        : "CSS"}
                     </span>
                     <div className="flex items-center gap-1">
                       <button
@@ -3374,7 +3445,7 @@ function DesignSystemEditorInner({
             className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-[56px]"
           >
             <h2
-              className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
+              className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
               style={{ color: "hsl(var(--foreground))" }}
             >
               Buttons{" "}
@@ -4528,7 +4599,7 @@ function DesignSystemEditorInner({
               data-axe-exclude
             >
               <h2
-                className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
+                className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
                 style={{ color: "hsl(var(--foreground))" }}
               >
                 Cards{" "}
@@ -5300,7 +5371,7 @@ function DesignSystemEditorInner({
               data-axe-exclude
             >
               <h2
-                className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
+                className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
                 style={{ color: "hsl(var(--foreground))" }}
               >
                 Alerts{" "}
@@ -6147,7 +6218,7 @@ function DesignSystemEditorInner({
             className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-[56px]"
           >
             <h2
-              className="text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
+              className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
               style={{ color: "hsl(var(--foreground))" }}
             >
               Typography{" "}
@@ -7665,7 +7736,524 @@ function DesignSystemEditorInner({
               id="typo-interaction-reset-modal-title"
             />
           </div>
+
+          {/* Input Reset Confirmation Modal */}
+          <ResetConfirmModal
+            open={showInputResetModal}
+            onClose={() => setShowInputResetModal(false)}
+            onConfirm={() => selectInputPreset("rounded")}
+            title="Reset Input Style?"
+            message="This will revert all input style settings to their defaults. Any customizations will be lost."
+            id="input-reset-modal-title"
+          />
+
+          {/* Inputs section */}
+          <div
+            id="inputs"
+            className="min-w-0 space-y-4 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-[56px]"
+          >
+            <h2
+              className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2"
+              style={{ color: "hsl(var(--foreground))" }}
+            >
+              Inputs{" "}
+              <a
+                href="#top"
+                className="ds-h2-link opacity-30"
+                aria-label="Back to top"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 19V5m0 0l-7 7m7-7l7 7"
+                  />
+                </svg>
+              </a>
+            </h2>
+
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+              {/* Controls */}
+              <div className="flex-1 min-w-0 space-y-3 order-2 md:order-1">
+                {/* Presets */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  {(["rounded", "sharp", "pill"] as const).map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => selectInputPreset(p)}
+                      className="h-8 px-3 text-[13px] font-light rounded-lg border transition-colors capitalize"
+                      style={{
+                        borderColor: inputStyle.preset === p ? "hsl(var(--primary))" : "hsl(var(--border))",
+                        backgroundColor: inputStyle.preset === p ? "hsl(var(--primary))" : "transparent",
+                        color: inputStyle.preset === p ? "hsl(var(--primary-foreground))" : "hsl(var(--foreground))",
+                      }}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setShowInputResetModal(true)}
+                    className="h-8 px-3 text-[13px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center gap-1 ml-auto"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Reset
+                  </button>
+                </div>
+
+                {/* Shape */}
+                <div className="space-y-1.5">
+                  <p
+                    className="text-[14px] font-light uppercase tracking-wider"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    Shape
+                  </p>
+                  <label
+                    className="flex items-center justify-between gap-2 text-[14px] font-light"
+                    style={{ color: "hsl(var(--foreground))" }}
+                  >
+                    <span>Radius: {inputStyle.borderRadius}px</span>
+                    <input
+                      type="range"
+                      min={0}
+                      max={999}
+                      value={inputStyle.borderRadius}
+                      onChange={(e) => updateInputStyle({ borderRadius: Number(e.target.value) })}
+                      className="w-32 accent-[hsl(var(--brand))]"
+                    />
+                  </label>
+                  <label
+                    className="flex items-center justify-between gap-2 text-[14px] font-light"
+                    style={{ color: "hsl(var(--foreground))" }}
+                  >
+                    <span>Border: {inputStyle.borderWidth}px</span>
+                    <input
+                      type="range"
+                      min={0}
+                      max={4}
+                      value={inputStyle.borderWidth}
+                      onChange={(e) => updateInputStyle({ borderWidth: Number(e.target.value) })}
+                      className="w-32 accent-[hsl(var(--brand))]"
+                    />
+                  </label>
+                </div>
+
+                {/* Size */}
+                <div className="space-y-1.5">
+                  <p
+                    className="text-[14px] font-light uppercase tracking-wider"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    Size
+                  </p>
+                  <label
+                    className="flex items-center justify-between gap-2 text-[14px] font-light"
+                    style={{ color: "hsl(var(--foreground))" }}
+                  >
+                    <span>Padding X: {inputStyle.paddingX}px</span>
+                    <input
+                      type="range"
+                      min={4}
+                      max={24}
+                      value={inputStyle.paddingX}
+                      onChange={(e) => updateInputStyle({ paddingX: Number(e.target.value) })}
+                      className="w-32 accent-[hsl(var(--brand))]"
+                    />
+                  </label>
+                  <label
+                    className="flex items-center justify-between gap-2 text-[14px] font-light"
+                    style={{ color: "hsl(var(--foreground))" }}
+                  >
+                    <span>Padding Y: {inputStyle.paddingY}px</span>
+                    <input
+                      type="range"
+                      min={2}
+                      max={16}
+                      value={inputStyle.paddingY}
+                      onChange={(e) => updateInputStyle({ paddingY: Number(e.target.value) })}
+                      className="w-32 accent-[hsl(var(--brand))]"
+                    />
+                  </label>
+                  <label
+                    className="flex items-center justify-between gap-2 text-[14px] font-light"
+                    style={{ color: "hsl(var(--foreground))" }}
+                  >
+                    <span>Font Size: {inputStyle.fontSize}px</span>
+                    <input
+                      type="range"
+                      min={10}
+                      max={22}
+                      value={inputStyle.fontSize}
+                      onChange={(e) => updateInputStyle({ fontSize: Number(e.target.value) })}
+                      className="w-32 accent-[hsl(var(--brand))]"
+                    />
+                  </label>
+                </div>
+
+                {/* Focus */}
+                <div className="space-y-1.5">
+                  <p
+                    className="text-[14px] font-light uppercase tracking-wider"
+                    style={{ color: "hsl(var(--muted-foreground))" }}
+                  >
+                    Focus
+                  </p>
+                  <label
+                    className="flex items-center justify-between gap-2 text-[14px] font-light"
+                    style={{ color: "hsl(var(--foreground))" }}
+                  >
+                    <span>Ring Width: {inputStyle.focusRingWidth}px</span>
+                    <input
+                      type="range"
+                      min={0}
+                      max={6}
+                      value={inputStyle.focusRingWidth}
+                      onChange={(e) => updateInputStyle({ focusRingWidth: Number(e.target.value) })}
+                      className="w-32 accent-[hsl(var(--brand))]"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* Preview */}
+              <div
+                className="flex-1 min-w-0 rounded-lg p-4 sm:p-6 order-1 md:order-2"
+                style={{
+                  border: "1px solid hsl(var(--border))",
+                  backgroundColor: "hsl(var(--background))",
+                }}
+              >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                {/* Left column — text inputs */}
+                <div className="space-y-4">
+                  {/* Text Input */}
+                  <div>
+                    <label
+                      className="block text-[13px] font-medium mb-1.5"
+                      style={{ color: "hsl(var(--foreground))" }}
+                    >
+                      Text Input
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter some text..."
+                      className="ds-input w-full border"
+                      style={{
+                        backgroundColor: "hsl(var(--background))",
+                        color: "hsl(var(--foreground))",
+                        borderColor: "hsl(var(--border))",
+                        borderRadius: `${inputStyle.borderRadius}px`,
+                        borderWidth: `${inputStyle.borderWidth}px`,
+                        padding: `${inputStyle.paddingY}px ${inputStyle.paddingX}px`,
+                        fontSize: `${inputStyle.fontSize}px`,
+                      }}
+                    />
+                  </div>
+
+                  {/* Email Input */}
+                  <div>
+                    <label
+                      className="block text-[13px] font-medium mb-1.5"
+                      style={{ color: "hsl(var(--foreground))" }}
+                    >
+                      Email Input
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="you@example.com"
+                      className="ds-input w-full border"
+                      style={{
+                        backgroundColor: "hsl(var(--background))",
+                        color: "hsl(var(--foreground))",
+                        borderColor: "hsl(var(--border))",
+                        borderRadius: `${inputStyle.borderRadius}px`,
+                        borderWidth: `${inputStyle.borderWidth}px`,
+                        padding: `${inputStyle.paddingY}px ${inputStyle.paddingX}px`,
+                        fontSize: `${inputStyle.fontSize}px`,
+                      }}
+                    />
+                  </div>
+
+                  {/* Textarea */}
+                  <div>
+                    <label
+                      className="block text-[13px] font-medium mb-1.5"
+                      style={{ color: "hsl(var(--foreground))" }}
+                    >
+                      Textarea
+                    </label>
+                    <textarea
+                      rows={3}
+                      placeholder="Write a message..."
+                      className="ds-input w-full border resize-none"
+                      style={{
+                        backgroundColor: "hsl(var(--background))",
+                        color: "hsl(var(--foreground))",
+                        borderColor: "hsl(var(--border))",
+                        borderRadius: `${inputStyle.borderRadius}px`,
+                        borderWidth: `${inputStyle.borderWidth}px`,
+                        padding: `${inputStyle.paddingY}px ${inputStyle.paddingX}px`,
+                        fontSize: `${inputStyle.fontSize}px`,
+                      }}
+                    />
+                  </div>
+
+                  {/* Disabled Input */}
+                  <div>
+                    <label
+                      className="block text-[13px] font-medium mb-1.5"
+                      style={{ color: "hsl(var(--muted-foreground))" }}
+                    >
+                      Disabled Input
+                    </label>
+                    <input
+                      type="text"
+                      disabled
+                      placeholder="Not editable"
+                      className="ds-input w-full border cursor-not-allowed opacity-60"
+                      style={{
+                        backgroundColor: "hsl(var(--muted))",
+                        color: "hsl(var(--muted-foreground))",
+                        borderColor: "hsl(var(--border))",
+                        borderRadius: `${inputStyle.borderRadius}px`,
+                        borderWidth: `${inputStyle.borderWidth}px`,
+                        padding: `${inputStyle.paddingY}px ${inputStyle.paddingX}px`,
+                        fontSize: `${inputStyle.fontSize}px`,
+                      }}
+                    />
+                  </div>
+                </div>
+
+                {/* Right column — selects, checkboxes, radios, toggles */}
+                <div className="space-y-5">
+                  {/* Custom Select */}
+                  <div>
+                    <label
+                      className="block text-[13px] font-medium mb-1.5"
+                      style={{ color: "hsl(var(--foreground))" }}
+                    >
+                      Select
+                    </label>
+                    <div ref={inputSelectRef} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setInputSelectOpen(!inputSelectOpen)}
+                        className="ds-input w-full border text-left flex items-center justify-between"
+                        style={{
+                          backgroundColor: "hsl(var(--background))",
+                          color: "hsl(var(--foreground))",
+                          borderColor: inputSelectOpen ? "hsl(var(--ring))" : "hsl(var(--border))",
+                          borderRadius: `${inputStyle.borderRadius}px`,
+                          borderWidth: `${inputStyle.borderWidth}px`,
+                          padding: `${inputStyle.paddingY}px ${inputStyle.paddingX}px`,
+                          fontSize: `${inputStyle.fontSize}px`,
+                          boxShadow: inputSelectOpen ? "0 0 0 2px hsl(var(--ring))" : "none",
+                        }}
+                      >
+                        <span>{inputSelectValue}</span>
+                        <svg
+                          className="w-4 h-4 flex-shrink-0"
+                          style={{ color: "hsl(var(--muted-foreground))", transform: inputSelectOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.15s" }}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      {inputSelectOpen && (
+                        <div
+                          className="absolute z-20 mt-1 w-full border shadow-lg overflow-hidden"
+                          style={{
+                            backgroundColor: "hsl(var(--background))",
+                            borderColor: "hsl(var(--border))",
+                            borderRadius: `${inputStyle.borderRadius}px`,
+                          }}
+                        >
+                          {["Choose an option", "Option A", "Option B", "Option C"].map((opt) => (
+                            <button
+                              key={opt}
+                              type="button"
+                              onClick={() => { setInputSelectValue(opt); setInputSelectOpen(false); }}
+                              className="w-full px-3 py-2 text-left transition-colors"
+                              style={{
+                                color: opt === inputSelectValue ? "hsl(var(--primary))" : "hsl(var(--foreground))",
+                                backgroundColor: opt === inputSelectValue ? "hsl(var(--primary) / 0.08)" : "transparent",
+                              }}
+                              onMouseEnter={(e) => { if (opt !== inputSelectValue) e.currentTarget.style.backgroundColor = "hsl(var(--muted))"; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = opt === inputSelectValue ? "hsl(var(--primary) / 0.08)" : "transparent"; }}
+                            >
+                              {opt}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Checkboxes */}
+                  <div>
+                    <label
+                      className="block text-[13px] font-medium mb-2"
+                      style={{ color: "hsl(var(--foreground))" }}
+                    >
+                      Checkboxes
+                    </label>
+                    <div className="space-y-2">
+                      {[
+                        { label: "Enable notifications", checked: inputCheck1, set: setInputCheck1 },
+                        { label: "Auto-save drafts", checked: inputCheck2, set: setInputCheck2 },
+                        { label: "Dark mode sync", checked: inputCheck3, set: setInputCheck3 },
+                      ].map(({ label, checked, set }) => (
+                        <label key={label} className="flex items-center gap-2.5 cursor-pointer">
+                          <button
+                            type="button"
+                            role="checkbox"
+                            aria-checked={checked}
+                            onClick={() => set(!checked)}
+                            className="ds-checkbox w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0"
+                            style={{
+                              borderColor: checked ? "hsl(var(--primary))" : "hsl(var(--border))",
+                              backgroundColor: checked ? "hsl(var(--primary))" : "transparent",
+                            }}
+                          >
+                            {checked && (
+                              <svg className="w-3 h-3" fill="none" stroke="hsl(var(--primary-foreground))" viewBox="0 0 24 24" strokeWidth={3}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                            )}
+                          </button>
+                          <span className="text-[15px]" style={{ color: "hsl(var(--foreground))" }}>{label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Radio Buttons */}
+                  <div>
+                    <label
+                      className="block text-[13px] font-medium mb-2"
+                      style={{ color: "hsl(var(--foreground))" }}
+                    >
+                      Radio Buttons
+                    </label>
+                    <div className="space-y-2">
+                      {[
+                        { value: "option1", label: "Small" },
+                        { value: "option2", label: "Medium" },
+                        { value: "option3", label: "Large" },
+                      ].map(({ value, label }) => (
+                        <label key={value} className="flex items-center gap-2.5 cursor-pointer">
+                          <button
+                            type="button"
+                            role="radio"
+                            aria-checked={inputRadio === value}
+                            onClick={() => setInputRadio(value)}
+                            className="ds-radio w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                            style={{
+                              borderColor: inputRadio === value ? "hsl(var(--primary))" : "hsl(var(--border))",
+                            }}
+                          >
+                            {inputRadio === value && (
+                              <div
+                                className="w-2.5 h-2.5 rounded-full"
+                                style={{ backgroundColor: "hsl(var(--primary))" }}
+                              />
+                            )}
+                          </button>
+                          <span className="text-[15px]" style={{ color: "hsl(var(--foreground))" }}>{label}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Toggle Switches */}
+                  <div>
+                    <label
+                      className="block text-[13px] font-medium mb-2"
+                      style={{ color: "hsl(var(--foreground))" }}
+                    >
+                      Toggle Switches
+                    </label>
+                    <div className="space-y-3">
+                      {/* On/off toggles */}
+                      {[
+                        { label: "Dark mode", on: inputToggle1, set: setInputToggle1 },
+                        { label: "Notifications", on: inputToggle2, set: setInputToggle2 },
+                      ].map(({ label, on, set }) => (
+                        <div key={label} className="flex items-center gap-3">
+                          <span className="text-[15px]" style={{ color: "hsl(var(--foreground))" }}>{label}</span>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={on}
+                            onClick={() => set(!on)}
+                            className="ds-toggle-track relative w-11 h-6 rounded-full flex-shrink-0"
+                            style={{
+                              backgroundColor: on ? "hsl(var(--primary))" : "hsl(var(--muted))",
+                            }}
+                          >
+                            <span
+                              className="ds-toggle-thumb absolute top-0.5 left-0.5 w-5 h-5 rounded-full shadow-sm"
+                              style={{
+                                backgroundColor: "hsl(var(--background))",
+                                transform: on ? "translateX(20px)" : "translateX(0)",
+                              }}
+                            />
+                          </button>
+                        </div>
+                      ))}
+
+                      {/* Segmented toggle */}
+                      <div className="pt-2">
+                        <span className="block text-[13px] font-medium mb-1.5" style={{ color: "hsl(var(--foreground))" }}>
+                          Segmented
+                        </span>
+                        <div
+                          className="inline-flex items-center rounded-lg overflow-hidden border"
+                          style={{ borderColor: "hsl(var(--border))" }}
+                        >
+                          {["Light", "Dark", "System"].map((opt, i) => (
+                            <React.Fragment key={opt}>
+                              {i > 0 && (
+                                <span className="w-px h-5" style={{ backgroundColor: "hsl(var(--border))" }} />
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => setInputSegmented(opt.toLowerCase())}
+                                className="h-9 px-3 text-[14px] font-light transition-colors"
+                                style={{
+                                  backgroundColor: inputSegmented === opt.toLowerCase() ? "hsl(var(--primary))" : "transparent",
+                                  color: inputSegmented === opt.toLowerCase() ? "hsl(var(--primary-foreground))" : "hsl(var(--muted-foreground))",
+                                }}
+                              >
+                                {opt}
+                              </button>
+                            </React.Fragment>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
         </div>
+
       </section>
       {/* CSS Import Modal */}
       {showCssImportModal && (
@@ -8731,206 +9319,6 @@ function DesignSystemEditorInner({
                   ? "Preparing..."
                   : `Submit PR (${prSections.size})`}
               </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Mobile bottom tray */}
-      {mobileMenuOpen && (
-        <div
-          className="lg:hidden fixed inset-0 z-40"
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          <div className="absolute inset-0 bg-black/30" />
-          <div
-            className="absolute bottom-0 left-0 right-0 rounded-t-2xl px-6 py-6 pb-28 space-y-5 max-h-[80vh] overflow-y-auto"
-            style={{
-              backgroundColor: "hsl(var(--card))",
-              borderTop: "1px solid hsl(var(--border))",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div
-              className="w-10 h-1 rounded-full mx-auto mb-2"
-              style={{ backgroundColor: "hsl(var(--muted-foreground) / 0.3)" }}
-            />
-
-            <div className="space-y-1">
-              <p
-                className="text-[11px] font-semibold uppercase tracking-wider mb-2"
-                style={{ color: "hsl(var(--muted-foreground))" }}
-              >
-                Sections
-              </p>
-              {[
-                { id: "colors", label: "Colors" },
-                { id: "buttons", label: "Buttons" },
-                { id: "card", label: "Cards" },
-                { id: "alerts", label: "Alerts" },
-                { id: "typography", label: "Typography" },
-              ].map((s) => (
-                <a
-                  key={s.id}
-                  href={`#${s.id}`}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70"
-                  style={{ color: "hsl(var(--foreground))" }}
-                >
-                  {s.label}
-                </a>
-              ))}
-            </div>
-
-            {showNavLinks && (
-              <div
-                className="space-y-1"
-                style={{
-                  borderTop: "1px solid hsl(var(--border))",
-                  paddingTop: "16px",
-                }}
-              >
-                <p
-                  className="text-[11px] font-semibold uppercase tracking-wider mb-2"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
-                >
-                  Pages
-                </p>
-                <a
-                  href="/editor"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70"
-                  style={{ color: "hsl(var(--foreground))" }}
-                >
-                  Editor
-                </a>
-                {aboutUrl && (
-                  <a
-                    href={aboutUrl}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70"
-                    style={{ color: "hsl(var(--foreground))" }}
-                  >
-                    About
-                  </a>
-                )}
-                <a
-                  href="/how-it-works"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70"
-                  style={{ color: "hsl(var(--foreground))" }}
-                >
-                  How
-                </a>
-                <a
-                  href="/readme"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70"
-                  style={{ color: "hsl(var(--foreground))" }}
-                >
-                  Dev
-                </a>
-                <a
-                  href="/features"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70"
-                  style={{ color: "hsl(var(--foreground))" }}
-                >
-                  Features
-                </a>
-                <a
-                  href="/pricing"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70"
-                  style={{ color: "hsl(var(--foreground))" }}
-                >
-                  Pricing
-                </a>
-              </div>
-            )}
-
-            {prEndpointUrl && (
-              <PremiumGate
-                feature="pr-integration"
-                variant="inline"
-                upgradeUrl={upgradeUrl}
-                signInUrl={signInUrl}
-              >
-                <div
-                  className="space-y-1"
-                  style={{
-                    borderTop: "1px solid hsl(var(--border))",
-                    paddingTop: "16px",
-                  }}
-                >
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      setPrSections(new Set());
-                      setPrError(null);
-                      setShowPrModal(true);
-                    }}
-                    className="block py-2 text-[20px] font-bold tracking-wider mb-[5px] transition-opacity hover:opacity-70 flex items-baseline gap-2"
-                    style={{ color: "hsl(var(--foreground))" }}
-                  >
-                    <svg
-                      className="w-4 h-4 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                    </svg>
-                    Open PR
-                  </button>
-                </div>
-              </PremiumGate>
-            )}
-
-            <div
-              className="space-y-1"
-              style={{
-                borderTop: "1px solid hsl(var(--border))",
-                paddingTop: "16px",
-              }}
-            >
-              <p
-                className="text-[11px] font-semibold uppercase tracking-wider mb-2"
-                style={{ color: "hsl(var(--muted-foreground))" }}
-              >
-                Legal
-              </p>
-              <a
-                href="/privacy"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70"
-                style={{ color: "hsl(var(--muted-foreground))" }}
-              >
-                Privacy Policy
-              </a>
-              <a
-                href="/cookies"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70"
-                style={{ color: "hsl(var(--muted-foreground))" }}
-              >
-                Cookies Policy
-              </a>
-              <a
-                href="/terms"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70"
-                style={{ color: "hsl(var(--muted-foreground))" }}
-              >
-                Terms & Conditions
-              </a>
-              <a
-                href="/accessibility"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block py-2 text-[15px] font-light transition-opacity hover:opacity-70"
-                style={{ color: "hsl(var(--muted-foreground))" }}
-              >
-                Accessibility
-              </a>
             </div>
           </div>
         </div>

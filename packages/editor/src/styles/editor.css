@@ -300,17 +300,44 @@
   font-size: 16px !important;
 }
 
+/* Themed input styles */
+.ds-input {
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.ds-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--ring));
+  border-color: hsl(var(--ring));
+}
+.ds-input::placeholder {
+  color: hsl(var(--muted-foreground));
+}
+.ds-toggle-track {
+  transition: background-color 0.2s;
+}
+.ds-toggle-thumb {
+  transition: transform 0.2s;
+}
+.ds-checkbox {
+  transition: background-color 0.15s, border-color 0.15s;
+}
+.ds-radio {
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
 /* Floating scroll-to-top button */
 .ds-scroll-top {
   position: fixed;
-  bottom: 80px;
-  right: 24px;
+  bottom: 8px;
+  right: 8px;
   z-index: 50;
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid hsl(var(--border));
-  background-color: hsl(var(--background));
+  border: 1px solid rgba(128,128,128,0.25);
+  background: linear-gradient(135deg, rgba(128,128,128,0.35), rgba(160,160,160,0.2));
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   color: hsl(var(--foreground));
   display: flex;
   align-items: center;
@@ -318,9 +345,9 @@
   cursor: pointer;
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 0.2s, transform 0.2s, background-color 0.15s;
+  transition: opacity 0.2s, transform 0.2s;
   pointer-events: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 4px 4px 12px rgba(0,0,0,0.1), -2px -2px 8px rgba(255,255,255,0.15), inset 1px 1px 2px rgba(255,255,255,0.2);
 }
 .ds-scroll-top.ds-visible {
   opacity: 1;
@@ -328,5 +355,5 @@
   pointer-events: auto;
 }
 .ds-scroll-top:hover {
-  background-color: hsl(var(--foreground) / 0.05);
+  opacity: 0.85;
 }
