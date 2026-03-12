@@ -158,6 +158,12 @@ function App() {
                   <td className="px-4 py-2">Content rendered at the far right of the header (e.g. auth buttons).</td>
                 </tr>
                 <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <td className="px-4 py-2 font-mono text-xs">topNav</td>
+                  <td className="px-4 py-2 font-mono text-xs">ReactNode</td>
+                  <td className="px-4 py-2">-</td>
+                  <td className="px-4 py-2">Custom top navigation. When provided, replaces the built-in nav links entirely.</td>
+                </tr>
+                <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
                   <td className="px-4 py-2 font-mono text-xs">aboutUrl</td>
                   <td className="px-4 py-2 font-mono text-xs">string</td>
                   <td className="px-4 py-2">-</td>
@@ -211,6 +217,19 @@ function App() {
   onExport={(css) => {
     navigator.clipboard.writeText(css);
   }}
+/>`}</code>
+          </pre>
+
+          <h3 className="text-[14px] font-medium mb-2" style={{ color: "hsl(var(--muted-foreground))" }}>Custom top navigation</h3>
+          <pre className="rounded-lg p-4 text-[14px] overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
+            <code>{`<DesignSystemEditor
+  topNav={
+    <>
+      <a href="/dashboard" className="ds-nav-link">Dashboard</a>
+      <a href="/settings" className="ds-nav-link">Settings</a>
+      <a href="/docs" className="ds-nav-link">Docs</a>
+    </>
+  }
 />`}</code>
           </pre>
         </section>

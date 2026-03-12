@@ -53,6 +53,7 @@ The editor writes CSS custom properties (HSL values) to `:root` and injects glob
 | `showHeader` | `boolean` | `true` | Show the editor header with logo and navigation. |
 | `showNavLinks` | `boolean` | `true` | Show page navigation links in the header and mobile menu. |
 | `headerRight` | `React.ReactNode` | — | Custom content rendered on the right side of the header (e.g. auth buttons). |
+| `topNav` | `React.ReactNode` | — | Custom top navigation. When provided, replaces the built-in nav links entirely. |
 | `aboutUrl` | `string` | — | URL for the About page link in the header navigation. |
 | `customIcons` | `CustomIcon[]` | — | Custom icons to display in the Icons preview section. Each entry needs `name` and `icon` (a React component). |
 | `iconMode` | `"append" \| "replace"` | `"append"` | `"append"` adds custom icons after the built-in lucide icons. `"replace"` hides built-ins and shows only custom icons. |
@@ -145,6 +146,20 @@ import { LicenseProvider } from '@themal/editor';
 <DesignSystemEditor
   headerRight={<button onClick={handleSignIn}>Sign In</button>}
   aboutUrl="/about"
+/>
+```
+
+### With custom top navigation
+
+```tsx
+<DesignSystemEditor
+  topNav={
+    <>
+      <a href="/dashboard" className="ds-nav-link">Dashboard</a>
+      <a href="/settings" className="ds-nav-link">Settings</a>
+      <a href="/docs" className="ds-nav-link">Docs</a>
+    </>
+  }
 />
 ```
 
