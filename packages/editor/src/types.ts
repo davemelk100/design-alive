@@ -35,6 +35,8 @@ export interface DesignSystemEditorProps {
   signInUrl?: string;
   /** Content rendered at the far right of the header row (e.g. auth buttons) */
   headerRight?: React.ReactNode;
+  /** Custom top navigation component. When provided, replaces the built-in nav links entirely. */
+  topNav?: React.ReactNode;
   /** URL for the "Learn more about features" link */
   featuresUrl?: string;
   /** URL for the About page link in the header */

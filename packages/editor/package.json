@@ -1,6 +1,6 @@
 {
   "name": "@themal/editor",
-  "version": "0.20.1",
+  "version": "0.21.0",
   "type": "module",
   "description": "Interactive design system editor — pick colors, enforce WCAG AA contrast, export CSS custom properties",
   "main": "./dist/index.js",

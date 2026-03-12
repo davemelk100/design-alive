@@ -233,6 +233,7 @@ function DesignSystemEditorInner({
   upgradeUrl,
   signInUrl,
   headerRight,
+  topNav,
   aboutUrl,
   customIcons,
   iconMode = "append",
@@ -1828,7 +1829,11 @@ function DesignSystemEditorInner({
               </a>}
 
               {/* Nav links - desktop (next to logo) */}
-              {showNavLinks && (
+              {topNav ? (
+                <nav className="hidden md:flex items-center gap-4">
+                  {topNav}
+                </nav>
+              ) : showNavLinks && (
                 <nav className="hidden md:flex items-center gap-4">
                   {[
                     { href: "/editor", label: "Editor" },
