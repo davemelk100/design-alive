@@ -14,6 +14,25 @@ export interface ImportedIconData {
 }
 
 // ---------------------------------------------------------------------------
+// URL validation — only allow https URLs for external fetches
+// ---------------------------------------------------------------------------
+
+const ALLOWED_URL_PROTOCOLS = new Set(["https:"]);
+
+function validateExternalUrl(url: string): string {
+  let parsed: URL;
+  try {
+    parsed = new URL(url, window.location.origin);
+  } catch {
+    throw new Error(`Invalid URL: ${url}`);
+  }
+  if (!ALLOWED_URL_PROTOCOLS.has(parsed.protocol)) {
+    throw new Error(`Blocked URL protocol "${parsed.protocol}" — only HTTPS is allowed.`);
+  }
+  return parsed.href;
+}
+
+// ---------------------------------------------------------------------------
 // SVG sanitisation — strip scripts and event-handler attributes
 // ---------------------------------------------------------------------------
 
@@ -27,7 +46,7 @@ const SAFE_SVG_ELEMENTS = new Set([
 
 // Whitelist of safe SVG attributes
 const SAFE_SVG_ATTRS = new Set([
-  "id", "class", "style", "viewBox", "xmlns", "xmlns:xlink", "xml:space",
+  "id", "class", "viewBox", "xmlns", "xmlns:xlink", "xml:space",
   "width", "height", "x", "y", "dx", "dy", "cx", "cy", "r", "rx", "ry",
   "x1", "y1", "x2", "y2", "d", "fill", "stroke", "stroke-width",
   "stroke-linecap", "stroke-linejoin", "stroke-dasharray", "stroke-dashoffset",
@@ -96,7 +115,8 @@ export function sanitizeSvg(svg: string): string {
 // ---------------------------------------------------------------------------
 
 export async function parseSvgSprite(url: string): Promise<ImportedIconData[]> {
-  const res = await fetch(url);
+  const safeUrl = validateExternalUrl(url);
+  const res = await fetch(safeUrl);
   if (!res.ok) throw new Error(`Failed to fetch sprite: ${res.status}`);
   const text = await res.text();
   const doc = new DOMParser().parseFromString(text, "image/svg+xml");
@@ -161,7 +181,8 @@ function extractBootstrapIconClasses(css: string): string[] {
 }
 
 export async function parseIconFont(cssUrl: string): Promise<ImportedIconData[]> {
-  const res = await fetch(cssUrl);
+  const safeUrl = validateExternalUrl(cssUrl);
+  const res = await fetch(safeUrl);
   if (!res.ok) throw new Error(`Failed to fetch CSS: ${res.status}`);
   const css = await res.text();
 
@@ -219,18 +240,18 @@ export const CDN_LIBRARIES: CdnLibrary[] = [
 ];
 
 async function fetchLucideIcons(): Promise<{ name: string; svgUrl: string }[]> {
-  const res = await fetch("https://unpkg.com/lucide-static@latest/icon-nodes.json");
+  const res = await fetch("https://unpkg.com/lucide-static@0.469.0/icon-nodes.json");
   if (!res.ok) throw new Error(`Failed to fetch Lucide icon index: ${res.status}`);
   const data: Record<string, unknown> = await res.json();
   return Object.keys(data).map((name) => ({
     name,
-    svgUrl: `https://unpkg.com/lucide-static@latest/icons/${name}.svg`,
+    svgUrl: `https://unpkg.com/lucide-static@0.469.0/icons/${name}.svg`,
   }));
 }
 
 async function fetchHeroicons(): Promise<{ name: string; svgUrl: string }[]> {
   // Use the unpkg directory listing for the outline set
-  const res = await fetch("https://unpkg.com/heroicons@latest/24/outline/");
+  const res = await fetch("https://unpkg.com/heroicons@2.2.0/24/outline/");
   if (!res.ok) throw new Error(`Failed to fetch Heroicons index: ${res.status}`);
   const html = await res.text();
   const names: string[] = [];
@@ -241,12 +262,12 @@ async function fetchHeroicons(): Promise<{ name: string; svgUrl: string }[]> {
   }
   return names.map((name) => ({
     name,
-    svgUrl: `https://unpkg.com/heroicons@latest/24/outline/${name}.svg`,
+    svgUrl: `https://unpkg.com/heroicons@2.2.0/24/outline/${name}.svg`,
   }));
 }
 
 async function fetchPhosphorIcons(): Promise<{ name: string; svgUrl: string }[]> {
-  const res = await fetch("https://unpkg.com/@phosphor-icons/core@latest/assets/regular/");
+  const res = await fetch("https://unpkg.com/@phosphor-icons/core@2.1.1/assets/regular/");
   if (!res.ok) throw new Error(`Failed to fetch Phosphor index: ${res.status}`);
   const html = await res.text();
   const names: string[] = [];
@@ -257,7 +278,7 @@ async function fetchPhosphorIcons(): Promise<{ name: string; svgUrl: string }[]>
   }
   return names.map((name) => ({
     name,
-    svgUrl: `https://unpkg.com/@phosphor-icons/core@latest/assets/regular/${name}.svg`,
+    svgUrl: `https://unpkg.com/@phosphor-icons/core@2.1.1/assets/regular/${name}.svg`,
   }));
 }
 

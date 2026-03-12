@@ -335,7 +335,7 @@ import type {
 13. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
 14. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
 15. **Icon import** *(Pro)* — Import icons from CDN packages (Lucide, Heroicons, Phosphor), SVG sprites, or icon font CSS files directly from the browser.
-16. **Mobile friendly** — Fully responsive UI with a frosted-glass sidebar menu, responsive nav text sizes (14px/16px/20px), a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, and stacked layouts for smaller screens. A floating scroll-to-top button with frosted glass styling appears on scroll.
+16. **Mobile friendly** — Fully responsive UI with a frosted-glass sidebar menu, section nav styled to match headings, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, and stacked layouts for smaller screens. A floating scroll-to-top button with frosted glass styling appears on scroll.
 
 ## Package Architecture
 

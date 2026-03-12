@@ -4,6 +4,34 @@ import usePageMeta from "../hooks/usePageMeta";
 
 const features = [
   {
+    version: "0.22",
+    items: [
+      "Compact base font size - editor UI text reduced to 13px for a tighter, more professional layout",
+      "Section nav matches headings - top navigation items now use the same font size, weight, and letter-spacing as section headings",
+      "Left nav border removed - cleaner sidebar appearance without the right border",
+    ],
+  },
+  {
+    version: "0.21",
+    items: [
+      "Left sidebar navigation - section links moved to a persistent left sidebar with collapsible layout",
+      "Shared site layout - consistent header, footer, and sidebar across all pages",
+      "Security hardening - stricter CSP headers and input sanitization",
+      "Export icons - per-section export buttons now include inline icons for clarity",
+    ],
+  },
+  {
+    version: "0.20",
+    items: [
+      "Icon import (Pro) - import icons from CDN packages (Lucide, Heroicons, Phosphor), SVG sprites, or icon font CSS directly from the browser",
+      "Custom select dropdowns - all native selects replaced with themed dropdowns that follow the design system color scheme",
+      "Input styles section - customize input border radius, border width, padding, font size, and focus ring with presets (Rounded, Sharp, Pill)",
+      "Segmented toggle - new toggle component for input previews with checkbox, radio, and switch variants",
+      "Top nav prop - new topNav prop to replace the built-in navigation with custom links for plugin usage",
+      "Dev mode - devMode prop with storage purge utility for development",
+    ],
+  },
+  {
     version: "0.19",
     items: [
       "App Default fonts - when a consuming app provides defaultTypography, the font dropdown shows an \"App Default\" option with the app's font name pre-selected on first load",
@@ -160,7 +188,7 @@ export default function Features() {
   usePageMeta({
     title: "Features | Themal Design System Editor",
     description:
-      "21 features including real-time color picking, color harmony schemes, WCAG AA contrast, typography presets, card styles, GitHub PR integration, and web component support. Plus changelog.",
+      "25+ features including real-time color picking, color harmony schemes, WCAG AA contrast, typography presets, card styles, input styles, icon import, GitHub PR integration, and web component support. Plus changelog.",
   });
 
   return (

@@ -9,8 +9,18 @@ const IMPORTED_ICONS_KEY = "themal:imported-icons";
 // Track injected font stylesheets to avoid duplicates
 const injectedStylesheets = new Set<string>();
 
+function isValidStylesheetUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url, window.location.origin);
+    return parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function ensureFontStylesheet(url: string) {
   if (injectedStylesheets.has(url)) return;
+  if (!isValidStylesheetUrl(url)) return;
   const existing = document.querySelector(`link[href="${CSS.escape(url)}"]`);
   if (existing) {
     injectedStylesheets.add(url);

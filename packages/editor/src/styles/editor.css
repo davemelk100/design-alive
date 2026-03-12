@@ -14,6 +14,8 @@
 
 .ds-editor .ds-section-nav {
   background-color: hsl(var(--background, 0 0% 98%));
+  border-bottom: none;
+  box-shadow: none;
 }
 
 .ds-nav-link,
@@ -120,6 +122,9 @@
 /* Nav link base (replaces inline styles on section nav items) */
 .ds-nav-link-item {
   color: hsl(var(--foreground) / 0.65);
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
   line-height: 1;
   border-bottom: 1px solid transparent;
   padding-bottom: 2px;
@@ -273,7 +278,7 @@
 .ds-editor textarea,
 .ds-editor label,
 .ds-editor span:not(.ds-premium-tooltip span):not(.ds-h2):not(.ds-palette-label) {
-  font-size: 13px;
+  font-size: inherit;
 }
 
 /* H2 back-to-top links — no transitions or size changes */
@@ -286,9 +291,8 @@
 
 /* Left sidebar nav */
 .ds-left-nav {
-  border-right: 1px solid hsl(var(--border));
+  border-right: none;
   background-color: hsl(var(--background, 0 0% 98%));
-  font-size: 16px;
 }
 .ds-left-nav .ds-global-btn,
 .ds-left-nav a,
@@ -297,7 +301,6 @@
 .ds-left-nav li,
 .ds-left-nav span {
   justify-content: flex-start;
-  font-size: 16px;
 }
 
 /* Themed input styles */

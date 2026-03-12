@@ -3,7 +3,6 @@
  * Handles the OAuth popup flow, token storage, and validation.
  */
 
-import storage from "./storage";
 import type { GitHubConfig } from "./githubApi";
 import { getAuthenticatedUser } from "./githubApi";
 
@@ -17,15 +16,18 @@ export interface StoredGitHubAuth {
 }
 
 export function getStoredAuth(): StoredGitHubAuth | null {
-  return storage.get<StoredGitHubAuth>(STORAGE_KEY);
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
 }
 
 export function storeAuth(auth: StoredGitHubAuth): void {
-  storage.set(STORAGE_KEY, auth);
+  try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(auth)); } catch { /* quota */ }
 }
 
 export function clearAuth(): void {
-  storage.remove(STORAGE_KEY);
+  try { sessionStorage.removeItem(STORAGE_KEY); } catch { /* noop */ }
 }
 
 /**
@@ -82,8 +84,11 @@ export function startOAuthFlow(config: GitHubConfig): Promise<StoredGitHubAuth> 
       return;
     }
 
+    const expectedOrigin = new URL(proxyBase).origin;
+
     function onMessage(event: MessageEvent) {
       if (!event.data || event.data.type !== "themal-github-oauth") return;
+      if (event.origin !== expectedOrigin && event.origin !== window.location.origin) return;
 
       cleanup();
 

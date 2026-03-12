@@ -47,7 +47,7 @@ function UpgradeModal({
   const handleActivate = () => {
     const result = validateLicenseKey(licenseInput);
     if (result.isValid) {
-      window.dispatchEvent(new CustomEvent("themal:license-activate", { detail: { key: licenseInput.trim().toUpperCase() } }));
+      window.dispatchEvent(new CustomEvent("themal:license-activate", { detail: { activated: true } }));
       onClose();
     } else {
       setLicenseError("Invalid license key. Please check and try again.");

@@ -82,16 +82,24 @@ class StorageManager {
     }
   }
 
-  get<T>(key: string, defaultValue?: T): T | null {
+  get<T>(key: string, defaultValue?: T, validator?: (v: unknown) => v is T): T | null {
     try {
       const value = this.primary.get(key);
       if (value === null) return defaultValue !== undefined ? defaultValue : null;
-      return JSON.parse(value);
+      const parsed = JSON.parse(value);
+      if (validator && !validator(parsed)) return defaultValue !== undefined ? defaultValue : null;
+      if (parsed === null || parsed === undefined) return defaultValue !== undefined ? defaultValue : null;
+      if (typeof parsed !== "object" && typeof parsed !== "string" && typeof parsed !== "number" && typeof parsed !== "boolean" && !Array.isArray(parsed)) {
+        return defaultValue !== undefined ? defaultValue : null;
+      }
+      return parsed;
     } catch {
       try {
         const fb = this.fallback.get(key);
         if (fb === null) return defaultValue !== undefined ? defaultValue : null;
-        return JSON.parse(fb);
+        const parsed = JSON.parse(fb);
+        if (validator && !validator(parsed)) return defaultValue !== undefined ? defaultValue : null;
+        return parsed;
       } catch {
         return defaultValue !== undefined ? defaultValue : null;
       }
@@ -113,7 +121,7 @@ class StorageManager {
 const mgr = new StorageManager();
 
 export const storage = {
-  get: <T>(key: string, defaultValue?: T): T | null => mgr.get(key, defaultValue),
+  get: <T>(key: string, defaultValue?: T, validator?: (v: unknown) => v is T): T | null => mgr.get(key, defaultValue, validator),
   set: <T>(key: string, value: T): void => mgr.set(key, value),
   remove: (key: string): void => mgr.remove(key),
 };
