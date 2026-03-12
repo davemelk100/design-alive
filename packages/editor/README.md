@@ -45,7 +45,8 @@ The editor writes CSS custom properties (HSL values) to `:root`. Typography styl
 | `licenseKey` | `string` | — | License key to unlock premium features. |
 | `upgradeUrl` | `string` | `"/pricing"` | URL shown in premium gate upgrade prompts. |
 | `signInUrl` | `string` | — | URL shown in premium gate sign-in prompts. |
-| `prEndpointUrl` | `string` | — | URL for your server-side PR creation endpoint. The editor POSTs `{ css, sections }` and expects `{ url }` back. PR button hidden if omitted. |
+| `prEndpointUrl` | `string` | — | URL for your server-side PR creation endpoint. The editor POSTs `{ css, sections }` and expects `{ url }` back. PR button hidden if both this and `githubConfig` are omitted. |
+| `githubConfig` | `GitHubConfig` | — | Client-side GitHub config for creating PRs directly via the GitHub API using an OAuth popup flow. No backend required beyond a lightweight token exchange proxy. PR button hidden if both this and `prEndpointUrl` are omitted. |
 | `accessibilityAudit` | `boolean` | `true` | Enable axe-core color contrast auditing. |
 | `onChange` | `(colors: Record<string, string>) => void` | — | Callback on every color change with the full color map. |
 | `onExport` | `(css: string) => void` | — | Override built-in CSS modal. Receives the generated CSS string. |
@@ -149,11 +150,42 @@ And should return:
 }
 ```
 
-The PR button is hidden when `prEndpointUrl` is omitted.
+The PR button is hidden when both `prEndpointUrl` and `githubConfig` are omitted.
 
-### With PR creation (client-side GitHub API)
+### With PR creation (client-side GitHub API via prop)
 
-For apps that don't have a backend, the editor also exports client-side utilities to create PRs directly via the GitHub API using OAuth:
+Pass `githubConfig` to enable PR creation directly from the editor UI using the GitHub API. The editor handles OAuth authentication, branch creation, and file updates automatically.
+
+```tsx
+<DesignSystemEditor
+  githubConfig={{
+    clientId: 'your-github-oauth-client-id',
+    repo: 'your-org/your-repo',
+    filePath: 'src/globals.css',   // optional, default: "src/globals.css"
+    baseBranch: 'main',            // optional, default: "main"
+  }}
+/>
+```
+
+When the user clicks "Open PR", the editor checks for a stored OAuth token. If none exists, it opens a GitHub OAuth popup. After authentication, it creates a branch, commits the updated CSS variables, and opens the GitHub compare page for the user to review and submit.
+
+The default OAuth token exchange proxy is hosted at `themalive.com`. Override it with `oauthProxyUrl` for self-hosted setups or GitHub Enterprise.
+
+#### GitHubConfig options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `clientId` | `string` | — | GitHub OAuth App client ID (required). |
+| `repo` | `string` | — | Target repository in `owner/repo` format (required). |
+| `filePath` | `string` | `"src/globals.css"` | Path to the CSS file to update. |
+| `baseBranch` | `string` | `"main"` | Base branch to create PRs against. |
+| `oauthProxyUrl` | `string` | `"https://themalive.com/.netlify/functions/github-oauth"` | Token exchange proxy URL. |
+| `apiBaseUrl` | `string` | `"https://api.github.com"` | GitHub API base URL (for GitHub Enterprise). |
+| `webBaseUrl` | `string` | `"https://github.com"` | GitHub web base URL (for GitHub Enterprise). |
+
+### With PR creation (client-side GitHub API, manual)
+
+For full control, use the exported utilities directly instead of the `githubConfig` prop:
 
 ```tsx
 import { createDesignPr, startOAuthFlow } from '@themal/editor';
@@ -161,8 +193,8 @@ import { createDesignPr, startOAuthFlow } from '@themal/editor';
 const config = {
   clientId: 'your-github-oauth-client-id',
   repo: 'your-org/your-repo',
-  filePath: 'src/globals.css',   // optional, default: "src/globals.css"
-  baseBranch: 'main',            // optional, default: "main"
+  filePath: 'src/globals.css',
+  baseBranch: 'main',
 };
 
 // 1. Authenticate via OAuth popup
@@ -173,7 +205,7 @@ const compareUrl = await createDesignPr(config, auth.access_token, css, ['colors
 window.open(compareUrl, '_blank');
 ```
 
-This flow opens a GitHub OAuth popup, exchanges the code for a token via a proxy, then creates a branch and commit using the GitHub API entirely from the browser. The default OAuth proxy is hosted at `themalive.com`. Override it with `oauthProxyUrl` in the config for self-hosted setups or GitHub Enterprise.
+This flow opens a GitHub OAuth popup, exchanges the code for a token via a proxy, then creates a branch and commit using the GitHub API entirely from the browser.
 
 ### With premium features
 
@@ -391,7 +423,7 @@ import type {
 13. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
 14. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
 15. **Icon import** *(Pro)* — Import icons from CDN packages (Lucide, Heroicons, Phosphor), SVG sprites, or icon font CSS files directly from the browser.
-16. **Mobile friendly** — Fully responsive UI with a frosted-glass sidebar menu, section nav styled to match headings, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, and stacked layouts for smaller screens. A floating scroll-to-top button with frosted glass styling appears on scroll.
+16. **Mobile friendly** — Fully responsive UI with a frosted-glass sidebar menu, section dropdown navigation, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, touch-friendly control sizing (44px+ tap targets for sliders, buttons, toggles, and checkboxes), and stacked layouts for smaller screens. A floating scroll-to-top button with frosted glass styling appears on scroll.
 
 ## Package Architecture
 
@@ -444,11 +476,11 @@ Import the main entry point for components and utilities, and `style.css` separa
 
 ## Theming & Customization
 
-The editor inherits your site's base font size by default (13px fallback). Override it with a CSS custom property:
+The editor inherits your site's base font size by default (0.8125rem fallback). Override it with a CSS custom property:
 
 ```css
 :root {
-  --ds-base-font-size: 16px;
+  --ds-base-font-size: 1rem;
 }
 ```
 

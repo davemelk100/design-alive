@@ -17,9 +17,13 @@ export default function SiteHeader() {
   const isEditor = pathname === "/editor";
 
   const [activeSection, setActiveSection] = useState("colors");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [navOffsets, setNavOffsets] = useState<Record<string, number>>({});
   const navItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const navContainerRef = useRef<HTMLElement | null>(null);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const activeLabel = SECTION_LINKS.find((s) => s.id === activeSection)?.label ?? "Colors";
 
   // Observe which section is in view
   useEffect(() => {
@@ -43,6 +47,18 @@ export default function SiteHeader() {
     elements.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [isEditor]);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [dropdownOpen]);
 
   // Recalculate offsets so active item slides to the left (desktop only)
   const recalcNavOffsets = useCallback(() => {
@@ -111,14 +127,22 @@ export default function SiteHeader() {
     };
   }, [isEditor, recalcNavOffsets]);
 
+  function scrollToSection(id: string) {
+    setDropdownOpen(false);
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
   return (
     <header
       className="sticky top-0 z-50 bg-page"
     >
       {isEditor ? (
         <div className="w-full mx-auto flex flex-col lg:flex-row site-container">
-          {/* Logo row: stacked above nav on mobile, sidebar-width column at lg */}
-          <div className="flex items-end flex-shrink-0 pl-4 pr-2 lg:w-48 pt-3 pb-1.5 lg:py-3">
+          {/* Logo + mobile dropdown row */}
+          <div className="flex items-center flex-shrink-0 pl-4 pr-2 lg:w-48 pt-3 pb-3 lg:py-3 gap-3">
             <Link
               to="/"
               className="flex-shrink-0 hover:opacity-70 transition-opacity"
@@ -126,9 +150,44 @@ export default function SiteHeader() {
             >
               <ThemalLogo className="h-6 sm:h-7" />
             </Link>
+
+            {/* Mobile section dropdown */}
+            <div ref={dropdownRef} className="relative lg:hidden">
+              <button
+                onClick={() => setDropdownOpen((v) => !v)}
+                className="flex items-center gap-1.5 px-3 h-9 rounded-lg text-sm font-light text-fg hover:opacity-80 transition-opacity"
+              >
+                {activeLabel}
+                <svg
+                  className={`w-3.5 h-3.5 transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {dropdownOpen && (
+                <div className="absolute left-0 top-full mt-1 z-50 min-w-[160px] rounded-lg shadow-lg py-1 border bg-page border-theme">
+                  {SECTION_LINKS.map(({ id, label }) => (
+                    <button
+                      key={id}
+                      onClick={() => scrollToSection(id)}
+                      className={`w-full text-left px-4 py-2.5 text-sm font-light transition-colors hover:opacity-80 ${
+                        id === activeSection ? "text-fg font-normal" : "text-muted"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-          {/* Nav row: full-width on mobile, flex-1 at lg */}
-          <div className="flex-1 min-w-0 px-4 sm:px-6 lg:px-8 pb-3 pt-1 lg:py-3 flex items-end">
+
+          {/* Desktop nav: hidden on mobile, visible at lg */}
+          <div className="hidden lg:flex flex-1 min-w-0 px-4 sm:px-6 lg:px-8 pb-3 pt-1 lg:py-3 items-end">
             <nav
               ref={navContainerRef}
               className="flex items-baseline gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-x-auto flex-nowrap"

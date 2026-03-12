@@ -390,7 +390,7 @@
 
 /* ── Mobile touch-friendly sizing ───────────────────────────────────── */
 @media (max-width: 768px) {
-  /* Range sliders: taller touch target */
+  /* Range sliders: taller touch target with visible track */
   .ds-editor input[type="range"] {
     height: 2.75rem;
     cursor: pointer;
@@ -398,9 +398,33 @@
     appearance: none;
     background: transparent;
   }
+  .ds-editor input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 2px;
+    background-color: hsl(var(--border));
+  }
   .ds-editor input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
     width: 1.25rem;
     height: 1.25rem;
+    border-radius: 50%;
+    background-color: hsl(var(--foreground));
+    margin-top: -0.5rem;
+    border: 2px solid hsl(var(--background));
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .ds-editor input[type="range"]::-moz-range-track {
+    height: 4px;
+    border-radius: 2px;
+    background-color: hsl(var(--border));
+  }
+  .ds-editor input[type="range"]::-moz-range-thumb {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background-color: hsl(var(--foreground));
+    border: 2px solid hsl(var(--background));
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   }
 
   /* Sidebar action buttons: bump to 44px minimum */
