@@ -8,6 +8,9 @@ import React, {
 import type { AxeResults } from "axe-core";
 import type { DesignSystemEditorProps, AiGenerateResult } from "./types";
 import { useColorState } from "./hooks/useColorState";
+import { useNavigationState } from "./hooks/useNavigationState";
+import { useImagePalette } from "./hooks/useImagePalette";
+import { usePrSubmission } from "./hooks/usePrSubmission";
 import { LicenseProvider, useLicense } from "./hooks/useLicense";
 import { PremiumGate } from "./components/PremiumGate";
 import { ResetConfirmModal } from "./components/ResetConfirmModal";
@@ -103,10 +106,6 @@ import type {
   TypoInteractionStyleState,
   InputStyleState,
 } from "./utils/themeUtils";
-import {
-  extractPaletteFromImage,
-  extractPaletteFromUrl,
-} from "./utils/extractPalette";
 import { useImportedIcons } from "./hooks/useImportedIcons";
 import { useStyleState } from "./hooks/useStyleState";
 import { IconImportModal } from "./components/IconImportModal";
@@ -172,131 +171,25 @@ function DesignSystemEditorInner({
     };
   }, [colors["--background"], colors["--foreground"], colors["--border"], colors["--muted"], colors["--muted-foreground"], colors["--brand"]]);
 
-  const [activeSection, setActiveSection] = useState<string>("colors");
-
-  useEffect(() => {
-    const ids = ["colors", "card", "alerts", "typography", "buttons", "inputs"];
-    const elements = ids
-      .map((id) => document.getElementById(id))
-      .filter(Boolean) as HTMLElement[];
-    if (elements.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        }
-      },
-      { rootMargin: "-20% 0px -60% 0px", threshold: 0 },
-    );
-
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
-  const NAV_IDS = ["colors", "buttons", "card", "alerts", "typography", "inputs"];
-
-  useEffect(() => {
-    const recalcNavOffsets = () => {
-      const refs = navItemRefs.current;
-      const container = navContainerRef.current;
-      if (!container) return;
-
-      // Temporarily remove transforms so we can measure natural positions
-      const elements: { el: HTMLAnchorElement; prev: string }[] = [];
-      for (const id of NAV_IDS) {
-        const el = refs[id];
-        if (el) {
-          elements.push({ el, prev: el.style.transform });
-          el.style.transform = "none";
-        }
-      }
-
-      // Force layout reflow
-      void container.offsetWidth;
-
-      // Measure natural positions
-      const positions: Record<string, { left: number; width: number }> = {};
-      for (const id of NAV_IDS) {
-        const el = refs[id];
-        if (el) {
-          positions[id] = { left: el.offsetLeft, width: el.offsetWidth };
-        }
-      }
-
-      // Restore transforms immediately (will be overwritten by state update)
-      for (const { el, prev } of elements) {
-        el.style.transform = prev;
-      }
-
-      if (!positions[activeSection]) return;
-
-      // Compute gap from container
-      const gap = parseFloat(getComputedStyle(container).gap) || 12;
-
-      // Build the reordered list: active first, then others in original order
-      const reordered = [
-        activeSection,
-        ...NAV_IDS.filter((id) => id !== activeSection),
-      ];
-
-      // Calculate where each item should go based on reordered positions
-      let cursor = positions[NAV_IDS[0]]?.left ?? 0;
-      const targetLeft: Record<string, number> = {};
-      for (const id of reordered) {
-        targetLeft[id] = cursor;
-        cursor += (positions[id]?.width ?? 0) + gap;
-      }
-
-      // Offset = target - natural
-      const offsets: Record<string, number> = {};
-      for (const id of NAV_IDS) {
-        offsets[id] = Math.round(
-          (targetLeft[id] ?? 0) - (positions[id]?.left ?? 0),
-        );
-      }
-      setNavOffsets(offsets);
-    };
-
-    // Delay to allow font/typography CSS to apply before measuring
-    const raf = requestAnimationFrame(() => recalcNavOffsets());
-    window.addEventListener("nav-recalc", recalcNavOffsets);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("nav-recalc", recalcNavOffsets);
-    };
-  }, [activeSection]);
+  const {
+    activeSection,
+    navOffsets,
+    mobileMenuOpen,
+    setMobileMenuOpen,
+    showScrollTop,
+    navItemRefs,
+    navContainerRef,
+  } = useNavigationState();
 
   const [showResetModal, setShowResetModal] = useState(false);
   const [showGlobalResetModal, setShowGlobalResetModal] = useState(false);
 
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [codeCopied, setCodeCopied] = useState(false);
-  const [prSections, setPrSections] = useState<Set<string>>(
-    new Set(["colors", "card", "typography", "alerts", "buttons", "interactions"]),
-  );
-  const [showPrModal, setShowPrModal] = useState(false);
-  const [prError, setPrError] = useState<string | null>(null);
-  const [sectionPrStatus, setSectionPrStatus] = useState<
-    Record<
-      string,
-      {
-        status: "idle" | "creating" | "created" | "error" | "rate-limited";
-        url?: string;
-        error?: string;
-      }
-    >
-  >({});
   const [auditStatus, setAuditStatus] = useState<
     "idle" | "running" | "failed" | "passed"
   >("idle");
   const auditTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const navItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
-  const navContainerRef = useRef<HTMLDivElement | null>(null);
-  const [navOffsets, setNavOffsets] = useState<Record<string, number>>({});
   const [iconsHidden, setIconsHidden] = useState(false);
   const [showIconImportModal, setShowIconImportModal] = useState(false);
   const { importedIcons, importedIconData, addIcons: addImportedIcons, removeIcon: removeImportedIcon, clearAll: clearImportedIcons } = useImportedIcons();
@@ -395,17 +288,28 @@ function DesignSystemEditorInner({
     () => storage.get<TypoInteractionStyleState>(TYPO_INTERACTION_STYLE_KEY) || { ...DEFAULT_TYPO_INTERACTION_STYLE },
     TYPO_INTERACTION_PRESETS,
   );
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [imagePaletteStatus, setImagePaletteStatus] = useState<
-    "idle" | "extracting" | "done" | "error"
-  >("idle");
-  const [imageUrlInput, setImageUrlInput] = useState("");
-  const [imageUrlError, setImageUrlError] = useState("");
-  const [showImagePaletteModal, setShowImagePaletteModal] = useState(false);
+  const {
+    showImagePaletteModal,
+    setShowImagePaletteModal,
+    imagePaletteStatus,
+    imageUrlInput,
+    setImageUrlInput,
+    imageUrlError,
+    setImageUrlError,
+    pendingImagePalette,
+    setPendingImagePalette,
+    appliedImageUrl,
+    setAppliedImageUrl,
+    appliedImageFading,
+    setAppliedImageFading,
+    fileInputRef,
+    handleImagePalette,
+    handleImageUrlSubmit,
+    markApplied: markImageApplied,
+  } = useImagePalette();
   const [exportFormat, setExportFormat] = useState<"css" | "tokens">("css");
   const [shareCopied, setShareCopied] = useState(false);
   const [showPurgeModal, setShowPurgeModal] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
   const {
     state: inputStyle,
     update: updateInputStyle,
@@ -417,12 +321,6 @@ function DesignSystemEditorInner({
   const [showPaletteExport, setShowPaletteExport] = useState(false);
   const [showCssImportModal, setShowCssImportModal] = useState(false);
   const [paletteExportCopied, setPaletteExportCopied] = useState(false);
-  const [pendingImagePalette, setPendingImagePalette] = useState<{
-    imageUrl: string;
-    palette: Record<string, string>;
-  } | null>(null);
-  const [appliedImageUrl, setAppliedImageUrl] = useState<string | null>(null);
-  const [appliedImageFading, setAppliedImageFading] = useState(false);
   const [mobilePickerKey, setMobilePickerKey] = useState<string | null>(null);
   const [mobilePickerHex, setMobilePickerHex] = useState("#000000");
   const [showAiGenerateModal, setShowAiGenerateModal] = useState(false);
@@ -438,13 +336,6 @@ function DesignSystemEditorInner({
   useEffect(() => {
     applyStoredCardStyle(colors, editorRootRef.current!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Show/hide scroll-to-top button
-  useEffect(() => {
-    const onScroll = () => setShowScrollTop(window.scrollY > 400);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // Hydrate from URL hash if present (shareable URL)
@@ -699,75 +590,17 @@ function DesignSystemEditorInner({
     [colors, cardStyle, typographyState, alertStyle, buttonStyle, interactionStyle],
   );
 
-  const submitPr = useCallback(
-    async (sections: Iterable<string>, statusKey: string) => {
-      if (!isPremium) return;
-      if (!prEndpointUrl) {
-        setPrError("No prEndpointUrl prop provided. Pass prEndpointUrl to the editor to enable PR creation.");
-        return;
-      }
-      setPrError(null);
-      setSectionPrStatus((prev) => ({
-        ...prev,
-        [statusKey]: { status: "creating" },
-      }));
-      const popup = window.open("about:blank", "_blank");
-      try {
-        const css = buildSectionCss(sections);
-        const sectionArr = [...sections];
-        const res = await fetch(prEndpointUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ css, sections: sectionArr }),
-        });
-        let data: Record<string, unknown> = {};
-        try {
-          data = await res.json();
-        } catch {
-          // Response wasn't JSON (e.g. 404 HTML page)
-        }
-        if (!res.ok) {
-          const msg =
-            typeof data.error === "string"
-              ? data.error
-              : `PR endpoint returned ${res.status}. Make sure prEndpointUrl points to a running server.`;
-          if (res.status === 429) {
-            setSectionPrStatus((prev) => ({
-              ...prev,
-              [statusKey]: { status: "rate-limited", error: msg },
-            }));
-            popup?.close();
-            return;
-          }
-          setPrError(msg);
-          setSectionPrStatus((prev) => ({
-            ...prev,
-            [statusKey]: { status: "error" },
-          }));
-          popup?.close();
-          return;
-        }
-        setSectionPrStatus((prev) => ({
-          ...prev,
-          [statusKey]: { status: "created", url: data.url as string },
-        }));
-        setShowPrModal(false);
-        if (popup) {
-          popup.location.href = data.url as string;
-        } else {
-          window.open(data.url as string, "_blank");
-        }
-      } catch (err) {
-        setSectionPrStatus((prev) => ({
-          ...prev,
-          [statusKey]: { status: "error" },
-        }));
-        setPrError(err instanceof Error ? err.message : "Failed to create PR");
-        popup?.close();
-      }
-    },
-    [isPremium, prEndpointUrl, buildSectionCss],
-  );
+  const {
+    showPrModal,
+    setShowPrModal,
+    prError,
+    prSections,
+    setPrSections,
+    sectionPrStatus,
+    setSectionPrStatus,
+    submitPr,
+    openPrModal,
+  } = usePrSubmission(isPremium, prEndpointUrl, buildSectionCss);
 
   const handleColorChange = (key: string, hex: string) => {
     const lower = hex.toLowerCase();
@@ -997,46 +830,6 @@ function DesignSystemEditorInner({
     if (accessibilityAudit) runAccessibilityAudit();
   };
 
-  const handleImagePalette = async (file: File) => {
-    try {
-      setImagePaletteStatus("extracting");
-      const palette = await extractPaletteFromImage(file);
-      const imageUrl = URL.createObjectURL(file);
-      setPendingImagePalette({ imageUrl, palette });
-      setImagePaletteStatus("idle");
-    } catch (err) {
-      console.error("Image palette extraction failed:", err);
-      setImagePaletteStatus("error");
-      setTimeout(() => setImagePaletteStatus("idle"), 3000);
-    }
-  };
-
-  const handleImageUrlSubmit = async () => {
-    const url = imageUrlInput.trim();
-    if (!url) return;
-    try {
-      new URL(url);
-    } catch {
-      setImageUrlError("Please enter a valid URL");
-      return;
-    }
-    setImageUrlError("");
-    try {
-      setImagePaletteStatus("extracting");
-      const palette = await extractPaletteFromUrl(url);
-      setPendingImagePalette({ imageUrl: url, palette });
-      setImagePaletteStatus("idle");
-      setImageUrlInput("");
-    } catch (err) {
-      console.error("Image URL palette extraction failed:", err);
-      setImageUrlError(
-        "Failed to load image. The server may block cross-origin requests.",
-      );
-      setImagePaletteStatus("error");
-      setTimeout(() => setImagePaletteStatus("idle"), 3000);
-    }
-  };
-
   const applyImagePalette = (palette: Record<string, string>) => {
     const snapshot = captureColorsForUndo();
     setColorUndoStack((s) => [...s.slice(-(MAX_UNDO - 1)), snapshot]);
@@ -1099,8 +892,7 @@ function DesignSystemEditorInner({
     setHarmonySchemeIndex(-1);
     fireOnChange(finalColors);
     if (accessibilityAudit) runAccessibilityAudit();
-    setImagePaletteStatus("done");
-    setTimeout(() => setImagePaletteStatus("idle"), 3000);
+    markImageApplied();
   };
 
   const handleResetColors = () => {
@@ -1737,9 +1529,7 @@ function DesignSystemEditorInner({
                   setTimeout(() => setShareCopied(false), 2000);
                 });
               } else if (v === "pr") {
-                setPrSections(new Set());
-                setPrError(null);
-                setShowPrModal(true);
+                openPrModal();
               }
               else if (v === "purge") setShowPurgeModal(true);
               else if (v === "audit") runAccessibilityAudit(true);
@@ -2003,7 +1793,7 @@ function DesignSystemEditorInner({
           {prEndpointUrl && (
             <PremiumGate feature="pr-integration" variant="inline" hideLock upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
               <button
-                onClick={() => { setPrSections(new Set()); setPrError(null); setShowPrModal(true); }}
+                onClick={openPrModal}
                 className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
                 title="Open a GitHub PR"
               >
@@ -2166,7 +1956,7 @@ function DesignSystemEditorInner({
           >
             <h2 className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider m-0 p-0">{s.label}</h2>
             <svg
-              className="w-5 h-5 opacity-60"
+              className="w-[1em] h-[1em] opacity-60"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

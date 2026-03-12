@@ -278,7 +278,7 @@
 .ds-editor textarea,
 .ds-editor label,
 .ds-editor span:not(.ds-premium-tooltip span):not(.ds-h2):not(.ds-palette-label) {
-  font-size: inherit;
+  font-size: var(--ds-base-font-size, 13px);
 }
 
 /* H2 back-to-top links — no transitions or size changes */

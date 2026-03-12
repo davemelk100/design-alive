@@ -101,7 +101,7 @@ export function CardsSection({
               aria-label="Back to top"
             >
               <svg
-                className="w-5 h-5"
+                className="w-[1em] h-[1em]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
