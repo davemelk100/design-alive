@@ -8,16 +8,16 @@ export default function Accessibility() {
   });
 
   return (
-    <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+    <div className="flex-1 flex flex-col bg-page">
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <h1 className="text-3xl sm:text-4xl font-light mb-2" style={{ color: "hsl(var(--foreground))" }}>
+        <h1 className="text-3xl sm:text-4xl font-light mb-2 text-fg">
           Themal's Accessibility Commitment
         </h1>
-        <p className="text-[14px] mb-8" style={{ color: "hsl(var(--muted-foreground))" }}>
+        <p className="text-sm mb-8 text-muted">
           Last updated: March 3, 2026
         </p>
 
-        <div className="space-y-6 text-[14px] leading-relaxed" style={{ color: "hsl(var(--foreground))" }}>
+        <div className="space-y-6 text-sm leading-relaxed text-fg">
           <section>
             <h2 className="text-xl font-medium mb-2">Our Commitment</h2>
             <p>Themal is committed to ensuring digital accessibility for all users. We strive for <strong>WCAG 2.1 Level AA compliance</strong> across our entire application. Accessibility is not an afterthought - it is a core part of how we build and a core feature of what our product helps you achieve.</p>
@@ -72,7 +72,7 @@ export default function Accessibility() {
             <h2 className="text-xl font-medium mb-2">Feedback</h2>
             <p>We welcome feedback on the accessibility of Themal. If you encounter any barriers or have suggestions for improvement, please contact us:</p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
-              <li>Email: <a href="mailto:accessibility@themalive.com" className="text-[14px] underline hover:opacity-70">accessibility@themalive.com</a></li>
+              <li>Email: <a href="mailto:accessibility@themalive.com" className="text-sm underline hover:opacity-70">accessibility@themalive.com</a></li>
             </ul>
             <p className="mt-2">We aim to respond to accessibility feedback within 5 business days and to resolve reported issues as quickly as possible.</p>
           </section>

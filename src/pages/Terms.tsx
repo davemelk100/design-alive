@@ -8,16 +8,16 @@ export default function Terms() {
   });
 
   return (
-    <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+    <div className="flex-1 flex flex-col bg-page">
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <h1 className="text-3xl sm:text-4xl font-light mb-2" style={{ color: "hsl(var(--foreground))" }}>
+        <h1 className="text-3xl sm:text-4xl font-light mb-2 text-fg">
           Themal's Terms &amp; Conditions
         </h1>
-        <p className="text-[14px] mb-8" style={{ color: "hsl(var(--muted-foreground))" }}>
+        <p className="text-sm mb-8 text-muted">
           Last updated: March 3, 2026
         </p>
 
-        <div className="space-y-6 text-[14px] leading-relaxed" style={{ color: "hsl(var(--foreground))" }}>
+        <div className="space-y-6 text-sm leading-relaxed text-fg">
           <section>
             <h2 className="text-xl font-medium mb-2">1. Acceptance of Terms</h2>
             <p>By accessing and using Themal ("the Service"), you agree to be bound by these Terms and Conditions. If you do not agree to these terms, please do not use the Service.</p>
@@ -82,7 +82,7 @@ export default function Terms() {
 
           <section>
             <h2 className="text-xl font-medium mb-2">11. Contact</h2>
-            <p>For questions about these terms, please contact us at <a href="mailto:legal@themalive.com" className="text-[14px] underline hover:opacity-70">legal@themalive.com</a>.</p>
+            <p>For questions about these terms, please contact us at <a href="mailto:legal@themalive.com" className="text-sm underline hover:opacity-70">legal@themalive.com</a>.</p>
           </section>
         </div>
       </div>

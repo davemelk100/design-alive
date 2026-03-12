@@ -33,20 +33,21 @@ const config: Config = {
         ],
       },
       fontSize: {
-        // 17px base with ~1.2 major third scale
-        xs: ["13px", { lineHeight: "1.5" }],
-        sm: ["15px", { lineHeight: "1.5" }],
-        base: ["17px", { lineHeight: "1.5" }],
-        lg: ["20px", { lineHeight: "1.4" }],
-        xl: ["23px", { lineHeight: "1.35" }],
-        "2xl": ["28px", { lineHeight: "1.3" }],
-        "3xl": ["34px", { lineHeight: "1.25" }],
-        "4xl": ["40px", { lineHeight: "1.2" }],
-        "5xl": ["52px", { lineHeight: "1.1" }],
-        "6xl": ["64px", { lineHeight: "1" }],
-        "7xl": ["80px", { lineHeight: "1" }],
-        "8xl": ["104px", { lineHeight: "1" }],
-        "9xl": ["136px", { lineHeight: "1" }],
+        // rem-based scale so all sizes inherit from root font-size.
+        // Consuming apps control the entire scale by setting font-size on <html>.
+        xs: ["0.8125rem", { lineHeight: "1.5" }],   // ~13px at 16px root
+        sm: ["0.875rem", { lineHeight: "1.5" }],    // ~14px at 16px root
+        base: ["1rem", { lineHeight: "1.5" }],       // 16px at 16px root
+        lg: ["1.25rem", { lineHeight: "1.4" }],      // ~20px at 16px root
+        xl: ["1.4375rem", { lineHeight: "1.35" }],   // ~23px at 16px root
+        "2xl": ["1.75rem", { lineHeight: "1.3" }],   // ~28px at 16px root
+        "3xl": ["2.125rem", { lineHeight: "1.25" }], // ~34px at 16px root
+        "4xl": ["2.5rem", { lineHeight: "1.2" }],    // ~40px at 16px root
+        "5xl": ["3.25rem", { lineHeight: "1.1" }],   // ~52px at 16px root
+        "6xl": ["4rem", { lineHeight: "1" }],         // ~64px at 16px root
+        "7xl": ["5rem", { lineHeight: "1" }],         // ~80px at 16px root
+        "8xl": ["6.5rem", { lineHeight: "1" }],       // ~104px at 16px root
+        "9xl": ["8.5rem", { lineHeight: "1" }],       // ~136px at 16px root
       },
       borderRadius: {
         lg: "var(--radius)",

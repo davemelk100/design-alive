@@ -8,16 +8,16 @@ export default function PrivacyPolicy() {
   });
 
   return (
-    <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+    <div className="flex-1 flex flex-col bg-page">
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <h1 className="text-3xl sm:text-4xl font-light mb-2" style={{ color: "hsl(var(--foreground))" }}>
+        <h1 className="text-3xl sm:text-4xl font-light mb-2 text-fg">
           Themal's Privacy Policy
         </h1>
-        <p className="text-[14px] mb-8" style={{ color: "hsl(var(--muted-foreground))" }}>
+        <p className="text-sm mb-8 text-muted">
           Last updated: March 3, 2026
         </p>
 
-        <div className="space-y-6 text-[14px] leading-relaxed" style={{ color: "hsl(var(--foreground))" }}>
+        <div className="space-y-6 text-sm leading-relaxed text-fg">
           <section>
             <h2 className="text-xl font-medium mb-2">1. Information We Collect</h2>
             <p>When you use Themal, we may collect the following information:</p>
@@ -44,9 +44,9 @@ export default function PrivacyPolicy() {
             <h2 className="text-xl font-medium mb-2">3. Third-Party Services</h2>
             <p>We use the following third-party services that may collect data:</p>
             <ul className="list-disc pl-6 mt-2 space-y-1">
-              <li><strong>Clerk</strong> - Authentication and user management. Clerk may set cookies to maintain your session. See <a href="https://clerk.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[14px] underline hover:opacity-70">Clerk's Privacy Policy</a>.</li>
-              <li><strong>Stripe</strong> - Payment processing for subscriptions. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[14px] underline hover:opacity-70">Stripe's Privacy Policy</a>.</li>
-              <li><strong>Google Fonts</strong> - Font loading for typography previews. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-[14px] underline hover:opacity-70">Google's Privacy Policy</a>.</li>
+              <li><strong>Clerk</strong> - Authentication and user management. Clerk may set cookies to maintain your session. See <a href="https://clerk.com/privacy" target="_blank" rel="noopener noreferrer" className="text-sm underline hover:opacity-70">Clerk's Privacy Policy</a>.</li>
+              <li><strong>Stripe</strong> - Payment processing for subscriptions. See <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-sm underline hover:opacity-70">Stripe's Privacy Policy</a>.</li>
+              <li><strong>Google Fonts</strong> - Font loading for typography previews. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-sm underline hover:opacity-70">Google's Privacy Policy</a>.</li>
               <li><strong>GitHub API</strong> - Used when submitting pull requests for design system changes. Only accessed when you explicitly initiate a PR.</li>
             </ul>
           </section>
@@ -75,7 +75,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-medium mb-2">7. Contact</h2>
-            <p>For privacy-related inquiries, please contact us at <a href="mailto:privacy@themalive.com" className="text-[14px] underline hover:opacity-70">privacy@themalive.com</a>.</p>
+            <p>For privacy-related inquiries, please contact us at <a href="mailto:privacy@themalive.com" className="text-sm underline hover:opacity-70">privacy@themalive.com</a>.</p>
           </section>
         </div>
       </div>

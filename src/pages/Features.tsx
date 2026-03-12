@@ -205,24 +205,23 @@ export default function Features() {
   });
 
   return (
-    <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+    <div className="flex-1 flex flex-col bg-page">
       <JsonLd data={PRODUCT_SCHEMA} />
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="flex items-end gap-3 mb-8" style={{ color: "hsl(var(--foreground))" }}>
+        <div className="flex items-end gap-3 mb-8 text-fg">
           <ThemalLogo className="h-10 sm:h-12" />
-          <h1 className="text-3xl sm:text-4xl font-light title-font" style={{ color: "hsl(var(--foreground))", lineHeight: ".75" }}>
+          <h1 className="text-3xl sm:text-4xl font-light title-font text-fg" style={{ lineHeight: ".75" }}>
             Features
           </h1>
         </div>
 
-        <p className="text-[14px] leading-relaxed mb-10" style={{ color: "hsl(var(--foreground))" }}>
+        <p className="text-sm leading-relaxed mb-10 text-fg">
           Everything you can do with the Themal design system editor.
         </p>
 
         <section className="mb-16">
           <h2
-            className="text-xl font-medium mb-6 pb-2 border-b"
-            style={{ color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+            className="text-xl font-medium mb-6 pb-2 border-b text-fg border-theme"
           >
             Features
           </h2>
@@ -251,10 +250,10 @@ export default function Features() {
               { title: "Web Component", desc: "Drop into Vue, Svelte, Astro, WordPress, Shopify, or any platform via a single script tag." },
             ].map(({ title, desc }) => (
               <div key={title} className="flex items-start gap-2">
-                <span className="mt-0.5" style={{ color: "hsl(var(--brand))" }}>{check}</span>
+                <span className="mt-0.5 text-brand">{check}</span>
                 <div>
-                  <p className="text-[14px] font-medium" style={{ color: "hsl(var(--foreground))" }}>{title}</p>
-                  <p className="text-[13px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>{desc}</p>
+                  <p className="text-sm font-medium text-fg">{title}</p>
+                  <p className="text-xs font-light text-muted">{desc}</p>
                 </div>
               </div>
             ))}
@@ -263,8 +262,7 @@ export default function Features() {
 
         <section className="mb-16">
           <h2
-            className="text-xl font-medium mb-6 pb-2 border-b"
-            style={{ color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+            className="text-xl font-medium mb-6 pb-2 border-b text-fg border-theme"
           >
             Upcoming
           </h2>
@@ -276,12 +274,12 @@ export default function Features() {
               { title: "Mobile App", desc: "Edit and preview your design system on the go with a native iOS and Android app." },
             ].map(({ title, desc }) => (
               <div key={title} className="flex items-start gap-2">
-                <svg className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "hsl(var(--muted-foreground))" }} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <svg className="w-4 h-4 flex-shrink-0 mt-0.5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <circle cx="12" cy="12" r="10" strokeDasharray="4 3" />
                 </svg>
                 <div>
-                  <p className="text-[14px] font-medium" style={{ color: "hsl(var(--foreground))" }}>{title}</p>
-                  <p className="text-[13px] font-light" style={{ color: "hsl(var(--muted-foreground))" }}>{desc}</p>
+                  <p className="text-sm font-medium text-fg">{title}</p>
+                  <p className="text-xs font-light text-muted">{desc}</p>
                 </div>
               </div>
             ))}
@@ -289,8 +287,7 @@ export default function Features() {
         </section>
 
         <h2
-          className="text-xl font-medium mb-6 pb-2 border-b"
-          style={{ color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+          className="text-xl font-medium mb-6 pb-2 border-b text-fg border-theme"
         >
           Changelog
         </h2>
@@ -299,8 +296,7 @@ export default function Features() {
           {features.map(({ version, items }) => (
             <section key={version}>
               <h2
-                className="text-xl font-medium mb-4 pb-2 border-b"
-                style={{ color: "hsl(var(--foreground))", borderColor: "hsl(var(--border))" }}
+                className="text-xl font-medium mb-4 pb-2 border-b text-fg border-theme"
               >
                 v{version}
               </h2>
@@ -308,10 +304,9 @@ export default function Features() {
                 {items.map((item) => (
                   <li
                     key={item}
-                    className="flex items-start gap-2 text-[14px] font-light"
-                    style={{ color: "hsl(var(--foreground))" }}
+                    className="flex items-start gap-2 text-sm font-light text-fg"
                   >
-                    <span style={{ color: "hsl(var(--brand))" }}>{check}</span>
+                    <span className="text-brand">{check}</span>
                     <span>{item}</span>
                   </li>
                 ))}

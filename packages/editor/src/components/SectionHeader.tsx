@@ -64,7 +64,7 @@ export function SectionHeader({
       data-axe-exclude
     >
       <h2
-        className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2 ds-text-fg"
+        className="text-sm sm:text-base md:text-lg font-bold tracking-wider mb-[5px] flex items-baseline gap-2 ds-text-fg"
       >
         {title}{" "}
         <a
@@ -106,7 +106,7 @@ export function SectionHeader({
           >
             <button
               onClick={onToggleCss}
-              className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+              className="h-10 px-2 sm:px-3 text-sm font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
               style={{
                 backgroundColor: cssActive ? activeBg : "transparent",
                 color: cssActive ? activeColor : inactiveColor,
@@ -133,7 +133,7 @@ export function SectionHeader({
             />
             <button
               onClick={onToggleTokens}
-              className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+              className="h-10 px-2 sm:px-3 text-sm font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
               style={{
                 backgroundColor: tokensActive ? activeBg : "transparent",
                 color: tokensActive ? activeColor : inactiveColor,
@@ -159,7 +159,7 @@ export function SectionHeader({
             <button
               key={action.value}
               onClick={action.onClick}
-              className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+              className="h-10 px-2 sm:px-3 text-sm font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
               style={{ color: inactiveColor }}
             >
               <span className="truncate">{action.label}</span>
@@ -167,7 +167,7 @@ export function SectionHeader({
           ))}
           <button
             onClick={onReset}
-            className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+            className="h-10 px-2 sm:px-3 text-sm font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1"
             style={{ color: inactiveColor }}
           >
             <svg

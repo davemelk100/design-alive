@@ -194,7 +194,7 @@ export function MobileColorPicker({
 
         {/* Hex input */}
         <div>
-          <label className="text-[13px] font-medium mb-1.5 block ds-text-fg">
+          <label className="text-xs font-medium mb-1.5 block ds-text-fg">
             Hex
           </label>
           <input
@@ -211,7 +211,7 @@ export function MobileColorPicker({
                 setMobilePickerHex(v);
               }
             }}
-            className="w-full h-10 px-3 text-[16px] font-mono rounded-lg border bg-transparent ds-text-fg ds-border"
+            className="w-full h-10 px-3 text-base font-mono rounded-lg border bg-transparent ds-text-fg ds-border"
           />
         </div>
       </div>
@@ -220,7 +220,7 @@ export function MobileColorPicker({
       <div className="p-4">
         <button
           onClick={() => setMobilePickerKey(null)}
-          className="w-full h-12 rounded-xl text-[16px] font-medium cursor-pointer"
+          className="w-full h-12 rounded-xl text-base font-medium cursor-pointer"
           style={{
             backgroundColor: "hsl(var(--primary))",
             color: "hsl(var(--primary-foreground))",

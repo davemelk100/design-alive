@@ -10,8 +10,7 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
   return (
     <div>
       <p
-        className="text-[11px] font-medium uppercase tracking-wider mb-1"
-        style={{ color: "hsl(var(--muted-foreground))" }}
+        className="text-[11px] font-medium uppercase tracking-wider mb-1 text-muted"
       >
         {label}
       </p>
@@ -23,16 +22,14 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
         }}
       >
         <pre
-          className="text-[13px] font-mono leading-relaxed m-0 pr-10 whitespace-pre-wrap break-words"
-          style={{ color: "hsl(var(--foreground))" }}
+          className="text-xs font-mono leading-relaxed m-0 pr-10 whitespace-pre-wrap break-words text-fg"
         >
           {code}
         </pre>
         <button
-          className="absolute top-3 right-3 p-1.5 rounded-md transition-opacity hover:opacity-70 cursor-pointer"
+          className="absolute top-3 right-3 p-1.5 rounded-md transition-opacity hover:opacity-70 cursor-pointer text-muted"
           style={{
             backgroundColor: "hsl(var(--foreground) / 0.08)",
-            color: "hsl(var(--muted-foreground))",
             border: "none",
           }}
           onClick={() => {
@@ -184,10 +181,9 @@ export default function LandingPage() {
   return (
     <div
       ref={scrollRef}
-      className="flex flex-col"
+      className="flex flex-col bg-page"
       style={{
         ...DEFAULT_THEME,
-        backgroundColor: "hsl(var(--background))",
         height: "100dvh",
         overflowY: "auto",
         scrollSnapType: "y mandatory",
@@ -234,15 +230,13 @@ export default function LandingPage() {
           <ThemalLogo className="w-48 sm:w-64 lg:w-80" />
 
           <h1
-            className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight"
-            style={{ color: "hsl(var(--foreground))" }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-fg"
           >
             Real Designs. Real Time. Real Code.
           </h1>
 
           <p
-            className="text-base sm:text-lg max-w-xl font-light leading-relaxed"
-            style={{ color: "hsl(var(--muted-foreground))" }}
+            className="text-base sm:text-lg max-w-xl font-light leading-relaxed text-muted"
           >
             Plug Themal into your app. Design your elements on screen. Open a pull request right from the editor.
           </p>
@@ -273,8 +267,7 @@ export default function LandingPage() {
           {/* Framework logos */}
           <div className="flex flex-col items-center gap-3 mt-4">
             <p
-              className="text-[11px] font-medium uppercase tracking-widest"
-              style={{ color: "hsl(var(--muted-foreground))" }}
+              className="text-[11px] font-medium uppercase tracking-widest text-muted"
             >
               Works with
             </p>
@@ -366,8 +359,7 @@ export default function LandingPage() {
               ].map((fw) => (
                 <div
                   key={fw.name}
-                  className="flex flex-col items-center gap-1.5 opacity-70 hover:opacity-90 transition-opacity"
-                  style={{ color: "hsl(var(--foreground))" }}
+                  className="flex flex-col items-center gap-1.5 opacity-70 hover:opacity-90 transition-opacity text-fg"
                   title={fw.name}
                 >
                   {fw.svg}
@@ -391,12 +383,11 @@ export default function LandingPage() {
           aria-label="Scroll down"
         >
           <svg
-            className="w-6 h-6"
+            className="w-6 h-6 text-muted"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
             strokeWidth={2}
-            style={{ color: "hsl(var(--muted-foreground))" }}
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
@@ -406,18 +397,16 @@ export default function LandingPage() {
       {/* Dev power */}
       <section
         className="relative z-10 flex-shrink-0 flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-10 sm:py-24"
-        style={{ backgroundColor: "transparent", minHeight: "100dvh", scrollSnapAlign: "start" }}
+        style={{ minHeight: "100dvh", scrollSnapAlign: "start" }}
       >
         <div className="max-w-4xl mx-auto text-center flex flex-col gap-5 sm:gap-10">
           <h2
-            className="text-xl sm:text-3xl font-light tracking-tight"
-            style={{ color: "hsl(var(--foreground))" }}
+            className="text-xl sm:text-3xl font-light tracking-tight text-fg"
           >
             A developer's design system, alive.
           </h2>
           <p
-            className="text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed"
-            style={{ color: "hsl(var(--muted-foreground))" }}
+            className="text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed text-muted"
           >
             Themal is a visual editor that plugs directly into your codebase.
             Adjust colors, typography, spacing, buttons, cards, and interaction
@@ -436,14 +425,12 @@ export default function LandingPage() {
             ].map((item) => (
               <div key={item.title}>
                 <h3
-                  className="text-sm font-medium uppercase tracking-wider mb-2"
-                  style={{ color: "hsl(var(--foreground))" }}
+                  className="text-sm font-medium uppercase tracking-wider mb-2 text-fg"
                 >
                   {item.title}
                 </h3>
                 <p
-                  className="text-sm font-light leading-relaxed"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
+                  className="text-sm font-light leading-relaxed text-muted"
                 >
                   {item.detail}
                 </p>
@@ -483,12 +470,11 @@ export default function LandingPage() {
           aria-label="Scroll down"
         >
           <svg
-            className="w-6 h-6"
+            className="w-6 h-6 text-muted"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
             strokeWidth={2}
-            style={{ color: "hsl(var(--muted-foreground))" }}
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
@@ -498,18 +484,16 @@ export default function LandingPage() {
       {/* Promo */}
       <section
         className="relative z-10 flex-shrink-0 flex flex-col justify-center px-4 sm:px-6 lg:px-8 py-10 sm:py-24"
-        style={{ backgroundColor: "transparent", minHeight: "100dvh", scrollSnapAlign: "start" }}
+        style={{ minHeight: "100dvh", scrollSnapAlign: "start" }}
       >
         <div className="max-w-4xl mx-auto text-center flex flex-col gap-5 sm:gap-10">
           <h2
-            className="text-xl sm:text-3xl font-light tracking-tight"
-            style={{ color: "hsl(var(--foreground))" }}
+            className="text-xl sm:text-3xl font-light tracking-tight text-fg"
           >
             Not just for developers.
           </h2>
           <p
-            className="text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed"
-            style={{ color: "hsl(var(--muted-foreground))" }}
+            className="text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed text-muted"
           >
             Product owners can present design options to stakeholders in real
             time. Marketing teams can explore brand directions without waiting on
@@ -529,14 +513,12 @@ export default function LandingPage() {
             ].map((item) => (
               <div key={item.role}>
                 <h3
-                  className="text-sm font-medium uppercase tracking-wider mb-2"
-                  style={{ color: "hsl(var(--foreground))" }}
+                  className="text-sm font-medium uppercase tracking-wider mb-2 text-fg"
                 >
                   {item.role}
                 </h3>
                 <p
-                  className="text-sm font-light leading-relaxed"
-                  style={{ color: "hsl(var(--muted-foreground))" }}
+                  className="text-sm font-light leading-relaxed text-muted"
                 >
                   {item.detail}
                 </p>
@@ -572,12 +554,11 @@ export default function LandingPage() {
           aria-label="Scroll to top"
         >
           <svg
-            className="w-6 h-6"
+            className="w-6 h-6 text-muted"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
             strokeWidth={2}
-            style={{ color: "hsl(var(--muted-foreground))" }}
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
           </svg>
@@ -589,7 +570,6 @@ export default function LandingPage() {
         className="relative z-10 flex-shrink-0 [&>*]:border-t-0 [&_footer]:!bg-transparent"
         style={{
           scrollSnapAlign: "start",
-          backgroundColor: "transparent",
         }}
       >
         <SiteFooterBranding />

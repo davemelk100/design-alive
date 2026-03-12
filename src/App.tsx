@@ -54,7 +54,7 @@ export default function App() {
           <main id="main-content" className="flex-1 relative z-10 flex flex-col">
             <Suspense
               fallback={
-                <div className="min-h-screen" style={{ backgroundColor: "hsl(var(--background))" }}>
+                <div className="min-h-screen bg-page">
                   <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
                     <div className="h-6 w-24 rounded bg-current opacity-10 mb-6" />
                     <div className="h-10 w-64 rounded bg-current opacity-10 mb-8" />

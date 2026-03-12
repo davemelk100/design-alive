@@ -212,7 +212,7 @@ export function IconImportModal({ open, onClose, onImport }: Props) {
         <div
           className="flex items-center justify-between px-5 pt-5 pb-3"
         >
-          <h2 className="text-[18px] font-medium">Import Icons</h2>
+          <h2 className="text-lg font-medium">Import Icons</h2>
           <button
             onClick={onClose}
             className="p-1 rounded-lg transition-opacity hover:opacity-70 ds-text-muted"
@@ -230,7 +230,7 @@ export function IconImportModal({ open, onClose, onImport }: Props) {
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className="ds-icon-import-tab px-3 py-1.5 rounded-lg text-[13px] font-light transition-colors"
+              className="ds-icon-import-tab px-3 py-1.5 rounded-lg text-xs font-light transition-colors"
               style={{
                 backgroundColor: tab === t.id ? "hsl(var(--foreground) / 0.1)" : "transparent",
                 color: tab === t.id ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))",
@@ -294,20 +294,20 @@ export function IconImportModal({ open, onClose, onImport }: Props) {
         <div
           className="flex items-center justify-between px-5 py-3 border-t ds-border"
         >
-          <span className="text-[13px] font-light ds-text-muted">
+          <span className="text-xs font-light ds-text-muted">
             {selected.size} selected
           </span>
           <div className="flex gap-2">
             <button
               onClick={onClose}
-              className="px-4 py-2 text-[13px] font-light rounded-lg transition-opacity hover:opacity-70 ds-text-muted"
+              className="px-4 py-2 text-xs font-light rounded-lg transition-opacity hover:opacity-70 ds-text-muted"
             >
               Cancel
             </button>
             <button
               onClick={handleImport}
               disabled={selected.size === 0 || cdnFetchingSelected}
-              className="px-4 py-2 text-[13px] font-medium rounded-lg transition-opacity hover:opacity-90 disabled:opacity-40 ds-surface-invert"
+              className="px-4 py-2 text-xs font-medium rounded-lg transition-opacity hover:opacity-90 disabled:opacity-40 ds-surface-invert"
             >
               {cdnFetchingSelected ? "Fetching..." : `Import (${selected.size})`}
             </button>
@@ -345,7 +345,7 @@ function SpriteTab({
 }) {
   return (
     <div className="space-y-3">
-      <p className="text-[13px] font-light ds-text-muted">
+      <p className="text-xs font-light ds-text-muted">
         Paste a URL to an SVG sprite file containing &lt;symbol&gt; elements.
       </p>
       <div className="flex gap-2">
@@ -354,13 +354,13 @@ function SpriteTab({
           value={url}
           onChange={(e) => onUrlChange(e.target.value)}
           placeholder="https://example.com/icons.svg"
-          className="flex-1 px-3 py-2 text-[13px] font-light rounded-lg border outline-none ds-border ds-surface-bg"
+          className="flex-1 px-3 py-2 text-xs font-light rounded-lg border outline-none ds-border ds-surface-bg"
           onKeyDown={(e) => { if (e.key === "Enter") onFetch(); }}
         />
         <button
           onClick={onFetch}
           disabled={loading || !url.trim()}
-          className="px-4 py-2 text-[13px] font-medium rounded-lg transition-opacity hover:opacity-90 disabled:opacity-40 ds-surface-invert"
+          className="px-4 py-2 text-xs font-medium rounded-lg transition-opacity hover:opacity-90 disabled:opacity-40 ds-surface-invert"
         >
           {loading ? "Loading..." : "Fetch"}
         </button>
@@ -411,7 +411,7 @@ function FontTab({
 }) {
   return (
     <div className="space-y-3">
-      <p className="text-[13px] font-light ds-text-muted">
+      <p className="text-xs font-light ds-text-muted">
         Paste a URL to an icon font CSS file, or choose a preset.
       </p>
       <div className="flex flex-wrap gap-2">
@@ -436,13 +436,13 @@ function FontTab({
           value={url}
           onChange={(e) => onUrlChange(e.target.value)}
           placeholder="https://cdn.example.com/icons.css"
-          className="flex-1 px-3 py-2 text-[13px] font-light rounded-lg border outline-none ds-border ds-surface-bg"
+          className="flex-1 px-3 py-2 text-xs font-light rounded-lg border outline-none ds-border ds-surface-bg"
           onKeyDown={(e) => { if (e.key === "Enter") onFetch(); }}
         />
         <button
           onClick={onFetch}
           disabled={loading || !url.trim()}
-          className="px-4 py-2 text-[13px] font-medium rounded-lg transition-opacity hover:opacity-90 disabled:opacity-40 ds-surface-invert"
+          className="px-4 py-2 text-xs font-medium rounded-lg transition-opacity hover:opacity-90 disabled:opacity-40 ds-surface-invert"
         >
           {loading ? "Loading..." : "Fetch"}
         </button>
@@ -503,7 +503,7 @@ function CdnTab({
 }) {
   return (
     <div className="space-y-3">
-      <p className="text-[13px] font-light ds-text-muted">
+      <p className="text-xs font-light ds-text-muted">
         Pick an icon library and select icons to import.
       </p>
       <div className="flex gap-2 flex-wrap">
@@ -511,7 +511,7 @@ function CdnTab({
           <button
             key={lib.id}
             onClick={() => onLibraryChange(lib.id)}
-            className="px-3 py-1.5 text-[13px] font-light rounded-lg border transition-colors"
+            className="px-3 py-1.5 text-xs font-light rounded-lg border transition-colors"
             style={{
               borderColor: library === lib.id ? "hsl(var(--foreground))" : "hsl(var(--border))",
               color: library === lib.id ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))",
@@ -528,7 +528,7 @@ function CdnTab({
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search icons..."
-          className="w-full px-3 py-2 text-[13px] font-light rounded-lg border outline-none ds-border ds-surface-bg"
+          className="w-full px-3 py-2 text-xs font-light rounded-lg border outline-none ds-border ds-surface-bg"
         />
       )}
       {loading && <LoadingSpinner />}
@@ -582,7 +582,7 @@ function CdnTab({
           {hasMore && (
             <button
               onClick={onLoadMore}
-              className="w-full py-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 ds-text-muted"
+              className="w-full py-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 ds-text-muted"
               style={{
                 border: "1px solid hsl(var(--border))",
               }}
@@ -660,7 +660,7 @@ function IconGrid({
 function ErrorMessage({ message }: { message: string }) {
   return (
     <div
-      className="text-[13px] font-light rounded-lg p-3 ds-text-destructive"
+      className="text-xs font-light rounded-lg p-3 ds-text-destructive"
       style={{
         backgroundColor: "hsl(var(--destructive) / 0.1)",
       }}

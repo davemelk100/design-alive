@@ -72,17 +72,17 @@ function UpgradeModal({
             </svg>
           </div>
           <div>
-            <h3 className="text-[18px] font-medium ds-text-fg">Pro Feature</h3>
-            <p className="text-[13px] ds-text-muted">{feature.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</p>
+            <h3 className="text-lg font-medium ds-text-fg">Pro Feature</h3>
+            <p className="text-xs ds-text-muted">{feature.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</p>
           </div>
         </div>
-        <p className="text-[14px] font-light mb-5 ds-text-muted">
+        <p className="text-sm font-light mb-5 ds-text-muted">
           This feature requires a Themal Pro license. Upgrade to unlock all premium features including harmony schemes, color locks, interaction controls, and more.
         </p>
         <div className="flex flex-col gap-2">
           <a
             href={upgradeUrl}
-            className="w-full text-center px-4 py-2.5 text-[14px] font-medium rounded-lg transition-opacity hover:opacity-90 ds-surface-invert"
+            className="w-full text-center px-4 py-2.5 text-sm font-medium rounded-lg transition-opacity hover:opacity-90 ds-surface-invert"
           >
             View Pricing
           </a>
@@ -93,7 +93,7 @@ function UpgradeModal({
                 onClose();
                 window.dispatchEvent(new CustomEvent("themal:sign-in"));
               }}
-              className="w-full text-center px-4 py-2.5 text-[14px] font-light rounded-lg transition-opacity hover:opacity-70 ds-surface-muted"
+              className="w-full text-center px-4 py-2.5 text-sm font-light rounded-lg transition-opacity hover:opacity-70 ds-surface-muted"
             >
               Already have a license? Sign in
             </button>
@@ -101,7 +101,7 @@ function UpgradeModal({
           {!showLicenseInput ? (
             <button
               onClick={() => setShowLicenseInput(true)}
-              className="w-full text-center px-4 py-2 text-[13px] font-light transition-opacity hover:opacity-70 ds-text-muted"
+              className="w-full text-center px-4 py-2 text-xs font-light transition-opacity hover:opacity-70 ds-text-muted"
             >
               Enter license key
             </button>
@@ -115,14 +115,14 @@ function UpgradeModal({
                   value={licenseInput}
                   onChange={(e) => { setLicenseInput(e.target.value); setLicenseError(""); }}
                   placeholder="THEMAL-XXXX-XXXX-XXXX"
-                  className="flex-1 px-3 py-2 text-[13px] font-light rounded-lg border outline-none ds-text-fg ds-bg-card"
+                  className="flex-1 px-3 py-2 text-xs font-light rounded-lg border outline-none ds-text-fg ds-bg-card"
                   style={{ borderColor: licenseError ? "hsl(var(--destructive))" : "hsl(var(--border))" }}
                   onKeyDown={(e) => { if (e.key === "Enter") handleActivate(); }}
                   autoFocus
                 />
                 <button
                   onClick={handleActivate}
-                  className="px-3 py-2 text-[13px] font-medium rounded-lg transition-opacity hover:opacity-90 ds-surface-invert"
+                  className="px-3 py-2 text-xs font-medium rounded-lg transition-opacity hover:opacity-90 ds-surface-invert"
                 >
                   Activate
                 </button>

@@ -49,7 +49,7 @@ export function CustomSelect({
     ? placeholder
     : (options.find((o) => o.value === value)?.label ?? value);
   const h = size === "sm" ? "h-8" : "h-9";
-  const text = size === "sm" ? "text-[13px]" : "text-[14px]";
+  const text = size === "sm" ? "text-xs" : "text-sm";
   const px = size === "sm" ? "px-2" : "px-3";
   const py = size === "sm" ? "py-1" : "py-2";
 

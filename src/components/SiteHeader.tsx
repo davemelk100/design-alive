@@ -113,13 +113,10 @@ export default function SiteHeader() {
 
   return (
     <header
-      className="sticky top-0 z-50"
-      style={{
-        backgroundColor: "hsl(var(--background))",
-      }}
+      className="sticky top-0 z-50 bg-page"
     >
       {isEditor ? (
-        <div className="w-full mx-auto flex" style={{ maxWidth: "1500px" }}>
+        <div className="w-full mx-auto flex site-container">
           {/* Match sidebar: w-48 + pl-4 pr-2 */}
           <div className="hidden lg:flex items-end w-48 flex-shrink-0 pl-4 pr-2 py-3">
             <Link
@@ -141,9 +138,8 @@ export default function SiteHeader() {
                   key={id}
                   ref={(el) => { navItemRefs.current[id] = el; }}
                   href={`#${id}`}
-                  className="text-[14px] sm:text-[16px] md:text-[20px] font-light flex items-baseline gap-1 sm:gap-2 whitespace-nowrap no-underline"
+                  className="text-sm sm:text-base md:text-lg font-light flex items-baseline gap-1 sm:gap-2 whitespace-nowrap no-underline text-fg"
                   style={{
-                    color: "hsl(var(--foreground))",
                     transform: `translateX(${navOffsets[id] ?? 0}px)`,
                     transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                   }}
@@ -168,7 +164,7 @@ export default function SiteHeader() {
           </div>
         </div>
       ) : (
-        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-end gap-6" style={{ maxWidth: "1500px" }}>
+        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-end gap-6 site-container">
           <Link
             to="/"
             className="flex-shrink-0 hover:opacity-70 transition-opacity"

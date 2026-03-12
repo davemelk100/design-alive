@@ -1448,7 +1448,7 @@ function DesignSystemEditorInner({
                       <a
                         key={href}
                         href={href}
-                        className={`ds-nav-link text-[13px] font-light uppercase tracking-wider hover:opacity-70 whitespace-nowrap${isActive ? " ds-active" : ""}`}
+                        className={`ds-nav-link text-xs font-light uppercase tracking-wider hover:opacity-70 whitespace-nowrap${isActive ? " ds-active" : ""}`}
                       >
                         {label}
                       </a>
@@ -1598,7 +1598,7 @@ function DesignSystemEditorInner({
         >
           <button
             onClick={() => setShowGlobalResetModal(true)}
-            className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+            className="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
             title="Reset all sections to defaults"
           >
             <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -1610,7 +1610,7 @@ function DesignSystemEditorInner({
             <button
               type="button"
               onClick={handleGenerate}
-              className="ds-global-btn flex-1 min-w-0 h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+              className="ds-global-btn flex-1 min-w-0 h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
               title="Generate new random palette"
             >
               <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -1622,7 +1622,7 @@ function DesignSystemEditorInner({
               <button
                 type="button"
                 onClick={handleUndo}
-                className="ds-global-btn ds-undo-btn h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center shrink-0"
+                className="ds-global-btn ds-undo-btn h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center shrink-0"
                 title="Undo last refresh"
                 aria-label="Undo last refresh"
               >
@@ -1642,7 +1642,7 @@ function DesignSystemEditorInner({
             <div className="relative w-full">
               <button
                 onClick={() => setShuffleOpen(!shuffleOpen)}
-                className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+                className="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
               >
                 <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
@@ -1668,7 +1668,7 @@ function DesignSystemEditorInner({
                   >
                     <button
                       onClick={() => { setHarmonySchemeIndex(-1); setShuffleOpen(false); }}
-                      className="w-full text-left px-4 py-2 text-[13px] font-light transition-colors hover:opacity-80 flex items-center justify-between ds-text-fg"
+                      className="w-full text-left px-4 py-2 text-xs font-light transition-colors hover:opacity-80 flex items-center justify-between ds-text-fg"
                     >
                       Default
                       {harmonySchemeIndex < 0 && <span className="text-green-600 dark:text-green-400">&#10003;</span>}
@@ -1677,7 +1677,7 @@ function DesignSystemEditorInner({
                       <button
                         key={scheme}
                         onClick={() => handleRegenerate(idx)}
-                        className="w-full text-left px-4 py-2 text-[13px] font-light transition-colors hover:opacity-80 flex items-center justify-between ds-text-fg"
+                        className="w-full text-left px-4 py-2 text-xs font-light transition-colors hover:opacity-80 flex items-center justify-between ds-text-fg"
                       >
                         {scheme}
                         {idx === harmonySchemeIndex && <span className="text-green-600 dark:text-green-400">&#10003;</span>}
@@ -1697,7 +1697,7 @@ function DesignSystemEditorInner({
           >
             <button
               onClick={() => setShowImagePaletteModal(true)}
-              className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+              className="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
               title="Extract a color palette from an image"
             >
               {imagePaletteStatus === "extracting" ? (
@@ -1733,7 +1733,7 @@ function DesignSystemEditorInner({
           {accessibilityAudit && (
             <button
               onClick={() => runAccessibilityAudit(true)}
-              className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+              className="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
               title="Run accessibility audit"
             >
               <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -1745,7 +1745,7 @@ function DesignSystemEditorInner({
           {onAiGenerate && (
             <button
               onClick={() => setShowAiGenerateModal(true)}
-              className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+              className="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
               title="Generate theme with AI"
             >
               <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -1761,7 +1761,7 @@ function DesignSystemEditorInner({
           <PremiumGate feature="palette-export" variant="inline" hideLock upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
             <button
               onClick={() => setShowPaletteExport(true)}
-              className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+              className="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
               title="Export palette"
             >
               <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -1776,7 +1776,7 @@ function DesignSystemEditorInner({
               window.location.hash = hash;
               navigator.clipboard.writeText(window.location.href).then(() => { setShareCopied(true); setTimeout(() => setShareCopied(false), 2000); });
             }}
-            className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+            className="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
             title="Share theme URL"
           >
             <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -1788,7 +1788,7 @@ function DesignSystemEditorInner({
             <PremiumGate feature="pr-integration" variant="inline" hideLock upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
               <button
                 onClick={openPrModal}
-                className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+                className="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
                 title="Open a GitHub PR"
               >
                 <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -1800,7 +1800,7 @@ function DesignSystemEditorInner({
           )}
           <button
             onClick={() => setShowPurgeModal(true)}
-            className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+            className="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
             title="Clear all localStorage and sessionStorage, then reload"
           >
             <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -1815,7 +1815,7 @@ function DesignSystemEditorInner({
                 <a
                   key={to}
                   href={to}
-                  className="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2 ds-text-fg"
+                  className="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2 ds-text-fg"
                 >
                   <span className="truncate">{label}</span>
                 </a>
@@ -1947,7 +1947,7 @@ function DesignSystemEditorInner({
               transform: `translateX(${navOffsets[s.id] ?? 0}px)`,
             }}
           >
-            <h2 className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider m-0 p-0">{s.label}</h2>
+            <h2 className="text-sm sm:text-base md:text-lg font-bold tracking-wider m-0 p-0">{s.label}</h2>
             <svg
               className="w-[1em] h-[1em] opacity-60"
               fill="none"
@@ -2002,13 +2002,13 @@ function DesignSystemEditorInner({
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </div>
-                        <p className="text-[16px] font-medium">WCAG AA Passed</p>
-                        <p className="text-[14px] font-light ds-text-muted">
+                        <p className="text-base font-medium">WCAG AA Passed</p>
+                        <p className="text-sm font-light ds-text-muted">
                           All color contrast checks passed.
                         </p>
                         <button
                           onClick={() => setAuditStatus("idle")}
-                          className="px-4 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                          className="px-4 py-2 text-sm font-light rounded-lg transition-colors hover:opacity-80"
                           style={{
                             backgroundColor: "hsl(var(--brand))",
                             color: "hsl(var(--brand-foreground, var(--background)))",
@@ -2024,16 +2024,16 @@ function DesignSystemEditorInner({
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                           </svg>
                         </div>
-                        <p className="text-[16px] font-medium">
+                        <p className="text-base font-medium">
                           {auditViolations.length} Contrast Issue{auditViolations.length !== 1 ? "s" : ""} Found
                         </p>
-                        <p className="text-[14px] font-light ds-text-muted">
+                        <p className="text-sm font-light ds-text-muted">
                           Some color combinations do not meet WCAG AA contrast requirements.
                         </p>
                         <div className="flex items-center justify-center gap-3">
                           <button
                             onClick={() => setAuditStatus("idle")}
-                            className="px-4 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 ds-bg-muted ds-text-muted"
+                            className="px-4 py-2 text-sm font-light rounded-lg transition-colors hover:opacity-80 ds-bg-muted ds-text-muted"
                           >
                             Ignore
                           </button>
@@ -2042,7 +2042,7 @@ function DesignSystemEditorInner({
                               setAuditStatus("idle");
                               fixContrastIssues();
                             }}
-                            className="px-4 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                            className="px-4 py-2 text-sm font-light rounded-lg transition-colors hover:opacity-80"
                             style={{
                               backgroundColor: "hsl(var(--brand))",
                               color: "hsl(var(--brand-foreground, var(--background)))",
@@ -2306,7 +2306,7 @@ function DesignSystemEditorInner({
             className="rounded-xl p-6 w-[340px] shadow-xl ds-bg-card ds-text-card"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 className="text-[18px] font-light mb-4">Export Palette</h3>
+            <h3 className="text-lg font-light mb-4">Export Palette</h3>
             <div className="flex flex-col gap-2">
               {(
                 [
@@ -2416,7 +2416,7 @@ function DesignSystemEditorInner({
                 <button
                   key={label}
                   onClick={action}
-                  className="w-full text-left px-3 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 text-sm font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
                   style={{
                     backgroundColor: "hsl(var(--muted))",
                     color: colors["--muted"]
@@ -2431,7 +2431,7 @@ function DesignSystemEditorInner({
             </div>
             {paletteExportCopied && (
               <p
-                className="text-[13px] font-light mt-2"
+                className="text-xs font-light mt-2"
                 style={{ color: "hsl(var(--success))" }}
               >
                 Copied to clipboard!
@@ -2440,7 +2440,7 @@ function DesignSystemEditorInner({
             <div className="flex justify-end mt-4">
               <button
                 onClick={() => setShowPaletteExport(false)}
-                className="px-4 py-1.5 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                className="px-4 py-1.5 text-sm font-light rounded-lg transition-colors hover:opacity-80"
                 style={{
                   backgroundColor: "hsl(var(--muted))",
                   color: colors["--muted"]
@@ -2495,12 +2495,12 @@ function DesignSystemEditorInner({
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </div>
-              <h3 className="text-[18px] font-medium">Purge Storage</h3>
+              <h3 className="text-lg font-medium">Purge Storage</h3>
             </div>
-            <p className="text-[14px] font-light mb-4 ds-text-muted">
+            <p className="text-sm font-light mb-4 ds-text-muted">
               This will clear all saved theme data, preferences, and cached settings. The page will reload with default values. This cannot be undone.
             </p>
-            <p className="text-[13px] font-light mb-4 ds-text-muted">
+            <p className="text-xs font-light mb-4 ds-text-muted">
               Save your current theme first?
             </p>
             <div className="flex gap-2 mb-6">
@@ -2509,7 +2509,7 @@ function DesignSystemEditorInner({
                   setShowPurgeModal(false);
                   setShowPaletteExport(true);
                 }}
-                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 border ds-border ds-text-fg"
+                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 border ds-border ds-text-fg"
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
@@ -2534,7 +2534,7 @@ function DesignSystemEditorInner({
                   });
                   setShowPurgeModal(false);
                 }}
-                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 border ds-border ds-text-fg"
+                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 border ds-border ds-text-fg"
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
@@ -2545,13 +2545,13 @@ function DesignSystemEditorInner({
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowPurgeModal(false)}
-                className="px-4 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 ds-text-fg"
+                className="px-4 py-2 text-sm font-light rounded-lg transition-colors hover:opacity-80 ds-text-fg"
               >
                 Cancel
               </button>
               <button
                 onClick={handlePurgeStorage}
-                className="px-4 py-2 text-[14px] font-light rounded-lg transition-colors hover:opacity-80"
+                className="px-4 py-2 text-sm font-light rounded-lg transition-colors hover:opacity-80"
                 style={{
                   backgroundColor: "hsl(var(--destructive, 0 84% 60%))",
                   color: "#fff",

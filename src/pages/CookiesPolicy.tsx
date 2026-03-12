@@ -8,16 +8,16 @@ export default function CookiesPolicy() {
   });
 
   return (
-    <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+    <div className="flex-1 flex flex-col bg-page">
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <h1 className="text-3xl sm:text-4xl font-light mb-2" style={{ color: "hsl(var(--foreground))" }}>
+        <h1 className="text-3xl sm:text-4xl font-light mb-2 text-fg">
           Themal's Cookies Policy
         </h1>
-        <p className="text-[14px] mb-8" style={{ color: "hsl(var(--muted-foreground))" }}>
+        <p className="text-sm mb-8 text-muted">
           Last updated: March 3, 2026
         </p>
 
-        <div className="space-y-6 text-[14px] leading-relaxed" style={{ color: "hsl(var(--foreground))" }}>
+        <div className="space-y-6 text-sm leading-relaxed text-fg">
           <section>
             <h2 className="text-xl font-medium mb-2">What Are Cookies</h2>
             <p>Cookies are small text files stored on your device by your web browser. They are used to remember preferences, maintain sessions, and provide analytics about how services are used.</p>
@@ -32,27 +32,27 @@ export default function CookiesPolicy() {
             <h2 className="text-xl font-medium mb-2">Third-Party Cookies</h2>
             <p>Our third-party service providers may set cookies on your device:</p>
 
-            <div className="mt-4 rounded-lg border overflow-hidden" style={{ borderColor: "hsl(var(--border))" }}>
+            <div className="mt-4 rounded-lg border overflow-hidden border-theme">
               <table className="w-full text-left">
                 <thead>
-                  <tr style={{ backgroundColor: "hsl(var(--muted))" }}>
+                  <tr className="bg-muted-surface">
                     <th className="px-4 py-2 font-medium">Provider</th>
                     <th className="px-4 py-2 font-medium">Purpose</th>
                     <th className="px-4 py-2 font-medium">Type</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <tr className="border-t border-theme">
                     <td className="px-4 py-2">Clerk</td>
                     <td className="px-4 py-2">Authentication &amp; session management. Maintains your sign-in state across page loads.</td>
                     <td className="px-4 py-2">Essential</td>
                   </tr>
-                  <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <tr className="border-t border-theme">
                     <td className="px-4 py-2">Stripe</td>
                     <td className="px-4 py-2">Payment processing &amp; fraud prevention. Set during checkout flows.</td>
                     <td className="px-4 py-2">Essential</td>
                   </tr>
-                  <tr className="border-t" style={{ borderColor: "hsl(var(--border))" }}>
+                  <tr className="border-t border-theme">
                     <td className="px-4 py-2">Google Fonts</td>
                     <td className="px-4 py-2">Font delivery for typography previews. May set cookies for CDN optimization.</td>
                     <td className="px-4 py-2">Functional</td>
@@ -82,7 +82,7 @@ export default function CookiesPolicy() {
 
           <section>
             <h2 className="text-xl font-medium mb-2">Contact</h2>
-            <p>If you have questions about our use of cookies, please contact us at <a href="mailto:privacy@themalive.com" className="text-[14px] underline hover:opacity-70">privacy@themalive.com</a>.</p>
+            <p>If you have questions about our use of cookies, please contact us at <a href="mailto:privacy@themalive.com" className="text-sm underline hover:opacity-70">privacy@themalive.com</a>.</p>
           </section>
         </div>
       </div>

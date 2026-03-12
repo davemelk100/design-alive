@@ -58,20 +58,20 @@ export default function About() {
   });
 
   return (
-    <div className="flex-1 flex flex-col" style={{ backgroundColor: "hsl(var(--background))" }}>
+    <div className="flex-1 flex flex-col bg-page">
       <JsonLd data={FAQ_SCHEMA} />
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="flex items-end gap-3 mb-3" style={{ color: "hsl(var(--foreground))" }}>
+        <div className="flex items-end gap-3 mb-3 text-fg">
           <ThemalLogo className="h-10 sm:h-12" />
-          <h1 className="text-3xl sm:text-4xl font-light title-font" style={{ color: "hsl(var(--foreground))", lineHeight: ".75" }}>
+          <h1 className="text-3xl sm:text-4xl font-light title-font text-fg" style={{ lineHeight: ".75" }}>
             About
           </h1>
         </div>
-        <p className="text-[14px] leading-relaxed mb-8" style={{ color: "hsl(var(--muted-foreground))" }}>
+        <p className="text-sm leading-relaxed mb-8 text-muted">
           A real-time design system editor for the modern web.
         </p>
 
-        <div className="space-y-8 text-[14px] leading-relaxed" style={{ color: "hsl(var(--foreground))" }}>
+        <div className="space-y-8 text-sm leading-relaxed text-fg">
           <section>
             <h2 className="text-xl font-medium mb-2">What is Themal?</h2>
             <p>
@@ -110,7 +110,7 @@ export default function About() {
           <section>
             <h2 className="text-xl font-medium mb-2">For Developers</h2>
             <p>
-              Themal is available as an npm package (<code className="px-1.5 py-0.5 rounded text-[13px]" style={{ backgroundColor: "hsl(var(--muted))" }}>@themal/editor</code>) that you can embed in your own application. Pass a brand color, configure callbacks, and let your users customize their own design system. See the <Link to="/readme" className="underline hover:opacity-70 transition-opacity">Dev docs</Link> for integration details.
+              Themal is available as an npm package (<code className="px-1.5 py-0.5 rounded text-xs bg-muted-surface">@themal/editor</code>) that you can embed in your own application. Pass a brand color, configure callbacks, and let your users customize their own design system. See the <Link to="/readme" className="underline hover:opacity-70 transition-opacity">Dev docs</Link> for integration details.
             </p>
           </section>
 

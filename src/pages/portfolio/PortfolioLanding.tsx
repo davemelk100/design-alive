@@ -27,14 +27,10 @@ export default function PortfolioLanding() {
   }, [searchParams, setSearchParams]);
 
   return (
-    <div className="mx-auto w-full" style={{ maxWidth: "1500px" }}>
+    <div className="mx-auto w-full site-container">
       {showSuccess && (
         <div
-          className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-lg shadow-lg text-[14px] font-medium animate-fade-in"
-          style={{
-            backgroundColor: "hsl(var(--success))",
-            color: "hsl(var(--success-foreground))",
-          }}
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-lg shadow-lg text-sm font-medium animate-fade-in surface-success"
         >
           Payment successful. Pro features are now unlocked.
         </div>
@@ -60,8 +56,8 @@ export default function PortfolioLanding() {
         ]}
         sidebarExtra={
           <>
-            <ContactForm buttonClassName="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2" />
-            <ReportBugForm buttonClassName="ds-global-btn w-full h-9 px-2 text-[13px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2" />
+            <ContactForm buttonClassName="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2" />
+            <ReportBugForm buttonClassName="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2" />
             <div className="mt-auto pt-4">
               <a href="/" className="hover:opacity-70 transition-opacity">
                 <img src="/themal-just-t.svg" alt="Themal" className="h-8" width="27" height="32" />

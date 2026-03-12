@@ -204,7 +204,7 @@ export function CssImportModal({
           <div className="flex items-center justify-end gap-2 pt-2">
             <button
               onClick={handleClose}
-              className="px-4 py-2 text-[14px] font-light rounded-lg ds-surface-muted"
+              className="px-4 py-2 text-sm font-light rounded-lg ds-surface-muted"
             >
               Cancel
             </button>
@@ -269,7 +269,7 @@ export function CssImportModal({
                 }
                 handleClose();
               }}
-              className="px-4 py-2 text-[14px] font-light rounded-lg transition-opacity"
+              className="px-4 py-2 text-sm font-light rounded-lg transition-opacity"
               style={{
                 backgroundColor: "hsl(var(--brand))",
                 color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff",

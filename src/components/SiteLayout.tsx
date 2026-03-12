@@ -13,7 +13,7 @@ export default function SiteLayout() {
       {isEditor ? (
         <Outlet />
       ) : (
-        <div className="flex flex-1 w-full mx-auto" style={{ maxWidth: "1500px" }}>
+        <div className="flex flex-1 w-full mx-auto site-container">
           <SiteNav />
           <div className="flex-1 min-w-0">
             <Outlet />

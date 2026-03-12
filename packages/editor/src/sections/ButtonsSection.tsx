@@ -99,7 +99,7 @@ export function ButtonsSection({
             className="min-w-0 space-y-3 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-[56px]"
           >
             <h2
-              className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2 ds-text-fg"
+              className="text-sm sm:text-base md:text-lg font-bold tracking-wider mb-[5px] flex items-baseline gap-2 ds-text-fg"
             >
               Buttons{" "}
               <a
@@ -135,7 +135,7 @@ export function ButtonsSection({
                   data-axe-exclude
                 >
                   <h3
-                    className="text-[16px] font-normal uppercase tracking-wider ds-text-fg"
+                    className="text-base font-normal uppercase tracking-wider ds-text-fg"
                   >
                     Types
                   </h3>
@@ -170,7 +170,7 @@ export function ButtonsSection({
                             setBtnExportFormat("css");
                             setBtnCssVisible(true);
                           }}
-                          className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                          className="h-10 px-2 sm:px-3 text-sm font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
                           style={{
                             backgroundColor: btnCssVisible && btnExportFormat === "css" ? "hsl(var(--brand))" : "transparent",
                             color: btnCssVisible && btnExportFormat === "css"
@@ -190,7 +190,7 @@ export function ButtonsSection({
                             setBtnExportFormat("tokens");
                             setBtnCssVisible(true);
                           }}
-                          className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                          className="h-10 px-2 sm:px-3 text-sm font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
                           style={{
                             backgroundColor: btnCssVisible && btnExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent",
                             color: btnCssVisible && btnExportFormat === "tokens"
@@ -206,7 +206,7 @@ export function ButtonsSection({
                       </div>
                       <button
                         onClick={() => setShowBtnResetModal(true)}
-                        className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1 ds-text-muted"
+                        className="h-10 px-2 sm:px-3 text-sm font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1 ds-text-muted"
                       >
                         <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" />
@@ -242,7 +242,7 @@ export function ButtonsSection({
                         className="flex items-center justify-between px-3 py-1.5 border-b ds-border"
                       >
                         <span
-                          className="text-[14px] font-light uppercase tracking-wider ds-text-card"
+                          className="text-sm font-light uppercase tracking-wider ds-text-card"
                         >
                           {btnExportFormat === "tokens" ? "Button Tokens" : "Button CSS"}
                         </span>
@@ -347,7 +347,7 @@ export function ButtonsSection({
                       <button
                         key={key}
                         onClick={() => selectButtonPreset(key)}
-                        className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                        className="h-12 px-3 text-sm font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
                         style={
                           active
                             ? {
@@ -378,12 +378,12 @@ export function ButtonsSection({
                   <div className="flex-1 min-w-0 space-y-3 order-2 md:order-1">
                     <div className="space-y-1.5">
                       <p
-                        className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                        className="text-sm font-light uppercase tracking-wider ds-text-muted"
                       >
                         Size
                       </p>
                       <label
-                        className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                        className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                       >
                         <span>Padding X: {buttonStyle.paddingX}px</span>
                         <input
@@ -397,7 +397,7 @@ export function ButtonsSection({
                         />
                       </label>
                       <label
-                        className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                        className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                       >
                         <span>Padding Y: {buttonStyle.paddingY}px</span>
                         <input
@@ -411,7 +411,7 @@ export function ButtonsSection({
                         />
                       </label>
                       <label
-                        className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                        className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                       >
                         <span>Radius: {buttonStyle.borderRadius}px</span>
                         <input
@@ -427,12 +427,12 @@ export function ButtonsSection({
                     </div>
                     <div className="space-y-1.5">
                       <p
-                        className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                        className="text-sm font-light uppercase tracking-wider ds-text-muted"
                       >
                         Text
                       </p>
                       <label
-                        className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                        className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                       >
                         <span>Font Size: {buttonStyle.fontSize}px</span>
                         <input
@@ -446,7 +446,7 @@ export function ButtonsSection({
                         />
                       </label>
                       <label
-                        className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                        className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                       >
                         <span>Font Weight: {buttonStyle.fontWeight}</span>
                         <input
@@ -463,12 +463,12 @@ export function ButtonsSection({
                     </div>
                     <div className="space-y-1.5">
                       <p
-                        className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                        className="text-sm font-light uppercase tracking-wider ds-text-muted"
                       >
                         Shadow
                       </p>
                       <label
-                        className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                        className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                       >
                         <span>Offset X: {buttonStyle.shadowOffsetX}px</span>
                         <input
@@ -479,7 +479,7 @@ export function ButtonsSection({
                         />
                       </label>
                       <label
-                        className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                        className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                       >
                         <span>Offset Y: {buttonStyle.shadowOffsetY}px</span>
                         <input
@@ -490,7 +490,7 @@ export function ButtonsSection({
                         />
                       </label>
                       <label
-                        className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                        className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                       >
                         <span>Blur: {buttonStyle.shadowBlur}px</span>
                         <input
@@ -501,7 +501,7 @@ export function ButtonsSection({
                         />
                       </label>
                       <label
-                        className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                        className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                       >
                         <span>Spread: {buttonStyle.shadowSpread}px</span>
                         <input
@@ -514,12 +514,12 @@ export function ButtonsSection({
                     </div>
                     <div className="space-y-1.5">
                       <p
-                        className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                        className="text-sm font-light uppercase tracking-wider ds-text-muted"
                       >
                         Border
                       </p>
                       <label
-                        className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                        className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                       >
                         <span>Width: {buttonStyle.borderWidth}px</span>
                         <input
@@ -536,7 +536,7 @@ export function ButtonsSection({
                   <div className="flex-1 min-w-0 flex items-start justify-center pt-2 order-1 md:order-2">
                     <div className="w-full space-y-3" data-axe-exclude>
                       <p
-                        className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                        className="text-sm font-light uppercase tracking-wider ds-text-muted"
                       >
                         Preview
                       </p>
@@ -637,7 +637,7 @@ export function ButtonsSection({
                   data-axe-exclude
                 >
                   <h3
-                    className="text-[16px] font-normal uppercase tracking-wider ds-text-fg"
+                    className="text-base font-normal uppercase tracking-wider ds-text-fg"
                   >
                     Interactions
                   </h3>
@@ -678,7 +678,7 @@ export function ButtonsSection({
                             setInteractionExportFormat("css");
                             setInteractionCssVisible(true);
                           }}
-                          className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                          className="h-10 px-2 sm:px-3 text-sm font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
                           style={{
                             backgroundColor:
                               interactionCssVisible &&
@@ -725,7 +725,7 @@ export function ButtonsSection({
                             setInteractionExportFormat("tokens");
                             setInteractionCssVisible(true);
                           }}
-                          className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                          className="h-10 px-2 sm:px-3 text-sm font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
                           style={{
                             backgroundColor:
                               interactionCssVisible &&
@@ -759,7 +759,7 @@ export function ButtonsSection({
                       </div>
                       <button
                         onClick={() => setShowInteractionResetModal(true)}
-                        className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1 ds-text-muted"
+                        className="h-10 px-2 sm:px-3 text-sm font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1 ds-text-muted"
                       >
                         <svg
                           className="w-4 h-4 flex-shrink-0"
@@ -848,7 +848,7 @@ export function ButtonsSection({
                         <button
                           key={key}
                           onClick={() => selectInteractionPreset(key)}
-                          className="h-12 px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                          className="h-12 px-3 text-sm font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
                           style={
                             active
                               ? {
@@ -902,7 +902,7 @@ export function ButtonsSection({
                             className="flex items-center justify-between px-3 py-1.5 border-b ds-border"
                           >
                             <span
-                              className="text-[14px] font-light uppercase tracking-wider ds-text-card"
+                              className="text-sm font-light uppercase tracking-wider ds-text-card"
                             >
                               {interactionExportFormat === "tokens"
                                 ? "Interaction Tokens"
@@ -958,12 +958,12 @@ export function ButtonsSection({
                     <div className="flex-1 min-w-0 space-y-3 order-2 md:order-1">
                       <div className="space-y-1.5">
                         <p
-                          className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                          className="text-sm font-light uppercase tracking-wider ds-text-muted"
                         >
                           Hover
                         </p>
                         <label
-                          className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                          className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                         >
                           <span>Opacity: {interactionStyle.hoverOpacity}</span>
                           <input
@@ -982,7 +982,7 @@ export function ButtonsSection({
                           />
                         </label>
                         <label
-                          className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                          className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                         >
                           <span>Scale: {interactionStyle.hoverScale}</span>
                           <input
@@ -1003,12 +1003,12 @@ export function ButtonsSection({
                       </div>
                       <div className="space-y-1.5">
                         <p
-                          className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                          className="text-sm font-light uppercase tracking-wider ds-text-muted"
                         >
                           Active
                         </p>
                         <label
-                          className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                          className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                         >
                           <span>Scale: {interactionStyle.activeScale}</span>
                           <input
@@ -1029,12 +1029,12 @@ export function ButtonsSection({
                       </div>
                       <div className="space-y-1.5">
                         <p
-                          className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                          className="text-sm font-light uppercase tracking-wider ds-text-muted"
                         >
                           Timing & Focus
                         </p>
                         <label
-                          className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                          className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                         >
                           <span>
                             Duration: {interactionStyle.transitionDuration}ms
@@ -1055,7 +1055,7 @@ export function ButtonsSection({
                           />
                         </label>
                         <label
-                          className="flex items-center justify-between gap-2 text-[14px] font-light ds-text-fg"
+                          className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                         >
                           <span>
                             Focus Ring: {interactionStyle.focusRingWidth}px
@@ -1085,7 +1085,7 @@ export function ButtonsSection({
                         data-axe-exclude
                       >
                         <p
-                          className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                          className="text-sm font-light uppercase tracking-wider ds-text-muted"
                         >
                           Preview
                         </p>

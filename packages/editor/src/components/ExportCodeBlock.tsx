@@ -63,7 +63,7 @@ export function ExportCodeBlock({
         className="flex items-center justify-between px-3 py-1.5 border-b ds-border"
       >
         <span
-          className="text-[14px] font-light uppercase tracking-wider ds-text-card"
+          className="text-sm font-light uppercase tracking-wider ds-text-card"
         >
           {label}
         </span>

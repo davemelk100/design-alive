@@ -209,7 +209,7 @@ export function ColorsSection({
               data-axe-exclude
             >
               <h2
-                className="text-[14px] sm:text-[16px] md:text-[20px] font-bold tracking-wider mb-[5px] flex items-baseline gap-2 ds-text-fg"
+                className="text-sm sm:text-base md:text-lg font-bold tracking-wider mb-[5px] flex items-baseline gap-2 ds-text-fg"
               >
                 Colors{" "}
                 <a
@@ -282,7 +282,7 @@ export function ColorsSection({
                         setExportFormat("css");
                         generateCode();
                       }}
-                      className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                      className="h-10 px-2 sm:px-3 text-sm font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
                       style={{
                         backgroundColor:
                           generatedCode && exportFormat === "css"
@@ -324,7 +324,7 @@ export function ColorsSection({
                         setExportFormat("tokens");
                         generateCode();
                       }}
-                      className="h-10 px-2 sm:px-3 text-[14px] font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                      className="h-10 px-2 sm:px-3 text-sm font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
                       style={{
                         backgroundColor:
                           generatedCode && exportFormat === "tokens"
@@ -356,7 +356,7 @@ export function ColorsSection({
                   </div>
                   <button
                     onClick={() => setShowResetModal(true)}
-                    className="h-10 px-2 sm:px-3 text-[14px] font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1 ds-text-muted"
+                    className="h-10 px-2 sm:px-3 text-sm font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1 ds-text-muted"
                   >
                     <svg
                       className="w-4 h-4 flex-shrink-0"
@@ -425,7 +425,7 @@ export function ColorsSection({
                       >
                         <button
                           aria-label={`${label} color swatch`}
-                          className="w-full aspect-square text-[12px] sm:text-[14px] font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-tl-lg rounded-tr-lg sm:rounded-tr-none sm:rounded-bl-lg"
+                          className="w-full aspect-square text-[12px] sm:text-sm font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-tl-lg rounded-tr-lg sm:rounded-tr-none sm:rounded-bl-lg"
                           style={{
                             backgroundColor: hsl ? `hsl(${hsl})` : "hsl(var(--muted))",
                             color: btnTextColor,
@@ -463,7 +463,7 @@ export function ColorsSection({
                             {label}
                           </span>
                           {hexCode && (
-                            <span className="hidden sm:inline whitespace-nowrap opacity-70 text-[14px] leading-tight">
+                            <span className="hidden sm:inline whitespace-nowrap opacity-70 text-sm leading-tight">
                               {hexCode}
                             </span>
                           )}
@@ -619,17 +619,17 @@ export function ColorsSection({
                       </div>
                       <div>
                         <h3
-                          className="text-[18px] font-medium ds-text-fg"
+                          className="text-lg font-medium ds-text-fg"
                         >
                           Pro Feature
                         </h3>
-                        <p className="text-[13px] ds-text-muted">
+                        <p className="text-xs ds-text-muted">
                           Color Locks
                         </p>
                       </div>
                     </div>
                     <p
-                      className="text-[14px] font-light mb-5 ds-text-muted"
+                      className="text-sm font-light mb-5 ds-text-muted"
                     >
                       This feature requires a Themal Pro license. Upgrade to
                       unlock all premium features including harmony schemes,
@@ -638,7 +638,7 @@ export function ColorsSection({
                     <div className="flex flex-col gap-2">
                       <a
                         href={upgradeUrl || "/pricing"}
-                        className="w-full text-center px-4 py-2.5 text-[14px] font-medium rounded-lg transition-opacity hover:opacity-90 ds-surface-invert"
+                        className="w-full text-center px-4 py-2.5 text-sm font-medium rounded-lg transition-opacity hover:opacity-90 ds-surface-invert"
                       >
                         View Pricing
                       </a>
@@ -650,7 +650,7 @@ export function ColorsSection({
                               new CustomEvent("themal:sign-in"),
                             );
                           }}
-                          className="w-full text-center px-4 py-2.5 text-[14px] font-light rounded-lg transition-opacity hover:opacity-70 ds-bg-muted ds-text-fg"
+                          className="w-full text-center px-4 py-2.5 text-sm font-light rounded-lg transition-opacity hover:opacity-70 ds-bg-muted ds-text-fg"
                         >
                           Already have a license? Sign in
                         </button>
@@ -699,7 +699,7 @@ export function ColorsSection({
                 {/* Palette (own row) */}
                 <div className="w-full" data-axe-exclude>
                   <p
-                    className="text-[14px] font-light uppercase tracking-wider mb-2 md:mb-3 ds-text-muted"
+                    className="text-sm font-light uppercase tracking-wider mb-2 md:mb-3 ds-text-muted"
                   >
                     Palette
                   </p>
@@ -745,13 +745,13 @@ export function ColorsSection({
                               }}
                             />
                             <span
-                              className="relative hidden sm:inline text-[14px] font-light truncate"
+                              className="relative hidden sm:inline text-sm font-light truncate"
                               style={{ color: swatchTextColor }}
                             >
                               {hexCode}
                             </span>
                           </div>
-                          <p className="hidden md:block text-[14px] font-light text-[color:hsl(var(--foreground))] truncate">
+                          <p className="hidden md:block text-sm font-light text-[color:hsl(var(--foreground))] truncate">
                             {label}
                           </p>
                         </div>
@@ -763,13 +763,13 @@ export function ColorsSection({
                 {/* Chips / Badges row */}
                 <div className="w-full space-y-2" data-axe-exclude>
                   <p
-                    className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                    className="text-sm font-light uppercase tracking-wider ds-text-muted"
                   >
                     Chips / Badges
                   </p>
                   <div className="flex flex-row flex-wrap gap-1.5 items-start">
                     <span
-                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--brand))",
                         color: colors["--brand"]
@@ -780,7 +780,7 @@ export function ColorsSection({
                       Brand
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--secondary))",
                         color: "hsl(var(--secondary-foreground))",
@@ -789,7 +789,7 @@ export function ColorsSection({
                       Secondary
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--muted))",
                         color: colors["--muted"]
@@ -800,7 +800,7 @@ export function ColorsSection({
                       Muted
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--accent))",
                         color: "hsl(var(--accent-foreground))",
@@ -809,7 +809,7 @@ export function ColorsSection({
                       Accent
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--destructive))",
                         color: "hsl(var(--destructive-foreground))",
@@ -818,7 +818,7 @@ export function ColorsSection({
                       Destructive
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--success))",
                         color: "hsl(var(--success-foreground))",
@@ -827,7 +827,7 @@ export function ColorsSection({
                       Success
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-2.5 py-1 rounded-md text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--warning))",
                         color: "hsl(var(--warning-foreground))",
@@ -836,7 +836,7 @@ export function ColorsSection({
                       Warning
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--brand))",
                         color: colors["--brand"]
@@ -847,7 +847,7 @@ export function ColorsSection({
                       Brand
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--secondary))",
                         color: "hsl(var(--secondary-foreground))",
@@ -856,7 +856,7 @@ export function ColorsSection({
                       Secondary
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--muted))",
                         color: colors["--muted"]
@@ -867,7 +867,7 @@ export function ColorsSection({
                       Muted
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--accent))",
                         color: "hsl(var(--accent-foreground))",
@@ -876,7 +876,7 @@ export function ColorsSection({
                       Accent
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--destructive))",
                         color: "hsl(var(--destructive-foreground))",
@@ -885,7 +885,7 @@ export function ColorsSection({
                       Destructive
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--success))",
                         color: "hsl(var(--success-foreground))",
@@ -894,7 +894,7 @@ export function ColorsSection({
                       Success
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[14px] font-light max-w-full truncate"
+                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-sm font-light max-w-full truncate"
                       style={{
                         backgroundColor: "hsl(var(--warning))",
                         color: "hsl(var(--warning-foreground))",
@@ -903,7 +903,7 @@ export function ColorsSection({
                       Warning
                     </span>
                     <span
-                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-[14px] font-light border border-border max-w-full truncate ds-text-fg"
+                      className="inline-flex items-center justify-center px-4 py-0.5 rounded-full text-sm font-light border border-border max-w-full truncate ds-text-fg"
                     >
                       Outlined
                     </span>
@@ -933,7 +933,7 @@ export function ColorsSection({
                     <div className="w-full hidden md:block" data-axe-exclude>
                       <div className="flex items-center gap-2 mb-2 md:mb-3">
                         <p
-                          className="text-[14px] font-light uppercase tracking-wider ds-text-muted"
+                          className="text-sm font-light uppercase tracking-wider ds-text-muted"
                         >
                           Icons
                         </p>

@@ -6,6 +6,14 @@ const config: Config = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontSize: {
+        // rem-based so the editor inherits the consuming app's root font-size.
+        xs: ["0.8125rem", { lineHeight: "1.5" }],   // ~13px at 16px root
+        sm: ["0.875rem", { lineHeight: "1.5" }],    // ~14px at 16px root
+        base: ["1rem", { lineHeight: "1.5" }],       // 16px at 16px root
+        lg: ["1.25rem", { lineHeight: "1.4" }],      // ~20px at 16px root
+        xl: ["1.4375rem", { lineHeight: "1.35" }],   // ~23px at 16px root
+      },
       colors: {
         brand: "hsl(var(--brand))",
         background: "hsl(var(--background))",
