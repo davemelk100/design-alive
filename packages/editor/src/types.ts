@@ -15,6 +15,8 @@ export interface AiGenerateResult {
 export interface DesignSystemEditorProps {
   /** URL for the PR creation endpoint. Hides PR button if omitted. */
   prEndpointUrl?: string;
+  /** Client-side GitHub config for creating PRs directly via the GitHub API. When provided, the PR button uses an OAuth popup flow instead of a server endpoint. */
+  githubConfig?: import("./utils/githubApi").GitHubConfig;
   /** Enable accessibility audit via axe-core. Default: true */
   accessibilityAudit?: boolean;
   /** Callback fired on every color change with the full color map */

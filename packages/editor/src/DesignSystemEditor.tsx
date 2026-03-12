@@ -119,6 +119,7 @@ import "./styles/editor.css";
 
 function DesignSystemEditorInner({
   prEndpointUrl,
+  githubConfig,
   accessibilityAudit = true,
   onChange,
   onExport,
@@ -600,7 +601,7 @@ function DesignSystemEditorInner({
     setSectionPrStatus,
     submitPr,
     openPrModal,
-  } = usePrSubmission(isPremium, prEndpointUrl, buildSectionCss);
+  } = usePrSubmission(isPremium, prEndpointUrl, githubConfig, buildSectionCss);
 
   const handleColorChange = (key: string, hex: string) => {
     const lower = hex.toLowerCase();
@@ -1541,7 +1542,7 @@ function DesignSystemEditorInner({
               { value: "upload", label: "Upload Image" },
               { value: "export", label: "Export Palette" },
               { value: "share", label: "Share" },
-              ...(prEndpointUrl ? [{ value: "pr", label: "Open PR" }] : []),
+              ...((prEndpointUrl || githubConfig) ? [{ value: "pr", label: "Open PR" }] : []),
               { value: "purge", label: "Purge Storage" },
               ...(accessibilityAudit ? [{ value: "audit", label: "Accessibility Check" }] : []),
               ...(onAiGenerate ? [{ value: "ai-generate", label: "AI Generate" }] : []),
@@ -1784,7 +1785,7 @@ function DesignSystemEditorInner({
             </svg>
             <span className="truncate">{shareCopied ? "Copied!" : "Share"}</span>
           </button>
-          {prEndpointUrl && (
+          {(prEndpointUrl || githubConfig) && (
             <PremiumGate feature="pr-integration" variant="inline" hideLock upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
               <button
                 onClick={openPrModal}

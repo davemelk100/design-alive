@@ -117,8 +117,8 @@ export default function SiteHeader() {
     >
       {isEditor ? (
         <div className="w-full mx-auto flex site-container">
-          {/* Match sidebar: w-48 + pl-4 pr-2 */}
-          <div className="hidden lg:flex items-end w-48 flex-shrink-0 pl-4 pr-2 py-3">
+          {/* Logo: inline on mobile, sidebar-width at lg */}
+          <div className="flex items-end flex-shrink-0 pl-4 pr-2 lg:w-48 py-3">
             <Link
               to="/"
               className="flex-shrink-0 hover:opacity-70 transition-opacity"

@@ -1,4 +1,7 @@
 import { useState, useCallback } from "react";
+import type { GitHubConfig } from "../utils/githubApi";
+import { createDesignPr } from "../utils/githubApi";
+import { getStoredAuth, startOAuthFlow } from "../utils/githubAuth";
 
 type SectionPrStatus = Record<
   string,
@@ -12,6 +15,7 @@ type SectionPrStatus = Record<
 export function usePrSubmission(
   isPremium: boolean,
   prEndpointUrl: string | undefined,
+  githubConfig: GitHubConfig | undefined,
   buildSectionCss: (sections: Iterable<string>) => string,
 ) {
   const [showPrModal, setShowPrModal] = useState(false);
@@ -24,8 +28,8 @@ export function usePrSubmission(
   const submitPr = useCallback(
     async (sections: Iterable<string>, statusKey: string) => {
       if (!isPremium) return;
-      if (!prEndpointUrl) {
-        setPrError("No prEndpointUrl prop provided. Pass prEndpointUrl to the editor to enable PR creation.");
+      if (!prEndpointUrl && !githubConfig) {
+        setPrError("No prEndpointUrl or githubConfig prop provided. Pass one to enable PR creation.");
         return;
       }
       setPrError(null);
@@ -33,11 +37,38 @@ export function usePrSubmission(
         ...prev,
         [statusKey]: { status: "creating" },
       }));
+
+      const css = buildSectionCss(sections);
+      const sectionArr = [...sections];
+
+      // Client-side GitHub API flow
+      if (githubConfig) {
+        try {
+          let auth = getStoredAuth();
+          if (!auth) {
+            auth = await startOAuthFlow(githubConfig);
+          }
+          const compareUrl = await createDesignPr(githubConfig, auth.access_token, css, sectionArr);
+          setSectionPrStatus((prev) => ({
+            ...prev,
+            [statusKey]: { status: "created", url: compareUrl },
+          }));
+          setShowPrModal(false);
+          window.open(compareUrl, "_blank");
+        } catch (err) {
+          setSectionPrStatus((prev) => ({
+            ...prev,
+            [statusKey]: { status: "error" },
+          }));
+          setPrError(err instanceof Error ? err.message : "Failed to create PR");
+        }
+        return;
+      }
+
+      // Server-side endpoint flow
       const popup = window.open("about:blank", "_blank");
       try {
-        const css = buildSectionCss(sections);
-        const sectionArr = [...sections];
-        const res = await fetch(prEndpointUrl, {
+        const res = await fetch(prEndpointUrl!, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ css, sections: sectionArr }),
@@ -88,7 +119,7 @@ export function usePrSubmission(
         popup?.close();
       }
     },
-    [isPremium, prEndpointUrl, buildSectionCss],
+    [isPremium, prEndpointUrl, githubConfig, buildSectionCss],
   );
 
   const openPrModal = useCallback(() => {
