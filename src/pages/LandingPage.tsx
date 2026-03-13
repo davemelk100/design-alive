@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import ThemalLogo from "../components/ThemalLogo";
-import SiteFooter, { SiteFooterBranding } from "../components/SiteFooter";
+import { SiteFooterBranding } from "../components/SiteFooter";
 import JsonLd from "../components/JsonLd";
 import usePageMeta from "../hooks/usePageMeta";
 
@@ -525,13 +525,12 @@ export default function LandingPage() {
 
       {/* Footer */}
       <div
-        className="relative z-10 flex-shrink-0 [&>*]:border-t-0 [&_footer]:!bg-transparent"
+        className="relative z-10 flex-shrink-0"
         style={{
           scrollSnapAlign: "start",
         }}
       >
         <SiteFooterBranding />
-        <SiteFooter />
       </div>
 
     </div>

@@ -250,7 +250,11 @@ export function ReportBugForm({ buttonClassName }: { buttonClassName?: string })
 
 
 export function SiteFooterBranding() {
-  return null;
+  return (
+    <div className="flex justify-center pb-6 pt-4">
+      <img src="/circled-themal.svg" alt="Themal" className="h-16" />
+    </div>
+  );
 }
 
 export default function SiteFooter() {

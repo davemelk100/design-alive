@@ -346,6 +346,7 @@
 .ds-left-nav p,
 .ds-left-nav li,
 .ds-left-nav span {
+  font-size: inherit;
   justify-content: flex-start;
 }
 
