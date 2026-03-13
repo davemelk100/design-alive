@@ -65,7 +65,7 @@
 
 /* Header nav links: subtle bottom border for active state */
 .ds-nav-link {
-  color: hsl(var(--foreground) / 0.65);
+  color: hsl(var(--foreground) / 0.8);
   border-bottom: 1px solid transparent;
   padding-bottom: 2px;
   transition: color 0.2s, border-bottom-color 0.2s;
@@ -148,7 +148,7 @@
 
 /* Nav link base (replaces inline styles on section nav items) */
 .ds-nav-link-item {
-  color: hsl(var(--foreground) / 0.65);
+  color: hsl(var(--foreground) / 0.8);
   font-size: 1.25rem !important;
   font-weight: 700 !important;
   letter-spacing: 0.05em !important;

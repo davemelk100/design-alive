@@ -1362,7 +1362,7 @@ function DesignSystemEditorInner({
     <div id="top" ref={editorRootRef} className={`ds-editor${className ? ` ${className}` : ""}`} style={{ background: "transparent" }}>
       {showHeader && (
         <div
-          className="pt-2 sm:pt-3 pb-4 sm:pb-2 lg:pb-6"
+          className="pt-2 sm:pt-3 pb-4 sm:pb-2 lg:pb-3"
         >
           <div className="w-full px-4 sm:px-6 lg:px-8">
             {/* Title + nav links - single header row */}
@@ -1590,7 +1590,7 @@ function DesignSystemEditorInner({
 
         {/* Left sidebar — shared between desktop (always visible) and mobile (slide-in) */}
         <aside
-          className={`ds-left-nav flex flex-col gap-1.5 flex-shrink-0 w-56 lg:w-48 pt-4 pb-6 pl-4 pr-2 overflow-y-auto ${
+          className={`ds-left-nav flex flex-col gap-1.5 flex-shrink-0 w-56 lg:w-48 pt-4 lg:pt-8 pb-6 pl-4 pr-2 overflow-y-auto ${
             mobileMenuOpen
               ? "fixed inset-y-0 left-0 z-50"
               : "hidden lg:flex sticky top-0 self-start z-30"
