@@ -217,9 +217,6 @@ export function InputsSection({
               {/* Preview */}
               <div
                 className="flex-1 min-w-0 rounded-lg p-4 sm:p-6 order-1 md:order-2 ds-bg"
-                style={{
-                  border: "1px solid hsl(var(--border))",
-                }}
                 data-axe-exclude
               >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
