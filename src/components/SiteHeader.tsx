@@ -142,7 +142,7 @@ export default function SiteHeader() {
       {isEditor ? (
         <div className="w-full mx-auto flex flex-col lg:flex-row site-container">
           {/* Logo row */}
-          <div className="flex items-center flex-shrink-0 px-4 lg:pl-4 lg:pr-2 lg:w-48 pt-3 mb-2.5 lg:mb-0 lg:py-3">
+          <div className="flex items-center flex-shrink-0 px-4 lg:pl-4 lg:pr-2 lg:w-48 pt-3 mb-5 lg:mb-0 lg:py-3">
             <Link
               to="/"
               className="flex-shrink-0 hover:opacity-70 transition-opacity"
