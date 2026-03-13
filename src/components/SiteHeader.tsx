@@ -142,7 +142,7 @@ export default function SiteHeader() {
       {isEditor ? (
         <div className="w-full mx-auto flex flex-col lg:flex-row site-container">
           {/* Logo + mobile dropdown row */}
-          <div className="flex items-center flex-shrink-0 pl-4 pr-2 lg:w-48 pt-3 pb-3 lg:py-3 gap-3">
+          <div className="flex items-center justify-center lg:justify-start flex-shrink-0 px-4 lg:pl-4 lg:pr-2 lg:w-48 pt-3 pb-3 lg:py-3 gap-3">
             <Link
               to="/"
               className="flex-shrink-0 hover:opacity-70 transition-opacity"

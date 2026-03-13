@@ -98,11 +98,10 @@
   }
 
   body {
-    @apply overflow-x-hidden antialiased;
+    @apply overflow-x-hidden antialiased text-sm;
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     font-family: var(--font-body);
-    font-size: var(--font-size-base);
     font-weight: var(--font-weight-body);
     line-height: var(--line-height);
     letter-spacing: var(--letter-spacing);
@@ -115,7 +114,7 @@
   }
 
   ul, ol, a, button, input, select, textarea, label {
-    font-size: var(--font-size-base);
+    font-size: 0.875rem;
     font-weight: var(--font-weight-body);
     line-height: var(--line-height);
   }
@@ -133,13 +132,7 @@
   h5 { font-size: 1.25rem; line-height: 1.4; }
   h6 { font-size: 1.125rem; line-height: 1.45; }
 
-  /* Responsive sizing — scale the root so all rem values adjust */
-  @media (max-width: 640px) {
-    body {
-      font-size: 0.875rem;
-    }
-  }
-
+  /* Responsive sizing */
   @media (max-width: 410px) {
     body {
       font-size: 0.8125rem;
