@@ -67,6 +67,7 @@ The editor writes CSS custom properties (HSL values) to `:root`. All styles are 
 | `sidebarExtra` | `React.ReactNode` | — | Custom content rendered at the bottom of the left sidebar (e.g. contact forms, branding). |
 | `featuresUrl` | `string` | — | URL for the Features page link in the sidebar. |
 | `onAiGenerate` | `(prompt: string) => Promise<AiGenerateResult>` | — | AI theme generation callback. When provided, an "AI Generate" button appears in Global Actions. |
+| `applyToRoot` | `boolean` | `false` | Mirror CSS custom properties to `:root` so the theme applies beyond the editor. When enabled, the editor scans the host page's colors and shows a developer prompt with a tailored CSS snippet for full-site theming. |
 | `devMode` | `boolean` | `false` | Show a "Purge Storage" button in Global Actions that clears all Themal localStorage keys. |
 
 ## Premium Features
@@ -304,6 +305,31 @@ Premium users can import icons directly from the editor UI without writing code.
 
 Imported icons are persisted to localStorage and rendered alongside built-in and custom icons. Each imported icon shows a remove badge on hover.
 
+### Full-site theming
+
+```tsx
+<DesignSystemEditor applyToRoot />
+```
+
+When `applyToRoot` is enabled, the editor:
+1. Mirrors all CSS custom properties to `:root` (so they're available page-wide)
+2. Scans the host page's DOM to detect its existing color palette
+3. Shows a banner prompting the developer to add CSS rules for full-site theming
+4. Clicking "View CSS" opens a modal with a tailored, copyable CSS snippet based on the detected palette
+
+The generated CSS uses `var()` references so your site responds to every color change in the editor:
+
+```css
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+a {
+  color: hsl(var(--brand));
+}
+/* ... more rules based on your site's detected colors */
+```
+
 ### Embedded / headless
 
 ```tsx
@@ -383,6 +409,11 @@ import {
   // Feature flags
   FeatureFlag,          // Conditionally render children based on a feature flag
   FEATURE_FLAGS,        // Current feature flag values
+
+  // Host style scanner
+  scanHostStyles,       // Scan host page DOM and extract color palette
+  mapPaletteToTokens,   // Map detected palette to Themal CSS variable tokens
+  buildIntegrationCss,  // Generate CSS snippet for full-site theming
 } from '@themal/editor';
 ```
 
@@ -412,6 +443,9 @@ import type {
   StoredGitHubAuth,
   FeatureFlagName,
   AiGenerateResult,
+  HostPalette,
+  ColorEntry,
+  FontEntry,
 } from '@themal/editor';
 ```
 
@@ -464,6 +498,7 @@ src/
 │   │   ├── alertStyle.ts       # Alert and toast styles
 │   │   ├── interactionStyle.ts # Button interaction states
 │   │   └── exportUtils.ts      # Serialization, design tokens, export
+│   ├── hostScanner.ts          # Host page style scanning and integration CSS
 │   ├── themeUtils.ts           # Barrel re-export of all style utilities
 │   ├── githubApi.ts            # Client-side GitHub PR creation
 │   ├── githubAuth.ts           # GitHub OAuth popup flow
