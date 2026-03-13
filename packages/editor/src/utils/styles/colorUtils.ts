@@ -101,6 +101,22 @@ export const CONTRAST_PAIRS: [string, string][] = [
   ["--destructive-foreground", "--destructive"],
   ["--success-foreground", "--success"],
   ["--warning-foreground", "--warning"],
+  // Additional pairs: foreground on colored surfaces
+  ["--foreground", "--card"],
+  ["--foreground", "--muted"],
+  ["--foreground", "--accent"],
+  ["--foreground", "--popover"],
+  ["--foreground", "--secondary"],
+  // Muted-foreground on all common surfaces
+  ["--muted-foreground", "--card"],
+  ["--muted-foreground", "--popover"],
+  ["--muted-foreground", "--accent"],
+  ["--muted-foreground", "--secondary"],
+  // Brand text on surfaces
+  ["--brand", "--card"],
+  ["--brand", "--muted"],
+  ["--brand", "--accent"],
+  ["--brand", "--secondary"],
 ];
 
 export function hslToRgb(hsl: string): [number, number, number] {
@@ -484,13 +500,16 @@ export const autoAdjustContrast = (
         working[fgK] = bestFg;
       }
     }
-    if (finalBg && !locked.has("--muted-foreground")) {
+    // Final pass: ensure --muted-foreground passes against both --background and --muted
+    if (!locked.has("--muted-foreground")) {
       const mutedFg = working["--muted-foreground"];
-      if (mutedFg && contrastRatio(mutedFg, finalBg) < WCAG_AA_RATIO) {
+      const mutedBg = working["--muted"];
+      // Check against --background
+      if (finalBg && mutedFg && contrastRatio(mutedFg, finalBg) < WCAG_AA_RATIO) {
         const bgL = parseFloat(finalBg.trim().split(/\s+/)[2]);
         const mutedL = bgL > 50 ? Math.max(0, bgL - 50) : Math.min(100, bgL + 50);
         const fixedMuted = `0 0% ${mutedL}%`;
-        if (contrastRatio(fixedMuted, finalBg) >= WCAG_AA_RATIO) {
+        if (contrastRatio(fixedMuted, finalBg) >= WCAG_AA_RATIO && (!mutedBg || contrastRatio(fixedMuted, mutedBg) >= WCAG_AA_RATIO)) {
           adjustments["--muted-foreground"] = fixedMuted;
           working["--muted-foreground"] = fixedMuted;
         } else {
@@ -498,6 +517,23 @@ export const autoAdjustContrast = (
           working["--muted-foreground"] = fgForBg(finalBg);
         }
       }
+      // Also check against --muted background
+      if (mutedBg && working["--muted-foreground"] && contrastRatio(working["--muted-foreground"], mutedBg) < WCAG_AA_RATIO) {
+        adjustments["--muted-foreground"] = fgForBg(mutedBg);
+        working["--muted-foreground"] = fgForBg(mutedBg);
+      }
+    }
+
+    // Final safety net: re-check all pairs one more time
+    for (const [fgKey, bgKey] of CONTRAST_PAIRS) {
+      const fgVal = working[fgKey];
+      const bgv = working[bgKey];
+      if (!fgVal || !bgv) continue;
+      if (contrastRatio(fgVal, bgv) >= WCAG_AA_RATIO) continue;
+      if (locked.has(fgKey)) continue;
+      const fixed = fgForBg(bgv);
+      adjustments[fgKey] = fixed;
+      working[fgKey] = fixed;
     }
 
     return adjustments;
