@@ -49,3 +49,4 @@ export { LicenseProvider, useLicense } from "./hooks/useLicense";
 export type { LicenseProviderProps } from "./hooks/useLicense";
 export { PremiumGate } from "./components/PremiumGate";
 export type { PremiumGateProps } from "./components/PremiumGate";
+export { SectionNav } from "./components/SectionNav";

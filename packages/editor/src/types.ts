@@ -41,6 +41,8 @@ export interface DesignSystemEditorProps {
   headerRight?: React.ReactNode;
   /** Custom top navigation component. When provided, replaces the built-in nav links entirely. */
   topNav?: React.ReactNode;
+  /** Show the sticky section jump-scroll navigation bar. Default: true */
+  showSectionNav?: boolean;
   /** URL for the "Learn more about features" link */
   featuresUrl?: string;
   /** URL for the About page link in the header */

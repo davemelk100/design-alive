@@ -46,6 +46,7 @@ export default function PortfolioLanding() {
         aboutUrl="/about"
         showHeader={false}
         showNavLinks={false}
+        showSectionNav={false}
         sidebarLinks={[
           { to: "/features", label: "Features" },
           { to: "/pricing", label: "Pricing" },

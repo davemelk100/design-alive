@@ -20,6 +20,7 @@ import { ImagePaletteModal, PendingImagePaletteConfirm } from "./components/Imag
 import { MobileColorPicker } from "./components/MobileColorPicker";
 import { PrModal } from "./components/PrModal";
 import { AiGenerateModal } from "./components/AiGenerateModal";
+import { SectionNav } from "./components/SectionNav";
 import storage from "./utils/storage";
 import {
   EDITABLE_VARS,
@@ -140,6 +141,7 @@ function DesignSystemEditorInner({
   onAiGenerate,
   sidebarLinks,
   sidebarExtra,
+  showSectionNav = true,
 }: DesignSystemEditorProps) {
   const { isPremium } = useLicense();
   const [hoveredLockKey, setHoveredLockKey] = useState<string | null>(null);
@@ -1496,6 +1498,8 @@ function DesignSystemEditorInner({
           </div>
         </div>
       )}
+
+      {showSectionNav && <SectionNav />}
 
       {/* Tablet actions dropdown (hidden on mobile where left nav is used, visible sm-lg) */}
       <div className="w-full px-4 sm:px-6 lg:px-8 pt-4 md:pt-12 hidden sm:flex items-center gap-2 lg:hidden" data-axe-exclude>
