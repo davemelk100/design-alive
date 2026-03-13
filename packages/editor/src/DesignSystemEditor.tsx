@@ -1494,8 +1494,8 @@ function DesignSystemEditorInner({
         </div>
       )}
 
-      {/* Mobile/tablet actions dropdown */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 pt-4 md:pt-12 flex items-center gap-2 lg:hidden" data-axe-exclude>
+      {/* Tablet actions dropdown (hidden on mobile where left nav is used, visible sm-lg) */}
+      <div className="w-full px-4 sm:px-6 lg:px-8 pt-4 md:pt-12 hidden sm:flex items-center gap-2 lg:hidden" data-axe-exclude>
         <div className="ml-auto">
           <CustomSelect
             ariaLabel="Global actions"

@@ -88,10 +88,10 @@ export function SectionHeader({
         </a>
       </h2>
       <div className="ml-auto flex items-center">
-        {/* Mobile: dropdown */}
+        {/* Mobile: dropdown (hidden on phone where left nav is available) */}
         <CustomSelect
           ariaLabel={`${title} actions`}
-          className="sm:hidden"
+          className="hidden"
           placeholder="Actions\u2026"
           size="sm"
           width="120px"
@@ -99,8 +99,8 @@ export function SectionHeader({
           onChange={handleMobileChange}
           options={mobileOptions}
         />
-        {/* Desktop: buttons */}
-        <div className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
+        {/* Action buttons */}
+        <div className="flex flex-wrap items-center gap-1 sm:gap-2">
           <div
             className="flex items-center rounded-lg overflow-hidden border ds-border"
           >

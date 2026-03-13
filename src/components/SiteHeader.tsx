@@ -142,7 +142,7 @@ export default function SiteHeader() {
       {isEditor ? (
         <div className="w-full mx-auto flex flex-col lg:flex-row site-container">
           {/* Logo row */}
-          <div className="flex items-center flex-shrink-0 px-4 lg:pl-4 lg:pr-2 lg:w-48 pt-3 pb-1 lg:py-3">
+          <div className="flex items-center flex-shrink-0 px-4 lg:pl-4 lg:pr-2 lg:w-48 pt-3 pb-2.5 lg:py-3">
             <Link
               to="/"
               className="flex-shrink-0 hover:opacity-70 transition-opacity"
@@ -176,8 +176,8 @@ export default function SiteHeader() {
                     <button
                       key={id}
                       onClick={() => scrollToSection(id)}
-                      className={`w-full text-left px-4 py-2.5 text-sm font-light transition-colors hover:opacity-80 ${
-                        id === activeSection ? "text-fg font-normal" : "text-muted"
+                      className={`w-full text-left px-4 py-2.5 text-sm font-light transition-colors hover:opacity-80 text-fg ${
+                        id === activeSection ? "font-normal" : "opacity-60"
                       }`}
                     >
                       {label}
