@@ -75,6 +75,8 @@ export function AlertsSection({
     "css",
   );
   const [showAlertResetModal, setShowAlertResetModal] = useState(false);
+  const [showDialogResetModal, setShowDialogResetModal] = useState(false);
+  const [showToastResetModal, setShowToastResetModal] = useState(false);
 
   return (
           <div
@@ -189,7 +191,7 @@ export function AlertsSection({
                         </button>
                       </div>
                       <button
-                        onClick={handleResetDialogStyle}
+                        onClick={() => setShowDialogResetModal(true)}
                         className="h-10 px-2 sm:px-3 text-sm font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1 ds-text-muted"
                       >
                         <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -579,7 +581,7 @@ export function AlertsSection({
                           </button>
                         </div>
                         <button
-                          onClick={handleResetToastStyle}
+                          onClick={() => setShowToastResetModal(true)}
                           className="h-10 px-2 sm:px-3 text-sm font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1 ds-text-muted"
                         >
                           <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -892,6 +894,22 @@ export function AlertsSection({
               title="Reset Alert Style?"
               message="This will revert all alert style settings to their defaults. Any customizations will be lost."
               id="alert-reset-modal-title"
+            />
+            <ResetConfirmModal
+              open={showDialogResetModal}
+              onClose={() => setShowDialogResetModal(false)}
+              onConfirm={handleResetDialogStyle}
+              title="Reset Dialog Style?"
+              message="This will revert dialog style settings to their defaults. Any customizations will be lost."
+              id="dialog-reset-modal-title"
+            />
+            <ResetConfirmModal
+              open={showToastResetModal}
+              onClose={() => setShowToastResetModal(false)}
+              onConfirm={handleResetToastStyle}
+              title="Reset Toast Style?"
+              message="This will revert toast style settings to their defaults. Any customizations will be lost."
+              id="toast-reset-modal-title"
             />
           </div>
   );
