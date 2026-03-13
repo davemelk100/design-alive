@@ -1594,7 +1594,7 @@ function DesignSystemEditorInner({
               ? "fixed inset-y-0 left-0 z-50"
               : "hidden lg:flex sticky top-0 self-start z-30"
           }`}
-          style={{ maxHeight: mobileMenuOpen ? undefined : "100vh", backgroundColor: mobileMenuOpen ? "hsl(var(--background))" : undefined }}
+          style={{ maxHeight: mobileMenuOpen ? undefined : "100vh", backgroundColor: "hsl(var(--background))" }}
           data-axe-exclude
           onClick={mobileMenuOpen ? (e) => e.stopPropagation() : undefined}
         >
