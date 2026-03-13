@@ -157,17 +157,17 @@ export default function SiteHeader() {
             <div ref={dropdownRef} className="relative">
               <button
                 onClick={() => setDropdownOpen((v) => !v)}
-                className="flex items-center gap-1.5 px-3 h-9 rounded-lg text-sm font-light text-fg hover:opacity-80 transition-opacity"
+                className="flex items-center gap-1.5 pr-3 h-9 rounded-lg text-sm font-light text-fg hover:opacity-80 transition-opacity"
               >
                 {activeLabel}
                 <svg
-                  className={`w-3.5 h-3.5 transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
+                  className={`w-3.5 h-3.5 opacity-30 transition-transform ${dropdownOpen ? "rotate-180" : ""}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14m0 0l-7-7m7 7l7-7" />
                 </svg>
               </button>
               {dropdownOpen && (
