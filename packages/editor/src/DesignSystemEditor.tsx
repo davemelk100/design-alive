@@ -109,6 +109,7 @@ import type {
   InputStyleState,
 } from "./utils/themeUtils";
 import { useImportedIcons } from "./hooks/useImportedIcons";
+import { useHostScanner } from "./hooks/useHostScanner";
 import { useStyleState } from "./hooks/useStyleState";
 import { IconImportModal } from "./components/IconImportModal";
 import { ColorsSection } from "./sections/ColorsSection";
@@ -198,6 +199,9 @@ function DesignSystemEditorInner({
       }
     };
   }, [applyToRoot]);
+
+  // Scan host page styles and inject overrides when applyToRoot is enabled
+  useHostScanner(applyToRoot, setColors, setVar, editorRootRef);
 
   const {
     activeSection,
