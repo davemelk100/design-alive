@@ -1,8 +1,8 @@
 # @themal/editor
 
-Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography, interaction states, and input styles, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile with a frosted-glass sidebar menu.
+Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography, interaction states, and input styles, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile with a collapsible sidebar menu.
 
-> Free tier available with core features. Pro features ($9/mo or $50/yr) require a subscription.
+> **Early access — all features are free.** Pro subscription tiers will be introduced in a future release.
 
 ## Install
 
@@ -46,6 +46,7 @@ The editor writes CSS custom properties (HSL values) to `:root`. All styles are 
 | `upgradeUrl` | `string` | `"/pricing"` | URL shown in premium gate upgrade prompts. |
 | `signInUrl` | `string` | — | URL shown in premium gate sign-in prompts. |
 | `prEndpointUrl` | `string` | — | URL for your server-side PR creation endpoint. The editor POSTs `{ css, sections }` and expects `{ url }` back. PR button hidden if both this and `githubConfig` are omitted. |
+| `prApiKey` | `string` | — | API key sent as `x-api-key` header when using `prEndpointUrl`. Optional — only needed if your endpoint requires authentication. |
 | `githubConfig` | `GitHubConfig` | — | Client-side GitHub config for creating PRs directly via the GitHub API using an OAuth popup flow. No backend required beyond a lightweight token exchange proxy. PR button hidden if both this and `prEndpointUrl` are omitted. |
 | `accessibilityAudit` | `boolean` | `true` | Enable axe-core color contrast auditing. |
 | `onChange` | `(colors: Record<string, string>) => void` | — | Callback on every color change with the full color map. |
@@ -65,6 +66,8 @@ The editor writes CSS custom properties (HSL values) to `:root`. All styles are 
 | `sidebarLinks` | `{ to: string; label: string }[]` | — | Navigation links to display in the left sidebar. |
 | `sidebarExtra` | `React.ReactNode` | — | Custom content rendered at the bottom of the left sidebar (e.g. contact forms, branding). |
 | `featuresUrl` | `string` | — | URL for the Features page link in the sidebar. |
+| `onAiGenerate` | `(prompt: string) => Promise<AiGenerateResult>` | — | AI theme generation callback. When provided, an "AI Generate" button appears in Global Actions. |
+| `devMode` | `boolean` | `false` | Show a "Purge Storage" button in Global Actions that clears all Themal localStorage keys. |
 
 ## Premium Features
 
@@ -73,7 +76,7 @@ The following features require a valid license key:
 | Feature | Description |
 |---------|-------------|
 | Harmony schemes | Generate palettes using complementary, analogous, triadic, or split-complementary color relationships. |
-| PR integration | Create design system pull requests directly from the editor. |
+| ~~PR integration~~ | Now free for all users. Create design system pull requests directly from the editor. |
 | Undo/redo | Up to 10 levels of undo for theme refreshes and image palette applications. |
 | Image palette extraction | Extract color palettes from uploaded images with preview confirmation. |
 | Palette export | Download palette as SVG/PNG, or copy as HEX/RGB/RGBA text. |
@@ -408,6 +411,7 @@ import type {
   GitHubConfig,
   StoredGitHubAuth,
   FeatureFlagName,
+  AiGenerateResult,
 } from '@themal/editor';
 ```
 
@@ -429,7 +433,7 @@ import type {
 13. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
 14. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
 15. **Icon import** *(Pro)* — Import icons from CDN packages (Lucide, Heroicons, Phosphor), SVG sprites, or icon font CSS files directly from the browser.
-16. **Mobile friendly** — Fully responsive UI with a frosted-glass sidebar menu, section dropdown navigation, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, touch-friendly control sizing (44px+ tap targets for sliders, buttons, toggles, and checkboxes), and stacked layouts for smaller screens. A floating scroll-to-top button with frosted glass styling appears on scroll.
+16. **Mobile friendly** — Fully responsive UI with a collapsible sidebar menu, section dropdown navigation, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, touch-friendly control sizing (44px+ tap targets for sliders, buttons, toggles, and checkboxes), and stacked layouts for smaller screens. A floating scroll-to-top button appears on scroll.
 
 ## Package Architecture
 
