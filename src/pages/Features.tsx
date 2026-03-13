@@ -4,6 +4,33 @@ import usePageMeta from "../hooks/usePageMeta";
 
 const features = [
   {
+    version: "0.32",
+    items: [
+      "Host style scanner - detects the consuming page's existing color palette (backgrounds, text, borders, fonts) on mount",
+      "Integration guide prompt - banner with \"View CSS\" button shows a tailored, copyable CSS snippet based on detected host page colors",
+      "Dismissable developer prompt - persists dismissal to localStorage, includes \"Don't show again\" option",
+      "buildIntegrationCss utility - generates context-aware CSS with var() references, includes detected palette summary as comments",
+    ],
+  },
+  {
+    version: "0.31",
+    items: [
+      "Host palette scanner - scanHostStyles() walks the DOM outside .ds-editor, extracts computed colors and fonts, groups similar colors within perceptual distance",
+      "Heuristic token mapper - mapPaletteToTokens() maps detected colors to Themal tokens (most common bg, highest contrast text, most saturated brand, etc.)",
+      "Auto-populate initial theme - when no stored theme exists and applyToRoot is enabled, editor initializes with the detected host palette",
+      "New exports: scanHostStyles, mapPaletteToTokens, buildIntegrationCss, HostPalette, ColorEntry, FontEntry",
+    ],
+  },
+  {
+    version: "0.30",
+    items: [
+      "applyToRoot prop - mirrors all CSS custom properties to :root so the theme applies beyond the .ds-editor scope",
+      "setVar helper - centralized CSS variable setter that applies to both the editor root and document root when applyToRoot is enabled",
+      "Cleanup on unmount - CSS variables are removed from :root when the editor unmounts",
+      "All style.setProperty calls unified through setVar for consistent behavior",
+    ],
+  },
+  {
     version: "0.29",
     items: [
       "Contrast auto-fix rewrite - \"Suggest Alternative\" now fixes CSS variables directly, persists to localStorage, and updates design tokens in sync",
@@ -228,6 +255,8 @@ const PRODUCT_SCHEMA = {
     "Responsive Layout",
     "Plugin Mode",
     "Custom Icons",
+    "Full-Site Theming",
+    "Host Style Scanner",
     "Web Component",
   ].map((name) => ({ "@type": "PropertyValue", name })),
 };
@@ -282,6 +311,7 @@ export default function Features() {
               { title: "Responsive Layout", desc: "Mobile-first design with a 2D color spectrum picker for touch, adaptive controls across all viewports." },
               { title: "Plugin Mode", desc: "Embed the editor in any React app with props for custom default colors, typography, header content, and white-label branding." },
               { title: "Custom Icons", desc: "Pass your own icon components to the Icons preview section, or replace the built-in set entirely." },
+              { title: "Full-Site Theming", desc: "applyToRoot mirrors CSS variables to :root. Host style scanner detects your page's palette and generates integration CSS." },
               { title: "Web Component", desc: "Drop into Vue, Svelte, Astro, WordPress, Shopify, or any platform via a single script tag." },
             ].map(({ title, desc }) => (
               <div key={title} className="flex items-start gap-2">
