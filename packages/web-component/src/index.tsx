@@ -38,7 +38,7 @@ function sanitizeSvgString(raw: string): string {
     "stop", "title", "desc", "metadata", "marker", "image",
   ]);
   const SAFE_ATTRS = new Set([
-    "id", "class", "style", "viewBox", "xmlns", "xmlns:xlink", "xml:space",
+    "id", "class", "viewBox", "xmlns", "xmlns:xlink", "xml:space",
     "width", "height", "x", "y", "dx", "dy", "cx", "cy", "r", "rx", "ry",
     "x1", "y1", "x2", "y2", "d", "fill", "stroke", "stroke-width",
     "stroke-linecap", "stroke-linejoin", "stroke-dasharray", "stroke-dashoffset",

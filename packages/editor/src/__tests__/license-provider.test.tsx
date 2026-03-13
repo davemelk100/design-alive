@@ -11,10 +11,10 @@ function wrapper(licenseKey?: string) {
 }
 
 describe("LicenseProvider", () => {
-  it("grants premium when no key is provided (freemium default)", () => {
+  it("denies premium when no key is provided", () => {
     const { result } = renderHook(() => useLicense(), { wrapper: wrapper() });
-    expect(result.current.isValid).toBe(true);
-    expect(result.current.isPremium).toBe(true);
+    expect(result.current.isValid).toBe(false);
+    expect(result.current.isPremium).toBe(false);
   });
 
   it("grants premium for a valid license key", () => {

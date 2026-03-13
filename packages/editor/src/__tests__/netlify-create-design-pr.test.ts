@@ -81,6 +81,7 @@ describe("create-design-pr", () => {
 
   beforeEach(() => {
     process.env.GITHUB_TOKEN = "ghp_test_token";
+    process.env.NETLIFY_DEV = "true";
     mockFetch.mockReset();
   });
 
@@ -154,6 +155,70 @@ describe("create-design-pr", () => {
       });
       const second = await handler(event2);
       expect(second.statusCode).toBe(200);
+    });
+  });
+
+  // ── API key auth ──────────────────────────────────────────────────────
+
+  describe("API key authentication", () => {
+    it("returns 500 when PR_API_KEY is not configured in production", async () => {
+      delete process.env.NETLIFY_DEV;
+      delete process.env.PR_API_KEY;
+      const result = await handler(
+        makeEvent({
+          headers: { origin: "https://themalive.com", "x-forwarded-for": "10.0.0.220", "x-api-key": "some-key" },
+        }),
+      );
+      expect(result.statusCode).toBe(500);
+      expect(parseBody(result).error).toBe("PR_API_KEY not configured");
+    });
+
+    it("returns 401 when API key is missing in production", async () => {
+      delete process.env.NETLIFY_DEV;
+      process.env.PR_API_KEY = "correct-key";
+      const result = await handler(
+        makeEvent({
+          headers: { origin: "https://themalive.com", "x-forwarded-for": "10.0.0.221" },
+        }),
+      );
+      expect(result.statusCode).toBe(401);
+      expect(parseBody(result).error).toBe("Invalid or missing API key");
+    });
+
+    it("returns 401 when API key is wrong in production", async () => {
+      delete process.env.NETLIFY_DEV;
+      process.env.PR_API_KEY = "correct-key";
+      const result = await handler(
+        makeEvent({
+          headers: { origin: "https://themalive.com", "x-forwarded-for": "10.0.0.222", "x-api-key": "wrong-key" },
+        }),
+      );
+      expect(result.statusCode).toBe(401);
+      expect(parseBody(result).error).toBe("Invalid or missing API key");
+    });
+
+    it("allows request with correct API key in production", async () => {
+      delete process.env.NETLIFY_DEV;
+      process.env.PR_API_KEY = "correct-key";
+      setupGitHubMocks();
+      const result = await handler(
+        makeEvent({
+          headers: { origin: "https://themalive.com", "x-forwarded-for": "10.0.0.223", "x-api-key": "correct-key" },
+        }),
+      );
+      expect(result.statusCode).toBe(200);
+    });
+
+    it("skips API key check in local dev", async () => {
+      process.env.NETLIFY_DEV = "true";
+      delete process.env.PR_API_KEY;
+      setupGitHubMocks();
+      const result = await handler(
+        makeEvent({
+          headers: { origin: "https://themalive.com", "x-forwarded-for": "10.0.0.224" },
+        }),
+      );
+      expect(result.statusCode).toBe(200);
     });
   });
 

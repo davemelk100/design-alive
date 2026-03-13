@@ -9,7 +9,7 @@ function corsHeaders(origin?: string) {
   return {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": allowed,
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, x-api-key",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 }
@@ -103,6 +103,26 @@ export const handler = async (event: any) => {
       headers,
       body: JSON.stringify({ error: "Method not allowed" }),
     };
+  }
+
+  // Verify API key (skip in local dev)
+  if (!process.env.NETLIFY_DEV) {
+    const apiKey = process.env.PR_API_KEY;
+    if (!apiKey) {
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({ error: "PR_API_KEY not configured" }),
+      };
+    }
+    const provided = event.headers["x-api-key"];
+    if (!provided || provided !== apiKey) {
+      return {
+        statusCode: 401,
+        headers,
+        body: JSON.stringify({ error: "Invalid or missing API key" }),
+      };
+    }
   }
 
   // Rate limit by IP
