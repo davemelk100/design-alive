@@ -50,3 +50,6 @@ export type { LicenseProviderProps } from "./hooks/useLicense";
 export { PremiumGate } from "./components/PremiumGate";
 export type { PremiumGateProps } from "./components/PremiumGate";
 export { SectionNav } from "./components/SectionNav";
+export { FeatureFlag } from "./components/FeatureFlag";
+export { FEATURE_FLAGS } from "./utils/featureFlags";
+export type { FeatureFlagName } from "./utils/featureFlags";

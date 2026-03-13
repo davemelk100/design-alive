@@ -76,7 +76,7 @@ function UpgradeModal({
             <p className="text-xs ds-text-muted">{feature.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</p>
           </div>
         </div>
-        <p className="text-sm font-light mb-5 ds-text-muted">
+        <p className="text-sm font-light mb-5 ds-text-fg">
           This feature requires a Themal Pro license. Upgrade to unlock all premium features including harmony schemes, color locks, interaction controls, and more.
         </p>
         <div className="flex flex-col gap-2">

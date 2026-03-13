@@ -4,6 +4,21 @@ import usePageMeta from "../hooks/usePageMeta";
 
 const features = [
   {
+    version: "0.27",
+    items: [
+      "CSS isolation - disabled Tailwind preflight globally, replaced with a scoped reset inside .ds-editor only to prevent leaking styles into the host site",
+      "Font inheritance by default - typography defaults to \"inherit\" so the editor picks up the host site's heading and body fonts without overriding them",
+      "Inherit (Host) font option - new first option in font dropdowns that omits font-family entirely, letting host CSS cascade through",
+      "Playwright health check suite - 39 e2e tests across 4 theme presets covering CSS variables, theme switching, font inheritance, contrast, a11y (axe-core WCAG AA), CSS isolation, and premium gate",
+      "Accessibility fixes - ds-text-muted specificity corrected to beat button color reset, explicit background-color/color on .ds-editor for accurate axe-core contrast detection",
+      "SectionNav arrow sizing - arrows now use em units inside headings so they scale consistently with section header arrows",
+      "Purge info icon - moved inline with the Purge button label instead of a separate button",
+      "defaultColors priority - host-provided defaultColors now correctly override stored theme on initial mount",
+      "Premium modal contrast fix - modal body text uses foreground color instead of muted for readable contrast",
+      "Custom select dropdowns replaced all native selects site-wide",
+    ],
+  },
+  {
     version: "0.23",
     items: [
       "Major refactor - DesignSystemEditor split from 9,500 lines into focused section components, domain hooks, and shared UI",
@@ -269,7 +284,6 @@ export default function Features() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4">
             {[
               { title: "VS Code Extension", desc: "Edit and preview design tokens directly inside your code editor." },
-              { title: "AI-Assisted Design", desc: "Describe your brand or mood and let AI generate a complete design system with colors, typography, and component styles." },
               { title: "Mobile App", desc: "Edit and preview your design system on the go with a native iOS and Android app." },
             ].map(({ title, desc }) => (
               <div key={title} className="flex items-start gap-2">

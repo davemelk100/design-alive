@@ -105,9 +105,6 @@ export interface ColorsSectionProps {
   colors: Record<string, string>;
   lockedKeys: Set<string>;
   setLockedKeys: React.Dispatch<React.SetStateAction<Set<string>>>;
-  hoveredLockKey: string | null;
-  setHoveredLockKey: React.Dispatch<React.SetStateAction<string | null>>;
-  isPremium: boolean;
   generatedCode: string | null;
   setGeneratedCode: React.Dispatch<React.SetStateAction<string | null>>;
   exportFormat: "css" | "tokens";
@@ -146,9 +143,6 @@ export function ColorsSection({
   colors,
   lockedKeys,
   setLockedKeys,
-  hoveredLockKey,
-  setHoveredLockKey,
-  isPremium,
   generatedCode,
   setGeneratedCode,
   exportFormat,
@@ -496,7 +490,7 @@ export function ColorsSection({
                           tabIndex={-1}
                         />
                         <button
-                          className={`h-6 sm:h-auto sm:w-8 flex items-center justify-center transition-all rounded-bl-lg rounded-br-lg sm:rounded-bl-none sm:rounded-tr-lg ${isPremium ? "cursor-pointer" : "cursor-not-allowed"} ${isLocked ? (wc >= bc ? "ds-swatch-light" : "ds-swatch-dark") : ""}`}
+                          className={`h-6 sm:h-auto sm:w-8 flex items-center justify-center transition-all rounded-bl-lg rounded-br-lg sm:rounded-bl-none sm:rounded-tr-lg cursor-pointer ${isLocked ? (wc >= bc ? "ds-swatch-light" : "ds-swatch-dark") : ""}`}
                           style={{
                             backgroundColor: isLocked
                               ? `hsl(${bgHsl})`
@@ -507,12 +501,6 @@ export function ColorsSection({
                             opacity: canLock ? 1 : 0.3,
                           }}
                           onClick={() => {
-                            if (!isPremium) {
-                              setHoveredLockKey((prev) =>
-                                prev === key ? null : key,
-                              );
-                              return;
-                            }
                             if (!canLock) return;
                             setLockedKeys((prev) => {
                               const next = new Set(prev);
@@ -522,13 +510,11 @@ export function ColorsSection({
                             });
                           }}
                           title={
-                            !isPremium
-                              ? "Pro feature"
-                              : isLocked
-                                ? `Unlock ${label}`
-                                : lockedKeys.size >= 4
-                                  ? "Max 4 locks"
-                                  : `Lock ${label}`
+                            isLocked
+                              ? `Unlock ${label}`
+                              : lockedKeys.size >= 4
+                                ? "Max 4 locks"
+                                : `Lock ${label}`
                           }
                           aria-label={
                             isLocked
@@ -579,102 +565,6 @@ export function ColorsSection({
                   );
                 })}
               </div>
-
-              {!isPremium && hoveredLockKey && (
-                <div
-                  className="fixed inset-0 z-50 flex items-center justify-center"
-                  style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-                  onClick={() => setHoveredLockKey(null)}
-                >
-                  <div
-                    className="rounded-xl p-6 w-[360px] shadow-xl ds-surface"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div
-                        className="w-10 h-10 rounded-full flex items-center justify-center ds-bg-muted"
-                      >
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <rect
-                            x="3"
-                            y="11"
-                            width="18"
-                            height="11"
-                            rx="2"
-                            ry="2"
-                          />
-                          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                        </svg>
-                      </div>
-                      <div>
-                        <h3
-                          className="text-lg font-medium ds-text-fg"
-                        >
-                          Pro Feature
-                        </h3>
-                        <p className="text-xs ds-text-muted">
-                          Color Locks
-                        </p>
-                      </div>
-                    </div>
-                    <p
-                      className="text-sm font-light mb-5 ds-text-muted"
-                    >
-                      This feature requires a Themal Pro license. Upgrade to
-                      unlock all premium features including harmony schemes,
-                      color locks, interaction controls, and more.
-                    </p>
-                    <div className="flex flex-col gap-2">
-                      <a
-                        href={upgradeUrl || "/pricing"}
-                        className="w-full text-center px-4 py-2.5 text-sm font-medium rounded-lg transition-opacity hover:opacity-90 ds-surface-invert"
-                      >
-                        View Pricing
-                      </a>
-                      {signInUrl && (
-                        <button
-                          onClick={() => {
-                            setHoveredLockKey(null);
-                            window.dispatchEvent(
-                              new CustomEvent("themal:sign-in"),
-                            );
-                          }}
-                          className="w-full text-center px-4 py-2.5 text-sm font-light rounded-lg transition-opacity hover:opacity-70 ds-bg-muted ds-text-fg"
-                        >
-                          Already have a license? Sign in
-                        </button>
-                      )}
-                    </div>
-                    <button
-                      onClick={() => setHoveredLockKey(null)}
-                      className="absolute top-4 right-4 p-1 rounded-lg transition-opacity hover:opacity-70 ds-text-muted"
-                      aria-label="Close"
-                    >
-                      <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M18 6L6 18M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              )}
 
               {/* Generated code output */}
               <ExportCodeBlock

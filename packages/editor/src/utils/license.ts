@@ -8,7 +8,6 @@
 
 export type PremiumFeature =
   | "harmony-schemes"
-  | "color-locks"
   | "pr-integration"
   | "undo"
   | "palette-export"

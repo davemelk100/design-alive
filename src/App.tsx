@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useClerk } from "@clerk/clerk-react";
 
 import { ThemeProvider } from "./context/ThemeContext";
-import { applyStoredThemeColors } from "@design-alive/editor";
+import { applyStoredThemeColors, EDITABLE_VARS } from "@design-alive/editor";
 import CookieConsent from "./components/CookieConsent";
 import SiteLayout from "./components/SiteLayout";
 
@@ -32,6 +32,45 @@ export default function App() {
 
   useEffect(() => {
     applyStoredThemeColors();
+  }, []);
+
+  // Mirror editor color changes to :root so the site header/footer stay in sync
+  useEffect(() => {
+    const syncToRoot = () => {
+      const editor = document.querySelector(".ds-editor") as HTMLElement | null;
+      if (!editor) return;
+      const root = document.documentElement;
+      for (const { key } of EDITABLE_VARS) {
+        const val = editor.style.getPropertyValue(key);
+        if (val) root.style.setProperty(key, val);
+      }
+    };
+
+    // Observe style attribute changes on .ds-editor
+    let mo: MutationObserver | null = null;
+    const setup = () => {
+      const editor = document.querySelector(".ds-editor");
+      if (!editor) return;
+      mo = new MutationObserver(syncToRoot);
+      mo.observe(editor, { attributes: true, attributeFilter: ["style"] });
+      syncToRoot(); // initial sync
+    };
+
+    // Editor may not be mounted yet — wait for it
+    setup();
+    if (!mo) {
+      const poll = setInterval(() => {
+        setup();
+        if (mo) clearInterval(poll);
+      }, 500);
+      return () => { clearInterval(poll); mo?.disconnect(); };
+    }
+
+    window.addEventListener("theme-pending-update", syncToRoot);
+    return () => {
+      mo?.disconnect();
+      window.removeEventListener("theme-pending-update", syncToRoot);
+    };
   }, []);
 
   // Listen for sign-in requests from the editor's PremiumGate popover

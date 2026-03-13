@@ -144,7 +144,6 @@ function DesignSystemEditorInner({
   showSectionNav = true,
 }: DesignSystemEditorProps) {
   const { isPremium } = useLicense();
-  const [hoveredLockKey, setHoveredLockKey] = useState<string | null>(null);
   const wcagEnforcement = true;
 
   const editorRootRef = useRef<HTMLDivElement>(null);
@@ -2118,9 +2117,6 @@ function DesignSystemEditorInner({
             colors={colors}
             lockedKeys={lockedKeys}
             setLockedKeys={setLockedKeys}
-            hoveredLockKey={hoveredLockKey}
-            setHoveredLockKey={setHoveredLockKey}
-            isPremium={isPremium}
             generatedCode={generatedCode}
             setGeneratedCode={setGeneratedCode}
             exportFormat={exportFormat}

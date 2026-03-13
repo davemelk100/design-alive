@@ -73,7 +73,6 @@ The following features require a valid license key:
 | Feature | Description |
 |---------|-------------|
 | Harmony schemes | Generate palettes using complementary, analogous, triadic, or split-complementary color relationships. |
-| Color locks | Lock up to 4 colors to preserve them during palette regeneration. |
 | PR integration | Create design system pull requests directly from the editor. |
 | Undo/redo | Up to 10 levels of undo for theme refreshes and image palette applications. |
 | Image palette extraction | Extract color palettes from uploaded images with preview confirmation. |
@@ -377,6 +376,10 @@ import {
   LicenseProvider,      // Context provider for license state
   useLicense,           // Hook: { isValid, isPremium }
   PremiumGate,          // Gate component for premium features
+
+  // Feature flags
+  FeatureFlag,          // Conditionally render children based on a feature flag
+  FEATURE_FLAGS,        // Current feature flag values
 } from '@themal/editor';
 ```
 
@@ -404,6 +407,7 @@ import type {
   PremiumGateProps,
   GitHubConfig,
   StoredGitHubAuth,
+  FeatureFlagName,
 } from '@themal/editor';
 ```
 
@@ -411,7 +415,8 @@ import type {
 
 1. **Color picking** — Click any swatch to scroll the Colors section into view, then open the native color picker. Changing a key color (brand, secondary, accent, background) automatically derives related tokens.
 2. **Harmony schemes** *(Pro)* — Generate palettes using complementary, analogous, triadic, or split-complementary color relationships.
-3. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1). Failing pairs are auto-corrected by adjusting lightness. The accessibility audit shows a centered modal with results. On failure, choose "Ignore" to dismiss or "Suggest Alternative" to auto-fix contrast issues. A WCAG On/Off toggle lets you disable auto-correction for marketing or other contexts that don't require WCAG compliance. Locks are still honored when enforcement is off.
+3. **Color locks** — Lock up to 4 color tokens to preserve them during palette regeneration or harmony scheme changes. Free for all users.
+4. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1). Failing pairs are auto-corrected by adjusting lightness. The accessibility audit shows a centered modal with results. On failure, choose "Ignore" to dismiss or "Suggest Alternative" to auto-fix contrast issues. A WCAG On/Off toggle lets you disable auto-correction for marketing or other contexts that don't require WCAG compliance. Locks are still honored when enforcement is off.
 4. **Typography** — Choose heading and body fonts (including custom Google Fonts), adjust sizes, weights, line height, and letter spacing with live preview. Five built-in presets (System, Modern, Classic, Compact, Editorial). The default "Inherit (Host)" option defers to the host site's font-family rules, so the editor naturally assumes your site's heading and body fonts. Typography is scoped to `.ds-editor` and does not override the host site's fonts.
 5. **Button styles** — Customize button padding, font size, font weight, border radius, shadow, and border width with presets (Subtle, Elevated, Bold).
 6. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
@@ -460,7 +465,8 @@ src/
 │   ├── githubAuth.ts           # GitHub OAuth popup flow
 │   ├── iconImport.ts           # SVG sanitizer, icon fetching
 │   ├── storage.ts              # localStorage with fallbacks
-│   └── license.ts              # License key validation
+│   ├── license.ts              # License key validation
+│   └── featureFlags.ts         # Feature flag config for in-progress features
 └── styles/editor.css           # Scoped Tailwind + custom CSS
 ```
 

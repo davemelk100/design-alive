@@ -206,7 +206,7 @@ test.describe("Plugin Health Check", () => {
       const headingFont = await getFontFamily(page, ".ds-editor h2");
       const bodyFont = await getFontFamily(page, ".ds-editor p");
       // If host sets different heading/body fonts, they should differ
-      // (the example app sets League Gothic for headings, Courier for body)
+      // (the example app sets Roboto Serif for headings, Courier for body)
       if (headingFont && bodyFont) {
         expect(
           headingFont,

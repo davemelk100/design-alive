@@ -14,6 +14,7 @@ const check = (
 const freeFeatures = [
   "Color picking and live derivation",
   "Random palette generation",
+  "Color locks during regeneration",
   "Card style, typography, alerts customization",
   "Per-section CSS and Tailwind export",
   "Shareable theme URLs",
@@ -24,7 +25,6 @@ const freeFeatures = [
 const proFeatures = [
   "Everything in Free, plus:",
   "Color harmony schemes (complementary, analogous, triadic, split-complementary)",
-  "Color locks during regeneration",
   "Image-based palette extraction",
   "Export palette as SVG, PNG, or text",
   "GitHub PR integration",
