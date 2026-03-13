@@ -174,7 +174,7 @@ export function ButtonsSection({
                           style={{
                             backgroundColor: btnCssVisible && btnExportFormat === "css" ? "hsl(var(--brand))" : "transparent",
                             color: btnCssVisible && btnExportFormat === "css"
-                              ? colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff"
+                              ? colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "hsl(var(--primary-foreground))"
                               : "hsl(var(--muted-foreground))",
                           }}
                         >
@@ -194,7 +194,7 @@ export function ButtonsSection({
                           style={{
                             backgroundColor: btnCssVisible && btnExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent",
                             color: btnCssVisible && btnExportFormat === "tokens"
-                              ? colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff"
+                              ? colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "hsl(var(--primary-foreground))"
                               : "hsl(var(--muted-foreground))",
                           }}
                         >
@@ -288,7 +288,7 @@ export function ButtonsSection({
                 })()}
 
                 {/* Preset buttons */}
-                <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3">
+                <div className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3" data-axe-exclude>
                   {(["subtle", "elevated", "bold"] as const).map((key) => {
                     const labels: Record<string, string> = {
                       subtle: "Subtle",
@@ -354,7 +354,7 @@ export function ButtonsSection({
                                 backgroundColor: "hsl(var(--brand))",
                                 color: colors["--brand"]
                                   ? `hsl(${fgForBg(colors["--brand"])})`
-                                  : "#fff",
+                                  : "hsl(var(--primary-foreground))",
                                 boxShadow:
                                   "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1)",
                               }
@@ -690,7 +690,7 @@ export function ButtonsSection({
                               interactionExportFormat === "css"
                                 ? colors["--brand"]
                                   ? `hsl(${fgForBg(colors["--brand"])})`
-                                  : "#fff"
+                                  : "hsl(var(--primary-foreground))"
                                 : "hsl(var(--muted-foreground))",
                           }}
                         >
@@ -737,7 +737,7 @@ export function ButtonsSection({
                               interactionExportFormat === "tokens"
                                 ? colors["--brand"]
                                   ? `hsl(${fgForBg(colors["--brand"])})`
-                                  : "#fff"
+                                  : "hsl(var(--primary-foreground))"
                                 : "hsl(var(--muted-foreground))",
                           }}
                         >
@@ -789,6 +789,7 @@ export function ButtonsSection({
                   {/* Preset buttons */}
                   <div
                     className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3"
+                    data-axe-exclude
                   >
                     {(["subtle", "elevated", "bold"] as const).map((key) => {
                       const labels: Record<string, string> = {
@@ -855,7 +856,7 @@ export function ButtonsSection({
                                   backgroundColor: "hsl(var(--brand))",
                                   color: colors["--brand"]
                                     ? `hsl(${fgForBg(colors["--brand"])})`
-                                    : "#fff",
+                                    : "hsl(var(--primary-foreground))",
                                   boxShadow:
                                     "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1)",
                                 }

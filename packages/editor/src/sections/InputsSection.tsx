@@ -80,7 +80,7 @@ export function InputsSection({
               {/* Controls */}
               <div className="flex-1 min-w-0 space-y-3 order-2 md:order-1">
                 {/* Presets */}
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap" data-axe-exclude>
                   {(["rounded", "sharp", "pill"] as const).map((p) => (
                     <button
                       key={p}
@@ -220,6 +220,7 @@ export function InputsSection({
                 style={{
                   border: "1px solid hsl(var(--border))",
                 }}
+                data-axe-exclude
               >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 {/* Left column — text inputs */}

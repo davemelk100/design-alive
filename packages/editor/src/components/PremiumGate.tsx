@@ -168,7 +168,7 @@ export function PremiumGate({
   if (variant === "inline") {
     return (
       <>
-        <div className="ds-premium-gated-inline" style={{ display: "inline-flex", alignItems: "center", gap: 4, cursor: "pointer" }} onClick={handleClick}>
+        <div className="ds-premium-gated-inline" style={{ display: "inline-flex", alignItems: "center", gap: 4, cursor: "not-allowed" }} onClick={handleClick}>
           <span className="ds-premium-locked-content">{children}</span>
           {!hideLock && <span
             className="ds-premium-lock"
@@ -185,7 +185,7 @@ export function PremiumGate({
   return (
     <div className="ds-premium-gated-section" style={{ position: "relative" }}>
       <div
-        style={{ opacity: 0.4, pointerEvents: "auto", filter: "grayscale(0.5)", userSelect: "none", cursor: "pointer" }}
+        style={{ pointerEvents: "auto", cursor: "not-allowed" }}
         onClick={handleClick}
       >
         {children}

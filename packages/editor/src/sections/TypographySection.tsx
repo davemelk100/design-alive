@@ -206,7 +206,7 @@ export function TypographySection({
                           typoCssVisible && typoExportFormat === "css"
                             ? colors["--brand"]
                               ? `hsl(${fgForBg(colors["--brand"])})`
-                              : "#fff"
+                              : "hsl(var(--primary-foreground))"
                             : "hsl(var(--muted-foreground))",
                       }}
                     >
@@ -251,7 +251,7 @@ export function TypographySection({
                           typoCssVisible && typoExportFormat === "tokens"
                             ? colors["--brand"]
                               ? `hsl(${fgForBg(colors["--brand"])})`
-                              : "#fff"
+                              : "hsl(var(--primary-foreground))"
                             : "hsl(var(--muted-foreground))",
                       }}
                     >
@@ -297,6 +297,7 @@ export function TypographySection({
             {/* Preset buttons */}
             <div
               className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3"
+              data-axe-exclude
             >
               {(
                 [
@@ -403,7 +404,7 @@ export function TypographySection({
                             backgroundColor: "hsl(var(--brand))",
                             color: colors["--brand"]
                               ? `hsl(${fgForBg(colors["--brand"])})`
-                              : "#fff",
+                              : "hsl(var(--primary-foreground))",
                             boxShadow:
                               "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1)",
                           }
@@ -777,7 +778,7 @@ export function TypographySection({
                   >
                     <h3
                       style={{
-                        fontFamily: typographyState.headingFamily,
+                        ...(typographyState.headingFamily !== "inherit" ? { fontFamily: typographyState.headingFamily } : {}),
                         fontSize: `${Math.round(typographyState.baseFontSize * 1.75)}px`,
                         fontWeight: typographyState.headingWeight,
                         lineHeight: typographyState.lineHeight,
@@ -788,7 +789,7 @@ export function TypographySection({
                     </h3>
                     <h4
                       style={{
-                        fontFamily: typographyState.headingFamily,
+                        ...(typographyState.headingFamily !== "inherit" ? { fontFamily: typographyState.headingFamily } : {}),
                         fontSize: `${Math.round(typographyState.baseFontSize * 1.25)}px`,
                         fontWeight: typographyState.headingWeight,
                         lineHeight: typographyState.lineHeight,
@@ -895,7 +896,7 @@ export function TypographySection({
                           typoInteractionExportFormat === "css"
                             ? colors["--brand"]
                               ? `hsl(${fgForBg(colors["--brand"])})`
-                              : "#fff"
+                              : "hsl(var(--primary-foreground))"
                             : "hsl(var(--muted-foreground))",
                       }}
                     >
@@ -942,7 +943,7 @@ export function TypographySection({
                           typoInteractionExportFormat === "tokens"
                             ? colors["--brand"]
                               ? `hsl(${fgForBg(colors["--brand"])})`
-                              : "#fff"
+                              : "hsl(var(--primary-foreground))"
                             : "hsl(var(--muted-foreground))",
                       }}
                     >
@@ -994,6 +995,7 @@ export function TypographySection({
               {/* Preset buttons */}
               <div
                 className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3"
+                data-axe-exclude
               >
                 {(["subtle", "elevated", "bold"] as const).map((key) => {
                   const labels: Record<string, string> = {
@@ -1060,7 +1062,7 @@ export function TypographySection({
                               backgroundColor: "hsl(var(--brand))",
                               color: colors["--brand"]
                                 ? `hsl(${fgForBg(colors["--brand"])})`
-                                : "#fff",
+                                : "hsl(var(--primary-foreground))",
                               boxShadow:
                                 "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1)",
                             }
@@ -1379,7 +1381,7 @@ export function TypographySection({
                       <h3
                         className="cursor-default"
                         style={{
-                          fontFamily: typographyState.headingFamily,
+                          ...(typographyState.headingFamily !== "inherit" ? { fontFamily: typographyState.headingFamily } : {}),
                           fontSize: `${Math.round(typographyState.baseFontSize * 1.5)}px`,
                           fontWeight: typographyState.headingWeight,
                           transition: `opacity ${typoInteractionStyle.headingTransitionDuration}ms ease, transform ${typoInteractionStyle.headingTransitionDuration}ms ease`,

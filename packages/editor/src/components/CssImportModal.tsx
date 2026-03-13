@@ -272,7 +272,7 @@ export function CssImportModal({
               className="px-4 py-2 text-sm font-light rounded-lg transition-opacity"
               style={{
                 backgroundColor: "hsl(var(--brand))",
-                color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "#fff",
+                color: colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "hsl(var(--primary-foreground))",
                 opacity: !cssImportPreview || (
                   Object.keys(cssImportPreview.colors).length === 0 &&
                   Object.keys(cssImportPreview.typographyState).length === 0 &&

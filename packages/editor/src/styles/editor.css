@@ -1,6 +1,48 @@
-@tailwind base;
+/* Preflight disabled — scoped reset below instead */
 @tailwind components;
 @tailwind utilities;
+
+/* Scoped reset: only applies inside .ds-editor so host styles are never overridden */
+.ds-editor *, .ds-editor *::before, .ds-editor *::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+}
+.ds-editor {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+.ds-editor img, .ds-editor svg, .ds-editor video {
+  display: block;
+  max-width: 100%;
+}
+.ds-editor blockquote, .ds-editor dl, .ds-editor dd, .ds-editor h1, .ds-editor h2, .ds-editor h3, .ds-editor h4, .ds-editor h5, .ds-editor h6, .ds-editor hr, .ds-editor figure, .ds-editor p, .ds-editor pre {
+  margin: 0;
+}
+.ds-editor ol, .ds-editor ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ds-editor a {
+  color: inherit;
+  text-decoration: inherit;
+}
+.ds-editor button, .ds-editor input, .ds-editor select, .ds-editor textarea {
+  font-family: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
 
 @layer utilities {
   .text-brand-dynamic { color: hsl(var(--brand)); }
@@ -13,12 +55,12 @@
 }
 
 /* ── Design-system color utilities ──────────────────────────────────── */
-/* Text colors */
-.ds-text-fg            { color: hsl(var(--foreground)); }
-.ds-text-muted         { color: hsl(var(--muted-foreground)); }
-.ds-text-brand         { color: hsl(var(--brand)); }
-.ds-text-destructive   { color: hsl(var(--destructive)); }
-.ds-text-card          { color: hsl(var(--card-foreground)); }
+/* Text colors — scoped under .ds-editor to beat the button reset (0,1,1) */
+.ds-editor .ds-text-fg            { color: hsl(var(--foreground)); }
+.ds-editor .ds-text-muted         { color: hsl(var(--muted-foreground)); }
+.ds-editor .ds-text-brand         { color: hsl(var(--brand)); }
+.ds-editor .ds-text-destructive   { color: hsl(var(--destructive)); }
+.ds-editor .ds-text-card          { color: hsl(var(--card-foreground)); }
 
 /* Background colors */
 .ds-bg                 { background-color: hsl(var(--background)); }
@@ -40,7 +82,7 @@
 .ds-surface-invert     { background-color: hsl(var(--foreground)); color: hsl(var(--background)); }
 
 .ds-editor .ds-section-nav {
-  background-color: hsl(var(--background, 0 0% 98%));
+  background-color: transparent;
   border-bottom: none;
   box-shadow: none;
 }
@@ -310,7 +352,8 @@
   pointer-events: none;
 }
 
-/* Base styles for editor elements — inherit consumer font-family and color */
+
+/* Base styles for editor elements — inherit consumer font-family */
 .ds-editor p,
 .ds-editor ul,
 .ds-editor ol,
@@ -324,7 +367,23 @@
 .ds-editor span:not(.ds-premium-tooltip span):not(.ds-h2):not(.ds-palette-label) {
   font-family: inherit;
   font-size: var(--ds-base-font-size, 0.8125rem);
+}
+
+/* Form elements have browser-default colors — force inherit from themed root.
+   Exclude elements with explicit ds-text-* color classes so they aren't overridden. */
+.ds-editor input,
+.ds-editor select,
+.ds-editor textarea,
+.ds-editor button:not(.ds-h2-btn):not(.ds-swatch-light):not(.ds-swatch-dark):not([class*="ds-text-"]) {
   color: inherit;
+}
+
+/* Swatch text colors must override everything — computed from contrast ratio */
+.ds-editor .ds-swatch-light {
+  color: #ffffff !important;
+}
+.ds-editor .ds-swatch-dark {
+  color: #000000 !important;
 }
 
 /* H2 back-to-top links — no transitions or size changes */
@@ -338,7 +397,7 @@
 /* Left sidebar nav */
 .ds-left-nav {
   border-right: none;
-  background-color: hsl(var(--background, 0 0% 98%));
+  background-color: transparent;
 }
 .ds-left-nav .ds-global-btn,
 .ds-left-nav a,
@@ -408,43 +467,56 @@
   opacity: 0.85;
 }
 
+/* ── Range slider tracks: theme-aware, visible on any background ──── */
+.ds-editor input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+.ds-editor input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background-color: hsl(var(--border));
+}
+.ds-editor input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background-color: hsl(var(--border));
+}
+.ds-editor input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background-color: hsl(var(--foreground));
+  margin-top: -0.3125rem;
+  border: 2px solid hsl(var(--background));
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.ds-editor input[type="range"]::-moz-range-thumb {
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background-color: hsl(var(--foreground));
+  border: 2px solid hsl(var(--background));
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
 /* ── Mobile touch-friendly sizing ───────────────────────────────────── */
 @media (max-width: 768px) {
-  /* Range sliders: taller touch target with visible track */
+  /* Range sliders: taller touch target */
   .ds-editor input[type="range"] {
     height: 2.75rem;
-    cursor: pointer;
-    -webkit-appearance: none;
-    appearance: none;
-    background: transparent;
-  }
-  .ds-editor input[type="range"]::-webkit-slider-runnable-track {
-    height: 4px;
-    border-radius: 2px;
-    background-color: hsl(var(--border));
   }
   .ds-editor input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
     width: 1.25rem;
     height: 1.25rem;
-    border-radius: 50%;
-    background-color: hsl(var(--foreground));
     margin-top: -0.5rem;
-    border: 2px solid hsl(var(--background));
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-  .ds-editor input[type="range"]::-moz-range-track {
-    height: 4px;
-    border-radius: 2px;
-    background-color: hsl(var(--border));
   }
   .ds-editor input[type="range"]::-moz-range-thumb {
     width: 1.25rem;
     height: 1.25rem;
-    border-radius: 50%;
-    background-color: hsl(var(--foreground));
-    border: 2px solid hsl(var(--background));
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   }
 
   /* Sidebar action buttons: bump to 44px minimum */

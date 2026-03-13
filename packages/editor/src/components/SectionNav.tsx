@@ -121,27 +121,29 @@ export function SectionNav() {
                 key={id}
                 ref={(el) => { navItemRefs.current[id] = el; }}
                 href={`#${id}`}
-                className="text-[14px] sm:text-[16px] md:text-[20px] font-light flex items-baseline gap-1 sm:gap-2 whitespace-nowrap no-underline"
+                className="whitespace-nowrap flex items-center gap-2 no-underline"
                 style={{
                   color: "hsl(var(--foreground))",
                   transform: `translateX(${navOffsets[id] ?? 0}px)`,
                   transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
-                {label}
-                <svg
-                  className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 opacity-30"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2.5}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 5v14m0 0l-7-7m7 7l7-7"
-                  />
-                </svg>
+                <h2 className="text-sm sm:text-base md:text-lg font-bold tracking-wider m-0 p-0 flex items-baseline gap-2">
+                  {label}
+                  <svg
+                    className="w-[1em] h-[1em] opacity-60"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M12 5v14m0 0l-7-7m7 7l7-7"
+                    />
+                  </svg>
+                </h2>
               </a>
             ))}
           </nav>

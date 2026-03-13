@@ -159,20 +159,15 @@ function DesignSystemEditorInner({
     readCurrentColors,
   } = useColorState(editorRootRef, wcagEnforcement, defaultColors);
 
-  // Keep body background-color and root CSS variables in sync so elements
-  // outside the editor DOM (e.g. sticky header) follow the theme.
+  // Sync CSS variables to the editor root element only (not document root).
+  // This keeps plugin CSS fully scoped to .ds-editor.
   useEffect(() => {
-    const bg = colors["--background"];
-    if (bg) document.body.style.backgroundColor = `hsl(${bg})`;
-    const root = document.documentElement;
+    const el = editorRootRef.current;
+    if (!el) return;
     const varsToSync = ["--background", "--foreground", "--border", "--muted", "--muted-foreground", "--brand"] as const;
     for (const v of varsToSync) {
-      if (colors[v]) root.style.setProperty(v, colors[v]);
+      if (colors[v]) el.style.setProperty(v, colors[v]);
     }
-    return () => {
-      document.body.style.backgroundColor = "";
-      for (const v of varsToSync) root.style.removeProperty(v);
-    };
   }, [colors["--background"], colors["--foreground"], colors["--border"], colors["--muted"], colors["--muted-foreground"], colors["--brand"]]);
 
   const {
@@ -234,7 +229,7 @@ function DesignSystemEditorInner({
           // Extract the first font name for the label (strip quotes and fallbacks)
           const firstName = family.split(",")[0].trim().replace(/^["']|["']$/g, "");
           // Skip if it matches the system default value
-          if (family !== "system-ui, -apple-system, sans-serif") {
+          if (family !== "inherit" && family !== "system-ui, -apple-system, sans-serif") {
             appDefaultOptions.push({ label: `App Default (${firstName})`, value: family });
           }
         }
@@ -1362,7 +1357,7 @@ function DesignSystemEditorInner({
   };
 
   return (
-    <div id="top" ref={editorRootRef} className={`ds-editor${className ? ` ${className}` : ""}`} style={{ background: "transparent" }}>
+    <div id="top" ref={editorRootRef} className={`ds-editor${className ? ` ${className}` : ""}`} style={{ background: "transparent", color: "hsl(var(--foreground))" }}>
       {showHeader && (
         <div
           className="pt-2 sm:pt-3 pb-4 sm:pb-2 lg:pb-3"
@@ -1806,32 +1801,30 @@ function DesignSystemEditorInner({
               </button>
             </PremiumGate>
           )}
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setShowPurgeModal(true)}
-              className="ds-global-btn flex-1 h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
-            >
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-              <span className="truncate">Purge</span>
-            </button>
-            <button
+          <button
+            onClick={() => setShowPurgeModal(true)}
+            className="ds-global-btn flex-1 h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
+          >
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            <span className="truncate">Purge</span>
+            <span
               ref={purgeInfoRef}
-              type="button"
-              className="w-6 h-6 flex items-center justify-center rounded-full ds-text-muted hover:opacity-70 transition-opacity"
-              aria-label="What does Purge do?"
-              onMouseEnter={() => {
+              className="ds-text-muted hover:opacity-70 transition-opacity"
+              onMouseEnter={(e) => {
+                e.stopPropagation();
                 const rect = purgeInfoRef.current?.getBoundingClientRect();
                 if (rect) setPurgeInfoPos({ top: rect.top - 8, left: rect.left + rect.width / 2 });
               }}
               onMouseLeave={() => setPurgeInfoPos(null)}
+              onClick={(e) => e.stopPropagation()}
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
               </svg>
-            </button>
-          </div>
+            </span>
+          </button>
           {purgeInfoPos && (
             <div
               className="ds-purge-tooltip"
@@ -2586,7 +2579,7 @@ function DesignSystemEditorInner({
                 className="px-4 py-2 text-sm font-light rounded-lg transition-colors hover:opacity-80"
                 style={{
                   backgroundColor: "hsl(var(--destructive, 0 84% 60%))",
-                  color: "#fff",
+                  color: "hsl(var(--destructive-foreground, 0 0% 100%))",
                 }}
               >
                 Purge Everything

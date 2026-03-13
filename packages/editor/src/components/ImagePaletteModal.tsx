@@ -75,7 +75,7 @@ export function ImagePaletteModal({
                 onClose();
               }
             }}
-            className="w-full py-6 text-sm font-light rounded-lg border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-colors hover:opacity-80 cursor-pointer [&[data-dragging=true]]:border-solid [&[data-dragging=true]]:bg-gray-50 ds-text-muted ds-border"
+            className="w-full py-6 text-sm font-light rounded-lg border-2 border-dashed flex flex-col items-center justify-center gap-2 transition-colors hover:opacity-80 cursor-pointer [&[data-dragging=true]]:border-solid [&[data-dragging=true]]:ds-bg-muted ds-text-muted ds-border"
           >
             <svg
               className="w-8 h-8 flex-shrink-0"

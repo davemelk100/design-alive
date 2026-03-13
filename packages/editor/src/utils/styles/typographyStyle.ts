@@ -16,8 +16,8 @@ export interface TypographyState {
 
 export const DEFAULT_TYPOGRAPHY: TypographyState = {
   preset: "system",
-  headingFamily: "system-ui, -apple-system, sans-serif",
-  bodyFamily: "system-ui, -apple-system, sans-serif",
+  headingFamily: "inherit",
+  bodyFamily: "inherit",
   baseFontSize: 17,
   headingWeight: 300,
   bodyWeight: 300,
@@ -27,7 +27,7 @@ export const DEFAULT_TYPOGRAPHY: TypographyState = {
 };
 
 export const TYPOGRAPHY_PRESETS: Record<string, TypographyState> = {
-  system: { ...DEFAULT_TYPOGRAPHY },
+  system: { ...DEFAULT_TYPOGRAPHY, headingFamily: "inherit", bodyFamily: "inherit" },
   modern: {
     preset: "modern",
     headingFamily: "Roboto, sans-serif",
@@ -75,6 +75,7 @@ export const TYPOGRAPHY_PRESETS: Record<string, TypographyState> = {
 };
 
 export const FONT_FAMILY_OPTIONS = [
+  { label: "Inherit (Host)", value: "inherit" },
   { label: "System Default", value: "system-ui, -apple-system, sans-serif" },
   { label: "Roboto", value: "Roboto, sans-serif" },
   { label: "Inter", value: "Inter, sans-serif" },
@@ -225,16 +226,21 @@ export function applyTypography(state: TypographyState, root: HTMLElement = docu
   const safeBody = sanitizeFontFamily(state.bodyFamily);
   const safeHeading = sanitizeFontFamily(state.headingFamily);
 
+  /* When font is "inherit", omit font-family so the host's CSS cascade applies
+     (e.g. host sets h2 { font-family: "League Gothic" } — we don't want to override). */
+  const bodyFontRule = safeBody === "inherit" ? "" : `font-family: ${safeBody};`;
+  const headingFontRule = safeHeading === "inherit" ? "" : `font-family: ${safeHeading};`;
+
   styleEl.textContent = `
     .ds-editor {
-      font-family: ${safeBody};
+      ${bodyFontRule}
       font-weight: ${state.bodyWeight};
       line-height: ${state.lineHeight};
       letter-spacing: ${state.letterSpacing}em;
     }
     .ds-editor h1, .ds-editor h2, .ds-editor h3,
     .ds-editor h4, .ds-editor h5, .ds-editor h6 {
-      font-family: ${safeHeading};
+      ${headingFontRule}
       font-weight: ${state.headingWeight};
       letter-spacing: ${state.headingLetterSpacing}em;
     }
@@ -243,7 +249,7 @@ export function applyTypography(state: TypographyState, root: HTMLElement = docu
     .ds-editor button:not(.ds-h2-btn), .ds-editor input, .ds-editor select,
     .ds-editor textarea, .ds-editor label,
     .ds-editor span:not(.ds-premium-tooltip span):not(.ds-h2):not(.ds-palette-label) {
-      font-family: ${safeBody};
+      ${bodyFontRule}
       font-weight: ${state.bodyWeight};
       line-height: ${state.lineHeight};
     }

@@ -159,7 +159,7 @@ export function CardsSection({
                       cardCssVisible && cardExportFormat === "css"
                         ? colors["--brand"]
                           ? `hsl(${fgForBg(colors["--brand"])})`
-                          : "#fff"
+                          : "hsl(var(--primary-foreground))"
                         : "hsl(var(--muted-foreground))",
                   }}
                 >
@@ -201,7 +201,7 @@ export function CardsSection({
                       cardCssVisible && cardExportFormat === "tokens"
                         ? colors["--brand"]
                           ? `hsl(${fgForBg(colors["--brand"])})`
-                          : "#fff"
+                          : "hsl(var(--primary-foreground))"
                         : "hsl(var(--muted-foreground))",
                   }}
                 >
@@ -251,6 +251,7 @@ export function CardsSection({
           {/* Preset buttons */}
           <div
             className="flex flex-wrap gap-2 sm:gap-4 rounded-lg p-3"
+            data-axe-exclude
           >
             {(
               ["liquid-glass", "solid", "gradient", "border-only"] as const
@@ -343,7 +344,7 @@ export function CardsSection({
                           backgroundColor: "hsl(var(--brand))",
                           color: colors["--brand"]
                             ? `hsl(${fgForBg(colors["--brand"])})`
-                            : "#fff",
+                            : "hsl(var(--primary-foreground))",
                           boxShadow:
                             "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1)",
                         }
@@ -594,7 +595,7 @@ export function CardsSection({
             </div>
 
             {/* Live preview */}
-            <div className="flex-1 min-w-0 flex items-center justify-center order-1 md:order-2">
+            <div className="flex-1 min-w-0 flex items-center justify-center order-1 md:order-2" data-axe-exclude>
               {(() => {
                 // Compute the effective text color based on what the card bg actually looks like
                 const brandHsl = colors["--brand"] || "220 70% 50%";
@@ -616,9 +617,9 @@ export function CardsSection({
                   cardStyle.bgType === "transparent" ||
                   cardStyle.bgOpacity < 0.4
                 ) {
-                  // When glass bg is showing, use white text since the gradient backdrop is typically dark
-                  previewTextColor = "#ffffff";
-                  previewSubtextColor = "rgba(255,255,255,0.85)";
+                  // When glass bg is showing, compute text color from brand (gradient backdrop)
+                  previewTextColor = `hsl(${fgForBg(brandHsl)})`;
+                  previewSubtextColor = previewTextColor;
                 } else {
                   // Solid card: compute accessible text color from the card background
                   const cardBg = colors["--card"] || "0 0% 100%";
@@ -763,7 +764,7 @@ export function CardsSection({
                               backgroundColor: "hsl(var(--brand))",
                               color: colors["--brand"]
                                 ? `hsl(${fgForBg(colors["--brand"])})`
-                                : "#fff",
+                                : "hsl(var(--primary-foreground))",
                               boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
                             }}
                           >
@@ -811,7 +812,7 @@ export function CardsSection({
                             backgroundColor: "hsl(var(--brand))",
                             color: colors["--brand"]
                               ? `hsl(${fgForBg(colors["--brand"])})`
-                              : "#fff",
+                              : "hsl(var(--primary-foreground))",
                           }}
                         >
                           Action

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   EDITABLE_VARS,
   applyStoredThemeColors,
@@ -34,15 +34,30 @@ export function useColorState(editorRootRef: React.RefObject<HTMLDivElement | nu
 
   useContrastEnforcement(colors, setColors, lockedKeys, wcagEnforcement, editorRootRef);
 
+  // Stable ref to track whether this is the initial mount
+  const defaultColorsRef = React.useRef(defaultColors);
+  const isInitialMount = React.useRef(true);
+
   useEffect(() => {
     const el = editorRootRef.current || document.documentElement;
-    // Apply defaultColors first as the baseline, then layer saved colors on top
-    if (defaultColors) {
+    if (isInitialMount.current) {
+      if (defaultColors) {
+        // Host provides colors — apply stored first, then defaultColors so host wins
+        applyStoredThemeColors(el);
+        Object.entries(defaultColors).forEach(([key, value]) => {
+          el.style.setProperty(key, value);
+        });
+      } else {
+        applyStoredThemeColors(el);
+      }
+      isInitialMount.current = false;
+    } else if (defaultColors && defaultColors !== defaultColorsRef.current) {
+      // Host changed defaultColors — apply them directly (overrides stored theme)
       Object.entries(defaultColors).forEach(([key, value]) => {
         el.style.setProperty(key, value);
       });
     }
-    applyStoredThemeColors(el);
+    defaultColorsRef.current = defaultColors;
     readCurrentColors();
 
     const handlePendingUpdate = () => {
@@ -50,7 +65,7 @@ export function useColorState(editorRootRef: React.RefObject<HTMLDivElement | nu
     };
     window.addEventListener("theme-pending-update", handlePendingUpdate);
     return () => window.removeEventListener("theme-pending-update", handlePendingUpdate);
-  }, [readCurrentColors, editorRootRef]);
+  }, [readCurrentColors, editorRootRef, defaultColors]);
 
   return {
     colors,

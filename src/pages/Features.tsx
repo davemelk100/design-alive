@@ -253,7 +253,7 @@ export default function Features() {
                 <span className="mt-0.5 text-brand">{check}</span>
                 <div>
                   <p className="text-sm font-medium text-fg">{title}</p>
-                  <p className="text-xs font-light text-muted">{desc}</p>
+                  <p className="text-xs text-muted">{desc}</p>
                 </div>
               </div>
             ))}
@@ -278,7 +278,7 @@ export default function Features() {
                 </svg>
                 <div>
                   <p className="text-sm font-medium text-fg">{title}</p>
-                  <p className="text-xs font-light text-muted">{desc}</p>
+                  <p className="text-xs text-muted">{desc}</p>
                 </div>
               </div>
             ))}

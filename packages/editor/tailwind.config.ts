@@ -5,6 +5,11 @@ const config: Config = {
   darkMode: ["class"],
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
+    /* Let the host site control font-family — preflight will emit "inherit" instead of a system stack */
+    fontFamily: {
+      sans: ["inherit"],
+      mono: ["inherit"],
+    },
     extend: {
       fontSize: {
         // rem-based so the editor inherits the consuming app's root font-size.
@@ -51,6 +56,9 @@ const config: Config = {
         ring: "hsl(var(--ring))",
       },
     },
+  },
+  corePlugins: {
+    preflight: false,
   },
   plugins: [],
 };

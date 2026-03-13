@@ -55,7 +55,7 @@ export function SectionHeader({
 
   const activeBg = "hsl(var(--brand))";
   const activeColor =
-    brandColor && fgForBg ? `hsl(${fgForBg(brandColor)})` : "#fff";
+    brandColor && fgForBg ? `hsl(${fgForBg(brandColor)})` : "hsl(var(--primary-foreground))";
   const inactiveColor = "hsl(var(--muted-foreground))";
 
   return (

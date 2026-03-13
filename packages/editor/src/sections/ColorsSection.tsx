@@ -292,7 +292,7 @@ export function ColorsSection({
                           generatedCode && exportFormat === "css"
                             ? colors["--brand"]
                               ? `hsl(${fgForBg(colors["--brand"])})`
-                              : "#fff"
+                              : "hsl(var(--primary-foreground))"
                             : "hsl(var(--muted-foreground))",
                       }}
                     >
@@ -334,7 +334,7 @@ export function ColorsSection({
                           generatedCode && exportFormat === "tokens"
                             ? colors["--brand"]
                               ? `hsl(${fgForBg(colors["--brand"])})`
-                              : "#fff"
+                              : "hsl(var(--primary-foreground))"
                             : "hsl(var(--muted-foreground))",
                       }}
                     >
@@ -401,7 +401,6 @@ export function ColorsSection({
                   const bgHsl = hsl || "0 0% 50%";
                   const wc = contrastRatio("0 0% 100%", bgHsl);
                   const bc = contrastRatio("0 0% 0%", bgHsl);
-                  const btnTextColor = wc >= bc ? "#ffffff" : "#000000";
                   const inputId = `brand-btn-color-input-${key}`;
                   const hexCode = hsl ? hslStringToHex(hsl) : "";
                   const isLocked = lockedKeys.has(key);
@@ -425,10 +424,9 @@ export function ColorsSection({
                       >
                         <button
                           aria-label={`${label} color swatch`}
-                          className="w-full aspect-square text-[12px] sm:text-sm font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-tl-lg rounded-tr-lg sm:rounded-tr-none sm:rounded-bl-lg"
+                          className={`w-full aspect-square text-[12px] sm:text-sm font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-tl-lg rounded-tr-lg sm:rounded-tr-none sm:rounded-bl-lg ${wc >= bc ? "ds-swatch-light" : "ds-swatch-dark"}`}
                           style={{
                             backgroundColor: hsl ? `hsl(${hsl})` : "hsl(var(--muted))",
-                            color: btnTextColor,
                           }}
                           onClick={(e) => {
                             e.preventDefault();
@@ -463,7 +461,7 @@ export function ColorsSection({
                             {label}
                           </span>
                           {hexCode && (
-                            <span className="hidden sm:inline whitespace-nowrap opacity-70 text-sm leading-tight">
+                            <span className="hidden sm:inline whitespace-nowrap opacity-90 text-sm leading-tight">
                               {hexCode}
                             </span>
                           )}
@@ -498,13 +496,13 @@ export function ColorsSection({
                           tabIndex={-1}
                         />
                         <button
-                          className={`h-6 sm:h-auto sm:w-8 flex items-center justify-center transition-all rounded-bl-lg rounded-br-lg sm:rounded-bl-none sm:rounded-tr-lg ${isPremium ? "cursor-pointer" : "cursor-not-allowed"}`}
+                          className={`h-6 sm:h-auto sm:w-8 flex items-center justify-center transition-all rounded-bl-lg rounded-br-lg sm:rounded-bl-none sm:rounded-tr-lg ${isPremium ? "cursor-pointer" : "cursor-not-allowed"} ${isLocked ? (wc >= bc ? "ds-swatch-light" : "ds-swatch-dark") : ""}`}
                           style={{
                             backgroundColor: isLocked
                               ? `hsl(${bgHsl})`
                               : "rgba(0,0,0,0.08)",
                             color: isLocked
-                              ? btnTextColor
+                              ? undefined
                               : "hsl(var(--muted-foreground))",
                             opacity: canLock ? 1 : 0.3,
                           }}
@@ -718,7 +716,6 @@ export function ColorsSection({
                       const bgHsl = hsl || "0 0% 50%";
                       const wc = contrastRatio("0 0% 100%", bgHsl);
                       const bc = contrastRatio("0 0% 0%", bgHsl);
-                      const swatchTextColor = wc >= bc ? "#ffffff" : "#000000";
                       const hexCode = hsl ? hslStringToHex(hsl) : "";
                       const initials = label
                         .split(/\s+/)
@@ -745,8 +742,7 @@ export function ColorsSection({
                               }}
                             />
                             <span
-                              className="relative hidden sm:inline text-sm font-light truncate"
-                              style={{ color: swatchTextColor }}
+                              className={`relative hidden sm:inline text-sm font-light truncate ${wc >= bc ? "ds-swatch-light" : "ds-swatch-dark"}`}
                             >
                               {hexCode}
                             </span>

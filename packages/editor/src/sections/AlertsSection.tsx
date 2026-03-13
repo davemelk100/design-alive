@@ -119,7 +119,7 @@ export function AlertsSection({
                   className="space-y-3 rounded-lg p-4"
                   style={{ border: "1px solid hsl(var(--border))" }}
                 >
-                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center justify-between gap-2 flex-wrap" data-axe-exclude>
                     <h3
                       className="text-base font-normal uppercase tracking-wider ds-text-fg"
                     >
@@ -148,7 +148,7 @@ export function AlertsSection({
                               alertCssVisible && alertExportFormat === "css"
                                 ? colors["--brand"]
                                   ? `hsl(${fgForBg(colors["--brand"])})`
-                                  : "#fff"
+                                  : "hsl(var(--primary-foreground))"
                                 : "hsl(var(--muted-foreground))",
                           }}
                         >
@@ -180,7 +180,7 @@ export function AlertsSection({
                               alertCssVisible && alertExportFormat === "tokens"
                                 ? colors["--brand"]
                                   ? `hsl(${fgForBg(colors["--brand"])})`
-                                  : "#fff"
+                                  : "hsl(var(--primary-foreground))"
                                 : "hsl(var(--muted-foreground))",
                           }}
                         >
@@ -202,7 +202,7 @@ export function AlertsSection({
                     </div>
                   </div>
                   {/* Dialog Preset Buttons */}
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-4 gap-2" data-axe-exclude>
                     {Object.keys(ALERT_PRESETS).map((key) => {
                       const labels: Record<string, string> = {
                         filled: "Filled",
@@ -222,7 +222,7 @@ export function AlertsSection({
                                   backgroundColor: "hsl(var(--brand))",
                                   color: colors["--brand"]
                                     ? `hsl(${fgForBg(colors["--brand"])})`
-                                    : "#fff",
+                                    : "hsl(var(--primary-foreground))",
                                   boxShadow:
                                     "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1)",
                                 }
@@ -367,7 +367,7 @@ export function AlertsSection({
                               ? `hsl(${fgRef})`
                               : colors[colorVar]
                                 ? `hsl(${fgForBg(colors[colorVar])})`
-                                : "#fff";
+                                : "hsl(var(--primary-foreground))";
                             borderStyle = "none";
                           } else if (preset === "soft") {
                             const parts = colorHsl.trim().split(/\s+/);
@@ -509,7 +509,7 @@ export function AlertsSection({
                     className="space-y-3 rounded-lg p-4"
                     style={{ border: "1px solid hsl(var(--border))" }}
                   >
-                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center justify-between gap-2 flex-wrap" data-axe-exclude>
                       <h3
                         className="text-base font-normal uppercase tracking-wider ds-text-fg"
                       >
@@ -538,7 +538,7 @@ export function AlertsSection({
                                 toastCssVisible && toastExportFormat === "css"
                                   ? colors["--brand"]
                                     ? `hsl(${fgForBg(colors["--brand"])})`
-                                    : "#fff"
+                                    : "hsl(var(--primary-foreground))"
                                   : "hsl(var(--muted-foreground))",
                             }}
                           >
@@ -570,7 +570,7 @@ export function AlertsSection({
                                 toastCssVisible && toastExportFormat === "tokens"
                                   ? colors["--brand"]
                                     ? `hsl(${fgForBg(colors["--brand"])})`
-                                    : "#fff"
+                                    : "hsl(var(--primary-foreground))"
                                   : "hsl(var(--muted-foreground))",
                             }}
                           >
@@ -592,7 +592,7 @@ export function AlertsSection({
                       </div>
                     </div>
                     {/* Toast Preset Buttons */}
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-4 gap-2" data-axe-exclude>
                       {Object.keys(TOAST_PRESETS).map((key) => {
                         const labels: Record<string, string> = {
                           filled: "Filled",
@@ -612,7 +612,7 @@ export function AlertsSection({
                                     backgroundColor: "hsl(var(--brand))",
                                     color: colors["--brand"]
                                       ? `hsl(${fgForBg(colors["--brand"])})`
-                                      : "#fff",
+                                      : "hsl(var(--primary-foreground))",
                                     boxShadow:
                                       "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1)",
                                   }
@@ -743,7 +743,7 @@ export function AlertsSection({
                                 ? `hsl(${fgRef})`
                                 : colors[colorVar]
                                   ? `hsl(${fgForBg(colors[colorVar])})`
-                                  : "#fff";
+                                  : "hsl(var(--primary-foreground))";
                               borderStyle = "none";
                             } else if (preset === "soft") {
                               const parts = colorHsl.trim().split(/\s+/);
