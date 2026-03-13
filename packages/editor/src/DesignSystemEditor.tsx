@@ -33,6 +33,7 @@ import {
   hexToHslString,
   derivePaletteFromChange,
   autoAdjustContrast,
+  CONTRAST_PAIRS,
   generateHarmonyPalette,
   generateRandomPalette,
   HARMONY_SCHEMES,
@@ -1054,7 +1055,6 @@ function DesignSystemEditorInner({
   };
 
   const fixContrastIssues = async () => {
-    if (!isPremium) return;
     setAuditStatus("running");
     try {
       const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -1070,15 +1070,18 @@ function DesignSystemEditorInner({
         }, ms);
       };
 
+      // 1. Read current CSS variable values
       const style = getComputedStyle(editorRootRef.current || document.documentElement);
       const liveColors: Record<string, string> = {};
       EDITABLE_VARS.forEach(({ key }) => {
         liveColors[key] = style.getPropertyValue(key).trim();
       });
 
+      // 2. Run autoAdjustContrast on all CONTRAST_PAIRS
       const fixes = autoAdjustContrast(liveColors, lockedKeys);
       const working = { ...liveColors, ...fixes };
 
+      // 3. Extra pass: force foreground/background to pass
       const bg = working["--background"];
       const fg = working["--foreground"];
       if (bg && fg && contrastRatio(fg, bg) < 4.5) {
@@ -1092,18 +1095,29 @@ function DesignSystemEditorInner({
           }
         }
       }
-      const mutedFg = working["--muted-foreground"];
-      if (
-        bg &&
-        mutedFg &&
-        contrastRatio(mutedFg, bg) < 4.5 &&
-        !lockedKeys.has("--muted-foreground")
-      ) {
-        const bestMuted = fgForBg(bg);
-        working["--muted-foreground"] = bestMuted;
-        fixes["--muted-foreground"] = bestMuted;
+
+      // 4. Fix muted-foreground against both --background and --muted
+      for (const bgKey of ["--background", "--muted"]) {
+        const mutedFg = working["--muted-foreground"];
+        const mutedBg = working[bgKey];
+        if (mutedBg && mutedFg && contrastRatio(mutedFg, mutedBg) < 4.5 && !lockedKeys.has("--muted-foreground")) {
+          working["--muted-foreground"] = fgForBg(mutedBg);
+          fixes["--muted-foreground"] = working["--muted-foreground"];
+        }
       }
 
+      // 5. Second pass — iterate all CONTRAST_PAIRS to catch stragglers
+      for (const [fgKey, bgKey] of CONTRAST_PAIRS) {
+        const fgVal = working[fgKey];
+        const bgVal = working[bgKey];
+        if (!fgVal || !bgVal) continue;
+        if (contrastRatio(fgVal, bgVal) >= 4.5) continue;
+        if (lockedKeys.has(fgKey)) continue;
+        working[fgKey] = fgForBg(bgVal);
+        fixes[fgKey] = working[fgKey];
+      }
+
+      // 6. Apply all fixes to the editor DOM and animate swatches
       const fixEntries = Object.entries(fixes).filter(
         ([k]) => fixes[k] !== liveColors[k],
       );
@@ -1115,17 +1129,18 @@ function DesignSystemEditorInner({
         if (swatchEl) {
           swatchEl.scrollIntoView({ behavior: "smooth", block: "center" });
           highlight(swatchEl, "hsl(0 84% 60%)");
-          await delay(250);
+          await delay(200);
         }
         editorRootRef.current?.style.setProperty(fixKey, fixVal);
         if (bg) saveContrastCorrection(bg, fixKey, fixVal);
         if (swatchEl) {
-          await delay(150);
+          await delay(100);
           highlight(swatchEl, "hsl(142 76% 45%)");
         }
-        await delay(100);
+        await delay(80);
       }
 
+      // 7. Persist all fixes to localStorage and update React state
       const contrastFixes: Record<string, string> = {};
       for (const [k, v] of Object.entries(working)) {
         if (v !== liveColors[k]) contrastFixes[k] = v;
@@ -1134,120 +1149,20 @@ function DesignSystemEditorInner({
       setColors(working);
       window.dispatchEvent(new Event("theme-pending-update"));
 
-      const axe = (await import("axe-core")).default;
-      const runAudit = () =>
-        axe.run(
-          { exclude: ["[data-axe-exclude]"] },
-          { runOnly: { type: "rule", values: ["color-contrast"] } },
-        );
-
-      const parseRgb = (rgb: string): [number, number, number] | null => {
-        const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-        if (!m) return null;
-        return [
-          parseInt(m[1]) / 255,
-          parseInt(m[2]) / 255,
-          parseInt(m[3]) / 255,
-        ];
-      };
-      const lum = (r: number, g: number, b: number) => {
-        const toL = (c: number) =>
-          c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-        return 0.2126 * toL(r) + 0.7152 * toL(g) + 0.0722 * toL(b);
-      };
-      const rgbToHsl = (r: number, g: number, b: number) => {
-        const max = Math.max(r, g, b),
-          min = Math.min(r, g, b);
-        const li = (max + min) / 2;
-        if (max === min) return { h: 0, s: 0, l: li };
-        const d = max - min;
-        const s = li > 0.5 ? d / (2 - max - min) : d / (max + min);
-        let h = 0;
-        if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
-        else if (max === g) h = ((b - r) / d + 2) / 6;
-        else h = ((r - g) / d + 4) / 6;
-        return { h, s, l: li };
-      };
-      const hslToRgbStr = (h: number, s: number, l: number) => {
-        const a = s * Math.min(l, 1 - l);
-        const f = (n: number) => {
-          const k = (n + h * 12) % 12;
-          return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-        };
-        return `rgb(${Math.round(f(0) * 255)}, ${Math.round(f(8) * 255)}, ${Math.round(f(4) * 255)})`;
-      };
-
-      const fixElementAnimated = async (node: { target: unknown[] }) => {
-        const el = document.querySelector(
-          node.target[0] as string,
-        ) as HTMLElement | null;
-        if (!el) return;
-        const computed = getComputedStyle(el);
-        const fgRgb = parseRgb(computed.color);
-        const bgRgb = parseRgb(computed.backgroundColor);
-        if (!fgRgb || !bgRgb) return;
-        const bgLum = lum(...bgRgb);
-        const fgLum = lum(...fgRgb);
-        const ratio =
-          (Math.max(fgLum, bgLum) + 0.05) / (Math.min(fgLum, bgLum) + 0.05);
-        if (ratio >= 4.5) return;
-
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-        highlight(el, "hsl(0 84% 60%)");
-        await delay(300);
-
-        const fgHsl = rgbToHsl(...fgRgb);
-        let fixed = false;
-        for (const dir of [
-          bgLum > 0.5 ? -0.01 : 0.01,
-          bgLum > 0.5 ? 0.01 : -0.01,
-        ]) {
-          const tryHsl = { ...fgHsl };
-          for (let i = 0; i < 100; i++) {
-            tryHsl.l = Math.max(0, Math.min(1, tryHsl.l + dir));
-            const a = tryHsl.s * Math.min(tryHsl.l, 1 - tryHsl.l);
-            const newFg = [0, 0, 0] as [number, number, number];
-            for (let ci = 0; ci < 3; ci++) {
-              const n = [0, 8, 4][ci];
-              const k = (n + tryHsl.h * 12) % 12;
-              newFg[ci] =
-                tryHsl.l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-            }
-            const newRatio =
-              (Math.max(lum(...newFg), bgLum) + 0.05) /
-              (Math.min(lum(...newFg), bgLum) + 0.05);
-            if (newRatio >= 4.5) {
-              el.style.color = hslToRgbStr(tryHsl.h, tryHsl.s, tryHsl.l);
-              fixed = true;
-              break;
-            }
-          }
-          if (fixed) break;
-        }
-
-        highlight(el, "hsl(142 76% 45%)");
-        await delay(200);
-      };
-
-      for (let pass = 0; pass < 3; pass++) {
-        await delay(300);
-        const midResults = await runAudit();
-        const contrastViolation = midResults.violations.find(
-          (v) => v.id === "color-contrast",
-        );
-        if (!contrastViolation) break;
-        for (let ni = 0; ni < contrastViolation.nodes.length; ni++) {
-          await fixElementAnimated(contrastViolation.nodes[ni]);
-        }
-      }
-
+      // 8. Re-run audit to verify
       await delay(400);
-      const finalResults = await runAudit();
+      const axe = (await import("axe-core")).default;
+      const context = editorRootRef.current || document.body;
+      const finalResults = await axe.run(
+        { include: [context], exclude: ["[data-axe-exclude]"] },
+        { runOnly: { type: "rule", values: ["color-contrast"] } },
+      );
+
       if (finalResults.violations.length === 0) {
         setAuditStatus("passed");
         setAuditViolations([]);
-
       } else {
+        // Some remaining issues — show them but keep fixes applied
         setAuditStatus("failed");
         const elements: { selector: string; text: string }[] = [];
         for (const v of finalResults.violations) {
@@ -1259,7 +1174,6 @@ function DesignSystemEditorInner({
           }
         }
         setAuditViolations(elements);
-
       }
     } catch (err) {
       console.error("fixContrastIssues failed:", err);

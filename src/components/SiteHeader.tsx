@@ -138,12 +138,7 @@ export default function SiteHeader() {
   return (
     <header
       className="sticky top-0 z-50"
-      style={{
-        backgroundColor: "rgba(255, 255, 255, 0.15)",
-        backdropFilter: "blur(16px) saturate(180%)",
-        WebkitBackdropFilter: "blur(16px) saturate(180%)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.25)",
-      }}
+      style={{ backgroundColor: "transparent" }}
     >
       {isEditor ? (
         <div className="w-full mx-auto flex flex-col lg:flex-row site-container">

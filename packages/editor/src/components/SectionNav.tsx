@@ -107,12 +107,7 @@ export function SectionNav() {
   return (
     <div
       className="ds-section-nav sticky top-0 z-50"
-      style={{
-        backgroundColor: "rgba(255, 255, 255, 0.15)",
-        backdropFilter: "blur(16px) saturate(180%)",
-        WebkitBackdropFilter: "blur(16px) saturate(180%)",
-        borderBottom: "1px solid rgba(255, 255, 255, 0.25)",
-      }}
+      style={{ backgroundColor: "transparent" }}
     >
       <div className="w-full mx-auto flex" style={{ maxWidth: "1500px" }}>
         <div className="hidden lg:flex items-end w-48 flex-shrink-0 pl-4 pr-2 py-3" />
