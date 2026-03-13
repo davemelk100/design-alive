@@ -65,6 +65,8 @@ export interface DesignSystemEditorProps {
   sidebarLinks?: { to: string; label: string }[];
   /** Extra content rendered at the very bottom of the left sidebar (e.g. contact forms) */
   sidebarExtra?: React.ReactNode;
+  /** Mirror CSS custom properties to :root so the theme applies to the entire page, not just the editor. Default: false */
+  applyToRoot?: boolean;
 }
 
 export type { ImportedIconData } from "./utils/iconImport";

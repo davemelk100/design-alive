@@ -143,11 +143,22 @@ function DesignSystemEditorInner({
   sidebarLinks,
   sidebarExtra,
   showSectionNav = true,
+  applyToRoot = false,
 }: DesignSystemEditorProps) {
   const { isPremium } = useLicense();
   const wcagEnforcement = true;
 
   const editorRootRef = useRef<HTMLDivElement>(null);
+
+  // Helper: set a CSS variable on the editor root (and optionally on :root).
+  const applyToRootRef = useRef(applyToRoot);
+  applyToRootRef.current = applyToRoot;
+  const setVar = useCallback((key: string, value: string) => {
+    editorRootRef.current?.style.setProperty(key, value);
+    if (applyToRootRef.current) {
+      document.documentElement.style.setProperty(key, value);
+    }
+  }, []);
 
   const {
     colors,
@@ -159,16 +170,34 @@ function DesignSystemEditorInner({
     readCurrentColors,
   } = useColorState(editorRootRef, wcagEnforcement, defaultColors);
 
-  // Sync CSS variables to the editor root element only (not document root).
-  // This keeps plugin CSS fully scoped to .ds-editor.
+  // Sync CSS variables to the editor root element (and :root when applyToRoot is set).
   useEffect(() => {
     const el = editorRootRef.current;
     if (!el) return;
     const varsToSync = ["--background", "--foreground", "--border", "--muted", "--muted-foreground", "--brand"] as const;
     for (const v of varsToSync) {
-      if (colors[v]) el.style.setProperty(v, colors[v]);
+      if (colors[v]) setVar(v, colors[v]);
     }
-  }, [colors["--background"], colors["--foreground"], colors["--border"], colors["--muted"], colors["--muted-foreground"], colors["--brand"]]);
+  }, [colors["--background"], colors["--foreground"], colors["--border"], colors["--muted"], colors["--muted-foreground"], colors["--brand"], setVar]);
+
+  // When applyToRoot is enabled, sync ALL current color variables to :root on mount
+  // and clean up on unmount. Ongoing changes are mirrored by setVar().
+  const colorsRef = useRef(colors);
+  colorsRef.current = colors;
+  useEffect(() => {
+    if (!applyToRoot) return;
+    const current = colorsRef.current;
+    const keys = Object.keys(current).filter((k) => k.startsWith("--"));
+    for (const key of keys) {
+      if (current[key]) document.documentElement.style.setProperty(key, current[key]);
+    }
+    return () => {
+      const final = colorsRef.current;
+      for (const key of Object.keys(final)) {
+        if (key.startsWith("--")) document.documentElement.style.removeProperty(key);
+      }
+    };
+  }, [applyToRoot]);
 
   const {
     activeSection,
@@ -347,7 +376,7 @@ function DesignSystemEditorInner({
     if (!parsed) return;
     // Apply colors
     for (const [key, val] of Object.entries(parsed.colors)) {
-      editorRootRef.current?.style.setProperty(key, val);
+      setVar(key, val);
     }
     setColors(parsed.colors);
     // Apply styles
@@ -630,7 +659,7 @@ function DesignSystemEditorInner({
       ) || [];
     history.push({ key, previousValue: colors[key] || "" });
 
-    editorRootRef.current?.style.setProperty(key, hsl);
+    setVar(key, hsl);
     const newColors = { ...colors, [key]: hsl };
 
     const pending =
@@ -648,7 +677,7 @@ function DesignSystemEditorInner({
       const derived = derivePaletteFromChange(key, hsl, newColors, lockedKeys);
       for (const [dKey, dVal] of Object.entries(derived)) {
         history.push({ key: dKey, previousValue: newColors[dKey] || "" });
-        editorRootRef.current?.style.setProperty(dKey, dVal);
+        setVar(dKey, dVal);
         newColors[dKey] = dVal;
         pending[dKey] = dVal;
       }
@@ -661,7 +690,7 @@ function DesignSystemEditorInner({
       const fixes = autoAdjustContrast(newColors, contrastLocks);
       for (const [adjKey, adjVal] of Object.entries(fixes)) {
         history.push({ key: adjKey, previousValue: newColors[adjKey] || "" });
-        editorRootRef.current?.style.setProperty(adjKey, adjVal);
+        setVar(adjKey, adjVal);
         newColors[adjKey] = adjVal;
         pending[adjKey] = adjVal;
         adjustments[adjKey] = adjVal;
@@ -753,7 +782,7 @@ function DesignSystemEditorInner({
 
     for (const [key, val] of Object.entries(result)) {
       history.push({ key, previousValue: newColors[key] || "" });
-      editorRootRef.current?.style.setProperty(key, val);
+      setVar(key, val);
       newColors[key] = val;
       pending[key] = val;
     }
@@ -796,7 +825,7 @@ function DesignSystemEditorInner({
 
     for (const [key, val] of Object.entries(result)) {
       history.push({ key, previousValue: newColors[key] || "" });
-      editorRootRef.current?.style.setProperty(key, val);
+      setVar(key, val);
       newColors[key] = val;
       pending[key] = val;
     }
@@ -814,12 +843,11 @@ function DesignSystemEditorInner({
     if (colorUndoStack.length === 0) return;
     const restored = colorUndoStack[colorUndoStack.length - 1];
     setColorUndoStack((s) => s.slice(0, -1));
-    const el = editorRootRef.current || document.documentElement;
     const pending =
       storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
     const saved = storage.get<Record<string, string>>(THEME_COLORS_KEY) || {};
     for (const [key, val] of Object.entries(restored)) {
-      el.style.setProperty(key, val);
+      setVar(key, val);
       pending[key] = val;
       saved[key] = val;
     }
@@ -880,7 +908,7 @@ function DesignSystemEditorInner({
     for (const [key, val] of Object.entries(newColors)) {
       if (val !== colors[key]) {
         history.push({ key, previousValue: finalColors[key] || "" });
-        editorRootRef.current?.style.setProperty(key, val);
+        setVar(key, val);
         finalColors[key] = val;
         pending[key] = val;
       }
@@ -902,7 +930,7 @@ function DesignSystemEditorInner({
     });
     if (defaultColors) {
       Object.entries(defaultColors).forEach(([key, value]) => {
-        editorRootRef.current?.style.setProperty(key, value);
+        setVar(key, value);
       });
     }
     storage.remove(THEME_COLORS_KEY);
@@ -921,7 +949,7 @@ function DesignSystemEditorInner({
     // If the consumer provided default colors, restore them instead of bare defaults
     if (defaultColors) {
       Object.entries(defaultColors).forEach(([key, value]) => {
-        editorRootRef.current?.style.setProperty(key, value);
+        setVar(key, value);
       });
     }
     storage.remove(THEME_COLORS_KEY);
@@ -1013,7 +1041,7 @@ function DesignSystemEditorInner({
             const updatedColors = { ...liveColors };
             const bg = liveColors["--background"];
             for (const [fixKey, fixVal] of Object.entries(fixes)) {
-              editorRootRef.current?.style.setProperty(fixKey, fixVal);
+              setVar(fixKey, fixVal);
               updatedColors[fixKey] = fixVal;
               if (bg) saveContrastCorrection(bg, fixKey, fixVal);
               console.log(`[Themal]   Fixed ${fixKey}: ${liveColors[fixKey]} -> ${fixVal}`);
@@ -1131,7 +1159,7 @@ function DesignSystemEditorInner({
           highlight(swatchEl, "hsl(0 84% 60%)");
           await delay(200);
         }
-        editorRootRef.current?.style.setProperty(fixKey, fixVal);
+        setVar(fixKey, fixVal);
         if (bg) saveContrastCorrection(bg, fixKey, fixVal);
         if (swatchEl) {
           await delay(100);
@@ -1248,7 +1276,7 @@ function DesignSystemEditorInner({
         storage.get<Record<string, string>>(PENDING_COLORS_KEY) || {};
       const newColors = { ...colors };
       for (const [key, val] of Object.entries(result.colors)) {
-        editorRootRef.current?.style.setProperty(key, val);
+        setVar(key, val);
         newColors[key] = val;
         pending[key] = val;
       }
