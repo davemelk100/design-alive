@@ -293,6 +293,23 @@
   opacity: 1;
 }
 
+/* Purge info tooltip — fixed position to escape sidebar overflow clipping */
+.ds-purge-tooltip {
+  position: fixed;
+  z-index: 100;
+  width: 14rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 300;
+  line-height: 1.4;
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--card, var(--background)));
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+}
+
 /* Base text size for editor elements */
 .ds-editor p,
 .ds-editor ul,

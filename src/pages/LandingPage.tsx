@@ -10,7 +10,7 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
   return (
     <div>
       <p
-        className="text-[11px] font-medium uppercase tracking-wider mb-1 text-muted"
+        className="text-[11px] font-medium uppercase tracking-wider mb-1 text-fg"
       >
         {label}
       </p>
@@ -194,7 +194,7 @@ export default function LandingPage() {
           </h1>
 
           <p
-            className="text-base sm:text-lg max-w-xl font-light leading-relaxed text-muted"
+            className="text-base sm:text-lg max-w-xl font-light leading-relaxed text-fg"
           >
             Plug Themal into your app. Design your elements on screen. Open a pull request right from the editor.
           </p>
@@ -225,7 +225,7 @@ export default function LandingPage() {
           {/* Framework logos */}
           <div className="flex flex-col items-center gap-3 mt-4">
             <p
-              className="text-[11px] font-medium uppercase tracking-widest text-muted"
+              className="text-[11px] font-medium uppercase tracking-widest text-fg"
             >
               Works with
             </p>
