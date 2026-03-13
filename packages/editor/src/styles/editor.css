@@ -310,7 +310,7 @@
   pointer-events: none;
 }
 
-/* Base text size for editor elements */
+/* Base styles for editor elements — inherit consumer font-family and color */
 .ds-editor p,
 .ds-editor ul,
 .ds-editor ol,
@@ -322,7 +322,9 @@
 .ds-editor textarea,
 .ds-editor label,
 .ds-editor span:not(.ds-premium-tooltip span):not(.ds-h2):not(.ds-palette-label) {
+  font-family: inherit;
   font-size: var(--ds-base-font-size, 0.8125rem);
+  color: inherit;
 }
 
 /* H2 back-to-top links — no transitions or size changes */
