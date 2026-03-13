@@ -75,6 +75,34 @@ const features = [
     ],
   },
   {
+    version: "0.26",
+    items: [
+      "Font-family and color inherit - editor CSS now inherits font-family and color from the host site so consumers don't need overrides",
+      "Muted-foreground color adjustment in globals.css",
+      "SiteFooter branding image and layout improvements",
+    ],
+  },
+  {
+    version: "0.25",
+    items: [
+      "prApiKey prop - send an x-api-key header with PR endpoint requests for authenticated server-side endpoints",
+      "Security fixes - SVG sanitizer hardened, license bypass patched, PR endpoint auth enforced",
+      "Dialog and toast reset modals - independent reset buttons for alert and toast style sections",
+      "Priority 1 test coverage - mobile header contrast, scroll margin, dropdown styling",
+      "Purge info tooltip - moved inline with Purge button label",
+    ],
+  },
+  {
+    version: "0.24",
+    items: [
+      "Client-side GitHub PR integration - new githubConfig prop for creating PRs directly via the GitHub API using an OAuth popup flow",
+      "Mobile touch-friendly design - 44px+ tap targets, touch-optimized controls",
+      "Left sidebar navigation added to all non-editor site pages",
+      "Font sizes converted to rem-based Tailwind scale, inline styles removed",
+      "GitHub PR utilities exported (createDesignPr, startOAuthFlow, etc.)",
+    ],
+  },
+  {
     version: "0.23",
     items: [
       "Major refactor - DesignSystemEditor split from 9,500 lines into focused section components, domain hooks, and shared UI",
