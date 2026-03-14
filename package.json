@@ -3,9 +3,6 @@
   "version": "0.10.0",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "packages/*"
-  ],
   "description": "Themal",
   "scripts": {
     "dev": "vite",
