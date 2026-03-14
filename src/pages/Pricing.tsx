@@ -117,7 +117,7 @@ export default function Pricing() {
             Pricing
           </h1>
         </div>
-        <p className="text-sm leading-relaxed mb-8 text-muted">
+        <p className="text-sm leading-relaxed mb-8 text-muted-foreground">
           Start free. Upgrade when you need the full toolkit.
         </p>
 
@@ -148,7 +148,7 @@ export default function Pricing() {
             </h2>
             <div className="mb-3">
               <span className="text-3xl font-semibold text-fg">$0.50</span>
-              <span className="text-sm ml-1 text-muted">one-time</span>
+              <span className="text-sm ml-1 text-muted-foreground">one-time</span>
             </div>
             <div
               className="w-full h-10 rounded-lg text-sm font-medium flex items-center justify-center mb-4 text-fg border-theme"
@@ -158,7 +158,7 @@ export default function Pricing() {
             >
               {loading === "test" ? "Redirecting..." : "Test Checkout"}
             </div>
-            <p className="text-xs text-muted">
+            <p className="text-xs text-muted-foreground">
               Verify the checkout flow with a minimal charge.
             </p>
           </div>
@@ -176,7 +176,7 @@ export default function Pricing() {
             </h2>
             <div className="mb-3">
               <span className="text-3xl font-semibold text-fg">$0</span>
-              <span className="text-sm ml-1 text-muted">forever</span>
+              <span className="text-sm ml-1 text-muted-foreground">forever</span>
             </div>
             <div
               className="w-full h-10 rounded-lg text-sm font-medium flex items-center justify-center mb-4 text-fg border-theme"
@@ -186,7 +186,7 @@ export default function Pricing() {
             >
               Get Started
             </div>
-            <p className="text-xs mb-4 text-muted">
+            <p className="text-xs mb-4 text-muted-foreground">
               Core design system editing for personal projects.
             </p>
             <ul className="space-y-2 flex-1">
@@ -226,7 +226,7 @@ export default function Pricing() {
               <span className="text-3xl font-semibold text-fg">
                 {billingCycle === "monthly" ? "$9" : "$50"}
               </span>
-              <span className="text-sm ml-1 text-muted">
+              <span className="text-sm ml-1 text-muted-foreground">
                 {billingCycle === "monthly" ? "/month" : "/year"}
               </span>
             </div>
@@ -262,7 +262,7 @@ export default function Pricing() {
                   Yearly
                 </button>
               </div>
-              <div className="text-muted">
+              <div className="text-muted-foreground">
                 {billingCycle === "monthly"
                   ? "$9/mo. $108 billed annually at monthly rate."
                   : "$50/yr. That's ~$4.17/mo. Save over 50% vs monthly."}
@@ -279,7 +279,7 @@ export default function Pricing() {
               {loading ? "Redirecting..." : `Subscribe ${billingCycle === "monthly" ? "Monthly" : "Yearly"}`}
             </div>
 
-            <p className="text-xs mb-4 text-muted">
+            <p className="text-xs mb-4 text-muted-foreground">
               Full power for teams and professional workflows.
             </p>
             <ul className="space-y-2 flex-1">

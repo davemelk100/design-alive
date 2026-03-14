@@ -67,7 +67,7 @@ export default function About() {
             About
           </h1>
         </div>
-        <p className="text-sm leading-relaxed mb-8 text-muted">
+        <p className="text-sm leading-relaxed mb-8 text-muted-foreground">
           A real-time design system editor for the modern web.
         </p>
 

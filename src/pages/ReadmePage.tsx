@@ -47,10 +47,10 @@ export default function ReadmePage() {
           <pre className="rounded-lg p-4 text-sm overflow-x-auto" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>npm install @themal/editor</code>
           </pre>
-          <p className="text-sm mt-2 text-muted">
+          <p className="text-sm mt-2 text-muted-foreground">
             Peer dependencies: <code className="font-mono text-sm">react</code> and <code className="font-mono text-sm">react-dom</code> (v18 or v19).
           </p>
-          <p className="text-sm mt-1 text-muted">
+          <p className="text-sm mt-1 text-muted-foreground">
             Optional peers: <code className="font-mono text-sm">axe-core</code> (accessibility auditing), <code className="font-mono text-sm">lucide-react</code> (icon previews).
           </p>
         </section>
@@ -66,7 +66,7 @@ function App() {
   return <DesignSystemEditor />;
 }`}</code>
           </pre>
-          <p className="text-sm mt-2 text-muted">
+          <p className="text-sm mt-2 text-muted-foreground">
             The editor writes CSS custom properties (HSL values) to <code className="font-mono text-sm">:root</code>, so it works with any framework that consumes CSS variables.
           </p>
         </section>
@@ -250,12 +250,12 @@ function App() {
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3 text-fg">Usage Examples</h2>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Basic - color picker only</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Basic - color picker only</h3>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor accessibilityAudit={false} />`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">With GitHub PR integration</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">With GitHub PR integration</h3>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor
   githubConfig={{
@@ -265,7 +265,7 @@ function App() {
 />`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">With premium features</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">With premium features</h3>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor
   licenseKey="THEMAL-XXXX-XXXX-XXXX"
@@ -274,7 +274,7 @@ function App() {
 />`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Listen for changes</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Listen for changes</h3>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor
   onChange={(colors) => {
@@ -283,7 +283,7 @@ function App() {
 />`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Custom export handler</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Custom export handler</h3>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor
   onExport={(css) => {
@@ -292,7 +292,7 @@ function App() {
 />`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Custom top navigation</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Custom top navigation</h3>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor
   topNav={
@@ -305,11 +305,11 @@ function App() {
 />`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Full-site theming</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Full-site theming</h3>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-2" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor applyToRoot />`}</code>
           </pre>
-          <p className="text-sm mb-3 text-muted">
+          <p className="text-sm mb-3 text-muted-foreground">
             When <code className="font-mono text-sm">applyToRoot</code> is enabled, the editor mirrors all CSS variables to <code className="font-mono text-sm">:root</code>, scans the host page to detect its color palette, and shows a banner with a "View CSS" button. The modal provides a tailored, copyable CSS snippet so your entire site responds to theme changes:
           </p>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
@@ -324,7 +324,7 @@ a {
 /* ... more rules based on your detected palette */`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 mt-6 text-muted">Scoped Color Utilities</h3>
+          <h3 className="text-sm font-medium mb-2 mt-6 text-muted-foreground">Scoped Color Utilities</h3>
           <p className="text-sm mb-3 text-fg">
             The editor provides scoped utility classes for text and surface colors inside <code className="font-mono text-sm">.ds-editor</code>.
             Modal labels use <code className="font-mono text-sm">ds-text-subtle</code> (foreground at 60% opacity) to guarantee contrast on any surface.
@@ -332,7 +332,7 @@ a {
             may not contrast on all surfaces — prefer <code className="font-mono text-sm">ds-text-subtle</code> for labels inside modals and cards.
           </p>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Embedded / headless</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Embedded / headless</h3>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<DesignSystemEditor showHeader={false} showNavLinks={false} />`}</code>
           </pre>
@@ -348,7 +348,7 @@ a {
             If neither <code className="font-mono text-sm">github</code> nor <code className="font-mono text-sm">prEndpointUrl</code> is provided, the PR button is hidden entirely.
           </p>
 
-          <h3 className="text-sm font-medium mb-2 mt-6 text-muted">Public mode (recommended for most users)</h3>
+          <h3 className="text-sm font-medium mb-2 mt-6 text-muted-foreground">Public mode (recommended for most users)</h3>
           <p className="text-sm leading-relaxed mb-3 text-fg">
             Uses Themal's hosted OAuth proxy for the token exchange. The user authenticates with their own GitHub account, and the editor calls the GitHub API directly from the browser using their token. The only thing that passes through the proxy is the OAuth authorization code (exchanged for a token). No CSS content or repository data ever touches Themal's servers.
           </p>
@@ -371,7 +371,7 @@ a {
             <li>That's it. No backend, no server-side token, no environment variables needed in your app.</li>
           </ol>
 
-          <h3 className="text-sm font-medium mb-2 mt-6 text-muted">Enterprise mode (self-hosted, for corporate environments)</h3>
+          <h3 className="text-sm font-medium mb-2 mt-6 text-muted-foreground">Enterprise mode (self-hosted, for corporate environments)</h3>
           <p className="text-sm leading-relaxed mb-3 text-fg">
             For organizations using GitHub Enterprise Server or requiring that no credentials pass through external services, the entire flow can be self-hosted. You deploy your own OAuth proxy (a single serverless function that exchanges an authorization code for a token) and register your own GitHub App with fine-grained permissions.
           </p>
@@ -387,7 +387,7 @@ a {
 />`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 mt-4 text-muted">Enterprise setup steps</h3>
+          <h3 className="text-sm font-medium mb-2 mt-4 text-muted-foreground">Enterprise setup steps</h3>
           <ol className="text-sm leading-relaxed list-decimal pl-5 space-y-2 mb-4 text-fg">
             <li>
               <span className="font-medium">Register a GitHub App</span> on your GitHub Enterprise Server instance. Use a GitHub App (not an OAuth App) for fine-grained permissions. Grant only <code className="font-mono text-sm">Contents: Read and write</code> on the specific repositories you want Themal to target. This avoids the broad <code className="font-mono text-sm">repo</code> scope that OAuth Apps require.
@@ -403,7 +403,7 @@ a {
             </li>
           </ol>
 
-          <h3 className="text-sm font-medium mb-2 mt-6 text-muted">Security model</h3>
+          <h3 className="text-sm font-medium mb-2 mt-6 text-muted-foreground">Security model</h3>
           <ul className="text-sm leading-relaxed list-disc pl-5 space-y-2 mb-4 text-fg">
             <li><span className="font-medium">Token ownership.</span> Each user authenticates with their own GitHub account. The editor stores the OAuth token in <code className="font-mono text-sm">localStorage</code> on their browser. No shared service account or static token is involved.</li>
             <li><span className="font-medium">Proxy scope.</span> The OAuth proxy only handles the code-to-token exchange. All GitHub API calls (reading files, creating branches, committing) happen directly from the browser to the GitHub API. No CSS content or repository data passes through the proxy.</li>
@@ -412,7 +412,7 @@ a {
             <li><span className="font-medium">Self-hostable.</span> In enterprise mode, no traffic leaves your network. The proxy runs behind your firewall, the GitHub API calls go to your GHE instance, and the editor runs on your domain under your CSP headers.</li>
           </ul>
 
-          <h3 className="text-sm font-medium mb-2 mt-6 text-muted">github prop reference</h3>
+          <h3 className="text-sm font-medium mb-2 mt-6 text-muted-foreground">github prop reference</h3>
           <div className="overflow-x-auto rounded-lg border mb-4 border-theme">
             <table className="w-full text-sm">
               <thead>
@@ -470,7 +470,7 @@ a {
             </table>
           </div>
 
-          <h3 className="text-sm font-medium mb-2 mt-6 text-muted">How it works</h3>
+          <h3 className="text-sm font-medium mb-2 mt-6 text-muted-foreground">How it works</h3>
           <ol className="text-sm leading-relaxed list-decimal pl-5 space-y-1 mb-4 text-fg">
             <li>User clicks "Open PR" in the editor.</li>
             <li>If not connected, a "Connect GitHub" button appears. Clicking it opens a popup to GitHub's OAuth authorization page.</li>
@@ -480,7 +480,7 @@ a {
             <li>The user reviews the diff and creates the PR on GitHub.</li>
           </ol>
 
-          <h3 className="text-sm font-medium mb-2 mt-6 text-muted">CSS variables by section</h3>
+          <h3 className="text-sm font-medium mb-2 mt-6 text-muted-foreground">CSS variables by section</h3>
           <p className="text-sm leading-relaxed mb-2 text-fg">
             The PR includes CSS custom properties for whichever sections the user selected:
           </p>
@@ -492,7 +492,7 @@ a {
             <li><span className="font-medium">interactions</span> — <code className="font-mono text-sm">--hover-opacity</code>, <code className="font-mono text-sm">--hover-scale</code>, <code className="font-mono text-sm">--active-scale</code>, <code className="font-mono text-sm">--transition-duration</code>, <code className="font-mono text-sm">--focus-ring-width</code>, <code className="font-mono text-sm">--focus-ring-color</code></li>
           </ul>
 
-          <h3 className="text-sm font-medium mb-2 mt-6 text-muted">Legacy: custom PR endpoint</h3>
+          <h3 className="text-sm font-medium mb-2 mt-6 text-muted-foreground">Legacy: custom PR endpoint</h3>
           <p className="text-sm leading-relaxed mb-3 text-fg">
             The <code className="font-mono text-sm">prEndpointUrl</code> prop is still supported for apps that want full control over the server-side PR logic. When provided, the editor POSTs <code className="font-mono text-sm">{`{ css, sections }`}</code> to your endpoint and expects <code className="font-mono text-sm">{`{ url }`}</code> back. See the <code className="font-mono text-sm">prEndpointUrl</code> row in the Props table above.
           </p>
@@ -580,7 +580,7 @@ a {
   showNavLinks={false}
 />`}</code>
           </pre>
-          <p className="text-sm mt-2 text-muted">
+          <p className="text-sm mt-2 text-muted-foreground">
             Hides the sticky header and nav links for embedding inside another app or plugin.
           </p>
         </section>
@@ -650,7 +650,7 @@ a {
               </tbody>
             </table>
           </div>
-          <p className="text-sm mt-3 text-muted">
+          <p className="text-sm mt-3 text-muted-foreground">
             The web component uses Shadow DOM for style isolation. React, ReactDOM, and all editor styles are bundled into the single JS file.
           </p>
         </section>
@@ -662,7 +662,7 @@ a {
             The <code className="font-mono text-sm">@themal/editor</code> npm package is for React apps. For all other frameworks, use the <code className="font-mono text-sm">&lt;themal-editor&gt;</code> web component — it bundles React internally and works anywhere you can load a script tag.
           </p>
 
-          <h3 className="text-sm font-medium mb-2 mt-4 text-muted">Vue 3</h3>
+          <h3 className="text-sm font-medium mb-2 mt-4 text-muted-foreground">Vue 3</h3>
           <p className="text-sm mb-2 text-fg">
             1. Load the script in your <code className="font-mono text-sm">index.html</code> or import it in a component:
           </p>
@@ -698,7 +698,7 @@ export default {
 }`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Svelte / SvelteKit</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Svelte / SvelteKit</h3>
           <p className="text-sm mb-2 text-fg">
             1. Add the script to your <code className="font-mono text-sm">app.html</code> or load it in a component:
           </p>
@@ -712,11 +712,11 @@ export default {
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<themal-editor></themal-editor>`}</code>
           </pre>
-          <p className="text-sm mb-4 text-muted">
+          <p className="text-sm mb-4 text-muted-foreground">
             Svelte supports custom elements natively — no extra configuration needed.
           </p>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Astro</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Astro</h3>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`---
 // src/pages/design.astro
@@ -731,7 +731,7 @@ export default {
 </html>`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Next.js</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Next.js</h3>
           <p className="text-sm mb-2 text-fg">
             The web component must render client-side only. Use <code className="font-mono text-sm">next/script</code> and a client component:
           </p>
@@ -752,7 +752,7 @@ export default function DesignEditor() {
 }`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Nuxt</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Nuxt</h3>
           <p className="text-sm mb-2 text-fg">
             Wrap in <code className="font-mono text-sm">&lt;ClientOnly&gt;</code> to prevent SSR:
           </p>
@@ -769,7 +769,7 @@ useHead({
 })
 </script>`}</code>
           </pre>
-          <p className="text-sm mb-4 text-muted">
+          <p className="text-sm mb-4 text-muted-foreground">
             Add the custom element config to <code className="font-mono text-sm">nuxt.config.ts</code>:
           </p>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
@@ -783,7 +783,7 @@ export default defineNuxtConfig({
 })`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">WordPress</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">WordPress</h3>
           <p className="text-sm mb-2 text-fg">
             Add a Custom HTML block to any page or post:
           </p>
@@ -791,11 +791,11 @@ export default defineNuxtConfig({
             <code>{`<script src="https://themalive.com/themal-editor.js"></script>
 <themal-editor></themal-editor>`}</code>
           </pre>
-          <p className="text-sm mb-4 text-muted">
+          <p className="text-sm mb-4 text-muted-foreground">
             Or enqueue via <code className="font-mono text-sm">functions.php</code> or create a shortcode plugin. See the <a href="https://github.com/user/themal" target="_blank" rel="noopener noreferrer" className="text-sm underline hover:opacity-70 transition-opacity text-brand">web component README</a> for detailed WordPress setup options.
           </p>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Shopify</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Shopify</h3>
           <p className="text-sm mb-2 text-fg">
             Add to any Liquid template or custom page:
           </p>
@@ -804,7 +804,7 @@ export default defineNuxtConfig({
 <themal-editor show-header="false"></themal-editor>`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Static Sites (Hugo, Jekyll, Eleventy)</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Static Sites (Hugo, Jekyll, Eleventy)</h3>
           <p className="text-sm mb-2 text-fg">
             Add to any HTML template or page:
           </p>
@@ -813,7 +813,7 @@ export default defineNuxtConfig({
 <themal-editor></themal-editor>`}</code>
           </pre>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">PHP (Laravel, Symfony, Drupal)</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">PHP (Laravel, Symfony, Drupal)</h3>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`<!-- In any Blade/Twig/PHP template -->
 <script src="https://themalive.com/themal-editor.js"></script>
@@ -836,7 +836,7 @@ export default defineNuxtConfig({
             Every editor UI element (modals, controls, buttons, labels, inputs) uses CSS custom properties for colors. This means the editor fully respects whatever theme your app defines. There are no hardcoded hex colors in the editor chrome.
           </p>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">Color variable mapping</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">Color variable mapping</h3>
           <div className="overflow-x-auto rounded-lg border mb-4 border-theme">
             <table className="w-full text-sm">
               <thead>
@@ -868,7 +868,7 @@ export default defineNuxtConfig({
             </table>
           </div>
 
-          <h3 className="text-sm font-medium mb-2 text-muted">CSS specificity</h3>
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">CSS specificity</h3>
           <ul className="list-disc pl-5 text-sm space-y-1.5 font-light text-fg">
             <li>Injected typography styles (<code className="font-mono text-xs">applyTypography</code>) never use <code className="font-mono text-xs">!important</code>. They rely on natural specificity so your classes can override them.</li>
             <li>Section heading (<code className="font-mono text-xs">.ds-h2</code>) and nav link (<code className="font-mono text-xs">.ds-nav-link-item</code>) classes in <code className="font-mono text-xs">editor.css</code> use <code className="font-mono text-xs">!important</code> only where needed to prevent injected typography from overriding structural UI.</li>

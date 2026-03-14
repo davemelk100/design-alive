@@ -13,7 +13,7 @@ export default function Terms() {
         <h1 className="text-3xl sm:text-4xl font-light mb-2 text-fg">
           Themal's Terms &amp; Conditions
         </h1>
-        <p className="text-sm mb-8 text-muted">
+        <p className="text-sm mb-8 text-muted-foreground">
           Last updated: March 3, 2026
         </p>
 

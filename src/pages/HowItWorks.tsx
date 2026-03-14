@@ -57,7 +57,7 @@ export default function HowItWorks() {
 
         <div className="space-y-8 text-fg">
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Overview
             </h2>
             <p className="text-sm leading-relaxed">
@@ -66,7 +66,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Color Derivation
             </h2>
             <p className="text-sm leading-relaxed mb-3">
@@ -85,7 +85,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Color Harmony
             </h2>
             <p className="text-sm leading-relaxed mb-3">
@@ -103,7 +103,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Random Palette Generation
             </h2>
             <p className="text-sm leading-relaxed mb-3">
@@ -118,7 +118,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Accessibility Enforcement
             </h2>
             <p className="text-sm leading-relaxed mb-3">
@@ -135,7 +135,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Contrast Learning Loop
             </h2>
             <ol className="text-sm leading-relaxed list-decimal pl-5 space-y-3">
@@ -155,7 +155,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Card Style System
             </h2>
             <p className="text-sm leading-relaxed mb-3">
@@ -173,7 +173,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Typography System
             </h2>
             <p className="text-sm leading-relaxed mb-3">
@@ -191,7 +191,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Alert Style System
             </h2>
             <p className="text-sm leading-relaxed mb-3">
@@ -209,7 +209,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Interaction States
             </h2>
             <p className="text-sm leading-relaxed mb-3">
@@ -227,7 +227,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Persistence & Export
             </h2>
             <p className="text-sm leading-relaxed">
@@ -236,7 +236,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Web Component
             </h2>
             <p className="text-sm leading-relaxed mb-3">
@@ -260,7 +260,7 @@ export default function HowItWorks() {
           </section>
 
           <section>
-            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted">
+            <h2 className="text-sm font-medium uppercase tracking-wider mb-2 text-muted-foreground">
               Responsive Behavior
             </h2>
             <p className="text-sm leading-relaxed">

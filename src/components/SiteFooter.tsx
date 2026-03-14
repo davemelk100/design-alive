@@ -36,7 +36,7 @@ export function ContactForm({ buttonClassName }: { buttonClassName?: string }) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className={`${buttonClassName || "text-xs font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"} ${buttonClassName ? "text-fg" : "text-muted"}`}
+        className={`${buttonClassName || "text-xs font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"} ${buttonClassName ? "text-fg" : "text-muted-foreground"}`}
       >
         Contact
       </button>
@@ -158,7 +158,7 @@ export function ReportBugForm({ buttonClassName }: { buttonClassName?: string })
     return (
       <button
         onClick={() => setOpen(true)}
-        className={`${buttonClassName || "text-xs font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"} ${buttonClassName ? "text-fg" : "text-muted"}`}
+        className={`${buttonClassName || "text-xs font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"} ${buttonClassName ? "text-fg" : "text-muted-foreground"}`}
       >
         Report Bug
       </button>

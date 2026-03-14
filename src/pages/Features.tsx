@@ -369,7 +369,7 @@ export default function Features() {
                 <span className="mt-0.5 text-brand">{check}</span>
                 <div>
                   <p className="text-sm font-medium text-fg">{title}</p>
-                  <p className="text-xs text-muted">{desc}</p>
+                  <p className="text-xs text-muted-foreground">{desc}</p>
                 </div>
               </div>
             ))}
@@ -388,12 +388,12 @@ export default function Features() {
               { title: "Mobile App", desc: "Edit and preview your design system on the go with a native iOS and Android app." },
             ].map(({ title, desc }) => (
               <div key={title} className="flex items-start gap-2">
-                <svg className="w-4 h-4 flex-shrink-0 mt-0.5 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <svg className="w-4 h-4 flex-shrink-0 mt-0.5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                   <circle cx="12" cy="12" r="10" strokeDasharray="4 3" />
                 </svg>
                 <div>
                   <p className="text-sm font-medium text-fg">{title}</p>
-                  <p className="text-xs text-muted">{desc}</p>
+                  <p className="text-xs text-muted-foreground">{desc}</p>
                 </div>
               </div>
             ))}

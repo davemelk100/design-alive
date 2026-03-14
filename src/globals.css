@@ -204,7 +204,7 @@
 
   /* Common color classes for site pages */
   .text-fg { color: hsl(var(--foreground)); }
-  .text-muted { color: hsl(var(--muted-foreground)); }
+  .text-subtle { color: hsl(var(--muted-foreground)); }
   .text-brand { color: hsl(var(--brand)); }
   .text-destructive { color: hsl(var(--destructive)); }
   .text-success { color: hsl(var(--success)); }

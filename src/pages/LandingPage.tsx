@@ -27,7 +27,7 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
           {code}
         </pre>
         <button
-          className="absolute top-3 right-3 p-1.5 rounded-md transition-opacity hover:opacity-70 cursor-pointer text-muted"
+          className="absolute top-3 right-3 p-1.5 rounded-md transition-opacity hover:opacity-70 cursor-pointer text-muted-foreground"
           style={{
             backgroundColor: "hsl(var(--foreground) / 0.08)",
             border: "none",
@@ -341,7 +341,7 @@ export default function LandingPage() {
           aria-label="Scroll down"
         >
           <svg
-            className="w-6 h-6 text-muted"
+            className="w-6 h-6 text-muted-foreground"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -364,7 +364,7 @@ export default function LandingPage() {
             A developer's design system, alive.
           </h2>
           <p
-            className="text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed text-muted"
+            className="text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed text-muted-foreground"
           >
             Themal is a visual editor that plugs directly into your codebase.
             Adjust colors, typography, spacing, buttons, cards, and interaction
@@ -388,7 +388,7 @@ export default function LandingPage() {
                   {item.title}
                 </h3>
                 <p
-                  className="text-sm font-light leading-relaxed text-muted"
+                  className="text-sm font-light leading-relaxed text-muted-foreground"
                 >
                   {item.detail}
                 </p>
@@ -428,7 +428,7 @@ export default function LandingPage() {
           aria-label="Scroll down"
         >
           <svg
-            className="w-6 h-6 text-muted"
+            className="w-6 h-6 text-muted-foreground"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -451,7 +451,7 @@ export default function LandingPage() {
             Not just for developers.
           </h2>
           <p
-            className="text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed text-muted"
+            className="text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed text-muted-foreground"
           >
             Product owners can present design options to stakeholders in real
             time. Marketing teams can explore brand directions without waiting on
@@ -476,7 +476,7 @@ export default function LandingPage() {
                   {item.role}
                 </h3>
                 <p
-                  className="text-sm font-light leading-relaxed text-muted"
+                  className="text-sm font-light leading-relaxed text-muted-foreground"
                 >
                   {item.detail}
                 </p>
@@ -512,7 +512,7 @@ export default function LandingPage() {
           aria-label="Scroll to top"
         >
           <svg
-            className="w-6 h-6 text-muted"
+            className="w-6 h-6 text-muted-foreground"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
