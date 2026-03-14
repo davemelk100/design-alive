@@ -295,8 +295,15 @@ export const derivePaletteFromChange = (
       if (!locked.has("--muted-foreground")) {
         const bgParts = bg.trim().split(/\s+/);
         const bgL = parseFloat(bgParts[2]);
-        const mutedL = bgL > 50 ? 44 : 65;
-        derived["--muted-foreground"] = `0 0% ${mutedL}%`;
+        let mutedL = bgL > 50 ? 30 : 75;
+        const mutedDir = bgL > 50 ? -1 : 1;
+        let mutedCandidate = `0 0% ${mutedL}%`;
+        for (let mi = 0; mi < 40; mi++) {
+          if (contrastRatio(mutedCandidate, bg) >= WCAG_AA_RATIO) break;
+          mutedL = Math.max(0, Math.min(100, mutedL + mutedDir));
+          mutedCandidate = `0 0% ${mutedL}%`;
+        }
+        derived["--muted-foreground"] = mutedCandidate;
       }
     };
 
@@ -549,15 +556,16 @@ export const autoAdjustContrast = (
       // Check against --background
       if (finalBg && mutedFg && contrastRatio(mutedFg, finalBg) < WCAG_AA_RATIO) {
         const bgL = parseFloat(finalBg.trim().split(/\s+/)[2]);
-        const mutedL = bgL > 50 ? Math.max(0, bgL - 50) : Math.min(100, bgL + 50);
-        const fixedMuted = `0 0% ${mutedL}%`;
-        if (contrastRatio(fixedMuted, finalBg) >= WCAG_AA_RATIO && (!mutedBg || contrastRatio(fixedMuted, mutedBg) >= WCAG_AA_RATIO)) {
-          adjustments["--muted-foreground"] = fixedMuted;
-          working["--muted-foreground"] = fixedMuted;
-        } else {
-          adjustments["--muted-foreground"] = fgForBg(finalBg);
-          working["--muted-foreground"] = fgForBg(finalBg);
+        let mutedL = bgL > 50 ? 30 : 75;
+        const dir = bgL > 50 ? -1 : 1;
+        let fixedMuted = `0 0% ${mutedL}%`;
+        for (let i = 0; i < 40; i++) {
+          if (contrastRatio(fixedMuted, finalBg) >= WCAG_AA_RATIO) break;
+          mutedL = Math.max(0, Math.min(100, mutedL + dir));
+          fixedMuted = `0 0% ${mutedL}%`;
         }
+        adjustments["--muted-foreground"] = fixedMuted;
+        working["--muted-foreground"] = fixedMuted;
       }
       // Also check against --muted background
       if (mutedBg && working["--muted-foreground"] && contrastRatio(working["--muted-foreground"], mutedBg) < WCAG_AA_RATIO) {
@@ -566,8 +574,12 @@ export const autoAdjustContrast = (
       }
     }
 
-    // Final safety net: re-check all pairs one more time
+    // Final safety net: re-check all pairs one more time.
+    // Skip body foreground keys — they are set optimally by fgForBg(background)
+    // above and must not be overridden to satisfy contrast against colored surfaces.
+    const bodyFgKeys = new Set(["--foreground", "--card-foreground", "--popover-foreground", "--muted-foreground", "--brand"]);
     for (const [fgKey, bgKey] of CONTRAST_PAIRS) {
+      if (bodyFgKeys.has(fgKey)) continue;
       const fgVal = working[fgKey];
       const bgv = working[bgKey];
       if (!fgVal || !bgv) continue;
@@ -689,17 +701,6 @@ export const generateRandomPalette = (
   const bLight = parseFloat(bParts[2]);
   const wrap = (h: number) => ((h % 360) + 360) % 360;
 
-  const secOffset = 90 + Math.random() * 180;
-  const accOffset = 30 + Math.random() * 120;
-  const lightMin = dark ? 40 : 15;
-  const lightMax = dark ? 75 : 90;
-  const clampLight = (v: number) => Math.min(lightMax, Math.max(lightMin, v));
-  const secHsl = `${wrap(bHue + secOffset).toFixed(1)} ${Math.min(100, bSat * (0.7 + Math.random() * 0.3)).toFixed(1)}% ${clampLight(bLight * (0.8 + Math.random() * 0.4)).toFixed(1)}%`;
-  const accHsl = `${wrap(bHue + accOffset).toFixed(1)} ${Math.min(100, bSat * (0.7 + Math.random() * 0.3)).toFixed(1)}% ${clampLight(bLight * (0.8 + Math.random() * 0.4)).toFixed(1)}%`;
-
-  if (!locked.has('--secondary')) result['--secondary'] = secHsl;
-  if (!locked.has('--accent')) result['--accent'] = accHsl;
-
   if (!locked.has('--background')) {
     let bgLight: number;
     if (dark) {
@@ -713,6 +714,23 @@ export const generateRandomPalette = (
     result['--background'] = `${wrap(bHue + 20).toFixed(1)} ${(15 + Math.random() * 20).toFixed(1)}% ${bgLight.toFixed(1)}%`;
   }
   const bg = result['--background'] || currentColors['--background'];
+  const bgL = parseFloat(bg.trim().split(/\s+/)[2]);
+
+  // Generate secondary and accent after background so their lightness
+  // stays on the same side (light or dark) as the background.
+  const secOffset = 90 + Math.random() * 180;
+  const accOffset = 30 + Math.random() * 120;
+  // Surface colors: near background lightness with slight variation
+  const surfaceLightRange = bgL > 50
+    ? [Math.max(80, bgL - 15), Math.min(98, bgL + 3)]
+    : [Math.max(2, bgL - 3), Math.min(20, bgL + 15)];
+  const surfaceLight = () => surfaceLightRange[0] + Math.random() * (surfaceLightRange[1] - surfaceLightRange[0]);
+  const secHsl = `${wrap(bHue + secOffset).toFixed(1)} ${Math.min(100, bSat * (0.7 + Math.random() * 0.3)).toFixed(1)}% ${surfaceLight().toFixed(1)}%`;
+  const accHsl = `${wrap(bHue + accOffset).toFixed(1)} ${Math.min(100, bSat * (0.7 + Math.random() * 0.3)).toFixed(1)}% ${surfaceLight().toFixed(1)}%`;
+
+  if (!locked.has('--secondary')) result['--secondary'] = secHsl;
+  if (!locked.has('--accent')) result['--accent'] = accHsl;
+
   const fgColor = fgForBg(bg);
   if (!locked.has('--foreground')) result['--foreground'] = fgColor;
   if (!locked.has('--card')) result['--card'] = bg;
@@ -721,8 +739,17 @@ export const generateRandomPalette = (
   if (!locked.has('--popover-foreground')) result['--popover-foreground'] = fgColor;
   if (!locked.has('--muted-foreground')) {
     const bgL = parseFloat(bg.trim().split(/\s+/)[2]);
-    const mutedL = bgL > 50 ? 44 : 65;
-    result['--muted-foreground'] = `0 0% ${mutedL}%`;
+    // Pick a muted lightness that guarantees WCAG AA (4.5:1) against the background.
+    // Start from a candidate and iterate toward more contrast if needed.
+    let mutedL = bgL > 50 ? 30 : 75;
+    const dir = bgL > 50 ? -1 : 1;
+    let candidate = `0 0% ${mutedL}%`;
+    for (let i = 0; i < 40; i++) {
+      if (contrastRatio(candidate, bg) >= WCAG_AA_RATIO) break;
+      mutedL = Math.max(0, Math.min(100, mutedL + dir));
+      candidate = `0 0% ${mutedL}%`;
+    }
+    result['--muted-foreground'] = candidate;
   }
   if (!locked.has('--border')) {
     const bgL = parseFloat(bg.trim().split(/\s+/)[2]);
@@ -759,6 +786,73 @@ export const generateRandomPalette = (
   const fullColors = { ...currentColors, ...result };
   const adjustments = autoAdjustContrast(fullColors, locked);
   Object.assign(result, adjustments);
+
+  // Final safety pass: for each foreground key, find a lightness that meets
+  // WCAG AA against ALL its paired backgrounds simultaneously.
+  const final = { ...currentColors, ...result };
+  const fgToBgs = new Map<string, string[]>();
+  for (const [fgKey, bgKey] of CONTRAST_PAIRS) {
+    if (locked.has(fgKey)) continue;
+    if (!fgToBgs.has(fgKey)) fgToBgs.set(fgKey, []);
+    fgToBgs.get(fgKey)!.push(bgKey);
+  }
+  for (const [fgKey, bgKeys] of fgToBgs) {
+    const fgVal = final[fgKey];
+    if (!fgVal) continue;
+    const bgs = bgKeys.map(k => final[k]).filter(Boolean) as string[];
+    const allPass = bgs.every(bg => contrastRatio(fgVal, bg) >= WCAG_AA_RATIO);
+    if (allPass) continue;
+    const fgParts = fgVal.trim().split(/\s+/);
+    if (fgParts.length < 3) continue;
+    const fgH = parseFloat(fgParts[0]);
+    let fgS = parseFloat(fgParts[1]);
+    const origL = parseFloat(fgParts[2]);
+    // Try both directions, pick the one that works
+    let found = false;
+    for (const dir of [-1, 1]) {
+      let l = origL;
+      for (let i = 0; i < 100; i++) {
+        l = Math.max(0, Math.min(100, l + dir));
+        const candidate = `${fgH} ${fgS}% ${l}%`;
+        if (bgs.every(bg => contrastRatio(candidate, bg) >= WCAG_AA_RATIO)) {
+          result[fgKey] = candidate;
+          final[fgKey] = candidate;
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+    // Last resort: desaturate and retry
+    if (!found) {
+      for (let ds = fgS - 10; ds >= 0; ds -= 10) {
+        for (const dir of [-1, 1]) {
+          let l = origL;
+          for (let i = 0; i < 100; i++) {
+            l = Math.max(0, Math.min(100, l + dir));
+            const candidate = `${fgH} ${Math.max(0, ds)}% ${l}%`;
+            if (bgs.every(bg => contrastRatio(candidate, bg) >= WCAG_AA_RATIO)) {
+              result[fgKey] = candidate;
+              final[fgKey] = candidate;
+              found = true;
+              break;
+            }
+          }
+          if (found) break;
+        }
+        if (found) break;
+      }
+    }
+    // Ultimate fallback: use fgForBg on primary background
+    if (!found) {
+      const primaryBg = final["--background"];
+      if (primaryBg) {
+        const fallback = fgForBg(primaryBg);
+        result[fgKey] = fallback;
+        final[fgKey] = fallback;
+      }
+    }
+  }
 
   return result;
 };

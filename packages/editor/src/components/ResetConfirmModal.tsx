@@ -27,9 +27,11 @@ export const ResetConfirmModal: React.FC<ResetConfirmModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby={id}
+      onClick={onClose}
     >
       <div
         className="rounded-lg shadow-xl p-6 w-full max-w-sm mx-4 ds-surface"
+        onClick={(e) => e.stopPropagation()}
       >
         <h4 id={id} className="text-2xl font-light mb-2">
           {title}

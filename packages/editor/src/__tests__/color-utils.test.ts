@@ -7,6 +7,7 @@ import {
   autoAdjustContrast,
   generateHarmonyPalette,
   derivePaletteFromChange,
+  generateRandomPalette,
   CONTRAST_PAIRS,
 } from "../utils/themeUtils";
 import { validateLicenseKey, generateLicenseKey } from "../utils/license";
@@ -267,6 +268,77 @@ describe("generateHarmonyPalette", () => {
 
     // Accent is also set (may be shifted by palette derivation from secondary)
     expect(result["--accent"]).toBeDefined();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// generateRandomPalette — end-to-end contrast regression
+// ---------------------------------------------------------------------------
+describe("generateRandomPalette", () => {
+  const baseColors: Record<string, string> = {
+    "--brand": "220 80% 50%",
+    "--background": "0 0% 95%",
+    "--foreground": "0 0% 10%",
+    "--secondary": "220 20% 80%",
+    "--secondary-foreground": "0 0% 10%",
+    "--accent": "220 20% 80%",
+    "--accent-foreground": "0 0% 10%",
+    "--muted": "220 10% 90%",
+    "--muted-foreground": "0 0% 40%",
+    "--border": "0 10% 85%",
+    "--card": "0 0% 95%",
+    "--card-foreground": "0 0% 10%",
+    "--popover": "0 0% 95%",
+    "--popover-foreground": "0 0% 10%",
+    "--primary": "220 80% 50%",
+    "--primary-foreground": "0 0% 100%",
+    "--ring": "220 80% 50%",
+    "--destructive": "0 80% 45%",
+    "--destructive-foreground": "0 0% 100%",
+    "--success": "142 70% 35%",
+    "--success-foreground": "0 0% 100%",
+    "--warning": "45 80% 50%",
+    "--warning-foreground": "0 0% 0%",
+  };
+
+  it("produces palettes where all contrast pairs meet WCAG AA (4.5:1) across 50 runs", () => {
+    for (let run = 0; run < 50; run++) {
+      const result = generateRandomPalette(baseColors, new Set(), false);
+      const merged = { ...baseColors, ...result };
+
+      for (const [fgKey, bgKey] of CONTRAST_PAIRS) {
+        const fg = merged[fgKey];
+        const bg = merged[bgKey];
+        if (!fg || !bg) continue;
+        const ratio = contrastRatio(fg, bg);
+        expect(ratio).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+
+  it("produces palettes meeting WCAG AA in dark mode across 50 runs", () => {
+    for (let run = 0; run < 50; run++) {
+      const result = generateRandomPalette(baseColors, new Set(), true);
+      const merged = { ...baseColors, ...result };
+
+      for (const [fgKey, bgKey] of CONTRAST_PAIRS) {
+        const fg = merged[fgKey];
+        const bg = merged[bgKey];
+        if (!fg || !bg) continue;
+        const ratio = contrastRatio(fg, bg);
+        expect(ratio).toBeGreaterThanOrEqual(4.5);
+      }
+    }
+  });
+
+  it("muted-foreground meets WCAG AA against background at 87% lightness", () => {
+    const colorsWithGrayBg = { ...baseColors, "--background": "200 18% 87%" };
+    for (let run = 0; run < 20; run++) {
+      const result = generateRandomPalette(colorsWithGrayBg, new Set(["--background"]), false);
+      const merged = { ...colorsWithGrayBg, ...result };
+      const ratio = contrastRatio(merged["--muted-foreground"], merged["--background"]);
+      expect(ratio).toBeGreaterThanOrEqual(4.5);
+    }
   });
 });
 
