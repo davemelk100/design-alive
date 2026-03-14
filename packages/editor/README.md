@@ -1,6 +1,6 @@
 # @themal/editor
 
-Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography, interaction states, and input styles, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile with a collapsible sidebar menu.
+Interactive design system editor for React apps. Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography, interaction states, input styles, and table styles, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile with a collapsible sidebar menu.
 
 > **Early access — all features are free.** Pro subscription tiers will be introduced in a future release.
 
@@ -351,6 +351,7 @@ import {
   fgForBg,           // Best foreground (black/white) for a background HSL
   EDITABLE_VARS,     // Array of { key, label } token definitions
   HARMONY_SCHEMES,   // ['Complementary', 'Analogous', 'Triadic', 'Split-Complementary']
+  readRootColors,            // Snapshot CSS custom properties from :root before editor mount
   applyStoredThemeColors, // Restore persisted theme from localStorage
 
   // localStorage key constants
@@ -360,6 +361,7 @@ import {
   TOAST_STYLE_KEY,           // Key for toast style storage
   BUTTON_STYLE_KEY,          // Key for button style storage
   INPUT_STYLE_KEY,           // Key for input style storage
+  TABLE_STYLE_KEY,           // Key for table style storage
   INTERACTION_STYLE_KEY,     // Key for interaction style storage
 
   // Card, typography & interaction style utilities
@@ -371,6 +373,8 @@ import {
   applyStoredButtonStyle,             // Restore button style from localStorage
   INPUT_PRESETS,                      // Rounded, Sharp, Pill input style presets
   applyStoredInputStyle,              // Restore input style from localStorage
+  TABLE_PRESETS,                      // Default, Striped, Bordered, Minimal table style presets
+  applyStoredTableStyle,              // Restore table style from localStorage
   applyStoredInteractionStyle,    // Restore button interaction style from localStorage
 
   // Shareable URL utilities
@@ -437,6 +441,7 @@ import type {
   CardStyleState,
   ButtonStyleState,
   InputStyleState,
+  TableStyleState,
   TypographyState,
   AlertStyleState,
   ToastStyleState,
@@ -468,14 +473,15 @@ import type {
 6. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
 7. **Typography interactions** *(Pro)* — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
 8. **Input styles** — Customize input border radius, border width, padding, font size, and focus ring width with presets (Rounded, Sharp, Pill). Live preview includes text inputs, email inputs, textareas, a custom themed select dropdown, checkboxes, radio buttons, toggle switches, and a segmented toggle.
-9. **Custom select dropdowns** — All native `<select>` elements throughout the editor have been replaced with custom themed dropdowns that follow the design system's color scheme, with click-outside-to-close, chevron animation, and hover highlighting.
-10. **Persistence** — All settings (colors, typography, card styles, dialog styles, toast styles, interactions, input styles) are saved to `localStorage` and restored on reload.
-11. **Per-section export** — Every section header includes a CSS | Tokens split button to export CSS custom properties with Tailwind config, or W3C Design Token JSON, for that section.
-12. **Shareable URLs** — Encode your full theme state in the URL hash and share it with anyone via a single link.
-13. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
-14. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
-15. **Icon import** *(Pro)* — Import icons from CDN packages (Lucide, Heroicons, Phosphor), SVG sprites, or icon font CSS files directly from the browser.
-16. **Mobile friendly** — Fully responsive UI with a collapsible sidebar menu, section dropdown navigation, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, touch-friendly control sizing (44px+ tap targets for sliders, buttons, toggles, and checkboxes), and stacked layouts for smaller screens. A floating scroll-to-top button appears on scroll.
+9. **Table styles** — Customize table border radius, border width, cell padding, header weight, and toggle striped rows, row hover, and compact mode with presets (Default, Striped, Bordered, Minimal). Responsive preview shows a standard `<table>` on desktop and a `<dl>` description list on mobile.
+10. **Custom select dropdowns** — All native `<select>` elements throughout the editor have been replaced with custom themed dropdowns that follow the design system's color scheme, with click-outside-to-close, chevron animation, and hover highlighting.
+11. **Persistence** — All settings (colors, typography, card styles, dialog styles, toast styles, interactions, input styles, table styles) are saved to `localStorage` and restored on reload.
+12. **Per-section export** — Every section header includes a CSS | Tokens split button to export CSS custom properties with Tailwind config, or W3C Design Token JSON, for that section.
+13. **Shareable URLs** — Encode your full theme state in the URL hash and share it with anyone via a single link.
+14. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
+15. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
+16. **Icon import** *(Pro)* — Import icons from CDN packages (Lucide, Heroicons, Phosphor), SVG sprites, or icon font CSS files directly from the browser.
+17. **Mobile friendly** — Fully responsive UI with a collapsible sidebar menu, section dropdown navigation, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, touch-friendly control sizing (44px+ tap targets for sliders, buttons, toggles, and checkboxes), and stacked layouts for smaller screens. A floating scroll-to-top button appears on scroll.
 
 ## Package Architecture
 
@@ -502,6 +508,7 @@ src/
 │   │   ├── cardStyle.ts        # Card style management
 │   │   ├── buttonStyle.ts      # Button style management
 │   │   ├── inputStyle.ts       # Input style management
+│   │   ├── tableStyle.ts       # Table style management
 │   │   ├── typographyStyle.ts  # Typography and custom fonts
 │   │   ├── alertStyle.ts       # Alert and toast styles
 │   │   ├── interactionStyle.ts       # Button interaction states
@@ -556,6 +563,7 @@ The editor provides scoped utility classes for text and surface colors inside `.
 | `ds-text-card` | `hsl(var(--card-foreground))` | Text on card surfaces |
 | `ds-surface` | Card bg + foreground text | Modal/card containers |
 | `ds-surface-bg` | Background bg + foreground text | Page-level containers |
+| `ds-surface-primary` | Primary bg + primary-foreground text | Primary action buttons |
 
 All modal labels use `ds-text-subtle` and primary action buttons use brand colors to ensure readable contrast regardless of the active theme.
 
@@ -683,7 +691,7 @@ The suite covers 39 checks including:
 - **CSS isolation** — plugin does not override `body` font-family or background-color
 - **Accessibility** — no critical/serious axe-core violations (WCAG 2 AA) on any theme
 - **Premium gate** — locked features show lock icon without opacity dimming; premium toggle unlocks them
-- **Sections** — all 6 sections (colors, buttons, card, alerts, typography, inputs) are present
+- **Sections** — all 7 sections (colors, buttons, cards, alerts, typography, inputs, tables) are present
 
 ## Publishing to npm
 
