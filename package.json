@@ -24,11 +24,7 @@
     "@clerk/clerk-sdk-node": "^4.13.23",
     "@themal/editor": "^0.33.0",
     "axe-core": "^4.11.1",
-    "brew": "^0.0.8",
-    "claude": "^0.1.1",
-    "gh": "^2.8.9",
-    "github": "^14.0.0",
-    "homebrew": "^0.1.0",
+
     "lucide-react": "^0.294.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
