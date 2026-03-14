@@ -148,6 +148,7 @@ describe("usePrSubmission", () => {
         body: JSON.stringify({
           css: "/* generated css */",
           sections: ["colors", "typography"],
+          includeIntegration: undefined,
         }),
       });
 
@@ -186,6 +187,7 @@ describe("usePrSubmission", () => {
         body: JSON.stringify({
           css: "/* generated css */",
           sections: ["colors"],
+          includeIntegration: undefined,
         }),
       });
     });
@@ -412,6 +414,7 @@ describe("usePrSubmission", () => {
         "gho_abc123",
         "/* generated css */",
         ["colors", "buttons"],
+        undefined,
       );
       expect(result.current.sectionPrStatus.all).toEqual({
         status: "created",
@@ -445,6 +448,7 @@ describe("usePrSubmission", () => {
         "gho_new",
         "/* generated css */",
         ["colors"],
+        undefined,
       );
       expect(result.current.sectionPrStatus.all).toEqual({
         status: "created",
@@ -561,6 +565,84 @@ describe("usePrSubmission", () => {
       );
       expect(global.fetch).not.toHaveBeenCalled();
       expect(result.current.sectionPrStatus).toEqual({});
+    });
+  });
+
+  // ---------- 6. includeIntegration state ----------
+
+  describe("includeIntegration", () => {
+    it("defaults to false when no defaultIncludeIntegration", () => {
+      const { result } = renderHook(() =>
+        usePrSubmission(PR_ENDPOINT, undefined, undefined, buildSectionCss),
+      );
+      expect(result.current.includeIntegration).toBe(false);
+    });
+
+    it("defaults to true when defaultIncludeIntegration is true", () => {
+      const { result } = renderHook(() =>
+        usePrSubmission(PR_ENDPOINT, undefined, undefined, buildSectionCss, true),
+      );
+      expect(result.current.includeIntegration).toBe(true);
+    });
+
+    it("openPrModal resets includeIntegration to default", () => {
+      const { result } = renderHook(() =>
+        usePrSubmission(PR_ENDPOINT, undefined, undefined, buildSectionCss, true),
+      );
+
+      // Toggle it off
+      act(() => result.current.setIncludeIntegration(false));
+      expect(result.current.includeIntegration).toBe(false);
+
+      // Open modal resets to default (true)
+      act(() => result.current.openPrModal());
+      expect(result.current.includeIntegration).toBe(true);
+    });
+
+    it("passes includeIntegration to createDesignPr via githubConfig flow", async () => {
+      mockedGetStoredAuth.mockReturnValueOnce({
+        access_token: "gho_abc",
+        username: "testuser",
+        stored_at: "2024-01-01",
+      });
+      mockedCreateDesignPr.mockResolvedValueOnce("https://example.com");
+
+      const { result } = renderHook(() =>
+        usePrSubmission(undefined, undefined, GITHUB_CONFIG, buildSectionCss, true),
+      );
+
+      await act(async () => {
+        await result.current.submitPr(["colors"], "all", true);
+      });
+
+      expect(mockedCreateDesignPr).toHaveBeenCalledWith(
+        GITHUB_CONFIG,
+        "gho_abc",
+        "/* generated css */",
+        ["colors"],
+        true,
+      );
+    });
+
+    it("includes includeIntegration in server-side endpoint body", async () => {
+      vi.mocked(global.fetch).mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        json: async () => ({ url: "https://example.com" }),
+      } as Response);
+
+      const { result } = renderHook(() =>
+        usePrSubmission(PR_ENDPOINT, undefined, undefined, buildSectionCss, true),
+      );
+
+      await act(async () => {
+        await result.current.submitPr(["colors"], "all", true);
+      });
+
+      const fetchBody = JSON.parse(
+        (vi.mocked(global.fetch).mock.calls[0][1] as RequestInit).body as string,
+      );
+      expect(fetchBody.includeIntegration).toBe(true);
     });
   });
 });

@@ -12,7 +12,9 @@ export interface PrModalProps {
       error?: string;
     }
   >;
-  submitPr: (sections: Iterable<string>, statusKey: string) => void;
+  submitPr: (sections: Iterable<string>, statusKey: string, includeIntegration?: boolean) => void;
+  includeIntegration: boolean;
+  setIncludeIntegration: React.Dispatch<React.SetStateAction<boolean>>;
   onClose: () => void;
 }
 
@@ -22,6 +24,8 @@ export function PrModal({
   prError,
   sectionPrStatus,
   submitPr,
+  includeIntegration,
+  setIncludeIntegration,
   onClose,
 }: PrModalProps) {
   return (
@@ -44,7 +48,7 @@ export function PrModal({
         >
           Select sections to include:
         </p>
-        <div className="flex flex-col gap-3 mb-6">
+        <div className="flex flex-col gap-3 mb-4">
           {(
             [
               "colors",
@@ -87,6 +91,20 @@ export function PrModal({
             );
           })}
         </div>
+        <div className="border-t pt-3 mb-4 ds-border">
+          <label className="flex items-center gap-3 cursor-pointer text-sm font-light">
+            <input
+              type="checkbox"
+              checked={includeIntegration}
+              onChange={() => setIncludeIntegration((prev) => !prev)}
+              className="w-4 h-4 rounded"
+            />
+            Include integration rules
+          </label>
+          <p className="text-xs ds-text-subtle mt-1.5 ml-7">
+            Adds CSS rules that apply variables to body, headings, links, cards, and nav elements.
+          </p>
+        </div>
         {prError && (
           <div
             className="text-xs font-light rounded-lg p-3 mb-4 ds-text-destructive"
@@ -108,7 +126,7 @@ export function PrModal({
               sectionPrStatus["main"]?.status === "creating"
             }
             onClick={() => {
-              submitPr(prSections, "main");
+              submitPr(prSections, "main", includeIntegration);
             }}
             className="ds-modal-btn h-9 px-4 text-sm font-light rounded-lg transition-colors hover:opacity-80 disabled:opacity-50 ds-surface-primary"
           >

@@ -209,6 +209,46 @@ function DesignSystemEditorInner({
     };
   }, [applyToRoot]);
 
+  // When applyToRoot is enabled, inject integration CSS rules so the host site
+  // picks up Themal's CSS variables out of the box (no manual stylesheet edits).
+  useEffect(() => {
+    if (!applyToRoot) return;
+    const STYLE_ID = "themal-integration-css";
+    // Avoid duplicates if already injected
+    if (document.getElementById(STYLE_ID)) return;
+    const style = document.createElement("style");
+    style.id = STYLE_ID;
+    style.textContent = [
+      "/* Themal integration — auto-injected when applyToRoot is enabled */",
+      "body {",
+      "  background-color: hsl(var(--background));",
+      "  color: hsl(var(--foreground));",
+      "}",
+      "h1, h2, h3, h4, h5, h6 {",
+      "  color: hsl(var(--foreground));",
+      "}",
+      "a {",
+      "  color: hsl(var(--brand));",
+      "}",
+      ".card, [class*='card'] {",
+      "  background-color: hsl(var(--card));",
+      "  color: hsl(var(--card-foreground));",
+      "}",
+      "hr, .border {",
+      "  border-color: hsl(var(--border));",
+      "}",
+      "nav, header, footer {",
+      "  background-color: hsl(var(--card, var(--background)));",
+      "  color: hsl(var(--foreground));",
+      "}",
+    ].join("\n");
+    document.head.appendChild(style);
+    return () => {
+      const el = document.getElementById(STYLE_ID);
+      if (el) el.remove();
+    };
+  }, [applyToRoot]);
+
   // Scan host page styles when applyToRoot is enabled
   const { scanResult, dismissed: scanDismissed, dismiss: dismissScan } = useHostScanner(applyToRoot, setColors, setVar, editorRootRef);
   const [showIntegrationGuide, setShowIntegrationGuide] = useState(false);
@@ -663,7 +703,9 @@ function DesignSystemEditorInner({
     setSectionPrStatus,
     submitPr,
     openPrModal,
-  } = usePrSubmission(prEndpointUrl, prApiKey, githubConfig, buildSectionCss);
+    includeIntegration,
+    setIncludeIntegration,
+  } = usePrSubmission(prEndpointUrl, prApiKey, githubConfig, buildSectionCss, applyToRoot);
 
   const handleColorChange = (key: string, hex: string) => {
     const lower = hex.toLowerCase();
@@ -2468,6 +2510,8 @@ function DesignSystemEditorInner({
           prError={prError}
           sectionPrStatus={sectionPrStatus}
           submitPr={submitPr}
+          includeIntegration={includeIntegration}
+          setIncludeIntegration={setIncludeIntegration}
           onClose={() => setShowPrModal(false)}
         />
       )}

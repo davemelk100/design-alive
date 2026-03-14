@@ -68,6 +68,8 @@ function App() {
 }
 ```
 
+When `applyToRoot` is enabled, Themal automatically injects integration CSS rules (body, headings, links, cards, borders, nav/header/footer) into a `<style>` tag so your site picks up the theme out of the box — no manual stylesheet edits required. The tag is removed on unmount.
+
 ## Web Component
 
 For WordPress, static sites, or any non-React platform, use the `<themal-editor>` web component via a single `<script>` tag. See [`packages/web-component/README.md`](packages/web-component/README.md) for setup instructions.

@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   replaceRootBlock,
+  upsertIntegrationBlock,
+  INTEGRATION_CSS,
   getAuthenticatedUser,
   createDesignPr,
 } from "../utils/githubApi";
@@ -438,5 +440,89 @@ describe("createDesignPr", () => {
     await expect(
       createDesignPr(baseConfig, "ghp_tok", newCss, ["colors"]),
     ).rejects.toThrow("Failed to fetch");
+  });
+
+  it("includes integration CSS when includeIntegration is true", async () => {
+    setupHappyPath();
+
+    await createDesignPr(baseConfig, "ghp_tok", newCss, ["colors"], true);
+
+    const commitCall = mockFetch.mock.calls[3];
+    const body = JSON.parse((commitCall[1] as RequestInit).body as string);
+    const decoded = atob(body.content);
+    expect(decoded).toContain("/* themal:integration-start */");
+    expect(decoded).toContain("/* themal:integration-end */");
+    expect(decoded).toContain("background-color: hsl(var(--background))");
+  });
+
+  it("omits integration CSS when includeIntegration is not set", async () => {
+    setupHappyPath();
+
+    await createDesignPr(baseConfig, "ghp_tok", newCss, ["colors"]);
+
+    const commitCall = mockFetch.mock.calls[3];
+    const body = JSON.parse((commitCall[1] as RequestInit).body as string);
+    const decoded = atob(body.content);
+    expect(decoded).not.toContain("themal:integration-start");
+  });
+
+  it("mentions integration rules in PR body when included", async () => {
+    setupHappyPath();
+
+    const url = await createDesignPr(baseConfig, "ghp_tok", newCss, ["colors"], true);
+
+    expect(decodeURIComponent(url)).toContain("integration CSS rules");
+  });
+});
+
+// ===========================================================================
+// upsertIntegrationBlock
+// ===========================================================================
+
+describe("upsertIntegrationBlock", () => {
+  it("inserts integration block after @layer base closing brace", () => {
+    const file = makeCssFile("    --background: 0 0% 100%;");
+
+    const result = upsertIntegrationBlock(file, INTEGRATION_CSS);
+
+    // Should appear after the layer block
+    const layerEnd = result.indexOf("}\n}");
+    const markerStart = result.indexOf("/* themal:integration-start */");
+    expect(markerStart).toBeGreaterThan(layerEnd);
+    expect(result).toContain("/* themal:integration-end */");
+    expect(result).toContain("background-color: hsl(var(--background))");
+  });
+
+  it("replaces an existing integration block", () => {
+    const file =
+      makeCssFile("    --background: 0 0% 100%;") +
+      "\n/* themal:integration-start */\nold rules\n/* themal:integration-end */\n";
+
+    const result = upsertIntegrationBlock(file, INTEGRATION_CSS);
+
+    expect(result).not.toContain("old rules");
+    expect(result).toContain("background-color: hsl(var(--background))");
+    // Only one start marker
+    const starts = result.match(/themal:integration-start/g);
+    expect(starts).toHaveLength(1);
+  });
+
+  it("preserves content before and after the injection point", () => {
+    const file = makeCssFile("    --bg: 0 0% 100%;") + "\n.custom { color: red; }\n";
+
+    const result = upsertIntegrationBlock(file, INTEGRATION_CSS);
+
+    expect(result).toContain("@tailwind base;");
+    expect(result).toContain(".custom { color: red; }");
+    expect(result).toContain("/* themal:integration-start */");
+  });
+
+  it("appends at end when no @layer base is found", () => {
+    const file = ":root {\n  --bg: 0 0% 100%;\n}\n";
+
+    const result = upsertIntegrationBlock(file, INTEGRATION_CSS);
+
+    expect(result).toContain("/* themal:integration-start */");
+    expect(result).toContain("/* themal:integration-end */");
   });
 });

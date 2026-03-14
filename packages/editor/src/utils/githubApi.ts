@@ -63,6 +63,31 @@ const SECTION_LABELS: Record<string, string> = {
   interactions: "Interactions",
 };
 
+/** Integration CSS rules that wire CSS variables to base HTML elements. */
+export const INTEGRATION_CSS = `/* themal:integration-start */
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+h1, h2, h3, h4, h5, h6 {
+  color: hsl(var(--foreground));
+}
+a {
+  color: hsl(var(--brand));
+}
+.card, [class*='card'] {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+}
+hr, .border {
+  border-color: hsl(var(--border));
+}
+nav, header, footer {
+  background-color: hsl(var(--card, var(--background)));
+  color: hsl(var(--foreground));
+}
+/* themal:integration-end */`;
+
 /**
  * Replace CSS custom properties inside an `@layer base { :root { ... } }` block.
  * Ported from the server-side Netlify function to run in the browser.
@@ -108,6 +133,51 @@ export function replaceRootBlock(fileContent: string, newCssVars: string): strin
 }
 
 /**
+ * Insert or replace a `/* themal:integration-start *​/ … /* themal:integration-end *​/` block.
+ * If a block already exists it is replaced in place; otherwise it is appended after
+ * the `@layer base { … }` closing brace.
+ */
+export function upsertIntegrationBlock(fileContent: string, integrationCss: string): string {
+  const markerRe = /\/\* themal:integration-start \*\/[\s\S]*?\/\* themal:integration-end \*\//;
+  if (markerRe.test(fileContent)) {
+    return fileContent.replace(markerRe, integrationCss);
+  }
+
+  // Find the closing brace of @layer base by counting depth
+  const layerStart = fileContent.search(/@layer\s+base\s*\{/);
+  if (layerStart === -1) {
+    // No @layer base — append at end
+    return fileContent.trimEnd() + "\n\n" + integrationCss + "\n";
+  }
+
+  const openIdx = fileContent.indexOf("{", layerStart);
+  let depth = 0;
+  let closeIdx = -1;
+  for (let i = openIdx; i < fileContent.length; i++) {
+    if (fileContent[i] === "{") depth++;
+    else if (fileContent[i] === "}") {
+      depth--;
+      if (depth === 0) {
+        closeIdx = i;
+        break;
+      }
+    }
+  }
+
+  if (closeIdx === -1) {
+    return fileContent.trimEnd() + "\n\n" + integrationCss + "\n";
+  }
+
+  return (
+    fileContent.slice(0, closeIdx + 1) +
+    "\n\n" +
+    integrationCss +
+    "\n" +
+    fileContent.slice(closeIdx + 1)
+  );
+}
+
+/**
  * Verify the token is valid and return the authenticated GitHub username.
  * Returns null if the token is invalid or expired.
  */
@@ -132,6 +202,7 @@ export async function createDesignPr(
   token: string,
   css: string,
   sections: string[],
+  includeIntegration?: boolean,
 ): Promise<string> {
   const repo = config.repo;
   const filePath = config.filePath || DEFAULT_FILE_PATH;
@@ -149,7 +220,12 @@ export async function createDesignPr(
   const currentContent = atob(fileData.content.replace(/\n/g, ""));
 
   // 2. Replace :root variables
-  const updatedContent = replaceRootBlock(currentContent, css);
+  let updatedContent = replaceRootBlock(currentContent, css);
+
+  // 2b. Optionally inject integration CSS rules
+  if (includeIntegration) {
+    updatedContent = upsertIntegrationBlock(updatedContent, INTEGRATION_CSS);
+  }
 
   // 3. Get base branch SHA
   const mainRef = (await ghFetch(
@@ -181,8 +257,11 @@ export async function createDesignPr(
 
   // 6. Return compare URL
   const title = encodeURIComponent(`Update design system: ${sectionLabel}`);
+  const integrationNote = includeIntegration
+    ? "\n\nAlso includes integration CSS rules that apply design system variables to base HTML elements."
+    : "";
   const body = encodeURIComponent(
-    `Updates CSS custom properties in \`${filePath}\` from the Themal design system editor.\n\nSections: ${sectionLabel}`,
+    `Updates CSS custom properties in \`${filePath}\` from the Themal design system editor.\n\nSections: ${sectionLabel}${integrationNote}`,
   );
   return `${webBase(config)}/${repo}/compare/${baseBranch}...${branchName}?expand=1&title=${title}&body=${body}`;
 }

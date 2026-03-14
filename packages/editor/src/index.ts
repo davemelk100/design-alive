@@ -42,7 +42,7 @@ export {
 } from "./utils/themeUtils";
 export type { HarmonyScheme, CardStyleState, ButtonStyleState, InputStyleState, TableStyleState, TypographyState, AlertStyleState, ToastStyleState, InteractionStyleState, TypoInteractionStyleState, CustomFontEntry } from "./utils/themeUtils";
 
-export { createDesignPr, replaceRootBlock, getAuthenticatedUser } from "./utils/githubApi";
+export { createDesignPr, replaceRootBlock, upsertIntegrationBlock, INTEGRATION_CSS, getAuthenticatedUser } from "./utils/githubApi";
 export type { GitHubConfig } from "./utils/githubApi";
 export { startOAuthFlow, getStoredAuth, clearAuth, validateStoredToken } from "./utils/githubAuth";
 export type { StoredGitHubAuth } from "./utils/githubAuth";

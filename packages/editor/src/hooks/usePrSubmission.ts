@@ -17,6 +17,7 @@ export function usePrSubmission(
   prApiKey: string | undefined,
   githubConfig: GitHubConfig | undefined,
   buildSectionCss: (sections: Iterable<string>) => string,
+  defaultIncludeIntegration = false,
 ) {
   const [showPrModal, setShowPrModal] = useState(false);
   const [prError, setPrError] = useState<string | null>(null);
@@ -24,9 +25,10 @@ export function usePrSubmission(
     new Set(["colors", "card", "typography", "alerts", "buttons", "interactions"]),
   );
   const [sectionPrStatus, setSectionPrStatus] = useState<SectionPrStatus>({});
+  const [includeIntegration, setIncludeIntegration] = useState(defaultIncludeIntegration);
 
   const submitPr = useCallback(
-    async (sections: Iterable<string>, statusKey: string) => {
+    async (sections: Iterable<string>, statusKey: string, integration?: boolean) => {
       if (!prEndpointUrl && !githubConfig) {
         setPrError("No prEndpointUrl or githubConfig prop provided. Pass one to enable PR creation.");
         return;
@@ -47,7 +49,7 @@ export function usePrSubmission(
           if (!auth) {
             auth = await startOAuthFlow(githubConfig);
           }
-          const compareUrl = await createDesignPr(githubConfig, auth.access_token, css, sectionArr);
+          const compareUrl = await createDesignPr(githubConfig, auth.access_token, css, sectionArr, integration);
           setSectionPrStatus((prev) => ({
             ...prev,
             [statusKey]: { status: "created", url: compareUrl },
@@ -73,7 +75,7 @@ export function usePrSubmission(
             "Content-Type": "application/json",
             ...(prApiKey ? { "x-api-key": prApiKey } : {}),
           },
-          body: JSON.stringify({ css, sections: sectionArr }),
+          body: JSON.stringify({ css, sections: sectionArr, includeIntegration: integration }),
         });
         let data: Record<string, unknown> = {};
         try {
@@ -127,8 +129,9 @@ export function usePrSubmission(
   const openPrModal = useCallback(() => {
     setPrSections(new Set());
     setPrError(null);
+    setIncludeIntegration(defaultIncludeIntegration);
     setShowPrModal(true);
-  }, []);
+  }, [defaultIncludeIntegration]);
 
   return {
     showPrModal,
@@ -140,5 +143,7 @@ export function usePrSubmission(
     setSectionPrStatus,
     submitPr,
     openPrModal,
+    includeIntegration,
+    setIncludeIntegration,
   };
 }

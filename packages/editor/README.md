@@ -67,7 +67,7 @@ The editor writes CSS custom properties (HSL values) to `:root`. All styles are 
 | `sidebarExtra` | `React.ReactNode` | — | Custom content rendered at the bottom of the left sidebar (e.g. contact forms, branding). |
 | `featuresUrl` | `string` | — | URL for the Features page link in the sidebar. |
 | `onAiGenerate` | `(prompt: string) => Promise<AiGenerateResult>` | — | AI theme generation callback. When provided, an "AI Generate" button appears in Global Actions. |
-| `applyToRoot` | `boolean` | `false` | Mirror CSS custom properties to `:root` so the theme applies beyond the editor. When enabled, the editor scans the host page's colors and shows a developer prompt with a tailored CSS snippet for full-site theming. |
+| `applyToRoot` | `boolean` | `false` | Mirror CSS custom properties to `:root` so the theme applies beyond the editor. When enabled, the editor also injects integration CSS rules automatically and scans the host page's colors for additional customization. |
 | `onAiPaletteMap` | `(prompt: string) => Promise<Record<string, string>>` | — | AI palette mapping callback. When provided and the `aiPaletteMapping` feature flag is enabled, an "AI Map" button appears in the host-scan confirmation modal. The callback receives a structured prompt describing the detected palette and should return a token map to apply. |
 | `devMode` | `boolean` | `false` | Show a "Purge Storage" button in Global Actions that clears all Themal localStorage keys. |
 
@@ -314,9 +314,10 @@ Imported icons are persisted to localStorage and rendered alongside built-in and
 
 When `applyToRoot` is enabled, the editor:
 1. Mirrors all CSS custom properties to `:root` (so they're available page-wide)
-2. Scans the host page's DOM to detect its existing color palette
-3. Shows a banner prompting the developer to add CSS rules for full-site theming
-4. Clicking "View CSS" opens a modal with a tailored, copyable CSS snippet based on the detected palette
+2. **Automatically injects integration CSS** (`<style id="themal-integration-css">`) so body, headings, links, cards, borders, and nav/header/footer use the theme variables out of the box — no manual stylesheet edits needed. The tag is removed on unmount.
+3. Scans the host page's DOM to detect its existing color palette
+4. Shows a banner prompting the developer to view a tailored CSS snippet for additional customization
+5. **Defaults the "Include integration rules" toggle on** in the Open PR modal, so PRs include both CSS variable values and the rules that consume them — the site works after merge without manual stylesheet edits
 
 The generated CSS uses `var()` references so your site responds to every color change in the editor:
 
