@@ -17,7 +17,6 @@ npm install @themal/editor
 | `react` | `^18.0.0 \|\| ^19.0.0` | Yes |
 | `react-dom` | `^18.0.0 \|\| ^19.0.0` | Yes |
 | `axe-core` | `>=4.0.0` | Optional — enables accessibility auditing |
-| `lucide-react` | `>=0.294.0` | Optional — enables icon previews |
 
 Install optional peers for full functionality:
 
@@ -57,8 +56,6 @@ The editor writes CSS custom properties (HSL values) to `:root`. All styles are 
 | `headerRight` | `React.ReactNode` | — | Custom content rendered on the right side of the header (e.g. auth buttons). |
 | `topNav` | `React.ReactNode` | — | Custom top navigation. When provided, replaces the built-in nav links entirely. |
 | `aboutUrl` | `string` | — | URL for the About page link in the header navigation. |
-| `customIcons` | `CustomIcon[]` | — | Custom icons to display in the Icons preview section. Each entry needs `name` and `icon` (a React component). |
-| `iconMode` | `"append" \| "replace"` | `"append"` | `"append"` adds custom icons after the built-in lucide icons. `"replace"` hides built-ins and shows only custom icons. |
 | `showLogo` | `boolean` | `true` | Show the Themal logo in the header. Set `false` for white-label or plugin usage. |
 | `showSectionNav` | `boolean` | `true` | Show the sticky section navigation bar (Colors, Buttons, Cards, etc.). |
 | `defaultColors` | `Record<string, string>` | — | Default color values keyed by CSS variable name (e.g. `{"--brand": "210 50% 40%"}`). Applied on mount and whenever the prop changes, taking priority over stored theme colors. "Reset theme to default" restores these instead of the Themal defaults. |
@@ -84,7 +81,6 @@ The following features require a valid license key:
 | Palette export | Download palette as SVG/PNG, or copy as HEX/RGB/RGBA text. |
 | Interaction states | Style hover, focus, and active states for buttons and components. |
 | Typography interactions | Customize hover, active, and underline behavior for links and headings. |
-| Icon import | Import icons from SVG sprites, icon font CSS (Font Awesome, Bootstrap Icons, Material Icons), or CDN packages (Lucide, Heroicons, Phosphor). |
 | Custom fonts | Add any Google Font by name — validated, loaded, and persisted across sessions. |
 
 ### License Key Format
@@ -106,7 +102,7 @@ import { PremiumGate } from '@themal/editor';
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `feature` | `string` | — | Name of the premium feature being gated. |
-| `variant` | `"section" \| "inline"` | `"section"` | `"section"` shows a lock icon and `not-allowed` cursor; `"inline"` shows a lock icon inline. Both open a modal on click. |
+| `variant` | `"section" \| "inline"` | `"section"` | `"section"` shows a lock indicator and `not-allowed` cursor; `"inline"` shows a lock indicator inline. Both open a modal on click. |
 | `upgradeUrl` | `string` | `"/pricing"` | URL for the upgrade prompt. |
 | `signInUrl` | `string` | — | URL for the sign-in prompt. |
 
@@ -265,47 +261,6 @@ This flow opens a GitHub OAuth popup, exchanges the code for a token via a proxy
 />
 ```
 
-### With custom icons
-
-```tsx
-import { Rocket, Star, Flame } from 'lucide-react';
-// Or use any React component that accepts className
-import { MyBrandIcon } from './icons';
-
-<DesignSystemEditor
-  customIcons={[
-    { name: "Rocket", icon: Rocket },
-    { name: "Star", icon: Star },
-    { name: "Flame", icon: Flame },
-    { name: "Brand", icon: MyBrandIcon },
-  ]}
-/>
-```
-
-### Replace built-in icons entirely
-
-```tsx
-<DesignSystemEditor
-  customIcons={[
-    { name: "Brand", icon: MyBrandIcon },
-    { name: "Product", icon: ProductIcon },
-  ]}
-  iconMode="replace"
-/>
-```
-
-The Icons section includes a "Hide All" / "Show All" toggle so users can collapse the icon grid.
-
-### Import icons from the browser (Pro)
-
-Premium users can import icons directly from the editor UI without writing code. Click the "Import" button in the Icons row to open the import modal with three tabs:
-
-- **CDN Package** — Pick from Lucide, Heroicons, or Phosphor. Search, select, and import individual icons.
-- **SVG Sprite** — Paste a URL to an SVG sprite file. The editor parses `<symbol>` elements and lets you pick which icons to import.
-- **Icon Font** — Paste a CSS URL (or choose a preset for Font Awesome, Bootstrap Icons, or Material Icons). The editor detects icon classes and renders previews.
-
-Imported icons are persisted to localStorage and rendered alongside built-in and custom icons. Each imported icon shows a remove badge on hover.
-
 ### Full-site theming
 
 ```tsx
@@ -436,8 +391,6 @@ import {
 import type {
   DesignSystemEditorProps,
   TokenDefinition,
-  CustomIcon,
-  ImportedIconData,
   HarmonyScheme,
   CardStyleState,
   ButtonStyleState,
@@ -481,8 +434,7 @@ import type {
 13. **Shareable URLs** — Encode your full theme state in the URL hash and share it with anyone via a single link.
 14. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
 15. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
-16. **Icon import** *(Pro)* — Import icons from CDN packages (Lucide, Heroicons, Phosphor), SVG sprites, or icon font CSS files directly from the browser.
-17. **Mobile friendly** — Fully responsive UI with a collapsible sidebar menu, section dropdown navigation, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, touch-friendly control sizing (44px+ tap targets for sliders, buttons, toggles, and checkboxes), and stacked layouts for smaller screens. A floating scroll-to-top button appears on scroll.
+16. **Mobile friendly** — Fully responsive UI with a collapsible sidebar menu, section dropdown navigation, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, touch-friendly control sizing (44px+ tap targets for sliders, buttons, toggles, and checkboxes), and stacked layouts for smaller screens. A floating scroll-to-top button appears on scroll.
 
 ## Package Architecture
 
@@ -518,10 +470,8 @@ src/
 │   ├── extractPalette.ts       # Image-to-palette extraction (k-means clustering)
 │   ├── hostScanner.ts          # Host page style scanning and integration CSS
 │   ├── themeUtils.ts           # Barrel re-export of all style utilities
-│   ├── lazyIcons.ts            # Lazy-loaded lucide icon helpers
 │   ├── githubApi.ts            # Client-side GitHub PR creation
 │   ├── githubAuth.ts           # GitHub OAuth popup flow
-│   ├── iconImport.ts           # SVG sanitizer, icon fetching
 │   ├── storage.ts              # localStorage with fallbacks
 │   ├── license.ts              # License key validation
 │   └── featureFlags.ts         # Feature flag config for in-progress features
@@ -553,7 +503,7 @@ Typography changes made in the editor are scoped to `.ds-editor` and do not over
 
 ### Modal Theming
 
-All editor modals (reset confirm, AI generate, CSS import, icon import, image palette, PR, and upgrade) use CSS custom properties for their backdrop, background, text color, and shadow. Override them without `!important`:
+All editor modals (reset confirm, AI generate, CSS import, image palette, PR, and upgrade) use CSS custom properties for their backdrop, background, text color, and shadow. Override them without `!important`:
 
 ```css
 :root {
@@ -621,7 +571,6 @@ All props that accept strings or booleans can be set as HTML attributes using ke
   license-key="THEMAL-XXXX-XXXX-XXXX"
   show-header="false"
   show-nav-links="false"
-  icon-mode="replace"
   show-logo="true"
   accessibility-audit="true"
   upgrade-url="/pricing"
@@ -632,31 +581,6 @@ All props that accept strings or booleans can be set as HTML attributes using ke
 ```
 
 Note: The Themal logo is hidden by default in the web component. Set `show-logo="true"` to display it.
-
-### Custom icons via JavaScript
-
-Since HTML attributes can only pass strings, custom icons are set programmatically with the `setIcons()` method. Pass an array of `{ name, svg }` objects where `svg` is a raw SVG string:
-
-```html
-<script src="https://unpkg.com/@themal/editor/dist/themal-editor.js"></script>
-<themal-editor icon-mode="replace"></themal-editor>
-
-<script>
-  const editor = document.querySelector('themal-editor');
-  editor.setIcons([
-    {
-      name: "Heart",
-      svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
-    },
-    {
-      name: "Star",
-      svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
-    },
-  ]);
-</script>
-```
-
-Set `icon-mode="replace"` to hide the built-in icons and show only your custom set, or omit it (defaults to `"append"`) to add yours alongside the built-ins.
 
 ## Development
 
@@ -676,10 +600,7 @@ npm run dev
 
 The editor follows these security practices:
 
-- **SVG sanitization** — All imported SVGs are sanitized with element and attribute whitelists. Script tags, event handlers, `javascript:` URIs, and `style` attributes are stripped.
 - **CSS injection prevention** — Font family names are sanitized before interpolation into `<style>` tags to prevent CSS breakout attacks.
-- **HTTPS-only fetching** — Icon imports (sprites, fonts, CDN) enforce HTTPS URLs only.
-- **Pinned CDN versions** — CDN icon fetches use pinned package versions instead of `@latest`.
 - **Origin-checked OAuth** — GitHub OAuth `postMessage` listener validates `event.origin`.
 - **Session-scoped tokens** — GitHub OAuth tokens are stored in `sessionStorage` (not `localStorage`) so they do not persist across browser sessions.
 - **No runtime dependencies** — Zero production dependencies beyond React peer deps, minimizing supply chain risk.

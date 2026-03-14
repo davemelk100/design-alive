@@ -1,12 +1,5 @@
 import type React from "react";
 
-export interface CustomIcon {
-  /** Display name for the icon */
-  name: string;
-  /** React component that renders the icon. Receives className and standard SVG props. */
-  icon: React.ComponentType<{ className?: string; [key: string]: unknown }>;
-}
-
 export interface AiGenerateResult {
   colors?: Record<string, string>;
   typography?: Partial<import("./utils/themeUtils").TypographyState>;
@@ -47,10 +40,6 @@ export interface DesignSystemEditorProps {
   featuresUrl?: string;
   /** URL for the About page link in the header */
   aboutUrl?: string;
-  /** Custom icons to display in the Icons preview section */
-  customIcons?: CustomIcon[];
-  /** How custom icons interact with built-in icons. "append" adds them after built-ins, "replace" hides built-ins entirely. Default: "append" */
-  iconMode?: "append" | "replace";
   /** Show the Themal logo in the header. Default: true */
   showLogo?: boolean;
   /** Default color values to restore on reset, keyed by CSS variable name (e.g. {"--brand": "210 50% 40%"}). When provided, "Reset theme to default" restores these instead of the Themal defaults. */
@@ -70,8 +59,6 @@ export interface DesignSystemEditorProps {
   /** Provider-agnostic AI palette mapping. When provided (and the `aiPaletteMapping` feature flag is enabled), an "AI Map" button appears in the host-scan confirmation modal. The callback receives a structured prompt describing the detected palette and should return a token map to apply. */
   onAiPaletteMap?: (prompt: string) => Promise<Record<string, string>>;
 }
-
-export type { ImportedIconData } from "./utils/iconImport";
 
 export interface TokenDefinition {
   key: string;

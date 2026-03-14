@@ -113,11 +113,9 @@ import type {
   InputStyleState,
   TableStyleState,
 } from "./utils/themeUtils";
-import { useImportedIcons } from "./hooks/useImportedIcons";
 import { useHostScanner } from "./hooks/useHostScanner";
 import { buildIntegrationCss } from "./utils/hostScanner";
 import { useStyleState } from "./hooks/useStyleState";
-import { IconImportModal } from "./components/IconImportModal";
 import { ColorsSection } from "./sections/ColorsSection";
 import { ButtonsSection } from "./sections/ButtonsSection";
 import { CardsSection } from "./sections/CardsSection";
@@ -143,8 +141,6 @@ function DesignSystemEditorInner({
   headerRight,
   topNav,
   aboutUrl,
-  customIcons,
-  iconMode = "append",
   showLogo = true,
   defaultColors,
   defaultTypography,
@@ -280,9 +276,6 @@ function DesignSystemEditorInner({
     "idle" | "running" | "failed" | "passed"
   >("idle");
   const auditTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [iconsHidden, setIconsHidden] = useState(false);
-  const [showIconImportModal, setShowIconImportModal] = useState(false);
-  const { importedIcons, importedIconData, addIcons: addImportedIcons, removeIcon: removeImportedIcon, clearAll: clearImportedIcons } = useImportedIcons();
   const [auditViolations, setAuditViolations] = useState<
     { selector: string; text: string }[]
   >([]);
@@ -2123,14 +2116,6 @@ function DesignSystemEditorInner({
             id="global-reset-modal-title"
           />
 
-          {/* Icon Import Modal */}
-          <IconImportModal
-            open={showIconImportModal}
-            onClose={() => setShowIconImportModal(false)}
-            onImport={addImportedIcons}
-          />
-
-
           {/* Colors section */}
           <ColorsSection
             colors={colors}
@@ -2150,18 +2135,6 @@ function DesignSystemEditorInner({
             setMobilePickerKey={setMobilePickerKey}
             setMobilePickerHex={setMobilePickerHex}
             fileInputRef={fileInputRef}
-            upgradeUrl={upgradeUrl}
-            signInUrl={signInUrl}
-            customIcons={customIcons}
-            iconMode={iconMode}
-            iconsHidden={iconsHidden}
-            setIconsHidden={setIconsHidden}
-            showIconImportModal={showIconImportModal}
-            setShowIconImportModal={setShowIconImportModal}
-            importedIcons={importedIcons}
-            importedIconData={importedIconData}
-            removeImportedIcon={removeImportedIcon}
-            clearImportedIcons={clearImportedIcons}
             cardStyle={cardStyle}
             typographyState={typographyState}
             alertStyle={alertStyle}
