@@ -332,7 +332,7 @@ describe("generateRandomPalette", () => {
   });
 
   it("muted-foreground meets WCAG AA against background at 87% lightness", () => {
-    const colorsWithGrayBg = { ...baseColors, "--background": "200 18% 87%" };
+    const colorsWithGrayBg: Record<string, string> = { ...baseColors, "--background": "200 18% 87%" };
     for (let run = 0; run < 20; run++) {
       const result = generateRandomPalette(colorsWithGrayBg, new Set(["--background"]), false);
       const merged = { ...colorsWithGrayBg, ...result };

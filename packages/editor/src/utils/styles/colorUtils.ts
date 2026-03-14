@@ -698,7 +698,6 @@ export const generateRandomPalette = (
   const bParts = activeBrand.trim().split(/\s+/);
   const bHue = parseFloat(bParts[0]);
   const bSat = parseFloat(bParts[1]);
-  const bLight = parseFloat(bParts[2]);
   const wrap = (h: number) => ((h % 360) + 360) % 360;
 
   if (!locked.has('--background')) {
