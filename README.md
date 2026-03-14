@@ -1,18 +1,36 @@
 # Themal
 
-An interactive design system editor that lets you pick a brand color and watch every token update in real time. Customize typography, button interactions, and link hover states. Export a CSS snapshot or open a PR to propose changes — from desktop, tablet, or phone.
+An interactive design system editor that lets you pick a brand color and watch every token update in real time. Customize colors, typography, buttons, cards, alerts, inputs, and tables — then export CSS, design tokens, or open a PR to propose changes. Works on desktop, tablet, and mobile.
 
 **Live:** [themalive.com](https://themalive.com)
 
 > **Early access — all features are free.** Pro subscription tiers will be introduced in a future release.
 
+## Features
+
+- **One-click theming** — Pick a brand color and the system derives a full palette (secondary, accent, muted, destructive) using harmony schemes (complementary, triadic, analogous, split-complementary, tetradic)
+- **WCAG AA contrast enforcement** — Every foreground/background pair is audited against 4.5:1 via axe-core and auto-corrected by adjusting lightness
+- **7 customizable sections** — Colors, Buttons, Cards, Alerts, Typography, Inputs, Tables — each with presets and granular controls
+- **Typography** — Heading and body fonts (including custom Google Fonts), sizes, weights, line height, letter spacing with five presets
+- **Button & interaction styles** — Padding, radius, shadow, hover/active scale, focus ring with live preview
+- **Card styles** — Border radius, shadow, backdrop blur, border width with presets
+- **Input styles** — Radius, padding, font size, focus ring with custom select, checkboxes, radios, toggles
+- **Table styles** — Responsive tables that render as `<table>` on desktop and `<dl>` on mobile, with striped, bordered, and minimal presets
+- **Alert & toast styles** — Independent dialog and toast message styling
+- **Per-section export** — CSS custom properties or W3C Design Token JSON for each section
+- **Shareable URLs** — Encode your full theme in the URL hash and share via a single link
+- **GitHub PR creation** — Propose design system changes directly from the editor
+- **Persistence** — All settings saved to localStorage and restored on reload
+- **CSS isolation** — Scoped styles never override host page CSS
+- **Mobile friendly** — Collapsible sidebar, touch-friendly controls (44px+ tap targets), responsive layouts
+
 ## How It Works
 
-All palette colors are HSL custom properties on `:root`. From one brand color, the system derives a full token set (secondary, accent, muted, destructive) using your choice of color harmony scheme: complementary, triadic, analogous, split-complementary, or tetradic.
+All palette colors are HSL custom properties on `:root`. From one brand color, the system derives a full token set using your choice of color harmony scheme.
 
 Every foreground/background pair is audited against WCAG AA (4.5:1) via axe-core. Failing pairs are auto-corrected by adjusting foreground lightness.
 
-Beyond colors, the editor includes typography controls (fonts, sizes, weights, spacing with five presets, plus custom Google Font loading) that apply site-wide, button interaction states (hover, active, focus), typography interaction states (link/heading hover effects), card customization, independent dialog box and toast message styling, an inputs section with controls for border radius, padding, font size, and focus ring, and a responsive tables section (standard table on desktop, description list on mobile) — all with live preview. A sticky section nav (Colors, Buttons, Cards, Alerts, Typography, Inputs, Tables) provides quick navigation with the active section sliding to the left on desktop. A responsive left sidebar houses page links, contact/bug-report forms, and the Themal logo, with a frosted-glass mobile menu for smaller screens.
+A sticky section nav (Colors, Buttons, Cards, Alerts, Typography, Inputs, Tables) provides quick navigation with the active section sliding to the left on desktop. A responsive left sidebar houses page links, contact/bug-report forms, and the Themal logo, with a frosted-glass mobile menu for smaller screens.
 
 Your entire theme (colors, typography, interactions, card styles, dialog styles, toast styles, input styles, table styles) persists in localStorage across reloads. All native select dropdowns have been replaced with custom themed dropdowns that follow the design system's color scheme.
 
@@ -35,14 +53,43 @@ function App() {
 
 Requires `react` and `react-dom` v18 or v19. Optionally install `axe-core` (accessibility auditing) and `lucide-react` (icon previews) for full functionality. See [`packages/editor/README.md`](packages/editor/README.md) for full API docs, props, exported utilities, and premium feature details.
 
+### Applying to the Host Page
+
+To theme your entire site (not just the editor), use `applyToRoot` with `readRootColors` so CSS-file values take precedence over stale localStorage:
+
+```tsx
+import { DesignSystemEditor, readRootColors } from "@themal/editor";
+import "@themal/editor/style.css";
+
+const cssColors = readRootColors(); // snapshot before editor mounts
+
+function App() {
+  return <DesignSystemEditor defaultColors={cssColors} applyToRoot />;
+}
+```
+
 ## Web Component
 
 For WordPress, static sites, or any non-React platform, use the `<themal-editor>` web component via a single `<script>` tag. See [`packages/web-component/README.md`](packages/web-component/README.md) for setup instructions.
 
+## Monorepo Structure
+
+```
+themal/
+├── src/                          # Site app (themalive.com)
+├── packages/
+│   ├── editor/                   # @themal/editor npm package
+│   ├── web-component/            # @themal/web-component (custom element wrapper)
+│   └── example-app/              # Integration test app with Playwright health checks
+├── netlify/functions/            # Serverless functions (PR creation, Stripe checkout, webhooks)
+├── SETUP.md                      # Full environment setup guide
+└── CLAUDE.md                     # Project coding rules
+```
+
 ## Tech Stack
 
 - React 18 + TypeScript
-- Vite
+- Vite (app + library mode for npm package)
 - Tailwind CSS
 - axe-core (WCAG AA accessibility auditing)
 - Lucide React (icons)
@@ -71,7 +118,7 @@ npm run test:health
 ## Getting Started
 
 ```bash
-cp .env.example .env   # then fill in the values
+cp .env.example .env   # then fill in the values (see notes in the file)
 npm install
 npm run dev
 ```
