@@ -347,7 +347,7 @@ export function ButtonsSection({
                       <button
                         key={key}
                         onClick={() => selectButtonPreset(key)}
-                        className="h-12 px-3 text-sm font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                        className="h-12 px-3 text-sm font-light rounded-lg transition-colors hover:opacity-80 flex flex-1 items-center justify-center gap-1"
                         style={
                           active
                             ? {
@@ -849,7 +849,7 @@ export function ButtonsSection({
                         <button
                           key={key}
                           onClick={() => selectInteractionPreset(key)}
-                          className="h-12 px-3 text-sm font-light rounded-lg transition-colors hover:opacity-80 flex items-center justify-center gap-1"
+                          className="h-12 px-3 text-sm font-light rounded-lg transition-colors hover:opacity-80 flex flex-1 items-center justify-center gap-1"
                           style={
                             active
                               ? {
