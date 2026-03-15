@@ -432,6 +432,7 @@ import type {
 14. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
 15. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
 16. **Mobile friendly** — Fully responsive UI with a collapsible sidebar menu, section dropdown navigation, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, touch-friendly control sizing (44px+ tap targets for sliders, buttons, toggles, and checkboxes), and stacked layouts for smaller screens. A floating scroll-to-top button appears on scroll.
+17. **Section locks** *(feature flag: `sectionLocks`)* — Lock any section (Colors, Buttons, Cards, Alerts, Typography, Inputs, Tables) to preserve its styles during global reset. Locked sections are immune to "Reset Everything" and persist across sessions via localStorage.
 
 ## Package Architecture
 
@@ -450,7 +451,7 @@ The editor is built with Vite in library mode and published as an ES module:
 src/
 ├── DesignSystemEditor.tsx      # Main orchestrator component
 ├── sections/                   # Section components (Colors, Buttons, Cards, etc.)
-├── components/                 # Shared UI (SectionHeader, modals, PremiumGate)
+├── components/                 # Shared UI (SectionHeader, modals, PremiumGate, SectionLockButton)
 ├── hooks/                      # Custom hooks (useColorState, useNavigationState, etc.)
 ├── utils/
 │   ├── styles/                 # Domain-specific style utilities

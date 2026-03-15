@@ -4,6 +4,18 @@ import usePageMeta from "../hooks/usePageMeta";
 
 const features = [
   {
+    version: "0.38",
+    items: [
+      "CSS/Tokens/Reset export buttons added to Inputs and Tables sections - all 7 sections now have per-section export",
+      "Section locks feature (behind sectionLocks feature flag) - lock any section to preserve its styles during global reset",
+      "Targeted contrast audit - auditor only scans elements marked with data-audit-target instead of the entire content area, eliminating false positives from code blocks and editor chrome",
+      "Scroll-to-top arrows account for sticky headers - 160px offset prevents content from hiding behind the header",
+      "Increased scroll-mt on section headings (scroll-mt-40 lg:scroll-mt-24) for proper scroll-into-view with sticky navs",
+      "Mobile full-width layout - reduced horizontal padding to px-2 on narrow viewports so content uses the full screen",
+      "Site header improvements - section nav animation on tablet, Tables added to section nav, background matches theme on editor page",
+    ],
+  },
+  {
     version: "0.37",
     items: [
       "Replaced axe-core (~580KB) with a built-in lightweight contrast auditor (~2KB) - 43% reduction in total JS bundle size",

@@ -17,7 +17,7 @@ An interactive design system editor that lets you pick a brand color and watch e
 - **Input styles** — Radius, padding, font size, focus ring with custom select, checkboxes, radios, toggles
 - **Table styles** — Responsive tables that render as `<table>` on desktop and `<dl>` on mobile, with striped, bordered, and minimal presets
 - **Alert & toast styles** — Independent dialog and toast message styling
-- **Per-section export** — CSS custom properties or W3C Design Token JSON for each section
+- **Per-section export** — CSS custom properties or W3C Design Token JSON for all 7 sections (Colors, Buttons, Cards, Alerts, Typography, Inputs, Tables)
 - **Shareable URLs** — Encode your full theme in the URL hash and share via a single link
 - **GitHub PR creation** — Propose design system changes directly from the editor
 - **Persistence** — All settings saved to localStorage and restored on reload
