@@ -19,7 +19,6 @@ export default defineConfig({
         "react",
         "react-dom",
         "react/jsx-runtime",
-        "axe-core",
         "lucide-react",
       ],
       output: {

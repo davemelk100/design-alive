@@ -107,7 +107,7 @@ All props that accept strings or booleans can be set as HTML attributes using ke
 |-----------|------|---------|-------------|
 | `license-key` | string | — | License key to unlock premium features. |
 | `pr-endpoint-url` | string | — | URL for PR creation endpoint. |
-| `accessibility-audit` | boolean | `true` | Enable axe-core WCAG contrast auditing. |
+| `accessibility-audit` | boolean | `true` | Enable built-in WCAG AA contrast auditing. |
 | `show-nav-links` | boolean | `true` | Show section navigation links. |
 | `show-header` | boolean | `true` | Show the editor header. Set `false` for embedded use. |
 | `show-logo` | boolean | `false` | Show the Themal logo in the header. Defaults to `false` in the web component. Set `true` to display it. |

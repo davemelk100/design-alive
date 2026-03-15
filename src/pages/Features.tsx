@@ -4,6 +4,30 @@ import usePageMeta from "../hooks/usePageMeta";
 
 const features = [
   {
+    version: "0.37",
+    items: [
+      "Replaced axe-core (~580KB) with a built-in lightweight contrast auditor (~2KB) - 43% reduction in total JS bundle size",
+      "Error notification for contrast auditor failures - displays a dialog with details and a retry button instead of failing silently",
+      "Theme-independent audit dialog - fixed opaque background, hardcoded accessible button colors, and icon colors that render correctly regardless of user theme",
+      "Removed section wrapper borders from Colors, Typography, Buttons, Cards, Inputs, Tables, Dialog Boxes, and Toast Messages sections for a cleaner UI",
+      "Removed axe-core from peer dependencies - WCAG AA contrast auditing now works out of the box with zero additional dependencies",
+    ],
+  },
+  {
+    version: "0.36",
+    items: [
+      "Removed Icons section from the editor",
+    ],
+  },
+  {
+    version: "0.35",
+    items: [
+      "Auto-inject integration CSS when applyToRoot is enabled - body, headings, links, cards, borders, and nav/header/footer are themed automatically via a managed <style> tag",
+      "Include integration rules in PRs - the Open PR modal defaults to including integration CSS rules so sites work after merge without manual stylesheet edits",
+      "Fix brand button contrast - brand-colored buttons now use computed foreground color for accessible text",
+    ],
+  },
+  {
     version: "0.34",
     items: [
       "Modal theming CSS custom properties - consumers can now override --themal-modal-backdrop-bg, --themal-modal-bg, --themal-modal-fg, and --themal-modal-shadow to theme all editor modals without !important or high-specificity selectors",
@@ -78,8 +102,8 @@ const features = [
       "CSS isolation - disabled Tailwind preflight globally, replaced with a scoped reset inside .ds-editor only to prevent leaking styles into the host site",
       "Font inheritance by default - typography defaults to \"inherit\" so the editor picks up the host site's heading and body fonts without overriding them",
       "Inherit (Host) font option - new first option in font dropdowns that omits font-family entirely, letting host CSS cascade through",
-      "Playwright health check suite - 39 e2e tests across 4 theme presets covering CSS variables, theme switching, font inheritance, contrast, a11y (axe-core WCAG AA), CSS isolation, and premium gate",
-      "Accessibility fixes - ds-text-muted specificity corrected to beat button color reset, explicit background-color/color on .ds-editor for accurate axe-core contrast detection",
+      "Playwright health check suite - 39 e2e tests across 4 theme presets covering CSS variables, theme switching, font inheritance, contrast, a11y (WCAG AA), CSS isolation, and premium gate",
+      "Accessibility fixes - ds-text-muted specificity corrected to beat button color reset, explicit background-color/color on .ds-editor for accurate contrast detection",
       "SectionNav arrow sizing - arrows now use em units inside headings so they scale consistently with section header arrows",
       "Purge info icon - moved inline with the Purge button label instead of a separate button",
       "defaultColors priority - host-provided defaultColors now correctly override stored theme on initial mount",
@@ -265,7 +289,7 @@ const features = [
       "WCAG AA contrast enforcement (4.6:1 ratio)",
       "Contrast learning loop - saves corrections to localStorage",
       "Dark mode support with automatic foreground/background swap",
-      "Accessibility audit via axe-core",
+      "Built-in WCAG AA contrast auditor (zero dependencies)",
       "Responsive mobile-first layout with hamburger menu",
       "Web component support via <themal-editor> custom element",
     ],
@@ -355,7 +379,7 @@ export default function Features() {
               { title: "CSS & Design Token Export", desc: "Per-section export of CSS custom properties or W3C Design Token JSON." },
               { title: "Palette Export", desc: "Download palette as SVG or PNG, copy as HEX, RGB, or RGBA." },
               { title: "Shareable URLs", desc: "Encode full theme state in a URL hash and share with one click." },
-              { title: "Accessibility Audit", desc: "Built-in axe-core audit with inline violation reporting." },
+              { title: "Accessibility Audit", desc: "Built-in WCAG AA contrast auditor with inline violation reporting and error notifications." },
               { title: "GitHub PR Integration", desc: "Open design system PRs via your server endpoint or directly through the GitHub API with built-in OAuth." },
               { title: "Color Locks", desc: "Pin individual color tokens during palette generation." },
               { title: "Responsive Layout", desc: "Mobile-first design with a 2D color spectrum picker for touch, adaptive controls across all viewports." },

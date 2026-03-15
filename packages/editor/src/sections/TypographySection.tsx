@@ -151,7 +151,7 @@ export function TypographySection({
           {/* Controls + Preview column */}
           <div
             className="space-y-3 rounded-lg p-4"
-            style={{ border: "1px solid hsl(var(--border))", minWidth: 0 }}
+            style={{ minWidth: 0 }}
           >
             <div
               className="flex items-center flex-wrap gap-2 sm:gap-4"
@@ -836,7 +836,7 @@ export function TypographySection({
           {/* Typography Interactions column */}
           <div
             className="space-y-3 rounded-lg p-4"
-            style={{ border: "1px solid hsl(var(--border))", minWidth: 0 }}
+            style={{ minWidth: 0 }}
           >
             <div
               className="flex items-center flex-wrap gap-2 sm:gap-4"

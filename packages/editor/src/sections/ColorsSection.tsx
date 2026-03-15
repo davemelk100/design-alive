@@ -280,7 +280,6 @@ export function ColorsSection({
 
             <div
               className="rounded-xl p-4 sm:p-6 space-y-3"
-              style={{ border: "1px solid hsl(var(--border))" }}
             >
               {/* Color swatch buttons */}
               <div

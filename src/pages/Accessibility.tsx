@@ -4,7 +4,7 @@ export default function Accessibility() {
   usePageMeta({
     title: "Accessibility | Themal",
     description:
-      "Themal's accessibility commitment. WCAG 2.1 Level AA compliance, built-in contrast enforcement, axe-core integration, keyboard navigation, and skip-to-content support.",
+      "Themal's accessibility commitment. WCAG 2.1 Level AA compliance, built-in contrast enforcement, automated contrast auditing, keyboard navigation, and skip-to-content support.",
   });
 
   return (
@@ -30,7 +30,7 @@ export default function Accessibility() {
               <li><strong>WCAG AA contrast enforcement:</strong> The color editor automatically checks and enforces a minimum 4.5:1 contrast ratio between foreground and background color pairs, ensuring text readability.</li>
               <li><strong>Real-time contrast ratios:</strong> Contrast ratios are displayed live as you adjust colors, so you always know where you stand.</li>
               <li><strong>Accessible color palettes:</strong> Generated harmony schemes and palette suggestions are tested against AA contrast thresholds.</li>
-              <li><strong>axe-core integration:</strong> Optional integration with the axe-core accessibility engine provides automated auditing of your design system output.</li>
+              <li><strong>Built-in contrast auditor:</strong> A lightweight WCAG AA contrast auditor automatically scans the live DOM for contrast violations and reports issues with a retry option on failure.</li>
             </ul>
           </section>
 

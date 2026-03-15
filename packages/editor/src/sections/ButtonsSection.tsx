@@ -128,7 +128,6 @@ export function ButtonsSection({
               {/* Types subsection */}
               <div
                 className="w-full lg:w-1/2 flex flex-col rounded-lg p-4"
-                style={{ border: "1px solid hsl(var(--border))" }}
               >
                 <div
                   className="flex items-center flex-wrap gap-2 sm:gap-4"
@@ -630,7 +629,6 @@ export function ButtonsSection({
               {/* Interactions subsection */}
               <div
                 className="w-full lg:w-1/2 space-y-3 rounded-lg p-4"
-                style={{ border: "1px solid hsl(var(--border))" }}
               >
                 <div
                   className="flex items-center flex-wrap gap-2 sm:gap-4"

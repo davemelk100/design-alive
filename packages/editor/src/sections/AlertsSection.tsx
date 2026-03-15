@@ -117,7 +117,6 @@ export function AlertsSection({
                 {/* Dialog Boxes (left) */}
                 <div
                   className="space-y-3 rounded-lg p-4"
-                  style={{ border: "1px solid hsl(var(--border))" }}
                 >
                   <div className="flex items-center justify-between gap-2 flex-wrap" data-axe-exclude>
                     <h3
@@ -507,7 +506,6 @@ export function AlertsSection({
                 >
                   <div
                     className="space-y-3 rounded-lg p-4"
-                    style={{ border: "1px solid hsl(var(--border))" }}
                   >
                     <div className="flex items-center justify-between gap-2 flex-wrap" data-axe-exclude>
                       <h3

@@ -1,6 +1,6 @@
 {
   "name": "@themal/editor",
-  "version": "0.36.0",
+  "version": "0.37.0",
   "type": "module",
   "description": "Interactive design system editor for any web app — pick colors, enforce WCAG AA contrast, export CSS custom properties",
   "main": "./dist/index.js",
@@ -22,13 +22,7 @@
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0",
-    "axe-core": ">=4.0.0"
-  },
-  "peerDependenciesMeta": {
-    "axe-core": {
-      "optional": true
-    }
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@types/react": "^18",

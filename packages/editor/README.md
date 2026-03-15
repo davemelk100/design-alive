@@ -16,13 +16,8 @@ npm install @themal/editor
 |---------|---------|----------|
 | `react` | `^18.0.0 \|\| ^19.0.0` | Yes |
 | `react-dom` | `^18.0.0 \|\| ^19.0.0` | Yes |
-| `axe-core` | `>=4.0.0` | Optional — enables accessibility auditing |
 
-Install optional peers for full functionality:
-
-```bash
-npm install axe-core lucide-react
-```
+WCAG AA contrast auditing is built in — no additional dependencies required. As of v0.37.0, the editor uses a lightweight built-in contrast auditor (~2KB) instead of axe-core (~580KB).
 
 ## Quick Start
 
@@ -47,7 +42,7 @@ The editor writes CSS custom properties (HSL values) to `:root`. All styles are 
 | `prEndpointUrl` | `string` | — | URL for your server-side PR creation endpoint. The editor POSTs `{ css, sections }` and expects `{ url }` back. PR button hidden if both this and `githubConfig` are omitted. |
 | `prApiKey` | `string` | — | API key sent as `x-api-key` header when using `prEndpointUrl`. Optional — only needed if your endpoint requires authentication. |
 | `githubConfig` | `GitHubConfig` | — | Client-side GitHub config for creating PRs directly via the GitHub API using an OAuth popup flow. No backend required beyond a lightweight token exchange proxy. PR button hidden if both this and `prEndpointUrl` are omitted. |
-| `accessibilityAudit` | `boolean` | `true` | Enable axe-core color contrast auditing. |
+| `accessibilityAudit` | `boolean` | `true` | Enable built-in WCAG AA contrast auditing. |
 | `onChange` | `(colors: Record<string, string>) => void` | — | Callback on every color change with the full color map. |
 | `onExport` | `(css: string) => void` | — | Override built-in CSS modal. Receives the generated CSS string. |
 | `className` | `string` | — | Additional CSS class for the wrapper element. |
@@ -421,7 +416,7 @@ import type {
 1. **Color picking** — Click any swatch to scroll the Colors section into view, then open the native color picker. Changing a key color (brand, secondary, accent, background) automatically derives related tokens.
 2. **Harmony schemes** *(Pro)* — Generate palettes using complementary, analogous, triadic, or split-complementary color relationships.
 3. **Color locks** — Lock up to 4 color tokens to preserve them during palette regeneration or harmony scheme changes. Free for all users.
-4. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1). Failing pairs are auto-corrected by adjusting lightness. The accessibility audit shows a centered modal with results. On failure, choose "Ignore" to dismiss or "Suggest Alternative" to auto-fix contrast issues. A WCAG On/Off toggle lets you disable auto-correction for marketing or other contexts that don't require WCAG compliance. Locks are still honored when enforcement is off.
+4. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1) using a built-in lightweight contrast auditor. Failing pairs are auto-corrected by adjusting lightness. The accessibility audit shows a centered modal with results. On failure, choose "Ignore" to dismiss or "Suggest Alternative" to auto-fix contrast issues. If the auditor encounters an error, a notification dialog appears with details and a retry option. A WCAG On/Off toggle lets you disable auto-correction for marketing or other contexts that don't require WCAG compliance. Locks are still honored when enforcement is off.
 4. **Typography** — Choose heading and body fonts (including custom Google Fonts), adjust sizes, weights, line height, and letter spacing with live preview. Five built-in presets (System, Modern, Classic, Compact, Editorial). The default "Inherit (Host)" option defers to the host site's font-family rules, so the editor naturally assumes your site's heading and body fonts. Typography is scoped to `.ds-editor` and does not override the host site's fonts.
 5. **Button styles** — Customize button padding, font size, font weight, border radius, shadow, and border width with presets (Subtle, Elevated, Bold).
 6. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
@@ -467,6 +462,7 @@ src/
 │   │   ├── interactionStyle.ts       # Button interaction states
 │   │   ├── typoInteractionStyle.ts  # Typography interaction states (link/heading hover)
 │   │   └── exportUtils.ts            # Serialization, design tokens, export
+│   ├── contrastAuditor.ts      # Lightweight WCAG AA contrast auditor (replaces axe-core)
 │   ├── extractPalette.ts       # Image-to-palette extraction (k-means clustering)
 │   ├── hostScanner.ts          # Host page style scanning and integration CSS
 │   ├── themeUtils.ts           # Barrel re-export of all style utilities
@@ -603,7 +599,7 @@ The editor follows these security practices:
 - **CSS injection prevention** — Font family names are sanitized before interpolation into `<style>` tags to prevent CSS breakout attacks.
 - **Origin-checked OAuth** — GitHub OAuth `postMessage` listener validates `event.origin`.
 - **Session-scoped tokens** — GitHub OAuth tokens are stored in `sessionStorage` (not `localStorage`) so they do not persist across browser sessions.
-- **No runtime dependencies** — Zero production dependencies beyond React peer deps, minimizing supply chain risk.
+- **No runtime dependencies** — Zero production dependencies beyond React peer deps, minimizing supply chain risk. WCAG AA contrast auditing is built in (~2KB) instead of relying on axe-core (~580KB).
 
 ## Testing
 

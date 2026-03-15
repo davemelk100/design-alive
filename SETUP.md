@@ -195,7 +195,7 @@ npm install @themal/editor
 ```
 
 Peer dependencies: `react` and `react-dom` (v18 or v19).
-Optional: `axe-core` (accessibility auditing), `lucide-react` (icon previews).
+WCAG AA contrast auditing is built in. Optional: `lucide-react` (icon previews).
 
 ```tsx
 import { DesignSystemEditor } from '@themal/editor';

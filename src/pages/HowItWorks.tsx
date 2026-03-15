@@ -130,7 +130,7 @@ export default function HowItWorks() {
               <li><span className="font-medium">Final Cleanup</span> - Sets optimal foreground for background via <code className="font-mono">fgForBg()</code>, ensures card and popover foregrounds match, and fixes muted-foreground contrast.</li>
             </ol>
             <p className="text-sm leading-relaxed mt-3">
-              After algorithmic enforcement, an optional axe-core audit scans the live DOM for any element-level contrast violations. Remaining issues trigger an animated fix sequence that scrolls to each element, highlights it, and iterates through lightness adjustments until the element passes.
+              After algorithmic enforcement, a built-in contrast auditor scans the live DOM for any element-level contrast violations. Remaining issues trigger an animated fix sequence that scrolls to each element, highlights it, and iterates through lightness adjustments until the element passes. If the auditor encounters an error, a notification dialog appears with details and a retry option.
             </p>
           </section>
 
@@ -252,7 +252,7 @@ export default function HowItWorks() {
             <ul className="text-sm leading-relaxed list-disc pl-5 space-y-1">
               <li><code className="font-mono">license-key</code> - License key to unlock premium features</li>
               <li><code className="font-mono">pr-endpoint-url</code> - URL for the PR creation endpoint</li>
-              <li><code className="font-mono">accessibility-audit</code> - Enable/disable axe-core auditing (<code className="font-mono">"true"</code>/<code className="font-mono">"false"</code>)</li>
+              <li><code className="font-mono">accessibility-audit</code> - Enable/disable WCAG AA contrast auditing (<code className="font-mono">"true"</code>/<code className="font-mono">"false"</code>)</li>
               <li><code className="font-mono">show-nav-links</code> - Show/hide documentation nav links</li>
               <li><code className="font-mono">show-header</code> - Show/hide the header bar</li>
               <li><code className="font-mono">upgrade-url</code> - Custom URL for the upgrade link</li>

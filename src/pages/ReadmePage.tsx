@@ -51,7 +51,7 @@ export default function ReadmePage() {
             Peer dependencies: <code className="font-mono text-sm">react</code> and <code className="font-mono text-sm">react-dom</code> (v18 or v19).
           </p>
           <p className="text-sm mt-1 text-muted-foreground">
-            Optional peers: <code className="font-mono text-sm">axe-core</code> (accessibility auditing), <code className="font-mono text-sm">lucide-react</code> (icon previews).
+            WCAG AA contrast auditing is built in with zero additional dependencies. Optionally install <code className="font-mono text-sm">lucide-react</code> for icon previews.
           </p>
         </section>
 
@@ -101,7 +101,7 @@ function App() {
                   <td className="px-4 py-2 font-mono text-xs">accessibilityAudit</td>
                   <td className="px-4 py-2 font-mono text-xs">boolean</td>
                   <td className="px-4 py-2 font-mono text-xs">true</td>
-                  <td className="px-4 py-2">Enable axe-core color contrast auditing.</td>
+                  <td className="px-4 py-2">Enable built-in WCAG AA contrast auditing.</td>
                 </tr>
                 <tr className="border-t border-theme">
                   <td className="px-4 py-2 font-mono text-xs">onChange</td>

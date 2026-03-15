@@ -9,7 +9,7 @@ An interactive design system editor that lets you pick a brand color and watch e
 ## Features
 
 - **One-click theming** — Pick a brand color and the system derives a full palette (secondary, accent, muted, destructive) using harmony schemes (complementary, triadic, analogous, split-complementary, tetradic)
-- **WCAG AA contrast enforcement** — Every foreground/background pair is audited against 4.5:1 via axe-core and auto-corrected by adjusting lightness
+- **WCAG AA contrast enforcement** — Every foreground/background pair is audited against 4.5:1 via a built-in lightweight contrast auditor and auto-corrected by adjusting lightness
 - **7 customizable sections** — Colors, Buttons, Cards, Alerts, Typography, Inputs, Tables — each with presets and granular controls
 - **Typography** — Heading and body fonts (including custom Google Fonts), sizes, weights, line height, letter spacing with five presets
 - **Button & interaction styles** — Padding, radius, shadow, hover/active scale, focus ring with live preview
@@ -28,7 +28,7 @@ An interactive design system editor that lets you pick a brand color and watch e
 
 All palette colors are HSL custom properties on `:root`. From one brand color, the system derives a full token set using your choice of color harmony scheme.
 
-Every foreground/background pair is audited against WCAG AA (4.5:1) via axe-core. Failing pairs are auto-corrected by adjusting foreground lightness.
+Every foreground/background pair is audited against WCAG AA (4.5:1) via a built-in contrast auditor. Failing pairs are auto-corrected by adjusting foreground lightness. If the audit encounters an error, a notification dialog appears with details and a retry option.
 
 A sticky section nav (Colors, Buttons, Cards, Alerts, Typography, Inputs, Tables) provides quick navigation with the active section sliding to the left on desktop. A responsive left sidebar houses page links, contact/bug-report forms, and the Themal logo, with a frosted-glass mobile menu for smaller screens.
 
@@ -51,7 +51,7 @@ function App() {
 }
 ```
 
-Requires `react` and `react-dom` v18 or v19. Optionally install `axe-core` (accessibility auditing) and `lucide-react` (icon previews) for full functionality. See [`packages/editor/README.md`](packages/editor/README.md) for full API docs, props, exported utilities, and premium feature details.
+Requires `react` and `react-dom` v18 or v19. WCAG AA contrast auditing is built in with zero additional dependencies. Optionally install `lucide-react` for icon previews. See [`packages/editor/README.md`](packages/editor/README.md) for full API docs, props, exported utilities, and premium feature details.
 
 ### Applying to the Host Page
 
@@ -93,7 +93,7 @@ themal/
 - React 18 + TypeScript
 - Vite (app + library mode for npm package)
 - Tailwind CSS
-- axe-core (WCAG AA accessibility auditing)
+- Built-in WCAG AA contrast auditor (replaced axe-core in v0.37.0, saving ~580KB)
 - Lucide React (icons)
 - Netlify Functions (GitHub PR creation)
 

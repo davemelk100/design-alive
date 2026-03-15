@@ -246,7 +246,6 @@ export function CardsSection({
 
         <div
           className="space-y-3 rounded-lg p-4"
-          style={{ border: "1px solid hsl(var(--border))" }}
         >
           {/* Preset buttons */}
           <div

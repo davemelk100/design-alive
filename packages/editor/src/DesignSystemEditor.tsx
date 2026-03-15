@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import type { AxeResults } from "axe-core";
+import { runContrastAudit, type AuditResults } from "./utils/contrastAuditor";
 import type { DesignSystemEditorProps, AiGenerateResult } from "./types";
 import { useColorState } from "./hooks/useColorState";
 import { useNavigationState } from "./hooks/useNavigationState";
@@ -273,7 +273,7 @@ function DesignSystemEditorInner({
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
   const [codeCopied, setCodeCopied] = useState(false);
   const [auditStatus, setAuditStatus] = useState<
-    "idle" | "running" | "failed" | "passed"
+    "idle" | "running" | "failed" | "passed" | "error"
   >("idle");
   const auditTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [auditViolations, setAuditViolations] = useState<
@@ -1079,12 +1079,8 @@ function DesignSystemEditorInner({
     setAuditStatus("running");
     setAuditViolations([]);
     try {
-      const axe = (await import("axe-core")).default;
       const context = editorRootRef.current || document.body;
-      const results: AxeResults = await axe.run(
-        { include: [context], exclude: ["[data-axe-exclude]"] },
-        { runOnly: { type: "rule", values: ["color-contrast"] } },
-      );
+      const results: AuditResults = runContrastAudit(context);
       const issueCount = results.violations.reduce((n, v) => n + v.nodes.length, 0);
       console.log(
         `[Themal] Accessibility audit: ${issueCount === 0 ? "PASSED" : `${issueCount} contrast issue${issueCount !== 1 ? "s" : ""} found`}`,
@@ -1119,12 +1115,9 @@ function DesignSystemEditorInner({
             window.dispatchEvent(new Event("theme-pending-update"));
           }
         }
-        // Wait for the browser to repaint so axe-core reads updated computed styles
+        // Wait for the browser to repaint so contrast auditor reads updated computed styles
         await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-        const reResults = await axe.run(
-          { include: [context], exclude: ["[data-axe-exclude]"] },
-          { runOnly: { type: "rule", values: ["color-contrast"] } },
-        );
+        const reResults = runContrastAudit(context);
         const remainingCount = reResults.violations.reduce((n, v) => n + v.nodes.length, 0);
         console.log(
           `[Themal] Post-fix audit: ${remainingCount === 0 ? "ALL ISSUES RESOLVED" : `${remainingCount} issue${remainingCount !== 1 ? "s" : ""} remaining`}`,
@@ -1147,8 +1140,9 @@ function DesignSystemEditorInner({
   
         }
       }
-    } catch {
-      setAuditStatus("idle");
+    } catch (err) {
+      console.warn("[Themal] Accessibility audit failed to run:", err);
+      setAuditStatus("error");
     }
   };
 
@@ -1249,12 +1243,8 @@ function DesignSystemEditorInner({
 
       // 8. Re-run audit to verify
       await delay(400);
-      const axe = (await import("axe-core")).default;
       const context = editorRootRef.current || document.body;
-      const finalResults = await axe.run(
-        { include: [context], exclude: ["[data-axe-exclude]"] },
-        { runOnly: { type: "rule", values: ["color-contrast"] } },
-      );
+      const finalResults = runContrastAudit(context);
 
       if (finalResults.violations.length === 0) {
         setAuditStatus("passed");
@@ -2009,7 +1999,7 @@ function DesignSystemEditorInner({
               className="w-full sm:w-auto order-first sm:order-last flex-shrink-0 sm:min-h-[36px] pointer-events-none [&>*]:pointer-events-auto"
               data-axe-exclude
             >
-              {accessibilityAudit && (auditStatus === "failed" || auditStatus === "passed") && (
+              {accessibilityAudit && (auditStatus === "failed" || auditStatus === "passed" || auditStatus === "error") && (
                 <button
                   type="button"
                   className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 cursor-default"
@@ -2025,16 +2015,42 @@ function DesignSystemEditorInner({
                     role="dialog"
                     aria-modal="true"
                     aria-label="Accessibility audit results"
-                    className="rounded-xl shadow-2xl p-6 max-w-sm w-[90vw] text-center space-y-4 ds-surface-bg"
-                    style={{
-                      border: "1px solid hsl(var(--border))",
-                    }}
+                    className="rounded-xl shadow-2xl p-6 max-w-sm w-[90vw] text-center space-y-4 ds-audit-dialog"
                     aria-live="assertive"
                   >
-                    {auditStatus === "passed" ? (
+                    {auditStatus === "error" ? (
                       <>
                         <div className="flex justify-center">
-                          <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="hsl(var(--success, 142 76% 36%))" strokeWidth={2}>
+                          <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="#dc2626" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <p className="text-base font-medium">Audit Failed to Run</p>
+                        <p className="text-sm font-light ds-text-muted">
+                          The contrast auditor encountered an error. Check the browser console for details.
+                        </p>
+                        <div className="flex items-center justify-center gap-3">
+                          <button
+                            onClick={() => setAuditStatus("idle")}
+                            className="px-4 py-2 text-sm font-light rounded-lg transition-colors ds-audit-btn-secondary"
+                          >
+                            Dismiss
+                          </button>
+                          <button
+                            onClick={() => {
+                              setAuditStatus("idle");
+                              runAccessibilityAudit(true);
+                            }}
+                            className="px-4 py-2 text-sm font-light rounded-lg transition-colors ds-audit-btn-primary"
+                          >
+                            Retry
+                          </button>
+                        </div>
+                      </>
+                    ) : auditStatus === "passed" ? (
+                      <>
+                        <div className="flex justify-center">
+                          <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="#16a34a" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                           </svg>
                         </div>
@@ -2044,11 +2060,7 @@ function DesignSystemEditorInner({
                         </p>
                         <button
                           onClick={() => setAuditStatus("idle")}
-                          className="px-4 py-2 text-sm font-light rounded-lg transition-colors hover:opacity-80"
-                          style={{
-                            backgroundColor: "hsl(var(--brand))",
-                            color: "hsl(var(--brand-foreground, var(--background)))",
-                          }}
+                          className="px-4 py-2 text-sm font-light rounded-lg transition-colors ds-audit-btn-primary"
                         >
                           OK
                         </button>
@@ -2056,7 +2068,7 @@ function DesignSystemEditorInner({
                     ) : (
                       <>
                         <div className="flex justify-center">
-                          <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="hsl(var(--destructive))" strokeWidth={2}>
+                          <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="#dc2626" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                           </svg>
                         </div>
@@ -2069,7 +2081,7 @@ function DesignSystemEditorInner({
                         <div className="flex items-center justify-center gap-3">
                           <button
                             onClick={() => setAuditStatus("idle")}
-                            className="px-4 py-2 text-sm font-light rounded-lg transition-colors hover:opacity-80 ds-bg-muted ds-text-muted"
+                            className="px-4 py-2 text-sm font-light rounded-lg transition-colors ds-audit-btn-secondary"
                           >
                             Ignore
                           </button>
@@ -2078,11 +2090,7 @@ function DesignSystemEditorInner({
                               setAuditStatus("idle");
                               fixContrastIssues();
                             }}
-                            className="px-4 py-2 text-sm font-light rounded-lg transition-colors hover:opacity-80"
-                            style={{
-                              backgroundColor: "hsl(var(--brand))",
-                              color: "hsl(var(--brand-foreground, var(--background)))",
-                            }}
+                            className="px-4 py-2 text-sm font-light rounded-lg transition-colors ds-audit-btn-primary"
                           >
                             Suggest Alternative
                           </button>

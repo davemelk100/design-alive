@@ -87,6 +87,13 @@
 .ds-surface-invert     { background-color: hsl(var(--foreground)); color: hsl(var(--background)); }
 .ds-surface-primary    { background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
 
+/* Audit dialog – fixed accessible colors independent of user theme */
+.ds-audit-dialog       { background-color: #fff; color: #1a1a1a; border: 1px solid #d4d4d4; }
+.ds-audit-dialog .ds-audit-btn-primary  { background-color: hsl(215 70% 45%); color: #fff; }
+.ds-audit-dialog .ds-audit-btn-primary:hover { background-color: hsl(215 70% 38%); }
+.ds-audit-dialog .ds-audit-btn-secondary { background-color: #e5e5e5; color: #525252; }
+.ds-audit-dialog .ds-audit-btn-secondary:hover { background-color: #d4d4d4; }
+
 /* ── Modal theming ─────────────────────────────────────────────────── */
 /* Consumers can override these custom properties to theme all modals:
  *   --themal-modal-backdrop-bg: rgba(0,0,0,0.5);
