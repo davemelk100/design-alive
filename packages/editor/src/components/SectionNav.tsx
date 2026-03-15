@@ -125,7 +125,7 @@ export function SectionNav() {
 
   return (
     <div
-      className="ds-section-nav sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 py-3"
+      className="ds-section-nav sticky top-0 z-50 w-full px-2 sm:px-8 lg:px-10 py-3"
       style={{ backgroundColor: "transparent" }}
     >
           <nav

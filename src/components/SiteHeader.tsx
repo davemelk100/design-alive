@@ -61,17 +61,11 @@ export default function SiteHeader() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [dropdownOpen]);
 
-  // Recalculate offsets so active item slides to the left (desktop only)
+  // Recalculate offsets so active item slides to the left
   const recalcNavOffsets = useCallback(() => {
     const refs = navItemRefs.current;
     const container = navContainerRef.current;
     if (!container) return;
-
-    // Only reorder on desktop (lg: 1024px+)
-    if (window.innerWidth < 1024) {
-      setNavOffsets({});
-      return;
-    }
 
     // Temporarily remove transforms to measure natural positions
     const elements: { el: HTMLAnchorElement; prev: string }[] = [];
@@ -150,7 +144,7 @@ export default function SiteHeader() {
       {isEditor ? (
         <div className="w-full mx-auto flex flex-col lg:flex-row site-container relative">
           {/* Logo row */}
-          <div className="flex items-center flex-shrink-0 px-4 lg:pl-4 lg:pr-2 lg:w-48 pt-3 mb-5 lg:mb-0 lg:py-3">
+          <div className="flex items-center flex-shrink-0 px-2 sm:px-6 lg:pl-6 lg:pr-2 lg:w-48 pt-8 sm:pt-10 mb-5 lg:mb-0 lg:pt-8 lg:pb-4">
             <Link
               to="/"
               className="flex-shrink-0 hover:opacity-70 transition-opacity"
@@ -161,7 +155,7 @@ export default function SiteHeader() {
           </div>
 
           {/* Mobile section dropdown row — only below sm */}
-          <div className="px-4 pb-3 sm:hidden">
+          <div className="px-2 pb-3 sm:hidden">
             <div ref={dropdownRef} className="relative">
               <button
                 onClick={() => setDropdownOpen((v) => !v)}
@@ -211,7 +205,7 @@ export default function SiteHeader() {
           </div>
 
           {/* Section nav: hidden on mobile, visible at sm+ */}
-          <div className="hidden sm:flex flex-1 min-w-0 px-4 sm:px-6 lg:px-8 pb-3 pt-1 lg:py-3 items-end">
+          <div className="hidden sm:flex flex-1 min-w-0 px-6 sm:px-8 lg:px-10 pb-3 pt-1 lg:py-3 items-end">
             <nav
               ref={navContainerRef}
               className="flex items-baseline gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-x-auto flex-nowrap"

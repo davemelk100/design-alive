@@ -8,6 +8,7 @@
 export const FEATURE_FLAGS = {
   tables: true,
   aiPaletteMapping: false,
+  sectionLocks: false,
 } as const;
 
 export type FeatureFlagName = keyof typeof FEATURE_FLAGS;

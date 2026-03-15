@@ -124,7 +124,11 @@ import { TypographySection } from "./sections/TypographySection";
 import { InputsSection } from "./sections/InputsSection";
 import { TablesSection } from "./sections/TablesSection";
 import { FeatureFlag } from "./components/FeatureFlag";
+import { FEATURE_FLAGS } from "./utils/featureFlags";
 import "./styles/editor.css";
+
+export type LockableSection = "colors" | "buttons" | "cards" | "alerts" | "typography" | "inputs" | "tables";
+const LOCKED_SECTIONS_KEY = "themal-locked-sections";
 
 function DesignSystemEditorInner({
   prEndpointUrl,
@@ -153,6 +157,31 @@ function DesignSystemEditorInner({
 }: DesignSystemEditorProps) {
   const { isPremium } = useLicense();
   const [wcagEnforcement, setWcagEnforcement] = useState(true);
+
+  // Section locks — preserve a section's styles during global operations
+  const [lockedSections, setLockedSections] = useState<Set<LockableSection>>(() => {
+    if (!FEATURE_FLAGS.sectionLocks) return new Set();
+    try {
+      const stored = localStorage.getItem(LOCKED_SECTIONS_KEY);
+      return stored ? new Set(JSON.parse(stored) as LockableSection[]) : new Set();
+    } catch { return new Set(); }
+  });
+
+  const toggleSectionLock = useCallback((section: LockableSection) => {
+    setLockedSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(section)) next.delete(section);
+      else next.add(section);
+      try { localStorage.setItem(LOCKED_SECTIONS_KEY, JSON.stringify([...next])); } catch {}
+      return next;
+    });
+  }, []);
+
+  const isSectionLocked = useCallback((section: LockableSection) => lockedSections.has(section), [lockedSections]);
+
+  // Expose section lock state for wiring — consumed when FEATURE_FLAGS.sectionLocks is true
+  void toggleSectionLock;
+  void isSectionLocked;
 
   const editorRootRef = useRef<HTMLDivElement>(null);
   const contentSectionRef = useRef<HTMLElement>(null);
@@ -1043,49 +1072,69 @@ function DesignSystemEditorInner({
 
   const handleReset = () => {
     const el = editorRootRef.current || document.documentElement;
-    EDITABLE_VARS.forEach(({ key }) => {
-      el.style.removeProperty(key);
-    });
-    // If the consumer provided default colors, restore them instead of bare defaults
-    if (defaultColors) {
-      Object.entries(defaultColors).forEach(([key, value]) => {
-        setVar(key, value);
-      });
-    } else {
-      // Re-apply fallback palette for any missing variables
+
+    // Colors — skip if locked
+    if (!isSectionLocked("colors")) {
       EDITABLE_VARS.forEach(({ key }) => {
-        if (!getComputedStyle(el).getPropertyValue(key).trim() && key in FALLBACK_COLORS) {
-          el.style.setProperty(key, FALLBACK_COLORS[key]);
-        }
+        el.style.removeProperty(key);
       });
+      if (defaultColors) {
+        Object.entries(defaultColors).forEach(([key, value]) => {
+          setVar(key, value);
+        });
+      } else {
+        EDITABLE_VARS.forEach(({ key }) => {
+          if (!getComputedStyle(el).getPropertyValue(key).trim() && key in FALLBACK_COLORS) {
+            el.style.setProperty(key, FALLBACK_COLORS[key]);
+          }
+        });
+      }
+      storage.remove(THEME_COLORS_KEY);
+      storage.remove(PENDING_COLORS_KEY);
+      storage.remove(COLOR_HISTORY_KEY);
+      storage.remove(CONTRAST_KNOWLEDGE_KEY);
     }
-    storage.remove(THEME_COLORS_KEY);
-    storage.remove(PENDING_COLORS_KEY);
-    storage.remove(COLOR_HISTORY_KEY);
-    storage.remove(CONTRAST_KNOWLEDGE_KEY);
-    storage.remove(CARD_STYLE_KEY);
-    removeCardStyleProperties(editorRootRef.current!);
-    setCardStyle({ ...DEFAULT_CARD_STYLE });
-    storage.remove(TYPOGRAPHY_KEY);
-    removeTypographyProperties(editorRootRef.current!);
-    const resetTypo = defaultTypography
-      ? { ...DEFAULT_TYPOGRAPHY, ...defaultTypography, preset: "custom" as const }
-      : { ...DEFAULT_TYPOGRAPHY };
-    setTypographyState(resetTypo);
-    if (defaultTypography) applyTypography(resetTypo, editorRootRef.current!);
-    storage.remove(ALERT_STYLE_KEY);
-    removeAlertStyleProperties(editorRootRef.current!);
-    setAlertStyle({ ...DEFAULT_ALERT_STYLE });
-    storage.remove(BUTTON_STYLE_KEY);
-    removeButtonStyleProperties(editorRootRef.current!);
-    setButtonStyle({ ...DEFAULT_BUTTON_STYLE });
-    storage.remove(INTERACTION_STYLE_KEY);
-    removeInteractionStyleProperties(editorRootRef.current!);
-    setInteractionStyle({ ...DEFAULT_INTERACTION_STYLE });
-    storage.remove(TYPO_INTERACTION_STYLE_KEY);
-    removeTypoInteractionStyleProperties(editorRootRef.current!);
-    setTypoInteractionStyle({ ...DEFAULT_TYPO_INTERACTION_STYLE });
-    readCurrentColors();
+
+    if (!isSectionLocked("cards")) {
+      storage.remove(CARD_STYLE_KEY);
+      removeCardStyleProperties(editorRootRef.current!);
+      setCardStyle({ ...DEFAULT_CARD_STYLE });
+    }
+
+    if (!isSectionLocked("typography")) {
+      storage.remove(TYPOGRAPHY_KEY);
+      removeTypographyProperties(editorRootRef.current!);
+      const resetTypo = defaultTypography
+        ? { ...DEFAULT_TYPOGRAPHY, ...defaultTypography, preset: "custom" as const }
+        : { ...DEFAULT_TYPOGRAPHY };
+      setTypographyState(resetTypo);
+      if (defaultTypography) applyTypography(resetTypo, editorRootRef.current!);
+    }
+
+    if (!isSectionLocked("alerts")) {
+      storage.remove(ALERT_STYLE_KEY);
+      removeAlertStyleProperties(editorRootRef.current!);
+      setAlertStyle({ ...DEFAULT_ALERT_STYLE });
+    }
+
+    if (!isSectionLocked("buttons")) {
+      storage.remove(BUTTON_STYLE_KEY);
+      removeButtonStyleProperties(editorRootRef.current!);
+      setButtonStyle({ ...DEFAULT_BUTTON_STYLE });
+      storage.remove(INTERACTION_STYLE_KEY);
+      removeInteractionStyleProperties(editorRootRef.current!);
+      setInteractionStyle({ ...DEFAULT_INTERACTION_STYLE });
+    }
+
+    if (!isSectionLocked("typography")) {
+      storage.remove(TYPO_INTERACTION_STYLE_KEY);
+      removeTypoInteractionStyleProperties(editorRootRef.current!);
+      setTypoInteractionStyle({ ...DEFAULT_TYPO_INTERACTION_STYLE });
+    }
+
+    if (!isSectionLocked("colors")) {
+      readCurrentColors();
+    }
     setGeneratedCode(null);
     setSectionPrStatus({});
     window.dispatchEvent(new Event("theme-pending-update"));
@@ -1917,7 +1966,7 @@ function DesignSystemEditorInner({
       {/* Section nav */}
       <nav
         ref={navContainerRef}
-        className="ds-section-nav sticky top-0 z-40 w-full px-4 sm:px-6 lg:px-8 pt-3 pb-2 hidden items-center gap-3 lg:gap-4"
+        className="ds-section-nav sticky top-0 z-40 w-full px-6 sm:px-8 lg:px-10 pt-3 pb-2 hidden items-center gap-3 lg:gap-4"
         data-axe-exclude
       >
         {[
@@ -2047,7 +2096,7 @@ function DesignSystemEditorInner({
       </nav>
 
       <section ref={contentSectionRef} className="pb-2 sm:pb-3 lg:pb-4 xl:pb-6 relative">
-        <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-2 sm:px-8 lg:px-10">
           {/* Alerts */}
           <div className="mb-0">
             <div
@@ -2292,15 +2341,31 @@ function DesignSystemEditorInner({
             signInUrl={signInUrl}
           />
           <InputsSection
+            colors={colors}
             inputStyle={inputStyle}
             updateInputStyle={updateInputStyle}
             selectInputPreset={selectInputPreset}
+            cardStyle={cardStyle}
+            typographyState={typographyState}
+            alertStyle={alertStyle}
+            interactionStyle={interactionStyle}
+            typoInteractionStyle={typoInteractionStyle}
+            buttonStyle={buttonStyle}
+            tableStyle={tableStyle}
           />
           <FeatureFlag name="tables">
             <TablesSection
+              colors={colors}
               tableStyle={tableStyle}
               updateTableStyle={updateTableStyle}
               selectTablePreset={selectTablePreset}
+              cardStyle={cardStyle}
+              typographyState={typographyState}
+              alertStyle={alertStyle}
+              interactionStyle={interactionStyle}
+              typoInteractionStyle={typoInteractionStyle}
+              buttonStyle={buttonStyle}
+              inputStyle={inputStyle}
             />
           </FeatureFlag>
         </div>

@@ -84,7 +84,7 @@ export function CardsSection({
       {/* Card Style section */}
       <div
         id="card"
-        className="min-w-0 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-28 lg:scroll-mt-14 space-y-3"
+        className="min-w-0 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-40 lg:scroll-mt-24 space-y-3"
       >
         <div
           className="flex items-center flex-wrap gap-2 sm:gap-4"
@@ -98,6 +98,7 @@ export function CardsSection({
               href="#top"
               className="ds-h2-link opacity-30"
               aria-label="Back to top"
+              onClick={(e) => { e.preventDefault(); const el = document.getElementById("top"); if (el) { const y = el.getBoundingClientRect().top + window.scrollY - 160; window.scrollTo({ top: Math.max(0, y), behavior: "smooth" }); } }}
             >
               <svg
                 className="w-[1em] h-[1em]"
@@ -594,7 +595,7 @@ export function CardsSection({
             </div>
 
             {/* Live preview */}
-            <div className="flex-1 min-w-0 flex items-center justify-center order-1 md:order-2">
+            <div className="flex-1 min-w-0 flex items-center justify-center order-1 md:order-2" data-audit-target>
               {(() => {
                 // Compute the effective text color based on what the card bg actually looks like
                 const brandHsl = colors["--brand"] || "220 70% 50%";

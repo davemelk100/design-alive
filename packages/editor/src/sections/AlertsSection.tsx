@@ -81,7 +81,7 @@ export function AlertsSection({
   return (
           <div
             id="alerts"
-            className="min-w-0 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-28 lg:scroll-mt-14 space-y-3"
+            className="min-w-0 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-40 lg:scroll-mt-24 space-y-3"
           >
             <div
               className="flex items-center flex-wrap gap-2 sm:gap-4"
@@ -95,6 +95,7 @@ export function AlertsSection({
                   href="#top"
                   className="ds-h2-link opacity-30"
                   aria-label="Back to top"
+                  onClick={(e) => { e.preventDefault(); const el = document.getElementById("top"); if (el) { const y = el.getBoundingClientRect().top + window.scrollY - 160; window.scrollTo({ top: Math.max(0, y), behavior: "smooth" }); } }}
                 >
                   <svg
                     className="w-[1em] h-[1em]"
@@ -299,7 +300,7 @@ export function AlertsSection({
                     </label>
                   </div>
                   {/* Preview */}
-                  <div className="w-full space-y-3">
+                  <div className="w-full space-y-3" data-audit-target>
                     {(() => {
                       const alertTypes = [
                         {
@@ -687,7 +688,7 @@ export function AlertsSection({
                       </label>
                     </div>
                     {/* Toast Preview */}
-                    <div className="w-full space-y-3">
+                    <div className="w-full space-y-3" data-audit-target>
                       {(() => {
                         const toasts = [
                           {

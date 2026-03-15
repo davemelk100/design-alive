@@ -160,7 +160,12 @@ export function runContrastAudit(
     root.querySelectorAll(excludeSelector),
   );
 
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+  // If the root contains audit target markers, only scan those subtrees
+  const auditTargets = root.querySelectorAll("[data-audit-target]");
+  const roots = auditTargets.length > 0 ? Array.from(auditTargets) as HTMLElement[] : [root];
+
+  for (const auditRoot of roots) {
+  const walker = document.createTreeWalker(auditRoot, NodeFilter.SHOW_ELEMENT);
   let node: Node | null = walker.nextNode();
 
   while (node) {
@@ -217,6 +222,7 @@ export function runContrastAudit(
 
     node = walker.nextNode();
   }
+  } // end for auditRoot
 
   if (violations.length === 0) {
     return { violations: [] };

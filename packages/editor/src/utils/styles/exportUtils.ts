@@ -6,6 +6,8 @@ import type { TypographyState } from "./typographyStyle";
 import type { AlertStyleState } from "./alertStyle";
 import type { InteractionStyleState } from "./interactionStyle";
 import type { TypoInteractionStyleState } from "./typoInteractionStyle";
+import type { InputStyleState } from "./inputStyle";
+import type { TableStyleState } from "./tableStyle";
 
 // ── Palette Export ───────────────────────────────────────────────────
 
@@ -107,13 +109,15 @@ export async function exportPaletteAsPng(colors: Record<string, string>): Promis
 }
 
 export function generateSectionDesignTokens(
-  section: "card" | "typography" | "alerts" | "interactions" | "typo-interactions" | "buttons",
+  section: "card" | "typography" | "alerts" | "interactions" | "typo-interactions" | "buttons" | "inputs" | "tables",
   cardStyle: CardStyleState,
   typographyState: TypographyState,
   alertStyle: AlertStyleState,
   interactionStyle: InteractionStyleState,
   typoInteractionStyle: TypoInteractionStyleState,
   buttonStyle?: ButtonStyleState,
+  inputStyle?: InputStyleState,
+  tableStyle?: TableStyleState,
 ): Record<string, unknown> {
   switch (section) {
     case "buttons": {
@@ -203,6 +207,34 @@ export function generateSectionDesignTokens(
           },
         },
       };
+    case "inputs": {
+      const is = inputStyle ?? { borderRadius: 8, borderWidth: 1, paddingX: 12, paddingY: 8, fontSize: 15, focusRingWidth: 2 };
+      return {
+        input: {
+          borderRadius: { $value: `${is.borderRadius}px`, $type: "dimension" },
+          borderWidth: { $value: `${is.borderWidth}px`, $type: "dimension" },
+          paddingX: { $value: `${is.paddingX}px`, $type: "dimension" },
+          paddingY: { $value: `${is.paddingY}px`, $type: "dimension" },
+          fontSize: { $value: `${is.fontSize}px`, $type: "dimension" },
+          focusRingWidth: { $value: `${is.focusRingWidth}px`, $type: "dimension" },
+        },
+      };
+    }
+    case "tables": {
+      const ts = tableStyle ?? { borderRadius: 8, borderWidth: 1, cellPaddingX: 16, cellPaddingY: 12, headerWeight: "semibold", striped: false, hoverable: true, compact: false };
+      return {
+        table: {
+          borderRadius: { $value: `${ts.borderRadius}px`, $type: "dimension" },
+          borderWidth: { $value: `${ts.borderWidth}px`, $type: "dimension" },
+          cellPaddingX: { $value: `${ts.cellPaddingX}px`, $type: "dimension" },
+          cellPaddingY: { $value: `${ts.cellPaddingY}px`, $type: "dimension" },
+          headerWeight: { $value: ts.headerWeight, $type: "fontWeight" },
+          striped: { $value: ts.striped, $type: "boolean" },
+          hoverable: { $value: ts.hoverable, $type: "boolean" },
+          compact: { $value: ts.compact, $type: "boolean" },
+        },
+      };
+    }
   }
 }
 

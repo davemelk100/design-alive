@@ -1,19 +1,78 @@
 import React, { useState, useRef, useEffect } from "react";
-import type { InputStyleState } from "../utils/themeUtils";
+import {
+  fgForBg,
+  generateSectionDesignTokens,
+} from "../utils/themeUtils";
+import type {
+  InputStyleState,
+  CardStyleState,
+  TypographyState,
+  AlertStyleState,
+  InteractionStyleState,
+  TypoInteractionStyleState,
+  ButtonStyleState,
+  TableStyleState,
+} from "../utils/themeUtils";
+import { CustomSelect } from "../components/CustomSelect";
 import { ResetConfirmModal } from "../components/ResetConfirmModal";
 
+function CopyIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+    </svg>
+  );
+}
+
+function XIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
+function CheckIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
 export interface InputsSectionProps {
+  colors: Record<string, string>;
   inputStyle: InputStyleState;
   updateInputStyle: (patch: Partial<InputStyleState>) => void;
   selectInputPreset: (preset: string) => void;
+  cardStyle: CardStyleState;
+  typographyState: TypographyState;
+  alertStyle: AlertStyleState;
+  interactionStyle: InteractionStyleState;
+  typoInteractionStyle: TypoInteractionStyleState;
+  buttonStyle: ButtonStyleState;
+  tableStyle: TableStyleState;
 }
 
 export function InputsSection({
+  colors,
   inputStyle,
   updateInputStyle,
   selectInputPreset,
+  cardStyle,
+  typographyState,
+  alertStyle,
+  interactionStyle,
+  typoInteractionStyle,
+  buttonStyle,
+  tableStyle,
 }: InputsSectionProps) {
   const [showInputResetModal, setShowInputResetModal] = useState(false);
+  const [inputCssVisible, setInputCssVisible] = useState(false);
+  const [inputCssCopied, setInputCssCopied] = useState(false);
+  const [inputExportFormat, setInputExportFormat] = useState<"css" | "tokens">("css");
   const [inputToggle1, setInputToggle1] = useState(false);
   const [inputToggle2, setInputToggle2] = useState(true);
   const [inputRadio, setInputRadio] = useState("option1");
@@ -49,7 +108,7 @@ export function InputsSection({
           {/* Inputs section */}
           <div
             id="inputs"
-            className="min-w-0 space-y-4 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-28 lg:scroll-mt-14"
+            className="min-w-0 space-y-4 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-40 lg:scroll-mt-24"
           >
             <h2
               className="text-sm sm:text-base md:text-lg font-bold tracking-wider mb-[5px] flex items-baseline gap-2 ds-text-fg"
@@ -59,6 +118,7 @@ export function InputsSection({
                 href="#top"
                 className="ds-h2-link opacity-30"
                 aria-label="Back to top"
+                onClick={(e) => { e.preventDefault(); const el = document.getElementById("top"); if (el) { const y = el.getBoundingClientRect().top + window.scrollY - 160; window.scrollTo({ top: Math.max(0, y), behavior: "smooth" }); } }}
               >
                 <svg
                   className="w-[1em] h-[1em]"
@@ -74,7 +134,155 @@ export function InputsSection({
                   />
                 </svg>
               </a>
+              <span className="ml-auto flex items-center gap-1 sm:gap-2">
+                {/* Mobile: dropdown */}
+                <CustomSelect
+                  ariaLabel="Input actions"
+                  className="sm:hidden"
+                  placeholder="Actions…"
+                  size="sm"
+                  width="120px"
+                  value=""
+                  onChange={(v) => {
+                    if (v === "css") { setInputExportFormat("css"); setInputCssVisible(true); }
+                    else if (v === "tokens") { setInputExportFormat("tokens"); setInputCssVisible(true); }
+                    else if (v === "reset") setShowInputResetModal(true);
+                  }}
+                  options={[
+                    { value: "css", label: "CSS" },
+                    { value: "tokens", label: "Tokens" },
+                    { value: "reset", label: "Reset" },
+                  ]}
+                />
+                {/* Desktop: buttons */}
+                <span className="hidden sm:flex flex-wrap items-center gap-1 sm:gap-2">
+                  <span
+                    className="flex items-center rounded-lg overflow-hidden border ds-border"
+                  >
+                    <button
+                      onClick={() => {
+                        if (inputCssVisible && inputExportFormat === "css") { setInputCssVisible(false); return; }
+                        setInputExportFormat("css");
+                        setInputCssVisible(true);
+                      }}
+                      className="h-8 px-3 sm:px-4 text-sm font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                      style={{
+                        backgroundColor: inputCssVisible && inputExportFormat === "css" ? "hsl(var(--brand))" : "transparent",
+                        color: inputCssVisible && inputExportFormat === "css"
+                          ? colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "hsl(var(--primary-foreground))"
+                          : "hsl(var(--muted-foreground))",
+                      }}
+                    >
+                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                      </svg>
+                      <span className="truncate">CSS</span>
+                    </button>
+                    <span className="w-px h-5" style={{ backgroundColor: "hsl(var(--border))" }} />
+                    <button
+                      onClick={() => {
+                        if (inputCssVisible && inputExportFormat === "tokens") { setInputCssVisible(false); return; }
+                        setInputExportFormat("tokens");
+                        setInputCssVisible(true);
+                      }}
+                      className="h-8 px-3 sm:px-4 text-sm font-light transition-colors hover:opacity-70 flex items-center justify-center gap-1"
+                      style={{
+                        backgroundColor: inputCssVisible && inputExportFormat === "tokens" ? "hsl(var(--brand))" : "transparent",
+                        color: inputCssVisible && inputExportFormat === "tokens"
+                          ? colors["--brand"] ? `hsl(${fgForBg(colors["--brand"])})` : "hsl(var(--primary-foreground))"
+                          : "hsl(var(--muted-foreground))",
+                      }}
+                    >
+                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4-4 4M7 8L3 12l4 4M14 4l-4 16" />
+                      </svg>
+                      <span className="truncate">Tokens</span>
+                    </button>
+                  </span>
+                  <button
+                    onClick={() => setShowInputResetModal(true)}
+                    className="h-8 px-2 sm:px-3 text-sm font-light rounded-lg transition-colors hover:opacity-70 flex items-center justify-center gap-1 ds-text-muted"
+                  >
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414-6.414a2 2 0 011.414-.586H19a2 2 0 012 2v10a2 2 0 01-2 2h-8.172a2 2 0 01-1.414-.586L3 12z" />
+                    </svg>
+                    <span className="truncate">Reset</span>
+                  </button>
+                </span>
+              </span>
             </h2>
+
+            {/* Input CSS/Tokens output */}
+            {inputCssVisible && (() => {
+              const inputCss = `:root {\n  --input-radius: ${inputStyle.borderRadius}px;\n  --input-border-width: ${inputStyle.borderWidth}px;\n  --input-px: ${inputStyle.paddingX}px;\n  --input-py: ${inputStyle.paddingY}px;\n  --input-font-size: ${inputStyle.fontSize}px;\n  --input-focus-ring: ${inputStyle.focusRingWidth}px;\n}`;
+              const inputTokens = JSON.stringify(
+                generateSectionDesignTokens(
+                  "inputs",
+                  cardStyle,
+                  typographyState,
+                  alertStyle,
+                  interactionStyle,
+                  typoInteractionStyle,
+                  buttonStyle,
+                  inputStyle,
+                  tableStyle,
+                ),
+                null,
+                2,
+              );
+              const output = inputExportFormat === "tokens" ? inputTokens : inputCss;
+              return (
+                <div
+                  className="rounded-lg border ds-border"
+                >
+                  <div
+                    className="flex items-center justify-between px-3 py-1.5 border-b ds-border"
+                  >
+                    <span
+                      className="text-sm font-light uppercase tracking-wider ds-text-card"
+                    >
+                      {inputExportFormat === "tokens" ? "Input Tokens" : "Input CSS"}
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(output);
+                          setInputCssCopied(true);
+                          setTimeout(() => setInputCssCopied(false), 2000);
+                        }}
+                        aria-label="Copy" className="p-1 rounded-lg transition-colors hover:opacity-80"
+                        style={{
+                          backgroundColor: "hsl(var(--muted))",
+                          color: colors["--muted"]
+                            ? `hsl(${fgForBg(colors["--muted"])})`
+                            : "hsl(var(--muted-foreground))",
+                        }}
+                      >
+                        {inputCssCopied ? <CheckIcon /> : <CopyIcon />}
+                      </button>
+                      <button
+                        onClick={() => setInputCssVisible(false)}
+                        aria-label="Close"
+                        className="p-1 rounded-lg transition-colors hover:opacity-80"
+                        style={{
+                          backgroundColor: "hsl(var(--muted))",
+                          color: colors["--muted"]
+                            ? `hsl(${fgForBg(colors["--muted"])})`
+                            : "hsl(var(--muted-foreground))",
+                        }}
+                      >
+                        <XIcon />
+                      </button>
+                    </div>
+                  </div>
+                  <pre
+                    className="p-3 overflow-x-auto max-h-64 text-xs leading-relaxed font-mono ds-text-card"
+                  >
+                    <code>{output}</code>
+                  </pre>
+                </div>
+              );
+            })()}
 
             <div className="flex flex-col md:flex-row gap-4 md:gap-6 rounded-lg p-4">
               {/* Controls */}
@@ -217,6 +425,7 @@ export function InputsSection({
               {/* Preview */}
               <div
                 className="flex-1 min-w-0 rounded-lg p-4 sm:p-6 order-1 md:order-2 ds-bg"
+                data-audit-target
               >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 {/* Left column — text inputs */}

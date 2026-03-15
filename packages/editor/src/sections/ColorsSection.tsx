@@ -108,7 +108,7 @@ export function ColorsSection({
   return (
           <div
             id="colors"
-            className="min-w-0 space-y-3 mb-6 md:mt-0 md:mb-16 scroll-mt-28 lg:scroll-mt-14"
+            className="min-w-0 space-y-3 mb-6 md:mt-0 md:mb-16 scroll-mt-40 lg:scroll-mt-24"
           >
             <div
               className="flex items-center flex-wrap gap-2 sm:gap-4"
@@ -122,6 +122,7 @@ export function ColorsSection({
                   href="#top"
                   className="ds-h2-link opacity-30"
                   aria-label="Back to top"
+                  onClick={(e) => { e.preventDefault(); const el = document.getElementById("top"); if (el) { const y = el.getBoundingClientRect().top + window.scrollY - 160; window.scrollTo({ top: Math.max(0, y), behavior: "smooth" }); } }}
                 >
                   <svg
                     className="w-[1em] h-[1em]"
@@ -287,6 +288,7 @@ export function ColorsSection({
                 id="color-swatch-grid"
                 className="grid grid-cols-5 gap-2 sm:gap-5 rounded-lg p-4 overflow-visible"
                 data-axe-exclude
+                data-audit-target
                 style={{ backgroundColor: "hsl(var(--foreground) / 0.04)" }}
               >
                 {COLOR_SWATCHES.filter(({ key }) =>
@@ -493,7 +495,7 @@ export function ColorsSection({
               <div className="flex flex-col gap-4 md:gap-6">
                 {/* Palette (own row) — Pro feature */}
                 <PremiumGate feature="secondary-palette" variant="section" upgradeUrl={upgradeUrl} signInUrl={signInUrl}>
-                <div className="w-full">
+                <div className="w-full" data-audit-target>
                   <p
                     className="text-sm font-light uppercase tracking-wider mb-2 md:mb-3 ds-text-muted"
                   >
@@ -556,7 +558,7 @@ export function ColorsSection({
                 </PremiumGate>
 
                 {/* Chips / Badges row */}
-                <div className="w-full space-y-2">
+                <div className="w-full space-y-2" data-audit-target>
                   <p
                     className="text-sm font-light uppercase tracking-wider ds-text-subtle"
                   >
