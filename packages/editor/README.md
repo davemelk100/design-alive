@@ -293,6 +293,24 @@ a {
 />
 ```
 
+### With AI theme generation
+
+```tsx
+<DesignSystemEditor
+  onAiGenerate={async (prompt) => {
+    const res = await fetch("/api/ai-generate-theme", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
+    if (!res.ok) throw new Error("AI generation failed");
+    return res.json();
+  }}
+/>
+```
+
+The `onAiGenerate` callback receives the user's natural language description and should return `{ colors?: Record<string, string>, typography?: Partial<TypographyState> }`. Use `buildAiSystemPrompt()` to get the system prompt for your AI backend. The themalive.com implementation uses Claude with [prompt caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching) for 90% input cost reduction on repeat requests.
+
 ## Exported Utilities
 
 ```tsx

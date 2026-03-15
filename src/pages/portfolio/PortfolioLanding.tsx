@@ -40,6 +40,15 @@ export default function PortfolioLanding() {
         licenseKey={licenseKey}
         upgradeUrl="/pricing"
         signInUrl="/sign-in"
+        onAiGenerate={async (prompt) => {
+          const res = await fetch("/.netlify/functions/ai-generate-theme", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ prompt }),
+          });
+          if (!res.ok) throw new Error("AI generation failed");
+          return res.json();
+        }}
         featuresUrl="/readme"
         aboutUrl="/about"
         showHeader={false}

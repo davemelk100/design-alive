@@ -338,6 +338,26 @@ a {
           </pre>
         </section>
 
+        {/* AI Theme Generation */}
+        <section className="mb-8">
+          <h3 className="text-sm font-medium mb-2 text-muted-foreground">AI theme generation</h3>
+          <p className="text-sm leading-relaxed mb-3 text-fg">
+            Pass an <code className="font-mono text-sm">onAiGenerate</code> callback to enable AI-powered theme generation. Users describe a theme in natural language and receive a full color palette and typography settings. Use <code className="font-mono text-sm">buildAiSystemPrompt()</code> for the system prompt.
+          </p>
+          <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
+            <code>{`<DesignSystemEditor
+  onAiGenerate={async (prompt) => {
+    const res = await fetch("/api/ai-generate", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ prompt }),
+    });
+    return res.json();
+  }}
+/>`}</code>
+          </pre>
+        </section>
+
         {/* GitHub Integration */}
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3 text-fg">GitHub Integration</h2>

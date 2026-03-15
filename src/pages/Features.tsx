@@ -13,6 +13,7 @@ const features = [
       "Increased scroll-mt on section headings (scroll-mt-40 lg:scroll-mt-24) for proper scroll-into-view with sticky navs",
       "Mobile full-width layout - reduced horizontal padding to px-2 on narrow viewports so content uses the full screen",
       "Site header improvements - section nav animation on tablet, Tables added to section nav, background matches theme on editor page",
+      "AI theme generation - new Netlify function (ai-generate-theme) calls Claude Sonnet 4.6 with prompt caching for 90% input cost reduction on repeat requests",
     ],
   },
   {
