@@ -1452,7 +1452,7 @@ function DesignSystemEditorInner({
         >
           <div className="w-full px-4 sm:px-6 lg:px-8">
             {/* Title + nav links */}
-            <div className="w-full mb-2 sm:mb-3 lg:mb-4 flex flex-wrap items-end gap-x-8 sm:gap-x-12 gap-y-2 pt-2 sm:pt-3 lg:pt-4 relative" data-axe-exclude>
+            <div className="w-full mb-2 sm:mb-3 lg:mb-4 flex flex-wrap items-center gap-x-6 sm:gap-x-8 gap-y-2 pt-2 sm:pt-3 lg:pt-4 relative" data-axe-exclude>
               {showLogo && <a
                 href="/"
                 className="flex-shrink-0 leading-none ds-text-fg"
@@ -1519,11 +1519,11 @@ function DesignSystemEditorInner({
 
               {/* Nav links - tablet & desktop (below logo), hidden on mobile */}
               {topNav ? (
-                <nav className="hidden sm:flex items-center gap-3 sm:gap-4 w-full">
+                <nav className="hidden sm:flex items-center gap-3 sm:gap-4">
                   {topNav}
                 </nav>
               ) : showNavLinks && (
-                <nav className="hidden sm:flex items-center gap-3 sm:gap-4 w-full">
+                <nav className="hidden sm:flex items-center gap-3 sm:gap-4">
                   {[
                     { href: "/editor", label: "Editor" },
                     ...(aboutUrl ? [{ href: aboutUrl, label: "About" }] : []),

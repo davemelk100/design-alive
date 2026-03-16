@@ -320,6 +320,10 @@ test.describe("Plugin Health Check", () => {
 
   test.describe("Premium Gate", () => {
     test("locked features show lock icon, not opacity dimming", async ({ page }) => {
+      // Navigate with ?dev to access premium toggle
+      await page.goto("/?dev");
+      await page.waitForSelector(".ds-editor");
+
       // Ensure premium is off
       const premiumCheckbox = page.locator("label:has-text('premium') input[type=checkbox]");
       if (await premiumCheckbox.isChecked()) {
@@ -341,6 +345,10 @@ test.describe("Plugin Health Check", () => {
     });
 
     test("premium toggle unlocks features", async ({ page }) => {
+      // Navigate with ?dev to access premium toggle
+      await page.goto("/?dev");
+      await page.waitForSelector(".ds-editor");
+
       const premiumCheckbox = page.locator("label:has-text('premium') input[type=checkbox]");
       await premiumCheckbox.check();
       await page.waitForTimeout(300);

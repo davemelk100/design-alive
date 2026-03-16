@@ -116,6 +116,7 @@ function applyTheme(vars: Record<string, string>) {
 }
 
 export default function App() {
+  const isDevMode = new URLSearchParams(window.location.search).has("dev");
   const [showHeader, setShowHeader] = useState(true);
   const [showSectionNav, setShowSectionNav] = useState(true);
   const [showNavLinks, setShowNavLinks] = useState(true);
@@ -196,14 +197,16 @@ export default function App() {
           />
           showNavLinks
         </label>
-        <label style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <input
-            type="checkbox"
-            checked={isPremium}
-            onChange={(e) => setIsPremium(e.target.checked)}
-          />
-          premium
-        </label>
+        {isDevMode && (
+          <label style={{ display: "flex", alignItems: "center", gap: 4 }}>
+            <input
+              type="checkbox"
+              checked={isPremium}
+              onChange={(e) => setIsPremium(e.target.checked)}
+            />
+            premium
+          </label>
+        )}
       </div>
 
       {/* Editor */}
@@ -233,7 +236,7 @@ export default function App() {
               Sign In
             </button>
           }
-          licenseKey={isPremium ? "THEMAL-TEST-DEV2-JPZQ" : undefined}
+          licenseKey={isDevMode && isPremium ? "THEMAL-TEST-DEV2-JPZQ" : undefined}
           prEndpointUrl="https://example.com/api/pr"
           onChange={(colors) => {
             console.log("[plugin] colors changed:", Object.keys(colors).length, "tokens");

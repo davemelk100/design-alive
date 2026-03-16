@@ -501,17 +501,17 @@ export function TypographySection({
             <div className="flex flex-col md:flex-row gap-4 md:gap-6">
               {/* Slider controls */}
               <div className="flex-1 min-w-0 space-y-3 order-2 md:order-1">
-                {/* Fonts */}
+                {/* Headings */}
                 <div className="space-y-1.5">
                   <p
                     className="text-sm font-light uppercase tracking-wider ds-text-subtle"
                   >
-                    Fonts
+                    Headings
                   </p>
                   <label
                     className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                   >
-                    <span>Heading:</span>
+                    <span>Font:</span>
                     <CustomSelect
                       value={typographyState.headingFamily}
                       onChange={(v) => updateTypography({ headingFamily: v })}
@@ -523,7 +523,59 @@ export function TypographySection({
                   <label
                     className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                   >
-                    <span>Body:</span>
+                    <span>Weight: {typographyState.headingWeight}</span>
+                    <input
+                      type="range"
+                      name="heading-weight"
+                      min={100}
+                      max={900}
+                      step={100}
+                      value={typographyState.headingWeight}
+                      onChange={(e) =>
+                        updateTypography({
+                          headingWeight: Number(e.target.value),
+                        })
+                      }
+                      className="w-32 accent-[hsl(var(--brand))]"
+                    />
+                  </label>
+                  <label
+                    className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
+                  >
+                    <span>
+                      Spacing:{" "}
+                      {typographyState.headingLetterSpacing.toFixed(2)}em
+                    </span>
+                    <input
+                      type="range"
+                      name="heading-letter-spacing"
+                      min={-5}
+                      max={10}
+                      step={1}
+                      value={Math.round(
+                        typographyState.headingLetterSpacing * 100,
+                      )}
+                      onChange={(e) =>
+                        updateTypography({
+                          headingLetterSpacing:
+                            Number(e.target.value) / 100,
+                        })
+                      }
+                      className="w-32 accent-[hsl(var(--brand))]"
+                    />
+                  </label>
+                </div>
+                {/* Body */}
+                <div className="space-y-1.5">
+                  <p
+                    className="text-sm font-light uppercase tracking-wider ds-text-subtle"
+                  >
+                    Body
+                  </p>
+                  <label
+                    className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
+                  >
+                    <span>Font:</span>
                     <CustomSelect
                       value={typographyState.bodyFamily}
                       onChange={(v) => updateTypography({ bodyFamily: v })}
@@ -532,14 +584,6 @@ export function TypographySection({
                       width="160px"
                     />
                   </label>
-                </div>
-                {/* Size & Weight */}
-                <div className="space-y-1.5">
-                  <p
-                    className="text-sm font-light uppercase tracking-wider ds-text-subtle"
-                  >
-                    Size & Weight
-                  </p>
                   <label
                     className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                   >
@@ -561,26 +605,7 @@ export function TypographySection({
                   <label
                     className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
                   >
-                    <span>Heading Wt: {typographyState.headingWeight}</span>
-                    <input
-                      type="range"
-                      name="heading-weight"
-                      min={100}
-                      max={900}
-                      step={100}
-                      value={typographyState.headingWeight}
-                      onChange={(e) =>
-                        updateTypography({
-                          headingWeight: Number(e.target.value),
-                        })
-                      }
-                      className="w-32 accent-[hsl(var(--brand))]"
-                    />
-                  </label>
-                  <label
-                    className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
-                  >
-                    <span>Body Wt: {typographyState.bodyWeight}</span>
+                    <span>Weight: {typographyState.bodyWeight}</span>
                     <input
                       type="range"
                       name="body-weight"
@@ -650,31 +675,6 @@ export function TypographySection({
                         onChange={(e) =>
                           updateTypography({
                             letterSpacing: Number(e.target.value) / 100,
-                          })
-                        }
-                        className="w-32 accent-[hsl(var(--brand))]"
-                      />
-                    </label>
-                    <label
-                      className="flex items-center justify-between gap-2 text-sm font-light ds-text-fg"
-                    >
-                      <span>
-                        Heading Sp:{" "}
-                        {typographyState.headingLetterSpacing.toFixed(2)}em
-                      </span>
-                      <input
-                        type="range"
-                        name="heading-letter-spacing"
-                        min={-5}
-                        max={10}
-                        step={1}
-                        value={Math.round(
-                          typographyState.headingLetterSpacing * 100,
-                        )}
-                        onChange={(e) =>
-                          updateTypography({
-                            headingLetterSpacing:
-                              Number(e.target.value) / 100,
                           })
                         }
                         className="w-32 accent-[hsl(var(--brand))]"
