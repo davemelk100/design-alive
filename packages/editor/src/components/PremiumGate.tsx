@@ -126,7 +126,7 @@ function UpgradeModal({
                   Activate
                 </button>
               </div>
-              {licenseError && <p className="text-[12px] ds-text-destructive">{licenseError}</p>}
+              {licenseError && <p className="text-xs ds-text-destructive">{licenseError}</p>}
             </div>
           )}
         </div>

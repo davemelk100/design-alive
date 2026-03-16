@@ -114,7 +114,7 @@ export function TablesSection({
 
       <div
         id="tables"
-        className="min-w-0 space-y-4 mt-6 mb-6 md:mt-16 md:mb-16 scroll-mt-40 lg:scroll-mt-24"
+        className="min-w-0 space-y-4 mt-6 pb-[50vh] md:mt-16 scroll-mt-40 lg:scroll-mt-24"
       >
         <h2 className="text-sm sm:text-base md:text-lg font-bold tracking-wider mb-[5px] flex items-baseline gap-2 ds-text-fg">
           Tables{" "}

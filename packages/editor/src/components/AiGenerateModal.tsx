@@ -111,7 +111,7 @@ export function AiGenerateModal({
                           backgroundColor: `hsl(${value})`,
                         }}
                       />
-                      <span className="text-[11px] font-light ds-text-subtle">
+                      <span className="text-xs font-light ds-text-subtle">
                         {varName.replace("--", "")}
                       </span>
                     </div>

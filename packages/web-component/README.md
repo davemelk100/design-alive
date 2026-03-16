@@ -1,6 +1,6 @@
 # @themal/web-component
 
-Use Themal on WordPress, static sites, or any non-React platform via a single `<script>` tag. No build step required. Includes all editor sections: Colors, Buttons, Cards, Alerts, Typography, and Inputs — with custom themed dropdowns, responsive sidebar navigation, and frosted-glass mobile menu.
+Use Themal on WordPress, static sites, or any non-React platform via a single `<script>` tag. No build step required. Includes all editor sections: Colors, Buttons, Cards, Alerts, Typography, Inputs, and Tables — with custom themed dropdowns, responsive sidebar navigation, and frosted-glass mobile menu.
 
 ## Quick Start
 
@@ -37,7 +37,7 @@ That's it — the script bundles React, the editor, and all styles into one file
            'themal-editor',
            get_template_directory_uri() . '/js/themal-editor.js',
            [],
-           '0.3.0',
+           '0.38.1',
            true
        );
    });
@@ -64,7 +64,7 @@ add_action('wp_enqueue_scripts', function() {
         'themal-editor',
         plugins_url('themal-editor.js', __FILE__),
         [],
-        '0.3.0',
+        '0.38.1',
         true
     );
 });

@@ -14,6 +14,7 @@ import type {
 import { CustomSelect } from "../components/CustomSelect";
 import { ExportCodeBlock } from "../components/ExportCodeBlock";
 import { PremiumGate } from "../components/PremiumGate";
+import { BREAKPOINTS } from "../utils/breakpoints";
 
 export const COLOR_SWATCHES = [
   { key: "--brand", label: "Primary" },
@@ -287,7 +288,6 @@ export function ColorsSection({
               <div
                 id="color-swatch-grid"
                 className="grid grid-cols-5 gap-2 sm:gap-5 rounded-lg p-4 overflow-visible"
-                data-axe-exclude
                 data-audit-target
                 style={{ backgroundColor: "hsl(var(--foreground) / 0.04)" }}
               >
@@ -314,7 +314,7 @@ export function ColorsSection({
                       className="flex flex-col items-stretch overflow-visible"
                     >
                       <span
-                        className="sm:hidden text-[11px] font-light text-center truncate mb-0.5 ds-text-muted"
+                        className="sm:hidden text-xs font-light text-center truncate mb-0.5 ds-text-muted"
                       >
                         {label}
                       </span>
@@ -327,7 +327,7 @@ export function ColorsSection({
                       >
                         <button
                           aria-label={`${label} color swatch`}
-                          className={`w-full aspect-square text-[12px] sm:text-sm font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-tl-lg rounded-tr-lg sm:rounded-tr-none sm:rounded-bl-lg ${wc >= bc ? "ds-swatch-light" : "ds-swatch-dark"}`}
+                          className={`w-full aspect-square text-xs sm:text-sm font-light transition-colors hover:opacity-80 flex flex-col items-center justify-center gap-0.5 cursor-pointer rounded-tl-lg rounded-tr-lg sm:rounded-tr-none sm:rounded-bl-lg ${wc >= bc ? "ds-swatch-light" : "ds-swatch-dark"}`}
                           style={{
                             backgroundColor: hsl ? `hsl(${hsl})` : "hsl(var(--muted))",
                           }}
@@ -344,7 +344,7 @@ export function ColorsSection({
                               el.scrollTop = 0;
                               el = el.parentElement;
                             }
-                            const isMobile = window.innerWidth < 640;
+                            const isMobile = window.innerWidth < BREAKPOINTS.sm;
                             if (isMobile) {
                               setTimeout(() => {
                                 setMobilePickerKey(key);
@@ -364,7 +364,7 @@ export function ColorsSection({
                             {label}
                           </span>
                           {hexCode && (
-                            <span className="hidden sm:inline whitespace-nowrap opacity-90 text-sm leading-tight">
+                            <span className="hidden sm:inline whitespace-nowrap text-sm leading-tight">
                               {hexCode}
                             </span>
                           )}
@@ -528,7 +528,7 @@ export function ColorsSection({
                           className="text-left"
                         >
                           <p
-                            className="sm:hidden text-[11px] font-light text-center mb-0.5 ds-text-muted"
+                            className="sm:hidden text-xs font-light text-center mb-0.5 ds-text-muted"
                           >
                             {initials}
                           </p>

@@ -69,7 +69,6 @@ describe("Example App — plugin consumer", () => {
     expect(screen.getByLabelText("showHeader")).toBeInTheDocument();
     expect(screen.getByLabelText("showSectionNav")).toBeInTheDocument();
     expect(screen.getByLabelText("showNavLinks")).toBeInTheDocument();
-    expect(screen.getByLabelText("topNav (custom)")).toBeInTheDocument();
   });
 
   it("switches between all theme presets without errors", async () => {

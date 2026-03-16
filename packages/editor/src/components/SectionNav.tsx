@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { FEATURE_FLAGS } from "../utils/featureFlags";
+import { BREAKPOINTS } from "../utils/breakpoints";
 
 const BASE_SECTION_IDS = ["colors", "buttons", "card", "alerts", "typography", "inputs"];
 const BASE_SECTION_LINKS: { id: string; label: string }[] = [
@@ -57,8 +58,8 @@ export function SectionNav() {
     const container = navContainerRef.current;
     if (!container) return;
 
-    // Only reorder on desktop (lg: 1024px+) — on tablet/mobile show natural order
-    if (window.innerWidth < 1024) {
+    // Only reorder on desktop (lg+) — on tablet/mobile show natural order
+    if (window.innerWidth < BREAKPOINTS.lg) {
       setNavOffsets({});
       return;
     }
@@ -125,25 +126,20 @@ export function SectionNav() {
 
   return (
     <div
-      className="ds-section-nav sticky top-0 z-50 w-full px-2 sm:px-8 lg:px-10 py-3"
-      style={{ backgroundColor: "transparent" }}
+      className="ds-section-nav sticky top-0 z-50 w-full px-4 sm:px-6 lg:px-8 py-3"
     >
           <nav
             ref={navContainerRef}
             className="flex items-baseline gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-x-auto flex-nowrap"
-            style={{ backgroundColor: "transparent" }}
           >
             {SECTION_LINKS.map(({ id, label }) => (
               <a
                 key={id}
                 ref={(el) => { navItemRefs.current[id] = el; }}
                 href={`#${id}`}
-                className="whitespace-nowrap flex items-center gap-2 no-underline"
+                className="whitespace-nowrap flex items-center gap-2 no-underline ds-text-fg ds-nav-link-item"
                 style={{
-                  color: "hsl(var(--foreground))",
-                  backgroundColor: "transparent",
                   transform: `translateX(${navOffsets[id] ?? 0}px)`,
-                  transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
                 }}
               >
                 <h2 className="text-sm sm:text-base md:text-lg font-bold tracking-wider m-0 p-0 flex items-baseline gap-2">

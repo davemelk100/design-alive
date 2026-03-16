@@ -1153,7 +1153,7 @@ export function ButtonsSection({
                           );
                         })()}
                         <p
-                          className="text-[12px] font-light ds-text-muted"
+                          className="text-xs font-light ds-text-muted"
                         >
                           Hover and click the buttons above to preview
                           interaction states.

@@ -18,7 +18,7 @@ const REQUIRED_CSS_VARS = [
   "--brand",
 ];
 
-const SECTIONS = ["colors", "buttons", "card", "alerts", "typography", "inputs"];
+const SECTIONS = ["colors", "buttons", "card", "alerts", "typography", "inputs", "tables"];
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -130,26 +130,20 @@ test.describe("Plugin Health Check", () => {
 
   test.describe("Section Nav", () => {
     for (const theme of THEMES) {
-      test(`nav background matches --background on "${theme}"`, async ({ page }) => {
+      test(`nav background is transparent on "${theme}"`, async ({ page }) => {
         await switchTheme(page, theme);
 
-        const { navBg, expectedBg } = await page.evaluate(() => {
+        const navBg = await page.evaluate(() => {
           const nav = document.querySelector(".ds-section-nav") as HTMLElement;
-          const editor = document.querySelector(".ds-editor") as HTMLElement;
-          if (!nav || !editor) return { navBg: null, expectedBg: null };
-          // Create a temp element to resolve hsl(var(--background)) to rgb
-          const temp = document.createElement("div");
-          temp.style.backgroundColor = `hsl(${getComputedStyle(editor).getPropertyValue("--background").trim()})`;
-          document.body.appendChild(temp);
-          const expected = getComputedStyle(temp).backgroundColor;
-          temp.remove();
-          return {
-            navBg: getComputedStyle(nav).backgroundColor,
-            expectedBg: expected,
-          };
+          if (!nav) return null;
+          return getComputedStyle(nav).backgroundColor;
         });
 
-        expect(navBg, `Nav bg should match --background on "${theme}"`).toEqual(expectedBg);
+        // Nav is intentionally transparent so it blends with the editor background
+        expect(
+          navBg,
+          `Nav bg should be transparent on "${theme}"`,
+        ).toMatch(/rgba?\(0, 0, 0, 0\)|transparent/);
       });
     }
 

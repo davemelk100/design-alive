@@ -179,9 +179,8 @@ function DesignSystemEditorInner({
 
   const isSectionLocked = useCallback((section: LockableSection) => lockedSections.has(section), [lockedSections]);
 
-  // Expose section lock state for wiring — consumed when FEATURE_FLAGS.sectionLocks is true
+  // toggleSectionLock will be wired to SectionLockButton once sectionLocks flag is enabled
   void toggleSectionLock;
-  void isSectionLocked;
 
   const editorRootRef = useRef<HTMLDivElement>(null);
   const contentSectionRef = useRef<HTMLElement>(null);
@@ -2096,7 +2095,7 @@ function DesignSystemEditorInner({
       </nav>
 
       <section ref={contentSectionRef} className="pb-2 sm:pb-3 lg:pb-4 xl:pb-6 relative">
-        <div className="w-full px-2 sm:px-8 lg:px-10">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* Alerts */}
           <div className="mb-0">
             <div

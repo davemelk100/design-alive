@@ -90,7 +90,7 @@ export function ImagePaletteModal({
               />
             </svg>
             <span>Drag and drop an image here</span>
-            <span className="text-[12px]">or click to choose a file</span>
+            <span className="text-xs">or click to choose a file</span>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ export function ImagePaletteModal({
             style={{ backgroundColor: "hsl(var(--border))" }}
           />
           <span
-            className="text-[12px] font-light ds-text-subtle"
+            className="text-xs font-light ds-text-subtle"
           >
             or
           </span>
@@ -157,7 +157,7 @@ export function ImagePaletteModal({
           </div>
           {imageUrlError && (
             <p
-              className="text-[12px] font-light mt-1 ds-text-destructive"
+              className="text-xs font-light mt-1 ds-text-destructive"
             >
               {imageUrlError}
             </p>

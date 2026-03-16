@@ -91,7 +91,7 @@ export function MobileColorPicker({
               }}
             />
             <span
-              className="text-[10px] font-medium truncate w-full text-center"
+              className="text-xs font-medium truncate w-full text-center"
               style={{ color: pc.active ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))" }}
             >
               {pc.label}

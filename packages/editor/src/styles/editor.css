@@ -68,13 +68,13 @@
 .ds-editor .ds-text-card          { color: hsl(var(--card-foreground)); }
 
 /* Background colors */
-.ds-bg                 { background-color: hsl(var(--background)); }
-.ds-bg-card            { background-color: hsl(var(--card)); }
-.ds-bg-muted           { background-color: hsl(var(--muted)); }
-.ds-bg-fg              { background-color: hsl(var(--foreground)); }
-.ds-bg-brand           { background-color: hsl(var(--brand)); }
-.ds-bg-destructive     { background-color: hsl(var(--destructive)); }
-.ds-bg-accent          { background-color: hsl(var(--accent)); }
+.ds-editor .ds-bg                 { background-color: hsl(var(--background)); }
+.ds-editor .ds-bg-card            { background-color: hsl(var(--card)); }
+.ds-editor .ds-bg-muted           { background-color: hsl(var(--muted)); }
+.ds-editor .ds-bg-fg              { background-color: hsl(var(--foreground)); }
+.ds-editor .ds-bg-brand           { background-color: hsl(var(--brand)); }
+.ds-editor .ds-bg-destructive     { background-color: hsl(var(--destructive)); }
+.ds-editor .ds-bg-accent          { background-color: hsl(var(--accent)); }
 
 /* Border colors */
 .ds-border             { border-color: hsl(var(--border)); }
@@ -478,10 +478,11 @@
 
 /* ── Mobile touch-friendly sizing ───────────────────────────────────── */
 /* ── Table section: responsive table → dl ──────────────────────────── */
+/* Breakpoints: sm=640px, md=768px, lg=1024px (match Tailwind defaults) */
 .ds-table-mobile { display: none; }
 .ds-table-desktop { display: block; }
 
-@media (max-width: 639px) {
+@media (max-width: 640px) {
   .ds-table-mobile { display: block; }
   .ds-table-desktop { display: none; }
 }
@@ -490,15 +491,16 @@
   background-color: hsl(var(--muted) / 0.5);
 }
 
-/* Badge utilities for table status cells */
+/* Badge utilities for table status cells — use foreground for text
+   so contrast is guaranteed on both light and dark backgrounds */
 .ds-badge-success {
-  background-color: hsl(var(--brand) / 0.15);
-  color: hsl(var(--brand));
+  background-color: hsl(var(--brand) / 0.1);
+  color: hsl(var(--foreground));
 }
 
 .ds-badge-warning {
-  background-color: hsl(var(--accent) / 0.15);
-  color: hsl(var(--accent-foreground));
+  background-color: hsl(var(--accent) / 0.1);
+  color: hsl(var(--foreground));
 }
 
 @media (max-width: 768px) {

@@ -724,7 +724,7 @@ export function TypographySection({
                           <button
                             disabled={fontAddLoading || !newFontName.trim()}
                             onClick={handleAddCustomFont}
-                            className="h-8 px-2 text-[12px] font-medium rounded-md border whitespace-nowrap"
+                            className="h-8 px-2 text-xs font-medium rounded-md border whitespace-nowrap"
                             style={{
                               backgroundColor: "hsl(var(--primary))",
                               color: "hsl(var(--primary-foreground))",
@@ -741,7 +741,7 @@ export function TypographySection({
                       </label>
                       {fontAddError && (
                         <p
-                          className="text-[12px] mt-0.5 ds-text-destructive"
+                          className="text-xs mt-0.5 ds-text-destructive"
                         >
                           {fontAddError}
                         </p>
@@ -751,7 +751,7 @@ export function TypographySection({
                           {customFonts.map((f) => (
                             <span
                               key={f.label}
-                              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[11px] rounded-md border ds-border ds-text-fg"
+                              className="inline-flex items-center gap-0.5 px-1.5 py-0.5 text-xs rounded-md border ds-border ds-text-fg"
                             >
                               {f.label}
                               <button
@@ -1502,7 +1502,7 @@ export function TypographySection({
                         to test hover states.
                       </p>
                       <p
-                        className="text-[12px] font-light ds-text-muted"
+                        className="text-xs font-light ds-text-muted"
                       >
                         Hover over the heading and links to preview
                         interaction states.

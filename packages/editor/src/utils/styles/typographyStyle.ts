@@ -131,7 +131,7 @@ export function getCustomFonts(): CustomFontEntry[] {
 }
 
 function saveCustomFonts(fonts: CustomFontEntry[]) {
-  localStorage.setItem(CUSTOM_FONTS_KEY, JSON.stringify(fonts));
+  try { localStorage.setItem(CUSTOM_FONTS_KEY, JSON.stringify(fonts)); } catch {}
 }
 
 function titleCase(str: string): string {

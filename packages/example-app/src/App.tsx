@@ -10,7 +10,7 @@ const presets: Record<string, Record<string, string>> = {
     "--card-foreground": "0 0% 5%",
     "--popover": "0 0% 100%",
     "--popover-foreground": "0 0% 5%",
-    "--primary": "210 80% 50%",
+    "--primary": "210 80% 42%",
     "--primary-foreground": "0 0% 100%",
     "--secondary": "210 15% 90%",
     "--secondary-foreground": "0 0% 10%",
@@ -18,16 +18,16 @@ const presets: Record<string, Record<string, string>> = {
     "--muted-foreground": "0 0% 40%",
     "--accent": "210 60% 50%",
     "--accent-foreground": "0 0% 5%",
-    "--destructive": "0 70% 50%",
+    "--destructive": "0 70% 45%",
     "--destructive-foreground": "0 0% 100%",
-    "--success": "142 50% 40%",
+    "--success": "142 50% 32%",
     "--success-foreground": "0 0% 100%",
     "--warning": "45 80% 50%",
     "--warning-foreground": "0 0% 10%",
     "--border": "0 0% 85%",
     "--input": "0 0% 90%",
     "--ring": "210 80% 55%",
-    "--brand": "210 80% 50%",
+    "--brand": "210 80% 42%",
   },
   dark: {
     "--background": "0 0% 10%",
@@ -36,24 +36,24 @@ const presets: Record<string, Record<string, string>> = {
     "--card-foreground": "0 0% 95%",
     "--popover": "0 0% 13%",
     "--popover-foreground": "0 0% 95%",
-    "--primary": "210 80% 55%",
+    "--primary": "210 80% 45%",
     "--primary-foreground": "0 0% 100%",
     "--secondary": "210 15% 20%",
     "--secondary-foreground": "0 0% 90%",
     "--muted": "0 0% 18%",
     "--muted-foreground": "0 0% 65%",
-    "--accent": "210 60% 55%",
+    "--accent": "210 60% 42%",
     "--accent-foreground": "0 0% 95%",
-    "--destructive": "0 60% 55%",
+    "--destructive": "0 60% 50%",
     "--destructive-foreground": "0 0% 100%",
-    "--success": "142 50% 45%",
+    "--success": "142 50% 35%",
     "--success-foreground": "0 0% 100%",
     "--warning": "45 80% 55%",
     "--warning-foreground": "0 0% 10%",
     "--border": "0 0% 22%",
     "--input": "0 0% 18%",
     "--ring": "210 80% 60%",
-    "--brand": "210 80% 55%",
+    "--brand": "210 80% 60%",
   },
   grey: {
     "--background": "0 0% 87%",
@@ -62,14 +62,14 @@ const presets: Record<string, Record<string, string>> = {
     "--card-foreground": "0 0% 0%",
     "--popover": "0 0% 87%",
     "--popover-foreground": "0 0% 0%",
-    "--primary": "199 83% 48%",
-    "--primary-foreground": "199 40% 16%",
+    "--primary": "199 83% 30%",
+    "--primary-foreground": "0 0% 100%",
     "--secondary": "199 16% 27%",
     "--secondary-foreground": "0 0% 100%",
     "--muted": "199 18% 95%",
     "--muted-foreground": "0 0% 15%",
-    "--accent": "199 64% 50%",
-    "--accent-foreground": "0 0% 0%",
+    "--accent": "199 64% 30%",
+    "--accent-foreground": "0 0% 100%",
     "--destructive": "0 21% 35%",
     "--destructive-foreground": "0 0% 100%",
     "--success": "142 17% 35%",
@@ -88,24 +88,24 @@ const presets: Record<string, Record<string, string>> = {
     "--card-foreground": "220 20% 95%",
     "--popover": "220 30% 22%",
     "--popover-foreground": "220 20% 95%",
-    "--primary": "210 80% 55%",
+    "--primary": "210 80% 45%",
     "--primary-foreground": "0 0% 100%",
     "--secondary": "220 20% 28%",
     "--secondary-foreground": "220 15% 90%",
     "--muted": "220 20% 25%",
-    "--muted-foreground": "220 15% 65%",
-    "--accent": "210 70% 60%",
+    "--muted-foreground": "220 15% 70%",
+    "--accent": "210 70% 42%",
     "--accent-foreground": "0 0% 100%",
-    "--destructive": "0 60% 55%",
+    "--destructive": "0 60% 50%",
     "--destructive-foreground": "0 0% 100%",
-    "--success": "142 50% 45%",
+    "--success": "142 50% 35%",
     "--success-foreground": "0 0% 100%",
     "--warning": "45 80% 55%",
     "--warning-foreground": "0 0% 10%",
     "--border": "220 15% 28%",
     "--input": "220 20% 25%",
     "--ring": "210 80% 60%",
-    "--brand": "210 70% 55%",
+    "--brand": "210 70% 65%",
   },
 };
 
@@ -119,7 +119,6 @@ export default function App() {
   const [showHeader, setShowHeader] = useState(true);
   const [showSectionNav, setShowSectionNav] = useState(true);
   const [showNavLinks, setShowNavLinks] = useState(true);
-  const [useCustomTopNav, setUseCustomTopNav] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
   const [activeTheme, setActiveTheme] = useState("grey");
 
@@ -200,14 +199,6 @@ export default function App() {
         <label style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <input
             type="checkbox"
-            checked={useCustomTopNav}
-            onChange={(e) => setUseCustomTopNav(e.target.checked)}
-          />
-          topNav (custom)
-        </label>
-        <label style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <input
-            type="checkbox"
             checked={isPremium}
             onChange={(e) => setIsPremium(e.target.checked)}
           />
@@ -227,15 +218,6 @@ export default function App() {
           showHeader={showHeader}
           showSectionNav={showSectionNav}
           showNavLinks={showNavLinks}
-          topNav={
-            useCustomTopNav ? (
-              <>
-                <a href="#" className="ds-nav-link">Dashboard</a>
-                <a href="#" className="ds-nav-link">Settings</a>
-                <a href="#" className="ds-nav-link">Docs</a>
-              </>
-            ) : undefined
-          }
           headerRight={
             <button
               style={{

@@ -14,10 +14,9 @@ export const SectionLockButton: React.FC<SectionLockButtonProps> = ({ section, l
   return (
     <button
       onClick={onToggle}
-      className="ml-2 p-1 rounded transition-opacity hover:opacity-70"
+      className={`ml-2 p-1 rounded transition-opacity hover:opacity-70 ${locked ? "ds-text-brand" : "ds-text-subtle"}`}
       title={locked ? `Unlock ${section} section` : `Lock ${section} section — preserves styles during global changes`}
       aria-label={locked ? `Unlock ${section} section` : `Lock ${section} section`}
-      style={{ color: locked ? "hsl(var(--brand))" : "hsl(var(--foreground) / 0.3)" }}
     >
       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
         {locked ? (

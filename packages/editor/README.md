@@ -370,6 +370,8 @@ import {
   // GitHub PR utilities (client-side)
   createDesignPr,       // Create a design system PR via GitHub API
   replaceRootBlock,     // Replace CSS vars in a :root block string
+  upsertIntegrationBlock, // Insert or update an integration CSS block in a stylesheet string
+  INTEGRATION_CSS,      // Default CSS snippet for full-site Themal integration
   getAuthenticatedUser, // Verify a GitHub token and get username
   startOAuthFlow,       // Start GitHub OAuth popup flow
   getStoredAuth,        // Retrieve stored GitHub auth from sessionStorage
@@ -397,6 +399,7 @@ import {
 
   // Standalone components
   SectionNav,           // Sticky section navigation bar (can be used independently)
+  SectionLockButton,    // Lock button for section headers (requires sectionLocks feature flag)
 } from '@themal/editor';
 ```
 

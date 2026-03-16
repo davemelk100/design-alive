@@ -421,7 +421,7 @@ export function AlertsSection({
                                 <p className="text-sm font-medium">
                                   {label}
                                 </p>
-                                <p className="text-xs font-light opacity-90">
+                                <p className="text-xs font-light">
                                   {message}
                                 </p>
                               </div>

@@ -10,6 +10,14 @@ const config: Config = {
       sans: ["inherit"],
       mono: ["inherit"],
     },
+    /* Explicit screens so editor breakpoints are documented and never drift
+       from the values used in editor.css media queries or JS checks. */
+    screens: {
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+    },
     extend: {
       fontSize: {
         // rem-based so the editor inherits the consuming app's root font-size.
