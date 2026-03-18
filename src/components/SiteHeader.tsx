@@ -205,7 +205,7 @@ export default function SiteHeader() {
           </div>
 
           {/* Section nav: hidden on mobile, visible at sm+ */}
-          <div className="hidden sm:flex flex-1 min-w-0 px-6 sm:px-8 lg:px-10 pb-3 pt-1 lg:py-3 items-end">
+          <div className="hidden sm:flex flex-1 min-w-0 px-4 sm:px-6 lg:px-8 pb-3 pt-1 lg:py-3 items-end">
             <nav
               ref={navContainerRef}
               className="flex items-baseline gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-x-auto flex-nowrap"
@@ -216,10 +216,6 @@ export default function SiteHeader() {
                   ref={(el) => { navItemRefs.current[id] = el; }}
                   href={`#${id}`}
                   className="text-sm sm:text-base md:text-lg font-light flex items-baseline gap-1 sm:gap-2 whitespace-nowrap no-underline text-fg"
-                  style={{
-                    transform: `translateX(${navOffsets[id] ?? 0}px)`,
-                    transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                  }}
                 >
                   {label}
                   <svg

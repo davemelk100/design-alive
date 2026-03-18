@@ -4,7 +4,7 @@ An interactive design system editor that lets you pick a brand color and watch e
 
 **Live:** [themalive.com](https://themalive.com)
 
-> **Early access — all features are free.** Pro subscription tiers will be introduced in a future release.
+> **Free core + Pro tier.** The core editor is free and open source (MIT). Premium features — color harmony schemes, image palette extraction, custom fonts, interaction states, and palette export — require a Pro subscription ($10/month or $50/year).
 
 ## Features
 
@@ -69,7 +69,7 @@ function App() {
 }
 ```
 
-When `applyToRoot` is enabled, Themal automatically injects integration CSS rules (body, headings, links, cards, borders, nav/header/footer) into a `<style>` tag so your site picks up the theme out of the box — no manual stylesheet edits required. The tag is removed on unmount.
+When `applyToRoot` is enabled, Themal automatically injects integration CSS rules (body, headings, links, cards, borders, nav/header/footer) into a `<style>` tag so your site picks up the theme out of the box — no manual stylesheet edits required. The tag is removed on unmount. By default it also scans the host page's existing palette — suppress this with `scanHostPage={false}`.
 
 ## Web Component
 

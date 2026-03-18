@@ -2,7 +2,7 @@
 
 Interactive design system editor for any web app. Available as a React component or a framework-agnostic web component (`<themal-editor>`). Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography, interaction states, input styles, and table styles, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile with a collapsible sidebar menu.
 
-> **Early access — all features are free.** Pro subscription tiers will be introduced in a future release.
+> **Free core + Pro tier.** The core editor is free and open source (MIT). Premium features — color harmony schemes, image palette extraction, custom fonts, interaction states, and palette export — require a license key. See the pricing page for details.
 
 ## Install
 
@@ -61,7 +61,8 @@ The editor automatically inherits CSS custom properties from the host page (chec
 | `sidebarExtra` | `React.ReactNode` | — | Custom content rendered at the bottom of the left sidebar (e.g. contact forms, branding). |
 | `featuresUrl` | `string` | — | URL for the Features page link in the sidebar. |
 | `onAiGenerate` | `(prompt: string) => Promise<AiGenerateResult>` | — | AI theme generation callback. When provided, an "AI Generate" button appears in Global Actions. |
-| `applyToRoot` | `boolean` | `false` | Mirror CSS custom properties to `:root` so the theme applies beyond the editor. When enabled, the editor also injects integration CSS rules automatically and scans the host page's colors for additional customization. |
+| `applyToRoot` | `boolean` | `false` | Mirror CSS custom properties to `:root` so the theme applies beyond the editor. When enabled, the editor also injects integration CSS rules automatically and (unless `scanHostPage` is false) scans the host page's colors for additional customization. |
+| `scanHostPage` | `boolean` | `true` | When `applyToRoot` is enabled, scan the host page for existing colors/fonts and offer to map them to Themal tokens via a "Site palette detected" modal. Set to `false` to suppress the scanner. |
 | `onAiPaletteMap` | `(prompt: string) => Promise<Record<string, string>>` | — | AI palette mapping callback. When provided and the `aiPaletteMapping` feature flag is enabled, an "AI Map" button appears in the host-scan confirmation modal. The callback receives a structured prompt describing the detected palette and should return a token map to apply. |
 | `devMode` | `boolean` | `false` | Show a "Purge Storage" button in Global Actions that clears all Themal localStorage keys. |
 
@@ -267,9 +268,15 @@ This flow opens a GitHub OAuth popup, exchanges the code for a token via a proxy
 When `applyToRoot` is enabled, the editor:
 1. Mirrors all CSS custom properties to `:root` (so they're available page-wide)
 2. **Automatically injects integration CSS** (`<style id="themal-integration-css">`) so body, headings, links, cards, borders, and nav/header/footer use the theme variables out of the box — no manual stylesheet edits needed. The tag is removed on unmount.
-3. Scans the host page's DOM to detect its existing color palette
+3. Scans the host page's DOM to detect its existing color palette (disable with `scanHostPage={false}`)
 4. Shows a banner prompting the developer to view a tailored CSS snippet for additional customization
 5. **Defaults the "Include integration rules" toggle on** in the Open PR modal, so PRs include both CSS variable values and the rules that consume them — the site works after merge without manual stylesheet edits
+
+To enable site-wide theming without the host palette scanner:
+
+```tsx
+<DesignSystemEditor applyToRoot scanHostPage={false} />
+```
 
 The generated CSS uses `var()` references so your site responds to every color change in the editor:
 

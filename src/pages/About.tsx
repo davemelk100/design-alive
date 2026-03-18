@@ -28,7 +28,7 @@ const FAQ_SCHEMA = {
       name: "Is Themal free?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "The core editor is free and open source (MIT). Premium features like color harmony schemes, image palette extraction, custom fonts, and interaction state styling are available with a license key.",
+        text: "The core editor is free and open source (MIT). Premium features like color harmony schemes, image palette extraction, custom fonts, and interaction state styling are available with a Pro subscription at $10/month or $50/year.",
       },
     },
     {
@@ -103,7 +103,8 @@ export default function About() {
                   <li>Dialog and toast message customization</li>
                   <li>Per-section CSS and design token export</li>
                   <li>Dark mode support</li>
-                  <li>WCAG AA contrast auditing with auto-fix</li>
+                  <li>WCAG AA contrast auditing with one-click Fix All</li>
+                  <li>Full-site theming via applyToRoot</li>
                   <li>GitHub PR integration</li>
                   <li>Shareable theme URLs</li>
                 </ul>

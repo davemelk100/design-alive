@@ -4,6 +4,24 @@ import usePageMeta from "../hooks/usePageMeta";
 
 const features = [
   {
+    version: "0.39",
+    items: [
+      "scanHostPage prop - control whether the host palette scanner runs when applyToRoot is enabled (default: true). Set to false to suppress the \"Site palette detected\" modal",
+      "Fix All confirmation summary - after applying WCAG contrast fixes, a summary shows every color that changed (old/new hex with swatches) and prompts to re-export CSS/Tokens",
+      "Modal opacity bulletproofing - all modal backdrops and children forced to opacity:1 via CSS, preventing hover:opacity Tailwind classes from making the scrim translucent",
+      "Unscoped audit dialog CSS - ds-audit-dialog selectors no longer require .ds-editor ancestor, fixing invisible buttons when the fixed-position modal escapes the editor wrapper",
+      "Unscoped modal color classes - ds-modal-panel .ds-bg-destructive and related selectors work without .ds-editor ancestor for reset confirmation modals",
+      "Section nav alignment fix - removed translateX-based nav item reordering so section nav labels always left-align with their corresponding section headers",
+      "Section nav padding aligned with content area - nav and content use matching horizontal padding at all breakpoints",
+      "applyToRoot enabled on Themal site - design system color changes now affect the entire page, not just the editor plugin area",
+      "Pricing update - monthly Pro plan changed from $9 to $10/month, yearly remains $50/year",
+      "Preset button contrast fix - inactive preset buttons (Alerts, Buttons, Typography) now use --muted-foreground for guaranteed readability on --muted backgrounds in dark themes",
+      "Placeholder text contrast fix - input/textarea placeholders use foreground at 45% opacity with browser opacity override to ensure visibility on all themes",
+      "Table heading contrast fix - header text color dynamically computed via fgForBg() against the --muted background, guaranteeing contrast in any theme",
+      "Audit dialog button specificity fix - !important on audit button colors to beat the .ds-editor scoped reset that was overriding blue backgrounds with transparent",
+    ],
+  },
+  {
     version: "0.38",
     items: [
       "CSS/Tokens/Reset export buttons added to Inputs and Tables sections - all 7 sections now have per-section export",
@@ -360,6 +378,7 @@ const PRODUCT_SCHEMA = {
     "Full-Site Theming",
     "Host Style Scanner",
     "Web Component",
+    "Contrast Fix Summary",
   ].map((name) => ({ "@type": "PropertyValue", name })),
 };
 
@@ -407,13 +426,13 @@ export default function Features() {
               { title: "CSS & Design Token Export", desc: "Per-section export of CSS custom properties or W3C Design Token JSON." },
               { title: "Palette Export", desc: "Download palette as SVG or PNG, copy as HEX, RGB, or RGBA." },
               { title: "Shareable URLs", desc: "Encode full theme state in a URL hash and share with one click." },
-              { title: "Accessibility Audit", desc: "Built-in WCAG AA contrast auditor with inline violation reporting and error notifications." },
+              { title: "Accessibility Audit", desc: "Built-in WCAG AA contrast auditor with inline violation reporting, one-click Fix All with a confirmation summary showing every color changed." },
               { title: "GitHub PR Integration", desc: "Open design system PRs via your server endpoint or directly through the GitHub API with built-in OAuth." },
               { title: "Color Locks", desc: "Pin individual color tokens during palette generation." },
               { title: "Responsive Layout", desc: "Mobile-first design with a 2D color spectrum picker for touch, adaptive controls across all viewports." },
               { title: "Plugin Mode", desc: "Embed the editor in any web app — React component or framework-agnostic web component. Customize with props for default colors, typography, header content, and white-label branding." },
               { title: "Custom Icons", desc: "Pass your own icon components to the Icons preview section, or replace the built-in set entirely." },
-              { title: "Full-Site Theming", desc: "applyToRoot mirrors CSS variables to :root. Host style scanner detects your page's palette and generates integration CSS." },
+              { title: "Full-Site Theming", desc: "applyToRoot mirrors CSS variables to :root. Optional host style scanner detects your page's palette and generates integration CSS. Control scanning with scanHostPage prop." },
               { title: "Modal Theming", desc: "Override modal backdrop, background, text, and shadow via CSS custom properties — no !important needed." },
               { title: "Web Component", desc: "Drop into Vue, Svelte, Astro, WordPress, Shopify, or any platform via a single script tag." },
             ].map(({ title, desc }) => (

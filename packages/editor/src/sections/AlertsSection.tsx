@@ -228,7 +228,7 @@ export function AlertsSection({
                                 }
                               : {
                                   backgroundColor: "hsl(var(--muted))",
-                                  color: "hsl(var(--foreground))",
+                                  color: "hsl(var(--muted-foreground))",
                                   boxShadow:
                                     "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1)",
                                 }
@@ -617,7 +617,7 @@ export function AlertsSection({
                                   }
                                 : {
                                     backgroundColor: "hsl(var(--muted))",
-                                    color: "hsl(var(--foreground))",
+                                    color: "hsl(var(--muted-foreground))",
                                     boxShadow:
                                       "0 2px 4px rgba(0,0,0,0.15), 0 4px 8px rgba(0,0,0,0.1)",
                                   }

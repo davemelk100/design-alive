@@ -233,7 +233,13 @@ function App() {
                   <td className="px-4 py-2 font-mono text-xs">applyToRoot</td>
                   <td className="px-4 py-2 font-mono text-xs">boolean</td>
                   <td className="px-4 py-2 font-mono text-xs">false</td>
-                  <td className="px-4 py-2">Mirror CSS custom properties to :root for full-site theming. Shows a developer prompt with integration CSS.</td>
+                  <td className="px-4 py-2">Mirror CSS custom properties to :root for full-site theming. Injects integration CSS and (unless scanHostPage is false) scans the host page for existing colors.</td>
+                </tr>
+                <tr className="border-t border-theme">
+                  <td className="px-4 py-2 font-mono text-xs">scanHostPage</td>
+                  <td className="px-4 py-2 font-mono text-xs">boolean</td>
+                  <td className="px-4 py-2 font-mono text-xs">true</td>
+                  <td className="px-4 py-2">When applyToRoot is enabled, scan the host page for existing colors/fonts and show a "Site palette detected" modal. Set to false to suppress.</td>
                 </tr>
                 <tr className="border-t border-theme">
                   <td className="px-4 py-2 font-mono text-xs">onAiPaletteMap</td>
@@ -310,7 +316,7 @@ function App() {
             <code>{`<DesignSystemEditor applyToRoot />`}</code>
           </pre>
           <p className="text-sm mb-3 text-muted-foreground">
-            When <code className="font-mono text-sm">applyToRoot</code> is enabled, the editor mirrors all CSS variables to <code className="font-mono text-sm">:root</code>, scans the host page to detect its color palette, and shows a banner with a "View CSS" button. The modal provides a tailored, copyable CSS snippet so your entire site responds to theme changes:
+            When <code className="font-mono text-sm">applyToRoot</code> is enabled, the editor mirrors all CSS variables to <code className="font-mono text-sm">:root</code> and automatically injects integration CSS. By default it also scans the host page to detect its color palette — disable this with <code className="font-mono text-sm">scanHostPage={"{false}"}</code>. The generated CSS uses var() references so your site responds to every color change:
           </p>
           <pre className="rounded-lg p-4 text-sm overflow-x-auto mb-4" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>
             <code>{`/* Add to your global stylesheet */
@@ -964,6 +970,7 @@ export default defineNuxtConfig({
   licenseKey={string}                      — Unlock premium features
   githubConfig={{ clientId, repo, filePath, baseBranch }}  — Enable PR creation via GitHub OAuth
   applyToRoot={boolean}                    — Mirror CSS vars to :root for site-wide theming
+  scanHostPage={boolean}                   — Scan host page for existing colors (default: true, only runs when applyToRoot is true)
 
 **Example defaultColors for a light theme:**
   {
@@ -998,6 +1005,7 @@ export default defineNuxtConfig({
   - The editor persists color choices to localStorage automatically
   - For dark themes, set --background lightness below 20% and --foreground above 90%
   - Set applyToRoot={true} if you want the editor's color changes to affect your whole site
+  - Set scanHostPage={false} with applyToRoot to disable the host palette scanner modal
 
 Generate the complete implementation for my setup.`}</code>
           </pre>

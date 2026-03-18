@@ -26,7 +26,7 @@ export function SectionNav() {
   }, []);
 
   const [activeSection, setActiveSection] = useState("colors");
-  const [navOffsets, setNavOffsets] = useState<Record<string, number>>({});
+  const [, setNavOffsets] = useState<Record<string, number>>({});
   const navItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const navContainerRef = useRef<HTMLElement | null>(null);
 
@@ -138,9 +138,6 @@ export function SectionNav() {
                 ref={(el) => { navItemRefs.current[id] = el; }}
                 href={`#${id}`}
                 className="whitespace-nowrap flex items-center gap-2 no-underline ds-text-fg ds-nav-link-item"
-                style={{
-                  transform: `translateX(${navOffsets[id] ?? 0}px)`,
-                }}
               >
                 <h2 className="text-sm sm:text-base md:text-lg font-bold tracking-wider m-0 p-0 flex items-baseline gap-2">
                   {label}

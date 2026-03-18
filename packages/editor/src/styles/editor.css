@@ -92,10 +92,10 @@
 /* Audit dialog – fixed accessible colors independent of user theme.
    Unscoped so they work inside fixed-position modals that escape .ds-editor. */
 .ds-audit-dialog       { background-color: #fff; color: #1a1a1a; border: 1px solid #d4d4d4; }
-.ds-audit-dialog .ds-audit-btn-primary  { background-color: hsl(215 70% 45%); color: #fff; }
-.ds-audit-dialog .ds-audit-btn-primary:hover { background-color: hsl(215 70% 38%); }
-.ds-audit-dialog .ds-audit-btn-secondary { background-color: #e5e5e5; color: #525252; }
-.ds-audit-dialog .ds-audit-btn-secondary:hover { background-color: #d4d4d4; }
+.ds-audit-dialog .ds-audit-btn-primary  { background-color: hsl(215 70% 45%) !important; color: #fff !important; }
+.ds-audit-dialog .ds-audit-btn-primary:hover { background-color: hsl(215 70% 38%) !important; }
+.ds-audit-dialog .ds-audit-btn-secondary { background-color: #e5e5e5 !important; color: #525252 !important; }
+.ds-audit-dialog .ds-audit-btn-secondary:hover { background-color: #d4d4d4 !important; }
 
 /* Contrast resolution panel */
 .ds-audit-dialog-wide { max-width: 32rem; width: 90vw; }
@@ -107,8 +107,8 @@
 .ds-audit-ratio-fail { background-color: #fef2f2; color: #dc2626; border-radius: 0.25rem; padding: 0.125rem 0.375rem; font-size: 0.75rem; white-space: nowrap; }
 .ds-audit-ratio-pass { background-color: #f0fdf4; color: #16a34a; border-radius: 0.25rem; padding: 0.125rem 0.375rem; font-size: 0.75rem; white-space: nowrap; }
 .ds-audit-arrow { color: #a3a3a3; flex-shrink: 0; }
-.ds-audit-btn-apply { background-color: hsl(215 70% 45%); color: #fff; border: none; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
-.ds-audit-btn-apply:hover { background-color: hsl(215 70% 38%); }
+.ds-audit-btn-apply { background-color: hsl(215 70% 45%) !important; color: #fff !important; border: none; border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 0.75rem; cursor: pointer; flex-shrink: 0; white-space: nowrap; }
+.ds-audit-btn-apply:hover { background-color: hsl(215 70% 38%) !important; }
 
 /* ── Modal theming ─────────────────────────────────────────────────── */
 /* Consumers can override these custom properties to theme all modals:
@@ -420,8 +420,9 @@
   box-shadow: 0 0 0 2px hsl(var(--ring));
   border-color: hsl(var(--ring));
 }
-.ds-input::placeholder {
-  color: hsl(var(--muted-foreground));
+.ds-editor .ds-input::placeholder {
+  color: hsl(var(--foreground) / 0.45) !important;
+  opacity: 1 !important;
 }
 .ds-toggle-track {
   transition: background-color 0.2s;
@@ -523,6 +524,11 @@
 
 .ds-editor .ds-table-row-hover:hover {
   background-color: hsl(var(--muted) / 0.5);
+}
+
+/* Table header text — guaranteed contrast on muted background */
+.ds-editor .ds-th-text {
+  color: hsl(var(--muted-foreground));
 }
 
 /* Badge utilities for table status cells — use foreground for text

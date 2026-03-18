@@ -461,13 +461,16 @@ export function TablesSection({
                     {COLUMNS.map((col) => (
                       <th
                         key={col}
-                        className={`text-left ${WEIGHT_CLASS[tableStyle.headerWeight]} ds-text-fg`}
+                        className={`text-left ${WEIGHT_CLASS[tableStyle.headerWeight]}`}
                         style={{
                           ...cellStyle,
                           ...(tableStyle.compact ? { padding: `${Math.max(tableStyle.cellPaddingY - 4, 2)}px ${tableStyle.cellPaddingX}px` } : {}),
                           borderBottomWidth: `${tableStyle.borderWidth}px`,
                           borderBottomColor: "hsl(var(--border))",
                           borderBottomStyle: tableStyle.borderWidth > 0 ? "solid" : "none",
+                          color: colors["--muted"]
+                            ? `hsl(${fgForBg(colors["--muted"])})`
+                            : "hsl(var(--muted-foreground))",
                         }}
                       >
                         {col}
