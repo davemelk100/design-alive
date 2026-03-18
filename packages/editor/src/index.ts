@@ -1,4 +1,5 @@
 export { DesignSystemEditor } from "./DesignSystemEditor";
+export { EDITOR_VERSION } from "./version";
 export type { DesignSystemEditorProps, TokenDefinition, AiGenerateResult } from "./types";
 export {
   hslStringToHex,

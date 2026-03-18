@@ -60,6 +60,8 @@ export interface DesignSystemEditorProps {
   scanHostPage?: boolean;
   /** Provider-agnostic AI palette mapping. When provided (and the `aiPaletteMapping` feature flag is enabled), an "AI Map" button appears in the host-scan confirmation modal. The callback receives a structured prompt describing the detected palette and should return a token map to apply. */
   onAiPaletteMap?: (prompt: string) => Promise<Record<string, string>>;
+  /** Called once per browser session when the editor mounts, with the editor version string. Use this for telemetry — the editor itself makes no network requests. */
+  onMount?: (version: string) => void;
 }
 
 export interface TokenDefinition {

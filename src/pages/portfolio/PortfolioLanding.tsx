@@ -39,6 +39,13 @@ export default function PortfolioLanding() {
         scanHostPage={false}
         prEndpointUrl="/.netlify/functions/create-design-pr"
         accessibilityAudit={true}
+        onMount={(version) => {
+          fetch("/.netlify/functions/telemetry", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ version }),
+          }).catch(() => {});
+        }}
         licenseKey={licenseKey}
         upgradeUrl="/pricing"
         signInUrl="/sign-in"

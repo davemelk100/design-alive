@@ -12,6 +12,8 @@ import { useNavigationState } from "./hooks/useNavigationState";
 import { useImagePalette } from "./hooks/useImagePalette";
 import { usePrSubmission } from "./hooks/usePrSubmission";
 import { LicenseProvider, useLicense } from "./hooks/useLicense";
+import { useTelemetry } from "./hooks/useTelemetry";
+import { EDITOR_VERSION } from "./version";
 import { PremiumGate } from "./components/PremiumGate";
 import { ResetConfirmModal } from "./components/ResetConfirmModal";
 import { CustomSelect } from "./components/CustomSelect";
@@ -158,8 +160,10 @@ function DesignSystemEditorInner({
   applyToRoot = false,
   scanHostPage = true,
   onAiPaletteMap: _onAiPaletteMap,
+  onMount,
 }: DesignSystemEditorProps) {
   const { isPremium } = useLicense();
+  useTelemetry(onMount, EDITOR_VERSION);
   const [wcagEnforcement, setWcagEnforcement] = useState(true);
 
   // Section locks — preserve a section's styles during global operations
