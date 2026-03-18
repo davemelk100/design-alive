@@ -51,29 +51,29 @@
 
 @layer base {
   :root {
-    --brand: 28.9 100% 31%;
+    --brand: 28.9 100% 17%;
     --brand-foreground: 0 0% 100%;
-    --background: 0.0 6.7% 2.9%;
-    --foreground: 0 0% 100%;
-    --card: 0.0 6.7% 2.9%;
-    --card-foreground: 0 0% 100%;
-    --popover: 0.0 6.7% 2.9%;
-    --popover-foreground: 0 0% 100%;
+    --background: 0 0% 83.1%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 83.1%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 83.1%;
+    --popover-foreground: 0 0% 0%;
     --primary: 28.9 83.2% 48.0%;
     --primary-foreground: 28.9 40.0% 15.0%;
     --secondary: 28.9 71.5% 93.0%;
     --secondary-foreground: 0 0% 0%;
-    --muted: 28.9 22.3% 97.2%;
-    --muted-foreground: 0 0% 0%;
-    --accent: 28.9 75.6% 87.7%;
+    --muted: 0.0 22.3% 97.2%;
+    --muted-foreground: 0 0% 35%;
+    --accent: 0 0% 90.2%;
     --accent-foreground: 0 0% 0%;
-    --destructive: 0 83.2% 55.0%;
-    --destructive-foreground: 0 0% 5%;
-    --success: 142 68.0% 55.0%;
-    --success-foreground: 0 0% 30%;
-    --warning: 45 79.4% 60.0%;
+    --destructive: 0 0.0% 55.0%;
+    --destructive-foreground: 0 0% 14%;
+    --success: 142 0.0% 55.0%;
+    --success-foreground: 0 0% 14%;
+    --warning: 45 0.0% 60.0%;
     --warning-foreground: 0 0% 0%;
-    --border: 0.0 2.0% 14.9%;
+    --border: 0 0.0% 74.1%;
     --input: 0.0 2.0% 14.9%;
     --ring: 28.9 83.2% 53.3%;
     --radius: 0.5rem;
