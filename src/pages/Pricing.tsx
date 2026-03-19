@@ -134,35 +134,7 @@ export default function Pricing() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
-          {/* Test */}
-          <div
-            onClick={() => handleCheckout("test")}
-            className="rounded-xl p-6 flex flex-col cursor-pointer transition-opacity hover:opacity-80 bg-card-surface"
-            style={{
-              border: "1px solid hsl(var(--border))",
-            }}
-          >
-            <h2 className="text-xl font-semibold mb-1 text-fg">
-              Test 50 Cent
-            </h2>
-            <div className="mb-3">
-              <span className="text-3xl font-semibold text-fg">$0.50</span>
-              <span className="text-sm ml-1 text-muted-foreground">one-time</span>
-            </div>
-            <div
-              className="w-full h-10 rounded-lg text-sm font-medium flex items-center justify-center mb-4 text-fg border-theme"
-              style={{
-                border: "1px solid hsl(var(--border))",
-              }}
-            >
-              {loading === "test" ? "Redirecting..." : "Test Checkout"}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Verify the checkout flow with a minimal charge.
-            </p>
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
           {/* Free */}
           <Link
             to="/editor"
