@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import ThemalLogo from "./ThemalLogo";
 
@@ -19,6 +19,9 @@ export default function SiteHeader() {
 
   const [activeSection, setActiveSection] = useState("colors");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [navOffsets, setNavOffsets] = useState<Record<string, number>>({});
+  const navItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const navContainerRef = useRef<HTMLElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const activeLabel = SECTION_LINKS.find((s) => s.id === activeSection)?.label ?? "Colors";
@@ -57,6 +60,73 @@ export default function SiteHeader() {
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, [dropdownOpen]);
+
+  // Recalculate offsets so active item slides to the left
+  const recalcNavOffsets = useCallback(() => {
+    const refs = navItemRefs.current;
+    const container = navContainerRef.current;
+    if (!container) return;
+
+    // Temporarily remove transforms to measure natural positions
+    const elements: { el: HTMLAnchorElement; prev: string }[] = [];
+    for (const id of SECTION_IDS) {
+      const el = refs[id];
+      if (el) {
+        elements.push({ el, prev: el.style.transform });
+        el.style.transform = "none";
+      }
+    }
+
+    void container.offsetWidth;
+
+    const positions: Record<string, { left: number; width: number }> = {};
+    for (const id of SECTION_IDS) {
+      const el = refs[id];
+      if (el) {
+        positions[id] = { left: el.offsetLeft, width: el.offsetWidth };
+      }
+    }
+
+    for (const { el, prev } of elements) {
+      el.style.transform = prev;
+    }
+
+    if (!positions[activeSection]) return;
+
+    const gap = parseFloat(getComputedStyle(container).gap) || 16;
+
+    const reordered = [
+      activeSection,
+      ...SECTION_IDS.filter((id) => id !== activeSection),
+    ];
+
+    let cursor = positions[SECTION_IDS[0]]?.left ?? 0;
+    const targetLeft: Record<string, number> = {};
+    for (const id of reordered) {
+      targetLeft[id] = cursor;
+      cursor += (positions[id]?.width ?? 0) + gap;
+    }
+
+    const offsets: Record<string, number> = {};
+    for (const id of SECTION_IDS) {
+      offsets[id] = Math.round(
+        (targetLeft[id] ?? 0) - (positions[id]?.left ?? 0),
+      );
+    }
+    setNavOffsets(offsets);
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (!isEditor) return;
+    const raf = requestAnimationFrame(() => recalcNavOffsets());
+    window.addEventListener("nav-recalc", recalcNavOffsets);
+    window.addEventListener("resize", recalcNavOffsets);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("nav-recalc", recalcNavOffsets);
+      window.removeEventListener("resize", recalcNavOffsets);
+    };
+  }, [isEditor, recalcNavOffsets]);
 
   function scrollToSection(id: string) {
     setDropdownOpen(false);
@@ -137,13 +207,16 @@ export default function SiteHeader() {
           {/* Section nav: hidden on mobile, visible at sm+ */}
           <div className="hidden sm:flex flex-1 min-w-0 px-4 sm:px-6 lg:px-8 pb-3 pt-1 lg:py-3 items-end">
             <nav
+              ref={navContainerRef}
               className="flex items-baseline gap-2 sm:gap-3 md:gap-4 lg:gap-6 overflow-x-auto flex-nowrap"
             >
               {SECTION_LINKS.map(({ id, label }) => (
                 <a
                   key={id}
+                  ref={(el) => { navItemRefs.current[id] = el; }}
                   href={`#${id}`}
                   className="text-sm sm:text-base md:text-lg font-light flex items-baseline gap-1 sm:gap-2 whitespace-nowrap no-underline text-fg"
+                  style={{ transform: `translateX(${navOffsets[id] ?? 0}px)`, transition: "transform 0.35s ease" }}
                 >
                   {label}
                   <svg
