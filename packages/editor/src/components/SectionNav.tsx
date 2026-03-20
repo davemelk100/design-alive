@@ -137,9 +137,9 @@ export function SectionNav() {
                 key={id}
                 ref={(el) => { navItemRefs.current[id] = el; }}
                 href={`#${id}`}
-                className="whitespace-nowrap flex items-center gap-2 no-underline ds-text-fg ds-nav-link-item"
+                className={`whitespace-nowrap flex items-center gap-2 no-underline ds-text-fg ds-nav-link-item${activeSection === id ? " ds-active" : ""}`}
               >
-                <h2 className="text-sm sm:text-base md:text-lg font-bold tracking-wider m-0 p-0 flex items-baseline gap-2">
+                <h2 className={`text-sm sm:text-base md:text-lg tracking-wider m-0 p-0 flex items-baseline gap-2${activeSection === id ? " font-bold" : " font-normal"}`}>
                   {label}
                   <svg
                     className="w-[1em] h-[1em] opacity-60"

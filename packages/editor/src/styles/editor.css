@@ -181,6 +181,7 @@
 .ds-editor .ds-nav-link.ds-active {
   color: hsl(var(--foreground)) !important;
   border-bottom-color: hsl(var(--foreground)) !important;
+  font-weight: 700;
 }
 
 /* Header nav links: subtle bottom border for active state */
@@ -269,10 +270,9 @@
 
 /* Nav link base (replaces inline styles on section nav items) */
 .ds-nav-link-item {
-  color: hsl(var(--foreground) / 0.8);
-  font-size: 1.25rem !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.05em !important;
+  color: hsl(var(--foreground) / 0.5);
+  font-size: 1.25rem;
+  letter-spacing: 0.05em;
   line-height: 1;
   border-bottom: 1px solid transparent;
   padding-bottom: 2px;

@@ -1672,9 +1672,12 @@ function DesignSystemEditorInner({
         {/* Mobile menu overlay */}
         {mobileMenuOpen && (
           <div
-            className="lg:hidden fixed inset-0 z-40"
-            style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+            role="button"
+            tabIndex={0}
+            aria-label="Close menu"
+            className="lg:hidden fixed inset-0 z-40 ds-modal-backdrop"
             onClick={() => setMobileMenuOpen(false)}
+            onKeyDown={(e) => { if (e.key === "Escape" || e.key === "Enter") setMobileMenuOpen(false); }}
           />
         )}
 
@@ -1687,7 +1690,9 @@ function DesignSystemEditorInner({
           }`}
           style={{ maxHeight: mobileMenuOpen ? undefined : "100vh", backgroundColor: mobileMenuOpen ? "hsl(var(--background))" : undefined }}
           data-axe-exclude
+          role={mobileMenuOpen ? "presentation" : undefined}
           onClick={mobileMenuOpen ? (e) => e.stopPropagation() : undefined}
+          onKeyDown={mobileMenuOpen ? (e) => e.stopPropagation() : undefined}
         >
           <button
             onClick={() => setShowGlobalResetModal(true)}

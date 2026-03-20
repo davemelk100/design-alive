@@ -215,7 +215,7 @@ export default function SiteHeader() {
                   key={id}
                   ref={(el) => { navItemRefs.current[id] = el; }}
                   href={`#${id}`}
-                  className="text-sm sm:text-base md:text-lg font-light flex items-baseline gap-1 sm:gap-2 whitespace-nowrap no-underline text-fg"
+                  className="text-sm sm:text-base md:text-lg flex items-baseline gap-1 sm:gap-2 whitespace-nowrap no-underline text-fg"
                   style={{ transform: `translateX(${navOffsets[id] ?? 0}px)`, transition: "transform 0.35s ease" }}
                 >
                   {label}
