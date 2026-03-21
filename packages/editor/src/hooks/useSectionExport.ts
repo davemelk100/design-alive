@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { copyToClipboard } from "../utils/clipboard";
 
 export function useSectionExport() {
   const [visible, setVisible] = useState(false);
@@ -22,7 +23,7 @@ export function useSectionExport() {
   }, [format]);
 
   const copyCode = useCallback((code: string) => {
-    navigator.clipboard.writeText(code);
+    copyToClipboard(code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, []);

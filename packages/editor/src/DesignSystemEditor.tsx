@@ -25,6 +25,7 @@ import { AiGenerateModal } from "./components/AiGenerateModal";
 import { ContrastResolutionPanel } from "./components/ContrastResolutionPanel";
 import { SectionNav } from "./components/SectionNav";
 import storage from "./utils/storage";
+import { copyToClipboard } from "./utils/clipboard";
 import {
   EDITABLE_VARS,
   contrastRatio,
@@ -1617,7 +1618,7 @@ function DesignSystemEditorInner({
                   buttonStyle,
                 );
                 window.location.hash = hash;
-                navigator.clipboard.writeText(window.location.href).then(() => {
+                copyToClipboard(window.location.href).then(() => {
                   setShareCopied(true);
                   setTimeout(() => setShareCopied(false), 2000);
                 });
@@ -1890,7 +1891,7 @@ function DesignSystemEditorInner({
             onClick={() => {
               const hash = serializeThemeState(colors, cardStyle, typographyState, alertStyle, interactionStyle, typoInteractionStyle, buttonStyle);
               window.location.hash = hash;
-              navigator.clipboard.writeText(window.location.href).then(() => { setShareCopied(true); setTimeout(() => setShareCopied(false), 2000); });
+              copyToClipboard(window.location.href).then(() => { setShareCopied(true); setTimeout(() => setShareCopied(false), 2000); });
             }}
             className="ds-global-btn w-full h-9 px-2 text-xs rounded-lg transition-colors hover:opacity-80 flex items-center gap-2"
             title="Share theme URL"
@@ -2518,7 +2519,7 @@ function DesignSystemEditorInner({
                       css += `  --focus-ring-width: ${interactionStyle.focusRingWidth}px;\n`;
                       css += `  --focus-ring-color: hsl(var(--ring));\n`;
                       css += "}\n";
-                      navigator.clipboard.writeText(css);
+                      copyToClipboard(css);
                       setPaletteExportCopied(true);
                       setTimeout(() => setPaletteExportCopied(false), 2000);
                     },
@@ -2527,7 +2528,7 @@ function DesignSystemEditorInner({
                     label: "Copy as HEX",
                     icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.334a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" /></svg>,
                     action: () => {
-                      navigator.clipboard.writeText(
+                      copyToClipboard(
                         exportPaletteAsText(colors, "hex"),
                       );
                       setPaletteExportCopied(true);
@@ -2538,7 +2539,7 @@ function DesignSystemEditorInner({
                     label: "Copy as RGB",
                     icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.334a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" /></svg>,
                     action: () => {
-                      navigator.clipboard.writeText(
+                      copyToClipboard(
                         exportPaletteAsText(colors, "rgb"),
                       );
                       setPaletteExportCopied(true);
@@ -2549,7 +2550,7 @@ function DesignSystemEditorInner({
                     label: "Copy as RGBA",
                     icon: <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9.334a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" /></svg>,
                     action: () => {
-                      navigator.clipboard.writeText(
+                      copyToClipboard(
                         exportPaletteAsText(colors, "rgba"),
                       );
                       setPaletteExportCopied(true);
@@ -2736,7 +2737,7 @@ function DesignSystemEditorInner({
               <button
                 type="button"
                 onClick={() => {
-                  navigator.clipboard.writeText(buildIntegrationCss(scanResult.palette, scanResult.tokenMap));
+                  copyToClipboard(buildIntegrationCss(scanResult.palette, scanResult.tokenMap));
                 }}
                 className="absolute top-2 right-2 px-2 py-1 text-xs rounded-md transition-colors"
                 style={{ backgroundColor: "hsl(var(--muted))", color: "hsl(var(--foreground))" }}

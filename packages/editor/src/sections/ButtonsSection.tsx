@@ -15,6 +15,7 @@ import type {
 import { CustomSelect } from "../components/CustomSelect";
 import { PremiumGate } from "../components/PremiumGate";
 import { ResetConfirmModal } from "../components/ResetConfirmModal";
+import { copyToClipboard } from "../utils/clipboard";
 
 function CopyIcon({ size = 14 }: { size?: number }) {
   return (
@@ -249,7 +250,7 @@ export function ButtonsSection({
                         <div className="flex items-center gap-1">
                           <button
                             onClick={() => {
-                              navigator.clipboard.writeText(output);
+                              copyToClipboard(output);
                               setBtnCssCopied(true);
                               setTimeout(() => setBtnCssCopied(false), 2000);
                             }}
@@ -911,7 +912,7 @@ export function ButtonsSection({
                             <div className="flex items-center gap-1">
                               <button
                                 onClick={() => {
-                                  navigator.clipboard.writeText(output);
+                                  copyToClipboard(output);
                                   setInteractionCssCopied(true);
                                   setTimeout(
                                     () => setInteractionCssCopied(false),

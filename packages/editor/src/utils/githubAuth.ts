@@ -55,12 +55,82 @@ function oauthAuthorizeUrl(config: GitHubConfig): string {
   return `${webBase}/login/oauth/authorize`;
 }
 
+function isNativeCapacitor(): boolean {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cap = (window as any).Capacitor;
+    return cap != null && typeof cap.isNativePlatform === "function" && cap.isNativePlatform();
+  } catch { return false; }
+}
+
 /**
- * Start the GitHub OAuth flow in a popup window.
+ * Start the GitHub OAuth flow in a popup window (web) or in-app browser (native).
  * Returns a promise that resolves with the access token and username,
  * or rejects if the user closes the popup or an error occurs.
  */
 export function startOAuthFlow(config: GitHubConfig): Promise<StoredGitHubAuth> {
+  if (isNativeCapacitor()) {
+    return startNativeOAuthFlow(config);
+  }
+  return startWebOAuthFlow(config);
+}
+
+/**
+ * Native OAuth flow using @capacitor/browser + @capacitor/app deep links.
+ * TODO: Configure redirect URI in GitHub OAuth app settings (e.g. com.themal.app://oauth/callback)
+ * TODO: Update Netlify proxy function to support redirect to custom scheme
+ */
+async function startNativeOAuthFlow(config: GitHubConfig): Promise<StoredGitHubAuth> {
+  const { Browser } = await import("@capacitor/browser");
+  const { App } = await import("@capacitor/app");
+
+  const state = crypto.randomUUID();
+  const proxyBase = oauthProxyUrl(config);
+  // TODO: Replace redirect URI with native deep link scheme once configured
+  const redirectUri = `${proxyBase}/callback`;
+
+  const authorizeUrl =
+    `${oauthAuthorizeUrl(config)}?client_id=${config.clientId}&scope=repo&state=${state}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+
+  return new Promise((resolve, reject) => {
+    let resolved = false;
+
+    const urlListener = App.addListener("appUrlOpen", async (event) => {
+      if (resolved) return;
+      try {
+        const url = new URL(event.url);
+        const token = url.searchParams.get("access_token");
+        const returnedState = url.searchParams.get("state");
+        if (token && returnedState === state) {
+          resolved = true;
+          urlListener.then((h) => h.remove());
+          await Browser.close();
+          const auth: StoredGitHubAuth = {
+            access_token: token,
+            username: url.searchParams.get("username") || "",
+            stored_at: new Date().toISOString(),
+          };
+          storeAuth(auth);
+          resolve(auth);
+        }
+      } catch (err) {
+        resolved = true;
+        urlListener.then((h) => h.remove());
+        reject(err);
+      }
+    });
+
+    Browser.open({ url: authorizeUrl }).catch((err) => {
+      resolved = true;
+      urlListener.then((h) => h.remove());
+      reject(err);
+    });
+
+    // TODO: Add a timeout or browserFinished listener to detect user cancellation
+  });
+}
+
+function startWebOAuthFlow(config: GitHubConfig): Promise<StoredGitHubAuth> {
   return new Promise((resolve, reject) => {
     const state = crypto.randomUUID();
     const proxyBase = oauthProxyUrl(config);

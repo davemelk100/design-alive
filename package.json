@@ -15,11 +15,22 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:lighthouse": "lhci autorun",
-    "lint": "eslint src/ packages/"
+    "lint": "eslint src/ packages/",
+    "cap:build": "npm run build && npx cap sync",
+    "cap:open:ios": "npx cap open ios",
+    "cap:open:android": "npx cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/app": "^8.0.1",
+    "@capacitor/browser": "^8.0.2",
     "@capacitor/cli": "^8.1.0",
+    "@capacitor/clipboard": "^8.0.1",
     "@capacitor/core": "^8.1.0",
+    "@capacitor/ios": "^8.2.0",
+    "@capacitor/keyboard": "^8.0.1",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.1",
     "@clerk/clerk-react": "^5.61.3",
     "@clerk/clerk-sdk-node": "^5.1.6",
     "@netlify/blobs": "^10.7.2",

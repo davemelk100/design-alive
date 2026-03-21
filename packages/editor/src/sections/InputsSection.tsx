@@ -15,6 +15,7 @@ import type {
 } from "../utils/themeUtils";
 import { CustomSelect } from "../components/CustomSelect";
 import { ResetConfirmModal } from "../components/ResetConfirmModal";
+import { copyToClipboard } from "../utils/clipboard";
 
 function CopyIcon({ size = 14 }: { size?: number }) {
   return (
@@ -246,7 +247,7 @@ export function InputsSection({
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => {
-                          navigator.clipboard.writeText(output);
+                          copyToClipboard(output);
                           setInputCssCopied(true);
                           setTimeout(() => setInputCssCopied(false), 2000);
                         }}

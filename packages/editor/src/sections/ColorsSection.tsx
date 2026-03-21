@@ -15,6 +15,7 @@ import { CustomSelect } from "../components/CustomSelect";
 import { ExportCodeBlock } from "../components/ExportCodeBlock";
 import { PremiumGate } from "../components/PremiumGate";
 import { BREAKPOINTS } from "../utils/breakpoints";
+import { copyToClipboard } from "../utils/clipboard";
 
 export const COLOR_SWATCHES = [
   { key: "--brand", label: "Primary" },
@@ -505,7 +506,7 @@ export function ColorsSection({
                 code={exportCode}
                 copied={codeCopied}
                 onCopy={() => {
-                  navigator.clipboard.writeText(exportCode);
+                  copyToClipboard(exportCode);
                   setCodeCopied(true);
                   setTimeout(() => setCodeCopied(false), 2000);
                 }}

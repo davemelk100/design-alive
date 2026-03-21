@@ -4,6 +4,7 @@ import ThemalLogo from "../components/ThemalLogo";
 import { SiteFooterBranding } from "../components/SiteFooter";
 import JsonLd from "../components/JsonLd";
 import usePageMeta from "../hooks/usePageMeta";
+import { copyToClipboard } from "../utils/clipboard";
 
 function CodeBlock({ label, code }: { label: string; code: string }) {
   const [copied, setCopied] = useState(false);
@@ -33,7 +34,7 @@ function CodeBlock({ label, code }: { label: string; code: string }) {
             border: "none",
           }}
           onClick={() => {
-            navigator.clipboard.writeText(code).then(() => {
+            copyToClipboard(code).then(() => {
               setCopied(true);
               setTimeout(() => setCopied(false), 2000);
             });

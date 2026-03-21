@@ -3,6 +3,23 @@ import type { GitHubConfig } from "../utils/githubApi";
 import { createDesignPr } from "../utils/githubApi";
 import { getStoredAuth, startOAuthFlow } from "../utils/githubAuth";
 
+function isNativeCapacitor(): boolean {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cap = (window as any).Capacitor;
+    return cap != null && typeof cap.isNativePlatform === "function" && cap.isNativePlatform();
+  } catch { return false; }
+}
+
+async function openUrl(url: string): Promise<void> {
+  if (isNativeCapacitor()) {
+    const { Browser } = await import("@capacitor/browser");
+    await Browser.open({ url });
+  } else {
+    window.open(url, "_blank");
+  }
+}
+
 type SectionPrStatus = Record<
   string,
   {
@@ -55,7 +72,7 @@ export function usePrSubmission(
             [statusKey]: { status: "created", url: compareUrl },
           }));
           setShowPrModal(false);
-          window.open(compareUrl, "_blank");
+          openUrl(compareUrl);
         } catch (err) {
           setSectionPrStatus((prev) => ({
             ...prev,
@@ -67,7 +84,7 @@ export function usePrSubmission(
       }
 
       // Server-side endpoint flow
-      const popup = window.open("about:blank", "_blank");
+      const popup = isNativeCapacitor() ? null : window.open("about:blank", "_blank");
       try {
         const res = await fetch(prEndpointUrl!, {
           method: "POST",
@@ -112,7 +129,7 @@ export function usePrSubmission(
         if (popup) {
           popup.location.href = data.url as string;
         } else {
-          window.open(data.url as string, "_blank");
+          openUrl(data.url as string);
         }
       } catch (err) {
         setSectionPrStatus((prev) => ({

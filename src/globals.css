@@ -245,4 +245,12 @@
   .site-container {
     max-width: 1500px;
   }
+
+  /* Safe area insets for notch / Dynamic Island / home indicator */
+  .site-nav {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }

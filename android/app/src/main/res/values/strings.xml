@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Themal</string>
+    <string name="title_activity_main">Themal</string>
+    <string name="package_name">com.themal.app</string>
+    <string name="custom_url_scheme">com.themal.app</string>
+</resources>

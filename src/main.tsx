@@ -3,6 +3,7 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import App from "./App";
 import "./globals.css";
 import "../packages/editor/src/styles/editor.css";
+import { isNativePlatform } from "./utils/platform";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string;
 
@@ -40,8 +41,15 @@ function MissingClerkKey() {
   );
 }
 
-// Register service worker in production only
-if (import.meta.env.PROD && "serviceWorker" in navigator) {
+// Hide Capacitor splash screen once the app shell is ready
+if (isNativePlatform()) {
+  import("@capacitor/splash-screen").then(({ SplashScreen }) => {
+    SplashScreen.hide();
+  });
+}
+
+// Register service worker in production only (skip on native — no SW support)
+if (import.meta.env.PROD && !isNativePlatform() && "serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw.js").catch(() => {});
   });
