@@ -49,6 +49,7 @@ export function ContrastResolutionPanel({
           const fixedFgHex = hslStringToHex(fixedFgHsl);
           const fixedBgHex = hslStringToHex(fixedBgHsl);
 
+          const passes = issue.fixedRatio >= 4.5;
           return (
             <div
               key={`${issue.fgKey}:${issue.bgKey}`}
@@ -99,8 +100,13 @@ export function ContrastResolutionPanel({
                   style={{ backgroundColor: fixedBgHex }}
                 />
               </div>
-              <span className="ds-audit-ratio-pass">
+              <span className={passes ? "ds-audit-ratio-pass" : "ds-audit-ratio-fail"}>
                 {issue.fixedRatio.toFixed(1)}:1
+              </span>
+
+              {/* Label */}
+              <span className="ds-audit-pair-label">
+                {issue.fgLabel} / {issue.bgLabel}
               </span>
 
               {/* Spacer + apply button */}

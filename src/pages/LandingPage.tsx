@@ -188,13 +188,13 @@ export default function LandingPage() {
           <ThemalLogo className="w-48 sm:w-64 lg:w-80" />
 
           <h1
-            className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-fg"
+            className="text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-fg"
           >
             Real Designs. Real Time. Real Code.
           </h1>
 
           <p
-            className="text-base sm:text-lg max-w-xl font-light leading-relaxed text-fg"
+            className="text-base sm:text-lg max-w-xl font-normal leading-relaxed text-fg"
           >
             Plug Themal into your app. Design your elements on screen. Open a pull request right from the editor.
           </p>
@@ -211,7 +211,7 @@ export default function LandingPage() {
               color: "hsl(var(--brand-foreground, var(--background)))",
               padding: "var(--btn-py, 8px) var(--btn-px, 16px)",
               fontSize: "var(--btn-font-size, 14px)",
-              fontWeight: "var(--btn-font-weight, 300)",
+              fontWeight: "var(--btn-font-weight, 400)",
               borderRadius: "var(--btn-radius, 12px)",
               boxShadow: "var(--btn-shadow, 0px 1px 3px 0px rgba(0,0,0,0.1))",
               borderWidth: "var(--btn-border-width, 0px)",
@@ -321,7 +321,7 @@ export default function LandingPage() {
                   title={fw.name}
                 >
                   {fw.svg}
-                  <span className="text-[11px] sm:text-[12px] font-light tracking-wider">{fw.name}</span>
+                  <span className="text-[11px] sm:text-[12px] font-normal tracking-wider">{fw.name}</span>
                 </div>
               ))}
             </div>
@@ -359,12 +359,12 @@ export default function LandingPage() {
       >
         <div className="max-w-4xl mx-auto text-center flex flex-col gap-5 sm:gap-10">
           <h2
-            className="text-xl sm:text-3xl font-light tracking-tight text-fg"
+            className="text-xl sm:text-3xl font-normal tracking-tight text-fg"
           >
             A developer's design system, alive.
           </h2>
           <p
-            className="text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed text-muted-foreground"
+            className="text-sm sm:text-lg max-w-2xl mx-auto font-normal leading-relaxed text-muted-foreground"
           >
             Themal is a visual editor that plugs directly into your codebase.
             Adjust colors, typography, spacing, buttons, cards, and interaction
@@ -388,7 +388,7 @@ export default function LandingPage() {
                   {item.title}
                 </h3>
                 <p
-                  className="text-sm font-light leading-relaxed text-muted-foreground"
+                  className="text-sm font-normal leading-relaxed text-muted-foreground"
                 >
                   {item.detail}
                 </p>
@@ -405,7 +405,7 @@ export default function LandingPage() {
                 color: "hsl(var(--brand-foreground, var(--background)))",
                 padding: "8px 24px",
                 fontSize: "14px",
-                fontWeight: 300,
+                fontWeight: 400,
                 borderRadius: "var(--btn-radius, 12px)",
                 boxShadow: "var(--btn-shadow, 0px 1px 3px 0px rgba(0,0,0,0.1))",
               }}
@@ -446,12 +446,12 @@ export default function LandingPage() {
       >
         <div className="max-w-4xl mx-auto text-center flex flex-col gap-5 sm:gap-10">
           <h2
-            className="text-xl sm:text-3xl font-light tracking-tight text-fg"
+            className="text-xl sm:text-3xl font-normal tracking-tight text-fg"
           >
             Not just for developers.
           </h2>
           <p
-            className="text-sm sm:text-lg max-w-2xl mx-auto font-light leading-relaxed text-muted-foreground"
+            className="text-sm sm:text-lg max-w-2xl mx-auto font-normal leading-relaxed text-muted-foreground"
           >
             Product owners can present design options to stakeholders in real
             time. Marketing teams can explore brand directions without waiting on
@@ -476,7 +476,7 @@ export default function LandingPage() {
                   {item.role}
                 </h3>
                 <p
-                  className="text-sm font-light leading-relaxed text-muted-foreground"
+                  className="text-sm font-normal leading-relaxed text-muted-foreground"
                 >
                   {item.detail}
                 </p>
@@ -493,7 +493,7 @@ export default function LandingPage() {
                 color: "hsl(var(--brand-foreground, var(--background)))",
                 padding: "8px 24px",
                 fontSize: "14px",
-                fontWeight: 300,
+                fontWeight: 400,
                 borderRadius: "var(--btn-radius, 12px)",
                 boxShadow: "var(--btn-shadow, 0px 1px 3px 0px rgba(0,0,0,0.1))",
               }}

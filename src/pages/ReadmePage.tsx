@@ -32,7 +32,7 @@ export default function ReadmePage() {
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 text-fg">
         <div className="flex items-end gap-3 mb-8 text-fg">
           <ThemalLogo className="h-10 sm:h-12" />
-          <h1 className="text-3xl sm:text-4xl font-light title-font text-fg" style={{ lineHeight: ".75" }}>
+          <h1 className="text-3xl sm:text-4xl font-normal title-font text-fg" style={{ lineHeight: ".75" }}>
             @themal/editor
           </h1>
         </div>
@@ -892,7 +892,7 @@ export default defineNuxtConfig({
                   ["Modal backdrop overlay", "rgba(0,0,0,0.5)"],
                 ].map(([purpose, variable], i) => (
                   <tr key={i} className="border-t border-theme">
-                    <td className="p-3 font-light">{purpose}</td>
+                    <td className="p-3 font-normal">{purpose}</td>
                     <td className="p-3 font-mono text-xs">{variable}</td>
                   </tr>
                 ))}
@@ -901,7 +901,7 @@ export default defineNuxtConfig({
           </div>
 
           <h3 className="text-sm font-medium mb-2 text-muted-foreground">CSS specificity</h3>
-          <ul className="list-disc pl-5 text-sm space-y-1.5 font-light text-fg">
+          <ul className="list-disc pl-5 text-sm space-y-1.5 font-normal text-fg">
             <li>Injected typography styles (<code className="font-mono text-xs">applyTypography</code>) never use <code className="font-mono text-xs">!important</code>. They rely on natural specificity so your classes can override them.</li>
             <li>Section heading (<code className="font-mono text-xs">.ds-h2</code>) and nav link (<code className="font-mono text-xs">.ds-nav-link-item</code>) classes in <code className="font-mono text-xs">editor.css</code> use <code className="font-mono text-xs">!important</code> only where needed to prevent injected typography from overriding structural UI.</li>
             <li>All editor styles are scoped under <code className="font-mono text-xs">.ds-editor</code> so they do not leak into your app.</li>
@@ -911,7 +911,7 @@ export default defineNuxtConfig({
         {/* AI Scaffold Prompt */}
         <section className="mb-8">
           <h2 className="text-xl font-medium mb-3 text-fg">AI Scaffold Prompt</h2>
-          <p className="text-sm font-light mb-4 text-fg">
+          <p className="text-sm font-normal mb-4 text-fg">
             Use this prompt to generate a complete Themal integration. Works with React, Next.js, Vue, Svelte, Astro, WordPress, or any web platform. Replace the bracketed placeholders with your own details.
           </p>
           <pre className="rounded-lg p-4 text-xs overflow-x-auto leading-relaxed" style={{ backgroundColor: "#1e1e2e", color: "#cdd6f4" }}>

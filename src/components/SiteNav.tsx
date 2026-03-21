@@ -21,7 +21,7 @@ export default function SiteNav() {
         <Link
           key={to}
           to={to}
-          className={`w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2 no-underline ${
+          className={`w-full h-9 px-2 text-xs font-normal rounded-lg transition-colors hover:opacity-80 flex items-center gap-2 no-underline ${
             pathname === to ? "site-nav-active" : "site-nav-link"
           }`}
         >

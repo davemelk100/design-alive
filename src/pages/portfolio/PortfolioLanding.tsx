@@ -76,8 +76,8 @@ export default function PortfolioLanding() {
         ]}
         sidebarExtra={
           <>
-            <ContactForm buttonClassName="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2" />
-            <ReportBugForm buttonClassName="ds-global-btn w-full h-9 px-2 text-xs font-light rounded-lg transition-colors hover:opacity-80 flex items-center gap-2" />
+            <ContactForm buttonClassName="ds-global-btn w-full h-9 px-2 text-xs font-normal rounded-lg transition-colors hover:opacity-80 flex items-center gap-2" />
+            <ReportBugForm buttonClassName="ds-global-btn w-full h-9 px-2 text-xs font-normal rounded-lg transition-colors hover:opacity-80 flex items-center gap-2" />
             <div className="mt-auto pt-4">
               <a href="/" className="hover:opacity-70 transition-opacity">
                 <img src="/themal-logo-negative.svg" alt="Themal" className="h-8" />

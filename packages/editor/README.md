@@ -2,7 +2,7 @@
 
 Interactive design system editor for any web app. Available as a React component or a framework-agnostic web component (`<themal-editor>`). Pick colors, generate harmony palettes, enforce WCAG AA contrast, customize typography, interaction states, input styles, and table styles, and export CSS custom properties — all in real time. Fully responsive — works on desktop, tablet, and mobile with a collapsible sidebar menu.
 
-> **Free core + Pro tier.** The core editor is free and open source (MIT). Premium features — color harmony schemes, image palette extraction, custom fonts, interaction states, and palette export — require a license key. See the pricing page for details.
+> **All features are free.** As of v0.40.0, all features are unlocked for every user — no license key required. The `licenseKey`, `upgradeUrl`, `signInUrl` props and `PremiumGate` component remain in the API for backward compatibility but have no effect.
 
 ## Install
 
@@ -67,14 +67,14 @@ The editor automatically inherits CSS custom properties from the host page (chec
 | `onMount` | `(version: string) => void` | — | Called once per browser session when the editor mounts, with the editor version string. Use for telemetry or analytics — the editor itself makes no network requests. |
 | `devMode` | `boolean` | `false` | Show a "Purge Storage" button in Global Actions that clears all Themal localStorage keys. |
 
-## Premium Features
+## Previously Premium Features
 
-The following features require a valid license key:
+As of v0.40.0, all features are free. No license key is required.
 
 | Feature | Description |
 |---------|-------------|
 | Harmony schemes | Generate palettes using complementary, analogous, triadic, or split-complementary color relationships. |
-| ~~PR integration~~ | Now free for all users. Create design system pull requests directly from the editor. |
+| PR integration | Create design system pull requests directly from the editor. |
 | Undo/redo | Up to 10 levels of undo for theme refreshes and image palette applications. |
 | Image palette extraction | Extract color palettes from uploaded images with preview confirmation. |
 | Palette export | Download palette as SVG/PNG, or copy as HEX/RGB/RGBA text. |
@@ -82,40 +82,9 @@ The following features require a valid license key:
 | Typography interactions | Customize hover, active, and underline behavior for links and headings. |
 | Custom fonts | Add any Google Font by name — validated, loaded, and persisted across sessions. |
 
-### License Key Format
+### Legacy License API (no-op)
 
-Keys follow the format `THEMAL-XXXX-XXXX-XXXX` with a checksum-validated third segment. Use `generateLicenseKey()` to create valid keys.
-
-### PremiumGate Component
-
-Wrap any feature in `PremiumGate` to gate it behind a license key. Clicking a gated feature opens a modal with upgrade and sign-in options:
-
-```tsx
-import { PremiumGate } from '@themal/editor';
-
-<PremiumGate feature="harmony-schemes" upgradeUrl="/pricing" signInUrl="/sign-in">
-  <HarmonyControls />
-</PremiumGate>
-```
-
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `feature` | `string` | — | Name of the premium feature being gated. |
-| `variant` | `"section" \| "inline"` | `"section"` | `"section"` shows a lock indicator and `not-allowed` cursor; `"inline"` shows a lock indicator inline. Both open a modal on click. |
-| `upgradeUrl` | `string` | `"/pricing"` | URL for the upgrade prompt. |
-| `signInUrl` | `string` | — | URL for the sign-in prompt. |
-
-### LicenseProvider
-
-If using `PremiumGate` or `useLicense` outside of `DesignSystemEditor`, wrap your tree in `LicenseProvider`:
-
-```tsx
-import { LicenseProvider } from '@themal/editor';
-
-<LicenseProvider licenseKey="THEMAL-XXXX-XXXX-XXXX">
-  <App />
-</LicenseProvider>
-```
+The `licenseKey` prop, `LicenseProvider`, `PremiumGate`, `useLicense`, `validateLicenseKey`, and `generateLicenseKey` are still exported for backward compatibility but have no gating effect — `isPremium` is always `true`.
 
 ## Usage Examples
 
@@ -206,16 +175,6 @@ window.open(compareUrl, '_blank');
 ```
 
 This flow opens a GitHub OAuth popup, exchanges the code for a token via a proxy, then creates a branch and commit using the GitHub API entirely from the browser.
-
-### With premium features
-
-```tsx
-<DesignSystemEditor
-  licenseKey="THEMAL-XXXX-XXXX-XXXX"
-  upgradeUrl="/pricing"
-  signInUrl="/sign-in"
-/>
-```
 
 ### With custom header content
 
@@ -445,21 +404,21 @@ import type {
 ## How It Works
 
 1. **Color picking** — Click any swatch to scroll the Colors section into view, then open the native color picker. Changing a key color (brand, secondary, accent, background) automatically derives related tokens.
-2. **Harmony schemes** *(Pro)* — Generate palettes using complementary, analogous, triadic, or split-complementary color relationships.
+2. **Harmony schemes** — Generate palettes using complementary, analogous, triadic, or split-complementary color relationships.
 3. **Color locks** — Lock up to 4 color tokens to preserve them during palette regeneration or harmony scheme changes. Free for all users.
-4. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1) using a built-in lightweight contrast auditor. The audit covers all preview content across all 7 sections (Colors, Buttons, Cards, Alerts, Typography, Inputs, Tables) — only editor chrome (nav, headers, preset buttons) is excluded. Failing pairs are auto-corrected by adjusting lightness. The accessibility audit shows a centered modal with results. On failure, choose "Ignore" to dismiss or "Suggest Alternative" to auto-fix contrast issues. If the auditor encounters an error, a notification dialog appears with details and a retry option. A WCAG On/Off toggle lets you disable auto-correction for marketing or other contexts that don't require WCAG compliance. Locks are still honored when enforcement is off.
+4. **Contrast enforcement** — Every foreground/background pair is checked against WCAG AA (4.5:1) using a built-in lightweight contrast auditor. The audit covers all preview content across all 7 sections (Colors, Buttons, Cards, Alerts, Typography, Inputs, Tables) — only editor chrome (nav, headers, preset buttons) is excluded. Failing pairs are auto-corrected by adjusting lightness. The accessibility audit shows a centered modal with results — each row labels the color pair (e.g. "Foreground / Background"), shows the current and suggested contrast ratios, and colors the suggested ratio green only when it meets WCAG AA. On failure, choose "Ignore" to dismiss or "Fix" / "Fix All" to auto-fix contrast issues. If the auditor encounters an error, a notification dialog appears with details and a retry option. A WCAG On/Off toggle lets you disable auto-correction for marketing or other contexts that don't require WCAG compliance. Locks are still honored when enforcement is off.
 4. **Typography** — Choose heading and body fonts (including custom Google Fonts), adjust sizes, weights, line height, and letter spacing with live preview. Five built-in presets (System, Modern, Classic, Compact, Editorial). The default "Inherit (Host)" option defers to the host site's font-family rules, so the editor naturally assumes your site's heading and body fonts. Typography is scoped to `.ds-editor` and does not override the host site's fonts.
 5. **Button styles** — Customize button padding, font size, font weight, border radius, shadow, and border width with presets (Subtle, Elevated, Bold).
-6. **Button interactions** *(Pro)* — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
-7. **Typography interactions** *(Pro)* — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
+6. **Button interactions** — Fine-tune hover opacity, hover/active scale, transition duration, and focus ring width with presets (Subtle, Elevated, Bold).
+7. **Typography interactions** — Customize link hover/active behavior (opacity, scale, underline) and heading hover effects with live preview.
 8. **Input styles** — Customize input border radius, border width, padding, font size, and focus ring width with presets (Rounded, Sharp, Pill). Live preview includes text inputs, email inputs, textareas, a custom themed select dropdown, checkboxes, radio buttons, toggle switches, and a segmented toggle.
 9. **Table styles** — Customize table border radius, border width, cell padding, header weight, and toggle striped rows, row hover, and compact mode with presets (Default, Striped, Bordered, Minimal). Responsive preview shows a standard `<table>` on desktop and a `<dl>` description list on mobile.
 10. **Custom select dropdowns** — All native `<select>` elements throughout the editor have been replaced with custom themed dropdowns that follow the design system's color scheme, with click-outside-to-close, chevron animation, and hover highlighting.
 11. **Persistence** — All settings (colors, typography, card styles, dialog styles, toast styles, interactions, input styles, table styles) are saved to `localStorage` and restored on reload.
 12. **Per-section export** — Every section header includes a CSS | Tokens split button to export CSS custom properties with Tailwind config, or W3C Design Token JSON, for that section.
 13. **Shareable URLs** — Encode your full theme state in the URL hash and share it with anyone via a single link.
-14. **Palette export** *(Pro)* — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
-15. **Custom fonts** *(Pro)* — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
+14. **Palette export** — Download your palette as SVG or PNG, or copy as a HEX/RGB/RGBA text list.
+15. **Custom fonts** — Add any Google Font by name. The editor validates the font exists, loads all weights, adds it to heading/body dropdowns, and persists it across sessions.
 16. **Mobile friendly** — Fully responsive UI with a collapsible sidebar menu, section dropdown navigation, a 2D color spectrum picker for touch-based color selection, custom themed dropdowns, compact swatch labels, touch-friendly control sizing (44px+ tap targets for sliders, buttons, toggles, and checkboxes), and stacked layouts for smaller screens. A floating scroll-to-top button appears on scroll.
 17. **Section locks** *(feature flag: `sectionLocks`)* — Lock any section (Colors, Buttons, Cards, Alerts, Typography, Inputs, Tables) to preserve its styles during global reset. Locked sections are immune to "Reset Everything" and persist across sessions via localStorage.
 
@@ -632,7 +591,7 @@ I want to integrate the @themal/editor design system editor into my web app. Gen
 3. An onChange handler that [saves to database / updates a config file / just logs]
 4. [Optional] PR creation via GitHub OAuth so designers can submit color changes as PRs
 
-**Package:** @themal/editor@0.38.2 (npm install @themal/editor)
+**Package:** @themal/editor@0.40.0 (npm install @themal/editor)
 
 **Required imports:**
   import { DesignSystemEditor } from '@themal/editor';
@@ -678,7 +637,7 @@ I want to integrate the @themal/editor design system editor into my web app. Gen
   showHeader={boolean}                     — Show/hide the editor header (default: true)
   showLogo={boolean}                       — Show/hide the Themal logo (default: true)
   accessibilityAudit={boolean}             — Enable WCAG AA auditing (default: true)
-  licenseKey={string}                      — Unlock premium features (harmony schemes, image palette, undo/redo, custom fonts)
+  licenseKey={string}                      — No-op as of v0.40.0 (all features are free)
   githubConfig={{ clientId, repo, filePath, baseBranch }}  — Enable PR creation via GitHub OAuth
   applyToRoot={boolean}                    — Mirror CSS vars to :root so the theme applies site-wide
 
@@ -775,7 +734,7 @@ The suite covers 39 checks including:
 - **Contrast** — foreground/background lightness difference is sufficient on every theme
 - **CSS isolation** — plugin does not override `body` font-family or background-color
 - **Accessibility** — no critical/serious axe-core violations (WCAG 2 AA) on any theme
-- **Premium gate** — locked features show lock icon without opacity dimming; premium toggle unlocks them
+- **Feature access** — all features are accessible without a license key
 - **Sections** — all 7 sections (colors, buttons, cards, alerts, typography, inputs, tables) are present
 
 ## Publishing to npm

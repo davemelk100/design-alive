@@ -10,7 +10,7 @@ export default function PrivacyPolicy() {
   return (
     <div className="flex-1 flex flex-col bg-page">
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <h1 className="text-3xl sm:text-4xl font-light mb-2 text-fg">
+        <h1 className="text-3xl sm:text-4xl font-normal mb-2 text-fg">
           Themal's Privacy Policy
         </h1>
         <p className="text-sm mb-8 text-muted-foreground">

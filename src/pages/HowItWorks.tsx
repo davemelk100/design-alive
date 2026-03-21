@@ -50,7 +50,7 @@ export default function HowItWorks() {
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         <div className="flex items-end gap-3 mb-8 text-fg">
           <ThemalLogo className="h-10 sm:h-12" />
-          <h1 className="text-3xl sm:text-4xl font-light title-font text-fg" style={{ lineHeight: ".75" }}>
+          <h1 className="text-3xl sm:text-4xl font-normal title-font text-fg" style={{ lineHeight: ".75" }}>
             How It Works
           </h1>
         </div>

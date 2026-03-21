@@ -36,7 +36,7 @@ export function ContactForm({ buttonClassName }: { buttonClassName?: string }) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className={`${buttonClassName || "text-xs font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"} ${buttonClassName ? "text-fg" : "text-muted-foreground"}`}
+        className={`${buttonClassName || "text-xs font-normal uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"} ${buttonClassName ? "text-fg" : "text-muted-foreground"}`}
       >
         Contact
       </button>
@@ -49,10 +49,10 @@ export function ContactForm({ buttonClassName }: { buttonClassName?: string }) {
         className="rounded-xl p-6 w-[380px] shadow-xl surface-card"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-lg font-light mb-4 text-card-fg">Contact Us</h3>
+        <h3 className="text-lg font-normal mb-4 text-card-fg">Contact Us</h3>
 
         {submitted ? (
-          <p className="text-sm font-light py-4 text-success">
+          <p className="text-sm font-normal py-4 text-success">
             Thanks! We'll be in touch.
           </p>
         ) : (
@@ -72,27 +72,27 @@ export function ContactForm({ buttonClassName }: { buttonClassName?: string }) {
               </label>
             </p>
             <div>
-              <label className="block text-xs font-light uppercase tracking-wider mb-1" style={{ color: "hsl(var(--card-foreground) / 0.6)" }}>
+              <label className="block text-xs font-normal uppercase tracking-wider mb-1" style={{ color: "hsl(var(--card-foreground) / 0.6)" }}>
                 Email
               </label>
               <input
                 type="email"
                 name="email"
                 required
-                className="w-full px-3 py-2 rounded-lg border text-sm font-light outline-none transition-colors border-theme text-card-fg"
+                className="w-full px-3 py-2 rounded-lg border text-sm font-normal outline-none transition-colors border-theme text-card-fg"
                 style={{ backgroundColor: "hsl(var(--card) / 0.7)" }}
                 placeholder="you@example.com"
               />
             </div>
             <div>
-              <label className="block text-xs font-light uppercase tracking-wider mb-1" style={{ color: "hsl(var(--card-foreground) / 0.6)" }}>
+              <label className="block text-xs font-normal uppercase tracking-wider mb-1" style={{ color: "hsl(var(--card-foreground) / 0.6)" }}>
                 Message
               </label>
               <textarea
                 name="message"
                 required
                 rows={3}
-                className="w-full px-3 py-2 rounded-lg border text-sm font-light outline-none transition-colors resize-none border-theme text-card-fg"
+                className="w-full px-3 py-2 rounded-lg border text-sm font-normal outline-none transition-colors resize-none border-theme text-card-fg"
                 style={{ backgroundColor: "hsl(var(--card) / 0.7)" }}
                 placeholder="How can we help?"
               />
@@ -101,13 +101,13 @@ export function ContactForm({ buttonClassName }: { buttonClassName?: string }) {
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="px-3 py-1.5 text-sm font-light rounded-lg transition-colors hover:opacity-80 text-card-fg"
+                className="px-3 py-1.5 text-sm font-normal rounded-lg transition-colors hover:opacity-80 text-card-fg"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-1.5 text-sm font-light rounded-lg transition-colors hover:opacity-80"
+                className="px-4 py-1.5 text-sm font-normal rounded-lg transition-colors hover:opacity-80"
                 style={{
                   backgroundColor: "hsl(var(--brand))",
                   color: "hsl(var(--brand-foreground, var(--background)))",
@@ -158,7 +158,7 @@ export function ReportBugForm({ buttonClassName }: { buttonClassName?: string })
     return (
       <button
         onClick={() => setOpen(true)}
-        className={`${buttonClassName || "text-xs font-light uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"} ${buttonClassName ? "text-fg" : "text-muted-foreground"}`}
+        className={`${buttonClassName || "text-xs font-normal uppercase tracking-wider hover:opacity-70 transition-opacity whitespace-nowrap"} ${buttonClassName ? "text-fg" : "text-muted-foreground"}`}
       >
         Report Bug
       </button>
@@ -171,10 +171,10 @@ export function ReportBugForm({ buttonClassName }: { buttonClassName?: string })
         className="rounded-xl p-6 w-[380px] shadow-xl surface-card"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 className="text-lg font-light mb-4 text-card-fg">Report a Bug</h3>
+        <h3 className="text-lg font-normal mb-4 text-card-fg">Report a Bug</h3>
 
         {submitted ? (
-          <p className="text-sm font-light py-4 text-success">
+          <p className="text-sm font-normal py-4 text-success">
             Thanks! We'll look into it.
           </p>
         ) : (
@@ -194,38 +194,38 @@ export function ReportBugForm({ buttonClassName }: { buttonClassName?: string })
               </label>
             </p>
             <div>
-              <label className="block text-xs font-light uppercase tracking-wider mb-1" style={{ color: "hsl(var(--card-foreground) / 0.6)" }}>
+              <label className="block text-xs font-normal uppercase tracking-wider mb-1" style={{ color: "hsl(var(--card-foreground) / 0.6)" }}>
                 Email (optional)
               </label>
               <input
                 type="email"
                 name="email"
-                className="w-full px-3 py-2 rounded-lg border text-sm font-light outline-none transition-colors border-theme text-card-fg"
+                className="w-full px-3 py-2 rounded-lg border text-sm font-normal outline-none transition-colors border-theme text-card-fg"
                 style={{ backgroundColor: "hsl(var(--card) / 0.7)" }}
                 placeholder="you@example.com"
               />
             </div>
             <div>
-              <label className="block text-xs font-light uppercase tracking-wider mb-1" style={{ color: "hsl(var(--card-foreground) / 0.6)" }}>
+              <label className="block text-xs font-normal uppercase tracking-wider mb-1" style={{ color: "hsl(var(--card-foreground) / 0.6)" }}>
                 What happened?
               </label>
               <textarea
                 name="description"
                 required
                 rows={3}
-                className="w-full px-3 py-2 rounded-lg border text-sm font-light outline-none transition-colors resize-none border-theme text-card-fg"
+                className="w-full px-3 py-2 rounded-lg border text-sm font-normal outline-none transition-colors resize-none border-theme text-card-fg"
                 style={{ backgroundColor: "hsl(var(--card) / 0.7)" }}
                 placeholder="Describe the bug..."
               />
             </div>
             <div>
-              <label className="block text-xs font-light uppercase tracking-wider mb-1" style={{ color: "hsl(var(--card-foreground) / 0.6)" }}>
+              <label className="block text-xs font-normal uppercase tracking-wider mb-1" style={{ color: "hsl(var(--card-foreground) / 0.6)" }}>
                 Steps to reproduce (optional)
               </label>
               <textarea
                 name="steps"
                 rows={2}
-                className="w-full px-3 py-2 rounded-lg border text-sm font-light outline-none transition-colors resize-none border-theme text-card-fg"
+                className="w-full px-3 py-2 rounded-lg border text-sm font-normal outline-none transition-colors resize-none border-theme text-card-fg"
                 style={{ backgroundColor: "hsl(var(--card) / 0.7)" }}
                 placeholder="1. Go to... 2. Click on..."
               />
@@ -234,13 +234,13 @@ export function ReportBugForm({ buttonClassName }: { buttonClassName?: string })
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                className="px-3 py-1.5 text-sm font-light rounded-lg transition-colors hover:opacity-80 text-card-fg"
+                className="px-3 py-1.5 text-sm font-normal rounded-lg transition-colors hover:opacity-80 text-card-fg"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-1.5 text-sm font-light rounded-lg transition-colors hover:opacity-80"
+                className="px-4 py-1.5 text-sm font-normal rounded-lg transition-colors hover:opacity-80"
                 style={{
                   backgroundColor: "hsl(var(--brand))",
                   color: "hsl(var(--brand-foreground, var(--background)))",

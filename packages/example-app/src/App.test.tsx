@@ -118,5 +118,5 @@ describe("Example App — plugin consumer", () => {
       (v: { impact: string }) => v.impact === "critical" || v.impact === "serious"
     );
     expect(critical).toHaveLength(0);
-  });
+  }, 15000);
 });

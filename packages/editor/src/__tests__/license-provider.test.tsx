@@ -11,10 +11,11 @@ function wrapper(licenseKey?: string) {
 }
 
 describe("LicenseProvider", () => {
-  it("denies premium when no key is provided", () => {
+  // Paywall is currently disabled — all users get premium access
+  it("grants premium when no key is provided (paywall off)", () => {
     const { result } = renderHook(() => useLicense(), { wrapper: wrapper() });
-    expect(result.current.isValid).toBe(false);
-    expect(result.current.isPremium).toBe(false);
+    expect(result.current.isValid).toBe(true);
+    expect(result.current.isPremium).toBe(true);
   });
 
   it("grants premium for a valid license key", () => {
@@ -24,19 +25,19 @@ describe("LicenseProvider", () => {
     expect(result.current.isPremium).toBe(true);
   });
 
-  it("denies premium for an invalid license key", () => {
+  it("grants premium for any key (paywall off)", () => {
     const { result } = renderHook(() => useLicense(), {
       wrapper: wrapper("THEMAL-AAAA-BBBB-ZZZZ"),
     });
-    expect(result.current.isValid).toBe(false);
-    expect(result.current.isPremium).toBe(false);
+    expect(result.current.isValid).toBe(true);
+    expect(result.current.isPremium).toBe(true);
   });
 
-  it("denies premium for a garbage string", () => {
+  it("grants premium for a garbage string (paywall off)", () => {
     const { result } = renderHook(() => useLicense(), {
       wrapper: wrapper("not-a-key"),
     });
-    expect(result.current.isValid).toBe(false);
-    expect(result.current.isPremium).toBe(false);
+    expect(result.current.isValid).toBe(true);
+    expect(result.current.isPremium).toBe(true);
   });
 });

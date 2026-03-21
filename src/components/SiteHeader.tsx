@@ -159,7 +159,7 @@ export default function SiteHeader() {
             <div ref={dropdownRef} className="relative">
               <button
                 onClick={() => setDropdownOpen((v) => !v)}
-                className="flex items-center gap-1.5 pr-3 h-9 rounded-lg text-sm font-light text-fg hover:opacity-80 transition-opacity"
+                className="flex items-center gap-1.5 pr-3 h-9 rounded-lg text-sm font-normal text-fg hover:opacity-80 transition-opacity"
               >
                 {activeLabel}
                 <svg
@@ -178,7 +178,7 @@ export default function SiteHeader() {
                     <button
                       key={id}
                       onClick={() => scrollToSection(id)}
-                      className={`w-full text-left px-4 py-2.5 text-sm font-light transition-colors hover:opacity-80 text-fg ${
+                      className={`w-full text-left px-4 py-2.5 text-sm font-normal transition-colors hover:opacity-80 text-fg ${
                         id === activeSection ? "font-normal" : "opacity-60"
                       }`}
                     >

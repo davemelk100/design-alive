@@ -1,8 +1,9 @@
-const CACHE_NAME = "design-alive-v1";
+const CACHE_NAME = "design-alive-v2";
 const urlsToCache = ["/", "/index.html", "/favicon.svg"];
 
-// Install event - cache resources
+// Install event - cache resources and activate immediately
 self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(urlsToCache);
@@ -14,13 +15,20 @@ self.addEventListener("install", (event) => {
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
-  // Handle navigation requests (HTML pages)
+  // Handle navigation requests (HTML pages) — network-first
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request).catch(() => {
-        // If network fails, try to serve from cache
-        return caches.match("/index.html");
-      })
+      fetch(event.request)
+        .then((response) => {
+          // Update cache with fresh copy
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          return response;
+        })
+        .catch(() => {
+          // If network fails, try to serve from cache
+          return caches.match("/index.html");
+        })
     );
     return;
   }
@@ -61,7 +69,7 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
-// Activate event - clean up old caches
+// Activate event - claim clients and clean up old caches
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -72,6 +80,6 @@ self.addEventListener("activate", (event) => {
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });

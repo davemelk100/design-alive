@@ -634,14 +634,17 @@ export function computeContrastIssues(
     if (seen.has(pairId)) continue;
     seen.add(pairId);
 
-    // Determine which key was fixed and the resulting ratio
+    // Determine which key was fixed and the resulting ratio.
+    // autoAdjustContrast may have fixed fg, bg, or both for this pair.
     const fixedFg = fixes[fgKey];
     const fixedBg = fixes[bgKey];
+
+    // Compute ratio using whatever autoAdjustContrast produced
     const postFg = fixedFg ?? fgVal;
     const postBg = fixedBg ?? bgVal;
-    const postRatio = contrastRatio(postFg, postBg);
+    let postRatio = contrastRatio(postFg, postBg);
 
-    // Pick the key that changed (prefer fg, fall back to bg)
+    // Pick the primary key that changed (prefer fg, fall back to bg)
     let fixedKey: string;
     let fixedValue: string;
     if (fixedFg) {
@@ -654,6 +657,7 @@ export function computeContrastIssues(
       // No fix found — use fgForBg as last resort
       fixedKey = fgKey;
       fixedValue = fgForBg(bgVal);
+      postRatio = contrastRatio(fixedValue, bgVal);
     }
 
     issues.push({
