@@ -424,6 +424,9 @@ The editor UI uses CSS custom properties for all colors. No hardcoded hex values
 | `npm run test:run` | Run tests once and exit |
 | `npm run test:lighthouse` | Run Lighthouse CI audit |
 | `npm run lint` | ESLint with jsx-a11y accessibility rules |
+| `npm run cap:build` | Build web assets and sync to native iOS/Android projects |
+| `npm run cap:open:ios` | Open iOS project in Xcode |
+| `npm run cap:open:android` | Open Android project in Android Studio |
 
 ### Editor Package (from `packages/editor`)
 

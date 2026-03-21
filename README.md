@@ -84,6 +84,9 @@ themal/
 │   ├── editor/                   # @themal/editor npm package
 │   ├── web-component/            # @themal/web-component (custom element wrapper)
 │   └── example-app/              # Integration test app with Playwright health checks
+├── ios/                          # Capacitor iOS native project
+├── android/                      # Capacitor Android native project
+├── capacitor.config.ts           # Capacitor configuration
 ├── netlify/functions/            # Serverless functions (PR creation, AI theme generation, Stripe)
 ├── SETUP.md                      # Full environment setup guide
 └── CLAUDE.md                     # Project coding rules
@@ -94,6 +97,7 @@ themal/
 - React 18 + TypeScript
 - Vite (app + library mode for npm package)
 - Tailwind CSS
+- Capacitor 8 (iOS + Android native apps)
 - Built-in WCAG AA contrast auditor (replaced axe-core in v0.37.0, saving ~580KB)
 - Lucide React (icons)
 - Netlify Functions (GitHub PR creation)
@@ -132,6 +136,18 @@ See [`SETUP.md`](SETUP.md) for detailed setup instructions and environment varia
 npm run build
 npm run preview
 ```
+
+## Mobile App (iOS & Android)
+
+The app runs natively on iOS and Android via [Capacitor](https://capacitorjs.com). Clipboard, link opening, and service worker behavior are automatically adapted for native platforms.
+
+```bash
+npm run cap:build          # Build web + sync to native projects
+npm run cap:open:ios       # Open in Xcode
+npm run cap:open:android   # Open in Android Studio
+```
+
+For live-reload during development, uncomment the `server.url` line in `capacitor.config.ts` and set it to your local IP, then run `npx cap run ios` or `npx cap run android`.
 
 ## Deployment
 
