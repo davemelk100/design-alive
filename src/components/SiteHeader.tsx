@@ -23,6 +23,8 @@ export default function SiteHeader() {
   const navItemRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
   const navContainerRef = useRef<HTMLElement | null>(null);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
+  // Tracks the section currently scrolled-to, so resize can re-anchor
+  const scrolledSectionRef = useRef<string | null>(null);
 
   const activeLabel = SECTION_LINKS.find((s) => s.id === activeSection)?.label ?? "Colors";
 
@@ -39,6 +41,7 @@ export default function SiteHeader() {
         for (const entry of entries) {
           if (entry.isIntersecting) {
             setActiveSection(entry.target.id);
+            scrolledSectionRef.current = entry.target.id;
           }
         }
       },
@@ -118,18 +121,32 @@ export default function SiteHeader() {
 
   useEffect(() => {
     if (!isEditor) return;
+
+    function handleResize() {
+      recalcNavOffsets();
+
+      const id = scrolledSectionRef.current;
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      // Instantly re-anchor (no smooth animation while dragging the viewport)
+      el.scrollIntoView({ behavior: "instant" });
+    }
+
     const raf = requestAnimationFrame(() => recalcNavOffsets());
     window.addEventListener("nav-recalc", recalcNavOffsets);
-    window.addEventListener("resize", recalcNavOffsets);
+    window.addEventListener("resize", handleResize);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("nav-recalc", recalcNavOffsets);
-      window.removeEventListener("resize", recalcNavOffsets);
+      window.removeEventListener("resize", handleResize);
     };
   }, [isEditor, recalcNavOffsets]);
 
   function scrollToSection(id: string) {
     setDropdownOpen(false);
+    scrolledSectionRef.current = id;
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: "smooth" });
